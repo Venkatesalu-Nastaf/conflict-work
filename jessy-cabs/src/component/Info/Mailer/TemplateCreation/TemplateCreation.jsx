@@ -13,7 +13,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsExclamationCircle } from "react-icons/bs";
 import { APIURL } from '../../../url';
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { IoCloseSharp } from "react-icons/io5";
 
 
 
@@ -32,10 +33,10 @@ const TemplateCreation = () => {
   const [editmode, setEditmode] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const[imagedata,setImageData]=useState([])
-  const [imagedataedit,setImagedataedit]=useState([])
+  const [imagedata, setImageData] = useState([])
+  const [imagedataedit, setImagedataedit] = useState([])
   const fileInputRef = useRef(null);
-  const [filedata,setFiledata]=useState(null)
+  const [filedata, setFiledata] = useState(null)
 
 
   useEffect(() => {
@@ -54,17 +55,17 @@ const TemplateCreation = () => {
       setEditmode(true);
     } else {
       setEditmode(false);
-    } 
-    
+    }
 
-   
+
+
     setTemplateData(TemplateFormData);
     const attacheimagedataedit = async (templateid) => {
       try {
-        if(templateid){
-        const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
-        const dataimage = response.data;
-        setImagedataedit(dataimage);
+        if (templateid) {
+          const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
+          const dataimage = response.data;
+          setImagedataedit(dataimage);
         }
       } catch (err) {
         console.log(err);
@@ -75,7 +76,7 @@ const TemplateCreation = () => {
     attacheimagedataedit(TemplateFormData["Templateid"])
 
 
-  }, [location,apiurl,setImageData]);
+  }, [location, apiurl, setImageData]);
 
   // const attacheimagedataedit = useCallback(async (templateid) => {
   //   try {
@@ -87,19 +88,19 @@ const TemplateCreation = () => {
   //   }
   // }, [apiurl, setImagedataedit]);
 
-//  async function attacheimagedataedit(templateid){
-//       try{
-//       const response=await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
-//       const dataimage=response.data
-//       setImagedataedit(dataimage)
+  //  async function attacheimagedataedit(templateid){
+  //       try{
+  //       const response=await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
+  //       const dataimage=response.data
+  //       setImagedataedit(dataimage)
 
-//     }
-//     catch(err){
-//      console.log(err)
-//     }
-//   }
+  //     }
+  //     catch(err){
+  //      console.log(err)
+  //     }
+  //   }
 
-  
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -118,14 +119,14 @@ const TemplateCreation = () => {
   const handleFileInputChange = (event) => {
     const files = event.target.files;
     setImageData((prevImages) => [...prevImages, ...files]);
-    if(editmode){
-      
+    if (editmode) {
+
       setFiledata(files)
       setImagedataedit((prevImages) => [...prevImages, ...files]);
     }
 
   };
- 
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -168,24 +169,24 @@ const TemplateCreation = () => {
       setTemplateData({})
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-      
+
     } catch (err) {
       console.log(err);
     }
   };
 
-  const Attacheimagedata=async(lastno)=>{
+  const Attacheimagedata = async (lastno) => {
     const formDataToSend = new FormData();
     imagedata.forEach((file, index) => {
       formDataToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
     });
-    
-    try{
-      const response= await axios.post(`${apiurl}/templateattachmentimage/${lastno}`,formDataToSend)
+
+    try {
+      const response = await axios.post(`${apiurl}/templateattachmentimage/${lastno}`, formDataToSend)
       console.log(response)
       setImageData([])
     }
-    catch(err){
+    catch (err) {
       console.log(err)
 
     }
@@ -201,31 +202,31 @@ const TemplateCreation = () => {
   //     }
   //     await axios.post(`/templateattachmentimage/${formData.templateId}`, formDataToSend);
   //     // Clear form and images after successful upload
-      
+
   //   } catch (error) {
   //     console.error('Error uploading images:', error);
   //   }
   // };
 
-  const handleEdit=async()=>{
+  const handleEdit = async () => {
     const formDataeditToSend = new FormData();
     imagedataedit.forEach((file, index) => {
       formDataeditToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
     });
-    try{
-    
-      const{Templateid,Templatecheck,...restdatatemplate}=templatedata
-      await axios.put(`${apiurl}/templatedataypdate/${templatedata.Templateid}`,restdatatemplate)
-    
-      if(filedata){
-       await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`,formDataeditToSend)
-       
+    try {
+
+      const { Templateid, Templatecheck, ...restdatatemplate } = templatedata
+      await axios.put(`${apiurl}/templatedataypdate/${templatedata.Templateid}`, restdatatemplate)
+
+      if (filedata) {
+        await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`, formDataeditToSend)
+
       }
-        // console.log(response2)
+      // console.log(response2)
       navigate("/home/info/mailer");
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
@@ -238,7 +239,7 @@ const TemplateCreation = () => {
     fileInputRef.current.click();
   };
 
- 
+
 
   const [openmodals, setOpenmodals] = useState(false);
   const handleOpenmodal = () => {
@@ -257,154 +258,160 @@ const TemplateCreation = () => {
     p: 4,
     borderRadius: '15px',
   };
- 
-  
-   
-    const handleCancel = (indexToRemove) => {
-      setImageData(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
-    };
-    const handleeditCancel = async(data,indexToRemove) => {
-      const temaplateimage=data.templateimage
 
-      if (window.confirm('Are you sure you want to remove this image?')) {
-        setImagedataedit(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
-        await axios.delete(`${apiurl}/templatesingledataimage/${templatedata.Templateid}/${temaplateimage}`)
-        
-      }
-    };
-  
+
+
+  const handleCancel = (indexToRemove) => {
+    setImageData(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
+  };
+  const handleeditCancel = async (data, indexToRemove) => {
+    const temaplateimage = data.templateimage
+
+    if (window.confirm('Are you sure you want to remove this image?')) {
+      setImagedataedit(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
+      await axios.delete(`${apiurl}/templatesingledataimage/${templatedata.Templateid}/${temaplateimage}`)
+
+    }
+  };
+
 
   return (
     <>
-      <div className='word-head'>
-        <div className='back-input'>
-          <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
-          <div>
-            <div>
-              <input type="text" className='template-name' name="TemplateName" value={templatedata.TemplateName||''} onChange={handleChange} placeholder='Enter a template name' />
+      <div className='Scroll-Style-hide' style={{ width: '100%', height: '71vh', overflow: 'auto'}}>
+        <div style={{ backgroundColor: '#fff' }}>
+          <div className='word-head'>
+            <div className='back-input'>
+              <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
+              <div>
+                <div>
+                  <input type="text" className='template-name' name="TemplateName" value={templatedata.TemplateName || ''} onChange={handleChange} placeholder='Enter a template name' />
+                </div>
+                <div>
+                  <input type="text" className='template-subject' name="TemplateSubject" value={templatedata.TemplateSubject || ''} onChange={handleChange} placeholder='Enter a template subject' />
+                </div>
+              </div>
             </div>
-            <div>
-              <input type="text" className='template-subject' name="TemplateSubject" value={templatedata.TemplateSubject||''} onChange={handleChange} placeholder='Enter a template subject' />
+            <div className='right-header'>
+              <div className='flex items-center'>
+                <p onClick={handleFileUploadClick} className='attachments' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'white' }}>
+                  Attachments
+                </p>
+                <input
+                  type="file"
+                  name="imagestemplate"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={handleFileInputChange}
+                />
+              </div>
+              <div>
+                <button onClick={handleOpenmodal} className='cancel-button-template'>
+                  Cancel
+                </button>
+                <div>
+                  <Modal
+                    keepMounted
+                    open={openmodals}
+                    onClose={handleClosemodal}
+                    aria-labelledby="keep-mounted-modal-title"
+                    aria-describedby="keep-mounted-modal-description"
+                  >
+                    <Box className="mass-email-box" sx={style1}>
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <BsExclamationCircle style={{ color: '#7c7c7c', fontSize: 40 }} />
+                      </div>
+                      <Typography id="keep-mounted-modal-description" style={{ textAlign: 'center' }} sx={{ mt: 2 }}>
+                        Are you sure want to cancel?
+                      </Typography>
+                      <div className='mt-10' style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button onClick={BackToSelection} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
+                          Yes, I'm sure
+                        </button>
+                        <button onClick={handleClosemodal} className="border border-solid border-red-500 hover:bg-red-700 text-red-500 hover:text-white font-bold py-2 px-4 mx-2 rounded">
+                          No, cancel
+                        </button>
+                      </div>
+                    </Box>
+                  </Modal>
+                </div>
+              </div>
+              <div>
+                <button className='preview-button-template cancel-button-template'>
+                  Preview
+                </button>
+              </div>
+              <div>
+                {editmode ? (
+                  <Button
+                    variant="contained"
+                    aria-controls="save-menu"
+                    aria-haspopup="true"
+                    onClick={handleEdit}
+                    className='save-button-template'
+                  >
+                    Edit
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    aria-controls="save-menu"
+                    aria-haspopup="true"
+                    onClick={handleADD}
+                    className='save-button-template'
+                  >
+                    Save
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
+          <ReactQuill
+            theme="snow"
+            value={templatedata.TemplateMessageData}
+            onChange={handleQuillChange}
+            className='quill-editor'
+            modules={{
+              toolbar: [
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ 'size': [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                ['link', 'image', 'video'],
+                ['clean']
+              ],
+            }}
+          />
+          {editmode ?
+            <>
+              {imagedataedit.length > 0 && (
+                <div style={{ paddingLeft: '20px'}}>
+                  {imagedataedit.map((data, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                      <p style={{color: '#000'}}>{data.templateimage || data.name}</p>
+                      <Button onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
+                    </div>
+
+                  ))}
+                </div>
+              )}
+            </> :
+            <>
+              {imagedata.length > 0 && (
+                <div style={{ paddingLeft: '20px'}}>
+                  {imagedata.map((data, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                      <p>{data.name}</p>
+                      <Button onClick={() => handleCancel(index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
+                    </div>
+                  ))}
+                </div>
+              )}</>
+          }
         </div>
-        <div className='right-header'>
-          <div className='flex items-center'>
-            <p onClick={handleFileUploadClick} className='attachments' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'white' }}>
-              Attachments
-            </p>
-            <input
-              type="file"
-              name="imagestemplate"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileInputChange}
-            />
-          </div>
-          <div>
-            <button onClick={handleOpenmodal} className='cancel-button-template'>
-              Cancel
-            </button>
-            <div>
-              <Modal
-                keepMounted
-                open={openmodals}
-                onClose={handleClosemodal}
-                aria-labelledby="keep-mounted-modal-title"
-                aria-describedby="keep-mounted-modal-description"
-              >
-                <Box className="mass-email-box" sx={style1}>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <BsExclamationCircle style={{ color: '#7c7c7c', fontSize: 40 }} />
-                  </div>
-                  <Typography id="keep-mounted-modal-description" style={{ textAlign: 'center' }} sx={{ mt: 2 }}>
-                    Are you sure want to cancel?
-                  </Typography>
-                  <div className='mt-10' style={{ display: 'flex', justifyContent: 'center' }}>
-                    <button onClick={BackToSelection} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
-                      Yes, I'm sure
-                    </button>
-                    <button onClick={handleClosemodal} className="border border-solid border-red-500 hover:bg-red-700 text-red-500 hover:text-white font-bold py-2 px-4 mx-2 rounded">
-                      No, cancel
-                    </button>
-                  </div>
-                </Box>
-              </Modal>
-            </div>
-          </div>
-          <div>
-            <button className='preview-button-template cancel-button-template'>
-              Preview
-            </button>
-          </div>
-          <div>
-            {editmode ? (
-              <Button
-                variant="contained"
-                aria-controls="save-menu"
-                aria-haspopup="true"
-                onClick={handleEdit}
-                className='save-button-template'
-              >
-                Edit
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                aria-controls="save-menu"
-                aria-haspopup="true"
-                onClick={handleADD}
-                className='save-button-template'
-              >
-                Save
-              </Button>
-            )}
-          </div>
-        </div>
+
       </div>
-      <ReactQuill
-        theme="snow"
-        value={templatedata.TemplateMessageData}
-        onChange={handleQuillChange}
-        className='quill-editor'
-        modules={{
-          toolbar: [
-            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-            [{ 'size': [] }],
-            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-            ['link', 'image', 'video'],
-            ['clean']
-          ],
-        }}
-      />
-      {editmode?
-      <>
-   {imagedataedit.length > 0 && (
-  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-    {imagedataedit.map((data, index) => (
-      <div key={index} style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-        <p>{data.templateimage||data.name}</p>
-        <Button onClick={() => handleeditCancel(data,index)}>cancel</Button>  {/* Cancel icon with onClick handler */}
-      </div>
-      
-    ))}
-  </div>
-)}
-</>:
-<>
-{imagedata.length > 0 && (
-  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-    {imagedata.map((data, index) => (
-      <div key={index} style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-        <p>{data.name}</p>
-        <Button onClick={() => handleCancel(index)}>cancel</Button>  {/* Cancel icon with onClick handler */}
-      </div>
-    ))}
-  </div>
-)}</>
-}
-      
+
+
       <div className='alert-popup-main'>
         {error && (
           <div className='alert-popup Error'>

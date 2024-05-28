@@ -62,7 +62,7 @@
 
 .glass {
   display: grid;
-  height: 90%;
+  height: 95%;
   width: 97%;
   backdrop-filter: blur(5px);
   border-radius: 2rem;

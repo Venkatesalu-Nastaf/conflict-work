@@ -368,7 +368,7 @@ const EmployeeCreation = ({ stationName }) => {
           </Box>
           <div className="EmployeeCreation-table-container">
             <div className='search-profile'>
-              <div className="search-input-container Scroll-Style-hide" style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+              <div className="search-input-container Scroll-Style-hide">
                 <TextField
                   id="search-input"
                   label="Search"
@@ -378,20 +378,24 @@ const EmployeeCreation = ({ stationName }) => {
                   InputProps={{
                     endAdornment: <AiOutlineSearch />,
                   }}
+                  style={{marginLeft: '15px'}}
                 />
-                {filteruser.map((row, index) => (
-                  <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
-                    togglePermission(row);
-                    handleRowClickUser(row)
-                  }}
-                    key={index}>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">{row.username}</h3>
-                      <p className="user-details-text">{row.designation}</p>
+                <div style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+                  {filteruser.map((row, index) => (
+                    <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
+                      togglePermission(row);
+                      handleRowClickUser(row)
+                    }}
+                      key={index}>
+                      <img src={Avatar} alt="profile" width="50" />
+                      <div>
+                        <h3 className="user-name-text">{row.username}</h3>
+                        <p className="user-details-text">{row.designation}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
               </div>
               {showPermission && <UserPermission
                 userid={selectedUserId}

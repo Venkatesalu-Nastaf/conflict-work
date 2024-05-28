@@ -430,22 +430,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className='input'>
-                  {/* <FormControlLabel
-                    value="smsguest"
-                    control={
-                      <Checkbox
-                        size="small"
-                        name="smsguest"
-                        checked={smsguest || formData.smsguest || book.smsguest}
-                        onChange={(event) => {
-                          setBook({ ...book, smsguest: event.target.checked });
-                          setFormData({ ...formData, guestsms: event.target.checked });
-                          setSmsGuest(event.target.checked);
-                        }}
-                      />
-                    }
-                    label="Guest SMS"
-                  /> */}
+
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -538,23 +523,7 @@ const TripSheet = ({ stationName }) => {
               <div className='tripsheet-division2'>
 
                 <div>
-                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
-                    <div className="icone">
-                      <AddHomeWorkIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="address1"
-                      className='tripsheet-address'
-                      value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
-                      onChange={handleChange}
-                      label="Address"
-                      id="remark"
-                      sx={{ m: 1 }}
-                      variant="standard"
-                      autoComplete="password"
-                    />
-                  </div> */}
+
 
                   <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                     <div className="icone">

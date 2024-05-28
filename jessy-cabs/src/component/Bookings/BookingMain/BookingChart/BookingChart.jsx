@@ -110,6 +110,7 @@ const BookingChart = () => {
 
   const handleButtonClick = async () => {
     try {
+      if (!vehdriverNames || vehdriverNames.length === 0) return
       const response = await axios.get(`${apiUrl}/getVehicleInfo/${vehicleDetail}`);
       console.log(response.data, 'vehresponse');
       setGetVehicleDetail(response.data)
@@ -135,8 +136,6 @@ const BookingChart = () => {
 
         });
         const datas = response.data;
-        // const status = datas?.map((li) => li.driverApp)
-        // setVehStatus(status)
 
         const updatedDetails = getVehicleDetail.map(vehicle => {
           const matchingDriver = datas.find(driver => driver.drivername === vehicle.driverName);
@@ -208,7 +207,7 @@ const BookingChart = () => {
 
     <>
       <div className="main-booking-chart" >
-        <div style={{ display: 'flex ', justifyContent: 'center' }}>
+        <div className="main-booking-chart-sub-division" style={{ display: 'flex ', justifyContent: 'center' }}>
           <div className="apex-fusion-chart">
             <div className="second-chart-bar-section second-chart-bar-section-apex">
               <div className="second-chart-bar1">
@@ -415,45 +414,51 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
-        <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', padding: '10px 20px' }}> Search here for Vehiecle Details..</p>
-        <div className="search-bar-input">
-          <div className="search-button">
-            <FaSearch style={{ color: '#fff' }} />
-            <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: '100%', color: '#fff' }} />
-          </div>
-          <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
-        </div>
-        {showsearchTable && (
-          <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center' }}>
-            <div className="graph-total-table graph-total-table-driver" style={{height:'300px'}}>
-              <table className="graph-table" >
-                <tr
-                  className="graph-table-row ">
-                  <th className="graph-table-head b-color">DRIVER NAME</th>
-                  <th className="graph-table-head b-color">DRIVER ID</th>
-                  <th className="graph-table-head b-color">VEHICLE NO</th>
-                  <th className="graph-table-head b-color">STATUS</th>
-                </tr>
-                {latestVehicleDetail?.length > 0 ? (
-                  latestVehicleDetail.map((li, index) => (
-                    <tr key={index} className="">
-                      <td className="graph-table-head graph-table-row-values">{li.driverName}</td>
-                      <td className="graph-table-head graph-table-row-id">{li.vehiclename}</td>
-                      <td className="graph-table-head graph-table-row-id">{li.vehRegNo}</td>
-                      <td className="graph-table-head">
-                        <p className="active-driver">{li.status}</p>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" style={{ textAlign: 'center',paddingTop:'50px' , paddingBottom:'50px' }}>No data available</td>
-                  </tr>
-                )}
-              </table>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', padding: '10px 20px' }}> Search here for Vehiecle Details..</p>
+          <div className="search-bar-input">
+            <div className="search-button">
+              <FaSearch style={{ color: '#fff' }} />
+              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: '100%', color: '#fff' }} />
             </div>
+            <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
           </div>
-        )}
+          {showsearchTable && (
+            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '20px' }}>
+              <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <div className="graph-total-table graph-total-table-driver">
+                  <table className="graph-table" >
+                    <tr
+                      className="graph-table-row ">
+                      <th className="graph-table-head b-color">DRIVER NAME</th>
+                      <th className="graph-table-head b-color">DRIVER ID</th>
+                      <th className="graph-table-head b-color">VEHICLE NO</th>
+                      <th className="graph-table-head b-color">STATUS</th>
+                    </tr>
+                    {latestVehicleDetail?.length > 0 ? (
+                      latestVehicleDetail.map((li, index) => (
+                        <tr key={index} className="">
+                          <td className="graph-table-head graph-table-row-values">{li.driverName}</td>
+                          <td className="graph-table-head graph-table-row-id">{li.vehiclename}</td>
+                          <td className="graph-table-head graph-table-row-id">{li.vehRegNo}</td>
+                          <td className="graph-table-head">
+                            <p className="active-driver">{li.status}</p>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: 'center', paddingTop: '50px', paddingBottom: '50px' }}>No data available</td>
+                      </tr>
+                    )}
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+          )}
+        </div>
 
       </div>
 

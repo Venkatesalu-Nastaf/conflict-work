@@ -252,11 +252,11 @@ border-right: 1px solid transparent !important;
     }
 
     .organisation-input-field {
-        width: 200px !important;
+        width: 230px !important;
     }
 
     .organisation-details {
-        margin: 0px;
+        margin: 10px;
         border: none !important;
         border-radius: 15px;
         padding: 0px;
@@ -314,4 +314,18 @@ border-right: 1px solid transparent !important;
         position: relative;
         top: 14px;
     }
+}
+
+/* 
+.organisation-input-field{
+   width:  300px;
+} */
+
+.organisation-details-input .organization-input{
+    width: 300px !important;
+    gap: 10px;
+}
+
+.organisation-details-input .organization-text-area{
+    width: 300px !important;
 }

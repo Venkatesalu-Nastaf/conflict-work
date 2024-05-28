@@ -869,7 +869,6 @@ const useTripsheet = () => {
                 pack: packageDetails[0]?.package,
                 minhrs: packageDetails[0]?.Hours,
                 minkm: packageDetails[0]?.KMS,
-                // Groups: book.Groups,
                 additionaltime: book.additionaltime || additionalTime.additionaltime,
                 billingno: book.billingno,
                 closedate: book.closedate,
@@ -877,7 +876,6 @@ const useTripsheet = () => {
                 closetime: book.closetime,
                 customeradvance: book.customeradvance,
                 email1: book.email1,
-                // hireTypes: selectedCustomerDatas.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                 vechtype: selectedCustomerDatas.vechtype,
                 parking: book.parking,
                 permit: book.permit,
@@ -991,8 +989,7 @@ const useTripsheet = () => {
     };
 
 
-    // lllllllllll
-    // const [statechange, setStateChange] = useState(false)
+
 
     const handleUpload = () => {
         const input = document.createElement('input');

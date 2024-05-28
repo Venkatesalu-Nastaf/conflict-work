@@ -171,7 +171,7 @@ const useEmplyeecreation = () => {
         designation: '',
         organizationname: '',
         userpassword: '',
-        active: '',
+        active: false,
     });
 
     // TABLE END
@@ -232,30 +232,112 @@ const useEmplyeecreation = () => {
     // add
     const handleAdd = async () => {
         const username = book.username;
-        if (password) {
-            if (!username) {
-                setError(true);
-                setErrorMessage("Fill mandatory fields");
-                return;
-            }
-            try {
-                const data = { book, permissionsData }
-                await axios.post(`${apiUrl}/usercreation-add`, data);
-                handleCancel();
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch (error) {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
+        const branchName = book.branchName;
+        const designation = book.designation;
+        const organisation = book.organizationname
+        const active = book.active
 
+        if (!password) {
+            setError(true);
+            setErrorMessage("Fill password");
+            return;
         }
+
+        if (!username) {
+            setError(true);
+            setErrorMessage("Fill UserName..");
+            return;
+        }
+
+        if (!branchName) {
+            setError(true);
+            setErrorMessage("Fill BranchName..");
+            return;
+        }
+
+        if (!designation) {
+            setError(true);
+            setErrorMessage("Fill Designation..");
+            return;
+        }
+
+        if (!organisation) {
+            setError(true);
+            setErrorMessage("Fill Organisation..");
+            return;
+        }
+
+
+        if (!active) {
+            setError(true);
+            setErrorMessage("Fill Active..");
+            return;
+        }
+
+
+
+        try {
+            const data = { book, permissionsData }
+            await axios.post(`${apiUrl}/usercreation-add`, data);
+            handleCancel();
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch (error) {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+
+
     };
 
 
     // edit
     const handleEdit = async (userid) => {
         try {
+
+            const username = book.username;
+            const branchName = book.stationname;
+            const designation = book.designation;
+            const organisation = book.organizationname
+            const active = book.active
+
+            console.log("NASTAF Technologies", branchName, "book", book)
+
+            if (!password) {
+                setError(true);
+                setErrorMessage("Fill password");
+                return;
+            }
+
+            if (!username) {
+                setError(true);
+                setErrorMessage("Fill UserName..");
+                return;
+            }
+
+            if (!branchName) {
+                setError(true);
+                setErrorMessage("Fill BranchName..");
+                return;
+            }
+
+            if (!designation) {
+                setError(true);
+                setErrorMessage("Fill Designation..");
+                return;
+            }
+
+            if (!organisation) {
+                setError(true);
+                setErrorMessage("Fill Organisation..");
+                return;
+            }
+
+            if (!active) {
+                setError(true);
+                setErrorMessage("Fill Active..");
+                return;
+            }
 
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book };
@@ -394,6 +476,7 @@ const useEmplyeecreation = () => {
 
     const handleRowClickUser = async (params) => {
         setBook(params)
+        console.log("params", params    )
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {

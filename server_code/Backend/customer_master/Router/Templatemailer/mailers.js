@@ -4,6 +4,7 @@ const db = require('../../../db')
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 router.use(express.static('customer_master'));
 const storage = multer.diskStorage({
@@ -20,15 +21,66 @@ const storage = multer.diskStorage({
   
   })
   const uploadattachement = multer({ storage: storage });
-router.post('/templateattachmentimage',uploadattachement.single('attach'),(req,res)=>{
-    db.query('Insert into Templateattachment set ?',[],(err,result)=>{
-        if(err){
-            console.log(err)
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
-        }
-    })
-})
+router.post('/templateattachmentimage/:templateid',uploadattachement.array('imagestemplate'),(req,res)=>{
+    const templateid=req.params.templateid
+    const imagedata=req.files
+    console.log(templateid)
+    console.log(imagedata,"reqfile")
+ // Other fields from the form
+ if (!imagedata || imagedata.length === 0) {
+    return res.status(500).json("No images provided ");
+  }
+ const insertQuery = 'INSERT INTO Templateattachement (templateid,templateimage,mimetype) VALUES (?, ?, ?)';
+ let insertCount = 0;
+
+ imagedata?.forEach((image) => {
+   const { filename, mimetype } = image;
+   db.query(insertQuery, [templateid, filename, mimetype], (err, result) => {
+     if (err) {
+       console.error('Error inserting data into MySQL:', err);
+       // If an error occurs for any image, return a response with the error
+       return res.status(500).json({ error: 'Failed to insert data into MySQL' });
+     }
+     console.log('Data inserted successfully');
+     // Increment the insertCount after each successful insertion
+     insertCount++;
+     // Check if all images have been processed
+     if (insertCount === imagedata.length) {
+       // If all images have been processed, send the response
+       res.status(200).json({ message: 'Data inserted successfully' });
+     }
+   });
+ });
+});
+
+  // Send response
+
+
+ 
+    
+    // db.query('Insert into Templateattachment set ?',[],(err,result)=>{
+    //     if(err){
+    //         console.log(err)
+    //         return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    //     }
+    //     console.log(result)
+    //     return res.status(200).json({ message: "Data inserted successfully" });
+    // })
+// })
   
+
+router.get('/lasttemplateid', (req, res) => {
+    db.query('SELECT   Templateid  FROM  TemplateMessage ORDER BY  Templateid DESC LIMIT    1', (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+      }
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'Template not found' });
+      }
+      const Templateid = result[0];
+      return res.status(200).json(Templateid);
+    });
+  });
 
 router.post('/templatedatainsert',(req,res)=>{
     const template=req.body;
@@ -56,7 +108,7 @@ router.get('/templatedataall', (req, res) => {
             return res.status(404).json({ error: 'Template datanot found' });
         }
          // Assuming there is only one matching booking
-         console.log(result)
+        //  console.log(result)
         return res.status(200).json(result);
     });
 });
@@ -66,6 +118,7 @@ router.put('/templatedataypdate/:templateid',(req,res)=>{
     const templateid=req.params.templateid;
     const template=req.body;
     console.log(template,templateid,"update")
+
     db.query('update TemplateMessage set  ? where templateid=?',[template,templateid],(err,result)=>{
         if(err){
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
@@ -78,7 +131,14 @@ router.put('/templatedataypdate/:templateid',(req,res)=>{
 
 })
 
-router.delete('/templatedataypdate/:templateid',(req,res)=>{
+        
+           
+        
+  
+
+
+
+router.delete('/templatedatadelete/:templateid',(req,res)=>{
     const templateid=req.params.templateid;
     console.log(templateid)
    
@@ -93,12 +153,26 @@ router.delete('/templatedataypdate/:templateid',(req,res)=>{
     })
 
 })
+router.get('/gettemplateattachimage/:templateid',(req,res)=>{
+    const templateid=req.params.templateid
+    db.query('select templateimage from Templateattachement where templateid=?',[templateid],(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+        if(results.length === 0){
+            return res.status(500).json({ error: "image not found" });
+        }
+        return res.status(200).json(results);
+
+    })
+})
 
 
 
 router.post('/send-emailtemplate', async (req, res) => {
     try {
-        const {templatemessage,emaildata} = req.body;
+        const {templatemessage,emaildata,templateimagedata} = req.body;
+        console.log(templatemessage,emaildata,templateimagedata)
     
 
         // Create a Nodemailer transporter
@@ -128,26 +202,52 @@ router.post('/send-emailtemplate', async (req, res) => {
 
         // // Email content for the customer
 
+
         const emailPromises = emaildata.map(async (data) => {
             const personalizedMessage = templatemessage.TemplateMessageData.replace(
                 '</p>',
                 `${data.CustomerName}`
             );
-            
+
+            const signatureDirectoryRelative = path.join('Backend','customer_master', 'public', 'Templateimage');
+
+// Get the complete absolute path
+const signatureDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', signatureDirectoryRelative);
+
+console.log(signatureDirectoryAbsolute);
+
+            // const imagesHtml = templateimagedata.map(image => `<img src="cid:${image.templateimage}" alt="${image.alt}" />`).join('');
+
+            const attachments = templateimagedata.map(image => ({
+                filename: image.templateimage, 
+                content: fs.createReadStream(`${signatureDirectoryAbsolute}/${image.templateimage}`), 
+                
+            }));
+            console.log(attachments)
+
+
+
+
+            // const imagesHtml = templateimagedata.map(image => `<img src=http://localhost:8081/public/Templateimage/${image.templateimage} alt="${image.templateimage}" />`).join('');
+            //  console.log(imagesHtml,"html")
+            // Append the generated imagesHtml to the personalized message
+            const finalMessage = `${personalizedMessage}`;
+            console.log(finalMessage,"mess")
            
             const customerMailOptions = {
                 from: 'foxfahad386@gmail.com',
                 to: data.Email, // Ensure the correct key is used here
                 subject: templatemessage.TemplateSubject,
-                html: personalizedMessage
+                html: finalMessage,
+                attachments:attachments
             };
-
+            // attachments
             // console.log(`Sending email to: ${data.EMAIL}`); // Log email addresses
 
             return transporter.sendMail(customerMailOptions);
         });
 
-        await Promise.all(emailPromises); // Await all email sending promises
+         await Promise.all(emailPromises); // Await all email sending promises
 
    
    
@@ -171,6 +271,114 @@ router.post('/send-emailtemplate', async (req, res) => {
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
+
+// router.get('/templategetimagedata/:templateid',(req,res)=>{
+//     const templateid=req.params.templateid
+
+//     db.query('select templateimage from Templateattachement where templateid=?',[templateid],(err,results)=>{
+//         if(err){
+//             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//         }
+
+//         if(results.length===0){
+//             return res.status(500).json({ error: "templateid not found" });
+//         }
+//         console.log(results)
+//         return res.status(200).json(results);
+    
+//     })
+
+// })
+
+router.delete('/templatedeleteimageedata/:templateid',(req,res)=>{
+    const templateid=req.params.templateid
+
+    db.query('select templateimage from Templateattachement where templateid=?',[templateid],(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+
+        if(results.length===0){
+            return res.status(500).json({ error: "templateid not found" });
+        }
+        db.query('delete from Templateattachement where templateid=?',[templateid],(err,results1)=>{
+
+            if(err){
+                return res.status(500).json({ error: "Failed to insert data into MySQL" });
+            }
+
+            results.forEach((row)=>{
+                const oldFileName = row.templateimage;
+                console.log(oldFileName,"old")
+                console.log(row)
+                if (oldFileName) {
+                  
+                    const oldImagePath = path.join('Backend','customer_master', 'public', 'Templateimage');
+
+// Get the complete absolute path
+const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath,oldFileName);
+
+console.log(oldImagePathDirectoryAbsolute);
+                
+                    // Check if the file exists
+                    if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+                        try {
+                            // Delete the file
+                            fs.unlinkSync(oldImagePathDirectoryAbsolute);
+                            console.log('File deleted successfully:', oldFileName);
+                        } catch (error) {
+                            console.error('Error deleting file:', error);
+                        }
+                    } else {
+                        console.log('File does not exist:', oldFileName);
+                    }
+                }
+            })
+
+            return res.status(200).json({ message: "Data delete successfully" });
+
+            
+
+        })
+    })
+})
+
+router.delete('/templatesingledataimage/:templateid/:templateimage',(req,res)=>{
+    const templateid=req.params.templateid
+    const templateimage=req.params.templateimage
+    
+    console.log(templateid,templateimage,"temmmmm")
+
+    db.query('delete from Templateattachement where templateid=? And templateimage=?',[templateid,templateimage],(err,results1)=>{
+
+        if(err){
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+        if (templateimage) {
+                  
+            const oldImagePath = path.join('Backend','customer_master', 'public', 'Templateimage');
+
+// Get the complete absolute path
+const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath,templateimage);
+
+console.log(oldImagePathDirectoryAbsolute);
+        
+            // Check if the file exists
+            if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+                try {
+                    // Delete the file
+                    fs.unlinkSync(oldImagePathDirectoryAbsolute);
+                    console.log('File deleted successfully:', templateimage);
+                } catch (error) {
+                    console.error('Error deleting file:', error);
+                }
+            } else {
+                console.log('File does not exist:', templateimage);
+            }
+        }
+        return res.status(200).json("image data delete siccessfully")
+})
+})
 
 
 

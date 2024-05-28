@@ -110,6 +110,7 @@ const BookingChart = () => {
 
   const handleButtonClick = async () => {
     try {
+      if (!vehdriverNames || vehdriverNames.length === 0) return
       const response = await axios.get(`${apiUrl}/getVehicleInfo/${vehicleDetail}`);
       console.log(response.data, 'vehresponse');
       setGetVehicleDetail(response.data)
@@ -135,8 +136,6 @@ const BookingChart = () => {
 
         });
         const datas = response.data;
-        // const status = datas?.map((li) => li.driverApp)
-        // setVehStatus(status)
 
         const updatedDetails = getVehicleDetail.map(vehicle => {
           const matchingDriver = datas.find(driver => driver.drivername === vehicle.driverName);
@@ -425,7 +424,7 @@ const BookingChart = () => {
             <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
           </div>
           {showsearchTable && (
-            <div style={{display: 'flex', justifyContent: 'center', paddingBottom: '20px'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '20px' }}>
               <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                 <div className="graph-total-table graph-total-table-driver">
                   <table className="graph-table" >

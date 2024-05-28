@@ -26,6 +26,9 @@ import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
 import { APIURL } from "../../../url";
 import axios from 'axios'
 import * as XLSX from 'xlsx';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 
 
@@ -62,13 +65,19 @@ const actions = [
 
 
 const MailDetails = () => {
-  const apiurl=APIURL
-  const[templatedata,setTemplateData] =useState([])
-  const [selecteddata,setSelectedData]=useState([])
-   const [file, setFile] = useState(null);
-  const [triggerdata,setTriggerData]=useState(false)
-    const [data, setData] = useState({});
+  const apiurl = APIURL
+  const [templatedata, setTemplateData] = useState([])
+  const [selecteddata, setSelectedData] = useState([])
+  const [file, setFile] = useState(null);
+  const [triggerdata, setTriggerData] = useState(false)
+  const [data, setData] = useState({});
+  const [templateimage, setTemplateimage] = useState([])
+  const [error, setError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+
   const columns = [
     { field: "idno", headerName: "Sno", width: 70 },
     { field: "Templateid", headerName: "Templateid", width: 130 },
@@ -89,62 +98,75 @@ const MailDetails = () => {
       headerName: 'Edit',
       width: 130,
       renderCell: (params) => (
-          <Button
-              onClick={() => handleButtonEditClick(params)}
-              aria-label="open-dialog"
-          >
-              <Button variant="contained" color="primary">
-                  Edit
-              </Button>
-
-          </Button>
-      ),
-  },
-  {
-    field: 'Delete',
-    headerName: 'Delete',
-    width: 130,
-    renderCell: (params) => (
         <Button
-            onClick={() => handleButtondeleteClick(params)}
-            aria-label="open-dialog"
+          onClick={() => handleButtonEditClick(params)}
+          aria-label="edit"
+          variant="contained"
+          color="primary"
         >
-            <Button variant="contained" color="primary">
-                Delete
-            </Button>
-
+          Edit
         </Button>
-    ),
-},
+      ),
+    },
+    {
+      field: 'Delete',
+      headerName: 'Delete',
+      width: 130,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleButtondeleteClick(params)}
+          aria-label="delete"
+          variant="contained"
+          color="primary"
+        >
+          Delete
+        </Button>
+      ),
+    },
+
   ]
-  useEffect(()=>{
-    const fetchdata=async()=>{
-      try{
-        const response=await axios.get(`${apiurl}/templatedataall`)
-        const data=response.data
-        console.log(data,"temp")
-        const rowuniqueid=data.map((row,index)=>({
+
+  const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+  };
+
+  useEffect(() => {
+    if (error || success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success]);
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get(`${apiurl}/templatedataall`)
+        const data = response.data
+        const rowuniqueid = data.map((row, index) => ({
           ...row,
-          idno:index+1
+          idno: index + 1
 
 
         }))
         setTemplateData(rowuniqueid)
         setTriggerData(false)
       }
-      catch(err){
+      catch (err) {
         console.log(err)
       }
     }
     fetchdata()
-  },[apiurl,triggerdata])
+  }, [apiurl, triggerdata])
 
   function convertToPlain(html) {
-  
-    if(html){
-    var tempDivElement = document.createElement("div");
-    tempDivElement.innerHTML = html;
-    return tempDivElement.textContent || tempDivElement.innerText || "";
+
+    if (html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
     }
     return ""
   }
@@ -161,37 +183,53 @@ const MailDetails = () => {
       const workbook = XLSX.read(binaryStr, { type: 'binary' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet,{header:1});
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       let indexToRemove = 0;
-        jsonData.splice(indexToRemove, 1);
-          let objects = jsonData.map(sublist => {
-            return {
-              Email: sublist[0],
-              CustomerName: sublist[1]
-            };
-          });
+      jsonData.splice(indexToRemove, 1);
+      let objects = jsonData.map(sublist => {
+        return {
+          Email: sublist[0],
+          CustomerName: sublist[1]
+        };
+      });
       setData(objects);
-      console.log(objects,"onbbbb")
-     
+
     };
 
     reader.readAsBinaryString(file);
   };
 
-  const handleButtondeleteClick = async(params) => {
-    console.log(params, 'params');
+  const handleButtondeleteClick = async (params) => {
     const { Templateid } = params.row;
-    try{
-      const response=await axios.delete(`${apiurl}/templatedataypdate/${Templateid}`)
-      console.log(response)
-      setTriggerData(true)
+    try {
+      setTemplateData((prevData) => prevData.filter(template => template.Templateid !== Templateid));
+      await axios.delete(`${apiurl}/templatedatadelete/${Templateid}`)
+      setSelectedData([])
 
+      // setTemplateData((prevData) => prevData.filter(template => template.Templateid !== Templateid));
+      await axios.delete(`${apiurl}/templatedeleteimageedata/${Templateid}`)
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
-  
+
   }
+
+  // const handleButtondeleteClick = async(params) => {
+  //   console.log(params, 'params');
+  //   const { Templateid } = params.row;
+  //   try{
+  //     const response=await axios.delete(`${apiurl}/templatedatadelete/${Templateid}`)
+  //     await axios.delete(`${apiurl}/templatedeleteimageedata/${Templateid}`)
+  //     console.log(response)
+  //     setTriggerData(true)
+
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+
+  // }
   // const handletableClick=async(params)=>{
   //   console.log(params,"data")
   //   setSelectedData(params.row)
@@ -199,13 +237,12 @@ const MailDetails = () => {
   // }
 
 
-  const handleButtonEditClick = async(params) => {
+  const handleButtonEditClick = async (params) => {
     // console.log(params, 'params');
     // console.log(params.row,params.row.Templateid)
-    const Templatecheck="true"
+    const Templatecheck = "true"
+    const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateMessageData=${params.row.TemplateMessageData}&TemplateimageData=${templateimage}`
 
-    const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateMessageData=${params.row.TemplateMessageData}`
-    
     window.location.href = mailerPageUrl
   }
 
@@ -229,48 +266,72 @@ const MailDetails = () => {
     navigate("/home/info/mailer/TemplateSelection");
   }
 
-  const handletableClick=async(params)=>{
-    console.log(params,"data")
+  const Attachedimagedata = async (templateid) => {
+    // console.log(templateid)
+    try {
+      const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
+
+      const Temp = response.data
+
+      if (Temp.length > 0) {
+        setTemplateimage(Temp)
+      }
+      //  setTemplateData([])
+
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handletableClick = async (params) => {
+
     setSelectedData(params.row)
+    Attachedimagedata(params.row.Templateid)
+    // setTriggerData(true)
+
 
   }
-  console.log(selecteddata,"data")
-  const handlesendbulkemail=async()=>{
-    // const datatemplate=selecteddata
-    
 
-    if(selecteddata.length===0){
-      console.log("please select data")
+  const handlesendbulkemail = async () => {
+    // const datatemplate=selecteddata
+
+
+    if (selecteddata.length === 0) {
+      setError(true)
+      setErrorMessage("Select the Data")
       return
     }
-    if( file === null){
-      console.log("please select file")
+    if (file === null) {
+      setError(true)
+      setErrorMessage("Select the Excel File")
       return
     }
-    try{
-      console.log(data,"fileeeee" )
-      const datatosend={
-        templatemessage:selecteddata,
-        emaildata:data
+    try {
+
+      const datatosend = {
+        templatemessage: selecteddata,
+        emaildata: data,
+        templateimagedata: templateimage
       }
-      
-      console.log("finish",datatosend)
-      const response=await axios.post(`${apiurl}/send-emailtemplate`,datatosend)
+      const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
       setData({})
       setFile(null)
       setSelectedData([])
-      
-    
+      setSuccess(true)
+      setSuccessMessage("Mail Sent Successfully")
+
+
       // const mailMessageTextField = document.getElementById('MailMessage');
-     
+
       //   mailMessageTextField.value = '';
-      
-      
-    
+
+
+
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
@@ -292,14 +353,14 @@ const MailDetails = () => {
                   <input
                     type="file"
                     id="fileInput"
-                    onChange={handleFileUpload} 
+                    onChange={handleFileUpload}
                     // onChange={handleFileChange}
                     style={{ display: 'none' }}
                   />
                 </div>
                 <div style={{ textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600' }}>{file}</div>
                 <div className="input-field ">
-                  <div className="input" style={{ width: "400px" }}>
+                  <div className=" input-mailer"  style={{ width: "400px" }}>
                     <div className="icone">
                       <SmsIcon color="action" />
                     </div>
@@ -309,7 +370,7 @@ const MailDetails = () => {
                       name="MailMessage"
                       label="Mail Message"
                       id="MailMessage"
-                      value={convertToPlain(selecteddata.TemplateMessageData)||''}
+                      value={convertToPlain(selecteddata.TemplateMessageData) || ''}
                       className="mail-textarea1"
                       sx={{ m: 1, width: "200ch" }}
                     />
@@ -325,11 +386,28 @@ const MailDetails = () => {
                     <Button variant="outlined">Clear</Button>
                   </div>
                 </div>
+                <div className='alert-popup-main'>
+                  {success &&
+                    <div className='alert-popup Success' >
+                      <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <p>{successMessage}</p>
+                    </div>
+                  }
+                  {error &&
+                    <div className='alert-popup Error' >
+                      <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <p>{errorMessage}</p>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
             <div className="container-right-mailDetails">
-              <div className="textbox">
-                <div className="textboxlist">
+              <div className="textbox textbox-mailer">
+
+                <div className="textboxlist-mailer">
                   <div className="textboxlist-customer ">
                     <div className="input-field" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
                       <div>
@@ -378,17 +456,17 @@ const MailDetails = () => {
                       </Table>
                     </div> */}
 
-          <div className="table-bookingCopy-TransferDataEntry">
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={templatedata}
-              columns={columns}
-              onRowClick={handletableClick}
-           
-              
-            />
-          </div>
-          </div>
+                    <div className="table-bookingCopy-TransferDataEntry" style={{ marginTop: '10px' }}>
+                      <div style={{ height: 400, width: "100%" }}>
+                        <DataGrid
+                          rows={templatedata}
+                          columns={columns}
+                          onRowClick={handletableClick}
+
+
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

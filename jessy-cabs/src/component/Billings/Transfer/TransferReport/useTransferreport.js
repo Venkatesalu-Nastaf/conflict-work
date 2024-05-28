@@ -37,7 +37,6 @@ const useTransferreport = () => {
   const [pdfBillList, setPdfBillList] = useState('')
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  // const[rowzip,setRowszipdata]=useState([])
   const [pdfzipdata, setPdfzipdata] = useState([])
   const location = useLocation()
   const { transferReport, setTransferReport } = PdfData()
@@ -62,7 +61,7 @@ const useTransferreport = () => {
     setInvoiceno(formData.Invoice_no)
     setInvoiceDate(formData.BillDate)
     setTransferReport(formData.TransferReport)
-  }, [location])
+  }, [location, setTransferReport])
 
   window.addEventListener('click', (event) => {
     if (event.target === window) {
@@ -120,37 +119,14 @@ const useTransferreport = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
+  }, [error, success, warning, info]);
+
 
   const handleEInvoiceClick = (row) => {
     if (rows.length === 0) {
@@ -489,62 +465,16 @@ const useTransferreport = () => {
         return selectedRow ? selectedRow.tripid : null;
       })
       .filter((tripid) => tripid !== null);
-    // setRowselect(selectedTripIds)
-
 
     const tripsheetid = selectedTripIds;
     setRowSelectionModel(tripsheetid);
-    // localStorage.setItem('selectedtripsheetid', tripsheetid);
-    // const selectedRowCount = selectedTripIds.length;
-
-    // localStorage.setItem('selectedrowcount', selectedRowCount);
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const tripid = rowSelectionModel
-  //       const encoded = localStorage.getItem("selectedcustomerdata");
-  //       localStorage.setItem("selectedcustomer", encoded);
-  //       const storedCustomer = localStorage.getItem("selectedcustomer");
-  //       const customer = decodeURIComponent(storedCustomer);
-  //       // console.log(tripid,customer,"transfer",rowSelectionModel)
-  //       // console.log(tripid,"objtripid")
-  //       const response = await fetch(
-  //         `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
-  //           customer
-  //         )}/${tripid}`
-  //       );
-  //       // console.log(response,"objresponse")
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const tripData = await response.json();
-  //       // if (Array.isArray(tripData)) {
 
-  //       //     const rowsWithUniqueId = tripData.map((row, index) => ({
-  //       //       ...row,
-
-  //       //     }));
-  //       console.log(tripData,"obj")
-  //           setRowszipdata(tripData);
-  //           // setSuccess(true);
-  //           setSuccessMessage("successfully listed");
-
-
-  //     } catch { }
-  //   };
-  //   fetchData();
-  // }, [apiUrl,rowSelectionModel,rowzip,handleRowSelection]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-
         const tripid = rowSelectionModel
-
-
-
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
@@ -557,24 +487,14 @@ const useTransferreport = () => {
               customer
             )}/${tripid}`
           );
-          // console.log(response,"objresponse")
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const tripData = await response.json();
-          // if (Array.isArray(tripData)) {
-
-          //     const rowsWithUniqueId = tripData.map((row, index) => ({
-          //       ...row,
-
-          //     }));
-          // console.log(tripData,"pdfobjneee")
 
           setPdfzipdata(tripData)
-          // setSuccess(true);
           setSuccessMessage("successfully listed");
-
-
         }
         else {
           return
@@ -582,7 +502,7 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl, rowSelectionModel, pdfzipdata, handleRowSelection, rows]);
+  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
 
   return {
     rows,

@@ -208,44 +208,6 @@ const useTransferlist = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Transfer_list.pdf');
   };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);
-  //   pdf.setFont("helvetica", "normal");
-  //   pdf.text("Transfer_list", 10, 10);
-  //   const tableData = rows.map((row) => [
-  //     row["id"],
-  //     row["status"],
-  //     row["invoiceno"],
-  //     row["Billingdate"],
-  //     row["customer"],
-  //     row["fromdate"],
-  //     row["todate"],
-  //     row["guestname"],
-  //     row["trips"],
-  //     row["Totalamount"],
-  //   ]);
-  //   pdf.autoTable({
-  //     head: [
-  //       [
-  //         "Sno",
-  //         "Status",
-  //         "Invoice No",
-  //         "Date",
-  //         "Customer",
-  //         "From Date",
-  //         "To Date",
-  //         "UserName",
-  //         "Trips",
-  //         "Amount",
-  //       ],
-  //     ],
-  //     body: tableData,
-  //     startY: 20,
-  //   });
-  //   const pdfBlob = pdf.output("blob");
-  //   saveAs(pdfBlob, "Transfer_list.pdf");
-  // };
 
 
   //-----------popup--------------
@@ -371,49 +333,11 @@ const useTransferlist = () => {
     { field: "Amount", headerName: "Amount", width: 130 },
   ];
 
-  // const columns = [
-  //   { field: "id", headerName: "Sno", width: 70 },
-  //   { field: "status", headerName: "Status", width: 130 },
-  //   { field: "invoiceno", headerName: "Invoice No", width: 130 },
-  //   {
-  //     field: "Billingdate",
-  //     headerName: "Date",
-  //     width: 130,
-  //     valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
-  //   },
-  //   { field: "customer", headerName: "Customer", width: 130 },
-  //   {
-  //     field: "fromdate",
-  //     headerName: "From Date",
-  //     width: 130,
-  //     valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
-  //   },
-  //   {
-  //     field: "todate",
-  //     headerName: "To Date",
-  //     width: 150,
-  //     valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
-  //   },
-  //   { field: "guestname", headerName: "UserName", width: 150 },
-  //   { field: "trips", headerName: "Trips", width: 150 },
-  //   { field: "Totalamount", headerName: "Amount", width: 130 },
-  // ];
-
 
 
   const handleButtonClickTripsheet = (params) => {
     const data = params.row;
-
-    // const customername = encodeURIComponent(row.customer);
-    // const encodedCustomer = customername;
-    // localStorage.setItem("selectedcustomer", encodedCustomer);
-    // const storedCustomer = localStorage.getItem("selectedcustomer");
-    // const decodedCustomer = decodeURIComponent(storedCustomer);
-    // localStorage.setItem("selectedcustomer", decodedCustomer);
-    // const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
-    // window.history.pushState({ path: billingPageUrl }, '', billingPageUrl);
     const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&billingsheet=true`
-    // window.location.assign(billingPageUrl)
     window.location.href = billingPageUrl
   };
 

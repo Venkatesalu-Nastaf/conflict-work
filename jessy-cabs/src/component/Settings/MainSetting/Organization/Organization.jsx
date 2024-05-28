@@ -209,8 +209,8 @@ const Organization = () => {
                     </div>
                 </div>
                 <div className="organisation-details ">
-                    <div className="input-field organisation-details-input">
-                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent: 'center', width: '68vw', gap: '10px' }}>
+                    <div className="input-field organisation-details-input" style={{padding:'20px'}}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent:'space-between', width: '68vw', gap: '10px' }}>
                             <div className="input organization-input">
                                 <label htmlFor="">Type of Organization:</label>
                                 <TextField
@@ -235,7 +235,7 @@ const Organization = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input " style={{ width: "100%", display: 'flex', gap: '10px' }}>
+                            <div className="input organization-text-area" >
                                 <TextField
                                     size="small"
                                     name="remark"

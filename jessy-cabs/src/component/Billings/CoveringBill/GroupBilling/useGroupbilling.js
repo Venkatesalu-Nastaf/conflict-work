@@ -13,7 +13,7 @@ import Excel from 'exceljs';
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
+
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -24,7 +24,6 @@ const useGroupbilling = () => {
     const [invoiceno, setInvoiceno] = useState("");
     const [totalValue, setTotalValue] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
-    // const [bankOptions, setBankOptions] = useState([]);
     const [errorMessage, setErrorMessage] = useState({});
     const [roundedAmount, setRoundedAmount] = useState('');
     const [successMessage, setSuccessMessage] = useState({});
@@ -60,12 +59,11 @@ const useGroupbilling = () => {
     };
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
-        // { field: "billingno", headerName: "Bill No", width: 130 },
         {
             field: groupInvoice ? "InvoiceNo" : "billingno",
             headerName: groupInvoice ? "Invoice No" : "Bill No",
             width: 150
-        },        // { field: groupInvoice ? `${groupInvoiceNumber}` : "billingno", headerName: groupInvoice ? "Invoice No" : "Bill No", width: 150 },
+        },
         { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
         { field: "tripid", headerName: "Trip No", width: 150 },
         { field: "customer", headerName: "Customer", width: 130 },
@@ -81,7 +79,6 @@ const useGroupbilling = () => {
         { field: "toll", headerName: "Toll", width: 150 },
         { field: "parking", headerName: "Parking", width: 150 },
         { field: "netamount", headerName: "Net Amount", width: 130 },
-        // { field: "tripid", headerName: "Trip ID", width: 130 },
         { field: "guestname", headerName: "UserName", width: 150 },
     ];
 
@@ -191,17 +188,6 @@ const useGroupbilling = () => {
         station: '',
     });
 
-    // useEffect(() => {
-    //     Organization()
-    //         .then((data) => {
-    //             if (data) {
-    //                 setBankOptions(data);
-    //             } else {
-    //             }
-    //         })
-    //         .catch(() => {
-    //         });
-    // }, []);
 
     const calculateNetAmountSum = useCallback((data) => {
         return data.reduce((sum, item) => {
@@ -229,21 +215,11 @@ const useGroupbilling = () => {
                 setRefInvDate(RefInvDate)
                 const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
                 setReferNo(ReferenceNo)
-                // const Amount = GroupReference.map((li)=>li.Amount)
-                // setGroupBillAmount(Amount)
-                // const Trips = GroupReference.map((li) => li.Trips)
-                // const tripcount = parseInt(Trips)
-                // setTrips(tripcount)
                 const Tripsid = GroupReference.map((li) => li.Trip_id)
-
             }
             catch (err) {
-
+                console.log("error", err)
             }
-        }
-
-        else {
-
         }
     }
 
@@ -324,25 +300,10 @@ const useGroupbilling = () => {
         }
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
-
-    // const convertToCSV = (data) => {
-    //     const header = columns.map((column) => column.headerName).join(",");
-    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //     return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //     const csvData = convertToCSV(rows);
-    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //     saveAs(blob, "Group Billing.csv");
-    // };
-
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-
-
         try {
-
             const fileName = "Group Billing"
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
@@ -350,10 +311,7 @@ const useGroupbilling = () => {
             //         console.log(headers,"hed")
             const columns = headers.map(key => ({ key, header: key }));
             //         worksheet.columns = columnsexcel
-
             worksheet.columns = columns;
-
-
             // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
 
@@ -375,10 +333,8 @@ const useGroupbilling = () => {
             });
 
             rows.forEach((singleData, index) => {
-
-
+                
                 worksheet.addRow(singleData);
-
                 // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
                     const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
@@ -511,10 +467,6 @@ const useGroupbilling = () => {
         setRowSelectedValues(selectedTrips)
         setRefPdfData(PdfSelectedTrips)
         setRefCustomer(PdfSelectedcustomer)
-        // localStorage.setItem('selectedtripsheetid', tripsheetid);
-        // const selectedRowCount = selectedTripIds.length;
-
-        // localStorage.setItem('selectedrowcount', selectedRowCount);
     };
 
 
@@ -650,7 +602,6 @@ const useGroupbilling = () => {
         handleKeyenter,
         customer,
         tripData,
-        // bankOptions,
         setCustomer,
         Billingdate,
         fromDate,

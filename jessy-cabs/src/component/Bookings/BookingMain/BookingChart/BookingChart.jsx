@@ -38,6 +38,7 @@ const BookingChart = () => {
   // const [vehStatus, setVehStatus] = useState([])
   const [latestVehicleDetail, setLatestVehicleDetail] = useState([])
   const apiUrl = APIURL;
+
   const chartData = {
     series: [assignDriver, driverOnline, driverOffline],
     options: {
@@ -72,6 +73,38 @@ const BookingChart = () => {
       }],
     },
   };
+
+  const [chartOptions, setChartOptions] = useState(chartData.options);
+  const [chartSize, setChartSize] = useState({
+    width: '100%',
+    height: '100%',
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 320 && window.innerWidth <= 550) {
+        setChartSize({
+          width: 400,
+          height: 400,
+        });
+      } else {
+        setChartSize({
+          width: '100%',
+          height: '100%',
+        });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
+
 
   const showsearchTable = useState(true);
 
@@ -184,6 +217,8 @@ const BookingChart = () => {
                   series={chartData.series}
                   type="pie"
                   className="graph-chart"
+                  width={chartSize.width}
+                  height={chartSize.height}
                 />
               </div>
               <div className="total-car-table">
@@ -210,7 +245,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4">No Active Drivers available</td>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Active Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -239,7 +274,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4">No Online Drivers available</td>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Online Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -268,7 +303,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4">No Offline Drivers available</td>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -277,12 +312,12 @@ const BookingChart = () => {
               </div>
             </div>
             <div className="second-chart-bar-section">
-              <div className="second-chart-bar">
+              <div className="second-chart-bar ">
                 <div ref={chartRef} className="car-chart" />
               </div>
               <div className="total-car-table">
                 {showActiveTable && (
-                  <div className="graph-total-table">
+                  <div className=" graph-total-table-driver graph-total-table">
                     <table className="graph-table">
                       <tr
                         className="graph-table-row ">
@@ -306,7 +341,7 @@ const BookingChart = () => {
                             </tr>
                           )) : (
                             <tr>
-                              <td colSpan="4">No Active Vehicles available</td>
+                              <td colSpan="4" style={{ textAlign: 'center' }}>No Active Vehicles available</td>
                             </tr>
                           )
                       }
@@ -314,7 +349,7 @@ const BookingChart = () => {
                   </div>
                 )}
                 {showInactiveTable && (
-                  <div className="graph-total-table">
+                  <div className="graph-total-table-driver graph-total-table">
                     <table className="graph-table">
                       <tr
                         className="graph-table-row ">
@@ -337,7 +372,7 @@ const BookingChart = () => {
                           </tr>
                         )) : (
                           <tr>
-                            <td colSpan="4">No Online Vehicles available</td>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>No Online Vehicles available</td>
                           </tr>
                         )
                       }
@@ -345,7 +380,7 @@ const BookingChart = () => {
                   </div>
                 )}
                 {showOfflineTable && (
-                  <div className="graph-total-table">
+                  <div className="graph-total-table-driver graph-total-table">
                     <table className="graph-table">
                       <tr
                         className="graph-table-row ">
@@ -369,7 +404,7 @@ const BookingChart = () => {
                         ))
                         : (
                           <tr>
-                            <td colSpan="4">No Offline Vehicles available</td>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Vehicles available</td>
                           </tr>
                         )
                       }
@@ -380,18 +415,18 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
-        <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600' }}> Search here for Vehiecle Details..</p>
+        <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', padding: '10px 20px' }}> Search here for Vehiecle Details..</p>
         <div className="search-bar-input">
           <div className="search-button">
             <FaSearch style={{ color: '#fff' }} />
-            <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: 'fit-content', color: '#fff' }} />
+            <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: '100%', color: '#fff' }} />
           </div>
           <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
         </div>
         {showsearchTable && (
-          <div className="total-car-table">
-            <div className="graph-total-table">
-              <table className="graph-table">
+          <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="graph-total-table graph-total-table-driver" style={{height:'300px'}}>
+              <table className="graph-table" >
                 <tr
                   className="graph-table-row ">
                   <th className="graph-table-head b-color">DRIVER NAME</th>
@@ -412,7 +447,7 @@ const BookingChart = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No data available</td>
+                    <td colSpan="4" style={{ textAlign: 'center',paddingTop:'50px' , paddingBottom:'50px' }}>No data available</td>
                   </tr>
                 )}
               </table>

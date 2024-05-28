@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
-import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
 // Table START
 const columns = [
@@ -12,21 +11,18 @@ const columns = [
     { field: "duty", headerName: "Duty", width: 100 },
     { field: "OrganizationName", headerName: "Organization Name", width: 150 },
     { field: "vehicleType", headerName: "vehicle Type", width: 110 },
-
     { field: "package", headerName: "Package", width: 80 },
     { field: "Hours", headerName: "Hours", width: 70 },
     { field: "KMS", headerName: "KMS", width: 70 },
     { field: "Rate", headerName: "Rate", width: 70 },
     { field: "UptoHours", headerName: "Upto Hours", width: 100 },
     { field: "UptoKMS", headerName: "UptoKMS", width: 90 },
-
     { field: "extraHours", headerName: "Extra Hours", width: 100 },
     { field: "extraKMS", headerName: "Extra KMS", width: 90 },
     { field: "AKMS", headerName: "AKMS", width: 70 },
     { field: "NHalt", headerName: "NHalt", width: 70 },
     { field: "Bata", headerName: "Bata", width: 70 },
     { field: "Validity", headerName: "Validity", width: 80 },
-
 ];
 // TABLE END
 
@@ -60,7 +56,6 @@ const usePackagerateentry = () => {
     //------------------------------
 
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -77,11 +72,9 @@ const usePackagerateentry = () => {
 
     //-------editmode------------------
     const [isEditMode, setIsEditMode] = useState(false);
-
     //------------------------------------------------
     const [validitydata, setValiditydata] = useState([])
     const [datevalidity, setDatevalidity] = useState()
-    const { setOrganizationName } = useData()
 
 
     useEffect(() => {
@@ -89,16 +82,14 @@ const usePackagerateentry = () => {
             try {
                 const response = await axios.get(`${apiUrl}/ratetype`);
                 const data = response.data
-                const names = data.map(res => res.ratename)
                 setValiditydata(data)
-                setOrganizationName(names)
             }
             catch (error) {
                 console.log(error, "error");
             }
         };
         fetchOrganizationnames()
-    }, [apiUrl, setOrganizationName])
+    }, [apiUrl])
 
 
     //// popup-----------------------------------------
@@ -109,6 +100,7 @@ const usePackagerateentry = () => {
         setInfo(false);
         setWarning(false);
     };
+
     useEffect(() => {
         if (error || success || warning || info) {
             const timer = setTimeout(() => {
@@ -132,11 +124,7 @@ const usePackagerateentry = () => {
             ...prevCommonData,
             [name]: value
         }));
-
     };
-
-
-
 
     const handleAutocompleteChange = (event, value, name, index) => {
         const selectedOption = value ? value.label : '';
@@ -153,16 +141,13 @@ const usePackagerateentry = () => {
                 [name]: selectedOption,
             }));
         }
-
         // Additional logic based on name if needed
         if (name === "pricetag") {
             getStartEndTimesByRateName(selectedOption);
         }
     };
 
-
-
-    //ayyanar----------------------------------------
+    //----------------------------------------
     const handleAddExtra = () => {
         setFieldSets([...fieldSets, {
             duty: '',
@@ -394,8 +379,6 @@ const usePackagerateentry = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
-
         handleClick,
         handleChange,
         handleRowClick,

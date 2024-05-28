@@ -58,7 +58,6 @@ import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import EngineeringIcon from "@mui/icons-material/Engineering";
@@ -66,7 +65,6 @@ import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
@@ -83,10 +81,8 @@ import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
 // FontAwesomeIcon Link
-// import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
 import { faStamp } from "@fortawesome/free-solid-svg-icons";
-// import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
@@ -578,75 +574,9 @@ const TripSheet = ({ stationName }) => {
                       onChange={handleChange}
                     />
                   </div>
-
-                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
-                    <div className="icone">
-                      <HomeTwoToneIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="streetno"
-                      className='tripsheet-address'
-                      value={formData.streetno || selectedCustomerData.streetno || book.streetno || ''}
-                      onChange={handleChange}
-                      id="remark"
-                      sx={{ m: 1 }}
-                      variant="standard"
-                      autoComplete="password"
-                    />
-                  </div> */}
-
-                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
-                    <div className="icone">
-                      <LocationCityIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="city"
-                      className='tripsheet-address'
-                      value={formData.city || selectedCustomerData.city || book.city || ''}
-                      onChange={handleChange}
-                      id="address3"
-                      sx={{ m: 1 }}
-                      variant="standard"
-                      autoComplete="password"
-                    />
-                  </div> */}
                 </div>
 
                 <div>
-                  {/* <div className="Scroll-Style tripsheet-table1">
-                    <Table hoverRow borderAxis="y">
-                      <thead>
-                        <tr>
-                          <th>Vehicle_Name</th>
-                          <th>Vehicle_Type</th>
-                          <th>Driver_name</th>
-                          <th>Driver_phone</th>
-                          <th>Supplier</th>
-                          <th>Online_Access</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rows.length === 0 ? (
-                          <tr>
-                            <td colSpan={7}>No data available.</td>
-                          </tr>
-                        ) : (
-                          rows.map((row) => (
-                            <tr key={row.id} onClick={() => handleRowClick(row)}>
-                              <td>{row.vehRegNo}</td>
-                              <td>{row.vehType}</td>
-                              <td>{row.driverName}</td>
-                              <td>{row.mobileNo}</td>
-                              <td>{row.supplier}</td>
-                              <td>{row.onlineAccess}</td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </Table>
-                  </div> */}
                   <div style={{ margin: '0px 10px', }}>
                     <div className="Scroll-Style tripsheet-table1 ">
                       <thead>
@@ -658,9 +588,7 @@ const TripSheet = ({ stationName }) => {
                           <th className="table-head-booking">Vehicle Reg No</th>
                           <th className="table-head-booking">HireTypes</th>
                           <th className="table-head-booking">Grouphs</th>
-
                           <th className="table-head-booking">Active</th>
-
                         </tr>
                       </thead>
                       <tbody>
@@ -680,7 +608,6 @@ const TripSheet = ({ stationName }) => {
                               <td>{row.Groups}</td>
 
                               <td>{row.active}</td>
-                              {/* <td>{row.onlineAccess}</td> */}
                             </tr>
                           ))
                         )}
@@ -919,21 +846,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                {/* <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
-                  <div className="icone">
-                    <CarCrashIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="vehiclerigsterno"
-                    label="Vehicle Rigster No"
-                    name="vehRegNo"
-                    value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
-                    onChange={handleChange}
-                    autoComplete="password"
-                  />
-                </div> */}
+
 
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
                   <div className="icone">
@@ -957,15 +870,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-
-
-
-
-
-
-
                 <div className="input radio">
-
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -979,24 +884,7 @@ const TripSheet = ({ stationName }) => {
 
                   />
                 </div>
-                {/* <div className="input radio">
-                  <FormControlLabel
-                    id="DriverSMS"
-                    value="DriverSMS"
-                    control={
-                      <Checkbox
-                        size="small"
-                        checked={formData.gps || book.gps}
-                        onChange={(event) => {
-                          setBook({ ...book, gps: event.target.checked });
-                          setFormData({ ...formData, gps: event.target.checked });
-                        }}
-                      />
-                    }
-                    label="GPS"
-                  />
 
-                </div> */}
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
@@ -1720,121 +1608,12 @@ const TripSheet = ({ stationName }) => {
                             variant="standard"
                             style={{ marginTop: '25px', marginLeft: '15px' }}
                           />
+
                           <div className="input-field">
-                            {/* <div className="input" style={{ width: "390px" }}>
-                        <div className="icone">
-                          <TollTwoToneIcon color="action" />
-                        </div>
-                        <TextField
-                          name="rud"
-                          value={formData.rud || selectedCustomerData.rud || book.rud || ''}
-                          onChange={handleChange}
-                          label="Rud"
-                          id="rud"
-                          size="small"
-                          autoComplete="password"
-                          variant="standard"
-                          sx={{ m: 1, width: "60ch" }}
-                        />
-                      </div> */}
-                            {/* <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="netamount1"
-                          value={book.netamount1 || calculateTotalAmount2() || ''}
-                          onChange={handleChange}
-                          size="small"
-                          label="Net Amount"
-                          id="net-amount"
-                          autoComplete="password"
-                          variant="standard"
-                        />
-                      </div> */}
+
                           </div>
                           <div className="input-field">
-                            {/* <div className="input" style={{ width: "186px" }}>
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faTags} />
-                        </div>
-                        <TextField
-                          name="discount"
-                          value={formData.discount || selectedCustomerData.discount || book.discount || ''}
-                          onChange={handleChange}
-                          label="Discount"
-                          id="discount"
-                          size="small"
-                          autoComplete="password"
-                          variant="standard"
-                        />
-                      </div> */}
-                            {/* <div className="input" style={{ width: "187px" }}>
-                        <div className="icone">
-                          <TollTwoToneIcon color="action" />
-                        </div>
-                        <TextField size="small" variant="standard" />
-                      </div> */}
-                            {/* <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="ons"
-                          value={formData.ons || selectedCustomerData.ons || book.ons || ''}
-                          onChange={handleChange}
-                          size="small"
-                          label="On"
-                          autoComplete="password"
-                          id="on"
-                          variant="standard"
-                        />
-                      </div> */}
                           </div>
-                          <div className="input-field">
-                            {/* <div className="input radio">
-                        <FormControlLabel
-                          name="manualbills"
-                          value="manualbills"
-                          control={<Checkbox size="small" />}
-                          label="Manual Bills"
-                          autoComplete="new-password"
-                          onChange={handleChange}
-                          checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
-                        />
-                      </div> */}
-                            {/* <div className="input">
-                        <div className="icone">
-                          <AccountBalanceWalletIcon color="action" />
-                        </div>
-                        <TextField
-                          name="balance"
-                          value={formData.balance || selectedCustomerData.balance || book.balance || ''}
-                          onChange={handleChange}
-                          size="small"
-                          autoComplete="password"
-                          label="Balance"
-                          id="balance"
-                        />
-                      </div> */}
-                          </div>
-                          {/* <div className="input-field">
-                      <div className="input">
-                        <TextField size="small" variant="standard" autoComplete="password" />
-                      </div>
-                      <div className="input">
-                        <div
-                          className="icone"
-                          style={{
-                            padding: "0px 10px 0px 0px",
-                            "font-size": "20px",
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faXmark} />
-                        </div>
-                        <TextField size="small" variant="standard" autoComplete="password" />
-                      </div>
-                    </div> */}
                         </div>
                       </DialogContentText>
                     </DialogContent>
@@ -1963,33 +1742,6 @@ const TripSheet = ({ stationName }) => {
                   </span>
                 </div>
 
-                {/* <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Active
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="active"
-                    onChange={handleChange}
-                    value={selectedCustomerData?.active || book.active}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div> */}
-
-                {/* aaaaaaa */}
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                     <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
@@ -2001,7 +1753,7 @@ const TripSheet = ({ stationName }) => {
                   </DialogActions>
                 </Dialog>
 
-                {/* // ayyanar calc */}
+
                 <div className="input" style={{ width: "160px" }}>
                   {isEditMode ? (<>
                     <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
@@ -2011,8 +1763,6 @@ const TripSheet = ({ stationName }) => {
                   ) : (
                     <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
                   )}
-                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
                 </div>
 
               </div>
@@ -2025,14 +1775,6 @@ const TripSheet = ({ stationName }) => {
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
-                  {/* {filteredActions.map((action) => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                      />
-                  ))} */}
 
                   {Tripsheet_read === 1 && (
                     <SpeedDialAction
@@ -3000,120 +2742,13 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                     />
                     <div className="input-field">
-                      {/* <div className="input" style={{ width: "390px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        name="rud"
-                        value={formData.rud || selectedCustomerData.rud || book.rud || ''}
-                        onChange={handleChange}
-                        label="Rud"
-                        id="rud"
-                        size="small"
-                        autoComplete="password"
-                        variant="standard"
-                        sx={{ m: 1, width: "60ch" }}
-                      />
-                    </div> */}
-                      {/* <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="netamount1"
-                        value={book.netamount1 || calculateTotalAmount2() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Net Amount"
-                        id="net-amount"
-                        autoComplete="password"
-                        variant="standard"
-                      />
-                    </div> */}
+
                     </div>
                     <div className="input-field">
-                      {/* <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faTags} />
-                      </div>
-                      <TextField
-                        name="discount"
-                        value={formData.discount || selectedCustomerData.discount || book.discount || ''}
-                        onChange={handleChange}
-                        label="Discount"
-                        id="discount"
-                        size="small"
-                        autoComplete="password"
-                        variant="standard"
-                      />
-                    </div> */}
-                      {/* <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField size="small" variant="standard" />
-                    </div> */}
-                      {/* <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="ons"
-                        value={formData.ons || selectedCustomerData.ons || book.ons || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="On"
-                        autoComplete="password"
-                        id="on"
-                        variant="standard"
-                      />
-                    </div> */}
+
                     </div>
                     <div className="input-field">
-                      {/* <div className="input radio">
-                      <FormControlLabel
-                        name="manualbills"
-                        value="manualbills"
-                        control={<Checkbox size="small" />}
-                        label="Manual Bills"
-                        autoComplete="new-password"
-                        onChange={handleChange}
-                        checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
-                      />
-                    </div> */}
-                      {/* <div className="input">
-                      <div className="icone">
-                        <AccountBalanceWalletIcon color="action" />
-                      </div>
-                      <TextField
-                        name="balance"
-                        value={formData.balance || selectedCustomerData.balance || book.balance || ''}
-                        onChange={handleChange}
-                        size="small"
-                        autoComplete="password"
-                        label="Balance"
-                        id="balance"
-                      />
-                    </div> */}
                     </div>
-                    {/* <div className="input-field">
-                    <div className="input">
-                      <TextField size="small" variant="standard" autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{
-                          padding: "0px 10px 0px 0px",
-                          "font-size": "20px",
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faXmark} />
-                      </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
-                    </div>
-                  </div> */}
                   </div>
                 </TabPanel>
                 <TabPanel value={4} sx={{ p: 2 }}>

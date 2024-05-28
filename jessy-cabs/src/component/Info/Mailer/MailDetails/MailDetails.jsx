@@ -65,19 +65,19 @@ const actions = [
 
 
 const MailDetails = () => {
-  const apiurl=APIURL
-  const[templatedata,setTemplateData] =useState([])
-  const [selecteddata,setSelectedData]=useState([])
-   const [file, setFile] = useState(null);
-  const [triggerdata,setTriggerData]=useState(false)
-    const [data, setData] = useState({});
-    const [templateimage,setTemplateimage]=useState([])
-    const [error, setError] = useState(false);
-    const [successMessage, setSuccessMessage] = useState({});
-    const [errorMessage, setErrorMessage] = useState({});
-    const [success, setSuccess] = useState(false);
+  const apiurl = APIURL
+  const [templatedata, setTemplateData] = useState([])
+  const [selecteddata, setSelectedData] = useState([])
+  const [file, setFile] = useState(null);
+  const [triggerdata, setTriggerData] = useState(false)
+  const [data, setData] = useState({});
+  const [templateimage, setTemplateimage] = useState([])
+  const [error, setError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-  
+
   const columns = [
     { field: "idno", headerName: "Sno", width: 70 },
     { field: "Templateid", headerName: "Templateid", width: 130 },
@@ -129,44 +129,44 @@ const MailDetails = () => {
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
-};
+  };
 
-useEffect(() => {
+  useEffect(() => {
     if (error || success) {
-        const timer = setTimeout(() => {
-            hidePopup();
-        }, 3000);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-}, [error, success]);
+  }, [error, success]);
 
-  useEffect(()=>{
-    const fetchdata=async()=>{
-      try{
-        const response=await axios.get(`${apiurl}/templatedataall`)
-        const data=response.data
-        const rowuniqueid=data.map((row,index)=>({
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get(`${apiurl}/templatedataall`)
+        const data = response.data
+        const rowuniqueid = data.map((row, index) => ({
           ...row,
-          idno:index+1
+          idno: index + 1
 
 
         }))
         setTemplateData(rowuniqueid)
         setTriggerData(false)
       }
-      catch(err){
+      catch (err) {
         console.log(err)
       }
     }
     fetchdata()
-  },[apiurl,triggerdata])
+  }, [apiurl, triggerdata])
 
   function convertToPlain(html) {
-  
-    if(html){
-    var tempDivElement = document.createElement("div");
-    tempDivElement.innerHTML = html;
-    return tempDivElement.textContent || tempDivElement.innerText || "";
+
+    if (html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
     }
     return ""
   }
@@ -183,36 +183,36 @@ useEffect(() => {
       const workbook = XLSX.read(binaryStr, { type: 'binary' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet,{header:1});
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       let indexToRemove = 0;
-        jsonData.splice(indexToRemove, 1);
-          let objects = jsonData.map(sublist => {
-            return {
-              Email: sublist[0],
-              CustomerName: sublist[1]
-            };
-          });
+      jsonData.splice(indexToRemove, 1);
+      let objects = jsonData.map(sublist => {
+        return {
+          Email: sublist[0],
+          CustomerName: sublist[1]
+        };
+      });
       setData(objects);
-     
+
     };
 
     reader.readAsBinaryString(file);
   };
 
-  const handleButtondeleteClick = async(params) => {
+  const handleButtondeleteClick = async (params) => {
     const { Templateid } = params.row;
-    try{
+    try {
       setTemplateData((prevData) => prevData.filter(template => template.Templateid !== Templateid));
       await axios.delete(`${apiurl}/templatedatadelete/${Templateid}`)
       setSelectedData([])
-    
+
       // setTemplateData((prevData) => prevData.filter(template => template.Templateid !== Templateid));
       await axios.delete(`${apiurl}/templatedeleteimageedata/${Templateid}`)
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
-  
+
   }
 
   // const handleButtondeleteClick = async(params) => {
@@ -228,7 +228,7 @@ useEffect(() => {
   //   catch(err){
   //     console.log(err)
   //   }
-  
+
   // }
   // const handletableClick=async(params)=>{
   //   console.log(params,"data")
@@ -237,12 +237,12 @@ useEffect(() => {
   // }
 
 
-  const handleButtonEditClick = async(params) => {
+  const handleButtonEditClick = async (params) => {
     // console.log(params, 'params');
     // console.log(params.row,params.row.Templateid)
-    const Templatecheck="true"
+    const Templatecheck = "true"
     const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateMessageData=${params.row.TemplateMessageData}&TemplateimageData=${templateimage}`
-    
+
     window.location.href = mailerPageUrl
   }
 
@@ -266,72 +266,72 @@ useEffect(() => {
     navigate("/home/info/mailer/TemplateSelection");
   }
 
-  const Attachedimagedata=async(templateid)=>{
+  const Attachedimagedata = async (templateid) => {
     // console.log(templateid)
-    try{
-       const response= await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
-      
-       const Temp=response.data
-     
-       if(Temp.length>0){
-       setTemplateimage(Temp)
-       }
+    try {
+      const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
+
+      const Temp = response.data
+
+      if (Temp.length > 0) {
+        setTemplateimage(Temp)
+      }
       //  setTemplateData([])
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
 
-  const handletableClick=async(params)=>{
-    
+  const handletableClick = async (params) => {
+
     setSelectedData(params.row)
     Attachedimagedata(params.row.Templateid)
     // setTriggerData(true)
-    
+
 
   }
 
-  const handlesendbulkemail=async()=>{
+  const handlesendbulkemail = async () => {
     // const datatemplate=selecteddata
-    
 
-    if(selecteddata.length===0){
+
+    if (selecteddata.length === 0) {
       setError(true)
       setErrorMessage("Select the Data")
       return
     }
-    if( file === null){
+    if (file === null) {
       setError(true)
       setErrorMessage("Select the Excel File")
       return
     }
-    try{
+    try {
 
-      const datatosend={
-        templatemessage:selecteddata,
-        emaildata:data,
-        templateimagedata:templateimage
+      const datatosend = {
+        templatemessage: selecteddata,
+        emaildata: data,
+        templateimagedata: templateimage
       }
-      const response=await axios.post(`${apiurl}/send-emailtemplate`,datatosend)
+      const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
       setData({})
       setFile(null)
       setSelectedData([])
       setSuccess(true)
       setSuccessMessage("Mail Sent Successfully")
-      
-    
+
+
       // const mailMessageTextField = document.getElementById('MailMessage');
-     
+
       //   mailMessageTextField.value = '';
-      
-      
-    
+
+
+
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
@@ -353,14 +353,14 @@ useEffect(() => {
                   <input
                     type="file"
                     id="fileInput"
-                    onChange={handleFileUpload} 
+                    onChange={handleFileUpload}
                     // onChange={handleFileChange}
                     style={{ display: 'none' }}
                   />
                 </div>
                 <div style={{ textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600' }}>{file}</div>
                 <div className="input-field ">
-                  <div className="input" style={{ width: "400px" }}>
+                  <div className=" input-mailer"  style={{ width: "400px" }}>
                     <div className="icone">
                       <SmsIcon color="action" />
                     </div>
@@ -370,7 +370,7 @@ useEffect(() => {
                       name="MailMessage"
                       label="Mail Message"
                       id="MailMessage"
-                      value={convertToPlain(selecteddata.TemplateMessageData)||''}
+                      value={convertToPlain(selecteddata.TemplateMessageData) || ''}
                       className="mail-textarea1"
                       sx={{ m: 1, width: "200ch" }}
                     />
@@ -387,26 +387,27 @@ useEffect(() => {
                   </div>
                 </div>
                 <div className='alert-popup-main'>
-                {success &&
-                            <div className='alert-popup Success' >
-                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                <p>{successMessage}</p>
-                            </div>
-                        }
-                         {error &&
-                            <div className='alert-popup Error' >
-                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                <p>{errorMessage}</p>
-                            </div>
-                        }
-                        </div>
+                  {success &&
+                    <div className='alert-popup Success' >
+                      <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <p>{successMessage}</p>
+                    </div>
+                  }
+                  {error &&
+                    <div className='alert-popup Error' >
+                      <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <p>{errorMessage}</p>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
             <div className="container-right-mailDetails">
-              <div className="textbox">
-                <div className="textboxlist">
+              <div className="textbox textbox-mailer">
+
+                <div className="textboxlist-mailer">
                   <div className="textboxlist-customer ">
                     <div className="input-field" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
                       <div>
@@ -455,17 +456,17 @@ useEffect(() => {
                       </Table>
                     </div> */}
 
-          <div className="table-bookingCopy-TransferDataEntry">
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={templatedata}
-              columns={columns}
-              onRowClick={handletableClick}
-           
-              
-            />
-          </div>
-          </div>
+                    <div className="table-bookingCopy-TransferDataEntry" style={{ marginTop: '10px' }}>
+                      <div style={{ height: 400, width: "100%" }}>
+                        <DataGrid
+                          rows={templatedata}
+                          columns={columns}
+                          onRowClick={handletableClick}
+
+
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

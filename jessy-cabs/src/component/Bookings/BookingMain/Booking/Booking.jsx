@@ -399,7 +399,8 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
           </div>
-          <div className="sub-section2">
+          <div className="sub-section2 sub-section2-booking">
+            <div className="first-table-driver">
             <div className="booking-update-main">
               <div className="booking-update">
                 <div
@@ -466,10 +467,12 @@ const Booking = ({ stationName }) => {
                 label="Send Email"
               />
             </div>
+            </div>
+            
           </div>
         </div>
         <div>
-          <div className="second-division" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <div className="second-division second-division-booking" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' ,alignItems:'center'}}>
             <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
                 <HomeRepairServiceTwoToneIcon color="action" />
@@ -849,17 +852,17 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
             </div>
-            <div style={{ width: '100%' }}>
-              <div className="input-field">
+            {/* <div style={{ width: '100%' }}> */}
+              {/* <div className="input-field">
                 <div className="input-btn">
                   <span onClick={handleClickHide} className="btn">
                     Hide
                   </span>
                   <span className="btn">Copy</span>
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
+              </div> */}
+              {/* <div style={{display:'flex',flexWrap:'wrap'}}> */}
+                <div className="input-dummy" style={{display:'inline'}}>
                   {formData.bookingno ||
                     selectedCustomerData.bookingno ||
                     book.bookingno ? (
@@ -891,7 +894,7 @@ const Booking = ({ stationName }) => {
                     </Button>
                   )}
                 </div>
-                <div className="input">
+                <div className="input-dummy">
                   <Button
                     variant="outlined"
                     onClick={handleButtonClick}
@@ -899,10 +902,15 @@ const Booking = ({ stationName }) => {
                     View
                   </Button>
                 </div>
-              </div>
-            </div>
+              {/* </div> */}
+            {/* </div> */}
           </div>
-          <div className="booking-main-section2">
+
+
+
+
+
+          <div className="booking-main-section2" style={{marginTop:'30px'}}>
             <div className="sub-section1 sub-section-second-division" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
@@ -1075,6 +1083,7 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
             <div className="sub-section2-driver">
+            <div className="second-table-driver">
               <div className="booking-update-main driver-table" style={{ marginTop: '20px' }}>
                 <div className="booking-update">
                   <div
@@ -1115,6 +1124,7 @@ const Booking = ({ stationName }) => {
                     </table>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           </div>

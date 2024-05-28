@@ -195,7 +195,7 @@
 }
 
 .sub-section2-driver {
-  width: 55%;
+  width: 40%;
 }
 
 @media screen and (max-width: 1240px) {
@@ -211,10 +211,14 @@
 
   .sub-section2 {
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .sub-section2-driver {
     width: 100%;
+    display: flex;
+        justify-content: center;
   }
 }
 
@@ -239,6 +243,7 @@
   }
 
   .sub-section-second-division {
+    /* width: 68vw !important; */
     width: 74vw !important;
     justify-content: center;
   }
@@ -327,37 +332,46 @@
 }
 
 @media screen and (min-width:1244px) and (max-width:1300px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 42% !important;
   }
 }
 
 @media screen and (min-width:1301px) and (max-width:1350px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 44% !important;
   }
 }
 
 @media screen and (min-width:1351px) and (max-width:1400px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 46% !important;
   }
 }
 
 @media screen and (min-width:1401px) and (max-width:1450px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 50% !important;
   }
 }
 
 @media screen and (min-width:1451px) and (max-width:1500px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 60% !important;
   }
 }
 
 @media screen and (min-width:1501px) {
-  .sub-section2 {
+  .sub-section2 , .sub-section2-driver {
     width: 60% !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:945px) {
+  .first-table-driver{
+    width: 80% !important;
+  }
+  .second-table-driver {
+    width: 80% !important;
   }
 }

@@ -21,8 +21,14 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
-    /* border-radius: 20px; */
     color: #000;
     background-color: var(--glass);
+}
+
+.head-tab-billing {
+    position: sticky;
+    top: 0px;
+    padding: 30px 10px 0px 0px;
+    background-color: #ffffff;
+    z-index: 5;
 }

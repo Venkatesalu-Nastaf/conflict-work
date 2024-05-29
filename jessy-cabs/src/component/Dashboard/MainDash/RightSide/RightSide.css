@@ -1,9 +1,6 @@
-
 .RightSide {
   display: flex;
   flex-direction: column;
-  /* padding-top: 1rem; */
-  /* width: 95%; */
   justify-content: space-evenly;
   margin-top: 100px;
 }
@@ -13,98 +10,61 @@
 
 
   .RightSide {
-      display: flex;
-      flex-direction: row;
-      /* padding-top: 1rem; */
-      /* width: 95%; */
-      width: max-content;
-      gap: 20px;
-      justify-content: space-around;
-      margin-top: 60px;
-     position: relative;
-     left: 20px;
-    }
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 60px;
+    position: relative;
+    left: 20px;
   }
+}
 
-  @media only screen and (min-width:888.99px) and (max-width:971px) {
+@media only screen and (min-width:888.99px) and (max-width:971px) {
+  .RightSide {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 60px;
+    position: relative;
+    left: 30px;
+  }
+}
 
+@media only screen and (min-width:971.99px) and (max-width:1060px) {
+  .RightSide {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 60px;
+    position: relative;
+    left: 40px;
+  }
+}
 
-    .RightSide {
-      display: flex;
-      flex-direction: row;
-      /* padding-top: 1rem; */
-      /* width: 95%; */
-      width: max-content;
-      gap: 20px;
-      justify-content: space-around;
-      margin-top: 60px;
-     position: relative;
-     left: 30px;
-      }
-    }
-
-    @media only screen and (min-width:971.99px) and (max-width:1060px) {
-
-
-      .RightSide {
-        display: flex;
-      flex-direction: row;
-      /* padding-top: 1rem; */
-      /* width: 95%; */
-      width: max-content;
-      gap: 20px;
-      justify-content: space-around;
-      margin-top: 60px;
-     position: relative;
-     left: 40px;
-        }
-      }
-
-      @media only screen and (min-width:1060.99px) and (max-width:1219px) {
-
-
-        .RightSide {
-          display: flex;
-        flex-direction: row;
-        /* padding-top: 1rem; */
-        /* width: 95%; */
-        width: max-content;
-        gap: 20px;
-        justify-content: space-around;
-        margin-top: 60px;
-       position: relative;
-       left: 60px;
-          }
-        }
-  
-
-
+@media only screen and (min-width:1060.99px) and (max-width:1219px) {
+  .RightSide {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 60px;
+    position: relative;
+    left: 60px;
+  }
+}
 
 .RightSide h3 {
   letter-spacing: .5px;
   font-size: 20px;
   color: #fff;
 }
-
-
-/* @media screen and (max-width: 1200px) {
-  .RightSide {
-    justify-content: flex-start;
-    margin-top: 3rem;
-  }
-} */
-
-/* @media screen and (max-width: 768px) {
-  .RightSide {
-    width: 100%;
-    margin-top: 40px;
-  }
-  .RightSide > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-} */
 
 
 @media screen and (min-width:427px) and (max-width: 768px) {
@@ -114,7 +74,6 @@
     position: relative;
     left: 30px;
   }
-
 }
 
 @media screen and (min-width:320px) and (max-width: 426.99px) {
@@ -124,10 +83,19 @@
     position: relative;
     left: 5px;
   }
-
 }
 
+.area-chart-text {
+  margin-bottom: 10px;
+  padding: 1rem;
+}
 
-.area-chart-text{
-  margin-bottom: 5px;
+.area-chart {
+  margin-top: 5px;
+}
+
+@media screen and (min-width:769px) and (max-width: 1219px) {
+  .RightSide {
+    align-items: center !important;
+  }
 }

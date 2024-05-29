@@ -39,9 +39,7 @@ const page404 = () => {
                   exists. Please try again, or take a look at our.
                 </p>
               </div>
-
             </div>
-
           </section>
         </a>
       </div>

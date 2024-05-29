@@ -1,21 +1,32 @@
-.MainDash{
+.MainDash {
     color: #ffffff;
-    /* padding-top: 1rem; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    padding-bottom: 30px;
 }
 
 @media screen and (max-width: 1200px) {
-    .MainDash{
-        justify-content:flex-start;
+    .MainDash {
+        justify-content: flex-start;
         margin-top: 2rem;
     }
 }
 
-@media screen and (max-width: 768px)
-{
-    .MainDash{
+@media screen and (max-width: 768px) {
+    .MainDash {
         align-items: center;
     }
+}
+
+.main-dash-first-section {
+    height: 97vh;
+    overflow: auto;
+}
+
+.main-dash-first-section::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    cursor: pointer;
+    position: absolute;
 }

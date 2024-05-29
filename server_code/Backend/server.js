@@ -22,7 +22,6 @@ const storage1 = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
   }
-
 })
 
 const upload2 = multer({
@@ -72,6 +71,8 @@ const image_delete = require('./customer_master/Router/delete_uploaded_files/del
 const DashboardRouter = require('./customer_master/Router/Dashboard/Dashboard');
 const User_Permission = require('./customer_master/Router/userpermission/userermissionpage');
 const SignatureRouter = require('./customer_master/Router/signature/signature');
+const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
+
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -150,6 +151,8 @@ app.use('/', DashboardRouter);// image delete
 //------------------------------------------------------------------------------------------------------------
 app.use('/', User_Permission);// image delete 
 //------------------------------------------------------------------------------------------------------------
+app.use('/', Templatemailer);// Customer Page Database
+// -------------------------------------------------------------------------------------------
 //theme update in user creation
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;

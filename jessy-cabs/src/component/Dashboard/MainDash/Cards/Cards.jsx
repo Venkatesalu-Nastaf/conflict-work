@@ -15,14 +15,9 @@ const Cards = () => {
   const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
   const [backendmonth, setBackendmonth] = useState([])
   const [billinggraph, setBillingGraph] = useState([])
-
-
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
-
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-
-
   // console.log(lastMonthTotalAmount, "amount ")
   // console.log(lastMonthTotalPending, "amount pend")
   // console.log(lastMonthTotalPaid, "amount paid")
@@ -33,13 +28,8 @@ const Cards = () => {
     return currentMonth.toString(); // Convert to string for comparison with option values
   };
 
-
-
-
   const fetchDataFromBackend = async (month) => {
     // console.log(month,"kkk")
-
-
     try {
       const response = await fetch(`${apiUrl}/total_amounts_from_billing?month=${month}`);
       if (!response.ok) {
@@ -48,7 +38,6 @@ const Cards = () => {
       if (response.status === 200) {
         const data = await response.json();
         setBackendmonth(data)
-        // console.log(data,"gg")
         return data;
       }
       else {
@@ -113,7 +102,6 @@ const Cards = () => {
     return percentageChange.toFixed(1);
   };
 
-
   const totalPaidPercentageChange = calculatePercentageChange(
     lastMonthTotalAmount,
     lastMonthTotalPending,
@@ -124,11 +112,7 @@ const Cards = () => {
     lastMonthTotalAmount,
     // lastMonthTotalPending,
     lastMonthTotalPaid
-
   );
-
-
-
 
   const cardData = [
     {
@@ -138,7 +122,6 @@ const Cards = () => {
         boxShadow: "0px 0px 0px 0px #e0c6f5",
       },
       barValue: "",
-
       value: lastMonthTotalAmount.toLocaleString(),
       png: FaRupeeSign,
       series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
@@ -166,10 +149,6 @@ const Cards = () => {
       series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
     },
   ];
-  // console.log(cardData,"j")
-
-
-
 
   useEffect(() => {
     const fetchData2 = async () => {
@@ -185,7 +164,6 @@ const Cards = () => {
     };
     fetchData2();
   }, [selectedMonth2]);
-  // console.log(selectedMonth2, "mon")
 
   return (
     <div className="cards-container">

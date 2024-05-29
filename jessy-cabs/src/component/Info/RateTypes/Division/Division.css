@@ -41,6 +41,7 @@
     background-color: var(--glass);
     margin-top: 30px;
 }
+
 .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
@@ -53,7 +54,6 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
@@ -81,29 +81,29 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
-.divisionform-inputfeilds{
+.divisionform-inputfeilds {
     flex-wrap: wrap !important;
 }
 
 @media screen and (max-width:1023px) {
-    .division-form-size{
+    .division-form-size {
         width: 200px !important;
     }
-    .divisionform-inputfeilds{
+
+    .divisionform-inputfeilds {
         justify-content: center;
     }
 }
+
 @media only screen and (min-width:320px) and (max-width:700px) {
-.copy-title-btn-Division {
-    width: 80% !important;
-}
+    .copy-title-btn-Division {
+        width: 80% !important;
+    }
 }
 
 @media only screen and (min-width:320px) and (max-width:380px) {
-
     .copy-title-btn-Division {
         border: none !important;
         background-color: transparent;

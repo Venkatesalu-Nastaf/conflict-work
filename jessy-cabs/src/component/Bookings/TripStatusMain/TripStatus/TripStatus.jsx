@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
-import { Department } from "./TripStatusData.js";
 import { Status } from "./TripStatusData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import useTripStatus from './useTripStatus.js';
@@ -28,7 +27,6 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { PermissionContext } from '../../../context/permissionContext.js';
 
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -37,7 +35,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -52,7 +49,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 
-const TripStatus = () => {
+const TripStatus = ({ stationName }) => {
 
   const {
     statusvalue, handlestatusChange,
@@ -85,7 +82,9 @@ const TripStatus = () => {
     handlePopupClose,
     selectedRow,
     handleTripsheetClick,
-    columns
+    columns,
+    filteredColumns,
+    columnshowall
   } = useTripStatus();
 
   useEffect(() => {
@@ -93,26 +92,20 @@ const TripStatus = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
-
-
   const { permissions } = useContext(PermissionContext)
-
   const TripStatus_read = permissions[2]?.read;
-
 
   return (
     <div className="TripStatus-form Scroll-Style-hide">
       <form action="">
-        <div className="detail-container-main">
-          <div className="container-left">
+        <div className="detail-container-main detail-container-main-tripstatus">
+          <div className="container-left-tripstatus">
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">
                 <div className="input">
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <MdOutlineCalendarMonth color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -124,17 +117,12 @@ const TripStatus = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
-
-                <div className="input dispatch-input" >
-
+                <div className="input dispatch-input">
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <MdOutlineCalendarMonth color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="To Date"
                         format="DD/MM/YYYY"
@@ -144,28 +132,20 @@ const TripStatus = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
-
-
                 <div className='show-all-button'>
                   <div className="input" >
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
               </div>
               <div className="input-field TripStatus-input-feilds">
-
-
                 <div className="input" style={{ width: "300px" }}>
-
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <SiStatuspal color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -182,22 +162,19 @@ const TripStatus = () => {
                       );
                     }}
                   />
-
                 </div>
                 <div className="input" style={{ width: "300px" }}>
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <GiMatterStates color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
                     value={department}
-                    options={Department.map((option) => ({
-                      label: option.option,
+                    options={stationName?.map((option) => ({
+                      label: option.Stationname,
                     }))}
                     onChange={(event, value) => handleInputChange(event, value)}
                     renderInput={(params) => {
@@ -207,12 +184,6 @@ const TripStatus = () => {
                     }}
                   />
                 </div>
-
-                {/* <div className="input" style={{ width: '170px' }}>
-                  <Button variant="contained" onClick={handleButtontripsheet}>
-                    New TripSheet
-                  </Button>
-                </div> */}
               </div>
             </div>
             <div className='alert-popup-main'>
@@ -247,9 +218,6 @@ const TripStatus = () => {
             </div>
           </div>
         </div>
-
-
-
         <div className="SpeedDial" style={{ padding: '26px', margin: '14px -35px 0px 0px' }}>
           <Box sx={{ position: "relative", mt: 2, }}>
             <StyledSpeedDial
@@ -257,17 +225,6 @@ const TripStatus = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                />
-              ))} */}
-
-
-
               {TripStatus_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -276,23 +233,15 @@ const TripStatus = () => {
                   onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                 />
               )}
-
               <SpeedDialAction
                 key="Cancel"
                 icon={<CancelPresentationIcon />}
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
-
-
             </StyledSpeedDial>
           </Box>
         </div>
-
-
-
         <div className="table-bookingCopy-TripStatus">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
@@ -312,7 +261,7 @@ const TripStatus = () => {
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={reversedRows}
-              columns={columns}
+              columns={columnshowall ? columns : filteredColumns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
             />

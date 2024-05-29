@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
+import Excel from 'exceljs';
 // import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 // import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
@@ -106,6 +107,8 @@ const useVehicleinfo = () => {
         // { field: "OwnerType", headerName: "Owner Type", width: 130 },
     ];
 
+  
+
     // const actions = [
     //     { icon: <CancelPresentationIcon />, name: "Cancel" },
     //     { icon: <DeleteIcon />, name: "Delete" },
@@ -175,84 +178,258 @@ const useVehicleinfo = () => {
     //---------------------------------------
 
 
-    const convertToCSV = (data) => {
-        const header = columns.map((column) => column.headerName).join(",");
-        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-        return [header, ...rows].join("\n");
-    };
-    const handleExcelDownload = () => {
-        const csvData = convertToCSV(rows);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "VehicleStatement Reports.csv");
-    };
+    // const convertToCSV = (data) => {
+    //     const header = columns.map((column) => column.headerName).join(",");
+    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    //     return [header, ...rows].join("\n");
+    // };
+    // const handleExcelDownload = () => {
+    //     const csvData = convertToCSV(rows);
+    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    //     saveAs(blob, "VehicleStatement Reports.csv");
+    // };
+    const handleExcelDownload=async()=>{
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
 
-    const handlePdfDownload = () => {
-        const pdf = new jsPDF('p', 'pt', 'letter');
-        pdf.setFontSize(16); // Increase font size for the title
-        const title = "Vehicle Statement Reports";
-        const titleWidth = pdf.getStringUnitWidth(title) * 16; // Calculate title width
-        const centerX = (pdf.internal.pageSize.width - titleWidth) / 2; // Calculate center position for title
-        pdf.text(title, centerX, 40); // Center the title
-        pdf.setFontSize(12); // Reset font size for the data
+        try {
 
-        // Define the starting position for the data
-        let yPos = 70;
-        const labelWidth = 200; // Adjust as needed
-        const valueWidth = 300; // Adjust as needed
-        const lineHeight = 20; // Adjust as needed
-        let totalPages = 1; // Initial number of pages
+            const fileName = "VehicleStatement Reports"
+            // creating one worksheet in workbook
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+            //         console.log(headers,"hed")
+                    const columnsExcel = headers.map(key => ({ key, header: key }));
+            
+            worksheet.columns = columnsExcel;
 
-        // Iterate through the data and print labels and values
-        rows.forEach((rowData) => {
-            // Check if the current row will fit on the current page
-            if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
-                // Add a new page if the row won't fit
-                pdf.addPage();
-                yPos = 70; // Reset yPos for the new page
-                totalPages++; // Increment total pages
-            }
+            // updated the font for first row.
+            worksheet.getRow(1).font = { bold: true };
 
-            // For each row, iterate through the properties of selectedCustomerData
-            Object.entries(selectedCustomerData).forEach(([label, value]) => {
-                // Skip if the label is 'id' or undefined value
-                if (label === 'id' || rowData[label] === undefined) return;
-
-                // Format label and value into a string
-                // const text = `${label}: ${rowData[label]}`;
-
-                // Check if the label is 'active'
-                if (label === 'active') {
-                    // Draw a line below the label 'active'
-                    pdf.setDrawColor(0); // Set border color to black
-                    pdf.setLineWidth(0.5); // Set border width
-                    pdf.line(40, yPos + 15, 40 + labelWidth + valueWidth, yPos + 15);// Draw line
-                }
-
-                // Check if the text exceeds the remaining space on the page
-                if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
-                    // Add a new page if the text exceeds the remaining space
-                    pdf.addPage();
-                    yPos = 70; // Reset yPos for the new page
-                    totalPages++; // Increment total pages
-                }
-
-                // Print label
-                pdf.text(label, 40, yPos);
-
-                // Print value next to the label
-                pdf.text(rowData[label], 40 + labelWidth, yPos);
-
-                // Move to the next line
-                yPos += lineHeight;
+            // Set background color for header cells
+            worksheet.getRow(1).eachCell((cell, colNumber) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' } // Green background color
+                };
             });
 
-            // Add some space between rows
-            yPos += lineHeight;
-        });
 
-        // Save the PDF file with the calculated number of pages
-        pdf.save(`VehicleStatementReports (${totalPages} pages).pdf`);
-    };
+            worksheet.getRow(1).height = 30;
+            // loop through all of the columns and set the alignment with width.
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            rows.forEach((singleData, index) => {
+             
+
+                worksheet.addRow(singleData);
+
+                // Adjust column width based on the length of the cell values in the added row
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            // loop through all of the rows and set the outline style.
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
+                const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
+                currentCell.forEach((singleCell) => {
+
+                    const cellAddress = singleCell._address;
+
+                    // apply border
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            // write the content using writeBuffer
+            const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERRROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // removing worksheet's instance to create new one
+            workbook.removeWorksheet(workSheetName);
+        }
+
+    }
+
+
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid" // [width, height] in inches
+        });
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("VehicleInfo Details", 10, 10);
+         const header = Object.keys(rows[0]);
+      
+        // Extracting body
+        const body = rows.map(row => Object.values(row));
+        console.log(header.length,"len")
+      
+        let fontdata = 1;
+        if (header.length <= 13) {
+            fontdata = 16;
+        }
+        else if (header.length >= 14 && header.length <= 18) {
+            fontdata = 11;
+        }
+        else if (header.length >= 19 && header.length <= 20) {
+          fontdata = 10;
+      } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 9;
+        }
+        else if (header.length >= 24 && header.length <= 26) {
+            fontdata = 7;
+        }
+        else if (header.length >= 27 && header.length <= 30) {
+            fontdata = 6;
+        }
+        else if (header.length >= 31 && header.length <= 35) {
+            fontdata = 4;
+        }
+        else if (header.length >= 36 && header.length <= 40) {
+            fontdata = 4;
+        }
+        else if (header.length >= 41 && header.length <= 46) {
+            fontdata = 2;
+        }
+        console.log(fontdata,"data")
+        
+        pdf.autoTable({
+            head: [header],
+            body: body,
+            startY: 20,
+      
+            headStyles: {
+                // fontSize: 5,
+                fontSize: fontdata,
+                cellPadding: 1.5, // Decrease padding in header
+      
+                minCellHeigh: 8,
+                valign: 'middle',
+      
+                font: 'helvetica', // Set font type for body
+      
+                cellWidth: 'wrap',
+                // cellWidth: 'auto'
+            },
+      
+            bodyStyles: {
+                // fontSize:4,
+                // fontSize: fontdata-1
+                fontSize: fontdata-1,
+                valign: 'middle',
+                //  cellWidth: 'wrap',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+      
+            },
+            columnWidth: 'auto'
+      
+      });
+        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+        console.log(scaleFactor, "SCALE")
+      
+        // Scale content
+        pdf.scale(scaleFactor, scaleFactor);
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'VehicleStatementReports.pdf');
+      };
+
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF('p', 'pt', 'letter');
+    //     pdf.setFontSize(16); // Increase font size for the title
+    //     const title = "Vehicle Statement Reports";
+    //     const titleWidth = pdf.getStringUnitWidth(title) * 16; // Calculate title width
+    //     const centerX = (pdf.internal.pageSize.width - titleWidth) / 2; // Calculate center position for title
+    //     pdf.text(title, centerX, 40); // Center the title
+    //     pdf.setFontSize(12); // Reset font size for the data
+
+    //     // Define the starting position for the data
+    //     let yPos = 70;
+    //     const labelWidth = 200; // Adjust as needed
+    //     const valueWidth = 300; // Adjust as needed
+    //     const lineHeight = 20; // Adjust as needed
+    //     let totalPages = 1; // Initial number of pages
+
+    //     // Iterate through the data and print labels and values
+    //     rows.forEach((rowData) => {
+    //         console.log(rows,"vehrow")
+    //         // Check if the current row will fit on the current page
+    //         if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
+    //             // Add a new page if the row won't fit
+    //             pdf.addPage();
+    //             yPos = 70; // Reset yPos for the new page
+    //             totalPages++; // Increment total pages
+    //         }
+    //         console.log(book,"selecetd")
+
+    //         // For each row, iterate through the properties of selectedCustomerData
+    //         Object.entries(book).forEach(([label, value]) => {
+           
+    //             // Skip if the label is 'id' or undefined value
+    //             if (label === 'id' || rowData[label] === undefined) return;
+
+    //             // Format label and value into a string
+    //             // const text = `${label}: ${rowData[label]}`;
+
+    //             // Check if the label is 'active'
+    //             if (label === 'active') {
+    //                 console.log(label,typeof(label))
+    //                 // Draw a line below the label 'active'
+    //                 pdf.setDrawColor(0); // Set border color to black
+    //                 pdf.setLineWidth(0.5); // Set border width
+    //                 pdf.line(40, yPos + 15, 40 + labelWidth + valueWidth, yPos + 15);// Draw line
+    //             }
+
+    //             // Check if the text exceeds the remaining space on the page
+    //             if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
+    //                 // Add a new page if the text exceeds the remaining space
+    //                 pdf.addPage();
+    //                 yPos = 70; // Reset yPos for the new page
+    //                 totalPages++; // Increment total pages
+    //             }
+
+    //             // Print label
+    //             pdf.text(label, 40, yPos);
+
+    //             // Print value next to the label
+    //             pdf.text(rowData[label], 40 + labelWidth, yPos);
+
+    //             // Move to the next line
+    //             yPos += lineHeight;
+    //         });
+
+    //         // Add some space between rows
+    //         yPos += lineHeight;
+    //     });
+
+    //     // Save the PDF file with the calculated number of pages
+    //     pdf.save(`VehicleStatementReports (${totalPages} pages).pdf`);
+    // };
 
 
     useEffect(() => {
@@ -305,17 +482,12 @@ const useVehicleinfo = () => {
         vehRegNo: '',
         stations: '',
         segement: '',
-        // costCenter: '',
-        // vehType: '',
         owner: '',
         mobileNo: '',
         email: '',
         yearModel: '',
         insuranceno: '',
         insduedate: '',
-        // licenseno: '',
-        // licensebatchno: '',
-        // licduedate: '',
         nationalpermito: '',
         npdate: '',
         avgmileage: '',
@@ -326,9 +498,6 @@ const useVehicleinfo = () => {
         fcdate: '',
         driverName: '',
         tankCap: '',
-        // routeno: '',
-        // remarks: '',
-        // OwnerType: '',
         active: 'yes',
     });
 
@@ -344,17 +513,12 @@ const useVehicleinfo = () => {
             vehRegNo: '',
             stations: '',
             segement: '',
-            // costCenter: '',
-            // vehType: '',
             owner: '',
             mobileNo: '',
             email: '',
             yearModel: '',
             insuranceno: '',
             insduedate: '',
-            // licenseno: '',
-            // licensebatchno: '',
-            // licduedate: '',
             nationalpermito: '',
             npdate: '',
             avgmileage: '',
@@ -365,9 +529,6 @@ const useVehicleinfo = () => {
             fcdate: '',
             driverName: '',
             tankCap: '',
-            // routeno: '',
-            // remarks: '',
-            // OwnerType: '',
             active: 'yes',
 
         }));
@@ -764,6 +925,22 @@ const useVehicleinfo = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
+                const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage('Successfully listed');
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
 
             }
 

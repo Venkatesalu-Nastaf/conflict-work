@@ -1,58 +1,65 @@
-import React, { useEffect } from "react";
-
+import React, { useState, useEffect, useRef } from "react";
+import * as echarts from 'echarts';
 import "./BookingChart.css";
-import Button from "@mui/material/Button";
-import { DataGrid } from "@mui/x-data-grid";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
-// ICONS
-import ClearIcon from "@mui/icons-material/Clear";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import useBookingchart from "./useBookingchart";
 import Chart from 'react-apexcharts';
-import ReactECharts from 'echarts-for-react';
+import axios from "axios";
+import { APIURL } from "../../../url";
+import { FaSearch } from "react-icons/fa";
 
 
 const BookingChart = () => {
   const {
     actionName,
-    error,
-    success,
-    info,
-    warning,
-    successMessage,
-    errorMessage,
-    warningMessage,
-    infoMessage,
+    driverOnline,
+    driverOffline,
+    assignDriver,
+    activeVehicle,
+    inActiveVehicle,
+    offlineVehicle,
     handleClick,
-    hidePopup,
-    fromDate,
-    setFromDate,
-    toDate,
-    setToDate,
-    vehicles,
-    columns,
-    showBookedStatusAll,
-  } = useBookingchart();
+    driverActiveDetails,
+    driverOfflineDetails,
+    driverOnlineDetails,
+    vehicleActiveDetails,
+    vehicleOfflineDetails,
+    vehicleOnlineDetails
 
+  } = useBookingchart();
   useEffect(() => {
     if (actionName === "List") {
       handleClick(null, "List");
     }
   }, [actionName, handleClick]);
-
+  const [clickedSegment, setClickedSegment] = useState('Active');
+  const [vehicleDetail, setVehicleDetail] = useState('')
+  const [getVehicleDetail, setGetVehicleDetail] = useState([])
+  const [vehdriverNames, setVehdriverNames] = useState([])
+  // const [vehStatus, setVehStatus] = useState([])
+  const [latestVehicleDetail, setLatestVehicleDetail] = useState([])
+  const apiUrl = APIURL;
 
   const chartData = {
-    series: [44, 55, 13, 43, 22],
+    series: [assignDriver, driverOnline, driverOffline],
     options: {
       chart: {
         type: 'pie',
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            if (config.dataPointIndex === 0) {
+              setClickedSegment('Active');
+            } else if (config.dataPointIndex === 1) {
+              setClickedSegment('Inactive');
+            } else if (config.dataPointIndex === 2) {
+              setClickedSegment('Offline');
+            } else {
+              setClickedSegment('Active');
+            }
+          },
+        },
       },
-      labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+      labels: ['Active', 'Inactive', 'Offline'],
+      colors: ['#28a745', '#007bff', '#ff0000'], //  Green,Blue, Red colors respectively
       responsive: [{
         breakpoint: 480,
         options: {
@@ -64,224 +71,398 @@ const BookingChart = () => {
           },
         },
       }],
-    },};
+    },
+  };
 
+  const [chartOptions, setChartOptions] = useState(chartData.options);
+  const [chartSize, setChartSize] = useState({
+    width: '100%',
+    height: '100%',
+  });
 
-
-    const chartOptions = {
-      title: {
-        text: 'Event and Action Chart'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' }
-      },
-      xAxis: {
-        type: 'category',
-        data: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [{
-        type: 'bar',
-        data: [20, 35, 15, 25, 30]
-      }]
-    };
-  
-    const onChartClick = (param, echartsInstance) => {
-      if (param.componentType === 'series') {
-        alert('Clicked on data item: ' + param.value);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 320 && window.innerWidth <= 550) {
+        setChartSize({
+          width: 400,
+          height: 400,
+        });
+      } else {
+        setChartSize({
+          width: '100%',
+          height: '100%',
+        });
       }
     };
 
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
+
+
+  const showsearchTable = useState(true);
+
+  const handleButtonClick = async () => {
+    try {
+      if (!vehdriverNames || vehdriverNames.length === 0) return
+      const response = await axios.get(`${apiUrl}/getVehicleInfo/${vehicleDetail}`);
+      console.log(response.data, 'vehresponse');
+      setGetVehicleDetail(response.data)
+    } catch (error) {
+      console.error('Request failed', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (getVehicleDetail.length > 0) {
+        const driverNames = getVehicleDetail.map((li) => li.driverName);
+        setVehdriverNames(driverNames);
+      }
+    };
+    fetchData();
+  }, [vehicleDetail, getVehicleDetail]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/getDriverIdStatus/${vehdriverNames}`, {
+
+        });
+        const datas = response.data;
+
+        const updatedDetails = getVehicleDetail.map(vehicle => {
+          const matchingDriver = datas.find(driver => driver.drivername === vehicle.driverName);
+          return {
+            ...vehicle,
+            status: matchingDriver ? matchingDriver.driverApp : '',
+          };
+        });
+        setLatestVehicleDetail(updatedDetails)
+      } catch (error) {
+        console.error('Error fetching driver id status:', error);
+      }
+    };
+    fetchData();
+  }, [vehdriverNames, vehicleDetail, apiUrl]);
+
+  const chartRef = useRef(null);
+  const [showActiveTable, setShowActiveTable] = useState(true);
+  const [showInactiveTable, setShowInactiveTable] = useState(false);
+  const [showOfflineTable, setShowOfflineTable] = useState(false);
+
+  useEffect(() => {
+    const chart = echarts.init(chartRef.current);
+    const option = {
+      legend: {},
+      tooltip: {},
+      dataset: {
+        dimensions: ['product', 'Active', 'Inactive', 'Offline'],
+        source: [
+          { product: 'Cars', Active: activeVehicle, Inactive: inActiveVehicle, Offline: offlineVehicle },
+        ]
+      },
+      xAxis: { type: 'category' },
+      yAxis: {},
+      series: [
+        { type: 'bar', name: 'Active', color: '#28a745' },
+        { type: 'bar', name: 'Inactive', color: '#007bff' },
+        { type: 'bar', name: 'Offline', color: '#ff0000' },
+      ]
+    };
+    chart.setOption(option);
+
+    chart.on('click', (params) => {
+      if (params.seriesName === 'Active') {
+        setShowActiveTable(true);
+        setShowInactiveTable(false);
+        setShowOfflineTable(false);
+      } else if (params.seriesName === 'Inactive') {
+        setShowActiveTable(false);
+        setShowInactiveTable(true);
+        setShowOfflineTable(false);
+      } else if (params.seriesName === 'Offline') {
+        setShowActiveTable(false);
+        setShowInactiveTable(false);
+        setShowOfflineTable(true);
+      } else {
+        setShowActiveTable(true);
+        setShowInactiveTable(false);
+        setShowOfflineTable(false);
+      }
+    });
+    return () => {
+      chart.dispose();
+    };
+  }, [activeVehicle, inActiveVehicle, offlineVehicle]);
 
 
   return (
 
-<>
-
-<Chart
-      options={chartData.options}
-      series={chartData.series}
-      type="pie"
-      width="400"
-    />
-
-
-   
-
-<div className="App">
-      <ReactECharts
-        option={chartOptions}
-        style={{ height: '400px', width: '800px' }}
-        onEvents={{ click: onChartClick }}
-      />
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {/* <div className="BookingChart-form Scroll-Style-hide">
-      <form action="">
-        <div className="detail-container-main">
-          <div className="container-left">
-            <div className="copy-title-btn-BookingChart">
-              <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="From Date"
-                      format="DD/MM/YYYY"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input" style={{ width: "50%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="To Date"
-                      format="DD/MM/YYYY"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input" style={{ width: "460px" }}>
-                  <Button
-                    variant="contained"
-                    onClick={() => showBookedStatusAll(fromDate, toDate)}
-
-                  >
-                    Show Booked Status All
-                  </Button>
-                </div>
+    <>
+      <div className="main-booking-chart" >
+        <div className="main-booking-chart-sub-division" style={{ display: 'flex ', justifyContent: 'center' }}>
+          <div className="apex-fusion-chart">
+            <div className="second-chart-bar-section second-chart-bar-section-apex">
+              <div className="second-chart-bar1">
+                <Chart
+                  options={chartData.options}
+                  series={chartData.series}
+                  type="pie"
+                  className="graph-chart"
+                  width={chartSize.width}
+                  height={chartSize.height}
+                />
+              </div>
+              <div className="total-car-table">
+                {clickedSegment === 'Active' && (
+                  <div className="graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver NAME</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver ID</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">STATUS</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Mobile Number</th>
+                      </tr>
+                      {driverActiveDetails?.length > 0 ? (
+                        driverActiveDetails.map((li, index) => (
+                          <tr key={index} className="">
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.drivername}</td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-id">{li.driverid}</td>
+                            <td className="graph-table-head graph-table-head-driver">
+                              <p className="active-driver">{li.driverApp}</p>
+                            </td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.Mobileno}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Active Drivers available</td>
+                        </tr>
+                      )}
+                    </table>
+                  </div>
+                )}
+                {clickedSegment === 'Inactive' && (
+                  <div className="graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver NAME</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver ID</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">STATUS</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Mobile Number</th>
+                      </tr>
+                      {driverOnlineDetails?.length > 0 ? (
+                        driverOnlineDetails.map((li, index) => (
+                          <tr key={index} className="">
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.drivername}</td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-id">{li.driverid}</td>
+                            <td className="graph-table-head graph-table-head-driver">
+                              <p className="active-driver">{li.driverApp}</p>
+                            </td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.Mobileno}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Online Drivers available</td>
+                        </tr>
+                      )}
+                    </table>
+                  </div>
+                )}
+                {clickedSegment === 'Offline' && (
+                  <div className="graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver NAME</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Driver ID</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">STATUS</th>
+                        <th className=" graph-table-head graph-table-head-driver b-color">Mobile Number</th>
+                      </tr>
+                      {driverOfflineDetails?.length > 0 ? (
+                        driverOfflineDetails.map((li, index) => (
+                          <tr key={index} className="">
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.drivername}</td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-id">{li.driverid}</td>
+                            <td className="graph-table-head graph-table-head-driver">
+                              <p className="active-driver">{li.driverApp}</p>
+                            </td>
+                            <td className="graph-table-head graph-table-head-driver graph-table-row-values">{li.Mobileno}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Drivers available</td>
+                        </tr>
+                      )}
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="second-chart-bar-section">
+              <div className="second-chart-bar ">
+                <div ref={chartRef} className="car-chart" />
+              </div>
+              <div className="total-car-table">
+                {showActiveTable && (
+                  <div className=" graph-total-table-driver graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className="graph-table-head b-color">Car NAME</th>
+                        <th className="graph-table-head b-color">Car Type</th>
+                        <th className="graph-table-head b-color">STATUS</th>
+                        <th className="graph-table-head b-color">Car Number</th>
+                      </tr>
+                      {
+                        vehicleActiveDetails.length > 0 ?
+                          vehicleActiveDetails?.map((li) => (
+                            <tr className="">
+                              <td className="graph-table-head graph-table-row-values">{li.vehiclename}</td>
+                              <td className="graph-table-head  graph-table-row-id">{li.vechtype}</td>
+                              <td className="graph-table-head ">
+                                <p className="active-driver">
+                                  {li.status}
+                                </p>
+                              </td>
+                              <td className="graph-table-head graph-table-row-values">{li.vehRegNo}</td>
+                            </tr>
+                          )) : (
+                            <tr>
+                              <td colSpan="4" style={{ textAlign: 'center' }}>No Active Vehicles available</td>
+                            </tr>
+                          )
+                      }
+                    </table>
+                  </div>
+                )}
+                {showInactiveTable && (
+                  <div className="graph-total-table-driver graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className="graph-table-head b-color">Car NAME</th>
+                        <th className="graph-table-head b-color">Car Type</th>
+                        <th className="graph-table-head b-color">STATUS</th>
+                        <th className="graph-table-head b-color">Car Number</th>
+                      </tr>
+                      {vehicleOnlineDetails.length > 0 ?
+                        vehicleOnlineDetails?.map((li) => (
+                          <tr className="">
+                            <td className="graph-table-head graph-table-row-values">{li.vehiclename}</td>
+                            <td className="graph-table-head  graph-table-row-id">{li.vechtype}</td>
+                            <td className="graph-table-head ">
+                              <p className="inactive-driver">
+                                {li.status}
+                              </p>
+                            </td>
+                            <td className="graph-table-head graph-table-row-values">{li.vehRegNo}</td>
+                          </tr>
+                        )) : (
+                          <tr>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>No Online Vehicles available</td>
+                          </tr>
+                        )
+                      }
+                    </table>
+                  </div>
+                )}
+                {showOfflineTable && (
+                  <div className="graph-total-table-driver graph-total-table">
+                    <table className="graph-table">
+                      <tr
+                        className="graph-table-row ">
+                        <th className="graph-table-head b-color">Car NAME</th>
+                        <th className="graph-table-head b-color">Car Type</th>
+                        <th className="graph-table-head b-color">STATUS</th>
+                        <th className="graph-table-head b-color">Car Number</th>
+                      </tr>
+                      {vehicleOfflineDetails.length ?
+                        vehicleOfflineDetails?.map((li) => (
+                          <tr className="">
+                            <td className="graph-table-head graph-table-row-values">{li.vehiclename}</td>
+                            <td className="graph-table-head  graph-table-row-id">{li.vechtype}</td>
+                            <td className="graph-table-head ">
+                              <p className="offline-driver">
+                                {li.status}
+                              </p>
+                            </td>
+                            <td className="graph-table-head graph-table-row-values">{li.vehRegNo}</td>
+                          </tr>
+                        ))
+                        : (
+                          <tr>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Vehicles available</td>
+                          </tr>
+                        )
+                      }
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-        {error && (
-          <div className="alert-popup Error">
-            <div className="popup-icon">
-              {" "}
-              <ClearIcon style={{ color: "#fff" }} />{" "}
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', padding: '10px 20px' }}> Search here for Vehiecle Details..</p>
+          <div className="search-bar-input">
+            <div className="search-button">
+              <FaSearch style={{ color: '#fff' }} />
+              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: '100%', color: '#fff' }} />
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{errorMessage}</p>
+            <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
           </div>
-        )}
-        {warning && (
-          <div className="alert-popup Warning">
-            <div className="popup-icon">
-              {" "}
-              <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+          {showsearchTable && (
+            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '20px' }}>
+              <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <div className="graph-total-table graph-total-table-driver">
+                  <table className="graph-table" >
+                    <tr
+                      className="graph-table-row ">
+                      <th className="graph-table-head b-color">DRIVER NAME</th>
+                      <th className="graph-table-head b-color">DRIVER ID</th>
+                      <th className="graph-table-head b-color">VEHICLE NO</th>
+                      <th className="graph-table-head b-color">STATUS</th>
+                    </tr>
+                    {latestVehicleDetail?.length > 0 ? (
+                      latestVehicleDetail.map((li, index) => (
+                        <tr key={index} className="">
+                          <td className="graph-table-head graph-table-row-values">{li.driverName}</td>
+                          <td className="graph-table-head graph-table-row-id">{li.vehiclename}</td>
+                          <td className="graph-table-head graph-table-row-id">{li.vehRegNo}</td>
+                          <td className="graph-table-head">
+                            <p className="active-driver">{li.status}</p>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: 'center', paddingTop: '50px', paddingBottom: '50px' }}>No data available</td>
+                      </tr>
+                    )}
+                  </table>
+                </div>
+              </div>
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{warningMessage}</p>
-          </div>
-        )}
-        {success && (
-          <div className="alert-popup Success">
-            <div className="popup-icon">
-              {" "}
-              <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
-            </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{successMessage}</p>
-          </div>
-        )}
-        {info && (
-          <div className="alert-popup Info">
-            <div className="popup-icon">
-              {" "}
-              <BsInfo style={{ color: "#fff" }} />{" "}
-            </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{infoMessage}</p>
-          </div>
-        )}
-        <div className="table-bookingCopy-BookingChart">
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              className="Scroll-Style"
-              rows={vehicles}
-              columns={columns}
-              pageSize={5}
-            />
-          </div>
+
+
+          )}
         </div>
-      </form>
-    </div> */}
+
+      </div>
+
+
 
     </>
   );

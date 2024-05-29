@@ -8,3 +8,8 @@
   align-items: center;
 }
 
+@media screen and (max-width: 768px) {
+  .Settings-main {
+    margin-top: 0px;
+  }
+}

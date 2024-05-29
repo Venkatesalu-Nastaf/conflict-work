@@ -1,174 +1,72 @@
-import React , {useState} from 'react';
-import ReactApexChart from 'react-apexcharts';
-// import React, { useEffect } from 'react';
-// import Highcharts from 'highcharts/highstock';
-// import HighchartsExporting from 'highcharts/modules/exporting';
-// import HighchartsExportData from 'highcharts/modules/export-data';
-// import HighchartsAccessibility from 'highcharts/modules/accessibility';
+import React, { useState } from "react";
+import Chart from "react-apexcharts";
+import "./CustomerReview.css";
 
-// HighchartsExporting(Highcharts);
-// HighchartsExportData(Highcharts);
-// HighchartsAccessibility(Highcharts);
-
-import './CustomerReview.css'
 const CustomerReview = () => {
-  // const data = {
-  //   series: [ 
-  //     {
-  //       name: "Booking",
-  //       data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
-  //     },
-  //   ],
-  //   options: {
-  //     chart: {
-  //       type: "line",
-  //     },
-  //     xaxis: {
-  //       categories: [
-  //         "Jan",
-  //         "Feb",
-  //         "Mar",
-  //         "Apr",
-  //         "May",
-  //         "Jun",
-  //         "Jul",
-  //         "Aug",
-  //         "Sep",
-  //       ],
-  //     },
-  //   },
-  // };
+  const [viewType, setViewType] = useState("monthly");
 
+  const handleWeeklyView = () => {
+    setViewType("weekly");
+  };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch('https://demo-live-data.highcharts.com/aapl-c.json');
-  //       const data = await response.json();
+  const handleMonthlyView = () => {
+    setViewType("monthly");
+  };
 
-  //       Highcharts.stockChart('container', {
-  //         rangeSelector: {
-  //           selected: 1,
-  //           buttons: [
-  //             {
-  //               type: 'week',
-  //               count: 1,
-  //               text: '1w',
-  //             },
-  //             {
-  //               type: 'all',
-  //               text: 'All',
-  //             },
-  //           ],
-  //         },
-  //         title: {
-  //           text: 'AAPL Stock Price',
-  //         },
-  //         series: [
-  //           {
-  //             name: 'AAPL Stock Price',
-  //             data: data,
-  //             type: 'area',
-  //             threshold: null,
-  //             tooltip: {
-  //               valueDecimals: 2,
-  //             },
-  //             fillColor: {
-  //               linearGradient: {
-  //                 x1: 0,
-  //                 y1: 0,
-  //                 x2: 0,
-  //                 y2: 1,
-  //               },
-  //               stops: [
-  //                 [0, Highcharts.getOptions().colors[0]],
-  //                 [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')],
-  //               ],
-  //             },
-  //           },
-  //         ],
-  //       });
-  //     } catch (error) {
-  //       console.error('Error fetching or processing data:', error);
-  //     }
-  //   };
+  const handleYesterdayView = () => {
+    // Logic to fetch data for yesterday
+    // For example, you can fetch data from an API or calculate it based on existing data
+    const yesterdayData = [25, 30, 35, 40, 35, 45, 50, 60, 55];
+    const categories = ["Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9"]; // Sample categories
 
-  //   fetchData();
-  // }, []);
+    setViewType("yesterday");
+    setChartData({ categories, data: yesterdayData });
+  };
 
-  const [filter, setFilter] = useState('daily'); // Initial filter state, can be 'daily', 'weekly', or 'yesterday'
+  const [chartData, setChartData] = useState({
+    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+    data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+  });
+
+  const getData = () => {
+    if (viewType === "monthly") {
+      return chartData;
+    } else if (viewType === "weekly") {
+      return {
+        categories: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8", "Week 9"],
+        data: [10, 20, 15, 30, 25, 35, 40, 50, 45],
+      };
+    } else {
+      // Yesterday data is already set in state
+      return chartData;
+    }
+  };
 
   const data = {
-    daily: {
-      categories: [
-        "01 Jan",
-        "02 Jan",
-        "03 Jan",
-        "04 Jan",
-        "05 Jan",
-        "06 Jan",
-        "07 Jan"
-      ],
-      series: [
-        {
-          name: "Series 1",
-          data: [45, 52, 38, 45, 19, 23, 2]
-        }
-      ]
+    series: [
+      {
+        name: "Booking",
+        data: getData().data,
+      },
+    ],
+    options: {
+      chart: {
+        type: "line",
+      },
+      xaxis: {
+        categories: getData().categories,
+      },
     },
-    weekly: {
-      categories: [
-        "Week 1",
-        "Week 2",
-        "Week 3",
-        "Week 4"
-      ],
-      series: [
-        {
-          name: "Series 1",
-          data: [150, 200, 180, 210]
-        }
-      ]
-    },
-    yesterday: {
-      categories: [
-        "Yesterday"
-      ],
-      series: [
-        {
-          name: "Series 1",
-          data: [25]
-        }
-      ]
-    }
   };
 
-  const handleFilterChange = (selectedFilter) => {
-    setFilter(selectedFilter);
-  };
-
-  const options = {
-    chart: {
-      height: 280,
-      type: "area",
-      background: '#ffffff' // Set background color to white
-    },
-    dataLabels: {
-      enabled: false
-    },
-    series: data[filter].series,
-    xaxis: {
-      categories: data[filter].categories
-    }
-  };
   return (
-    <div id="chart" className='weekly-chart'>
-      <div style={{display:'flex', gap:'0px'}}>
-        <button onClick={() => handleFilterChange('daily')}  className='graph-all-button'>All</button>
-        <button onClick={() => handleFilterChange('weekly')} className='graph-weekly-button'>Weekly</button>
-        <button onClick={() => handleFilterChange('yesterday')} className='graph-yesterday-button'>Yesterday</button>
+    <div className="CustomerReview weekly-chart" id="areachart">
+      <div className="button-container ">
+        <button onClick={handleMonthlyView} className="graph-all-button">All</button>
+        <button onClick={handleWeeklyView} className="graph-weekly-button">Weekly</button>
+        <button onClick={handleYesterdayView} className="graph-yesterday-button">Yesterday</button>
       </div>
-      <ReactApexChart options={options} series={options.series} type="area" height={280} />
+      <Chart options={data.options} series={data.series} type="bar" />
     </div>
   );
 };

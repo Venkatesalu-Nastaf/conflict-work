@@ -3,15 +3,9 @@ import axios from 'axios';
 import { APIURL } from "../../../url";
 
 
-
-
-
-
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -24,22 +18,6 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
-
-
-
-    // TABLE START
-    const columns = [
-        { field: "id", headerName: "Sno", width: 70 },
-        { field: "userid", headerName: "User Id", width: 110 },
-        { field: "username", headerName: "User_Name", width: 130 },
-        { field: "userpassword", headerName: "Password", width: 130 },
-        { field: "active", headerName: "Active", width: 100 },
-        { field: "stationname", headerName: "Station", width: 130 },
-        // { field: "viewfor", headerName: "Access", width: 130 },
-        { field: "designation", headerName: "Designation", width: 150 },
-        { field: "organizationname", headerName: "Organization", width: 130 }
-    ];
 
 
     ////-------------permission --------------------------
@@ -50,53 +28,139 @@ const useEmplyeecreation = () => {
         { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
         { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
         { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
         { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
         { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
         { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
         { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+
         { id: 8, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
         { id: 9, name: 'Customer', read: false, new: false, modify: false, delete: false },
         { id: 10, name: 'Supllier', read: false, new: false, modify: false, delete: false },
         { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
         { id: 12, name: 'SETTING', read: false, new: false, modify: false, delete: false },
         { id: 13, name: 'User Creation', read: false, new: false, modify: false, delete: false },
         { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
         { id: 15, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
         { id: 16, name: 'INFO', read: false, new: false, modify: false, delete: false },
         { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
         { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
-
+        { id: 20, name: 'Dashbord', read: false },
     ];
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
 
+    const [readState, setReadState] = useState(false);
+    const [newState, setNewState] = useState(false);
+    const [modifyState, setModifyState] = useState(false);
+    const [deleteState, setDeleteState] = useState(false);
+
+
+    //-------------------------------------------------------------------------
+    // Function to update state based on permissions
+    const updatePermissionsState = () => {
+        setReadState(checkPermission('read'));
+        setNewState(checkPermission('new'));
+        setModifyState(checkPermission('modify'));
+        setDeleteState(checkPermission('delete'));
+    };
+
+    // Function to check if any object in the array has the property set to true
+    const checkPermission = (property) => {
+        const data = permissionsData.some(permission => permission[property]);
+        return data;
+    }
+
     const handleSwitchChange = (permissionType) => () => {
+
+        switch (permissionType) {
+            case 'read':
+                setReadState(prevState => !prevState);
+                break;
+            case 'new':
+                setNewState(prevState => !prevState);
+                break;
+            case 'modify':
+                setModifyState(prevState => !prevState);
+                break;
+            case 'delete':
+                setDeleteState(prevState => !prevState);
+                break;
+            default:
+                break;
+        }
+
+        // Use the corresponding state variable directly based on the permission type
+        let newStateValue;
+        switch (permissionType) {
+            case 'read':
+                newStateValue = readState;
+                break;
+            case 'new':
+                newStateValue = newState;
+                break;
+            case 'modify':
+                newStateValue = modifyState;
+                break;
+            case 'delete':
+                newStateValue = deleteState;
+                break;
+            default:
+                break;
+        }
+
+        // Update permissions data using the correct state value for the permission type
         setPermissionsData(prevData =>
             prevData.map(permission => ({
                 ...permission,
-                [permissionType]: !permission[permissionType],
+                [permissionType]: !newStateValue
             }))
         );
     };
 
 
+    //----------------------------------------------------
 
-    const handleCheckboxChange = (id, field) => (event) => {
+    const handleCheckboxChange = (index, field) => (event) => {
+        if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
+            handleMainCheckboxChange(index, field)
+        }
         const { checked } = event.target;
         setPermissionsData(prevData =>
-            prevData.map(permission => {
-                if (permission.id === id) {
+            prevData.map((permission, i) => {
+                if (i === index) {
                     return { ...permission, [field]: checked };
                 }
                 return permission;
             })
         );
+    }
+
+    // its for set main checkbox state 
+    const handleMainCheckboxChange = (index, field) => {
+        setPermissionsData(prevData => {
+            const newState = prevData.map((item, idx) => {
+                if (idx >= index && idx < index + 4) {
+                    return {
+                        ...item,
+                        [field]: !item[field]
+                    };
+                }
+                return item;
+            });
+
+            const checked = newState[index][field];
+            // Set all checkboxes within the range to match the checked state of the main checkbox
+            for (let i = index + 1; i < index + 4; i++) {
+                newState[i][field] = checked;
+            }
+            return newState;
+        });
     };
-
-
-
 
     ///----------------------------------------------------
 
@@ -107,7 +171,7 @@ const useEmplyeecreation = () => {
         designation: '',
         organizationname: '',
         userpassword: '',
-        active: '',
+        active: false,
     });
 
     // TABLE END
@@ -133,6 +197,7 @@ const useEmplyeecreation = () => {
         }
     };
 
+
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
@@ -155,40 +220,124 @@ const useEmplyeecreation = () => {
             userpassword: '',
             active: '',
         }));
-        // setBook({});
-        setIsEditMode(false);
+
         setPermissionsData(initialPermissionsData);
+        setReadState(false)
+        setDeleteState(false)
+        setModifyState(false)
+        setNewState(false);
+        setIsEditMode(false)
     };
 
     // add
     const handleAdd = async () => {
         const username = book.username;
-        if (password) {
-            if (!username) {
-                setError(true);
-                setErrorMessage("Fill mandatory fields");
-                return;
-            }
-            try {
-                const data = { book, permissionsData }
-                await axios.post(`${apiUrl}/usercreation-add`, data);
-                handleCancel();
-                setRows([]);
-                // setBook({})
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch (error) {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
+        const branchName = book.branchName;
+        const designation = book.designation;
+        const organisation = book.organizationname
+        const active = book.active
 
+        if (!password) {
+            setError(true);
+            setErrorMessage("Fill password");
+            return;
         }
+
+        if (!username) {
+            setError(true);
+            setErrorMessage("Fill UserName..");
+            return;
+        }
+
+        if (!branchName) {
+            setError(true);
+            setErrorMessage("Fill BranchName..");
+            return;
+        }
+
+        if (!designation) {
+            setError(true);
+            setErrorMessage("Fill Designation..");
+            return;
+        }
+
+        if (!organisation) {
+            setError(true);
+            setErrorMessage("Fill Organisation..");
+            return;
+        }
+
+
+        if (!active) {
+            setError(true);
+            setErrorMessage("Fill Active..");
+            return;
+        }
+
+
+
+        try {
+            const data = { book, permissionsData }
+            await axios.post(`${apiUrl}/usercreation-add`, data);
+            handleCancel();
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch (error) {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+
+
     };
 
 
     // edit
     const handleEdit = async (userid) => {
         try {
+
+            const username = book.username;
+            const branchName = book.stationname;
+            const designation = book.designation;
+            const organisation = book.organizationname
+            const active = book.active
+
+            console.log("NASTAF Technologies", branchName, "book", book)
+
+            if (!password) {
+                setError(true);
+                setErrorMessage("Fill password");
+                return;
+            }
+
+            if (!username) {
+                setError(true);
+                setErrorMessage("Fill UserName..");
+                return;
+            }
+
+            if (!branchName) {
+                setError(true);
+                setErrorMessage("Fill BranchName..");
+                return;
+            }
+
+            if (!designation) {
+                setError(true);
+                setErrorMessage("Fill Designation..");
+                return;
+            }
+
+            if (!organisation) {
+                setError(true);
+                setErrorMessage("Fill Organisation..");
+                return;
+            }
+
+            if (!active) {
+                setError(true);
+                setErrorMessage("Fill Active..");
+                return;
+            }
 
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book };
@@ -198,7 +347,7 @@ const useEmplyeecreation = () => {
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
-            setRows([]);
+
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -209,18 +358,17 @@ const useEmplyeecreation = () => {
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
-            // await axios.delete(`${apiUrl}/permission-delete/${book.userid}`)
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
-            setRows([]);
+
         }
         catch (err) {
             setError(true);
             setErrorMessage("Error in deleting");
         }
-
     }
+
 
     // show list
     const handleList = useCallback(async () => {
@@ -239,14 +387,12 @@ const useEmplyeecreation = () => {
 
     //------------------------------------------------------
 
-    // to show list automatically
-    useEffect(() => {
-        handleList();
-    }, [apiUrl, handleList]);
+
 
     /// list of options ---------------------------------
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
+
         try {
             if (actionName === 'List') {
                 handleList().then((showlist) => {
@@ -255,27 +401,35 @@ const useEmplyeecreation = () => {
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
-                        setRows([]);
+
                         setError(true);
                         setErrorMessage("No data found");
                     }
                 })
             } else if (actionName === 'Cancel') {
+
                 handleCancel();
-                setRows([]);
+                handleList();
             } else if (actionName === 'Delete') {
+
                 handleDelete();
+                handleList();
             } else if (actionName === 'Edit') {
                 handleEdit();
+                handleList();
             }
             else if (actionName === 'Add') {
                 handleAdd();
+                handleList();
             }
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
+
+
+    // its for notification-----------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -291,7 +445,7 @@ const useEmplyeecreation = () => {
             return () => clearTimeout(timer);
         }
     }, [error, success, warning, info]);
-
+    //-------------------------------------------------
 
     useEffect(() => {
         if (actionName === 'List') {
@@ -301,12 +455,10 @@ const useEmplyeecreation = () => {
 
     const permissiondata = async (userId) => {
         const userid = userId;
-        // console.log("userid,set", userid)
         if (userid) {
             try {
                 const response = await axios.get(`${apiUrl}/user-permissionget/${userid}`);
                 const permissiondata = response?.data;
-                // console.log("permission9999", permissiondata)
                 if (permissiondata.length > 0) {
                     return permissiondata;
                 }
@@ -317,8 +469,14 @@ const useEmplyeecreation = () => {
         return;
     }
 
+    // to show list automatically
+    useEffect(() => {
+        handleList();
+    }, [apiUrl, handleList]);
+
     const handleRowClickUser = async (params) => {
         setBook(params)
+        console.log("params", params    )
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {
@@ -327,15 +485,9 @@ const useEmplyeecreation = () => {
 
         setSelectedCustomerId(params.customerId);
         setIsEditMode(true);
+        updatePermissionsState();
     };
 
-
-    const handleRowClick = useCallback((params) => {
-        const customerData = params?.row;
-        setBook(customerData)
-        setSelectedCustomerId(params.row.customerId);
-        setIsEditMode(true);
-    }, []);
 
     const handleClickShowPasswords = () => {
         setShowPasswords((show) => !show);
@@ -345,13 +497,6 @@ const useEmplyeecreation = () => {
         event.preventDefault();
     };
 
-    const handleClickShowPassword = () => {
-        setShowPassword((show) => !show);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     return {
 
@@ -368,23 +513,18 @@ const useEmplyeecreation = () => {
         book,
         handleClick,
         handleChange,
-        handleRowClick, handleRowClickUser,
+        handleRowClickUser,
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        handleMouseDownPassword,
-        showPassword,
-        handleClickShowPassword,
-
-        columns,
         isEditMode,
         handleEdit,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
     };
 };
 

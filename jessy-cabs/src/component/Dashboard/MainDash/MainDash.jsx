@@ -8,16 +8,13 @@ const MainDash = () => {
   const [isBelow768px, setIsBelow768px] = useState(false);
   useEffect(() => {
     const handleResize = () => {
-      setIsBelow768px(window.innerWidth < 768);
+      setIsBelow768px(window.innerWidth < 768.99);
     };
 
-    // Call handleResize initially to set the initial state
     handleResize();
 
-    // Add event listener for window resize
     window.addEventListener('resize', handleResize);
 
-    // Cleanup function to remove event listener
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -25,7 +22,7 @@ const MainDash = () => {
   return (
     <>
       {isBelow768px ? (
-        <div style={{height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px'}}>
+        <div style={{ height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px' }}>
           <div className="MainDash">
             <Cards />
             <Table />
@@ -34,13 +31,14 @@ const MainDash = () => {
         </div>
       ) : (
         <>
-          <div className="MainDash">
-            <Cards />
-            <Table />
+          <div className="main-dash-first-section">
+            <div className="MainDash">
+              <Cards />
+              <Table />
+            </div>
           </div>
-          <div>
-          <RightSide />
-            
+          <div style={{height: '93vh', overflow: 'auto'}}>
+            <RightSide />
           </div>
         </>
       )}

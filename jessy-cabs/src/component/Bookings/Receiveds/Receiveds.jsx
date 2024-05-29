@@ -23,11 +23,9 @@ const Receiveds = () => {
                             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                                     <Tab label="Pending" value="pending" />
-                                    {/* <Tab label="Vehicle Statement" value="vehiclestatement" /> */}
                                 </TabList>
                             </Box>
                             <TabPanel value="pending"><Pending /></TabPanel>
-                            {/* <TabPanel value="vehiclestatement"><VehicleStatement /></TabPanel> */}
                         </TabContext>
                     </Box>
                 </div>

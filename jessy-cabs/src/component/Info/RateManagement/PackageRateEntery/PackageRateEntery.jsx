@@ -28,7 +28,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
-import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
+// import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
 import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 
@@ -44,7 +44,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const PackageRateEntery = () => {
+const PackageRateEntery = ({ organizationNames }) => {
 
   const {
     selectedCustomerId,
@@ -72,7 +72,7 @@ const PackageRateEntery = () => {
 
   } = usePackagerateentry();
 
-  const { organizationName } = useData()
+  const organizationName = organizationNames;
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -82,16 +82,11 @@ const PackageRateEntery = () => {
 
   const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
   const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
-
-
   const { permissions } = useContext(PermissionContext)
-
   const RateManagement_read = permissions[17]?.read;
   const RateManagement_new = permissions[17]?.new;
   const RateManagement_modify = permissions[17]?.modify;
   const RateManagement_delete = permissions[17]?.delete;
-
-
 
   //--------------------------------------------------------------------
 
@@ -102,7 +97,7 @@ const PackageRateEntery = () => {
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field PackageRateEntery-input-feild">
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -112,12 +107,10 @@ const PackageRateEntery = () => {
                     id="free-solo-demo-ratetype"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
-
                     value={RateType?.find((option) => option.optionvalue)?.label || commonData?.ratetype || ''}
                     options={RateType?.map((option) => ({
                       label: option.Option,
                     }))}
-
                     getOptionLabel={(option) => option.label || commonData?.ratetype || ''}
                     renderInput={(params) => {
                       return (
@@ -127,7 +120,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -136,10 +129,9 @@ const PackageRateEntery = () => {
                     size="small"
                     id="free-solo-demo-pricetag"
                     freeSolo
-                    sx={{ width: "20ch" }}
+                    sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-
                     options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
@@ -150,9 +142,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-
-
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -161,7 +151,7 @@ const PackageRateEntery = () => {
                     size="small"
                     id="free-solo-demo-vehicleType"
                     freeSolo
-                    sx={{ width: "20ch" }}
+                    sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleType")}
                     value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleType || ''}
                     options={VehicleType.map((option) => ({
@@ -175,14 +165,8 @@ const PackageRateEntery = () => {
                     }
                     }
                   />
-                </div>
-
-
-
-                {/* </div>
-
-              <div className="input-field"> */}
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                </div>                
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -198,7 +182,6 @@ const PackageRateEntery = () => {
                     variant="standard"
                   />
                 </div>
-
               </div>
             </div>
           </div>
@@ -208,13 +191,9 @@ const PackageRateEntery = () => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
-
-
-          {/* //-------------------- */}
+          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}         
 
           {fieldSets.map((fieldSet, index) => (
-
             <div key={index} className="input-field feild-inputs">
               <div>
                 <div className="input" style={{ width: "200px" }}>
@@ -242,12 +221,9 @@ const PackageRateEntery = () => {
                   />
                 </div>
               </div>
-
-
               <div>
                 <div className='first'>
-
-                  <div className="input">
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       size="small"
                       id="id"
@@ -258,10 +234,10 @@ const PackageRateEntery = () => {
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                       variant="standard"
+                      style={{ width: '100%' }}
                     />
                   </div>
-
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -271,9 +247,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -283,9 +260,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -295,10 +273,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Rate || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -308,9 +286,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoHours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -320,12 +299,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
-                  </div>
-                  {/* </div>
-                <div className='first'> */}
-
-                  <div className="input" style={{ width: "200px" }}>
+                  </div>             
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -335,10 +312,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraHours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -348,9 +325,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -360,9 +338,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.AKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -372,9 +351,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.NHalt || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -384,27 +364,21 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Bata || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{ width: '100%' }}
                     />
                   </div>
                   {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}
                   {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
                     <MdCancelPresentation className='icon-cancel' />
                   </div>}
-
-
-
                 </div>
               </div>
             </div>
-
-          ))}
-
-          {/* //-------------------------------- */}
+          ))}         
 
           {/* {details.map((detail, index) => (
             <React.Fragment key={index}>{detail}</React.Fragment>
           ))} */}
-
 
           <div className="input" style={{ width: "100px", marginTop: '10px', marginLeft: '10px' }}>
             {isEditMode ? (
@@ -412,11 +386,9 @@ const PackageRateEntery = () => {
             ) : (
               <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
             )}
-
           </div>
         </div>
 
-        {/* //--------------------------------------------------------------------------------------- */}
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -460,8 +432,6 @@ const PackageRateEntery = () => {
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))} */}
-
-
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -486,7 +456,6 @@ const PackageRateEntery = () => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
@@ -501,8 +470,6 @@ const PackageRateEntery = () => {
                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
               />
             )}
-
-
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">

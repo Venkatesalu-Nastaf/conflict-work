@@ -1,6 +1,5 @@
 /* HEADER CONTAINER */
 .MailageDetails-page-header {
-    /* border-top: solid 1px #ccc; */
     background: var(--glass);
     padding: 20px;
     padding-top: 40px;
@@ -12,11 +11,9 @@
     border-top: solid 1px #ccc;
     background-color: var(--glass);
     padding: 20px;
-    /* margin-top: 10px; */
 }
 
 /* Button */
-
 .Download-btn {
     padding: 20px 10px;
 }
@@ -46,10 +43,8 @@
     width: 100%;
     overflow-x: hidden;
     display: flex;
-    /* border-radius: 10px; */
     flex-direction: column;
     color: #000;
-
 }
 
 .detail-container-main-customer {
@@ -73,7 +68,6 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
 .form-container-FuelInfo .MailageDetails-form::-webkit-scrollbar-track {
@@ -98,7 +92,6 @@
     color: #000;
 }
 
-
 .mailage-icone {
     padding: 10px 10px 0px;
     color: #616161;
@@ -112,31 +105,30 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
-    .FuelInfo-main .FuelInfo-form-container{ 
-      width: 76vw !important;
+    .FuelInfo-main .FuelInfo-form-container {
+        width: 76vw !important;
     }
-  }
-  
-  @media screen and (min-width:769px) and (max-width:969.99px) {
-    .FuelInfo-main .FuelInfo-form-container { 
-      width: 70vw !important;
-    }
-  }
+}
 
-  .detailsFuel-inputs{
+@media screen and (min-width:769px) and (max-width:969.99px) {
+    .FuelInfo-main .FuelInfo-form-container {
+        width: 70vw !important;
+    }
+}
+
+.detailsFuel-inputs {
     flex-wrap: wrap;
-    /* justify-content: center; */
-  }
-  @media screen and (max-width:1333px) {
-    .detailsFuel-inputs{
+}
+
+@media screen and (max-width:1333px) {
+    .detailsFuel-inputs {
         flex-wrap: wrap;
         justify-content: center;
-      }
-  }
- 
-
-  @media screen and (max-width:768px) {
-    .FuelInfo-main {
-        width: 84% !important;
     }
-  }
+}
+
+@media screen and (max-width:768px) {
+    .FuelInfo-main {
+        width: 97% !important;
+    }
+}

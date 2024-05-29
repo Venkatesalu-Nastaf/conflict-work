@@ -4,15 +4,16 @@ import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
 import Coverpdf from './coverpdf/Coverpdf';
 import { saveAs } from 'file-saver';
-import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+// import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
 import { ReferenceNo } from './RefenceNo';
 import { RefPdfData } from './GroupBillingContext';
+import Excel from 'exceljs';
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
+
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -23,7 +24,6 @@ const useGroupbilling = () => {
     const [invoiceno, setInvoiceno] = useState("");
     const [totalValue, setTotalValue] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
-    const [bankOptions, setBankOptions] = useState([]);
     const [errorMessage, setErrorMessage] = useState({});
     const [roundedAmount, setRoundedAmount] = useState('');
     const [successMessage, setSuccessMessage] = useState({});
@@ -47,7 +47,10 @@ const useGroupbilling = () => {
     const [refFromDate, setRefFromDate] = useState('')
     const [refToDate, setRefToDate] = useState('')
     const [gstno, setGstno] = useState('')
-    const {  setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
+    const [selectedRow, setSelectedRow] = useState([])
+    const { setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
+    const [groupBillAmount, setGroupBillAmount] = useState(0)
+    const [trips, setTrips] = useState(0)
     // popup------------------------------
     const hidePopup = () => {
         setError(false);
@@ -56,12 +59,11 @@ const useGroupbilling = () => {
     };
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
-        // { field: "billingno", headerName: "Bill No", width: 130 },
         {
             field: groupInvoice ? "InvoiceNo" : "billingno",
             headerName: groupInvoice ? "Invoice No" : "Bill No",
             width: 150
-        },        // { field: groupInvoice ? `${groupInvoiceNumber}` : "billingno", headerName: groupInvoice ? "Invoice No" : "Bill No", width: 150 },
+        },
         { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
         { field: "tripid", headerName: "Trip No", width: 150 },
         { field: "customer", headerName: "Customer", width: 130 },
@@ -77,7 +79,6 @@ const useGroupbilling = () => {
         { field: "toll", headerName: "Toll", width: 150 },
         { field: "parking", headerName: "Parking", width: 150 },
         { field: "netamount", headerName: "Net Amount", width: 130 },
-        // { field: "tripid", headerName: "Trip ID", width: 130 },
         { field: "guestname", headerName: "UserName", width: 150 },
     ];
 
@@ -108,6 +109,8 @@ const useGroupbilling = () => {
 
             try {
                 const id = groupBillId
+                if (!id || id?.length === 0) return
+
                 const response = await fetch(`${apiUrl}/ParticularLists/${id}`)
                 const tripData = await response.json();
                 // setRows(tripData)
@@ -117,13 +120,13 @@ const useGroupbilling = () => {
                     ...{ InvoiceDate: groupInvoiceDate }
                 }));
                 setRows(transformedTripData);
+
             }
             catch (err) {
                 console.log(err, 'error');
             }
         }
         fetchData()
-
     }, [apiUrl, groupBillId])
 
     useEffect(() => {
@@ -185,17 +188,6 @@ const useGroupbilling = () => {
         station: '',
     });
 
-    useEffect(() => {
-        Organization()
-            .then((data) => {
-                if (data) {
-                    setBankOptions(data);
-                } else {
-                }
-            })
-            .catch(() => {
-            });
-    }, []);
 
     const calculateNetAmountSum = useCallback((data) => {
         return data.reduce((sum, item) => {
@@ -212,7 +204,7 @@ const useGroupbilling = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`${apiUrl}/GroupReference/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
                 setRows(GroupReference)
                 const RefId = GroupReference.map((li) => li.Trip_id)
@@ -223,21 +215,23 @@ const useGroupbilling = () => {
                 setRefInvDate(RefInvDate)
                 const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
                 setReferNo(ReferenceNo)
+                const Tripsid = GroupReference.map((li) => li.Trip_id)
             }
             catch (err) {
-
+                console.log("error", err)
             }
-        }
-
-        else {
-
         }
     }
 
+
+
     useEffect(() => {
         const fetchData = async () => {
-            const id = particularId
+            const id = particularId;
+
             try {
+                if (!id || id?.length === 0) return
+                console.log("id", id)
                 const Tripresponse = await axios.get(`${apiUrl}/ParticularLists/${id}`);
                 const TripDetails = await Tripresponse.data;
 
@@ -306,17 +300,85 @@ const useGroupbilling = () => {
         }
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
+    const handleExcelDownload = async () => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+        try {
+            const fileName = "Group Billing"
+            // creating one worksheet in workbook
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+            //         console.log(headers,"hed")
+            const columns = headers.map(key => ({ key, header: key }));
+            //         worksheet.columns = columnsexcel
+            worksheet.columns = columns;
+            // updated the font for first row.
+            worksheet.getRow(1).font = { bold: true };
 
-    const convertToCSV = (data) => {
-        const header = columns.map((column) => column.headerName).join(",");
-        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-        return [header, ...rows].join("\n");
-    };
-    const handleExcelDownload = () => {
-        const csvData = convertToCSV(rows);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "Group Billing.csv");
-    };
+            // Set background color for header cells
+            worksheet.getRow(1).eachCell((cell, colNumber) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' } // Green background color
+                };
+            });
+
+
+            worksheet.getRow(1).height = 30;
+            // loop through all of the columns and set the alignment with width.
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            rows.forEach((singleData, index) => {
+                
+                worksheet.addRow(singleData);
+                // Adjust column width based on the length of the cell values in the added row
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            // loop through all of the rows and set the outline style.
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
+                const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
+                currentCell.forEach((singleCell) => {
+
+                    const cellAddress = singleCell._address;
+
+                    // apply border
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            // write the content using writeBuffer
+            const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERRROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // removing worksheet's instance to create new one
+            workbook.removeWorksheet(workSheetName);
+        }
+
+    }
 
     const handleCoverPDFDownload = () => {
         if (rows.length === 0) {
@@ -359,7 +421,6 @@ const useGroupbilling = () => {
     }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     const handleButtonClickTripsheet = (params) => {
-        const data = params.row;
 
     };
 
@@ -402,14 +463,36 @@ const useGroupbilling = () => {
 
 
         setRowSelectionModel(PdfSelectedTrips);
+        setSelectedRow(selectedTripIds)
         setRowSelectedValues(selectedTrips)
         setRefPdfData(PdfSelectedTrips)
         setRefCustomer(PdfSelectedcustomer)
-        // localStorage.setItem('selectedtripsheetid', tripsheetid);
-        // const selectedRowCount = selectedTripIds.length;
-
-        // localStorage.setItem('selectedrowcount', selectedRowCount);
     };
+
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!invoiceno) return
+                console.log("invoiceno", invoiceno)
+                const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
+                const GroupReference = response.data;
+                const Amount = GroupReference.map((li) => li.Amount)
+                setGroupBillAmount(Amount)
+                const Trips = GroupReference.map((li) => li.Trips)
+                const tripcount = parseInt(Trips)
+                setTrips(tripcount)
+            }
+            catch (err) {
+                console.log(err, 'error');
+            }
+        }
+        fetchData()
+    }, [rowSelectionModel, apiUrl, invoiceno])
+
+
 
     const handlePopup = () => {
         setRefPdfPrint(false)
@@ -418,14 +501,44 @@ const useGroupbilling = () => {
         setRefPdfPrint(true)
     }
 
-    console.log(rowSelectionModel, 'roww');
     const handleRemoveData = async () => {
         const selectedIds = rowSelectionModel.map(row => row.id);
-        const tripIds = rowSelectionModel.map(row => row.tripid);
+        // const tripIds = rowSelectionModel.map(row => row.tripid);
+        const tripIds = rowSelectionModel.map(row => row.tripid.toString());
 
+        // const tripid = rowSelectionModel?.map((li) => li.tripid.toString().replace(/,/g, ''));
+        const tripid = rowSelectionModel?.map(li => li.tripid);
+        // const tripIdArray = rowSelectionModel?.Trip_id.split(',').map(tripId => tripId.trim());
+
+
+        const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split the varchar field into an array and flatten it
+        // Summing up the amounts
+        const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
+        const Amount = groupBillAmount - totalAmount;
+
+        const TripCount = trips - rowSelectionModel.length
+        const Tripcounts = TripCount.toString()
+        const groupUpdateList = {
+            Trips: Tripcounts,
+            Amount: Amount,
+            Trip_id: tripIds
+        }
         try {
-            await axios.put(`${apiUrl}/statusupdate/${tripIds}`);
-            console.log('Status updated successfully');
+            const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
+                tripids: tripid,
+                status: 'Opened',
+            });
+            console.log(response, 'response');
+            const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
+            console.log(updatelist, 'uplist');
+            const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`)
+            const result = Details.data;
+            const tripno = result?.map((li) => li.Trip_id)
+            const groupid = result?.map((li) => li.id)
+            if (tripno[0] === "") {
+                const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`)
+                console.log(getresponse, 'Deleted Successfully');
+            }
         } catch (error) {
             console.error('Error updating status:', error);
         }
@@ -437,15 +550,14 @@ const useGroupbilling = () => {
     };
 
 
-
     const handlegroupData = async () => {
         const TripsCount = rowSelectionModel.length;
         let TotalAmount = 0; // Change from const to let
         rowSelectedValues?.map((li) => {
             TotalAmount += li;
         });
-        const FromDate = dayjs(fromDate).format('DD-MM-YYYY')
-        const ToDate = dayjs(toDate).format('DD-MM-YYYY')
+        const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+        const ToDate = dayjs(toDate).format('YYYY-MM-DD')
         const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
         if (rowSelectionModel.length === 0) {
             setError(true);
@@ -461,14 +573,14 @@ const useGroupbilling = () => {
                 ToDate: ToDate,
                 Trips: TripsCount,
                 Amount: TotalAmount,
-                Trip_id: rowSelectionModel,
+                Trip_id: selectedRow,
             };
             await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
             setSuccess(true)
             setSuccessMessage("Successfully Added")
             setRows([])
         } catch (err) {
-            console.log(err, "errordet");
+            console.log(err, "errordetails");
         }
     }
 
@@ -490,7 +602,6 @@ const useGroupbilling = () => {
         handleKeyenter,
         customer,
         tripData,
-        bankOptions,
         setCustomer,
         Billingdate,
         fromDate,

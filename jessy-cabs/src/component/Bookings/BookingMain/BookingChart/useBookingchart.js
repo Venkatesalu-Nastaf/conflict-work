@@ -17,6 +17,18 @@ const useBookingchart = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
+  const [assignDriver, setAssignDriver] = useState(0)
+  const [driverOnline, setDriverOnline] = useState(0)
+  const [driverOffline, setDriverOffline] = useState(0)
+  const [activeVehicle, setActiveVehicle] = useState(0)
+  const [offlineVehicle, setOfflineVehicle] = useState(0)
+  const [inActiveVehicle, setInActiveVehicle] = useState(0)
+  const [driverOnlineDetails, setDriverOnlineDetails] = useState([])
+  const [driverOfflineDetails, setDriverOfflineDetails] = useState([])
+  const [driverActiveDetails, setDriverActiveDetails] = useState([])
+  const [vehicleActiveDetails, setVehicleActiveDetails] = useState([])
+  const [vehicleOnlineDetails, setVehicleOnlineDetails] = useState([])
+  const [vehicleOfflineDetails, setVehicleOfflineDetails] = useState([])
 
 
   //------------------------popup-------------------  
@@ -37,6 +49,150 @@ const useBookingchart = () => {
   }, [error, success, warning, info]);
 
   //-----------------------------------------------
+
+  // Getting all Driver Details
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/getDriverDetails`);
+        const driverDetails = response.data;
+
+        // Ensure data integrity
+        if (!Array.isArray(driverDetails)) {
+          console.error("Invalid data format: Expected an array.");
+          return;
+        }
+        // Filter active drivers
+        const activeDrivers = driverDetails.filter(li => li.driverApp === 'online');
+        const offlineDrivers = driverDetails.filter(li => li.driverApp === 'offline');
+        const assignedDrivers = driverDetails.filter(li => li.driverApp === 'assigned');
+        setDriverActiveDetails(assignedDrivers)
+        setDriverOnlineDetails(activeDrivers)
+        setDriverOfflineDetails(offlineDrivers)
+        setDriverOnline(activeDrivers.length)
+        setDriverOffline(offlineDrivers.length)
+        setAssignDriver(assignedDrivers.length)
+        // Log the count of active drivers
+      } catch (error) {
+        console.error("Error fetching driver details:", error);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Get current date and time using dayjs
+      const currentDate = dayjs().format('YYYY-MM-DD');
+
+      const response = await axios.get(`${apiUrl}/checkAssign`);
+      const tripAssign = response.data;
+
+      const vehicleDetails = await axios.get(`${apiUrl}/getVehicleDetails`);
+      const VehicleNumberDetails = vehicleDetails.data
+
+      const TotalvehicleNumbers = VehicleNumberDetails.map(li => li.vehRegNo)
+
+      const notActivevehicleDetails = await axios.get(`${apiUrl}/getNotVehicleDetails`);
+      const notActiveVehicleNumberDetails = notActivevehicleDetails.data
+      const notActiveVehicleNumbers = notActiveVehicleNumberDetails.map(li => li.vehRegNo)
+      setOfflineVehicle(notActiveVehicleNumberDetails.length)
+      try {
+        const vehicleOfflineDetailsResponse = await axios.get(`${apiUrl}/particularNotActiveVehicleDetails`, {
+          params: { vehNumber: notActiveVehicleNumbers }
+        });
+        const offlineVehicles = vehicleOfflineDetailsResponse.data.map(vehicle => ({
+          ...vehicle,
+          status: 'offline'
+        }));
+        setVehicleOfflineDetails(offlineVehicles)
+      } catch (error) {
+        console.error('Request failed', error);
+      }
+
+      // Not Assign Vehicles
+      const filterCurrentDate = tripAssign.filter(li => dayjs(li.startDate).isBefore(currentDate));
+      const getDriverName = filterCurrentDate?.map(li => li.driverName)
+      const notAssignedVehciles = filterCurrentDate?.map(li => li.vehRegNo)
+
+
+
+      if (filterCurrentDate.length !== 0) {
+        // Query Available in driverapplogin.js
+        const response = await axios.post(`${apiUrl}/removeAssign`, { driverName: getDriverName })
+
+      }
+
+      // Not Assign Vehicles
+      const filterAfterCurrentDate = tripAssign.filter(li => dayjs(li.startDate).isAfter(currentDate));
+      const getDriverNameAfter = filterAfterCurrentDate.map(li => li.driverName);
+      const notAssignedVehiclesAfter = filterAfterCurrentDate.map(li => li.vehRegNo);
+      if (filterAfterCurrentDate.length !== 0) {
+        // Query Available in driverapplogin.js
+        const response = await axios.post(`${apiUrl}/removeAssign`, { driverName: getDriverNameAfter })
+        console.log(response, 'success');
+      }
+
+
+
+      const allNotAssignedVehicles = [...notAssignedVehciles, ...notAssignedVehiclesAfter];
+      const newVehicles = TotalvehicleNumbers.filter(vehicleNumber => !allNotAssignedVehicles.includes(vehicleNumber));
+
+      // Log new vehicles that are not in the fetched vehicle details
+      const updatedNotAssignedVehicles = Array.from(new Set([...allNotAssignedVehicles, ...newVehicles]));
+
+
+      // Join into a single comma-separated string
+      const allNotAssignedVehiclesString = updatedNotAssignedVehicles.join(',');
+
+
+      try {
+
+        const vehicleOnlineDetailsResponse = await axios.get(`${apiUrl}/particularVehicleDetails`, {
+          params: { vehNumber: allNotAssignedVehiclesString }
+        });
+        const onlineVehicles = vehicleOnlineDetailsResponse.data.map(vehicle => ({
+          ...vehicle,
+          status: 'online'
+        }));
+        setVehicleOnlineDetails(onlineVehicles)
+      } catch (error) {
+        console.error('Request failed', error);
+      }
+      // Assign Vehicles
+      const filterAssignedWork = tripAssign.filter(li => dayjs(li.startDate).isSame(currentDate, 'day'));
+      const AssignedDriver = filterAssignedWork?.map(li => li.driverName)
+      const assignedVehciles = filterAssignedWork?.map(li => li.vehRegNo)
+      const onlineVehicles = assignedVehciles.length;
+      setActiveVehicle(onlineVehicles)
+      try {
+        if (!assignedVehciles || assignedVehciles.length === 0) return
+        console.log("assignedVehciles0", assignedVehciles)
+        const vehicleOnlineDetailsResponse = await axios.get(`${apiUrl}/ActiveVehicleDetail`, {
+          params: { vehNumber: assignedVehciles }
+        });
+        const activeVehicles = vehicleOnlineDetailsResponse.data.map(vehicle => ({
+          ...vehicle,
+          status: 'active'
+        }));
+        setVehicleActiveDetails(activeVehicles)
+      }
+      catch (error) {
+        console.log(error);
+      }
+
+      if (filterAssignedWork.length !== 0) {
+        const response = await axios.post(`${apiUrl}/driverAssign`, { driverName: AssignedDriver })
+        console.log(response, 'assigned');
+
+      }
+      const offlineVehicles = TotalvehicleNumbers.length - assignedVehciles.length
+      setInActiveVehicle(offlineVehicles)
+    };
+
+    fetchData();
+  }, [apiUrl]);
 
 
   const [vehicles, setVehicles] = useState(() => {
@@ -131,6 +287,18 @@ const useBookingchart = () => {
     vehicles,
     columns,
     showBookedStatusAll,
+    driverOffline,
+    driverOnline,
+    assignDriver,
+    activeVehicle,
+    inActiveVehicle,
+    offlineVehicle,
+    driverActiveDetails,
+    driverOfflineDetails,
+    driverOnlineDetails,
+    vehicleActiveDetails,
+    vehicleOfflineDetails,
+    vehicleOnlineDetails
   };
 };
 

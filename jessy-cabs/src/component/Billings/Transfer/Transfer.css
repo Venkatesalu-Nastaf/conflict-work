@@ -1,32 +1,52 @@
 .form-container-Transfer .Title-Name {
-    font-size: 20px;
-    font-weight: 500;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .form-container-Transfer {
-    display: flex;
-    border-radius: 10px;
+  display: flex;
+  border-radius: 10px;
 }
 
 .form-container-Transfer .container-main::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    overflow-x: hidden;
+  width: 0px;
+  height: 0px;
+  overflow-x: hidden;
 }
+
 .form-container-Transfer .container-main::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    outline: 1px solid transparent;
-} 
+  background-color: transparent;
+  outline: 1px solid transparent;
+}
 
 .form-container-Transfer .container-main {
-    border: 2px solid #ccc;
-    overflow: scroll;
-    height: 77vh;
-    width: 81vw;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    border-radius: 20px;
-    color: #000;
-    background-color: var(--glass);
+  border: 2px solid #ccc;
+  overflow: scroll;
+  height: 71vh;
+  width: 81vw;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  color: #000;
+  background-color: var(--glass);
+}
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .form-container-Transfer .container-main-transfer {
+    width: 76vw !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .form-container-Transfer .container-main-transfer {
+    width: 70vw !important;
+  }
+}
+
+.head-tab-transfer {
+  position: sticky;
+  top: 0px;
+  padding: 30px 10px 0px 0px;
+  background-color: #ffffff;
+  z-index: 5;
 }

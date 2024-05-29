@@ -4,6 +4,12 @@
     flex-direction: column;
     grid-gap: 1rem;
     gap: 1rem;
-    margin-top: 50px;
+    margin-top: 80px;
     align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+    .billings-conatiner {
+        margin-top: 0px;
+    }
 }

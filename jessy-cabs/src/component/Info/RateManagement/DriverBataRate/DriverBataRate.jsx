@@ -21,15 +21,16 @@ import CarCrashIcon from '@mui/icons-material/CarCrash';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-import EngineeringIcon from "@mui/icons-material/Engineering";
+// import EngineeringIcon from "@mui/icons-material/Engineering";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
-import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext.js';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -77,10 +78,8 @@ const DriverBataRate = () => {
     }
   }, [actionName, handleClick]);
 
-
   // Permission ---------------------
   const { permissions } = useContext(PermissionContext)
-
   const RateManagement_read = permissions[17]?.read;
   const RateManagement_new = permissions[17]?.new;
   const RateManagement_modify = permissions[17]?.modify;
@@ -93,9 +92,9 @@ const DriverBataRate = () => {
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input DriverBataRate-input">
+                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -110,10 +109,9 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input">
-
+                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -128,7 +126,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ width: "300px" }}>
+                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -156,10 +154,7 @@ const DriverBataRate = () => {
                 </div>
               </div>
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input" style={{ width: "200px" }}>
-                  <div className="icone">
-                    <EngineeringIcon color="action" />
-                  </div>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -179,7 +174,7 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <TextField
                     type='number'
                     size="small"
@@ -189,9 +184,10 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraHours || book.ExtraHours}
                     onChange={handleChange}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <TextField
                     type='number'
                     size="small"
@@ -201,11 +197,10 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraDays || book.ExtraDays}
                     onChange={handleChange}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                {/* </div>
-              <div className="input-field"> */}
-                <div className="input">
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <TextField
                     type='number'
                     size="small"
@@ -223,7 +218,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" >
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <TextField
                     type='number'
                     size="small"
@@ -241,7 +236,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <TextField
                     type='number'
                     size="small"
@@ -251,6 +246,7 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.Bata || book.Bata}
                     onChange={handleChange}
+                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ width: "160px" }}>
@@ -308,7 +304,6 @@ const DriverBataRate = () => {
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))} */}
-
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -333,7 +328,6 @@ const DriverBataRate = () => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
@@ -348,9 +342,6 @@ const DriverBataRate = () => {
                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
               />
             )}
-
-
-
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-DriverBataRate">

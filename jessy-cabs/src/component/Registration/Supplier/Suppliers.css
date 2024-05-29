@@ -1,34 +1,7 @@
-/* @media screen  and (min-width:320px) and (max-width:371px){
-
-    .tab-content{
-        font-size: 7px !important;
-    }
-}
-
-@media screen  and (min-width:423px) and (max-width:512px){
-
-    .tab-content{
-        font-size: 11px !important;
-    }
-}
-
-@media screen  and (min-width:397px) and (max-width:422.99px){
-
-    .tab-content{
-        font-size: 10px !important;
-    }
-}
-
-@media screen  and (min-width:371px) and (max-width:396.99px){
-
-    .tab-content{
-        font-size: 9px !important;
-    }
-} */
-
-.head-tab{
+.head-tab {
     position: sticky;
-    top: -19px;
+    top: 0px;
     z-index: 1;
-    /* background-color: #f0ece2; */
+    background-color: #ffffff;
+    padding: 30px 10px 0px 0px;
 }

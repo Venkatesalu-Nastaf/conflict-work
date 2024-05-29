@@ -11,7 +11,6 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "serialid", headerName: "Serial Id", width: 130 },
@@ -42,7 +41,6 @@ const rows = [
     Message: "2:00 PM",
     Status: "456 Avenue, Unit 8, Town",
   },
-  // Add more rows as needed
 ];
 
 const SMSReport = () => {
@@ -78,8 +76,6 @@ const SMSReport = () => {
                     />
                   </Button>
                 </div>
-              {/* </div>
-              <div className="input-field"> */}
                 <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth

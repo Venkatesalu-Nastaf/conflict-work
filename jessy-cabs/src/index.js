@@ -15,32 +15,32 @@ import { PermissionProvider } from "./component/context/permissionContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
+  // <React.StrictMode>
+  <BrowserRouter>
 
-      <RefPdfDataProvider>
-        <PdfDataProvider>
-          <MailerTemplateDataProvider>
-
-
-            <DataProvider2>
-              <DataProvider>
-                <UserProvider>
-                  <PermissionProvider>
-                    <App />
-                  </PermissionProvider>
-
-                </UserProvider>
-              </DataProvider>
-            </DataProvider2>
+    <RefPdfDataProvider>
+      <PdfDataProvider>
+        <MailerTemplateDataProvider>
 
 
-          </MailerTemplateDataProvider>
+          <DataProvider2>
+            <DataProvider>
+              <UserProvider>
+                <PermissionProvider>
+                  <App />
+                </PermissionProvider>
 
-        </PdfDataProvider>
-      </RefPdfDataProvider>
+              </UserProvider>
+            </DataProvider>
+          </DataProvider2>
 
-    </BrowserRouter>
-  </React.StrictMode>
+
+        </MailerTemplateDataProvider>
+
+      </PdfDataProvider>
+    </RefPdfDataProvider>
+
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 reportWebVitals();

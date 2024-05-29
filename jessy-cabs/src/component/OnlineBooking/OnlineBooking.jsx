@@ -9,7 +9,6 @@ import { APIURL } from "../url";
 
 const OnlineBooking = () => {
   const apiUrl = APIURL;
-
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -18,7 +17,6 @@ const OnlineBooking = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-
   const [formValues, setFormValues] = useState({
     guestname: '',
     guestmobileno: '',
@@ -45,7 +43,6 @@ const OnlineBooking = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
-
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -97,7 +94,6 @@ const OnlineBooking = () => {
       remarks: '',
     }));
   };
-
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
     if (type === 'checkbox') {
@@ -134,9 +130,7 @@ const OnlineBooking = () => {
       setErrorMessage("Check your Network Connection");
     }
   };
-
   const handlecheck = async () => {
-
     try {
       const dataToSend = {
         guestname: formValues.guestname,
@@ -150,7 +144,6 @@ const OnlineBooking = () => {
         vehType: formValues.vehType,
         remarks: formValues.remarks,
       };
-
       await axios.post(`${apiUrl}/send-onbook-email`, dataToSend);
       setSuccess(true);
       setSuccessMessage("Mail sented Successfully");

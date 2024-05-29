@@ -1,92 +1,416 @@
 .css-13xfq8m-MuiTabPanel-root {
-    display: flex;
-    padding: 0px !important;
-  }
-  .detail-container-main {
-    display: flex;
-  }
-  .form-container-booking .Title-Name {
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .form-container-booking .BookingChart-form {
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    color: #000;
-    background-color: var(--glass);
-  }
-  .form-container-booking {
-    display: flex;
-    border-radius: 10px;
-  }
-  .form-container-booking .container-main::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    overflow-x: hidden;
-  }
-  .table-bookingCopy-BookingChart{
-    border: 2px solid #ccc;
-    border-radius: 15px;
-    background-color: var(--glass);
-    margin-top: 30px;
-  }
-  /* .form-container-booking .container-main::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    } */
-  
-  .form-container-booking .container-main::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    outline: 1px solid transparent;
-  }
+  display: flex;
+  padding: 0px !important;
+}
+
+.detail-container-main {
+  display: flex;
+}
+
+.form-container-booking .Title-Name {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.form-container-booking .BookingChart-form {
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #000;
+  background-color: var(--glass);
+}
+
+.form-container-booking {
+  display: flex;
+  border-radius: 10px;
+}
+
+.form-container-booking .container-main::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  overflow-x: hidden;
+}
+
+.table-bookingCopy-BookingChart {
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  background-color: var(--glass);
+  margin-top: 30px;
+}
+
+
+.form-container-booking .container-main::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  outline: 1px solid transparent;
+}
+
+.form-container-booking .container-main {
+  border: 2px solid #ccc;
+  overflow: scroll;
+  height: 71vh;
+  width: 81vw;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  color: #000;
+  background-color: var(--glass);
+}
+
+@media screen and (max-width: 768px) {
   .form-container-booking .container-main {
-    border: 2px solid #ccc;
-    overflow: scroll;
-    height: 77vh;
-    width: 81vw;
+    width: 93vw;
+  }
+}
+
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .form-container-booking .container-main {
+    width: 76vw !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .form-container-booking .container-main {
+    width: 70vw !important;
+  }
+}
+
+.BookingChart-form .Title-Name {
+  position: relative;
+}
+
+.copy-title-btn-BookingChart {
+  background: var(--glass);
+  width: 100%;
+  margin-top: 30px;
+  padding: 20px 20px 35px 20px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+}
+
+.BookingChart-form .Title-Name::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  border-radius: 20px;
+  height: 3px;
+  background-color: #457cdc;
+}
+
+.graph-table-head {
+  padding: 20px 30px;
+}
+
+.graph-table {
+  background-color: #fcfcfc;
+}
+
+.graph-total-table {
+  overflow-x: auto;
+  border-radius: 20px;
+  margin-top: 40px;
+  border: 2px solid #ccc;
+}
+
+@media screen and (max-width: 1242px) {
+  .graph-total-table {
+    margin-top: 0px;
+  }
+
+  .search-bar-input {
+    margin-bottom: 30px;
+  }
+}
+
+.graph-table-row {
+  color: white;
+  font-size: 17px;
+}
+
+.graph-table-row-values {
+  color: #a3a3a3;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.graph-table-row-id {
+  color: #5391f8;
+  text-decoration: underline;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.active-driver {
+  color: #008000;
+  border-radius: 8px;
+  padding: 2px 15px;
+  border: 2px solid #008000;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #d5ffd5;
+  margin: 0px;
+}
+
+.b-color {
+  background-color: #76757d;
+}
+
+.offline-driver {
+  color: #afafaf;
+  border-radius: 8px;
+  padding: 2px 15px;
+  border: 2px solid #afafaf;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #f1ecec;
+  margin: 0px;
+}
+
+.inactive-driver {
+  color: #f68b73;
+  border-radius: 8px;
+  padding: 2px 15px;
+  border: 2px solid #f68b73;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #eddeda;
+  margin: 0px;
+}
+
+.graph-chart {
+  width: 400px !important;
+  height: 400px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.second-chart-bar-section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.second-chart-bar {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width:320px) and (max-width:355.99px) {
+  .total-car-table {
+    width: 230px;
+    overflow-x: scroll;
+    padding-left: 10px;
+  }
+}
+
+@media screen and (min-width:320px) and (max-width:391.99px) {
+  .total-car-table {
+    width: 250px;
+    overflow-x: scroll;
+    padding-left: 10px;
+  }
+}
+
+@media screen and (min-width:392px) and (max-width:474.99px) {
+  .total-car-table {
+    width: 300px;
+    overflow-x: scroll;
+    padding-left: 10px;
+  }
+}
+
+@media screen and (min-width:910.99px) and (max-width:969.99px) {
+  .total-car-table {
+    width: 600px;
+    overflow-x: scroll;
+  }
+}
+
+@media screen and (min-width:665px) and (max-width:909.99px) {
+  .total-car-table {
+    width: 500px;
+    overflow-x: scroll;
+  }
+}
+
+@media screen and (min-width:537px) and (max-width:664.99px) {
+  .total-car-table {
+    width: 400px;
+    overflow-x: scroll;
+  }
+}
+
+@media screen and (min-width:475px) and (max-width:536.99px) {
+  .total-car-table {
+    width: 350px;
+    overflow-x: scroll;
+  }
+}
+
+.react-fusion-chart {
+  width: 380px;
+}
+
+.apex-fusion-chart {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.apex-chart-section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.apex-chart {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width:320px) and (max-width:500px) {
+  .apex-chart {
+    margin: 10px;
+  }
+
+  .graph-chart {
+    width: 100% !important;
+  }
+}
+
+.input-search-place::placeholder {
+  color: #fff;
+}
+
+/* .main-booking-chart {
+  margin: 30px;
+} */
+
+.car-chart {
+  width: 400px;
+  height: 400px;
+}
+
+@media screen and (min-width:411.99px) and (max-width:550px) {
+  .car-chart {
+    /* width: 300px !important;
+    height: 300px; */
+    /* background-color: #fff; */
+  }
+
+  .graph-chart {
+    width: 100% !important;
+    display: block;
+    height: fit-content !important;
+  }
+}
+
+@media screen and (min-width:320px) and (max-width:411px) {
+  .car-chart {
+    /* width: 250px;
+    height: 300px; */
+    /* background-color: #fff; */
+    padding-left: 5px;
+  }
+
+  .graph-chart {
+    width: 100% !important;
+    display: block;
+    height: fit-content !important;
+  }
+
+  /* .main-booking-chart {
+    margin: 0px !important;
+  } */
+
+  .second-chart-bar-section {
     display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    border-radius: 20px;
-    color: #000;
-    background-color: var(--glass);
+    gap: 20px;
+    flex-wrap: wrap;
+    /* justify-content: flex-start; */
+    align-items: center;
   }
 
-  @media screen and (min-width:970px) and (max-width:1240px) {
-    .form-container-booking .container-main{ 
-      width: 76vw !important;
-    }
-  }
-  
-  @media screen and (min-width:769px) and (max-width:969.99px) {
-    .form-container-booking .container-main { 
-      width: 70vw !important;
-    }
+  .second-chart-bar-section-apex {
+    justify-content: center !important;
   }
 
-  .BookingChart-form .Title-Name {
-    position: relative;
-  }
-  .copy-title-btn-BookingChart{
-    background: var(--glass);
+  .second-chart-bar {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
     width: 100%;
-    margin-top: 30px;
-    padding: 20px 20px 35px 20px;
-    border: 2px solid #ccc;
-    border-radius: 15px ;
+    justify-content: flex-start;
   }
-  
-  .BookingChart-form .Title-Name::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    width: 100%;
-    border-radius: 20px;
-    height: 3px;
-    background-color: #457cdc; /* Adjust color as needed */
+
+  .search-bar-input {
+    display: inline-flex;
+    padding: 10px !important;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
   }
-  
+
+  .search-button {
+    display: inline-flex;
+    align-items: center;
+    background: #79a6ff;
+    padding: 5px;
+  }
+}
+
+.search-bar-input {
+  display: inline-flex;
+  padding: 20px;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.search-button {
+  display: inline-flex;
+  align-items: center;
+  background: #79a6ff;
+  padding: 10px;
+}
+
+.graph-table-head-driver {
+  padding: 15px 30px !important;
+}
+
+.graph-table,
+.graph-total-table {
+  height: 200px;
+}
+
+@media screen and (max-width: 720px) {
+
+  .graph-table,
+  .graph-total-table {
+    width: 71vw;
+  }
+}
+
+.graph-table th {
+  height: 30px;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 430px) {
+  .main-booking-chart-sub-division {
+    width: 91vw;
+  }
+}

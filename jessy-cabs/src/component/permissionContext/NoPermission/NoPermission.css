@@ -1,0 +1,26 @@
+.no-permission-div {
+    width: 76vw;
+    height: 100%;
+    text-align: center;
+}
+
+.no-permission-img {
+    width: 350px;
+}
+
+.no-permission-text {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+}
+
+@media screen and (max-width: 410px) {
+    .no-permission-img {
+        width: 100%;
+    }
+
+    .no-permission-text {
+        font-size: 25px;
+    }
+}

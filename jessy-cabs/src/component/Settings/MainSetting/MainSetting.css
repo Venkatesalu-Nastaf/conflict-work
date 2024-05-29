@@ -21,7 +21,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .main-setting-main .Title-Name {
@@ -37,26 +36,32 @@
   width: 81vw !important;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+  .main-setting-main .main-setting-form-container {
+    width: 93vw !important;
+  }
+}
+
 @media screen and (min-width:970px) and (max-width:1240px) {
-  .main-setting-main .main-setting-form-container { 
+  .main-setting-main .main-setting-form-container {
     width: 76vw !important;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
-  .main-setting-main .main-setting-form-container { 
+  .main-setting-main .main-setting-form-container {
     width: 70vw !important;
   }
 }
+
 @media screen and (min-width:320px) and (max-width:769.99px) {
-  .main-setting-main { 
-    width: 85% !important;
+  .main-setting-main {
+    width: 97% !important;
   }
 }
 
@@ -68,8 +73,6 @@
   margin-bottom: -10px;
 }
 
-/*  */
-/*  */
 .main-setting-main .main-setting-form-container::-webkit-scrollbar {
   width: 0px;
   height: 0px;
@@ -84,8 +87,6 @@
   background-color: rgb(217, 212, 212);
   outline: 1px solid slategrey;
 }
-
-
 
 /* TABLE */
 .usercreation-table-container {
@@ -103,24 +104,14 @@
   overflow: scroll;
 }
 
-.back-up-component{
+.back-up-component {
   display: flex;
   justify-content: center;
 }
 
-
-
-/* @media screen and (min-width:320px) and (max-width:380px) {
-  .tablists{
-font-size: 8px !important;
-padding: 2px !important;
-  }
+.head-tab {
+  position: sticky;
+  top: 0px;
+  background-color: #ffffff;
+  padding: 30px 10x 0px 0px;
 }
-
-@media screen and (min-width:380.99px) and (max-width:510px) {
-  .tablists{
-font-size: 11px !important;
-padding: 2px !important;
-  }
-} */
-

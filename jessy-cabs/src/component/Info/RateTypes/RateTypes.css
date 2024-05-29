@@ -1,13 +1,11 @@
-
-.css-jpln7h-MuiTabs-scroller{
+.css-jpln7h-MuiTabs-scroller {
     overflow: auto !important;
 }
 
-.head-tab-ratetype{
+.head-tab-ratetype {
     position: sticky;
-    top: -28px;
+    top: 0px;
     z-index: 5;
-    /* background-color: #f0ece2; */
-    padding: 10px 10px 0px 10px;
-
+    background-color: #ffffff;
+    padding: 30px 10px 0px 0px;
 }

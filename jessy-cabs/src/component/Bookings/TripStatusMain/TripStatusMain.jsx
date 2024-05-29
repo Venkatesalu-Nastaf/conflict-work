@@ -8,7 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import VehicleStatement from './VehicleStatement/VehicleStatement';
 import TripStatus from './TripStatus/TripStatus';
 
-const TripStatusMain = () => {
+const TripStatusMain = ({ stationName }) => {
     const [value, setValue] = React.useState("tripstatus");
 
     const handleChange = (event, newValue) => {
@@ -20,13 +20,13 @@ const TripStatusMain = () => {
             <div className="container-main">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box className='head-tab-tripstatus' sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Trip Status" value="tripstatus" />
                                 <Tab label="VehicleStatement" value="vehicleStatement" />
                             </TabList>
                         </Box>
-                        <TabPanel value="tripstatus"><TripStatus /></TabPanel>
+                        <TabPanel value="tripstatus"><TripStatus stationName={stationName} /></TabPanel>
                         <TabPanel value="vehicleStatement"><VehicleStatement /></TabPanel>
                     </TabContext>
                 </Box>

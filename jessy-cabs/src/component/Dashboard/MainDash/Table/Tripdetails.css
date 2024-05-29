@@ -5,7 +5,8 @@
 .TripDetails-container .field-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly !important;
+    flex-wrap: wrap !important;
 }
 
 .TripDetails-container .field-item .input label {
@@ -15,16 +16,17 @@
 
 .TripDetails-container .field-item .input {
     padding: 10px 15px;
+    width: 200px !important;
 }
-.dialog-status{
+
+.dialog-status {
     padding: 5px 10px;
-    border-radius:10px ;
+    border-radius: 10px;
     border: 2px solid rgb(145 254 159 / 47%);
 }
 
 .MuiBackdrop-root {
-    background:  #00000005 !important;
-    /* opacity: 0.1 !important; */
+    background: #00000005 !important;
 }
 
 .MuiPaper-elevation24 {

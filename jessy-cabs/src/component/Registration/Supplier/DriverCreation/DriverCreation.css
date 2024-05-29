@@ -1,121 +1,107 @@
 /* Main Container For User Creation */
 .DriverCreation-main {
-    width: 100%;
-    overflow-x: hidden;
-    display: flex;
-    /* flex-direction: column; */
-    color: #000;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  color: #000;
 }
 
 
 .DriverCreation-main .DriverCreation-form-container {
-    overflow: scroll;
-    height: 75vh;
-    width: 81vw;
-    display: flex;
-    flex-direction: column;
-    color: #000;
-    background-color: var(--glass);
+  overflow: scroll;
+  height: 75vh;
+  width: 81vw;
+  display: flex;
+  flex-direction: column;
+  color: #000;
 }
 
+@media screen and (max-width: 768px) {
+  .DriverCreation-main .DriverCreation-form-container {
+    width: 93vw;
+  }
+}
+
+
 .DriverCreation-header {
-    border-top: solid 1px #ccc;
-    background: var(--glass);
-    padding: 10px;
-    margin-bottom: -10px;
+  border-top: solid 1px #ccc;
+  background: var(--glass);
+  padding: 10px;
+  margin-bottom: -10px;
 }
 
 .DriverCreation-main .DriverCreation-form-container::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    overflow-x: hidden;
+  width: 0px;
+  height: 0px;
+  overflow-x: hidden;
 }
 
 .DriverCreation-main .DriverCreation-form-container::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 .DriverCreation-main .DriverCreation-form-container::-webkit-scrollbar-thumb {
-    background-color: rgb(217, 212, 212);
-    outline: 1px solid slategrey;
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
 }
 
 .DriverCreation-table-container {
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    padding: 20px;
-    background-color: var(--glass);
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: var(--glass);
 }
 
 .table-DriverCreations {
-    background: var(--glass);
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    height: 400px;
-    width: 100%;
-    overflow: hidden;
+  background: var(--glass);
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .detail-container-main {
-    display: flex;
-  }
+  display: flex;
+}
 
-  .driver-info-inputs{
-   flex-wrap: wrap; 
-   /* justify-content: center; */
-  }
-  @media screen and (max-width:1240px) {
-    .driver-info-inputs{
-      flex-wrap: wrap; 
-      justify-content: center;
-     }
-  }
+.driver-info-inputs {
+  flex-wrap: wrap;
+}
 
-  @media screen and (min-width:970px) and (max-width:1240px) {
-    .form-container .container-main{ 
-      width: 76vw !important;
-    }
+@media screen and (max-width:1240px) {
+  .driver-info-inputs {
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  
-  @media screen and (min-width:769px) and (max-width:969.99px) {
-    .form-container .container-main{ 
-      width: 70vw !important;
-    }
-  }
+}
 
-  /* @media screen and (min-width:970px) and (max-width:1240px) {
-    .DriverCreation-main .DriverCreation-form-container{ 
-      width: 76vw !important;
-    }
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .form-container .container-main {
+    width: 76vw !important;
   }
-  
-  @media screen and (min-width:769px) and (max-width:969.99px) {
-    .DriverCreation-main .DriverCreation-form-container{ 
-      width: 70vw !important;
-    }
-  } */
+}
 
-  .driver-input{
-    /* width: 300px !important; */
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .form-container .container-main {
+    width: 70vw !important;
   }
+}
 
-.detail-container-main-crivercreation{
+.detail-container-main-crivercreation {
   justify-content: center !important;
 }
- 
-  @media screen and (min-width:320px) and (max-width:700px) {
-    .detail-container-main-crivercreation{
-    
-        display: flex;
-        width: 85% !important;
-    
-  }
-  }
 
-  @media screen and (min-width:320px) and (max-width:380px) {
-    .copy-title-btn-Booking {
-        background-color: transparent;
-        border:none !important;
-    }
-
+@media screen and (min-width:320px) and (max-width:700px) {
+  .detail-container-main-crivercreation {
+    display: flex;
+    width: 85% !important;
   }
+}
+
+@media screen and (min-width:320px) and (max-width:380px) {
+  .copy-title-btn-Booking {
+    background-color: transparent;
+    border: none !important;
+  }
+}

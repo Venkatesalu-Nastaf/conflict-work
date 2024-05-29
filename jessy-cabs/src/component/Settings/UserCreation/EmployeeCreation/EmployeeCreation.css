@@ -3,7 +3,6 @@
   width: 100%;
   overflow-x: hidden;
   display: flex;
-  /* flex-direction: column; */
   color: #000;
 }
 
@@ -11,19 +10,18 @@
 .EmployeeCreation-main .EmployeeCreation-form-container {
   overflow: scroll;
   height: 75vh;
-  /* width: 81vw; */
   width: 81vw;
   display: flex;
   flex-direction: column;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .EmployeeCreation-header {
   border-top: solid 1px #ccc;
   background: var(--glass);
   padding: 10px;
-  margin-bottom: -10px;
+  /* margin-bottom: -10px; */
 }
 
 .EmployeeCreation-main .EmployeeCreation-form-container::-webkit-scrollbar {
@@ -43,7 +41,6 @@
 
 /* TABLE */
 .EmployeeCreation-table-container {
-  /* margin-top: 10px; */
   border: 1px solid #ccc;
   padding: 20px;
   background-color: var(--glass);
@@ -58,21 +55,21 @@
   overflow: hidden;
 }
 
-.employee-creation-inputfeilds{
+.employee-creation-inputfeilds {
   flex-wrap: wrap;
 }
-@media screen  and (max-width: 1141px){
-  .employee-creation-inputfeilds{
+
+@media screen and (max-width: 1141px) {
+  .employee-creation-inputfeilds {
     flex-wrap: wrap;
     justify-content: center;
   }
 }
 
-@media screen  and (max-width: 767.99px){
+@media screen and (max-width: 767.99px) {
   .EmployeeCreation-main .EmployeeCreation-form-container {
     overflow: scroll;
     height: 75vh;
-    /* width: 81vw; */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -81,51 +78,68 @@
   }
 }
 
-
-.add-icon{
+.add-icon {
   position: relative;
   right: 0px;
-  height: 60px !important;
-  background-color: #fff !important;
   margin-top: 0px !important;
-
 }
 
-
 @media only screen and (min-width: 850px) and (max-width: 1230px) {
-  .add-icon{
+  .add-icon {
     position: relative !important;
     right: 0px !important;
     height: 60px !important;
     background-color: #fff;
   }
-  
 }
 
 @media only screen and (min-width: 768.99px) and (max-width: 849.99px) {
- .add-icon{
+  .add-icon {
     position: relative !important;
     right: 0px !important;
     height: 60px !important;
-  
   }
-  
 }
 
-.user-table-permission{
+.user-table-permission {
   display: flex;
   align-items: center;
   margin-top: 15px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  background-color: #d0d0d0;
+  padding: 5px;
+  border-radius: 8px;
 }
 
-.search-profile{
+.user-table-permission:active {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px,
+    inset rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    inset rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.search-profile {
   display: flex;
 }
-.user-name-text{
+
+.user-name-text {
   margin: 0px;
 }
 
-.user-details-text{
+.user-details-text {
   margin: 0px;
-  width: 200px;
+  /* width: 200px; */
+}
+
+.add-permission {
+  display: flex;
+  gap: 20px;
+}
+
+.add-user-button {
+  padding: 10px 20px !important;
+}
+
+.user-permission-button {
+  padding: 10px 20px !important;
 }

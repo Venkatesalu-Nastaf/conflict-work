@@ -2,9 +2,7 @@ import React, { useEffect, useContext } from "react";
 import "./Employe.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
-
 import Box from "@mui/material/Box";
-
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -13,12 +11,10 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { TextField } from "@mui/material";
 import { AiOutlineFileSearch } from "react-icons/ai";
-
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -39,7 +35,7 @@ import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
@@ -53,10 +49,9 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
-import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
-
-
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -121,7 +116,6 @@ const Employe = () => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-
   const Employee_read = permissions[11]?.read;
   const Employee_new = permissions[11]?.new;
   const Employee_modify = permissions[11]?.modify;
@@ -133,7 +127,7 @@ const Employe = () => {
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
             <div className="input-field employee-input-feilds">
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -145,9 +139,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.empid || book.empid}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -159,9 +154,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.empname || book.empname}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <EmailIcon color="action" />
                 </div>
@@ -173,9 +169,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.empemailid || book.empemailid}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PhoneIphoneIcon color="action" />
                 </div>
@@ -187,11 +184,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.empmobile || book.empmobile}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <WorkOutlineRoundedIcon color="action" />
                 </div>
@@ -203,12 +199,13 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.jobroll || book.jobroll}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <DatePicker
                     label="Joining Date"
@@ -230,7 +227,7 @@ const Employe = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <TransgenderRoundedIcon color="action" />
                 </div>
@@ -242,9 +239,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.gender || book.gender}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BloodtypeIcon color="action" />
                 </div>
@@ -256,27 +254,28 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input input-address" style={{ width: "415px" }}>
+              <div className="input input-address" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <TextField
-                  sx={{ width: "415px" }}
-                  size="small"
+                  margin="normal"
                   id="address1"
                   label="Address"
                   name="address1"
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
                   autoComplete="new-password"
+                  style={{ width: '100%' }}
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                  variant="standard"
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ContactMailIcon color="action" />
                 </div>
@@ -288,9 +287,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.aadharcard || book.aadharcard}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FactCheckIcon color="action" />
                 </div>
@@ -302,26 +302,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.pancard || book.pancard}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input input-address" style={{ width: "415px" }}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  sx={{ width: "415px" }}
-                  size="small"
-                  id="address2"
-                  name="address2"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address2 || book.address2}
-                  onChange={handleChange}
-                  variant="standard"
-                />
-              </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <EscalatorWarningIcon color="action" />
                 </div>
@@ -333,9 +317,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.guardian || book.guardian}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "215px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <CurrencyRupeeIcon color="action" />
                 </div>
@@ -347,11 +332,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input" style={{ width: "260px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <DeviceHubRoundedIcon color="action" />
                 </div>
@@ -363,9 +347,10 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.uanid || book.uanid}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "260px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <MedicalInformationIcon color="action" />
                 </div>
@@ -377,23 +362,24 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.esino || book.esino}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "250px", display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
+              <div className="" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="drivinglicence no"
-                  label="Drving Licence No"
+                  label="Driving Licence No"
                   name="licenceno"
                   autoComplete="new-password"
                   value={selectedCustomerData?.licenceno || book.licenceno}
                   onChange={handleChange}
                 />
 
-                <div>
+                <div style={{ paddingLeft: '20px' }}>
                   {selectedCustomerData?.empid || book.empid ? (
                     <Button component="label">
                       <UploadFileIcon />
@@ -413,26 +399,6 @@ const Employe = () => {
                   )}
                 </div>
               </div>
-
-              {/* <div className="input" style={{ width: "20px" }}>
-                {selectedCustomerData?.empid || book.empid ? (
-                  <Button component="label">
-                    <UploadFileIcon />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </Button>
-                ) : (
-                  <Button color="primary" variant="contained" onClick={() => {
-                    setError(true);
-                    setErrorMessage("Please Enter Booking No");
-                  }}>
-                    <UploadFileIcon />
-                  </Button>
-                )}
-              </div> */}
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
@@ -501,17 +467,6 @@ const Employe = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) =>
-                  handleClick(event, action.name, selectedCustomerId)
-                }
-              />
-            ))} */}
-
             {Employee_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -550,8 +505,6 @@ const Employe = () => {
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-
-
           </StyledSpeedDial>
         </Box>
         <div className="Employe-search-container">

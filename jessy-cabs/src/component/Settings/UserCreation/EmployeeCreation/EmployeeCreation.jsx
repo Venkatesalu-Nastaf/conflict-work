@@ -3,7 +3,6 @@ import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
-import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +10,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName } from "./EmployeeCreationData";      //Branch Name
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import Avatar from "../../../../assets/img/avatar.png"
@@ -60,7 +58,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const EmployeeCreation = () => {
+const EmployeeCreation = ({ stationName }) => {
 
   const {
 
@@ -78,18 +76,17 @@ const EmployeeCreation = () => {
     book,
     handleClick,
     handleChange,
-    handleRowClick, handleRowClickUser,
+    handleRowClickUser,
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
     handleMouseDownPasswords,
-    columns,
     isEditMode,
     handleEdit,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange,
+    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -99,11 +96,25 @@ const EmployeeCreation = () => {
   }, [actionName, handleClick]);
 
 
+  const [stationNameforUSer, setSationNameforUser] = useState([])
+
+  useEffect(() => {
+    if (stationName.length > 1) {
+      setSationNameforUser([...stationName, { Stationname: "ALL" }]);
+    } else {
+      setSationNameforUser(stationName); // Set the original array when length is not greater than 1
+    }
+  }, [stationName]);
+
+
+
+
   //  for showing table
   const [showPermission, setShowPermission] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
+
     setShowPermission(!showPermission);
     setSelectedUserId(row.userid)
   };
@@ -132,8 +143,8 @@ const EmployeeCreation = () => {
       <div className="EmployeeCreation-form-container">
         <form onSubmit={handleClick}>
           <div className="EmployeeCreation-header">
-            <div className="input-field employee-creation-inputfeilds">
-              <div className="input">
+            <div className="input-field employee-creation-inputfeilds" style={{ padding: '10px' }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -144,11 +155,12 @@ const EmployeeCreation = () => {
                   label="ID"
                   name="userid"
                   value={book.userid}
-                  onChange={handleChange}
+                  // onChange={handleChange}
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                 </div>
@@ -162,7 +174,7 @@ const EmployeeCreation = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -171,11 +183,11 @@ const EmployeeCreation = () => {
                   size="small"
                   id="free-solo-demo-stationname"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={StationName.find((option) => option.Option)?.label || book?.stationname || ''}
-                  options={StationName.map((option) => ({
-                    label: option.Option,
+                  value={stationNameforUSer.find((option) => option.Option)?.label || book?.stationname || ''}
+                  options={stationNameforUSer.map((option) => ({
+                    label: option.Stationname,
                   }))}
                   getOptionLabel={(option) => option.label || book?.stationname || ''}
                   renderInput={(params) => {
@@ -186,7 +198,7 @@ const EmployeeCreation = () => {
                   }
                 />
               </div>
-              <div className="input" style={{ width: "200px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -197,10 +209,9 @@ const EmployeeCreation = () => {
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
-                // variant="standard"
                 />
               </div>
-              <div className="input" style={{ width: "200px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -212,11 +223,10 @@ const EmployeeCreation = () => {
                   label="Organization"
                   id="organizationname"
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-
-
-              <div className="input" style={{ width: "240px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                 </div>
@@ -242,7 +252,6 @@ const EmployeeCreation = () => {
                   />
                 </FormControl>
               </div>
-
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -272,14 +281,13 @@ const EmployeeCreation = () => {
                 {isEditMode ? (
                   <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <>
-                    <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} >Add</Button>
-                    <Button variant="contained" disabled={!UserCreation_new} style={{ marginLeft: 10 }} onClick={togglePermission} >Give Permission</Button>
-                  </>
+                  <div className='add-permission'>
+                    {/* <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button> */}
+                    <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
+                  </div>
                 )}
               </div>
             </div>
-
           </div>
           <div className='alert-popup-main'>
             {error &&
@@ -311,16 +319,13 @@ const EmployeeCreation = () => {
               </div>
             }
           </div>
-
           <Box sx={{ mt: 3, }}
             className="add-icon">
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
-
             >
-
               {UserCreation_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -345,7 +350,7 @@ const EmployeeCreation = () => {
                   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                 />
               )}
-              {UserCreation_new === 1 && (
+              {UserCreation_new === 1 && !isEditMode && (
                 <SpeedDialAction
                   key="Add"
                   icon={<BookmarkAddedIcon />}
@@ -359,16 +364,11 @@ const EmployeeCreation = () => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
-
-          <div className="EmployeeCreation-table-container" style={{ marginTop: '20px' }}>
+          <div className="EmployeeCreation-table-container">
             <div className='search-profile'>
-
-              <div className="search-input-container" style={{ marginBottom: '20px' }}>
-
+              <div className="search-input-container Scroll-Style-hide">
                 <TextField
                   id="search-input"
                   label="Search"
@@ -378,84 +378,42 @@ const EmployeeCreation = () => {
                   InputProps={{
                     endAdornment: <AiOutlineSearch />,
                   }}
+                  style={{marginLeft: '15px'}}
                 />
-
-
-                {filteruser.map((row, index) => (
-
-                  <div className='user-table-permission' onClick={() => {
-
-                    togglePermission(row);
-                    handleRowClickUser(row)
-
-                  }
-                  }
-
-                    key={index}>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">{row.username}</h3>
-                      <p className="user-details-text">{row.designation}</p>
+                <div style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+                  {filteruser.map((row, index) => (
+                    <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
+                      togglePermission(row);
+                      handleRowClickUser(row)
+                    }}
+                      key={index}>
+                      <img src={Avatar} alt="profile" width="50" />
+                      <div>
+                        <h3 className="user-name-text">{row.username}</h3>
+                        <p className="user-details-text">{row.designation}</p>
+                      </div>
                     </div>
-                  </div>
-
-                ))}
-
-
-                {/* <div>
-
-                  <div className='user-table-permission' onClick={togglePermission}>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-                </div> */}
+                  ))}
+                </div>
 
               </div>
-
-              {showPermission && <UserPermission userid={selectedUserId} permissionsData={permissionsData} handleSwitchChange={handleSwitchChange} handleCheckboxChange={handleCheckboxChange} />}
-
+              {showPermission && <UserPermission
+                userid={selectedUserId}
+                permissionsData={permissionsData}
+                handleSwitchChange={handleSwitchChange}
+                handleCheckboxChange={handleCheckboxChange}
+                setReadState={setReadState}
+                readState={readState}
+                newState={newState}
+                modifyState={modifyState}
+                deleteState={deleteState}
+              />}
             </div>
-
-            <div className="table-EmployeeCreations">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-              />
-            </div>
+            {!isEditMode &&
+              <div style={{ display: "flex", justifyContent: "end" }}>
+                <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
+              </div>
+            }
           </div>
         </form>
       </div>

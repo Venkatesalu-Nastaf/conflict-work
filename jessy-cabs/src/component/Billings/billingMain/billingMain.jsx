@@ -9,8 +9,7 @@ import TabContext from "@mui/lab/TabContext";
 import BankAccount from './BankAccount/BankAccount';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
-
-const BillingMain = () => {
+const BillingMain = ({ organizationNames }) => {
   const [value, setValue] = React.useState("billing");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -20,7 +19,7 @@ const BillingMain = () => {
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-billing">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Billing" value="billing" />
                 <Tab label="Payment" value="payment" />
@@ -28,11 +27,10 @@ const BillingMain = () => {
               </TabList>
             </Box>
             <TabPanel value="billing"><Billing /></TabPanel>
-            <TabPanel value="payment"><PaymentDetail /></TabPanel>
+            <TabPanel value="payment"><PaymentDetail organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>
-       
       </div>
     </div >
   )

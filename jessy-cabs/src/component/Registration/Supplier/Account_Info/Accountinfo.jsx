@@ -30,11 +30,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
 import RateReviewIcon from "@mui/icons-material/RateReview";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
@@ -43,8 +43,9 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useAccountinfo from './useAccountinfo';
-
-
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { GrSelect } from "react-icons/gr";
+import { FaCarOn } from "react-icons/fa6";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -58,13 +59,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-// const actions = [
-//   { icon: <ChecklistIcon />, name: "List" },
-//   { icon: <CancelPresentationIcon />, name: "Cancel" },
-//   { icon: <DeleteIcon />, name: "Delete" },
-//   { icon: <ModeEditIcon />, name: "Edit" },
-//   { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
 const Accuntinfo = () => {
 
   const {
@@ -101,15 +95,12 @@ const Accuntinfo = () => {
     }
   }, [actionName, handleClick]);
 
-
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-
   const Supllier_read = permissions[10]?.read;
   const Supllier_new = permissions[10]?.new;
   const Supllier_modify = permissions[10]?.modify;
   const Supllier_delete = permissions[10]?.delete;
-
 
   return (
     <div className="account-form">
@@ -117,7 +108,7 @@ const Accuntinfo = () => {
         <div className="detail-container-main-account">
           <div className="container-left-account">
             <div className="input-field account-info-input-feild">
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
@@ -131,9 +122,13 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
@@ -147,7 +142,7 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <MinorCrashIcon color="action" />
                 </div>
@@ -159,9 +154,10 @@ const Accuntinfo = () => {
                   label="Vehicle/Travels"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ContactPhoneIcon color="action" />
                 </div>
@@ -173,27 +169,28 @@ const Accuntinfo = () => {
                   label="Phone"
                   id="phone"
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <TextField
-                  size="small"
+                  margin="normal"
+                  id="remark"
+                  label="Address"
                   name="address1"
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
                   autoComplete="new-password"
+                  style={{ width: '100%' }}
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                  label="Address"
-                  id="remark"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -205,15 +202,19 @@ const Accuntinfo = () => {
                   label="C Person"
                   id="cperson"
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input radio">
+              <div className="input radio" style={{ paddingRight: '15px' }}>
+                <div className='icone'>
+                  <GrSelect style={{ fontSize: '25px' }} />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-vehicleInfo"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
                   value={Undergroup.find((option) => option.Option)?.label || selectedCustomerData?.underGroup || ''}
                   options={Undergroup.map((option) => ({
@@ -228,24 +229,7 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
-                <div className="icone">
-                  <HomeTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="streetNo"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.streetNo || book.streetNo}
-                  onChange={handleChange}
-                  id="remark"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -257,9 +241,13 @@ const Accuntinfo = () => {
                   label="Email"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: "15px" }}>
+                <div className='icone'>
+                  <FaCarOn style={{ fontSize: '25px' }} />
+                </div>
                 <TextField
                   type="number"
                   name='vehCommission'
@@ -269,7 +257,7 @@ const Accuntinfo = () => {
                   label="Veh.Commission"
                   size="small"
                   id="outlined-start-adornment"
-                  sx={{ m: 1, width: "25ch" }}
+                  sx={{ width: "100%" }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">%</InputAdornment>
@@ -277,24 +265,7 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="city"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.city || book.city}
-                  onChange={handleChange}
-                  id="address3"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                />
-              </div>
-              <div className="input radio">
+              <div className="input radio" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
@@ -306,15 +277,19 @@ const Accuntinfo = () => {
                   label="Opening Balance"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: '15px' }}>
+                <div className='icone'>
+                  <FaCarOn style={{ fontSize: '25px' }} />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-vehicleInfo"
                   freeSolo
-                  sx={{ m: 1, width: "25ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
                   value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
                   options={Vehicleinfo.map((option) => ({
@@ -333,28 +308,6 @@ const Accuntinfo = () => {
           </div>
         </div>
         <div className="input-field account-info-label">
-          <div className="input">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                Is Runing
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="isRunning"
-                autoComplete="new-password"
-                onChange={handleChange}
-                value={selectedCustomerData?.isRunning || book.isRunning}
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel value="no" control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
-          </div>
           <div className="input radio">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">
@@ -373,7 +326,7 @@ const Accuntinfo = () => {
               </RadioGroup>
             </FormControl>
           </div>
-          <div className="input">
+          <div className="input" style={{ paddingRight: '15px' }}>
             <div className="icone">
               <RateReviewIcon color="action" />
             </div>
@@ -385,6 +338,7 @@ const Accuntinfo = () => {
               label="Rate Type"
               id="standard-size-normal"
               variant="standard"
+              style={{ width: '100%' }}
             />
           </div>
           <div className="input" style={{ width: "160px" }}>
@@ -432,15 +386,6 @@ const Accuntinfo = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                />
-              ))} */}
-
               {Supllier_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -479,12 +424,9 @@ const Accuntinfo = () => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
         </div>
-
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (

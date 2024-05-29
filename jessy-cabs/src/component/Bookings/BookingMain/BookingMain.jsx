@@ -6,8 +6,9 @@ import TabPanel from "@mui/lab/TabPanel";
 import Booking from "./Booking/Booking.jsx";
 import TabContext from "@mui/lab/TabContext";
 import BokkingChart from "./BookingChart/BookingChart.jsx";
+import "./BookingMain.css";
 
-const BookingMain = () => {
+const BookingMain = ({ stationName }) => {
   const [value, setValue] = React.useState("booking");
 
   const handleChange = (event, newValue) => {
@@ -18,7 +19,7 @@ const BookingMain = () => {
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box className='head-tab-booking' sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
@@ -28,9 +29,9 @@ const BookingMain = () => {
               </TabList>
             </Box>
             <TabPanel value="booking">
-              <Booking />
+              <Booking stationName={stationName} />
             </TabPanel>
-            <TabPanel value="bookingchart">
+            <TabPanel value="bookingchart" className="BokkingChart-render">
               <BokkingChart />
             </TabPanel>
           </TabContext>

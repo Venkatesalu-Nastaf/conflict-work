@@ -1,12 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import "./RateType.css";
 import "jspdf-autotable";
-
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Stations } from "./RateTypeData.js";
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -27,20 +25,18 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, } from "@mui/material";
 import useRatype from './useRatype.js';
-
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-
 import { PermissionContext } from '../../../context/permissionContext.js';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -54,7 +50,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const RateType = () => {
+const RateType = ({ stationName, organizationNames }) => {
 
     const {
         selectedCustomerData,
@@ -76,16 +72,12 @@ const RateType = () => {
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
-        // formData,
-        // setBook,
         handleExcelDownload,
         handlePdfDownload,
         columns,
         isEditMode,
         handleEdit,
         handleDateChange,
-        organizationNames,
-
     } = useRatype();
 
     useEffect(() => {
@@ -94,18 +86,12 @@ const RateType = () => {
         }
     }, [actionName, handleClick]);
 
-
-
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-
     const INFO_read = permissions[16]?.read;
     const INFO_new = permissions[16]?.new;
     const INFO_modify = permissions[16]?.modify;
     const INFO_delete = permissions[16]?.delete;
-
-
-
 
     return (
         <div className="ratetype-form Scroll-Style-hide">
@@ -114,7 +100,7 @@ const RateType = () => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
                             <div className="input-field rate-type-inputs">
-                                <div className="input">
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -126,22 +112,22 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input" style={{}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
-
                                     <Autocomplete
                                         fullWidth
                                         size="small"
                                         id="free-solo-demo-customerType"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                        value={Stations.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
-                                        options={Stations.map((option) => ({
-                                            label: option.Option,
+                                        value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
                                         getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                         renderInput={(params) => {
@@ -152,31 +138,18 @@ const RateType = () => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{ width: 250 }}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    {/* <TextField
-                                        size="small"
-                                        id="id"
-                                        label="Organization Name"
-                                        name="ratename"
-                                        autoComplete="new-password"
-                                        value={selectedCustomerData?.ratename || book.ratename}
-                                        onChange={handleChange}
-                                    /> */}
                                     <Autocomplete
                                         fullWidth
                                         size="small"
                                         id="free-solo-demo-pricetag"
                                         freeSolo
-                                        sx={{ width: "20ch" }}
+                                        sx={{ width: "100%" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
-                                        // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
                                         value={selectedCustomerData?.ratename || book.selectedCustomerData || ""}
-                                        // options={PriceTag.map((option) => ({
-                                        //   label: option.option,
-                                        // }))}
                                         options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
                                         getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
                                         renderInput={(params) => {
@@ -187,9 +160,7 @@ const RateType = () => {
                                         }
                                     />
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
-                                <div className="input" style={{ width: "300px" }}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -201,6 +172,7 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px", paddingLeft: '10px' }}>
@@ -229,9 +201,10 @@ const RateType = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-
-
-                                <div className="input">
+                                <div className="input" style={{ paddingRight: '15px' }}>
+                                    <div className='icone'>
+                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
@@ -256,7 +229,10 @@ const RateType = () => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{ paddingRight: '15px' }}>
+                                    <div className='icone'>
+                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
@@ -281,8 +257,6 @@ const RateType = () => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "160px" }}>
                                     {isEditMode ? (
                                         <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
@@ -355,8 +329,6 @@ const RateType = () => {
                                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))} */}
-
-
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -365,7 +337,6 @@ const RateType = () => {
                                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                             />
                         )}
-
                         {INFO_modify === 1 && (
                             <SpeedDialAction
                                 key="edit"
@@ -382,7 +353,6 @@ const RateType = () => {
                                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                             />
                         )}
-
                         {INFO_new === 1 && (
                             <SpeedDialAction
                                 key="Add"
@@ -391,17 +361,12 @@ const RateType = () => {
                                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
                             />
                         )}
-
-
                         <SpeedDialAction
                             key="Cancel"
                             icon={<CancelPresentationIcon />}
                             tooltipTitle="Cancel"
                             onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                         />
-
-
-
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateType">

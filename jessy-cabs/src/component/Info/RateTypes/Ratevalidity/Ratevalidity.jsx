@@ -22,14 +22,14 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import useRatevalidity from './useRatevalidity';
-import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext';
-
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -42,7 +42,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-
 
 const Ratevalidity = () => {
 
@@ -77,10 +76,8 @@ const Ratevalidity = () => {
         }
     }, [actionName, handleClick]);
 
-
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-
     const INFO_read = permissions[16]?.read;
     const INFO_new = permissions[16]?.new;
     const INFO_modify = permissions[16]?.modify;
@@ -93,7 +90,7 @@ const Ratevalidity = () => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
                             <div className="input-field RateValidity-input-feilds">
-                                <div className="input RateValidity-input">
+                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -105,9 +102,10 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input">
+                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -119,13 +117,13 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" >
+                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
-                                        <DateRangeIcon color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
-
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="From Date"
@@ -139,9 +137,9 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" >
+                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
-                                        <DateRangeIcon color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
@@ -156,9 +154,7 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
-                                <div className="input RateValidity-input" style={{ width: "300px" }}>
+                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -170,6 +166,7 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.Remarks || book.Remarks}
                                         onChange={handleChange}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px" }}>
@@ -253,8 +250,6 @@ const Ratevalidity = () => {
                                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))} */}
-
-
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -293,8 +288,6 @@ const Ratevalidity = () => {
                             tooltipTitle="Cancel"
                             onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                         />
-
-
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateValidity">

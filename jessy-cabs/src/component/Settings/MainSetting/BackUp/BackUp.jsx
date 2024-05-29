@@ -73,7 +73,6 @@ const BackUp = () => {
         }
     }, [info]);
 
-
     // LOADING
     function LinearProgressWithLabel(props) {
         return (
@@ -119,11 +118,12 @@ const BackUp = () => {
         setSuccessMessage("Data Downloaded!");
     }
     return (
-        <div className="BackUp-form">
+        <div className="BackUp-form" style={{ width: '100%' }}>
             <form action="">
                 <div className="BackUp-header">
-                    <div className="input-field backup-inputs"  style={{ justifyContent: 'center', marginTop: '20px' }}>
+                    <div className="input-field backup-inputs" style={{ justifyContent: 'center', marginTop: '20px' }}>
                         <div className="input">
+
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
                                     <DatePicker
@@ -170,41 +170,43 @@ const BackUp = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Box sx={{ width: '85%', marginTop: '20%' ,marginBottom: '20%'}}>
+                            <Box sx={{ width: '85%', marginTop: '20%', marginBottom: '20%' }}>
                                 <LinearProgressWithLabel variant="buffer" value={progress} valueBuffer={buffer} />
                             </Box>
                         )}
                     </div>
                 </div>
             </form>
-            {error &&
-                <div className='alert-popup Error' >
-                    <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{errorMessage}</p>
-                </div>
-            }
-            {info &&
-                <div className='alert-popup Info' >
-                    <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{infoMessage}</p>
-                </div>
-            }
-            {warning &&
-                <div className='alert-popup Warning' >
-                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{warningMessage}</p>
-                </div>
-            }
-            {success &&
-                <div className='alert-popup Success' >
-                    <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{successMessage}</p>
-                </div>
-            }
+            <div className='alert-popup-main'>
+                {error &&
+                    <div className='alert-popup Error' >
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {info &&
+                    <div className='alert-popup Info' >
+                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{infoMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success' >
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+            </div>
         </div>
     )
 }

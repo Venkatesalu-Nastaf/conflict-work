@@ -17,11 +17,10 @@ import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
 // import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
 import { PermissionContext } from "../../context/permissionContext";
 import update from "../../../assets/img/update.png"
 import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
-
+import { FaBell } from "react-icons/fa";
 // import axios from "axios";
 
 //dialog box
@@ -35,6 +34,7 @@ import Tooltip from '@mui/material/Tooltip';
 // import Box from '@mui/material/Box';
 
 const MainDashboard = () => {
+
   const apiUrl = APIURL;
   const { sharedData, setFilteredData } = useData();
   const navigate = useNavigate();
@@ -45,15 +45,13 @@ const MainDashboard = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
-
-
   const data1 = localStorage.getItem("useridno")
   const data2 = localStorage.getItem("usercompany")
   const data4 = localStorage.getItem("username");
   const data5 = localStorage.getItem("profileimages")
   const data6 = localStorage.getItem("organizationimages")
 
-  const { setUser_id } = useContext(PermissionContext)
+  const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
 
   useEffect(() => {
 
@@ -90,14 +88,18 @@ const MainDashboard = () => {
       localStorage.removeItem("profileimages")
       localStorage.removeItem("organizationimages")
       localStorage.removeItem("selectedusertheme")
+      localStorage.removeItem("username")
 
+      setPermission([]);
       setExpanded(true);
       navigate("/");
+      setMakeRender((prev) => !prev);
     },
     [navigate]
   );
 
   useEffect(() => {
+
     if (!localStorage.getItem("auth")) {
       navigate("/");
     } else {
@@ -219,13 +221,13 @@ const MainDashboard = () => {
   }, [apiUrl, setFilteredData]);
 
   useEffect(() => {
-    if (data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
+    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
       setTimeout(() => {
         setUserdashboard(false)
       }, 3000);
 
     }
-  }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
+  }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme, permissions]);
 
   const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -237,38 +239,26 @@ const MainDashboard = () => {
     setPopupVisible(false);
   };
 
-
   return (
     <>
-
-     
-
-
       {isPopupVisible && (
-                  <div className="popup" onClick={handlePopupmodalClose}>
-                    <div className="update-card ">
+        <div className="popup" onClick={handlePopupmodalClose}>
+          <div className="update-card ">
 
-                    <div className="close-button-container">
+            <div className="close-button-container">
               <button className="close-button" onClick={handlePopupmodalClose}>
                 {/* Close icon */}
                 <FaTimes />
               </button>
             </div>
-                      <img src={update} alt="update" className="whats-new-image" />
-                      <h3 className="text-black update-text py-3">
-                        Update for more Features
-                      </h3>
-                      <button className="update-button">update</button>
-                    </div>
-                  </div>
-                )}
-
-
-
-
-
-
-
+            <img src={update} alt="update" className="whats-new-image" />
+            <h3 className="text-black update-text py-3">
+              Update for more Features
+            </h3>
+            <button className="update-button">update</button>
+          </div>
+        </div>
+      )}
       {userdashboard ? (
         <div className={userdashboard ? "loading-container" : ""}>
           <div className="loading-spinners">
@@ -279,11 +269,8 @@ const MainDashboard = () => {
         </div>
       ) :
         <section
-          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
-            }`}
+          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}
         >
-
-
           <div className="glass">
             <Sidebar expanded={expanded} />
             <div className="header-user">
@@ -293,18 +280,13 @@ const MainDashboard = () => {
                     overlap="circular"
                     anchorOrigin={{ vertical: "top", horizontal: "right" }}
                     variant="dot"
-
                   >
                     <Avatar
                       alt="userimage"
                       src={`${apiUrl}/public/user_profile/${selectedImage}`}
                     />
                   </StyledBadge>
-
                 </Tooltip>
-
-
-
                 { }
               </div>
               <div className="user-name-item">
@@ -312,18 +294,18 @@ const MainDashboard = () => {
                   <div>
                     <p onClick={navigateToUserSettings}>{storedUsername}</p>
                     <div className="alert-popup-main">
-                    {success && (
-                      <div className="alert-popup Success">
-                        <div className="popup-icon">
-                          {" "}
-                          <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                      {success && (
+                        <div className="alert-popup Success">
+                          <div className="popup-icon">
+                            {" "}
+                            <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                          </div>
+                          <span className="cancel-btn" onClick={hidePopup}>
+                            <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                          </span>
+                          <p>{success}</p>
                         </div>
-                        <span className="cancel-btn" onClick={hidePopup}>
-                          <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                        </span>
-                        <p>{success}</p>
-                      </div>
-                    )}
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -333,27 +315,16 @@ const MainDashboard = () => {
                 )}
               </div>
               <div className="logout-item">
-                {/* <FiLogOut className="logout-icon" onClick={handleLogout} /> */}
                 <IoPower className="logout-icon" onClick={handleLogout} />
               </div>
-
-              {/* <div className="user-icon-update"> */}
-
               <div className="user-icon-update" onClick={handleIconClick}>
-                <FaUser />
+                <FaBell />
                 <div className="user-icon-update-dot"></div>
               </div>
-
             </div>
             <Outlet />
           </div>
-
-
-
-
-
           <Dialog open={popupOpen} onClose={handlePopupClose}>
-            {/* <p>sdfghjkl;'</p> */}
             <DialogContent>
               <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
               <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
@@ -375,8 +346,6 @@ const MainDashboard = () => {
               </Button>
             </DialogActions>
           </Dialog>
-
-
         </section>
       }
     </>

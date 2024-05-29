@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from "react";
+import { React, useState } from "react";
 // import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,14 +15,14 @@ import { Button, IconButton } from "@mui/material";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import { APIURL } from "../../../url";
+// import { APIURL } from "../../../url";
 import { useData } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { BiBorderRadius } from "react-icons/bi";
+// import { BiBorderRadius } from "react-icons/bi";
 
-const apiUrl = APIURL;
+// const apiUrl = APIURL;
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
@@ -32,7 +32,6 @@ const makeStyle = (status) => {
       borderRadius: '24px',
       padding: '10px 20px',
       fontWeight: '600',
-      
     }
   }
   else if (status === 'Closed') {
@@ -62,7 +61,7 @@ export default function BasicTable() {
 
   const { filteredData } = useData();
 
-  const data1 = filteredData;
+  // const data1 = filteredData;
   const handlePopupClose = () => {
     setPopupOpen(false);
   };
@@ -75,7 +74,6 @@ export default function BasicTable() {
   return (
     <div className="Table">
       <h1>Live Driver Status</h1>
-
       <TableContainer
         className="Scroll-Style total-table"
         component={Paper}
@@ -104,10 +102,9 @@ export default function BasicTable() {
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
                     <TableCell align="left" className="driver-trip-date">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
                     <TableCell className="driver-tripstatus"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
-                    <TableCell  className="Details driver-details">
+                    <TableCell className="Details driver-details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>
-
                     <Dialog open={popupOpen} className="dialog-box-TripDetails" >
                       <div className="dialog-close-btn">
                         <DialogActions>
@@ -117,11 +114,9 @@ export default function BasicTable() {
                         </DialogActions>
                       </div>
                       <DialogContent>
-                        {/*  <Tripdetails /> */}
                         {selectedTrip && <Tripdetails tripData={selectedTrip} />}
                       </DialogContent>
                     </Dialog>
-
                   </TableRow>
                 ))
               ) : (

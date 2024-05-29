@@ -9,12 +9,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-// import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-// import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
-// import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 import { APIURL } from "../url.js";
+
 
 
 const Login = () => {
@@ -43,38 +41,14 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
+  }, [error, success, warning, info]);
 
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -82,6 +56,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("auth")) navigate("/");
+
   });
 
   const formSubmitter = async (e) => {
@@ -90,11 +65,14 @@ const Login = () => {
       const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
         setUserdashboard(true)
+
         loginUser(input.username);
+        localStorage.setItem("username", input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
-      } else {
+      }
+      else {
         setError(true);
         setErrorMessage("Check your Network Connection");
       }
@@ -178,23 +156,6 @@ const Login = () => {
                 Login
               </button>
             </div>
-            {/* <div className="social_media_container">
-              <a href="/" className="social facebook">
-                <i>
-                  <RiFacebookCircleFill />
-                </i>
-              </a>
-              <a href="/" className="social instagram">
-                <i>
-                  <AiOutlineInstagram />
-                </i>
-              </a>
-              <a href="/" className="social linkedin">
-                <i>
-                  <FaLinkedin />
-                </i>
-              </a>
-            </div> */}
           </form>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TransferList.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,8 +12,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
-
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
@@ -21,11 +19,13 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferlist from './useTransferlist';
-import { useData } from '../../../Dashboard/Maindashboard/DataContext';
+import { PermissionContext } from '../../../context/permissionContext';
+// import { FaCalendar } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
-const TransferList = () => {
+const TransferList = ({ stationName, organizationNames }) => {
 
     const {
         rows,
@@ -39,7 +39,6 @@ const TransferList = () => {
         handleClick,
         hidePopup,
         customer,
-        // bankOptions,
         setCustomer,
         fromDate,
         setFromDate,
@@ -56,22 +55,26 @@ const TransferList = () => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
-    const { organizationName } = useData()
+
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
 
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const Transfer_read = permissions[6]?.read;
 
     return (
         <div className="TransferList-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main">
-                    <div className="container-left">
+                    <div className="container-left-transferlist">
                         <div className="copy-title-btn-TransferList">
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
-                                <div className="input" style={{ width: "230px" }}>
+                            <div className="input-field input-field-transferlist" style={{ flexWrap: 'wrap' }} >
+                                <div className="input input-transferlist" style={{ width: "230px" }}>
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
@@ -81,7 +84,7 @@ const TransferList = () => {
                                         freeSolo
                                         size="small"
                                         value={customer}
-                                        options={organizationName}
+                                        options={organizationNames}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
@@ -90,23 +93,37 @@ const TransferList = () => {
                                         }}
                                     />
                                 </div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                        <DatePicker
-                                            label="From Date"
-                                            format="DD/MM/YYYY"
-                                            value={fromDate}
-                                            onChange={(date) => setFromDate(date)}
-                                        />
-                                        <DatePicker
-                                            label="To Date"
-                                            format="DD/MM/YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                                <div className="input">
+                                <div className="input input-transferlist">
+                                    <div className="icone">
+                                        <CalendarMonthIcon color="action" />
+                                    </div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                label="From Date"
+                                                format="DD/MM/YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </div>
+                                <div className='input input-transferlist'>
+                                    <div className="icone">
+                                        <CalendarMonthIcon color="action" />
+                                    </div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                label="To Date"
+                                                format="DD/MM/YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </div>
+                                <div className="input input-transferlist">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                     </div>
@@ -117,9 +134,7 @@ const TransferList = () => {
                                         <option value="notbilled">Not Billed</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div className="input-field">
-                                <div className="input" >
+                                <div className="input input-transferlist" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
@@ -129,8 +144,8 @@ const TransferList = () => {
                                         freeSolo
                                         size="small"
                                         value={servicestation}
-                                        options={Stations.map((option) => ({
-                                            label: option.optionvalue,
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
@@ -141,7 +156,7 @@ const TransferList = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} >Search</Button>
+                                    <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +166,7 @@ const TransferList = () => {
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>
-                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                     Download
                                 </Button>
                                 <Menu {...bindMenu(popupState)}>
@@ -176,27 +191,29 @@ const TransferList = () => {
                     </div>
                 </div>
             </form>
-            {error &&
-                <div className='alert-popup Error'>
-                    <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{errorMessage}</p>
-                </div>
-            }
-            {success &&
-                <div className='alert-popup Success'>
-                    <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{successMessage}</p>
-                </div>
-            }
-            {warning &&
-                <div className='alert-popup Warning' >
-                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{warningMessage}</p>
-                </div>
-            }
+            <div className='alert-popup-main'>
+                {error &&
+                    <div className='alert-popup Error'>
+                        <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success'>
+                        <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
+                    </div>
+                }
+            </div>
         </div>
     )
 }

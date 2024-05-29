@@ -8,10 +8,8 @@ import FuelRate from "./FuelRate/FuelRate";
 import TabContext from "@mui/lab/TabContext";
 import MailageDetails from "./MailageDetails/MailageDetails";
 
-
 const FuelInfo = () => {
   const [value, setValue] = React.useState("MailageDetails");
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

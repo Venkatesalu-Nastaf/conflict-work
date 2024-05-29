@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
-import dayjs from "dayjs";
+import Excel from 'exceljs';
+import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
-import { useData } from '../../Dashboard/Maindashboard/DataContext';
+import 'jspdf-autotable'
 
 
 // TABLE START
@@ -20,11 +21,12 @@ const columns = [
     { field: "state", headerName: "State", width: 160 },
     { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
+
+
 // TABLE END
 
 const useCustomer = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -36,69 +38,179 @@ const useCustomer = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
 
     //---------------------------------------
 
-    const { setOrganizationName } = useData()
-    // Fetching the Customers Table for getting the customer details
-    useEffect(() => {
-        const organizationNames = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/customers`);
-                const organisationData = response?.data;
-                const names = organisationData.map(res => res.customer);
-                setOrganizationName(names);
-            } catch (error) {
-                console.error('Error fetching organization names:', error);
-            }
-        };
-        organizationNames();
-    }, [rows, apiUrl, setOrganizationName])
-
 
     const handleButtonClick = () => {
         setIsInputVisible(!isInputVisible);
     };
-    const convertToCSV = (data) => {
-        const header = columns.map((column) => column.headerName).join(",");
-        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-        return [header, ...rows].join("\n");
-    };
-    const handleExcelDownload = () => {
-        const csvData = convertToCSV(rows);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "customer_details.csv");
-    };
+
+    const handleExcelDownload = async () => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+        console.log(rows, "exceldata")
+
+        try {
+
+            const fileName = "customer_details"
+            // creating one worksheet in workbook
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+            const columns = headers.map(key => ({ key, header: key }));
+            worksheet.columns = columns;
+
+            // updated the font for first row.
+            worksheet.getRow(1).font = { bold: true };
+
+            // Set background color for header cells
+            worksheet.getRow(1).eachCell((cell, colNumber) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' } // Green background color
+                };
+            });
+
+
+            worksheet.getRow(1).height = 30;
+            // loop through all of the columns and set the alignment with width.
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            rows.forEach((singleData, index) => {
+
+
+                worksheet.addRow(singleData);
+
+                // Adjust column width based on the length of the cell values in the added row
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            // loop through all of the rows and set the outline style.
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
+                const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
+                currentCell.forEach((singleCell) => {
+
+                    const cellAddress = singleCell._address;
+
+                    // apply border
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            // write the content using writeBuffer
+            const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERRROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // removing worksheet's instance to create new one
+            workbook.removeWorksheet(workSheetName);
+        }
+
+    }
+
+
     const handlePdfDownload = () => {
-        const pdf = new jsPDF();
-        pdf.setFontSize(12);
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid" // [width, height] in inches
+        });
+        pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
+        const header = Object.keys(rows[0]);
 
-        const tableData = rows.map((row) => [
-            row['id'],
-            row['customerId'],
-            row['customer'],
-            row['address1'],
-            row['phoneno'],
-            row['Active'],
-            row['active'],
-            row['gstTax'],
-            row['state'],
-            row['enableDriverApp']
-        ]);
+        // Extracting body
+        const body = rows.map(row => Object.values(row));
+
+        let fontdata = 1;
+        if (header.length <= 13) {
+            fontdata = 16;
+        }
+        else if (header.length >= 14 && header.length <= 20) {
+            fontdata = 11;
+        } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 9;
+        }
+        else if (header.length >= 24 && header.length <= 26) {
+            fontdata = 7;
+        }
+        else if (header.length >= 27 && header.length <= 30) {
+            fontdata = 6;
+        }
+        else if (header.length >= 31 && header.length <= 35) {
+            fontdata = 4;
+        }
+        else if (header.length >= 36 && header.length <= 40) {
+            fontdata = 4;
+        }
+        else if (header.length >= 41 && header.length <= 46) {
+            fontdata = 2;
+        }
 
         pdf.autoTable({
-            head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-            body: tableData,
+            head: [header],
+            body: body,
             startY: 20,
+
+            headStyles: {
+                // fontSize: 5,
+                fontSize: fontdata,
+                cellPadding: 1.5, // Decrease padding in header
+
+                minCellHeigh: 8,
+                valign: 'middle',
+
+                font: 'helvetica', // Set font type for body
+
+                cellWidth: 'wrap',
+
+            },
+
+            bodyStyles: {
+
+                fontSize: fontdata - 1,
+                valign: 'middle',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+
+            },
+            columnWidth: 'auto'
+
         });
+        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+        console.log(scaleFactor, "SCALE")
+
+        // Scale content
+        pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
+
 
     const hidePopup = () => {
         setSuccess(false);
@@ -107,37 +219,14 @@ const useCustomer = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || warning || info || success) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
+    }, [error, warning, info, success]);
+
 
     const [book, setBook] = useState({
         customerId: '',
@@ -147,8 +236,6 @@ const useCustomer = () => {
         servicestation: '',
         date: '',
         address1: '',
-        address2: '',
-        city: '',
         customeremail: '',
         rateType: '',
         opBalance: '',
@@ -163,7 +250,6 @@ const useCustomer = () => {
         division: '',
         hourRoundedOff: '',
         selectOption: '',
-        inclAddress: '',
         active: '',
         state: '',
         gstnumber: '',
@@ -232,8 +318,6 @@ const useCustomer = () => {
             servicestation: '',
             date: '',
             address1: '',
-            address2: '',
-            city: '',
             customeremail: '',
             rateType: '',
             opBalance: '',
@@ -247,7 +331,6 @@ const useCustomer = () => {
             division: '',
             hourRoundedOff: '',
             selectOption: '',
-            inclAddress: '',
             active: '',
             entity: '',
             state: '',
@@ -259,7 +342,7 @@ const useCustomer = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
-    
+
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
@@ -295,7 +378,7 @@ const useCustomer = () => {
             ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-    
+
         await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         handleCancel();
         setRows([]);

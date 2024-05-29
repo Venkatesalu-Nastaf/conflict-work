@@ -1,8 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import "./Bookings.css";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import { PermissionContext } from '../context/permissionContext';
-
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
@@ -22,22 +23,31 @@ const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
 const Bookings = () => {
 
   const { permissions } = useContext(PermissionContext);
-
   // const BOOKING = permissions[0]?.read;
   const Booking = permissions[1]?.read || permissions[0]?.read;;
   const Trip_Status = permissions[2]?.read;
   const Trip_sheet = permissions[3]?.read;
+  const [warning, setWarning] = useState(false);
+  const hidePopup = () => {
+    setWarning(false);
+  };
+
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [warning]);
 
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const handleMenuItemClick = (label, alt, e) => {
+
     localStorage.setItem('activeMenuItem', label);
     setActiveMenuItem(label);
-
-
     let hasPermission = 0
-
     switch (label) {
-
       case "Booking":
         hasPermission = Booking;
         break;
@@ -49,16 +59,14 @@ const Bookings = () => {
         break;
       default:
         break;
-
     }
     try {
-
       if (hasPermission === 1) {
         Navigate(alt);
       }
       else if (hasPermission === 0) {
         e.preventDefault();
-        alert("You do not have Permission ..!");
+        setWarning(true);
       }
     }
     catch {
@@ -93,7 +101,15 @@ const Bookings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-
+      </div>
+      <div className='alert-popup-main'>
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>You do not have Permission ..!</p>
+          </div>
+        }
       </div>
 
       <Outlet />

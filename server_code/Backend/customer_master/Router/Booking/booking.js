@@ -88,18 +88,32 @@ router.put('/booking/:bookingno', (req, res) => {
             return res.status(404).json({ error: "Customer not found" });
         }
         if (updatedCustomerData.status === "Cancelled") {
-        
-            db.query('UPDATE tripsheet SET status = ? WHERE bookingno = ?', [updatedCustomerData.status, bookingno], (err, result1) => {
+            db.query('select * from tripsheet WHERE bookingno = ?', [bookingno], (err, result1) => {
                 if (err) {
+                    console.log(err)
+                  
+                    return res.status(500).json({ error: "Failed to update data in MySQL" });
+                }
+                if(result1.length>0){
+                    console.log(result1,"ree")
+        
+            db.query('UPDATE tripsheet SET status = ? WHERE bookingno = ?', [updatedCustomerData.status, bookingno], (err, result2) => {
+                if (err) {
+                    console.log(err)
                   
                     return res.status(500).json({ error: "Failed to update data in MySQL" });
                 }
 
-                if (result1.affectedRows > 0) {
+                if (result2.affectedRows > 0) {
                    
                     return res.status(200).json({ message: "Data updated successfully" });
                 }
             });
+        }
+        else{
+            return res.status(200).json({ message: "Data updated successfully" });
+        }
+        })
         } else {
             // If the status is not "Cancelled", simply send the response here
             return res.status(200).json({ message: "Data updated successfully" });
@@ -208,19 +222,67 @@ router.get('/drivername-details/:driver', (req, res) => {
 });
 
 //send email from booking page
+// router.post('/send-email', async (req, res) => {
+//     try {
+//         const { guestname, guestmobileno, email, useage, pickup } = req.body;
+//         const transporter = nodemailer.createTransport({
+//             host: 'smtp.gmail.com',
+//             port: 465,
+//             secure: true,
+//             auth: {
+//                 user: 'foxfahad386@gmail.com', // Your email address
+//                 pass: 'vwmh mtxr qdnk tldd' // Your email password
+//             },
+//             tls: {
+//                 // Ignore SSL certificate errors
+//                 rejectUnauthorized: false
+//             }
+//         });
+
+//         // Email content for the owner
+//         const ownerMailOptions = {
+//             from: 'foxfahad386@gmail.com',
+//             to: 'foxfahad386@gmail.com', // Set the owner's email address
+//             subject: `${guestname} sent you a feedback`,
+//             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
+//         };
+
+//         // Send email to the owner
+//         await transporter.sendMail(ownerMailOptions);
+
+//         // Email content for the customer
+//         const customerMailOptions = {
+//             from: 'foxfahad386@gmail.com',
+//             to: email,
+//             subject: 'Greetings from Jessy Cabs',
+//             text: `Hello ${guestname},\n\nThank you for reaching out. Your booking is Placed successfully\n\nRegards,\nJessy Cabs`,
+//         };
+
+//         // Send greeting email to the customer
+//         await transporter.sendMail(customerMailOptions);
+
+//         res.status(200).json({ message: 'Email sent successfully' });
+//     } catch {
+//         res.status(500).json({ message: 'An error occurred while sending the email' });
+//     }
+// });
+
+
 router.post('/send-email', async (req, res) => {
     try {
-        const { guestname, guestmobileno, email, useage, pickup } = req.body;
+        const { guestname, guestmobileno, email, startdate, starttime, driverName, useage,vehType,mobileNo,vehRegNo,tripid,servicestation,status,requestno,bookingno,duty} = req.body;
+        console.log( guestname, guestmobileno, email, startdate, starttime, driverName, useage,vehType,mobileNo,vehRegNo,tripid,servicestation,status,requestno,bookingno,duty,"data")
+
+        // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
             secure: true,
             auth: {
-                user: 'foxfahad386@gmail.com', // Your email address
-                pass: 'vwmh mtxr qdnk tldd' // Your email password
+                user: 'foxfahad386@gmail.com',
+                pass: 'vwmh mtxr qdnk tldd',
             },
             tls: {
-                // Ignore SSL certificate errors
                 rejectUnauthorized: false
             }
         });
@@ -228,27 +290,135 @@ router.post('/send-email', async (req, res) => {
         // Email content for the owner
         const ownerMailOptions = {
             from: 'foxfahad386@gmail.com',
-            to: 'foxfahad386@gmail.com', // Set the owner's email address
-            subject: `${guestname} sent you a feedback`,
-            text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
+            to: 'foxfahad386@gmail.com.com', // Set the owner's email address
+            subject: `${guestname} sent you a booking request`,
+            text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nUseage: ${useage}\nVehicle Type: ${vehType}`,
         };
 
         // Send email to the owner
         await transporter.sendMail(ownerMailOptions);
 
         // Email content for the customer
+
+        if(status=== "Cancelled"){
         const customerMailOptions = {
             from: 'foxfahad386@gmail.com',
             to: email,
-            subject: 'Greetings from Jessy Cabs',
-            text: `Hello ${guestname},\n\nThank you for reaching out. Your booking is Placed successfully\n\nRegards,\nJessy Cabs`,
+            subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${tripid}`,
+            html: `
+            <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
+                    <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
+                        <tr>
+                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS BOOKING CANCELLATION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px; color: #000">${tripid}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
+                            <td style="padding: 8px;color: #000"">${guestname}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Location:</strong></td>
+                            <td style="padding: 8px;color: #000"">${servicestation}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Date:</strong></td>
+                            <td style="padding: 8px;color: #000"">${startdate}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Time (24):</strong></td>
+                            <td style="padding: 8px;color: #000"">${starttime} Hrs</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Car Sent:</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehType}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
+                            <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+
+        
+          `,
         };
+        await transporter.sendMail(customerMailOptions);
+        res.status(200).json({ message: 'Email sent successfully' });
+    }
+    else{
+        const customerMailOptions1 = {
+            from: 'foxfahad386@gmail.com',
+            to: email,
+            subject: `: JESSY CABS CAR DETAILS FOR  For${guestname}-Tripsheet No.${bookingno}`,
+            html: `
+           
+            <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
+                    <thead style="background-color: #9BB0C1; color: #FFFFFF;">
+                        <tr>
+                            <th colspan="2" style="padding: 8px; text-align: center;">Dear Sir/Madam, Your Cabs Details are below </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px;">${bookingno}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
+                            <td style="padding: 8px;">${guestname}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Location :</strong></td>
+                            <td style="padding: 8px;">${servicestation}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Date :</strong></td>
+                            <td style="padding: 8px;">${startdate}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>
+                            <td style="padding: 8px;">${starttime} Hrs</td>
+                        </tr>
+                       
+                        <tr>
+                        <td style="padding: 8px;"><strong>Car Sent:</strong></td>
+                        <td style="padding: 8px;color: #000"">${vehType}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
+                        <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
+                        <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+        
+          `,
+        };
+        await transporter.sendMail(customerMailOptions1);
+        res.status(200).json({ message: 'Email sent successfully' });
+
+    }
 
         // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions);
+        // await transporter.sendMail(customerMailOptions);
 
-        res.status(200).json({ message: 'Email sent successfully' });
-    } catch {
+        // res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -338,8 +508,8 @@ router.get('/table-for-booking', (req, res) => {
             'email',
             'employeeno',
             'address1',
-            'streetno',
-            'city',
+            // 'streetno',
+            // 'city',
             'report',
             'vehType',
             'paymenttype',
@@ -355,10 +525,10 @@ router.get('/table-for-booking', (req, res) => {
             'remarks',
             'servicestation',
             'advance',
-            'nameupdate',
-            'address3',
-            'address4',
-            'cityupdate',
+            // 'nameupdate',
+            // 'address3',
+            // 'address4',
+            // 'cityupdate',
             'useage',
             'username',
             'emaildoggle',
@@ -369,8 +539,8 @@ router.get('/table-for-booking', (req, res) => {
             'driverName',
             'mobileNo',
             'travelsemail',
-            'triptime',
-            'tripdate',
+            // 'triptime',
+            // 'tripdate',
             'Groups'
         ];
 

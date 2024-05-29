@@ -15,7 +15,7 @@
 }
 
 .BankAccount-detail-container-main {
-    display: flex;
+    width: 100%;
 }
 
 .form-container-BillingMain .BankAccount-form {
@@ -24,7 +24,6 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    /* padding: 20px; */
     color: #000;
     background-color: var(--glass);
 }
@@ -50,6 +49,7 @@
 .Download-btn {
     padding: 20px;
 }
+
 .form-container-BillingMain .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
@@ -62,21 +62,18 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
 }
 
 .BankAccount-first-container {
-    position: relative;
+    width: 100%;
 }
 
 .bankaddbtn {
-    width: 200px;
-    position: absolute;
-    top: 10px;
-    left: 800px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .bankaddbtn Button {
@@ -87,7 +84,6 @@
 .bank-btn-amount-main {
     width: 130px;
     margin: 0px 5px;
-    /* background-color: #000; */
 }
 
 #bank-btn-amountIN label {
@@ -109,19 +105,17 @@
 }
 
 .bank-amount-input {
-    text-align: center;
     display: flex;
     justify-content: center;
-    width: 130px;
+    width: fit-content;
     font-size: 15px;
     padding: 10px;
     border: none;
     background-color: transparent;
 }
 
-
 .AddBankContainer-BankAccount {
-    /* width: 100%; */
+    width: 100%;
     margin-top: 80px;
     background-color: var(--glass);
     padding: 10px 20px 35px;
@@ -131,7 +125,6 @@
 
 .BankDetails-mainContainer {
     margin-top: 80px;
-
 }
 
 .addedbanks-Details-BankAccount {
@@ -153,7 +146,6 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
 .total-account {
@@ -167,6 +159,8 @@
     display: flex;
     border-radius: 10px;
     padding: 10px 20px;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .total-account .total-inputs {
@@ -185,4 +179,64 @@
     border: 1.5px solid #ccc;
     border-radius: 5px;
     padding: 10px;
+}
+
+@media screen and (max-width:1250px) {
+    .total-account .amount-calculate {
+        justify-content: center !important;
+    }
+
+    .input-field-bankaccount {
+        justify-content: center !important;
+
+    }
+}
+
+@media screen and (max-width:1025px) {
+    .total-account .total-inputs {
+        width: 300px !important;
+    }
+}
+
+@media screen and (min-width:320px) and (max-width:450px) {
+    .total-account .total-inputs label {
+        padding: 0px 10px;
+        font-weight: 500;
+        font-size: 10px;
+    }
+
+    .total-account .total-inputs input {
+        width: 100px;
+    }
+
+    .total-account .amount-calculate {
+        width: 80%;
+    }
+
+    .AddBankContainer-BankAccount {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width:450.99px) and (max-width:700px) {
+    .total-account .total-inputs input {
+        width: 200px;
+    }
+
+    .total-account .amount-calculate {
+        width: 90%;
+    }
+}
+
+.input-field-bankaccount {
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.input-bankaccount {
+    width: 200px !important;
+}
+
+.input-bank-account-icon {
+    width: fit-content !important;
 }

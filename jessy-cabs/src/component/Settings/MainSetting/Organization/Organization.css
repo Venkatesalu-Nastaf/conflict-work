@@ -50,21 +50,25 @@
     border-radius: 4px;
     font-size: 17px;
 }
-.organisation-details{
+
+.organisation-details {
     margin: 0px 20px 20px 20px;
     border: 2px solid #ccc;
     border-radius: 15px;
     padding: 20px 0px;
     background-color: var(--glass);
 }
+
 .organisation-details .input {
     /* margin-left: 20px; */
     justify-content: start !important;
 }
-.organisation-details .address-block{
+
+.organisation-details .address-block {
     display: flex;
     flex-direction: column;
 }
+
 .input-field .times label {
     position: absolute;
     color: #272626;
@@ -87,10 +91,15 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
     border-radius: 20px;
     color: #000;
     background-color: var(--glass) !important;
+}
+
+@media screen and (max-width:768px) {
+    .form-container-UserSettings .container-main {
+        width: 93vw;
+    }
 }
 
 .organisation-form .Title-Name {
@@ -103,7 +112,8 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 70vw;
+    /* width: 100%; */
     margin: 30px auto;
     background-color: var(--glass);
     padding: 20px 35px 20px 0px;
@@ -130,6 +140,33 @@
     right: 20px;
 }
 
+@media screen and (min-width:769px) and (max-width: 969.99px) {
+    .container-organisation-main {
+        width: 61vw;
+    }
+}
+
+@media screen and (min-width:540px) and (max-width: 769.99px) {
+    .container-organisation-main {
+        width: 82vw;
+    }
+}
+
+@media screen and (min-width:450px) and (max-width: 539.99px) {
+    .container-organisation-main {
+        width: 78vw;
+    }
+}
+
+@media screen and (min-width:320px) and (max-width: 449.99px) {
+    .container-organisation-main {
+        width: 70vw;
+    }
+}
+
+
+
+/* 
 @media screen and (min-width:970px)  and (max-width: 1011px){
     .container-organisation-main {
         width: 95%;
@@ -152,69 +189,77 @@
     .container-organisation-main {
         width: 61vw;
     }
-}
+} */
 
-.organisation-details-input-feilds{
+.organisation-details-input-feilds {
     flex-wrap: wrap;
     justify-content: center;
 }
 
 @media only screen and (min-width:964px) and (max-width:1241px) {
-   
-    .input-buttons-small{
+
+    .input-buttons-small {
         width: 200px !important;
     }
+
     /* .container-organisation-left{
 border-right: 1px solid transparent !important;
     } */
 }
 
 @media screen and (max-width:963.99px) {
-    .container-organisation-main{
+    .container-organisation-main {
         flex-wrap: wrap !important;
     }
-    .input-buttons-small{
+
+    .input-buttons-small {
         width: 200px !important;
     }
-    .container-organisation-left{
+
+    .container-organisation-left {
         border-right: 1px solid transparent !important;
     }
 }
-.container-organisation-main{
+
+.container-organisation-main {
     flex-wrap: nowrap;
 }
+
 @media screen and (max-width: 562px) {
-    .organisation-details-input-feilds{
+    .organisation-details-input-feilds {
         flex-wrap: wrap !important;
         flex-direction: column;
     }
 }
-.organisation-details-input{
+
+.organisation-details-input {
     flex-wrap: wrap;
     justify-content: center;
 }
 
-@media screen and (max-width: 465px){
-    .save-cancel-inputs{
+@media screen and (max-width: 465px) {
+    .save-cancel-inputs {
         flex-wrap: wrap !important;
     }
-    .office-address{
+
+    .office-address {
         flex-wrap: wrap;
     }
-    .organization-input{
+
+    .organization-input {
         /* width: 150px !important; */
         flex-wrap: wrap !important;
     }
 
-    .organisation-input-field{
-        width: 200px !important;
+    .organisation-input-field {
+        width: 230px !important;
     }
 
     .organisation-details {
-        margin: 0px ;
+        margin: 10px;
         border: none !important;
         border-radius: 15px;
-        padding:  0px;
+        padding: 0px;
         background-color: var(--glass);
     }
 
@@ -225,19 +270,20 @@ border-right: 1px solid transparent !important;
 }
 
 
-@media only  screen and (min-width:466px)  and (max-width: 656px){
-    .organization-input{
+@media only screen and (min-width:466px) and (max-width: 656px) {
+    .organization-input {
         /* width: 200px !important; */
         flex-wrap: wrap !important;
     }
 }
 
-.organisation-input-row{
+.organisation-input-row {
     display: flex;
     width: 100%;
 }
 
-.organisation-input-row .office-address, .organisation-input-row .organization-input{
+.organisation-input-row .office-address,
+.organisation-input-row .organization-input {
     width: fit-content;
     display: grid;
     gap: 10px;
@@ -245,26 +291,41 @@ border-right: 1px solid transparent !important;
 }
 
 @media screen and (max-width: 1040px) {
-    .organisation-input-row{
+    .organisation-input-row {
         flex-wrap: wrap;
     }
-    .organisation-details .input{
+
+    .organisation-details .input {
         justify-content: center !important;
     }
 
-    .organisation-btn{
+    .organisation-btn {
         justify-content: center;
     }
 
-    .organisation-input-row .office-address, .organisation-input-row .organization-input{
+    .organisation-input-row .office-address,
+    .organisation-input-row .organization-input {
         padding-left: 0px;
     }
 }
 
 @media screen and (min-width: 1041px) {
-    .organisation-btn-row{
+    .organisation-btn-row {
         position: relative;
         top: 14px;
-    }   
+    }
 }
 
+/* 
+.organisation-input-field{
+   width:  300px;
+} */
+
+.organisation-details-input .organization-input{
+    width: 300px !important;
+    gap: 10px;
+}
+
+.organisation-details-input .organization-text-area{
+    width: 300px !important;
+}

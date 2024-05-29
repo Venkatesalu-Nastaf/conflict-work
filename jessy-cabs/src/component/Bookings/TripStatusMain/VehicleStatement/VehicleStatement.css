@@ -8,10 +8,6 @@
   width: 70%;
 }
 
-/* .VehicleStatement-container-main{
-  width: 100% !important;
-} */
-
 .form-container-TripStatus .Title-Name {
   font-size: 20px;
   font-weight: 500;
@@ -58,7 +54,6 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
@@ -69,12 +64,30 @@
 }
 
 .SearchContainer-VehicleStatement {
-  width: 100%;
+  width: 61vw;
   background-color: var(--glass);
   padding: 0px 20px;
   padding-bottom: 15px;
   border: 2px solid #ccc;
   border-radius: 15px;
+}
+
+@media screen and (min-width: 700px) and (max-width: 768px) {
+  .SearchContainer-VehicleStatement {
+    width: 82vw !important;
+  }
+}
+
+@media screen and (min-width: 570px) and (max-width: 699.99px) {
+  .SearchContainer-VehicleStatement {
+    width: 80vw !important;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 569.99px) {
+  .SearchContainer-VehicleStatement {
+    width: 76vw !important;
+  }
 }
 
 .VehicleStatement-form .Title-Name::after {
@@ -86,33 +99,33 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
-  .form-container-TripStatus .container-main { 
+  .form-container-TripStatus .container-main {
     width: 76vw !important;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
-  .form-container-TripStatus .container-main { 
+  .form-container-TripStatus .container-main {
     width: 70vw !important;
   }
 }
 
-.vehiclestatement-inputfeild{
+.vehiclestatement-inputfeild {
   flex-wrap: wrap;
 }
 
-@media screen and  (max-width:1290px) {
+@media screen and (max-width:1290px) {
 
-  .vehiclestatement-inputfeild{
+  .vehiclestatement-inputfeild {
     justify-content: center;
   }
 }
-@media screen  and (max-width:462px){
-  .show-btn-vehicle{
+
+@media screen and (max-width:462px) {
+  .show-btn-vehicle {
     flex-wrap: wrap;
   }
 
@@ -120,18 +133,16 @@
     border: none;
     background-color: transparent;
   }
-  .VehicleStatement-container-main{
+
+  .VehicleStatement-container-main {
     width: 100% !important;
   }
 
-  .vehiecle-date{
-    width: 200px !important;
-  }
-}
-
-
-@media screen  and (max-width:700px){
   .SearchContainer-VehicleStatement {
-    width: 75% !important;
+    padding: 0px !important;
   }
+
+  /* .vehiecle-date {
+    width: 200px !important;
+  } */
 }

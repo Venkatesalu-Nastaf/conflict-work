@@ -177,9 +177,6 @@ const TripDetails = ({ tripData }) => {
                         <label htmlFor="starttime">Start Time :</label>
                         <TextField size='small' id="starttime" name="starttime" value={tripData?.starttime} required />
                     </div>
-                </div>
-
-                <div className='field-item'>
                     <div className="input">
                         <label htmlFor="startkm">Start Kilometers :</label>
                         <TextField size='small' id="startkm" name='startkm' value={tripData?.startkm} required />
@@ -192,8 +189,6 @@ const TripDetails = ({ tripData }) => {
                         <label htmlFor="closetime">Closing Time :</label>
                         <TextField size='small' id="closetime" name='closetime' value={tripData?.closetime} required />
                     </div>
-                </div>
-                <div className='field-item'>
                     <div className="input">
                         <label htmlFor="closekm">Closing Kilometers :</label>
                         <TextField size='small' id="closekm" name='closekm' value={tripData?.closekm} required />
@@ -206,8 +201,6 @@ const TripDetails = ({ tripData }) => {
                         <label htmlFor="guestmobileno">Contact Number :</label>
                         <TextField size='small' id="guestmobileno" name="guestmobileno" value={tripData?.guestmobileno} readOnly />
                     </div>
-                </div>
-                <div className='field-item'>
                     <div className="input">
                         <label htmlFor="vehType">Vehicle Type :</label>
                         <TextField size='small' id="vehType" name="vehType" value={tripData?.vehType} readOnly />
@@ -220,8 +213,6 @@ const TripDetails = ({ tripData }) => {
                         <label htmlFor="advancepaidtovendor">Advance :</label>
                         <TextField size='small' id="advancepaidtovendor" name='advancepaidtovendor' value={tripData?.advancepaidtovendor} required />
                     </div>
-                </div>
-                <div className='field-item'>
                     <div className="input">
                         <label htmlFor="toll">Toll :</label>
                         <TextField size='small' id="toll" name='toll' value={tripData?.toll} required />

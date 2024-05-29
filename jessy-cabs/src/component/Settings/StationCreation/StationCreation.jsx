@@ -26,6 +26,11 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import useStationCreation from './useStationCreation';
 import { PermissionContext } from '../../context/permissionContext';
 
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import { MdNumbers } from "react-icons/md";
+
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -42,10 +47,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "stationid", headerName: "Station_Id", width: 130 },
-  { field: "Stationname", headerName: "Station_Name", width: 130 },
-  { field: "active", headerName: "Active", width: 160 },
+  { field: "gstno", headerName: "GST No", width: 130 },
+  { field: "Stationname", headerName: "Station_Name", width: 140 },
+  { field: "active", headerName: "Active", width: 80 },
   { field: "shortname", headerName: "Station", width: 130 },
   { field: "ownbranch", headerName: "Own_Branch", width: 130 },
+  { field: "address", headerName: "address", width: 130 },
+
 ];
 // TABLE END
 
@@ -97,8 +105,8 @@ const StationCreation = () => {
 
           </p>
           <div className="stationcreation-header">
-            <div className="input-field station-creation-inputfeilds">
-              <div className="input">
+            <div className="input-field station-creation-inputfeilds" style={{ padding: '10px' }}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -112,9 +120,10 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: "380px" }}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -130,7 +139,7 @@ const StationCreation = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ width: "300px" }}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -145,11 +154,53 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                 />
-
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              <div className="input radio">
+              <div className='input' style={{ paddingRight: '15px' }}>
+                <div className='icone'>
+                  <AddHomeWorkIcon color='action' />
+                </div>
+                <TextField
+                  size="small"
+                  name="remark"
+                  className='address-field'
+                  value={selectedCustomerData?.address || book.address}
+                  onChange={handleChange}
+                  label="Address"
+                  id="remark"
+                  multiline
+                  rows={4}
+                  autoComplete="password"
+                />
+              </div>
+              {/* <TextField
+                margin="normal"
+                size="small"
+                id="address"
+                label="Adress"
+                name="address"
+                value={selectedCustomerData?.address || book.address}
+                autoComplete="new-password"
+                onChange={handleChange}
+                variant="standard"
+              /> */}
+              <div className='input' style={{ paddingRight: '15px' }}>
+                <div className='icone'>
+                  <MdNumbers color='action' />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="gstno"
+                  label="GST No"
+                  name="gstno"
+                  value={selectedCustomerData?.gstno || book.gstno}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  variant="standard"
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div className="input radio input-station-creaton">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active
@@ -175,7 +226,7 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input radio">
+              <div className="input radio input-station-creaton">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Own Branch
@@ -201,7 +252,7 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input" style={{ width: "160px" }}>
+              <div className="input input-station-creaton" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -240,7 +291,6 @@ const StationCreation = () => {
               </div>
             }
           </div>
-
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -294,8 +344,6 @@ const StationCreation = () => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
           <div className="stationcreation-table-container">

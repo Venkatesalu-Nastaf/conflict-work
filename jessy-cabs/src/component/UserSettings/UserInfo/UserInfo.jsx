@@ -81,9 +81,7 @@ const UserSetting = () => {
                       sx={{ width: "12ch", height: "12ch" }}
                       alt="userimage"
                       src={`${apiUrl}/public/user_profile/${selectedImage}`}
-
                     />
-
                   </div>
                 </div>
                 <div className="input-field">
@@ -137,7 +135,6 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-
                   <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <AccountCircleIcon color="action" />
@@ -173,7 +170,7 @@ const UserSetting = () => {
                     />
                   </div>
                   <div className="input" style={{ width: "200px" }}>
-                  <div className="icone">
+                    <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
                     <TextField
@@ -188,7 +185,6 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-
                   <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />
@@ -223,8 +219,6 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-
-
                   <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
@@ -303,21 +297,7 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
-
-
-
                 </div>
-                {/* <div className="input-field">
-                
-                </div>
-                <div className="input-field">
-
-                 
-                </div>
-                <div className="input-field">
-
-                 
-                </div> */}
                 {editMode ? (
                   <div className="input-field">
                     <div className="input" style={{ width: "150px" }}>
@@ -345,54 +325,54 @@ const UserSetting = () => {
                   </div>
                 )}
                 <div className="alert-popup-main">
-                {error && (
-                  <div className="alert-popup Error">
-                    <div className="popup-icon">
-                      {" "}
-                      <ClearIcon style={{ color: "#fff" }} />{" "}
+                  {error && (
+                    <div className="alert-popup Error">
+                      <div className="popup-icon">
+                        {" "}
+                        <ClearIcon style={{ color: "#fff" }} />{" "}
+                      </div>
+                      <span className="cancel-btn" onClick={hidePopup}>
+                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                      </span>
+                      <p>{errorMessage}</p>
                     </div>
-                    <span className="cancel-btn" onClick={hidePopup}>
-                      <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                    </span>
-                    <p>{errorMessage}</p>
-                  </div>
-                )}
-                {warning && (
-                  <div className="alert-popup Warning">
-                    <div className="popup-icon">
-                      {" "}
-                      <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+                  )}
+                  {warning && (
+                    <div className="alert-popup Warning">
+                      <div className="popup-icon">
+                        {" "}
+                        <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+                      </div>
+                      <span className="cancel-btn" onClick={hidePopup}>
+                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                      </span>
+                      <p>{warningMessage}</p>
                     </div>
-                    <span className="cancel-btn" onClick={hidePopup}>
-                      <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                    </span>
-                    <p>{warningMessage}</p>
-                  </div>
-                )}
-                {success && (
-                  <div className="alert-popup Success">
-                    <div className="popup-icon">
-                      {" "}
-                      <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                  )}
+                  {success && (
+                    <div className="alert-popup Success">
+                      <div className="popup-icon">
+                        {" "}
+                        <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                      </div>
+                      <span className="cancel-btn" onClick={hidePopup}>
+                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                      </span>
+                      <p>{successMessage}</p>
                     </div>
-                    <span className="cancel-btn" onClick={hidePopup}>
-                      <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                    </span>
-                    <p>{successMessage}</p>
-                  </div>
-                )}
-                {info && (
-                  <div className="alert-popup Info">
-                    <div className="popup-icon">
-                      {" "}
-                      <BsInfo style={{ color: "#fff" }} />{" "}
+                  )}
+                  {info && (
+                    <div className="alert-popup Info">
+                      <div className="popup-icon">
+                        {" "}
+                        <BsInfo style={{ color: "#fff" }} />{" "}
+                      </div>
+                      <span className="cancel-btn" onClick={hidePopup}>
+                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                      </span>
+                      <p>{infoMessage}</p>
                     </div>
-                    <span className="cancel-btn" onClick={hidePopup}>
-                      <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                    </span>
-                    <p>{infoMessage}</p>
-                  </div>
-                )}
+                  )}
                 </div>
               </div>
             </div>

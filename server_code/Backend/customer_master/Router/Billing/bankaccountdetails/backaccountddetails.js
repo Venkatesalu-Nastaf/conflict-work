@@ -48,6 +48,7 @@ router.put('/updatebankdetails/:id', (req, res) => {
 //delete bank account
 router.delete('/deletebankdetails/:id', (req, res) => {
     const idToDelete = req.params.id;
+    console.log(idToDelete,"dd")
     const query = 'DELETE FROM bankaccountdetails WHERE id = ?';
     db.query(query, [idToDelete], (err, result) => {
         if (err) {

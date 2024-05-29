@@ -21,7 +21,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .FuelInfo-main .Title-Name {
@@ -33,15 +32,19 @@
 .FuelInfo-main .FuelInfo-form-container {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 75vh;
+  height: 71vh;
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
   border-radius: 20px;
   color: #000;
-  /* background-color: var(--glass); */
   background-color: #f0ece2;
+}
+
+@media screen and (max-width: 768px) {
+  .FuelInfo-main .FuelInfo-form-container {
+      width: 93vw;
+  }
 }
 
 .stationcreation-header {
@@ -86,7 +89,8 @@
 
 .head-tab-fuel {
   position: sticky;
-  top: -28px;
+  top: 0px;
   z-index: 5;
-  background-color: #f0ece2;
+  background-color: #ffffff;
+  padding: 30px 10px 0px 0px;
 }

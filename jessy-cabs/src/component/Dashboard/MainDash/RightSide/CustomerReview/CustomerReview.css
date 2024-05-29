@@ -17,22 +17,18 @@
     color: #000;
 }
 
-.graph-all-button , .graph-weekly-button ,.graph-yesterday-button{
-    background-color:  #0491fb;
+.graph-all-button,
+.graph-weekly-button,
+.graph-yesterday-button {
+    background-color: #0491fb;
     color: #fff;
-    /* border: 2px solid #0491fb;  */
     padding: 5px 10px;
-    /* border-radius: 8px; */
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
 }
 
-
-
 .graph-all-button {
-    
-    /* border-radius: 5px; */
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-right: 1px dotted #fff;
@@ -42,63 +38,80 @@
 }
 
 .graph-all-button:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
- .graph-weekly-button{
+.graph-weekly-button {
     border: 2px solid #0491fb;
     border-right: 1px dotted #fff;
 
 }
 
-.graph-yesterday-button{
+.graph-yesterday-button {
     border: 2px solid #0491fb;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
 .graph-weekly-button:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
 .graph-yesterday-button:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
-@media only screen and  (min-width:1219px) {
-    .weekly-chart{
-        width: 94% !important;
-    }}
-@media only screen and  (max-width:768px) {
-.weekly-chart{
-    width: 90% !important;
+@media only screen and (min-width:1219px) {
+    .weekly-chart {
+        width: 86% !important;
+    }
 }
+
+@media only screen and (max-width:768px) {
+    .weekly-chart {
+        width: 90% !important;
+    }
 }
+
 @media only screen and (min-width:855px) and (max-width:888px) {
-    .weekly-chart{
-        width: 390px;
+    .weekly-chart {
+        width: 360px;
     }
 }
 
 @media only screen and (min-width:888.99px) and (max-width:960px) {
-    .weekly-chart{
-        width: 430px;
+    .weekly-chart {
+        width: 385px;
     }
 }
 
-@media only screen and (min-width:960.99px) and (max-width:1021px) {
-    .weekly-chart{
-        width: 470px;
+@media only screen and (min-width:960.99px) and (max-width:1020px) {
+    .weekly-chart {
+        width: 453px;
     }
 }
-@media only screen and (min-width:1021.99px) and (max-width:1103px) {
-    .weekly-chart{
+
+@media only screen and (min-width:1021px) and (max-width:1102.99px) {
+    .weekly-chart {
         width: 500px;
     }
 }
 
-@media only screen and (min-width:1103.99px) and (max-width:1219px) {
-    .weekly-chart{
-        width: 600px;
+@media only screen and (min-width:1103px) and (max-width:1218px) {
+    .weekly-chart {
+        width: 558px;
+    }
+}
+
+
+@media only screen and (min-width:769px) and (max-width: 800px) {
+    .weekly-chart {
+        width: 285px !important;
+    }
+}
+
+@media screen and (min-width:801px) and (max-width: 855px) {
+    .weekly-chart {
+        width: 300px !important;
     }
 }

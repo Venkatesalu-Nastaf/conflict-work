@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-// import axios from "axios";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
-import {  useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { PdfData } from "./PdfContext";
+
+
 const useTransferreport = () => {
   const apiUrl = APIURL;
-  // const user_id = localStorage.getItem("useridno");
+
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
@@ -31,19 +33,18 @@ const useTransferreport = () => {
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
-  const [misformat,setMisformat]=useState('')
-  const [pdfBillList,setPdfBillList] = useState('')
-  
+  const [misformat, setMisformat] = useState('')
+  const [pdfBillList, setPdfBillList] = useState('')
+
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  // const[rowzip,setRowszipdata]=useState([])
-  const[pdfzipdata,setPdfzipdata]=useState([])
+  const [pdfzipdata, setPdfzipdata] = useState([])
   const location = useLocation()
-  
+  const { transferReport, setTransferReport } = PdfData()
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate"
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId"
     ];
 
     const formData = {};
@@ -59,13 +60,32 @@ const useTransferreport = () => {
     setGroupTripid(formData.Group_id)
     setInvoiceno(formData.Invoice_no)
     setInvoiceDate(formData.BillDate)
-  }, [location])
+    setTransferReport(formData.TransferReport)
+  }, [location, setTransferReport])
 
-
+  window.addEventListener('click', (event) => {
+    if (event.target === window) {
+      setTransferReport(false)
+    }
+  });
+  useEffect(() => {
+    if (transferReport === false || transferReport === undefined) {
+      setCustomer('')
+      setFromDate('')
+      setEndDate('')
+      setGroupTripid('')
+      setRatetypeforpage("")
+      setInvoiceno('')
+      setInvoiceDate('')
+      setGroupTripid('');
+      setCustomerData("")
+      setRows([])
+      setRowSelectionModel([])
+    }
+  }, [transferReport, setTransferReport])
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
   }, []);
-
   const tableData = rows.map((row) => [
     row["id"],
     row["tripid"],
@@ -99,37 +119,14 @@ const useTransferreport = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
+  }, [error, success, warning, info]);
+
 
   const handleEInvoiceClick = (row) => {
     if (rows.length === 0) {
@@ -188,6 +185,9 @@ const useTransferreport = () => {
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
+
+        if (!customer || !tripid) return
+
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
             customer
@@ -204,7 +204,7 @@ const useTransferreport = () => {
             guestname: row.guestname,
             tripid: row.tripid,
             status: row.status,
-            customer:row.customer
+            customer: row.customer
           }));
           if (tripsheetNumbers.length > 0) {
             const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
@@ -244,6 +244,7 @@ const useTransferreport = () => {
   const [totalValue, setTotalValue] = useState("");
   const [roundedAmount, setRoundedAmount] = useState("");
   const [sumTotalAndRounded, setSumTotalAndRounded] = useState("");
+  const [ratetypeforpage, setRatetypeforpage] = useState("");
 
   const calculateNetAmountSum = (data) => {
     return data.reduce((sum, item) => {
@@ -256,37 +257,40 @@ const useTransferreport = () => {
     const fetchData = async () => {
       const tripid = localStorage.getItem("selectedtripsheetid");
       const customer = localStorage.getItem("selectedcustomer");
-      if (customer) {
-        try {
-          const response = await fetch(
-            `${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`
-          );
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const responseData = await response.json();
-          if (Array.isArray(responseData)) {
-            setRouteData(responseData);
-            const netAmountSum = calculateNetAmountSum(responseData);
-            setTotalValue(netAmountSum);
 
-            const calculateRoundOff = () => {
-              const balanceAmount = parseFloat(totalValue);
-              const roundedGrossAmount = Math.ceil(balanceAmount);
-              const roundOff = roundedGrossAmount - balanceAmount;
-              return roundOff.toFixed(2);
-            };
+      try {
 
-            const roundOffValue = calculateRoundOff();
-            setRoundedAmount(roundOffValue);
+        if (!tripid || !customer) return
 
-            const sumTotalAndRounded =
-              parseFloat(netAmountSum) + parseFloat(roundOffValue);
-            setSumTotalAndRounded(sumTotalAndRounded);
-          } else {
-          }
-        } catch { }
-      }
+        const response = await fetch(
+          `${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        if (Array.isArray(responseData)) {
+          setRouteData(responseData);
+          const netAmountSum = calculateNetAmountSum(responseData);
+          setTotalValue(netAmountSum);
+
+          const calculateRoundOff = () => {
+            const balanceAmount = parseFloat(totalValue);
+            const roundedGrossAmount = Math.ceil(balanceAmount);
+            const roundOff = roundedGrossAmount - balanceAmount;
+            return roundOff.toFixed(2);
+          };
+
+          const roundOffValue = calculateRoundOff();
+          setRoundedAmount(roundOffValue);
+
+          const sumTotalAndRounded =
+            parseFloat(netAmountSum) + parseFloat(roundOffValue);
+          setSumTotalAndRounded(sumTotalAndRounded);
+        } else {
+        }
+      } catch { }
+
     };
     fetchData();
   }, [totalValue, roundedAmount, apiUrl]);
@@ -296,6 +300,9 @@ const useTransferreport = () => {
     const fetchData = async () => {
       const customer = localStorage.getItem("selectedcustomerdata");
       try {
+
+        if (!customer) return
+
         const response = await fetch(
           `${apiUrl}/customers/${encodeURIComponent(customer)}`
         );
@@ -304,16 +311,19 @@ const useTransferreport = () => {
         }
         const customerData = await response.json();
         setCustomerData(customerData);
+        const ratetype = customerData.rateType;
+        setRatetypeforpage(ratetype)
       } catch { }
     };
     fetchData();
   }, [apiUrl]);
 
+
+
   const organizationaddress1 = customerData.address1;
   const organizationaddress2 = customerData.address2;
   const organizationcity = customerData.city;
   const organizationgstnumber = customerData.gstnumber;
-  const ratetypeforpage = customerData.rateType;
 
   useEffect(() => {
     Organization()
@@ -449,109 +459,50 @@ const useTransferreport = () => {
 
   const handleRowSelection = (newSelectionModel) => {
     const selectedTripIds = newSelectionModel
-        .filter((selectedId) => selectedId !== null)
-        .map((selectedId) => {
-            const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-            return selectedRow ? selectedRow.tripid : null;
-        })
-        .filter((tripid) => tripid !== null);
-    // setRowselect(selectedTripIds)
-
+      .filter((selectedId) => selectedId !== null)
+      .map((selectedId) => {
+        const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+        return selectedRow ? selectedRow.tripid : null;
+      })
+      .filter((tripid) => tripid !== null);
 
     const tripsheetid = selectedTripIds;
     setRowSelectionModel(tripsheetid);
-    // localStorage.setItem('selectedtripsheetid', tripsheetid);
-    // const selectedRowCount = selectedTripIds.length;
-
-    // localStorage.setItem('selectedrowcount', selectedRowCount);
-};
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     try {
-//       const tripid = rowSelectionModel
-//       const encoded = localStorage.getItem("selectedcustomerdata");
-//       localStorage.setItem("selectedcustomer", encoded);
-//       const storedCustomer = localStorage.getItem("selectedcustomer");
-//       const customer = decodeURIComponent(storedCustomer);
-//       // console.log(tripid,customer,"transfer",rowSelectionModel)
-//       // console.log(tripid,"objtripid")
-//       const response = await fetch(
-//         `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
-//           customer
-//         )}/${tripid}`
-//       );
-//       // console.log(response,"objresponse")
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-//       const tripData = await response.json();
-//       // if (Array.isArray(tripData)) {
-        
-//       //     const rowsWithUniqueId = tripData.map((row, index) => ({
-//       //       ...row,
-        
-//       //     }));
-//       console.log(tripData,"obj")
-//           setRowszipdata(tripData);
-//           // setSuccess(true);
-//           setSuccessMessage("successfully listed");
-        
-     
-//     } catch { }
-//   };
-//   fetchData();
-// }, [apiUrl,rowSelectionModel,rowzip,handleRowSelection]);
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-
-
-      const tripid = rowSelectionModel
-
-
-
-      const encoded = localStorage.getItem("selectedcustomerdata");
-      localStorage.setItem("selectedcustomer", encoded);
-      const storedCustomer = localStorage.getItem("selectedcustomer");
-      const customer = decodeURIComponent(storedCustomer);
-      // console.log(tripid,customer,"transfer",rowSelectionModel)
-      // console.log(tripid,"objtripid",typeof(tripid))
-
-      if(tripid.length>=1)
-      {
-      
-      const response = await fetch(
-        `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
-          customer
-        )}/${tripid}`
-      );
-      // console.log(response,"objresponse")
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const tripData = await response.json();
-      // if (Array.isArray(tripData)) {
-        
-      //     const rowsWithUniqueId = tripData.map((row, index) => ({
-      //       ...row,
-        
-      //     }));
-      // console.log(tripData,"pdfobjneee")
-         
-          setPdfzipdata(tripData)
-          // setSuccess(true);
-          setSuccessMessage("successfully listed");
-        
-     
-    } 
-    else{
-      return
-    }
-  }catch { }
   };
-  fetchData();
-}, [apiUrl,rowSelectionModel,pdfzipdata,handleRowSelection,rows]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tripid = rowSelectionModel
+        const encoded = localStorage.getItem("selectedcustomerdata");
+        localStorage.setItem("selectedcustomer", encoded);
+        const storedCustomer = localStorage.getItem("selectedcustomer");
+        const customer = decodeURIComponent(storedCustomer);
+
+        if (tripid.length >= 1) {
+
+          const response = await fetch(
+            `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
+              customer
+            )}/${tripid}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const tripData = await response.json();
+
+          setPdfzipdata(tripData)
+          setSuccessMessage("successfully listed");
+        }
+        else {
+          return
+        }
+      } catch { }
+    };
+    fetchData();
+  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
 
   return {
     rows,
@@ -604,14 +555,14 @@ useEffect(() => {
     setMisformat,
     pdfBillList,
     setPdfBillList,
-    
-  handleRowSelection,
-  // rowzip,
-  rowSelectionModel,
-  
-  setRowSelectionModel,
-  pdfzipdata
-  
+
+    handleRowSelection,
+    // rowzip,
+    rowSelectionModel,
+
+    setRowSelectionModel,
+    pdfzipdata
+
   };
 };
 

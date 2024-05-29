@@ -50,24 +50,29 @@
 .form-container-Mailer .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 77vh;
+  height: 71vh;
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+  .form-container-Mailer .container-main {
+      width: 93vw;
+  }
+}
+
 @media screen and (min-width:970px) and (max-width:1240px) {
-  .form-container-Mailer .container-main { 
+  .form-container-Mailer .container-main {
     width: 76vw !important;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
-  .form-container-Mailer .container-main  { 
+  .form-container-Mailer .container-main {
     width: 70vw !important;
   }
 }
@@ -94,40 +99,38 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
-.sms-report-inputfeild{
+.sms-report-inputfeild {
   flex-wrap: wrap;
 }
 
-@media screen  and (max-width: 1076px){
+@media screen and (max-width: 1076px) {
   .sms-report-inputfeild {
     flex-wrap: wrap;
     justify-content: center;
-}
-  
-}
-@media screen  and (min-width: 430px) and (max-width:700px){
- .copy-title-btn-SMSReport {
-    width: 86%;
-}
-  
-} 
+  }
 
-@media screen  and (min-width: 381px) and (max-width:429.99px){
+}
+
+@media screen and (min-width: 430px) and (max-width:700px) {
   .copy-title-btn-SMSReport {
-     width: 76%;
-     
- }
-   
- } 
+    width: 86%;
+  }
 
-@media screen  and  (max-width:380.99px){
+}
+
+@media screen and (min-width: 381px) and (max-width:429.99px) {
+  .copy-title-btn-SMSReport {
+    width: 76%;
+
+  }
+
+}
+
+@media screen and (max-width:380.99px) {
   .copy-title-btn-SMSReport {
     background-color: transparent;
-    /* margin-right: 63px; */
     border: none;
- }
-   
- } 
+  }
+}

@@ -16,8 +16,7 @@
 .Tripsheet-header {
   border-top: solid 1px #ccc;
   background: var(--glass);
-  padding: 10px;
-  margin-top: 10px;
+  padding: 0px;
   margin-bottom: -10px;
 }
 
@@ -48,7 +47,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .form-container .Tripsheet-form::-webkit-scrollbar-track {
@@ -60,18 +58,52 @@
   outline: 1px solid slategrey;
 }
 
+@media screen and (max-width: 768px) {
+ .form-container-tripsheet {
+      width: 97% !important;
+  }
+}
+
 .form-container .Tripsheet-form {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 75vh;
+  height: 71vh;
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
   border-radius: 20px;
   color: #000;
-  /* background-color: var(--glass); */
-  background-color: #f0ece2;
+  background-color: var(--glass);
+}
+
+@media screen and (max-width: 768px) {
+  .form-container .Tripsheet-form {
+    width: 93vw;
+  }
+}
+
+@media screen and (min-width: 1113px) and (max-width: 1267px) {
+  .form-container .Tripsheet-form {
+    width: 79vw;
+  }
+}
+
+@media screen and (min-width: 957px) and (max-width: 1112.9px) {
+  .form-container .Tripsheet-form {
+    width: 76vw;
+  }
+}
+
+@media screen and (min-width: 829px) and (max-width: 956.9px) {
+  .form-container .Tripsheet-form {
+    width: 73vw;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 828.9px) {
+  .form-container .Tripsheet-form {
+    width: 70vw;
+  }
 }
 
 .secend-container {
@@ -84,7 +116,7 @@
 /* TRIPSHEET CONETNT */
 .Tipsheet-content-table-main {
   background: var(--glass);
-  padding: 40px;
+  padding: 15px;
 }
 
 .Tipsheet-content-table-main .Tipsheet-content-table {
@@ -113,7 +145,6 @@
 /*Dialogbox image*/
 .dialogboximg {
   width: 535px;
-  /* height: 535px; */
 }
 
 .mapview {
@@ -143,11 +174,185 @@
   width: 150px;
 }
 
-.tripsheet-heading{
+.tripsheet-heading {
   position: sticky;
   top: -27px;
   z-index: 5;
   background-color: #f0ece2;
-  padding: 10px ;
+  padding: 10px;
   margin: 0px;
+}
+
+.head-tab-tripsheet {
+  position: sticky !important;
+  top: 0px;
+  z-index: 1051;
+  background-color: #ffffff;
+  padding: 40px 10px 10px 10px !important;
+  margin: 0px;
+}
+
+.head-tab-tripsheet::after {
+  content: "";
+  position: absolute;
+  bottom: 0px !important;
+  left: 0px !important;
+  width: 100%;
+  border-radius: 20px;
+  height: 3px;
+  background-color: #457cdc;
+}
+
+.form-container .Title-Name {
+  padding-left: 10px !important;
+}
+
+.time input {
+  margin-top: 10px;
+  margin-bottom: 25px;
+  background: transparent;
+  text-align: inherit;
+  border: 1px solid #457cdc;
+  padding: 15px 8px 15px 10px;
+  border-radius: 4px;
+  font-size: 17px;
+}
+
+.icone {
+  padding: 10px 8px 0px 0px !important;
+  color: #737271 !important;
+}
+
+.input {
+  width: 255px !important;
+}
+
+.tripsheet-table1 {
+  width: 500px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  height: 250px;
+  overflow: scroll;
+}
+
+@media screen and (max-width: 667px) {
+  .tripsheet-table1 {
+    width: auto;
+  }
+}
+
+.tripsheet-division1,
+.tripsheet-division2,
+.tripsheet-division3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid #ccc;
+  justify-content: left;
+  padding: 30px 0px 30px 20px;
+  width: 79vw;
+}
+
+@media screen and (min-width: 1113px) and (max-width: 1266px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 79vw;
+  }
+}
+
+@media screen and (min-width: 909px) and (max-width: 1112.99px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 73vw;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 910px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 66vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 768.99px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 79vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 910px) and (max-width: 956px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 71vw;
+  }
+}
+
+.tripsheet-address {
+  width: 20vw;
+}
+
+@media screen and (max-width: 1060px) {
+  .tripsheet-address {
+    width: 40vw;
+  }
+}
+
+.table-input-field {
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 673px) {
+  .tripsheet-tab {
+    width: 150vw;
+  }
+}
+
+.address-field {
+  width: 25vw;
+}
+
+@media screen and (min-width: 600px) and (max-width: 1146.99px) {
+  .address-field {
+    width: 40vw;
+  }
+}
+
+@media screen and (max-width: 599.99px) {
+  .address-field {
+    width: 55vw;
+  }
+}
+
+.remark-textfield {
+  width: 400px !important;
+}
+
+@media screen and (max-width: 600px) {
+  .remark-textfield {
+    width: 400px !important;
+  }
+}
+
+@media screen and (max-width:1080px) {
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    justify-content: center;
+  }
 }

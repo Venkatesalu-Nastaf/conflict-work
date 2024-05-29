@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
-
-
+const moment = require('moment');
 // trip sheet database:
+
 
 // add tripsheet database-------------------------------------------- 
 router.post('/tripsheet-add', (req, res) => {
@@ -118,7 +118,7 @@ router.post('/tripsheet-add', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss,Groups,transferreport } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
 
 
@@ -232,36 +232,46 @@ router.post('/tripsheet-add', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype
     };
 
 
+
+
+    // Assuming 'startdate' is in ISO 8601 format
+    const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
+    const driverTripAssign = {
+        driverName,
+        startdate: formattedStartDate,
+        vehRegNo,
+        reporttime,
+        shedintime
+    }
+
+
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
+
         if (err) {
-            console.log(err,"dta")
+            s
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-
         if (result.affectedRows > 0) {
-            // console.log(result.affectedRows,status)
-            // if(status === "Opened" || status === "Cancelled" ){
-            //     console.log(status)
-
-            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `,(err,result5)=>{
+            db.query('INSERT INTO driver_trip_assign SET ?', driverTripAssign, (err, result) => {
                 if (err) {
-                    console.log(err)
+                    console.log(err, "error")
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+            })
+            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `, (err, result5) => {
+                if (err) {
                     return res.status(500).json({ error: "Failed to insert data into MySQL" });
                 }
                 if (result.affectedRows > 0) {
-                    console.log(result,"aa",result5)
                     return res.status(200).json({ message: "Data inserted successfully" });
 
                 }
-                console.log(result,"bb")
+
             })
-            // }
-        
-        // return res.status(200).json({ message: "Data inserted successfully" });
         }
     });
 });
@@ -269,6 +279,8 @@ router.post('/tripsheet-add', (req, res) => {
 // delete tripsheet data---------------------------------------------------
 router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
+    const username = req.query;
+
     db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
@@ -391,7 +403,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups,transferreport} = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -502,7 +514,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype,
     };
 
 
@@ -511,18 +523,18 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
-        
+
             return res.status(404).json({ error: "Customer not found" });
         }
         if (result.affectedRows > 0) {
-            console.log(result.affectedRows,status)
-            if(status === "Opened" || status === "Cancelled"){
-                console.log(status)
-            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
+
+            if (status === "Opened" || status === "Cancelled") {
+
+                db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
             }
-        
-       
-        return res.status(200).json({ message: "Data updated successfully" });
+
+
+            return res.status(200).json({ message: "Data updated successfully" });
         }
     });
 });
@@ -640,7 +652,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss,Groups,transferreport } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -751,9 +763,8 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype,
     };
-
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -762,7 +773,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
             return res.status(404).json({ error: "Customer not found" });
         }
         // for BE_closed
-        db.query(`UPDATE tripsheet SET apps='Be_Closed' WHERE tripid=${tripid}`, (err, result) => {
+        db.query(`UPDATE tripsheet SET apps='Closed' WHERE tripid=${tripid}`, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to update tripsheet details in MySQL' });
             }
@@ -773,22 +784,58 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
 });
 
 // collect data from tripsheet database------------------------------------
-router.get('/tripsheet/:tripid', (req, res) => {
+router.get('/tripsheet-enter/:tripid', async (req, res) => {
     const tripid = req.params.tripid;
+    const username = req.query.loginUserName;
 
-    db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
+    let data = '';
+
+    if (!username) {
+        return res.status(500).json({ error: "username is undefined" })
+    }
+
+    db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+            return res.status(500).json({ error: "there some issue ffetching station name " })
         }
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Booking not found' });
+
+        data = await results[0]?.Stationname;
+        //------------------------------------------------------------
+
+        if (data && data.toLowerCase() === "all") {
+            // its for fetch by All
+            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"`, tripid, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                }
+                if (result.length === 0) {
+
+                    return res.status(404).json({ error: 'Booking not found' });
+                }
+                const bookingDetails = result[0]; // Assuming there is only one matching booking
+                return res.status(200).json(bookingDetails);
+            });
         }
-        const bookingDetails = result[0]; // Assuming there is only one matching booking
-        return res.status(200).json(bookingDetails);
-    });
+        else if (data) {
+            // its for fetch by All
+            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department=${data}`, tripid, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                }
+                if (result.length === 0) {
+                    return res.status(404).json({ error: 'Booking not found' });
+                }
+                const bookingDetails = result[0]; // Assuming there is only one matching booking
+                return res.status(200).json(bookingDetails);
+            });
+        } else {
+            return res.status(500).json({ error: 'there is some ISSUE ' });
+        }
+        //----------------------------------------------------------
+    })
 });
 
-
+//--------------------------------------------------------
 
 router.get('/tripsheet-maindash', (req, res) => {
 

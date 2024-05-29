@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
 import Logo from "./assets/img/logonas.png";
 import Mailer from "./component/Info/Mailer/Mailer";
@@ -10,9 +10,7 @@ import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
 import Accounts from "./component/Accounts/Accounts";
-// import Income from "./component/Billings/Income/Income";
 import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
-// import Expense from "./component/Billings/Expense/Expense";
 import RateTypes from "./component/Info/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
@@ -28,7 +26,6 @@ import Permission from "./component/Settings/Permission/Permission";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import BookingMain from "./component/Bookings/BookingMain/BookingMain";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
-// import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
@@ -41,8 +38,13 @@ import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLog
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
 import TripStatusMain from "./component/Bookings/TripStatusMain/TripStatusMain";
+import { PermissionContext } from "./component/context/permissionContext";
+import axios from "axios";
+import { APIURL } from "../src/component/url";
+import NoPermission from "./component/permissionContext/NoPermission/NoPermission";
 
 function App() {
+  const apiUrl = APIURL;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -51,12 +53,85 @@ function App() {
     }, 1000);
   }, []);
 
+
+  // Permission ----------------------------------------
+
+  const { permissions } = useContext(PermissionContext)
+
+  const BOOKING = permissions[0]?.read || permissions[1]?.read;;
+  const TripStatus = permissions[2]?.read;
+  const TriSheet = permissions[3]?.read;
+
+  const BILLING = permissions[4]?.read || permissions[5]?.read;;
+  const Billing_Transfer = permissions[6]?.read;
+  const Billing_CoveringBill = permissions[7]?.read;
+
+  const REGISTER = permissions[8]?.read || permissions[9]?.read;
+  const R_Supllier = permissions[10]?.read;
+  const R_Employee = permissions[11]?.read;
+
+  const SETTING = permissions[12]?.read || permissions[13]?.read;
+  const Station_Creation = permissions[14]?.read;
+  const Main_Setting = permissions[15]?.read;
+
+  const INFO = permissions[16]?.read || permissions[17]?.read;
+  const Mailers = permissions[18]?.read;
+  const INFO_FuelInfo = permissions[19]?.read;
+  const Dashbord_read = permissions[20]?.read;
+
+
+  //--------   fetch station name ------------------------------------------------------------
+
+  const loginUserName = localStorage.getItem("username")
+
+  const [stationName, setStationName] = useState([]);
+
+  useEffect(() => {
+    const fetchSattionName = async () => {
+      try {
+
+        const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
+        const station = response.data;
+        setStationName(station);
+
+      } catch (error) {
+        console.log("error occur ", error);
+      }
+    }
+    fetchSattionName();
+  }, [apiUrl, loginUserName])
+
+
+  //---------------------------------------------------------------------
+  //  fetching Organisation name (Customer )
+  const [organizationNames, setOrganizationName] = useState([])
+
+  useEffect(() => {
+    const organizationName = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/customers`);
+        const organisationData = response?.data;
+        const names = organisationData.map(res => res.customer);
+        setOrganizationName(names);
+      } catch (error) {
+        console.error('Error fetching organization names:', error);
+      }
+    };
+    organizationName();
+
+  }, [apiUrl]); // Empty dependency array to ensure it runs only once
+
+  //--------------------------------------------------------
+
+
+
+
+
   return (
     <>
       <div className={isLoading ? "loading-container" : ""}>
         {isLoading ? (
           <div className="loading-spinners">
-            {/* <ThreeCircles color="#3d92f3" height={80} width={80} /> */}
             <div className="logo-loading">
               <img src={Logo} alt="logo" />
             </div>
@@ -65,68 +140,66 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
-              <Route path="/home/dashboard" element={<MainDash />} />
+              <Route path="/home/dashboard" element={Dashbord_read !== 0 ? <MainDash /> : <Navigate to="/home/bookings/booking" />} />
+
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={<BookingMain />}
+                  element={BOOKING !== 0 ? <BookingMain stationName={stationName} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={<TripSheet />}
+                  element={TriSheet !== 0 ? <TripSheet stationName={stationName} /> : <NoPermission />}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={<TripStatusMain />}
+                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>
                 <Route
                   path="/home/registration/customer"
-                  element={<Customer />}
+                  element={REGISTER !== 0 ? <Customer stationName={stationName} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/registration/supplier"
-                  element={<Suppliers />}
+                  element={R_Supllier !== 0 ? <Suppliers stationName={stationName} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/registration/employes"
-                  element={<Employes />}
+                  element={R_Employee !== 0 ? <Employes stationName={stationName} /> : <NoPermission />}
                 />
               </Route>
+
               <Route path="/home/info" element={<Info />}>
-                <Route path="/home/info/ratetype" element={<RateTypes />} />
-                <Route
-                  path="/home/info/ratemanagement"
-                  element={<RateManagement />}
-                />
-                <Route path="/home/info/mailer" element={<Mailer />} />
+                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} />
+                <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} />} />
+                <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
-                <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
+                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
-                <Route path="/home/billing/billing" element={<BillingMain />} />
-                <Route path="/home/billing/transfer" element={<Transfer />} />
+
+                <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={<CoveringBill />}
+                    element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames }/> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
-                {/* <Route path="/home/accounts/expense" element={<Expense />} />
-                <Route path="/home/accounts/income" element={<Income />} />
-                <Route path="/home/accounts/profitandloss" element={<ProfiteLoss />} /> */}
+
               </Route>
               <Route path="/home/settings" element={<Settings />}>
                 <Route
                   path="/home/settings/usercreation"
-                  element={<UserCreation />}
+                  element={SETTING !== 0 ? <UserCreation stationName={stationName} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/settings/stationcreation"
-                  element={<StationCreation />}
+                  element={Station_Creation !== 0 ? <StationCreation /> : <NoPermission />}
                 />
                 <Route
                   path="/home/settings/permission"
@@ -134,7 +207,7 @@ function App() {
                 />
                 <Route
                   path="/home/settings/mainsetting"
-                  element={<MainSetting />}
+                  element={Main_Setting !== 0 ? <MainSetting /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/usersettings" element={<UserSettings />}>
@@ -165,7 +238,7 @@ function App() {
             />
           </Routes>
         )}
-      </div>
+      </div >
     </>
   );
 }

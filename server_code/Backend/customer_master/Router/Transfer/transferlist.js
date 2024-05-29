@@ -61,7 +61,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
         vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
 
       });
-      db.query('select customer,gstTax,address1,address2,city from customers where customer=?', [customer], (err, result2) => {
+      db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
         }
@@ -73,7 +73,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
 
         result2.forEach(row => {
           // vehicleDataMap[row.customer]={gsttax:row.gstTax}
-          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1,Customeraddress2:row.address2,Customercity:row.city };
+          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1 };
 
         })
 
@@ -88,8 +88,6 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
           obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown'
-          obj.CustomerAddress2= customerdetails ? customerdetails.Customeraddress2 : 'unknown'
-          obj.Customercity= customerdetails ? customerdetails.Customercity : 'unknown'
         });
 
 
@@ -134,7 +132,7 @@ router.get('/tripsheetiddata/:id', (req, res) => {
 
 
   // Prepare the query with placeholders
-  const query = 'SELECT * FROM tripsheet WHERE status = "Closed" AND  tripid IN (?)';
+  const query = 'SELECT * FROM tripsheet WHERE status = "Transfer_Closed" AND  tripid IN (?)';
 
   // Execute the query with tripIds as parameters
   db.query(query, [tripIds], (err, result) => {
@@ -248,6 +246,165 @@ router.get('/gettransfer_list', (req, res) => {
   });
 
 })
+router.put('/updateList', async (req, res) => {
+  try {
+    const { Trip_id, Trips, Amount } = req.body;
+    console.log(typeof(Trip_id), Trip_id, Trips, Amount, 'response');
+
+    const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+    
+    const updatePromises = Trip_id.map(tripId => {
+      return new Promise((resolve, reject) => {
+        db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+          if (err) {
+            console.log(err, 'error');
+            reject(err);
+          } else {
+            console.log(updateGroupBillingResult, 'result');
+            if (updateGroupBillingResult.affectedRows > 0) {
+              resolve(updateGroupBillingResult);
+            } else {
+              reject(new Error("No rows affected"));
+            }
+          }
+        });
+      });
+    });
+
+    // Wait for all update queries to finish
+    const updateResults = await Promise.all(updatePromises);
+    res.status(200).json(updateResults);
+  } catch (err) {
+    console.log(err, 'error');
+    res.status(500).json({ error: "An error occurred. Please try again later." });
+  }
+});
+
+
+router.post('/tripsheetUpdate', (req, res) => {
+  const { tripids, status } = req.body;
+  console.log(tripids, status,'rrrrrrrrrr');
+  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+  db.query(query, [status, tripids], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
+
+
+// router.put('/updateList',(req,res)=>{
+//   const {Trip_id,Trips,Amount}= req.body;
+//   console.log(typeof(Trip_id),Trip_id,Trips,Amount,'response');
+//   const sqlUpdateTransferList =  "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+//   Trip_id.forEach(tripId => {
+//     console.log(tripId, 'tttt');
+//     db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+//       console.log(Trips, Amount, tripId, 'wwwww');
+//       if (err) {
+//         console.log(err, 'error');
+//         return res.status(500).json({ error: "Failed to update data in MySQL" });
+//       }
+//       console.log(updateGroupBillingResult, 'result');
+//       if(updateGroupBillingResult.affectedRows>0){
+//       res.status(200).json(updateGroupBillingResult)
+//       }
+//     });
+//   });
+// })
+
+// router.put('/statusupdate', (req, res) => {
+//   const { Trips, Amount, Trip_id } = req.body;
+//   console.log(Trips,Amount,Trip_id,typeof(Trip_id),'reqqqqqqqq');
+//   const sqlUpdate = "UPDATE tripsheet SET status = 'Covering_Closed', apps = 'Closed' WHERE tripid = ?";
+//   const sqlUpdateGroupBilling = "UPDATE Group_billing SET Trips=?, Amount=?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0 ";
+
+//   db.query(sqlUpdate, [Trip_id], (err, updateResult) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to update data in MySQL" });
+//     }
+
+//     db.query(sqlUpdateGroupBilling, [Trips, Amount, Trip_id, Trip_id], (err, updateGroupBillingResult) => {
+//       console.log(Trips, Amount, Trip_id,Trip_id,'wwwww');
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to update data in MySQL" });
+//       }
+// console.log(updateGroupBillingResult,'result');
+//       return res.status(200).json({ message: "Data updated successfully" });
+//     });
+//   });
+// });
+
+
+
+router.get('/updateTransferListdata/:groupId', (req, res) => {
+  const groupId= req.params.groupId;
+  console.log(groupId,'gid');
+  const sqlquery = "SELECT * FROM Transfer_list where Grouptrip_id = ?";
+  
+  db.query(sqlquery,[groupId], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(result,'getlist');
+    return res.status(200).json(result);
+  });
+});
+
+router.delete('/deleteTransfer/:groupid', (req, res) => {
+  const groupid = req.params.groupid;
+  console.log(groupid,'idddd');
+  const sql = "DELETE FROM Transfer_list WHERE Grouptrip_id = ?";
+  
+  db.query(sql, [groupid], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+
+
+
+
+router.put('/statusChangeTransfer/:invoiceno',(req,res)=>{
+  const {invoiceno} = req.params;
+  const sqlquery = 'update Transfer_list set Status="Billed" where Invoice_no = ? ';
+  db.query(sqlquery,[invoiceno],(err,result)=>{
+    if(err){
+      console.log(err,'error');
+    }
+    return res.status(200).json({ message: "Data updated successfully" });
+
+  })
+})
+
+router.put('/statusChangeTripsheet/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  // Check if tripid is defined
+  if (!tripid) {
+    return res.status(400).json({ error: "Trip ID is required" });
+  }
+
+  const tripIds = tripid.split(',');
+
+  const sqlquery = 'UPDATE tripsheet SET status="Transfer_Billed" AND apps="Closed" WHERE tripid IN (?)';
+
+  db.query(sqlquery, [tripIds], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
 
 
 
@@ -301,8 +458,6 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         vi.Groups AS Groups, 
         c.gstTax AS gstTax,
         c.address1 AS Customeraddress1,
-        c.address2 AS Customeraddress2,
-        c.city AS Customeraddress3,
         JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.name)) AS bookattachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import "./Pending.css";
 import Menu from '@mui/material/Menu';
-import { Stations } from "./PendingData";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -65,6 +64,8 @@ const Pending = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+  const Stations = "";
 
   return (
     <div className="pending-form Scroll-Style-hide">
@@ -175,7 +176,6 @@ const Pending = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              // rows={rows}
               rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}

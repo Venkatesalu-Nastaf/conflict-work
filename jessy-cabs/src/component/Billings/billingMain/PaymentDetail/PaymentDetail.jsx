@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./PaymentDetail.css";
-
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
-
 import { Autocomplete, Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -20,9 +18,11 @@ import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import usePaymentdetails from './usePaymentdetails';
+import { PermissionContext } from '../../../context/permissionContext';
+// import { FaRegCalendarAlt } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-
-const PaymentDetail = () => {
+const PaymentDetail = ({ organizationNames }) => {
 
   const {
     actionName,
@@ -39,7 +39,7 @@ const PaymentDetail = () => {
     billingno,
     handleInputChange,
     customer,
-    bankOptions,
+    // bankOptions,
     fromDate,
     setFromDate,
     toDate,
@@ -62,15 +62,17 @@ const PaymentDetail = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  const { permissions } = useContext(PermissionContext)
+  const Billing_read = permissions[5]?.read;
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
       <form >
-        <div className="detail-container-main">
+        <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field input-field-payment" style={{ flexWrap: 'wrap', alignItems: 'baseline' }}>
+                <div className="input input-payment"  >
                   <div className="icone">
                     <ListAltIcon color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -84,7 +86,7 @@ const PaymentDetail = () => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-payment" >
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
@@ -94,7 +96,8 @@ const PaymentDetail = () => {
                     freeSolo
                     size="small"
                     value={customer}
-                    options={bankOptions}
+                    // options={bankOptions}
+                    options={organizationNames}
                     onChange={handleInputChange}
                     renderInput={(params) => {
                       return (
@@ -103,66 +106,82 @@ const PaymentDetail = () => {
                     }}
                   />
                 </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="From Date"
-                      format="DD/MM/YYYY"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                    <DatePicker
-                      label="To Date"
-                      format="DD/MM/YYYY"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                <div className="input" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="From Date"
+                        format="DD/MM/YYYY"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="input" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="To Date"
+                        format="DD/MM/YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShow} >Search</Button>
+                  <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
+        <div className='alert-popup-main'>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
 
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+        </div>
         <div className='total-container'>
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  <Button variant="contained" disabled={!Billing_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                     Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>

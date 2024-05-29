@@ -1,4 +1,4 @@
-import React, { useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import "./TransferReport.css";
 import { APIURL } from '../../../url';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -13,14 +13,12 @@ import Reportinvoice from './Reportinvoice/Reportinvoice';
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
-import {  pdf } from '@react-pdf/renderer';
-// import PdfContent2 from './PdfContent2.';
+import { pdf } from '@react-pdf/renderer';
 import PdfContent2 from './PdfContent2';
-import {useData} from "../../../Dashboard/MainDash/Sildebar/DataContext2"
+import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2"
 import PdfParticularData from './PdfParticularData';
 import Modal from '@mui/material/Modal';
 import { Box } from '@mui/material';
@@ -44,8 +42,8 @@ import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortaweso
 import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
-
-
+import { PiMoneyBold } from "react-icons/pi";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 export const PDFbill = [
   {
@@ -69,7 +67,7 @@ export const MISformat = [
   },
 ];
 
-const TransferReport = () => {
+const TransferReport = ({ stationName }) => {
 
   const {
     invoiceno,
@@ -93,18 +91,16 @@ const TransferReport = () => {
     date,
     customer,
     tripData,
-    bankOptions,
+    // bankOptions,
     selectedImage,
-    setCustomer,
-    misformat,setMisformat,
+    // setCustomer,
+    misformat, setMisformat,
     servicestation,
     handleserviceInputChange,
     pbpopupOpen,
     handlePopupClose,
     npopupOpen,
     lxpopupOpen,
-    // handleExcelDownload,
-    // handlePdfDownload,
     routeData,
     roundedAmount,
     sumTotalAndRounded,
@@ -126,17 +122,18 @@ const TransferReport = () => {
     pdfzipdata
   } = useTransferreport();
   const {
-        handleExcelDownload,error1,errormessage1,
-        handledatazipDownload} = useExeclpage()
-  const [invoicedata,setInvoicedata] = useState([])
-  const [addressDetails,setAddressDetails] = useState([])
+    handleExcelDownload, error1, errormessage1,
+    handledatazipDownload } = useExeclpage()
+  const [invoicedata, setInvoicedata] = useState([])
+  const [addressDetails, setAddressDetails] = useState([])
   const apiUrl = APIURL;
-  const [organizationsdetail1,setOrganisationDetail]=useState([]);
+  const [organizationsdetail1, setOrganisationDetail] = useState([]);
   const { sharedData } = useData();
-  const [particularPdf,setParticularPdf] = useState([])
+  const [particularPdf, setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
-  const [tripno,setTripno] = useState('')
-const {pdfPrint,setPdfPrint} = PdfData()
+  const [tripno, setTripno] = useState('')
+  const { pdfPrint, setPdfPrint } = PdfData()
+
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -145,24 +142,29 @@ const {pdfPrint,setPdfPrint} = PdfData()
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
+
+        if (!customer) return
+
         const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const addressdetail = await response.json();
+        console.log(addressdetail, 'details');
         setAddressDetails(addressdetail);
       } catch (err) {
         console.error('Error fetching customer address:', err);
       }
     };
-  
+
     fetchdata();
   }, [apiUrl, customer]);
-//   console.log(pdfzipdata,"zippppp")
-//  console.log(rowSelectionModel,"mpdel")
 
 
   useEffect(() => {
@@ -174,24 +176,27 @@ const {pdfPrint,setPdfPrint} = PdfData()
         }
         const organizationdetails = await response.json();
         setOrganisationDetail(organizationdetails)
-       
+
       } catch (err) {
         console.error('Error fetching customer address:', err);
       }
     };
-  
+
     fetchdata();
   }, [apiUrl, customer]);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     const fetchData = async () => {
 
-    try {
+      try {
         const tripid = localStorage.getItem("selectedtripsheetid");
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
+
+        if (!customer || !tripid) return
+
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
@@ -199,109 +204,100 @@ const {pdfPrint,setPdfPrint} = PdfData()
         }
         const tripData = await response.json();
         setInvoicedata(tripData)
-    }
-    catch(err){
+      }
+      catch (err) {
         console.log(err);
+      }
     }
-}
-fetchData()
-},[apiUrl])
-// useEffect(()=>{
-//   const fetchData = async () =>{
-//     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
-//   }
-// })
+    fetchData()
+  }, [apiUrl])
 
-const handleDownloadPdf = async () => {
-  if(!pdfBillList){
-       setError(true)
-       setErrorMessage('Select PDF Format')
-       return
+  const handleDownloadPdf = async () => {
+    if (!pdfBillList) {
+      setError(true)
+      setErrorMessage('Select PDF Format')
+      return
+    }
+
+    else if (pdfBillList === "PDF 1") {
+      const fileName = 'test.pdf';
+      const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+      saveAs(blob, fileName);
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
+    }
+    else if (pdfBillList === "PDF 2") {
+      const fileName = 'test.pdf';
+      const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
+      saveAs(blob, fileName);
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
+    }
+
   }
 
-  else if (pdfBillList === "PDF 1") {
-    const fileName = 'test.pdf';
-    const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
-    saveAs(blob, fileName);
-    localStorage.removeItem("selectedcustomerdata");
-    localStorage.removeItem("selectedtripsheetid");
-  }
-  else if (pdfBillList === "PDF 2") {
-    const fileName = 'test.pdf';
-    const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation}/>).toBlob();
-    saveAs(blob, fileName);
-    localStorage.removeItem("selectedcustomerdata");
-    localStorage.removeItem("selectedtripsheetid");
+  const handlePopup = () => {
+    setPdfPrint(false)
   }
 
-}
-
-const handlePopup= ()=>{
-  setPdfPrint(false)
-}
-
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "vcode", headerName: "VCode", width: 130 },
-  { field: "guestname", headerName: "Guest Name", width: 130 },
-  { field: "tripid", headerName: "Trip No", width: 130 },
-  { field: "status", headerName: "Status", width: 130 },
-  // { field: "view", headerName: "View", width: 130 },
-  {
-    field: 'actions',
-    headerName: 'Actions',
-    width: 130,
-    renderCell: (params) => (
+  const columns = [
+    { field: "id", headerName: "Sno", width: 70 },
+    { field: "vcode", headerName: "VCode", width: 130 },
+    { field: "guestname", headerName: "Guest Name", width: 130 },
+    { field: "tripid", headerName: "Trip No", width: 130 },
+    { field: "status", headerName: "Status", width: 130 },
+    // { field: "view", headerName: "View", width: 130 },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 130,
+      renderCell: (params) => (
         <Button
-            onClick={() => handleButtonClick(params)}
-            aria-label="open-dialog"
+          onClick={() => handleButtonClick(params)}
+          aria-label="open-dialog"
         >
-            <Button variant="contained" color="primary">
-                view
-            </Button>
+          <Button variant="contained" color="primary">
+            view
+          </Button>
 
         </Button>
-    ),
-},
-];
+      ),
+    },
+  ];
 
 
-const handleButtonClick = async(params) => {
-  setPdfPrint(true)
-const {tripid,customer} = params.row;
-setTripno(tripid)
-const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
-const pdfdetails = await response.json()
-setParticularPdf(pdfdetails)
+  const handleButtonClick = async (params) => {
+    setPdfPrint(true)
+    const { tripid, customer } = params.row;
+    setTripno(tripid)
+    const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+    const pdfdetails = await response.json()
+    setParticularPdf(pdfdetails)
 
-};
-const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
-  if(!misformat){
-    setError(true)
-    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
-  return
-  }
-  if(!pdfBillList){
-    setError(true)
-    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
-  return
-  }
-  handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
-  handleDownloadPdf();
-};
-
-
-
+  };
+  const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
+    if (!misformat) {
+      setError(true)
+      setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+      return
+    }
+    if (!pdfBillList) {
+      setError(true)
+      setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+      return
+    }
+    handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
+    handleDownloadPdf();
+  };
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
-    
       <form >
-        <div className="detail-container-main">
-          <div className="container-left">
+        <div className="detail-container-main detail-container-main-tfreport">
+          <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field input-field-transfer-report" style={{ flexWrap: 'wrap' }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
                   </div>
@@ -314,7 +310,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     value={groupTripid}
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                   </div>
@@ -327,34 +323,11 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
-                  {/* <TextField
-                    size="small"
-                    id="id"
-                    label="MIS Format"
-                    name="misformat"
-                    autoComplete='off'
-                  /> */}
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    options={MISformat.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    onChange={(event, value) => setMisformat(value.label)}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
-                      );
-                    }}
-                  /> */}
-
-<Autocomplete
+                  <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -369,19 +342,13 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                       );
                     }}
                   />
-
-                
-
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      {/* <DatePicker
-                        label="Date"
-                        name="date"
-                        value={date}
-                        format="DD/MM/YYYY"
-                      /> */}
                       <DatePicker
                         label="Month"
                         name="month"
@@ -391,38 +358,36 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "400px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
+                  <TextField
                     size="small"
+                    id="free-solo-demo"
+                    label="Organization"
                     value={customer}
-                    options={bankOptions}
-                    onChange={(event, value) => setCustomer(value)}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
-                      );
-                    }}
+                    name="customer"
+                    autoComplete='off'
                   />
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+                  <div className="icone">
+                    <PiMoneyBold color="action" style={{ fontSize: "23px" }} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
                     label="Rate Type"
-                    value={ratetypeforpage || ''}
+                    value={ratetypeforpage}
                     name="ratetype"
                     autoComplete='off'
                   />
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -432,9 +397,10 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     autoComplete='off'
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" >
+                <div className="input input-transfer-report" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -444,7 +410,10 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" >
+                <div className="input input-transfer-report" >
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -454,7 +423,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" >
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
                   </div>
@@ -464,8 +433,8 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     freeSolo
                     size="small"
                     value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                    options={Stations.map((option) => ({
-                      label: option.Option,
+                    options={stationName.map((option) => ({
+                      label: option.Stationname,
                     }))}
                     onChange={(event, value) => handleserviceInputChange(event, value)}
                     renderInput={(params) => {
@@ -475,20 +444,11 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
-                  {/* <TextField
-                    size="small"
-                    id="id"
-                    label="MIS Format"
-                    name="misformat"
-                    autoComplete='off'
-                  /> */}
-                   <Autocomplete
+                  <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -496,7 +456,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     options={PDFbill.map((option) => ({
                       label: option.Option,
                     }))}
-                    value={pdfBillList} // Set the value to the state variable pdfBillList
+                    value={pdfBillList}
                     onChange={(event, value) => setPdfBillList(value.label)}
                     renderInput={(params) => {
                       return (
@@ -505,8 +465,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     }}
                   />
                 </div>
-
-                <div className="input" style={{ width: "180px" }}>
+                <div className="input input-transfer-report" >
                   <FormControlLabel
                     value="bookingmail"
                     control={
@@ -516,10 +475,8 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     }
                     label="Booking Mail"
                   />
-
                 </div>
-
-                <div className="input">
+                <div className="input input-transfer-report" >
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       Invoice With
@@ -544,7 +501,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     />
                   </FormControl>
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
                   <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (
@@ -553,9 +510,9 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                             Download
                           </Button>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata,invoiceDate)}>Excel</MenuItem>
+                            <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate)}>Excel</MenuItem>
                             <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
-                            <MenuItem onClick={()=>handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
+                            <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}
@@ -598,7 +555,6 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                 </Button>
               </DialogActions>
             </Dialog>
-
             {/* mapinnvoice */}
             <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>
@@ -634,7 +590,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                     </Button>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={()=>handledatazipDownload(misformat,pdfzipdata,invoiceDate,customer,organizationsdetail1,imageorganisation,rowSelectionModel) }>  ZIP </MenuItem>
+                      <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, imageorganisation, rowSelectionModel)}>  ZIP </MenuItem>
                       {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                       {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>
@@ -660,10 +616,7 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                 }}
                 checkboxSelection
                 disableRowSelectionOnClick
-                selectionModel={rowSelectionModel} // Pass the selection model to maintain selection
-
-               
-
+                selectionModel={rowSelectionModel}
               />
             </div>
           </div>
@@ -694,77 +647,62 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
                 </div>
               </div>
             </div> */}
-
           </div>
-          {error &&
-            <div className='alert-popup Error'>
-              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {error1 &&
-            <div className='alert-popup Error'>
-              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errormessage1}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success'>
-              <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
+          <div className='alert-popup-main'>
+            {error &&
+              <div className='alert-popup Error'>
+                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {error1 &&
+              <div className='alert-popup Error'>
+                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errormessage1}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success'>
+                <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+          </div>
         </div>
-        {/* <Dialog open={popup} onClose={handlePopup}>
-                <DialogContent style={{ width: 1000 }}>
-                  <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handlePopup} variant="contained" color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog> */}
-               <Modal
-        open={pdfPrint}
-        onClose={handlePopup}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '854px',
-            height: '700px',
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
-            boxShadow: 24,
-            p: 4,
-            overflowY:'auto'
-          }}
+        <Modal
+          open={pdfPrint}
+          onClose={handlePopup}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
-      
-          <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno}/>
-
-          {/* <Button onClick={handlePopup} variant="contained" color="primary">
-                    Cancel
-                  </Button> */}
-        </Box>
-      </Modal>
-     
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '854px',
+              height: '700px',
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+              overflowY: 'auto'
+            }}
+          >
+            <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno} />
+          </Box>
+        </Modal>
       </form>
     </div>
   )

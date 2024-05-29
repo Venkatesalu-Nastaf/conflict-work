@@ -11,7 +11,6 @@ import Organization from "./Organization/Organization";
 
 const MainSetting = () => {
   const [value, setValue] = React.useState("Organization");
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -20,27 +19,14 @@ const MainSetting = () => {
       <div className="main-setting-form-container">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box className='head-tab' sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
-                
               >
-
-                
                 <Tab label="Organization Details" className="tablists" value="Organization" />
-
-              
                 <Tab label="Tax Setting" className="tablists" value="Tax_Setting" />
-
-              
                 <Tab label="BackUp" className="tablists" value="Back_Up" />
-
-               
-                
-                {/* <Tab label="Organization Details" className="tablists" value="Organization" />
-                <Tab label="Tax Setting" className="tablists" value="Tax_Setting" />
-                <Tab label="BackUp" className="tablists" value="Back_Up" /> */}
               </TabList>
             </Box>
             <TabPanel value="Organization">

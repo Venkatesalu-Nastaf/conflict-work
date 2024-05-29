@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
-// import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
+import Excel from 'exceljs';
+
 
 
 const useDrivercreation = () => {
@@ -33,6 +35,8 @@ const useDrivercreation = () => {
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [edit, setEdit] = useState(false)
+    // const [profileimage,setProfileimage]=useState('')
+    // console.log(profileimage,"imagedata")
     // venkat
 
 
@@ -107,11 +111,193 @@ const useDrivercreation = () => {
         address1: '',
         licenseno: '',
         licenseexpdate: '',
-        city: '',
         badgeno: '',
         badgeexpdate: '',
         aadharno: '',
+        Email:'',
+        Profile_image:null,
     });
+
+    const handleFileChange = (e) => {
+        setBook({
+          ...book,
+          Profile_image: e.target.files[0]
+        });
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            Profile_image: e.target.files[0],
+        }));
+      };
+    
+
+    const handleExcelDownload=async()=>{
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+
+        try {
+
+            const fileName = "Drivercreation Reports"
+            // creating one worksheet in workbook
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+            //         console.log(headers,"hed")
+            const columnsExcel = headers.map(key => ({ key, header: key }));
+            
+            worksheet.columns = columnsExcel;
+
+            // updated the font for first row.
+            worksheet.getRow(1).font = { bold: true };
+
+            // Set background color for header cells
+            worksheet.getRow(1).eachCell((cell, colNumber) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' } // Green background color
+                };
+            });
+
+
+            worksheet.getRow(1).height = 30;
+            // loop through all of the columns and set the alignment with width.
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            rows.forEach((singleData, index) => {
+             
+
+                worksheet.addRow(singleData);
+
+                // Adjust column width based on the length of the cell values in the added row
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            // loop through all of the rows and set the outline style.
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
+                const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
+                currentCell.forEach((singleCell) => {
+
+                    const cellAddress = singleCell._address;
+
+                    // apply border
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            // write the content using writeBuffer
+            const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERRROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // removing worksheet's instance to create new one
+            workbook.removeWorksheet(workSheetName);
+        }
+
+    }
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid" // [width, height] in inches
+        });
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Driver Details", 10, 10);
+         const header = Object.keys(rows[0]);
+      
+        // Extracting body
+        const body = rows.map(row => Object.values(row));
+        console.log(header.length,"len")
+      
+        let fontdata = 1;
+        if (header.length <= 13) {
+            fontdata = 16;
+        }
+        else if (header.length >= 14 && header.length <= 17) {
+            fontdata = 11;
+        }
+        else if (header.length >= 18 && header.length <= 20) {
+          fontdata = 10;
+      } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 9;
+        }
+        else if (header.length >= 24 && header.length <= 26) {
+            fontdata = 7;
+        }
+        else if (header.length >= 27 && header.length <= 30) {
+            fontdata = 6;
+        }
+        else if (header.length >= 31 && header.length <= 35) {
+            fontdata = 4;
+        }
+        else if (header.length >= 36 && header.length <= 40) {
+            fontdata = 4;
+        }
+        else if (header.length >= 41 && header.length <= 46) {
+            fontdata = 2;
+        }
+        console.log(fontdata,"data")
+        
+        pdf.autoTable({
+            head: [header],
+            body: body,
+            startY: 20,
+      
+            headStyles: {
+                // fontSize: 5,
+                fontSize: fontdata,
+                cellPadding: 1.5, // Decrease padding in header
+      
+                minCellHeigh: 8,
+                valign: 'middle',
+      
+                font: 'helvetica', // Set font type for body
+      
+                cellWidth: 'wrap',
+                // cellWidth: 'auto'
+            },
+      
+            bodyStyles: {
+                // fontSize:4,
+                // fontSize: fontdata-1
+                fontSize: fontdata-1,
+                valign: 'middle',
+                //  cellWidth: 'wrap',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+      
+            },
+            columnWidth: 'auto'
+      
+      });
+        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+        console.log(scaleFactor, "SCALE")
+      
+        // Scale content
+        pdf.scale(scaleFactor, scaleFactor);
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'drivercreationReports.pdf');
+      };
 
     // TABLE END
 
@@ -186,8 +372,8 @@ const useDrivercreation = () => {
             licenseexpdate: '',
             badgeno: '',
             badgeexpdate: '',
-            city: '',
             aadharno: '',
+            Email:''
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
@@ -225,6 +411,7 @@ const useDrivercreation = () => {
         if (licencepdf !== null) {
             const formData = new FormData();
             formData.append("file", licencepdf);
+            
             try {
                 await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
                 setFile(null);
@@ -289,14 +476,6 @@ const useDrivercreation = () => {
             setErrorMessage("All fields are mandatory");
             return
         }
-
-        if (!book.city) {
-
-            setError(true)
-            setErrorMessage("All fields are mandatory");
-            return
-
-        }
         if (!book.licenseexpdate) {
             setError(true)
             setErrorMessage("All fields are mandatory");
@@ -305,9 +484,19 @@ const useDrivercreation = () => {
 
         try {
 
-            const data = { ...book }
+            const formData = new FormData();
+            for (const key in book) {
+                console.log(key,book[key])
+                formData.append(key, book[key]);
+              }
+
+             
+
+            // const data = { ...book }
             // console.log(data, "bookadd")
-            await axios.post(`${apiUrl}/drivercreation`, data);
+            // await axios.post(`${apiUrl}/drivercreation`, data);
+            await axios.post(`${apiUrl}/drivercreation`, formData)
+            
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;
             licenceSubmit(lastdriveridno);
@@ -383,24 +572,34 @@ const useDrivercreation = () => {
     const handleEdit = async (userid) => {
         setEdit(true)
         const data = selectedCustomerData.driverid
-        const updatedriver = {
-            drivername: selectedCustomerData.drivername,
-            username: selectedCustomerData.username,
-            stations: selectedCustomerData.stations,
-            Mobileno: selectedCustomerData.Mobileno,
-            userpassword: selectedCustomerData.userpassword,
-            joiningdate: selectedCustomerData.joiningdate,
-            active: selectedCustomerData.active,
-            address1: selectedCustomerData.address1,
-            licenseno: selectedCustomerData.licenseno,
-            licenseexpdate: selectedCustomerData.licenseexpdate,
-            badgeno: selectedCustomerData.badgeno,
-            badgeexpdate: selectedCustomerData.badgeexpdate,
-            city: selectedCustomerData.city,
-            aadharno: selectedCustomerData.aadharno,
-        }
+        const formData = new FormData();
+        const {id,driverid,...restselected}=selectedCustomerData
+        console.log(restselected,"data")
 
-        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`, updatedriver);
+        for (const key in restselected) {
+            console.log(key,restselected[key])
+            formData.append(key, restselected[key]);
+          }
+        // const updatedriver = {
+        //     drivername: selectedCustomerData.drivername,
+        //     username: selectedCustomerData.username,
+        //     stations: selectedCustomerData.stations,
+        //     Mobileno: selectedCustomerData.Mobileno,
+        //     userpassword: selectedCustomerData.userpassword,
+        //     joiningdate: selectedCustomerData.joiningdate,
+        //     active: selectedCustomerData.active,
+        //     address1: selectedCustomerData.address1,
+        //     licenseno: selectedCustomerData.licenseno,
+        //     licenseexpdate: selectedCustomerData.licenseexpdate,
+        //     badgeno: selectedCustomerData.badgeno,
+        //     badgeexpdate: selectedCustomerData.badgeexpdate,
+        //     city: selectedCustomerData.city,
+        //     aadharno: selectedCustomerData.aadharno,
+        // }
+
+
+        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,formData);
+        // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
         setSuccess(true);
         setSuccessMessage('Successfully updated');
         handleCancel();
@@ -712,6 +911,10 @@ const useDrivercreation = () => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
+        handlePdfDownload,
+        handleExcelDownload,
+        handleFileChange
+        
         // venkat
     };
 };

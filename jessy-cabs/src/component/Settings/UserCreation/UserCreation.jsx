@@ -9,7 +9,7 @@ import AppUserList from "./AppUserList/AppUserList";
 // import DriverCreation from "./DriverCreation/DriverCreation";
 import EmployeeCreation from "./EmployeeCreation/EmployeeCreation";
 
-const UserCreation = () => {
+const UserCreation = ({ stationName }) => {
     const [value, setValue] = React.useState("Employee");
 
     const handleChange = (event, newValue) => {
@@ -27,7 +27,7 @@ const UserCreation = () => {
                                 <Tab label="App User List" value="appuserlist" />
                             </TabList>
                         </Box>
-                        <TabPanel value="Employee"><EmployeeCreation /></TabPanel>
+                        <TabPanel value="Employee"><EmployeeCreation stationName={stationName} /></TabPanel>
                         {/* <TabPanel value="Driver"><DriverCreation /></TabPanel>/ */}
                         <TabPanel value="appuserlist"> <AppUserList /></TabPanel>
                     </TabContext>

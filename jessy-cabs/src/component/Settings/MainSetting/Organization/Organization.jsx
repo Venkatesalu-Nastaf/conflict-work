@@ -58,7 +58,7 @@ const Organization = ({ logoImage }) => {
     const { permissions } = useContext(PermissionContext)
     const MainSetting_modify = permissions[15]?.modify;
 
-    console.log("logoImage123", logoImage)
+
 
     return (
         <div className="organisation-form Scroll-Style-hide">

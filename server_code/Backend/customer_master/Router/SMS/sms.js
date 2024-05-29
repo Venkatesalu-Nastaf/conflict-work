@@ -1,11 +1,39 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios'); // Import the axios library
+const db = require('../../../db');
 
 // // Send guest SMS from booking when the button is clicked
 router.post('/send-sms', async (req, res) => {
-    await sendSMS(req.body);
-    res.send('SMS sent!');
+//    const response= await sendSMS(req.body);
+   try {
+    const sendResponse = await sendSMS(req.body);
+    if (sendResponse.error) {
+        res.status(500).send(`Failed to send SMS: ${sendResponse.error.message}`);
+        return;
+    }
+
+    const messageId = sendResponse.messageId;
+    const tripid=sendResponse.tripid
+    // db.query("insert into")
+    if(messageId && tripid){
+    // console.log(messageId,tripid,"tt")
+    db.query("insert into SmsReport(tripid,SmsMessageid) values(?,?)",[tripid,messageId],(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        
+        res.send('SMS sent!');
+    })
+}
+else{
+    res.send('Messageid && tripid not found');
+}
+   
+   
+}catch(err){
+    console.log(err)
+}
 });
 
 // // Your sendSMS function
@@ -26,20 +54,62 @@ async function sendSMS(dataToSend) {
     };
 
     try {
-        await axios.post(apiUrl, params);
-    } catch {
+       const response= await axios.post(apiUrl, params);
+        const data = response.data.Data[0];
+        console.log(data)
+        const messageErrorCode = data.MessageErrorCode;
+        const messageErrorDescription = data.MessageErrorDescription;
+        const messageId = data.MessageId;
+
+        if (messageErrorCode !== 0) {
+            return { error: { message: messageErrorDescription, code: messageErrorCode } };
+        }
+
+        return { messageId,tripid};
+    } catch (error) {
+        console.error('Error sending SMS:', error);
+        return { error: { message: error.message, code: error.response?.status || 'Unknown' } };
     }
-}
+    } 
+    
+
 
 // Send guest SMS from tripsheet when the button is clicked
 router.post('/tripguest-send-sms', async (req, res) => {
-    await tripguestsendSMS(req.body);
-    res.send('SMS sent!');
+
+    try{
+
+    
+   const response= await tripguestsendSMS(req.body);
+
+    const messageId = response.messageId;
+    const tripid=response.tripid
+    // db.query("insert into")
+    if(messageId && tripid){
+    console.log(messageId,tripid,"tt")
+    db.query("insert into SmsReport(tripid,SmsMessageid) values(?,?)",[tripid,messageId],(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        
+        res.send('SMS sent!');
+    })
+}
+else{
+    res.send('Messageid && tripid not found');
+}
+    // res.send('SMS sent!');
+    }
+    catch(err){
+        console.log(err)
+    }
 });
 
 // Your sendSMS function
 async function tripguestsendSMS(dataToSend) {
-    const { guestname, guestmobileno, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno } = dataToSend;
+    const { guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno } = dataToSend;
+    console.log(guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno,"guestsms")
+
     const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const params = {
         SenderId: 'JSYCAB',
@@ -51,20 +121,57 @@ async function tripguestsendSMS(dataToSend) {
     };
 
     try {
-        await axios.post(apiUrl, params);
-    } catch (error) {
+        const response=await axios.post(apiUrl, params);
+        const data = response.data.Data[0];
+        // console.log(data)
+        const messageErrorCode = data.MessageErrorCode;
+        const messageErrorDescription = data.MessageErrorDescription;
+        const messageId = data.MessageId;
+
+        if (messageErrorCode !== 0) {
+            return { error: { message: messageErrorDescription, code: messageErrorCode } };
+        }
+
+        return { messageId,tripid};
+    }
+    catch (error) {
+        console.error('Error sending SMS:', error);
+        return { error: { message: error.message, code: error.response?.status || 'Unknown' } };
     }
 }
 
 // Send driver SMS from tripsheet when the button is clicked
 router.post('/tripdriver-send-sms', async (req, res) => {
-    await tripdriversendSMS(req.body);
-    res.send('SMS sent!');
+    try{
+  const response=  await tripdriversendSMS(req.body);
+    // res.send('SMS sent!');
+    const messageId = response.messageId;
+    const tripid=response.tripid
+    // db.query("insert into")
+    if(messageId && tripid){
+    // console.log(messageId,tripid,"tt")
+    db.query("insert into SmsReport(tripid,SmsMessageid) values(?,?)",[tripid,messageId],(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        
+        res.send('SMS sent!');
+    })
+}
+else{
+    res.send('Messageid && tripid not found');
+}
+    // res.send('SMS sent!');
+    }
+    catch(err){
+        console.log(err)
+    }
 });
 
 // Your sendSMS function
 async function tripdriversendSMS(dataSend) {
-    const { guestname, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno } = dataSend;
+    const {tripid, guestname, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno } = dataSend;
+    console.log(tripid, guestname, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno ,"driversms")
     const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const params = {
         SenderId: 'JSYCAB',
@@ -77,7 +184,21 @@ async function tripdriversendSMS(dataSend) {
 
     try {
         const response = await axios.post(apiUrl, params);
-    } catch {
+        const data = response.data.Data[0];
+        // console.log(data)
+        // const messageErrorCode = data.MessageErrorCode;
+        // const messageErrorDescription = data.MessageErrorDescription;
+        const messageId = data.MessageId;
+
+        // if (messageErrorCode !== 0) {
+        //     return { error: { message: messageErrorDescription, code: messageErrorCode } };
+        // }
+
+        return { messageId,tripid};
+    }
+    catch (error) {
+        console.error('Error sending SMS:', error);
+        return { error: { message: error.message, code: error.response?.status || 'Unknown' } };
     }
 }
 

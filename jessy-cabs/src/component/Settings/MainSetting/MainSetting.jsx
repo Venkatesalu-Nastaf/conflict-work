@@ -9,7 +9,7 @@ import TabContext from "@mui/lab/TabContext";
 import TaxSetting from "./TaxSetting/TaxSetting";
 import Organization from "./Organization/Organization";
 
-const MainSetting = () => {
+const MainSetting = ({ logoImage }) => {
   const [value, setValue] = React.useState("Organization");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -30,7 +30,7 @@ const MainSetting = () => {
               </TabList>
             </Box>
             <TabPanel value="Organization">
-              <Organization />
+              <Organization logoImage={logoImage} />
             </TabPanel>
             <TabPanel value="Tax_Setting">
               <TaxSetting />

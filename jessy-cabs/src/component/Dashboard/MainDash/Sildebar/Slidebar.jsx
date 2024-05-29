@@ -52,6 +52,7 @@ import { FaUser } from "react-icons/fa";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import update from "../../../../assets/img/update.png";
+// import { useData } from "../../MainDash/Sildebar/DataContext2";
 
 const MenuItem = ({
   label,
@@ -98,6 +99,8 @@ const MenuItem = ({
 
 const Sidebar = () => {
 
+
+
   const apiUrl = APIURL;
   const location = useLocation();
   const { user } = useUser();
@@ -128,7 +131,7 @@ const Sidebar = () => {
 
   //--------------------------to show logo-----------
 
-  const { sharedData } = useData();
+  const { sharedData, logo } = useData();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
@@ -215,18 +218,6 @@ const Sidebar = () => {
     setInfoDropdownVisible(false)
     setIsbookingdropdownclicked((prevExpanded) => !prevExpanded);
   }
-
-  // const handleRegistermenuClick = () => {
-  //   setRegistrationDropdownVisible(false);
-  // }
-
-  // const handleBillingmenuClick = () => {
-  //   setBillingDropdownVisible(false);
-  // }
-
-  // const handleBookingmenuClick = () => {
-  //   setBookingDropdownVisible(false);
-  // }
 
   const { permissions } = useContext(PermissionContext)
   const BOOKING = permissions[0]?.read;
@@ -496,6 +487,9 @@ const Sidebar = () => {
     }
   }
 
+
+  //------------------------------------------------------------------
+
   return (
     <>
       <div
@@ -507,25 +501,15 @@ const Sidebar = () => {
       <motion.div
         className="sidebar desktop-view-sidebar" >
         <div className="logo">
-          {selectedImage !== null ? (
-            <>
-              {!isImageLoaded && (
-                <div style={{ fontSize: "55px" }}>
-                  <BiBuildings />
-                </div>
-              )}
-              <img
-                src={`${apiUrl}/public/org_logo/${selectedImage}`}
-                alt=""
-                onLoad={() => setIsImageLoaded(true)}
-                style={{ display: isImageLoaded ? "block" : "none" }}
-              />
-            </>
-          ) : (
-            <div style={{ fontSize: "55px" }}>
+
+          {logo ? (
+            <img
+              src={logo}
+              alt=""
+            />) : (<div style={{ 'fontSize': "55px" }}>
               <BiBuildings />
-            </div>
-          )}
+            </div>)}
+
         </div>
         <div className="menu">
           {Dashbord_read === 1 && <MenuItem
@@ -655,7 +639,7 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.div >
       <div className="alert-popup-main">
         {info && (
           <div className="alert-popup Info">
@@ -670,407 +654,409 @@ const Sidebar = () => {
           </div>
         )}
       </div>
-      {expanded && (
-        <motion.div className="sidebar mobile-view-sidebar">
-          <div className="logo" onClick={closeMenuFunction}>
-            {selectedImage !== null ? (
-              <>
-                {!isImageLoaded && (
-                  <div style={{ fontSize: "55px" }}>
-                    <BiBuildings />
-                  </div>
-                )}
-                <img
-                  src={`${apiUrl}/public/org_logo/${selectedImage}`}
-                  alt=""
-                  onLoad={() => setIsImageLoaded(true)}
-                  style={{ display: isImageLoaded ? "block" : "none" }}
-                />
-              </>
-            ) : (
-              <div style={{ fontSize: "55px" }}>
-                <BiBuildings />
-              </div>
-            )}
-          </div>
-          <div className="menu">
-            {Dashbord_read === 1 && <MenuItem
-              label="Dashboard"
-              to="/home/dashboard"
-              value="/home/dashboard"
-              alt="/home/dashboard"
-              name="Dashboard page"
-              isActive={isActive}
-              handleMenuItemClick={handleMenuItemClick}
-              icon={BiHomeAlt}
-            />}
-            <motion.div>
-              <MenuItem
-                label={
-                  <span style={{ display: 'flex', alignItems: "center" }}>
-                    <span>
-                      Booking
-                    </span>
-                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
-                      <FaChevronDown className={isbookingdropdownclicked ? 'isbookingdropdownclicked' : ''} />
-                    </span>
-                  </span>
-                }
-                value="/home/bookings"
-                menuItemKey="/home/bookings"
-                name="Booking page"
-                isActive={isActive}
-                handleMenuItemClick={handleBookingClick}
-                icon={HiOutlineUsers}
-              />
-            </motion.div>
-            {bookingDropdownVisible && (
-              <div className="settings-dropdown">
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/booking')}>
-                    <span>
-                      <FaBookmark />
-                    </span>
-                    <span className="menu-items-registration">
-                      Booking
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripstatus')}>
-                    <span>
-                      <MdOutlineMoving />
-                    </span>
-                    <span className="menu-items-registration">
-                      Trip status
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripsheet')}>
-                    <span>
-                      <BiSpreadsheet />
-                    </span>
-                    <span className="menu-items-registration">
-                      Trip sheet
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <motion.div>
-              <MenuItem
-                label={
-                  <span style={{ display: 'flex', alignItems: "center" }}>
-                    <span>
-                      Billing
-                    </span>
-                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
-                      <FaChevronDown className={isbillingdropdownclicked ? 'isbillingdropdownclicked' : ''} />
-                    </span>
-                  </span>
-                }
-                value="/home/billing"
-                menuItemKey="/home/billing"
-                name="Billing page"
-                isActive={isActive}
-                handleMenuItemClick={handleBillingClick}
-                icon={BiBarChartSquare}
-              />
-            </motion.div>
-            {billingDropdownVisible && (
-              <div className="settings-dropdown">
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/billing')}>
-                    <span>
-                      <FaMoneyBillTransfer />
-                    </span>
-                    <span className="menu-items-registration">
-                      Billing
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/transfer')}>
-                    <span>
-                      <BiTransfer />
-                    </span>
-                    <span className="menu-items-registration">
-                      Transfer
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/coveringbill')}>
-                    <span>
-                      <FaMoneyBillWheat />
-                    </span>
-                    <span className="menu-items-registration">
-                      Covering Bill
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <motion.div>
-              <MenuItem
-                label={
-                  <span style={{ display: 'flex', alignItems: "center" }}>
-                    <span>
-                      Register
-                    </span>
-                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
-                      <FaChevronDown className={isRegisterdropdownclicked ? 'isRegisterdropdownclicked' : ''} />
-                    </span>
-                  </span>
-                }
-                value="/home/registration"
-                menuItemKey="/home/registration"
-                name="Registration page"
-                isActive={isActive}
-                handleMenuItemClick={handleRegisterClick}
-                icon={BiNotepad}
-              />
-            </motion.div>
-            {registrationDropdownVisible && (
-              <div className="settings-dropdown">
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
-                    <span>
-                      <MdGroup />
-                    </span>
-                    <span className="menu-items-registration">
-                      Customer
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/supplier')}>
-                    <span>
-                      <MdGroupRemove />
-                    </span>
-                    <span className="menu-items-registration">
-                      Supplier
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/employes')}>
-                    <span>
-                      <HiOutlineUserGroup />
-                    </span>
-                    <span className="menu-items-registration">
-                      Employees
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <motion.div >
-              <MenuItem
-                label={
-                  <span style={{ display: 'flex', alignItems: "center" }}>
-                    <span>
-                      Settings
-                    </span>
-                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
-                      <FaChevronDown className={issettingdropdownclicked ? 'issettingdropdownclicked' : ''} />
-                    </span>
-                  </span>
-                }
-                value="/home/settings"
-                menuItemKey="/home/settings"
-                name="Settings page"
-                isActive={isActive}
-                handleMenuItemClick={handleSettingsClick}
-                icon={AiOutlineSetting}
-                dropdownItems={[
-                ]}
-              />
-            </motion.div>
-            {settingsDropdownVisible && (
-              <div className="settings-dropdown">
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => settingSubMenu('settings/usercreation')}>
-                    <span>
-                      <GrUserSettings />
-                    </span>
-
-                    <span>
-                      user Creation
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => settingSubMenu('settings/stationcreation')}>
-                    <span>
-                      <FaCodeBranch />
-                    </span>
-                    <span>
-                      Station Creation
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
-                    <span>
-                      <GrSettingsOption />
-                    </span>
-                    <span>
-                      Main setting
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <motion.div >
-              <MenuItem
-                label={
-                  <span style={{ display: 'flex', alignItems: "center" }}>
-                    <span>
-                      info
-                    </span>
-                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
-                      <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
-                    </span>
-                  </span>
-                }
-                value="/home/info"
-                menuItemKey="/home/info"
-                name="info page"
-                isActive={isActive}
-                handleMenuItemClick={handleinfoClick}
-                icon={AiOutlineInfoCircle}
-                dropdownItems={[
-                ]}
-              />
-            </motion.div>
-            {infoDropdownVisible && (
-              <div className="settings-dropdown">
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
-                    <span>
-                      <GiDuration />
-                    </span>
-                    <span>
-                      Rate Type
-                    </span>
-                  </p>
-                </div>
-
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
-                    <span>
-                      <GiReceiveMoney />
-                    </span>
-                    <span>
-                      Rate Management
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
-                    <span>
-                      <SiMinutemailer />
-                    </span>
-                    <span>
-                      Mailer
-                    </span>
-                  </p>
-                </div>
-                <div className="settings-dropdown-links">
-                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
-                    <span>
-                      <BsFillFuelPumpFill />
-                    </span>
-                    <span>
-                      Fuel Info
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <MenuItem
-              label="User"
-              to="/home/usersettings/usersetting"
-              alt="/home/usersettings/usersetting"
-              value="/home/usersettings"
-              menuItemKey="/home/usersettings"
-              name="User page"
-              isActive={isActive}
-              handleMenuItemClick={handleMenuItemClick}
-              icon={FaUserAstronaut}
-            />
-            <div className="header-user-mobile" onClick={closeMenuFunction}>
-              <div className="logout-item">
-                <FiLogOut className="logout-icon" onClick={handleLogout} />
-              </div>
-              <div className="user-name-item">
-                <div>
-                  {storedUsername ? (
-                    <div>
-                      <p onClick={navigateToUserSettings}>{storedUsername}</p>
-                      <div className="alert-popup-main">
-                        {success && (
-                          <div className="alert-popup Success">
-                            <div className="popup-icon">
-                              {" "}
-                              <FileDownloadDoneIcon
-                                style={{ color: "#fff" }}
-                              />{" "}
-                            </div>
-                            <span className="cancel-btn" onClick={hidePopup}>
-                              <ClearIcon
-                                color="action"
-                                style={{ fontSize: "14px" }}
-                              />{" "}
-                            </span>
-                            <p>{success}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <p>User not logged in</p>
+      {
+        expanded && (
+          <motion.div className="sidebar mobile-view-sidebar">
+            <div className="logo" onClick={closeMenuFunction}>
+              {selectedImage !== null ? (
+                <>
+                  {!isImageLoaded && (
+                    <div style={{ fontSize: "55px" }}>
+                      <BiBuildings />
                     </div>
                   )}
-                </div>
-              </div>
-              <div className="avatar-item" style={{ display: 'flex', alignItems: 'center' }}>
-                <StyledBadge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  variant="dot"
-                >
-                  <Avatar
-                    alt="userimage"
-                    src={`${apiUrl}/images/${selectedprofileImage}`}
+                  <img
+                    src={`${apiUrl}/public/org_logo/${selectedImage}`}
+                    alt=""
+                    onLoad={() => setIsImageLoaded(true)}
+                    style={{ display: isImageLoaded ? "block" : "none" }}
                   />
-                </StyledBadge>
-                <div className="user-icon-update" onClick={handleClickOpenmodal}>
-                  <FaUser />
-                  <div className="user-icon-update-dot"></div>
+                </>
+              ) : (
+                <div style={{ fontSize: "55px" }}>
+                  <BiBuildings />
+                </div>
+              )}
+            </div>
+            <div className="menu">
+              {Dashbord_read === 1 && <MenuItem
+                label="Dashboard"
+                to="/home/dashboard"
+                value="/home/dashboard"
+                alt="/home/dashboard"
+                name="Dashboard page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={BiHomeAlt}
+              />}
+              <motion.div>
+                <MenuItem
+                  label={
+                    <span style={{ display: 'flex', alignItems: "center" }}>
+                      <span>
+                        Booking
+                      </span>
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={isbookingdropdownclicked ? 'isbookingdropdownclicked' : ''} />
+                      </span>
+                    </span>
+                  }
+                  value="/home/bookings"
+                  menuItemKey="/home/bookings"
+                  name="Booking page"
+                  isActive={isActive}
+                  handleMenuItemClick={handleBookingClick}
+                  icon={HiOutlineUsers}
+                />
+              </motion.div>
+              {bookingDropdownVisible && (
+                <div className="settings-dropdown">
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/booking')}>
+                      <span>
+                        <FaBookmark />
+                      </span>
+                      <span className="menu-items-registration">
+                        Booking
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripstatus')}>
+                      <span>
+                        <MdOutlineMoving />
+                      </span>
+                      <span className="menu-items-registration">
+                        Trip status
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripsheet')}>
+                      <span>
+                        <BiSpreadsheet />
+                      </span>
+                      <span className="menu-items-registration">
+                        Trip sheet
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              <motion.div>
+                <MenuItem
+                  label={
+                    <span style={{ display: 'flex', alignItems: "center" }}>
+                      <span>
+                        Billing
+                      </span>
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={isbillingdropdownclicked ? 'isbillingdropdownclicked' : ''} />
+                      </span>
+                    </span>
+                  }
+                  value="/home/billing"
+                  menuItemKey="/home/billing"
+                  name="Billing page"
+                  isActive={isActive}
+                  handleMenuItemClick={handleBillingClick}
+                  icon={BiBarChartSquare}
+                />
+              </motion.div>
+              {billingDropdownVisible && (
+                <div className="settings-dropdown">
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/billing')}>
+                      <span>
+                        <FaMoneyBillTransfer />
+                      </span>
+                      <span className="menu-items-registration">
+                        Billing
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/transfer')}>
+                      <span>
+                        <BiTransfer />
+                      </span>
+                      <span className="menu-items-registration">
+                        Transfer
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/coveringbill')}>
+                      <span>
+                        <FaMoneyBillWheat />
+                      </span>
+                      <span className="menu-items-registration">
+                        Covering Bill
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              <motion.div>
+                <MenuItem
+                  label={
+                    <span style={{ display: 'flex', alignItems: "center" }}>
+                      <span>
+                        Register
+                      </span>
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={isRegisterdropdownclicked ? 'isRegisterdropdownclicked' : ''} />
+                      </span>
+                    </span>
+                  }
+                  value="/home/registration"
+                  menuItemKey="/home/registration"
+                  name="Registration page"
+                  isActive={isActive}
+                  handleMenuItemClick={handleRegisterClick}
+                  icon={BiNotepad}
+                />
+              </motion.div>
+              {registrationDropdownVisible && (
+                <div className="settings-dropdown">
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
+                      <span>
+                        <MdGroup />
+                      </span>
+                      <span className="menu-items-registration">
+                        Customer
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/supplier')}>
+                      <span>
+                        <MdGroupRemove />
+                      </span>
+                      <span className="menu-items-registration">
+                        Supplier
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/employes')}>
+                      <span>
+                        <HiOutlineUserGroup />
+                      </span>
+                      <span className="menu-items-registration">
+                        Employees
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              <motion.div >
+                <MenuItem
+                  label={
+                    <span style={{ display: 'flex', alignItems: "center" }}>
+                      <span>
+                        Settings
+                      </span>
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={issettingdropdownclicked ? 'issettingdropdownclicked' : ''} />
+                      </span>
+                    </span>
+                  }
+                  value="/home/settings"
+                  menuItemKey="/home/settings"
+                  name="Settings page"
+                  isActive={isActive}
+                  handleMenuItemClick={handleSettingsClick}
+                  icon={AiOutlineSetting}
+                  dropdownItems={[
+                  ]}
+                />
+              </motion.div>
+              {settingsDropdownVisible && (
+                <div className="settings-dropdown">
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/usercreation')}>
+                      <span>
+                        <GrUserSettings />
+                      </span>
+
+                      <span>
+                        user Creation
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/stationcreation')}>
+                      <span>
+                        <FaCodeBranch />
+                      </span>
+                      <span>
+                        Station Creation
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
+                      <span>
+                        <GrSettingsOption />
+                      </span>
+                      <span>
+                        Main setting
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              <motion.div >
+                <MenuItem
+                  label={
+                    <span style={{ display: 'flex', alignItems: "center" }}>
+                      <span>
+                        info
+                      </span>
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
+                      </span>
+                    </span>
+                  }
+                  value="/home/info"
+                  menuItemKey="/home/info"
+                  name="info page"
+                  isActive={isActive}
+                  handleMenuItemClick={handleinfoClick}
+                  icon={AiOutlineInfoCircle}
+                  dropdownItems={[
+                  ]}
+                />
+              </motion.div>
+              {infoDropdownVisible && (
+                <div className="settings-dropdown">
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
+                      <span>
+                        <GiDuration />
+                      </span>
+                      <span>
+                        Rate Type
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
+                      <span>
+                        <GiReceiveMoney />
+                      </span>
+                      <span>
+                        Rate Management
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
+                      <span>
+                        <SiMinutemailer />
+                      </span>
+                      <span>
+                        Mailer
+                      </span>
+                    </p>
+                  </div>
+                  <div className="settings-dropdown-links">
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
+                      <span>
+                        <BsFillFuelPumpFill />
+                      </span>
+                      <span>
+                        Fuel Info
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              <MenuItem
+                label="User"
+                to="/home/usersettings/usersetting"
+                alt="/home/usersettings/usersetting"
+                value="/home/usersettings"
+                menuItemKey="/home/usersettings"
+                name="User page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={FaUserAstronaut}
+              />
+              <div className="header-user-mobile" onClick={closeMenuFunction}>
+                <div className="logout-item">
+                  <FiLogOut className="logout-icon" onClick={handleLogout} />
+                </div>
+                <div className="user-name-item">
+                  <div>
+                    {storedUsername ? (
+                      <div>
+                        <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                        <div className="alert-popup-main">
+                          {success && (
+                            <div className="alert-popup Success">
+                              <div className="popup-icon">
+                                {" "}
+                                <FileDownloadDoneIcon
+                                  style={{ color: "#fff" }}
+                                />{" "}
+                              </div>
+                              <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon
+                                  color="action"
+                                  style={{ fontSize: "14px" }}
+                                />{" "}
+                              </span>
+                              <p>{success}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <p>User not logged in</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="avatar-item" style={{ display: 'flex', alignItems: 'center' }}>
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    variant="dot"
+                  >
+                    <Avatar
+                      alt="userimage"
+                      src={`${apiUrl}/images/${selectedprofileImage}`}
+                    />
+                  </StyledBadge>
+                  <div className="user-icon-update" onClick={handleClickOpenmodal}>
+                    <FaUser />
+                    <div className="user-icon-update-dot"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="alert-popup-main">
-            {info && (
-              <div className="alert-popup Info">
-                <div className="popup-icon">
-                  {" "}
-                  <BsInfo style={{ color: "#fff" }} />{" "}
+            <div className="alert-popup-main">
+              {info && (
+                <div className="alert-popup Info">
+                  <div className="popup-icon">
+                    {" "}
+                    <BsInfo style={{ color: "#fff" }} />{" "}
+                  </div>
+                  <span className="cancel-btn" onClick={hidePopup}>
+                    <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                  </span>
+                  <p>{infoMessage}</p>
                 </div>
-                <span className="cancel-btn" onClick={hidePopup}>
-                  <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                </span>
-                <p>{infoMessage}</p>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
+              )}
+            </div>
+          </motion.div>
+        )
+      }
       <Modal open={openmodal} onClose={handleClosemodal}>
         <Box sx={{
           position: 'absolute',

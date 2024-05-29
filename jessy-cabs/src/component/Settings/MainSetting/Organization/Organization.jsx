@@ -19,10 +19,10 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { PermissionContext } from '../../../context/permissionContext';
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
-import { APIURL } from "../../../url";
 
-const Organization = () => {
-    const apiUrl = APIURL;
+const Organization = ({ logoImage }) => {
+
+
     const {
         selectedCustomerData,
         actionName,
@@ -39,7 +39,7 @@ const Organization = () => {
         handleChange,
         handleAdd,
         hidePopup,
-        selectedImage,
+
         editMode,
         handleUpload,
         toggleEditMode,
@@ -58,6 +58,8 @@ const Organization = () => {
     const { permissions } = useContext(PermissionContext)
     const MainSetting_modify = permissions[15]?.modify;
 
+    console.log("logoImage123", logoImage)
+
     return (
         <div className="organisation-form Scroll-Style-hide">
             <form>
@@ -70,9 +72,9 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={`${apiUrl}/public/org_logo/${selectedImage}`}
+                                            src={logoImage}
                                         >
-                                            {selectedImage ? null : (
+                                            {logoImage ? null : (
                                                 <div style={{ 'fontSize': "55px" }}>
                                                     <BiBuildings />
                                                 </div>
@@ -209,8 +211,8 @@ const Organization = () => {
                     </div>
                 </div>
                 <div className="organisation-details ">
-                    <div className="input-field organisation-details-input" style={{padding:'20px'}}>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent:'space-between', width: '68vw', gap: '10px' }}>
+                    <div className="input-field organisation-details-input" style={{ padding: '20px' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent: 'space-between', width: '68vw', gap: '10px' }}>
                             <div className="input organization-input">
                                 <label htmlFor="">Type of Organization:</label>
                                 <TextField

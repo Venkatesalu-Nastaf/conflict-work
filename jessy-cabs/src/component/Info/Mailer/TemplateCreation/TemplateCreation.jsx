@@ -278,7 +278,7 @@ const TemplateCreation = () => {
   return (
     <>
       <div className='Scroll-Style-hide' style={{ width: '100%', height: '71vh', overflow: 'auto'}}>
-        <div style={{ backgroundColor: '#fff' }}>
+        <div className='mail-template-division' style={{ backgroundColor: '#fff' }}>
           <div className='word-head'>
             <div className='back-input'>
               <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>

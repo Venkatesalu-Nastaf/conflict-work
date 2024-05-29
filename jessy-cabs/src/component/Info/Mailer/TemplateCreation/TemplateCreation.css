@@ -10,7 +10,7 @@
     gap: 20px !important;
     justify-content: space-between !important;
     align-items: center !important;
-    width: 98%;
+    /* width: 98%; */
 }
 
 .back-section {
@@ -44,6 +44,7 @@
     display: flex !important;
     align-items: center;
     gap: 20px !important;
+    flex-wrap: wrap;
 }
 
 .cancel-button-template {
@@ -178,4 +179,14 @@
 
 .ql-container.ql-snow {
     border: none !important;
+}
+
+.mail-template-division{
+    background-color: #fff;
+}
+
+@media screen and (min-width: 769px) {
+    .mail-template-division{
+        width: 98%;
+    }
 }

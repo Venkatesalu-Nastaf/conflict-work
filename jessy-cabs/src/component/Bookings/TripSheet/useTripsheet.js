@@ -49,6 +49,9 @@ const useTripsheet = () => {
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [sign, setSign] = useState(false)
+    const [smsguest, setSmsGuest] = useState(true);
+    const [DriverSMS, setDriverSMS] = useState(true);
+    const [sendEmail, setSendEmail] = useState(true);
 
     //-------------------------calc-------------------
 
@@ -232,26 +235,28 @@ const useTripsheet = () => {
         reporttime: '',
         startdate: '',
     });
-    const [sendEmail, setSendEmail] = useState(false);
+    // const [sendEmail, setSendEmail] = useState(false);
 
     const handlecheck = async () => {
         if (sendEmail) {
             try {
+                const user=localStorage.getItem("username")
                 const dataToSend = {
+                    bookingno:formData.tripid || selectedCustomerData.tripid || book.tripid,
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
                     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
-                    pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
-                    useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,
-                    hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || formData.hireTypes,
-                    department: formValues.department || selectedCustomerData.department || book.department || formData.department,
-                    vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+                    useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,                    
                     vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
-                    driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
-                    mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo
+                    starttime:formData.reporttime || formData.reporttime|| selectedCustomerData.reporttime || book.reporttime,
+                    startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+                    Address:formData.address1 || formData.address1 || selectedCustomerData.address1  || book.address1,
+                    duty:formData.duty || selectedCustomerData.duty || book.duty,
+                    username:user
                 };
                 await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
+                setSendEmail(false)
             } catch {
                 alert('An error occurred while sending the email');
             }
@@ -727,9 +732,12 @@ const useTripsheet = () => {
 
                 setRow([]);
                 setRows([]);
-                handleDriverSendSMS();
-                handleSendSMS();
-                handlecheck();
+                // handleDriverSendSMS();
+                // handleSendSMS();
+                // handlecheck();
+                setSendEmail(true)
+                setDriverSMS(true)
+                setSmsGuest(true)
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
             } catch {
@@ -803,9 +811,9 @@ const useTripsheet = () => {
 
                 setRow([]);
                 setRows([]);
-                handleDriverSendSMS();
-                handleSendSMS();
-                handlecheck();
+                // handleDriverSendSMS();
+                // handleSendSMS();
+                // handlecheck();
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
             } catch {
@@ -1361,6 +1369,9 @@ const useTripsheet = () => {
                             setEscort(bookingDetails.escort)
                             setTransferreport(bookingDetails.transferreport)
                             //----------
+                            setSmsGuest(false)
+                            setSendEmail(false)
+                            setDriverSMS(false)
                             setSuccess(true);
                             setSuccessMessage("Successfully listed");
                             setIsEditMode(true);
@@ -1402,18 +1413,19 @@ const useTripsheet = () => {
     };
 
 
-    const [smsguest, setSmsGuest] = useState(false);
+    // const [smsguest, setSmsGuest] = useState(false);
 
     const handleSendSMS = async () => {
         if (smsguest || formData.smsguest || book.smsguest) {
             try {
                 const dataToSend = {
+                    tripid:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                    driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                    mobileNo:  formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
-                    driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
-                    mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
                     reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',
@@ -1440,18 +1452,19 @@ const useTripsheet = () => {
         }
     };
     //send sms from tripsheet to driver
-    const [DriverSMS, setDriverSMS] = useState(false);
+    // const [DriverSMS, setDriverSMS] = useState(false);
 
     const handleDriverSendSMS = async () => {
         if (DriverSMS || formData.DriverSMS || book.DriverSMS) {
             try {
                 const dataSend = {
+                    tripid:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                    driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                    mobileNo:  formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
-                    driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
-                    mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
                     reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',

@@ -12,8 +12,8 @@ export const useData = () => {
 };
 
 export const DataProvider = ({ children }) => {
+
     const [sharedData, setSharedData] = useState('');
-    // const [organizationName, setOrganizationName] = useState([])
     const [filteredData, setFilteredData] = useState([])
 
 

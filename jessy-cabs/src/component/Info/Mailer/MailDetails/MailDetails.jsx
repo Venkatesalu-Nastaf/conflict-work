@@ -76,6 +76,7 @@ const MailDetails = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
+  const [searchname,setSearchname]=useState('')
   const navigate = useNavigate();
 
   const columns = [
@@ -335,6 +336,40 @@ const MailDetails = () => {
       console.log(err)
     }
   }
+  
+  const  handleCleardata=()=>{
+    setData({})
+    setFile(null)
+    setSelectedData([])
+
+  }
+  const handleShowdata = async () => {
+
+    try {
+      const response = await fetch(
+        `${apiurl}/tabletemplateseatch?searchText=${searchname}`
+      );
+      const data = await response.json();
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+
+        setTemplateData(rowsWithUniqueId)
+        setSuccess(true);
+        setSuccessMessage("successfully listed");
+      } else {
+        setTemplateData([]);
+        setError(true);
+        setErrorMessage("no data found");
+      }
+    } catch {
+      setError(true);
+      setErrorMessage("sorry");
+    }
+
+  };
 
   return (
     <div className="mailDetails-form-container">
@@ -383,7 +418,7 @@ const MailDetails = () => {
                     </Button>
                   </div>
                   <div className="input" style={{ width: "20px" }}>
-                    <Button variant="outlined">Clear</Button>
+                  <Button variant="outlined" onClick={handleCleardata}>Clear</Button>
                   </div>
                 </div>
                 <div className='alert-popup-main'>
@@ -417,16 +452,18 @@ const MailDetails = () => {
                           </div>
                           <TextField
                             size="small"
-                            id="templatename"
-                            label="Template Name"
-                            name="templatename"
+                            id="searchname"
+                            label="Searchname"
+                            name="Searchname"
+                            value={searchname||""}
                             sx={{ m: 1, width: "200ch" }}
+                            onChange={(e) => setSearchname(e.target.value)}
                           />
                         </div>
                       </div>
                       <div className="template-search-btn" style={{ display: 'flex' }}>
                         <div className="input" style={{ width: "100px" }}>
-                          <Button variant="contained">Search</Button>
+                        <Button variant="contained" onClick={()=>handleShowdata()}>Search</Button>
                         </div>
                         <div className="input" onClick={handleTemplateCreation}>
                           <Button variant="contained">Create Template</Button>

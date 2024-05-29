@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { APIURL } from "../../../url";
 import axios from 'axios';
+import { APIURL } from '../../../url';
 
-const url = APIURL;
-
+const apiUrl = APIURL
 const DataContext = createContext();
 
 export const useData = () => {
@@ -11,47 +10,37 @@ export const useData = () => {
 };
 
 export const DataProvider2 = ({ children }) => {
-    const [sharedData, setSharedData] = useState('');
+
+    // its for organisation logo
+    const [logotrigger, setLogoTrigger] = useState(false) //for logo trigger 
+    const [logo, setLogo] = useState("")
 
 
-    //------------------
+    const fetchOrgLogo = async () => {
+        try {
+            const organizationname = localStorage.getItem('usercompany');
+            if (!organizationname || organizationname === undefined) return
+            const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
+            if (response?.status === 200) {
+                const logoImage = response?.data[0]?.fileName;
+                // setLogoImage(logoImage)
+                setLogo(logoImage)
+                setLogoTrigger(false)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     useEffect(() => {
-
-        const handleImageView = async () => {
-
-            try {
-                const organizationname = localStorage.getItem('usercompany');
-                if (organizationname) {
-                    await axios.get(`${url}/logo-view/${organizationname}`)
-                        .then(res => {
-                            if (res.status === 200) {
-                                setSharedData(res.data[0]?.fileName)
-                                // localStorage.setItem("usr_ProfileImage", res.data[0]?.fileName)
-                                const data = res.data[0]?.fileName
-                                localStorage.setItem("organizationimages", data)
-                                // console.log("datacontaxt logo ", res.data[0]?.fileName)
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error fetching image data:", error);
-                        });
-                } else {
-                    console.log("org name undefind 222")
-                }
-            }
-            catch (err) { }
-        };
-        handleImageView();
-
-    }, [sharedData, setSharedData]);
-
+        fetchOrgLogo()
+    }, [logotrigger])
 
     //-------------------
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData }}>
+        <DataContext.Provider value={{ logotrigger, setLogoTrigger, logo, setLogo }}>
             {children}
         </DataContext.Provider>
     );

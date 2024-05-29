@@ -102,9 +102,9 @@ const MailDetails = () => {
           onClick={() => handleButtonEditClick(params)}
           aria-label="edit"
           variant="contained"
-          color="primary"
+          sx={{ backgroundColor: '#1976d2', color: 'white', '&:hover': { backgroundColor: 'dark#1976d2' } }}
         >
-          Edit
+          <ModeEditIcon />
         </Button>
       ),
     },
@@ -117,9 +117,9 @@ const MailDetails = () => {
           onClick={() => handleButtondeleteClick(params)}
           aria-label="delete"
           variant="contained"
-          color="primary"
+          sx={{ backgroundColor: 'red', color: 'white', '&:hover': { backgroundColor: 'darkred' } }}
         >
-          Delete
+          <DeleteIcon />
         </Button>
       ),
     },
@@ -360,7 +360,7 @@ const MailDetails = () => {
                 </div>
                 <div style={{ textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600' }}>{file}</div>
                 <div className="input-field ">
-                  <div className=" input-mailer"  style={{ width: "400px" }}>
+                  <div className=" input-mailer" style={{ width: "400px" }}>
                     <div className="icone">
                       <SmsIcon color="action" />
                     </div>

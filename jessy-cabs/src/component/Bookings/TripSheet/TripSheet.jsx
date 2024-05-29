@@ -697,7 +697,7 @@ const TripSheet = ({ stationName }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                        value={(selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
+                        value={selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType || ''}
                         options={vehileName?.map((option) => ({
                           label: option,
                         }))}

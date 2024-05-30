@@ -280,7 +280,7 @@ const TripSheet = ({ stationName }) => {
 
             <div>
               <div className='tripsheet-division1'>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
@@ -298,7 +298,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -314,7 +314,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -333,7 +333,7 @@ const TripSheet = ({ stationName }) => {
                   </LocalizationProvider>
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <QuizOutlinedIcon color="action" />
                   </div>
@@ -358,7 +358,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
                   </div>
@@ -375,7 +375,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <AppsOutageOutlinedIcon color="action" />
                   </div>
@@ -399,7 +399,7 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
@@ -414,7 +414,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -456,7 +456,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
                   </div>
@@ -472,7 +472,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <AssignmentIndIcon color="action" />
                   </div>
@@ -488,7 +488,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <CallIcon color="action" />
                   </div>
@@ -503,7 +503,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex' }}>
+                <div className="input">
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
@@ -525,7 +525,7 @@ const TripSheet = ({ stationName }) => {
                 <div>
 
 
-                  <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                  <div className="input">
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
@@ -538,7 +538,6 @@ const TripSheet = ({ stationName }) => {
                       rows={2}
                       sx={{ width: "100%" }}
                       autoComplete="new-password"
-                      style={{ width: '100%' }}
                       value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
                       onChange={handleChange}
                     />
@@ -546,11 +545,11 @@ const TripSheet = ({ stationName }) => {
                 </div>
 
                 <div>
-                  <div style={{ margin: '0px 10px', }}>
-                    <div className="Scroll-Style tripsheet-table1 ">
+                  <div>
+                    <div className="Scroll-Style tripsheet-table1">
                       <thead>
                         <tr>
-                          <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}> Driver name</th>
+                          <th className="table-head-booking table-heading-1"> Driver name</th>
                           <th className="table-head-booking">Driver phone</th>
                           <th className="table-head-booking">Vehicle Name</th>
                           <th className="table-head-booking">Vehicle Type</th>
@@ -575,7 +574,6 @@ const TripSheet = ({ stationName }) => {
                               <td>{row.vehRegNo}</td>
                               <td>{row.hiretypes}</td>
                               <td>{row.Groups}</td>
-
                               <td>{row.active}</td>
                             </tr>
                           ))
@@ -584,17 +582,12 @@ const TripSheet = ({ stationName }) => {
                     </div>
                   </div>
                 </div>
-
               </div>
 
               <div className='tripsheet-division3'>
-
-
-                <div className="vehicle-confirm" style={{ marginBottom: '15px' }}>
-                  <div className="input-field input-feild-vehicle-confirm" style={{ flexWrap: 'wrap' }}>
-
-
-                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="vehicle-confirm">
+                  <div className="input-field input-feild-vehicle-confirm">
+                    <div className="input">
                       <div className="icone">
                         <HowToRegIcon color="action" />
                       </div>
@@ -605,7 +598,6 @@ const TripSheet = ({ stationName }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-
                         value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                         options={HireTypes.map((option) => ({
                           label: option.option,
@@ -620,7 +612,7 @@ const TripSheet = ({ stationName }) => {
                       />
                     </div>
 
-                    <div className="input" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <div className="input">
                       <div className="icone">
                         <AltRouteIcon color="action" />
                       </div>
@@ -641,8 +633,7 @@ const TripSheet = ({ stationName }) => {
                       />
                     </div>
 
-
-                    <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
+                    <div className="input">
                       <div className="icone">
                         <CarCrashIcon color="action" />
                       </div>
@@ -658,7 +649,7 @@ const TripSheet = ({ stationName }) => {
                       />
                     </div>
 
-                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="input">
                       <div className="icone">
                         <PiCarSimpleFill color="action" />
                       </div>
@@ -686,7 +677,7 @@ const TripSheet = ({ stationName }) => {
                       />
                     </div>
 
-                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="input">
                       <div className="icone">
                         <NoCrashIcon color="action" />
                       </div>
@@ -710,7 +701,7 @@ const TripSheet = ({ stationName }) => {
 
                     </div>
 
-                    <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
+                    <div className="input">
                       <div className="icone">
                         <EmailIcon color="action" />
                       </div>
@@ -732,12 +723,13 @@ const TripSheet = ({ stationName }) => {
                       />
                     </div>
 
-                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="input">
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
                       <TextField
                         name="driverName"
+                        className='full-width'
                         value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
                         onChange={handleChange}
                         label="Driver Name"
@@ -745,29 +737,28 @@ const TripSheet = ({ stationName }) => {
                         variant="standard"
                         autoComplete="password"
                         onKeyDown={handleKeyEnterDriverDetails}
-                        style={{ width: '100%' }}
                       />
                     </div>
 
-                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="input">
                       <div className="icone">
                         <PhoneIphoneIcon color="action" />
                       </div>
                       <TextField
                         name="mobileNo"
+                        className='full-width'
                         value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
                         onChange={handleChange}
                         label="Cell"
                         id="cell"
                         variant="standard"
                         autoComplete="password"
-                        style={{ width: '100%' }}
                       />
                     </div>
 
 
 
-                    <div className="input" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <div className="input">
                       <div className="icone">
                         <AttachEmailIcon color="action" />
                       </div>
@@ -786,11 +777,9 @@ const TripSheet = ({ stationName }) => {
                         variant="standard"
                       />
                     </div>
-
                   </div>
                 </div>
-
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <StoreIcon color="action" />
                   </div>
@@ -814,10 +803,7 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-
-
-
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
+                <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
@@ -850,11 +836,10 @@ const TripSheet = ({ stationName }) => {
                       />
                     }
                     label="Driver SMS"
-
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
@@ -880,7 +865,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
@@ -904,7 +889,7 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
@@ -928,7 +913,7 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <DataUsageIcon color="action" />
                   </div>
@@ -943,7 +928,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <StreamIcon color="action" />
                   </div>
@@ -959,7 +944,7 @@ const TripSheet = ({ stationName }) => {
                   />
 
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -974,7 +959,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -991,7 +976,7 @@ const TripSheet = ({ stationName }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1008,7 +993,7 @@ const TripSheet = ({ stationName }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1025,7 +1010,7 @@ const TripSheet = ({ stationName }) => {
                     />
                   </DemoItem>
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <RecentActorsIcon color="action" />
                   </div>
@@ -1039,7 +1024,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "300px" }}>
+                <div className="input">
                   <div className="icone">
                     <CurrencyRupeeTwoToneIcon color="action" />
                   </div>
@@ -1054,11 +1039,11 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div style={{ width: '100%', display: 'grid' }}>
+                  <div className='input-type-grid'>
                     <label>shed out Time</label>
                     <input
                       type="time"
@@ -1073,11 +1058,11 @@ const TripSheet = ({ stationName }) => {
                     />
                   </div>
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div style={{ width: '100%', display: 'grid' }}>
+                  <div className='input-type-grid'>
                     <label>Report Time</label>
                     <input
                       type="time"
@@ -1092,11 +1077,11 @@ const TripSheet = ({ stationName }) => {
                     />
                   </div>
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div style={{ width: '100%', display: 'grid' }}>
+                  <div className='input-type-grid'>
                     <label>Close Time</label>
                     <input
                       type="time"
@@ -1111,11 +1096,11 @@ const TripSheet = ({ stationName }) => {
                     />
                   </div>
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div style={{ width: '100%', display: 'grid' }}>
+                  <div className='input-type-grid'>
                     <label>Shed-In Time</label>
                     <input
                       type="time"
@@ -1131,7 +1116,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1146,7 +1131,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1161,7 +1146,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1176,7 +1161,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1191,7 +1176,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1206,7 +1191,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1224,7 +1209,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
@@ -1238,7 +1223,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
@@ -1253,7 +1238,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStamp} />
                   </div>
@@ -1267,7 +1252,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
                   </div>
@@ -1281,7 +1266,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
                   </div>
@@ -1301,7 +1286,7 @@ const TripSheet = ({ stationName }) => {
                   {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
                     calculate
                   </Button> */}
-                  <Button style={{ marginLeft: "10px" }} variant="contained"
+                  <Button variant="contained"
                     onClick={() => {
                       handleCalc();
                       handleClickOpen();
@@ -1320,14 +1305,14 @@ const TripSheet = ({ stationName }) => {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                   >
-                    <DialogTitle id="alert-dialog-title" style={{ paddingBottom: 0 }}>
+                    <DialogTitle id="alert-dialog-title">
                       {"Customer Bill"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
                         <div className="Customer-Customer-Bill-Slider">
                           <div className="input-field">
-                            <div className="input" style={{ width: "390px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <Inventory2Icon color="action" />
                               </div>
@@ -1368,7 +1353,7 @@ const TripSheet = ({ stationName }) => {
                             </div>
                           </div>
                           <div className="input-field">
-                            <div className="input" style={{ width: "186px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <FontAwesomeIcon icon={faRoad} />
                               </div>
@@ -1385,7 +1370,7 @@ const TripSheet = ({ stationName }) => {
                                 variant="standard"
                               />
                             </div>
-                            <div className="input" style={{ width: "187px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <TollTwoToneIcon color="action" />
                               </div>
@@ -1419,7 +1404,7 @@ const TripSheet = ({ stationName }) => {
                           </div>
 
                           <div className="input-field">
-                            <div className="input" style={{ width: "186px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <FontAwesomeIcon icon={faStopwatch} />
                               </div>
@@ -1436,7 +1421,7 @@ const TripSheet = ({ stationName }) => {
                                 variant="standard"
                               />
                             </div>
-                            <div className="input" style={{ width: "187px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <TollTwoToneIcon color="action" />
                               </div>
@@ -1472,11 +1457,10 @@ const TripSheet = ({ stationName }) => {
                             </div>
                           </div>
                           <div className="input-field">
-                            <div className="input" style={{ width: "186px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <FontAwesomeIcon icon={faCloudMoon} />
                               </div>
-
                               <TextField
                                 name="night1"
                                 className='customer-bill-input'
@@ -1489,7 +1473,7 @@ const TripSheet = ({ stationName }) => {
                                 variant="standard"
                               />
                             </div>
-                            <div className="input" style={{ width: "187px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <TollTwoToneIcon color="action" />
                               </div>
@@ -1520,7 +1504,7 @@ const TripSheet = ({ stationName }) => {
                             </div>
                           </div>
                           <div className="input-field">
-                            <div className="input" style={{ width: "186px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <FontAwesomeIcon icon={faMoneyBill1Wave} />
                               </div>
@@ -1536,7 +1520,7 @@ const TripSheet = ({ stationName }) => {
                                 variant="standard"
                               />
                             </div>
-                            <div className="input" style={{ width: "187px" }}>
+                            <div className="input">
                               <div className="icone">
                                 <TollTwoToneIcon color="action" />
                               </div>
@@ -1569,13 +1553,13 @@ const TripSheet = ({ stationName }) => {
 
                           <TextField
                             name="amount9"
+                            className='total-amount-textfield'
                             value={totalcalcAmount || 0}
                             size="small"
                             label="Total Amount"
                             id="amount"
                             autoComplete="password"
                             variant="standard"
-                            style={{ marginTop: '25px', marginLeft: '15px' }}
                           />
 
                           <div className="input-field">
@@ -1586,8 +1570,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                       </DialogContentText>
                     </DialogContent>
-                    <DialogActions style={{ padding: '20px' }}>
-                      <Button onClick={handleClose} style={{ backgroundColor: 'red', color: 'white' }}>Cancel</Button>
+                    <DialogActions className='tripsheet-cancel-save-btn'>
+                      <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
                       <Button variant="contained" onClick={handleClose} autoFocus>
                         Save
                       </Button>
@@ -1595,7 +1579,7 @@ const TripSheet = ({ stationName }) => {
                   </Dialog>
                 </React.Fragment>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input">
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
                   </div>
@@ -1610,7 +1594,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input">
                   <div className="icone">
                     <MinorCrashSharpIcon color="action" />
                   </div>
@@ -1625,7 +1609,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input">
                   <div className="icone">
                     <PaymentsIcon color="action" />
                   </div>
@@ -1645,7 +1629,7 @@ const TripSheet = ({ stationName }) => {
                   </Button>
                 </div>
 
-                <div className="input" style={{ display: 'flex', width: "400px" }}>
+                <div className="input">
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
                   </div>
@@ -1663,7 +1647,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className='input' style={{ display: 'grid' }}>
+                <div className='input d-grid'>
                   <label>Escort</label>
                   <span>
                     <label>
@@ -1687,7 +1671,7 @@ const TripSheet = ({ stationName }) => {
                   </span>
                 </div>
 
-                <div className='input' style={{ display: 'grid' }}>
+                <div className='input d-grid'>
                   <label>Airport Transfer</label>
                   <span>
                     <label>
@@ -1723,7 +1707,7 @@ const TripSheet = ({ stationName }) => {
                 </Dialog>
 
 
-                <div className="input" style={{ width: "160px" }}>
+                <div className="input">
                   {isEditMode ? (<>
                     <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
                     {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
@@ -1844,7 +1828,7 @@ const TripSheet = ({ stationName }) => {
                 <TabPanel value={0} sx={{ p: 2 }}>
                   <div className="Customer-Booking-Slider">
                     <div className="input-field table-input-field">
-                      <div className="input" style={{ width: "200px" }}>
+                      <div className="input">
                         <Button
                           variant="outlined"
                           sx={{
@@ -1861,7 +1845,7 @@ const TripSheet = ({ stationName }) => {
                           SMS Waiting
                         </Button>
                       </div>
-                      <div className="input" style={{ width: "90px" }}>
+                      <div className="input">
                         <Button
                           variant="outlined"
                           sx={{
@@ -1881,10 +1865,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
                     <div className="input-field table-input-field">
                       <div className="input">
-                        <div
-                          className="icone"
-                          style={{ padding: "0px 10px 0px 5px" }}
-                        >
+                        <div className="icone">
                           <FontAwesomeIcon icon={faFolderOpen} size="lg" />
                         </div>
                         <Autocomplete
@@ -1921,15 +1902,15 @@ const TripSheet = ({ stationName }) => {
                           autoComplete="password"
                         />
                       </div>
-                      <div className="input" style={{ width: "90px" }}>
+                      <div className="input">
                         <Button variant="outlined">Select</Button>
                       </div>
-                      <div className="input" style={{ width: "90px" }}>
+                      <div className="input">
                         <Button variant="contained">Refresh</Button>
                       </div>
                     </div>
                     <div className="table-TripSheet">
-                      <div style={{ height: 400, width: "100%" }}>
+                      <div className='tripsheet-booking-table'>
                         <DataGrid
                           rows={UpdateTbaleRows}
                           columns={UpdateTbaleColumns}
@@ -1957,7 +1938,7 @@ const TripSheet = ({ stationName }) => {
                           autoComplete="password"
                         />
                       </div>
-                      <div className="input" style={{ width: "250px" }}>
+                      <div className="input">
                         <div className="icone">
                           <NoCrashIcon color="action" />
                         </div>
@@ -2173,10 +2154,7 @@ const TripSheet = ({ stationName }) => {
                   <div className="Customer-Vendor-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
-                        <div
-                          className="icone"
-                          style={{ padding: "0px 10px 0px 5px" }}
-                        >
+                        <div className="icone">
                           <FontAwesomeIcon icon={faStopwatch} size="lg" />
                         </div>
                         <TextField
@@ -2190,10 +2168,7 @@ const TripSheet = ({ stationName }) => {
                         />
                       </div>
                       <div className="input">
-                        <div
-                          className="icone"
-                          style={{ padding: "0px 10px 0px 5px" }}
-                        >
+                        <div className="icone">
                           <FontAwesomeIcon icon={faRoad} size="lg" />
                         </div>
                         <TextField
@@ -2207,7 +2182,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <div className="icone">
                           <Inventory2Icon color="action" />
                         </div>
@@ -2240,7 +2215,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faRoad} />
                         </div>
@@ -2255,7 +2230,7 @@ const TripSheet = ({ stationName }) => {
                           autoComplete="password"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2286,7 +2261,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faStopwatch} />
                         </div>
@@ -2301,7 +2276,7 @@ const TripSheet = ({ stationName }) => {
                           autoComplete="password"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2329,7 +2304,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faCloudMoon} />
                         </div>
@@ -2345,7 +2320,7 @@ const TripSheet = ({ stationName }) => {
                         />
 
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2374,7 +2349,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faMoneyBill1Wave} />
                         </div>
@@ -2389,7 +2364,7 @@ const TripSheet = ({ stationName }) => {
                           autoComplete="password"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2420,10 +2395,7 @@ const TripSheet = ({ stationName }) => {
                     <div className="input-field">
 
                       <div className="input">
-                        <div
-                          className="icone"
-                          style={{ padding: "0px 10px 0px 10px" }}
-                        >
+                        <div className="icone">
                           <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                         </div>
                         <TextField
@@ -2473,7 +2445,7 @@ const TripSheet = ({ stationName }) => {
                 <TabPanel value={3} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <div className="icone">
                           <Inventory2Icon color="action" />
                         </div>
@@ -2514,7 +2486,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faRoad} />
                         </div>
@@ -2530,7 +2502,7 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2562,7 +2534,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
 
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faStopwatch} />
                         </div>
@@ -2578,7 +2550,7 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2612,7 +2584,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faCloudMoon} />
                         </div>
@@ -2628,7 +2600,7 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2657,7 +2629,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "186px" }}>
+                      <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faMoneyBill1Wave} />
                         </div>
@@ -2672,7 +2644,7 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                         />
                       </div>
-                      <div className="input" style={{ width: "187px" }}>
+                      <div className="input">
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
@@ -2788,7 +2760,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <TextField
                           name="maintenancetype"
                           value={formData.maintenancetype || selectedCustomerData.maintenancetype || book.maintenancetype || ''}
@@ -2813,7 +2785,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                       </div>
                       <div className="input">
@@ -2821,7 +2793,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                       </div>
                       <div className="input">
@@ -2829,7 +2801,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                       </div>
                       <div className="input">
@@ -2837,7 +2809,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "390px" }}>
+                      <div className="input">
                         <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                       </div>
                       <div className="input">
@@ -2954,12 +2926,12 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                         />
                       </div>
-                      <div className="input" style={{ width: "220px" }}>
+                      <div className="input">
                         <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                       </div>
                     </div>
                     <div className="input-field">
-                      <div className="input" style={{ width: "400px" }}>
+                      <div className="input">
                         <div className="icone">
                           <MarkChatReadIcon color="action" />
                         </div>
@@ -2994,7 +2966,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="table-TripSheet">
-                      <div style={{ height: 400, width: "100%" }}>
+                      <div className='tripsheet-booking-table'>
                         <DataGrid
                           rows={rows}
                           columns={columns}
@@ -3052,29 +3024,29 @@ const TripSheet = ({ stationName }) => {
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
-                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{errorMessage}</p>
               </div>
             }
             {warning &&
               <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{warningMessage}</p>
               </div>
             }
             {success &&
               <div className='alert-popup Success' >
-                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{successMessage}</p>
               </div>
             }
             {info &&
               <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <BsInfo /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{infoMessage}</p>
               </div>
             }

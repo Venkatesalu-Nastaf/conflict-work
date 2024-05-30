@@ -85,69 +85,6 @@ router.delete('/companydelete/:organizationname', (req, res) => {
 //----------------------------------logo upload
 
 
-// router.use(express.static('images'));
-// router.use(express.static('customer_master'));
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './customer_master/public/org_logo')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-//     }
-
-// })
-
-// const upload = multer({
-//     storage: storage
-// })
-
-// router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) => {
-//     const organizationN_Name = req.params.organizationname;
-//     const fileName = req.file.filename;
-
-//     // Check if the user profile already exists
-//     const checkIfExistsQuery = `SELECT * FROM organisation_logo WHERE organisation_name = ?`;
-//     db.query(checkIfExistsQuery, [organizationN_Name], (err, rows) => {
-//         if (err) {
-//             return res.status(500).json({ Message: "Error checking profile existence", err });
-//         }
-
-//         // Profile already exists, update the record
-//         if (rows.length > 0) {
-//             console.log(rows[0])
-
-//             // to unlink image file
-//             const oldFileName = rows[0].fileName;
-//             console.log(oldFileName, "kkcghcgvhhbb")
-
-//             if (oldFileName) {
-//                 const oldImagePath = path.join("./customer_master/public/org_logo", oldFileName);
-//                 try {
-//                     fs.unlinkSync(oldImagePath)
-//                 } catch { }
-//             }
-//             const updateQuery = `UPDATE organisation_logo SET fileName = ? WHERE organisation_name = ?`;
-//             db.query(updateQuery, [fileName, organizationN_Name], (err, result) => {
-//                 if (err) {
-//                     return res.status(500).json({ Message: "Error updating profile picture", err });
-//                 }
-//                 return res.status(200).json({ Status: "success" });
-//             });
-//         } else {
-//             // Profile doesn't exist, insert a new record
-//             const insertQuery = `INSERT INTO organisation_logo (organisation_name, fileName) VALUES (?, ?)`;
-//             db.query(insertQuery, [organizationN_Name, fileName], (err, result) => {
-//                 if (err) {
-//                     return res.status(500).json({ Message: "Error inserting profile picture", err });
-//                 }
-//                 return res.status(200).json({ Status: "success" });
-//             });
-//         }
-//     });
-// });
-
-
 router.put('/logo-base64/:organizationname', (req, res) => {
     const organizationN_Name = req.params.organizationname;
     const { data } = req.body;

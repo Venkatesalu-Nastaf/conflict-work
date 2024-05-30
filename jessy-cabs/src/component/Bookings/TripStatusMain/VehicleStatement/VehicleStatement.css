@@ -146,3 +146,17 @@
     width: 200px !important;
   } */
 }
+
+.paid-amount-input-field {
+  justify-content: end;
+}
+
+.SpeedDial-division {
+  padding: 26px;
+  margin: 15px 10px 0px 0px;
+}
+
+.vehicle-statement-table{
+  height: 400px;
+  width: 100%;
+}

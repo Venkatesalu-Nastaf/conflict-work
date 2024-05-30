@@ -69,7 +69,7 @@
 
 @media only screen and (max-width:768px) {
     .weekly-chart {
-        width: 90% !important;
+        width: 82% !important;
     }
 }
 
@@ -83,23 +83,26 @@
     .weekly-chart {
         width: 385px;
     }
+    .RightSide{
+        flex-direction: column;
+    }
 }
 
 @media only screen and (min-width:960.99px) and (max-width:1020px) {
     .weekly-chart {
-        width: 453px;
+        width: 260px;
     }
 }
 
 @media only screen and (min-width:1021px) and (max-width:1102.99px) {
     .weekly-chart {
-        width: 500px;
+        width: 320px;
     }
 }
 
 @media only screen and (min-width:1103px) and (max-width:1218px) {
     .weekly-chart {
-        width: 558px;
+        width: 350px;
     }
 }
 

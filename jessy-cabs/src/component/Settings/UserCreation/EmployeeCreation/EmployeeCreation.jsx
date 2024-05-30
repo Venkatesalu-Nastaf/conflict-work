@@ -368,7 +368,7 @@ const EmployeeCreation = ({ stationName }) => {
           </Box>
           <div className="EmployeeCreation-table-container">
             <div className='search-profile'>
-              <div className="search-input-container Scroll-Style-hide">
+              <div className="search-input-container">
                 <TextField
                   id="search-input"
                   label="Search"
@@ -380,7 +380,7 @@ const EmployeeCreation = ({ stationName }) => {
                   }}
                   style={{marginLeft: '15px'}}
                 />
-                <div style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+                <div className='Scroll-Style-hide' style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
                   {filteruser.map((row, index) => (
                     <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                       togglePermission(row);

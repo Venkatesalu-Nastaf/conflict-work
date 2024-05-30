@@ -210,9 +210,9 @@ const Billing = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "120px" }}>
+                            <div className="input">
                                 <div className="icone">
-                                    <RiPinDistanceLine color="action" style={{ fontSize: '20px' }} />
+                                    <RiPinDistanceLine color="action" />
                                 </div>
                                 <TextField
                                     type='number'
@@ -225,8 +225,8 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "120px" }}>
-                                <div className="icone" style={{ fontSize: '20px' }} >
+                            <div className="input">
+                                <div className="icone" >
                                     <IoIosTime color="action" />
                                 </div>
                                 <TextField
@@ -240,7 +240,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <HailOutlinedIcon color="action" />
                                 </div>
@@ -256,7 +256,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBoxesPacking} size="lg" />
                                 </div>
@@ -289,7 +289,7 @@ const Billing = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "111px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
                                 </div>
@@ -305,7 +305,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />
                                 </div>
@@ -321,7 +321,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                 </div>
@@ -372,7 +372,7 @@ const Billing = () => {
                     <div className="Billing-page-secend-container">
                         <div className="Billing-secend-left">
                             <div className="input-field input-feild-booking ">
-                                <div className="input" style={{ width: "360px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <CarCrashIcon color="action" />
                                     </div>
@@ -387,7 +387,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <EngineeringIcon color="action" />
                                     </div>
@@ -403,7 +403,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "360px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <Inventory2Icon color="action" />
                                     </div>
@@ -419,7 +419,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                <div className="input min-charge-value-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -437,7 +437,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faRoad} />
                                         </div>

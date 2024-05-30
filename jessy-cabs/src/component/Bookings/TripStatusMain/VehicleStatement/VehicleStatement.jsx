@@ -167,8 +167,6 @@ const VehicleStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
                   <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                 </div>
@@ -176,6 +174,14 @@ const VehicleStatement = () => {
                   <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
+              {/* <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
+                <div className="input" style={{ width: "130px" }} >
+                  <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
+                </div>
+                <div className="input" style={{ width: "110px" }} >
+                  <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
+                </div>
+              </div> */}
               <div className="input-field" style={{ justifyContent: "end" }}>
                 <div className="input" style={{ width: "130px" }}>
                   <TextField

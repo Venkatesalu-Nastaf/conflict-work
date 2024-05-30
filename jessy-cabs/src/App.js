@@ -126,28 +126,29 @@ function App() {
 
   //--------------------------------------------------------
   //fetch org logo
-  const { logo } = useData() // its for logo
+  const { logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
 
-  // const fetchOrgLogo = async () => {
-  //   try {
-  //     const organizationname = localStorage.getItem('usercompany');
-  //     if (!organizationname || organizationname === undefined) return
-  //     const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+  const fetchOrgLogo = async () => {
+    try {
+      const organizationname = localStorage.getItem('usercompany');
+      console.log("organizationname", organizationname)
+      if (!organizationname || organizationname === undefined) return
+      const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
-  //     if (response?.status === 200) {
-  //       const logoImage = response?.data[0]?.fileName;
-  //       setLogoImage(logoImage)
-  //       setLogo(logoImage)
-  //       setLogoTrigger(false)
-  //     }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
+      if (response?.status === 200) {
+        const logoImage = response?.data[0]?.fileName;
+        setLogo(logoImage)
+        setLogoTrigger(false)
 
-  // useEffect(() => {
-  //   fetchOrgLogo()
-  // }, [logotrigger])
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchOrgLogo()
+  }, [logotrigger])
 
   //-------------------------------------------------------------------------------------------------
 

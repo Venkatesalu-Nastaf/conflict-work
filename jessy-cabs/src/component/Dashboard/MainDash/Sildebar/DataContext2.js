@@ -16,26 +16,26 @@ export const DataProvider2 = ({ children }) => {
     const [logo, setLogo] = useState("")
 
 
-    const fetchOrgLogo = async () => {
-        try {
-            const organizationname = localStorage.getItem('usercompany');
-            if (!organizationname || organizationname === undefined) return
-            const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+    // const fetchOrgLogo = async () => {
+    //     try {
+    //         const organizationname = localStorage.getItem('usercompany');
+    //         if (!organizationname || organizationname === undefined) return
+    //         const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
-            if (response?.status === 200) {
-                const logoImage = response?.data[0]?.fileName;
-                // setLogoImage(logoImage)
-                setLogo(logoImage)
-                setLogoTrigger(false)
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    //         if (response?.status === 200) {
+    //             const logoImage = response?.data[0]?.fileName;
+    //             // setLogoImage(logoImage)
+    //             setLogo(logoImage)
+    //             setLogoTrigger(false)
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchOrgLogo()
-    }, [logotrigger])
+    // useEffect(() => {
+    //     fetchOrgLogo()
+    // }, [logotrigger])
 
     //-------------------
 

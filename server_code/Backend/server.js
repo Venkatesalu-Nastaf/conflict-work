@@ -611,7 +611,6 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 
 app.get('/use-permissions/:userid', (req, res) => {
   const userid = req.params.userid;
-  console.log(userid)
 
   const sql = `select * from user_permissions where user_id=?`;
   db.query(sql, [userid], (err, result) => {

@@ -13,6 +13,7 @@ import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
 import Excel from 'exceljs';
+// import { toast } from 'react-toastify';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -122,7 +123,6 @@ const useBooking = () => {
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     customer: "",
   });
-  console.log(selectedCustomerDatas,"customer")
   const [selectedCustomerdriver, setSelectedCustomerdriver] = useState({});
 
   const transformRow = (originalRow) => {
@@ -395,6 +395,8 @@ const useBooking = () => {
           };
         });
       });
+
+
       // write the content using writeBuffer
       const buf = await workbook.xlsx.writeBuffer();
 
@@ -821,11 +823,11 @@ const useBooking = () => {
   //     }
   //   }
   // };
-  
+
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
       try {
-        const user=localStorage.getItem("username")
+        const user = localStorage.getItem("username")
         const dataToSend = {
           guestname:
             formValues.guestname ||
@@ -852,12 +854,12 @@ const useBooking = () => {
           requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
           duty: formData.duty || selectedCustomerData.duty || book.duty || "",
           bookingno: lastBookingno || '',
-          customeremail:formData.orderbyemail ||selectedCustomerData.orderbyemail ||selectedCustomerDatas.customeremail ||book.orderbyemail || "",
-          username:user,
-          Address:formData.address1 ||selectedCustomerData.address1 ||book.address1 ||""
-          
-          
-          
+          customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
+          username: user,
+          Address: formData.address1 || selectedCustomerData.address1 || book.address1 || ""
+
+
+
         };
         await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
@@ -944,8 +946,6 @@ const useBooking = () => {
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-      console.log(restSelectedCustomerDatas,"data")
-      console.log(selectedCustomerdriver,"driver")
 
       const updatedBook = {
 
@@ -996,13 +996,12 @@ const useBooking = () => {
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
       };
-      console.log(updatedBook,"databook")
-      // setSendGuestsms(true)
+
       setSendmailGuestsms(true)
       await axios.post(`${apiUrl}/booking`, updatedBook);
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-   
+
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();
@@ -1027,13 +1026,7 @@ const useBooking = () => {
 
   const handleEdit = async (userid) => {
 
-    setError(true);
-    setErrorMessage("Booking can't be Edited..")
-
     try {
-
-
-      setEdit(false)
       const selectedCustomer = rows.find(
         (row) =>
           row.bookingno === selectedCustomerData.bookingno ||
@@ -1049,12 +1042,12 @@ const useBooking = () => {
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
         ...selectedCustomer,
-    //     // ...book,
-    //     // ...formData,
-    //     // ...selectedCustomerData,
-    //     // ...restSelectedCustomerData, // Use the modified object without 'id'
-    //     // ...selectedCustomerDatas,
-    //     // ...restSelectedCustomerDatas,
+        //     // ...book,
+        //     // ...formData,
+        //     // ...selectedCustomerData,
+        //     // ...restSelectedCustomerData, // Use the modified object without 'id'
+        //     // ...selectedCustomerDatas,
+        //     // ...restSelectedCustomerDatas,
         bookingtime: bookingtime || getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
@@ -1093,44 +1086,44 @@ const useBooking = () => {
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
 
-
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
       };
-      const editbookno=book.bookingno ||selectedCustomerData.bookingno ||formData.bookingno
+      const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
 
-      await axios.put(
-        `${apiUrl}/booking/${book.bookingno ||
-        selectedCustomerData.bookingno ||
-        formData.bookingno
-        }`,
+      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
         updatedCustomer
       )
-      
 
-      setEdit(false)
+      if (response.data.success) {
+        if (response.status === 201) {
+          setSuccess(true);
+          setSuccessMessage(response.data.message);
 
-      // handleCancel();
-      addPdf();
-      setRow([]);
-      setRowsdriver([])
-      setRows([]);
-      handleCancel();
-      if (sendEmail) {
-        handlecheck(editbookno);
+        } else {
+          setSuccess(true);
+          setSuccessMessage(response.data.message);
+        }
+
+        setEdit(false)
+        addPdf();
+        setRow([]);
+        setRowsdriver([])
+        setRows([]);
+        handleCancel();
+        if (sendEmail) {
+          handlecheck(editbookno);
+        }
       }
-      setSuccess(true);
-
-      setSuccessMessage("Successfully Updated");
 
     } catch (error) {
       console.error("An error occurred:", error);
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-    // // setSendEmail(true)
-    // // setGuestSms(true)
   };
+
+
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
@@ -1145,26 +1138,23 @@ const useBooking = () => {
         setError(true);
         setErrorMessage("Booking can't be Deleted..")
 
-
-        // await axios.delete(
-        //   `${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno
-        //   }`
-        // );
-        // setSelectedCustomerData(null);
-        // // setSuccess(true);
-        // // setSuccessMessage("Successfully Deleted");
-        // setFormData(null);
-        // handleCancel();
-        // setRow([]);
-        // setRows([]);
-        // setRowsdriver([])
+        await axios.delete(
+          `${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno
+          }`
+        );
+        setSelectedCustomerData(null);
+        // setSuccess(true);
+        // setSuccessMessage("Successfully Deleted");
+        setFormData(null);
+        handleCancel();
+        setRow([]);
+        setRows([]);
+        setRowsdriver([])
 
       } else if (actionName === "Modify") {
         // setGuestSms(false)
         setSendEmail(false)
-        setError(true);
-        setErrorMessage("Booking can't be Edited..")
-        // handleEdit()
+        handleEdit()
 
       } else if (actionName === "Copy This") {
         handleClickShow();

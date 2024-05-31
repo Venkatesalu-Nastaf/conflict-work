@@ -61,17 +61,36 @@ router.get('/last-booking-no', (req, res) => {
 });
 
 // delete booking details
-router.delete('/booking/:bookingno', (req, res) => {
+router.delete('/booking/:bookingno', async (req, res) => {
     const bookingno = req.params.bookingno;
-    db.query('DELETE FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to delete data from MySQL" });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Customer not found" });
-        }
-        return res.status(200).json({ message: "Data deleted successfully" });
-    });
+
+    try {
+        //check this booking added tripsheet or not
+        const checkBookingId = await query('select bookingno from tripsheet where bookingno=?', [bookingno])
+        if (checkBookingId.length > 0) return res.json({ message: "This Booking dosen't allowed to delete", error: false, success: true })
+
+        const response = await query('DELETE FROM booking WHERE bookingno = ?', bookingno)
+        if (response.affectedRows > 0) return res.status(201).json({ message: "Successfully deleted ", success: true, error: false })
+
+        // return res.json({ message: "check Booking Id", error: false, success: true })
+
+    } catch (err) {
+        res.status(500).json({
+            message: err.message,
+            success: false,
+            error: true
+        })
+    }
+
+    // db.query('DELETE FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
+    //     if (err) {
+    //         return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    //     }
+    //     if (result.affectedRows === 0) {
+    //         return res.status(404).json({ error: "Customer not found" });
+    //     }
+    //     return res.status(200).json({ message: "Data deleted successfully" });
+    // });
 });
 
 
@@ -276,8 +295,8 @@ router.get('/drivername-details/:driver', (req, res) => {
 
 router.post('/send-email', async (req, res) => {
     try {
-        const {Address, guestname, guestmobileno,customeremail, email, startdate, starttime, driverName, useage,vehType,mobileNo,vehRegNo,servicestation,status,requestno,bookingno,duty,username} = req.body;
-        console.log(Address, guestname, guestmobileno,customeremail, email, startdate, starttime, driverName, useage,vehType,mobileNo,vehRegNo,servicestation,status,requestno,bookingno,duty,username,"data")
+        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username } = req.body;
+        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, "data")
 
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -294,13 +313,13 @@ router.post('/send-email', async (req, res) => {
         });
 
 
-        if(status=== "Cancelled"){
+        if (status === "Cancelled") {
 
-        const customerMailOptions = {
-            from: 'foxfahad386@gmail.com',
-            to: `${email},${customeremail}`, 
-            subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
-            html: `
+            const customerMailOptions = {
+                from: 'foxfahad386@gmail.com',
+                to: `${email},${customeremail}`,
+                subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
+                html: `
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
                         <tr>
@@ -346,19 +365,19 @@ router.post('/send-email', async (req, res) => {
 
         
           `,
-        };
-        await transporter.sendMail(customerMailOptions);
-        // await transporter.sendMail(ownerMailOptions);
-        res.status(200).json({ message: 'Email sent successfully' });
-    }
-    else{
+            };
+            await transporter.sendMail(customerMailOptions);
+            // await transporter.sendMail(ownerMailOptions);
+            res.status(200).json({ message: 'Email sent successfully' });
+        }
+        else {
 
-       
-        const customerMailOptions1 = {
-            from: 'foxfahad386@gmail.com',
-            to: `${email},${customeremail}`, 
-            subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
-            html: `
+
+            const customerMailOptions1 = {
+                from: 'foxfahad386@gmail.com',
+                to: `${email},${customeremail}`,
+                subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
+                html: `
             <p>Dear Sir/Madam,</p>
              <p>Thank you for booking with us!!! Your booking has been confirmed. Please find the details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
@@ -416,12 +435,12 @@ router.post('/send-email', async (req, res) => {
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
         
           `,
-        }
-        // await transporter.sendMail(ownerMailOptions1);
-        await transporter.sendMail(customerMailOptions1);
-        res.status(200).json({ message: 'Email sent successfully' });
+            }
+            // await transporter.sendMail(ownerMailOptions1);
+            await transporter.sendMail(customerMailOptions1);
+            res.status(200).json({ message: 'Email sent successfully' });
 
-    }
+        }
 
         // Send greeting email to the customer
         // await transporter.sendMail(customerMailOptions);

@@ -83,9 +83,10 @@ const useBooking = () => {
   const location = useLocation();
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
+  const [infoMessage, setInfoMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [searchText, setSearchText] = useState("");
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -826,7 +827,7 @@ const useBooking = () => {
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
-      const datamode=isEditMode?selectedCustomerData.status:book.status
+      const datamode = isEditMode ? selectedCustomerData.status : book.status
       try {
         const user = localStorage.getItem("username")
         const dataToSend = {
@@ -1103,8 +1104,8 @@ const useBooking = () => {
           setSuccessMessage(response.data.message);
 
         } else {
-          setSuccess(true);
-          setSuccessMessage(response.data.message);
+          setInfo(true);
+          setInfoMessage(response.data.message);
         }
 
         setEdit(false)
@@ -1137,24 +1138,28 @@ const useBooking = () => {
         setRow([]);
         setRowsdriver([])
       } else if (actionName === "Delete") {
-        setError(true);
-        setErrorMessage("Booking can't be Deleted..")
 
-        await axios.delete(
-          `${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno
-          }`
-        );
-        setSelectedCustomerData(null);
-        // setSuccess(true);
-        // setSuccessMessage("Successfully Deleted");
-        setFormData(null);
-        handleCancel();
-        setRow([]);
-        setRows([]);
-        setRowsdriver([])
+        const response = await axios.delete(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno}`);
+
+        if (response.data.success) {
+          if (response.status === 201) {
+            setSuccess(true);
+            setSuccessMessage(response.data.message);
+          } else {
+            setInfo(true);
+            setInfoMessage(response.data.message)
+          }
+          setSelectedCustomerData(null);
+
+          setFormData(null);
+          handleCancel();
+          setRow([]);
+          setRows([]);
+          setRowsdriver([])
+        }
 
       } else if (actionName === "Modify") {
-        // setGuestSms(false)
+
         setSendEmail(false)
         handleEdit()
 
@@ -1515,7 +1520,7 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver,
-    vehileName
+    vehileName, infoMessage
   };
 };
 

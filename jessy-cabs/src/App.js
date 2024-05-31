@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
@@ -126,32 +126,32 @@ function App() {
 
   //--------------------------------------------------------
   //fetch org logo
-  const { logo } = useData() // its for logo
+  const { logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
 
-  // const fetchOrgLogo = async () => {
-  //   try {
-  //     const organizationname = localStorage.getItem('usercompany');
-  //     if (!organizationname || organizationname === undefined) return
-  //     const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+  const fetchOrgLogo = useCallback(async () => {
+    try {
+      const organizationname = localStorage.getItem('usercompany');
+      console.log("organizationname", organizationname)
+      if (!organizationname || organizationname === undefined) return
+      const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
-  //     if (response?.status === 200) {
-  //       const logoImage = response?.data[0]?.fileName;
-  //       setLogoImage(logoImage)
-  //       setLogo(logoImage)
-  //       setLogoTrigger(false)
-  //     }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
+      if (response?.status === 200) {
+        const logoImage = response?.data[0]?.fileName;
+        setLogo(logoImage)
+        setLogoTrigger(false)
 
-  // useEffect(() => {
-  //   fetchOrgLogo()
-  // }, [logotrigger])
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }, [apiUrl, setLogo, setLogoTrigger])
+
+  useEffect(() => {
+    fetchOrgLogo()
+  }, [logotrigger, fetchOrgLogo])
 
   //-------------------------------------------------------------------------------------------------
 
-  // console.log("logoImage app", logoImage)
 
   return (
     <>

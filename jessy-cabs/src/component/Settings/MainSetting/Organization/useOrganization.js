@@ -177,8 +177,8 @@ const useOrganization = () => {
             if (!file) return;
 
             const base64Format = await imageToBase64(file)
-            const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
-          
+             const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
+
             if (response.status === 200) {
                 setLogoTrigger(true)
             }

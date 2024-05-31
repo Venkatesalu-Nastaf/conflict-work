@@ -311,3 +311,18 @@ header img {
   width: 100%;
   margin: 10px;
 }
+
+.invoice-remarks-main {
+  font-weight: 600;
+  font-size: 75%;
+  background-color: #E8EAE9;
+}
+
+.invoice-remarks-sub {
+  font-size: 13px;
+  padding: 10px;
+}
+
+.guest-sign-text{
+  text-align: center;
+}

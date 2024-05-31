@@ -99,8 +99,8 @@ const VehicleStatement = () => {
           <div className="container-left">
             <div className="SearchContainer-VehicleStatement">
               <div className="input-field vehiclestatement-inputfeild">
-                <div className="input" style={{ width: '200px' }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input">
+                  <div className="icone">
                     <IoBusinessSharp color="action" />
                   </div>
                   <Autocomplete
@@ -119,8 +119,8 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: '200px' }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input">
+                  <div className="icone">
                     <IoBusinessSharp color="action" />
                   </div>
                   <Autocomplete
@@ -139,8 +139,8 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-                <div className="input vehiecle-date" style={{ width: "250px" }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input vehiecle-date">
+                  <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -153,8 +153,8 @@ const VehicleStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input vehiecle-date" style={{ width: "250px" }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input vehiecle-date">
+                  <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -167,10 +167,10 @@ const VehicleStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "130px" }} >
+                <div className="input">
                   <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                 </div>
-                <div className="input" style={{ width: "110px" }} >
+                <div className="input">
                   <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
@@ -182,8 +182,8 @@ const VehicleStatement = () => {
                   <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
                 </div>
               </div> */}
-              <div className="input-field" style={{ justifyContent: "end" }}>
-                <div className="input" style={{ width: "130px" }}>
+              <div className="input-field paid-amount-input-field">
+                <div className="input">
                   <TextField
                     margin="normal"
                     size="small"
@@ -197,7 +197,7 @@ const VehicleStatement = () => {
             </div>
           </div>
         </div>
-        <div className="SpeedDial" style={{ padding: '26px', margin: ' 15px 10px 0px 0px' }}>
+        <div className="SpeedDial SpeedDial-division">
           <Box sx={{ position: "relative", mt: 2, }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -232,29 +232,29 @@ const VehicleStatement = () => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
@@ -275,7 +275,7 @@ const VehicleStatement = () => {
               )}
             </PopupState>
           </div>
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='vehicle-statement-table'>
             <DataGrid
               rows={rows}
               columns={columns}

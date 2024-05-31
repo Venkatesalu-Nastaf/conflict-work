@@ -207,7 +207,7 @@ const BookingChart = () => {
 
     <>
       <div className="main-booking-chart" >
-        <div className="main-booking-chart-sub-division" style={{ display: 'flex ', justifyContent: 'center' }}>
+        <div className="main-booking-chart-sub-division">
           <div className="apex-fusion-chart">
             <div className="second-chart-bar-section second-chart-bar-section-apex">
               <div className="second-chart-bar1">
@@ -244,7 +244,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4" style={{ textAlign: 'center' }}>No Active Drivers available</td>
+                          <td colSpan="4" className="chart-table-no-data">No Active Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -273,7 +273,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4" style={{ textAlign: 'center' }}>No Online Drivers available</td>
+                          <td colSpan="4" className="chart-table-no-data">No Online Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -302,7 +302,7 @@ const BookingChart = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Drivers available</td>
+                          <td colSpan="4" className="chart-table-no-data">No Offline Drivers available</td>
                         </tr>
                       )}
                     </table>
@@ -340,7 +340,7 @@ const BookingChart = () => {
                             </tr>
                           )) : (
                             <tr>
-                              <td colSpan="4" style={{ textAlign: 'center' }}>No Active Vehicles available</td>
+                              <td colSpan="4" className="chart-table-no-data">No Active Vehicles available</td>
                             </tr>
                           )
                       }
@@ -371,7 +371,7 @@ const BookingChart = () => {
                           </tr>
                         )) : (
                           <tr>
-                            <td colSpan="4" style={{ textAlign: 'center' }}>No Online Vehicles available</td>
+                            <td colSpan="4" className="chart-table-no-data">No Online Vehicles available</td>
                           </tr>
                         )
                       }
@@ -403,7 +403,7 @@ const BookingChart = () => {
                         ))
                         : (
                           <tr>
-                            <td colSpan="4" style={{ textAlign: 'center' }}>No Offline Vehicles available</td>
+                            <td colSpan="4" className="chart-table-no-data">No Offline Vehicles available</td>
                           </tr>
                         )
                       }
@@ -414,18 +414,18 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', padding: '10px 20px' }}> Search here for Vehiecle Details..</p>
+        <div className="chart-search-main-division">
+          <p className="search-text-division"> Search here for Vehiecle Details..</p>
           <div className="search-bar-input">
             <div className="search-button">
-              <FaSearch style={{ color: '#fff' }} />
-              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" style={{ background: 'none', border: 'none', width: '100%', color: '#fff' }} />
+              <FaSearch />
+              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place"/>
             </div>
-            <button style={{ padding: '10px', border: 'none' }} onClick={handleButtonClick}>search</button>
+            <button className="chart-search-btn" onClick={handleButtonClick}>search</button>
           </div>
           {showsearchTable && (
-            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '20px' }}>
-              <div className="total-car-table total-vehiecle" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <div className="total-car-table-division">
+              <div className="total-car-table total-vehiecle">
                 <div className="graph-total-table graph-total-table-driver">
                   <table className="graph-table" >
                     <tr
@@ -448,7 +448,7 @@ const BookingChart = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="4" style={{ textAlign: 'center', paddingTop: '50px', paddingBottom: '50px' }}>No data available</td>
+                        <td colSpan="4" className="total-car-table-no-data">No data available</td>
                       </tr>
                     )}
                   </table>

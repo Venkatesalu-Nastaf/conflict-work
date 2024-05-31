@@ -118,7 +118,7 @@ router.post('/tripsheet-add', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail } = req.body;
 
 
 
@@ -232,7 +232,7 @@ router.post('/tripsheet-add', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport, travelsemail, travelsname, vechtype
+        transferreport, travelsemail, travelsname, vechtype,orderbyemail
     };
 
 
@@ -403,7 +403,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -514,7 +514,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport, travelsemail, travelsname, vechtype,
+        transferreport, travelsemail, travelsname, vechtype,orderbyemail
     };
 
 
@@ -652,7 +652,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail} = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -763,7 +763,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport, travelsemail, travelsname, vechtype,
+        transferreport, travelsemail, travelsname, vechtype,orderbyemail
     };
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
@@ -870,8 +870,8 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { guestname, guestmobileno, email,vehType, useage,Address,username,bookingno,starttime,startdate,duty} = req.body;
-        // console.log(guestname, guestmobileno, email, vehType, useage,Address,username,bookingno,starttime,startdate,duty,"mail")
+        const { customeremail,guestname, guestmobileno, email,vehType,bookingno,starttime,startdate,vehRegNo,driverName,mobileNo,status,servicestation} = req.body;
+        console.log(customeremail,guestname, guestmobileno, email,vehType,bookingno,starttime,startdate,vehRegNo,driverName,mobileNo,status,servicestation,"mail")
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -887,128 +887,113 @@ router.post('/send-tripsheet-email', async (req, res) => {
             }
         });
         // Email content for the owner
-        const ownerMailOptions = {
-            from: 'foxfahad386@gmail.com',
-            to: 'foxfahad386@gmail.com',
-            subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
-            html: `
-            <p>Dear Sir/Madam,</p>
-             <p>Thank you for booking with us!!! Your booking has been confirmed. Please find the details below:</p>
-            <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
-                    <thead style="background-color: #9BB0C1; color: #FFFFFF;">
-                        <tr>
-                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS Booking Confirmation </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
-                            <td style="padding: 8px;">${bookingno}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
-                            <td style="padding: 8px;">${guestname}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Contact Number :</strong></td>
-                            <td style="padding: 8px;">${guestmobileno}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
-                            <td style="padding: 8px;">${startdate}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>
-                            <td style="padding: 8px;">${starttime} Hrs</td>
-                        </tr>
-                       
-                        <tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Reporting Address:</strong></td>
-                            <td style="padding: 8px;">${Address}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Drop Address :</strong></td>
-                            <td style="padding: 8px;">${useage}</td>
-                        </tr>
-                       
-                        <tr>
-                        <td style="padding: 8px;"><strong>Type of Car Requiredt:</strong></td>
-                        <td style="padding: 8px;color: #000"">${vehType}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px;"><strong>Duty Type</strong></td>
-                        <td style="padding: 8px;color: #000"">${duty}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px;"><strong>Confirmed By:</strong></td>
-                        <td style="padding: 8px;color: #000"">${username}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
-        
-          `,
-        };
-        // Send email to the owner
-        await transporter.sendMail(ownerMailOptions);
+
+        if(status === "Cancelled"){
+       
         // Email content for the customer
         const customerMailOptions = {
             from: 'foxfahad386@gmail.com',
-            to: email,
-            subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
+            to: `${email},${customeremail}`, 
+            subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
             html: `
-            <p>Dear Sir/Madam,</p>
-             <p>Thank you for booking with us!!! Your booking has been confirmed. Please find the details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
-                    <thead style="background-color: #9BB0C1; color: #FFFFFF;">
+                    <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
                         <tr>
-                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS Booking Confirmation </th>
+                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS BOOKING CANCELLATION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style="padding: 8px;"><strong>Trip No:</strong></td>
-                            <td style="padding: 8px;">${bookingno}</td>
+                            <td style="padding: 8px; color: #000">${bookingno}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
+                            <td style="padding: 8px;color: #000"">${guestname}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Location:</strong></td>
+                            <td style="padding: 8px;color: #000"">${servicestation}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Date:</strong></td>
+                            <td style="padding: 8px;color: #000"">${startdate}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Time (24):</strong></td>
+                            <td style="padding: 8px;color: #000"">${starttime} Hrs</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Car Sent:</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehType}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
+                            <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+
+        
+          `,
+        }
+        // Send greeting email to the customer
+        await transporter.sendMail(customerMailOptions);
+        res.status(200).json({ message: 'Email sent successfully' });
+    }
+    else
+    {
+        const customerMailOptions1 = {
+            from: 'foxfahad386@gmail.com',
+            to: `${email},${customeremail}`,
+            subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
+            html: `
+            <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
+                    <thead style="background-color: #9BB0C1; color: #FFFFFF;">
+                        <tr>
+                            <th colspan="2" style="padding: 8px; text-align: center;">Dear Sir/Madam, Your Cabs Details are below </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Trip No</strong></td>
+                            <td style="padding: 8px;">${bookingno}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Name of Guest</strong></td>
                             <td style="padding: 8px;">${guestname}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Contact Number :</strong></td>
+                            <td style="padding: 8px;"><strong>Contact Number </strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
+                            <td style="padding: 8px;"><strong> Date :</strong></td>
                             <td style="padding: 8px;">${startdate}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>
+                            <td style="padding: 8px;"><strong> Time(24HR) </strong></td>
                             <td style="padding: 8px;">${starttime} Hrs</td>
                         </tr>
                        
                         <tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Reporting Address:</strong></td>
-                            <td style="padding: 8px;">${Address}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px;"><strong>Drop Address :</strong></td>
-                            <td style="padding: 8px;">${useage}</td>
-                        </tr>
                        
                         <tr>
-                        <td style="padding: 8px;"><strong>Type of Car Requiredt:</strong></td>
+                        <td style="padding: 8px;"><strong>Car Sent</strong></td>
                         <td style="padding: 8px;color: #000"">${vehType}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px;"><strong>Duty Type</strong></td>
-                        <td style="padding: 8px;color: #000"">${duty}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px;"><strong>Confirmed By:</strong></td>
-                        <td style="padding: 8px;color: #000"">${username}</td>
+                            <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
+                        <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -1017,10 +1002,14 @@ router.post('/send-tripsheet-email', async (req, res) => {
           `,
         }
         // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions);
-
+        await transporter.sendMail(customerMailOptions1);
         res.status(200).json({ message: 'Email sent successfully' });
+
+    }
+
+        // res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });

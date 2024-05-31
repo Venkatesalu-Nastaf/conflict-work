@@ -90,7 +90,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               </table>
             </div>
             <div >
-              <label >  <span style={{ fontWeight: 600, fontSize: '75%', backgroundColor: '#E8EAE9' }}>Remarks : </span><span style={{ fontSize: 13, padding: 10 }}>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
+              <label><span className='invoice-remarks-main'>Remarks : </span><span className='invoice-remarks-sub'>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
               </label>
             </div>
             <div className="secondTable">
@@ -135,7 +135,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 <div className="guest-sign">
                   {signimageUrl !== "" ?
                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-                  <p style={{ textAlign: 'center' }}>Guest Signature</p>
+                  <p className='guest-sign-text'>Guest Signature</p>
                 </div>
               </div>
             </div>

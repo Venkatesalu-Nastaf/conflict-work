@@ -114,3 +114,13 @@
     border-radius: 15px;
   }
 }
+
+.SpeedDial {
+  padding: 26px;
+  margin: 14px -35px 0px 0px;
+}
+
+.trip-status-table {
+  height: 400px;
+  width: 100%;
+}

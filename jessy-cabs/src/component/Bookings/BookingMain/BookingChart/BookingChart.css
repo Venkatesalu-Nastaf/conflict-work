@@ -291,6 +291,13 @@
   }
 }
 
+.input-search-place {
+  background: none;
+  border: none;
+  width: 100%;
+  color: #fff;
+}
+
 .input-search-place::placeholder {
   color: #fff;
 }
@@ -409,8 +416,53 @@
   font-size: 14px;
 }
 
+.main-booking-chart-sub-division {
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (max-width: 430px) {
   .main-booking-chart-sub-division {
     width: 91vw;
   }
+}
+
+.chart-search-main-division {
+  text-align: center;
+}
+
+.search-text-division {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+
+.chart-search-btn {
+  padding: 10px;
+  border: none;
+}
+
+.total-car-table-division {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.total-car-table-division .total-vehiecle {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search-bar-input .search-button svg {
+  color: #fff;
+}
+
+.total-car-table-no-data {
+  text-align: center;
+  padding: 50px 0px;
+}
+
+.chart-table-no-data{
+  text-align: center;
 }

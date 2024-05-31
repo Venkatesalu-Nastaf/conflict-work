@@ -236,7 +236,7 @@ const useTripsheet = () => {
         startdate: '',
     });
     // const [sendEmail, setSendEmail] = useState(false);
-   
+
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -287,7 +287,7 @@ const useTripsheet = () => {
         const formData = {};
 
         const parameterKeys = [
-            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups','orderbyemail'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -354,7 +354,7 @@ const useTripsheet = () => {
         apps: '',
         customer: '',
         orderedby: '',
-        orderbyemail:'',
+        orderbyemail: '',
         mobile: '',
         guestname: '',
         guestmobileno: '',
@@ -471,7 +471,7 @@ const useTripsheet = () => {
             apps: '',
             customer: '',
             orderedby: '',
-            orderbyemail:'',
+            orderbyemail: '',
             mobile: '',
             guestname: '',
             guestmobileno: '',
@@ -598,33 +598,33 @@ const useTripsheet = () => {
 
     };
 
-    console.log(book,formData,"sttaus")
-    console.log(selectedCustomerData,"datatat")
+    // console.log(book, formData, "sttaus")
+    // console.log(selectedCustomerData, "datatat")
 
     const handlecheck = async () => {
         if (sendEmail) {
             // const datamode=isEditMode?
-            console.log(sendEmail,"email")
+            // console.log(sendEmail, "email")
             try {
 
                 const dataToSend = {
-                    bookingno:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                    bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
                     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
                     driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
-                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',                
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
-                    starttime:formData.reporttime || formData.reporttime|| selectedCustomerData.reporttime || book.reporttime,
+                    starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
-                    customeremail:formData.orderedby || selectedCustomerData.orderedby || book.orderedby || '',
-                    status:formData.status||book.status||selectedCustomerData.status,
-                    customeremail: formData.orderbyemail||book.orderbyemail||selectedCustomerData.orderbyemail,
-                    servicestation:formData.department || formValues.department || selectedCustomerData.department || book.department || ''
-                   
+                    customeremail: formData.orderedby || selectedCustomerData.orderedby || book.orderedby || '',
+                    status: formData.status || book.status || selectedCustomerData.status,
+                    customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
+                    servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || ''
+
                 };
-                console.log(dataToSend,"emsildata")
+                console.log(dataToSend, "emsildata")
                 await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
                 setSendEmail(false)
@@ -744,10 +744,10 @@ const useTripsheet = () => {
                 setAdditionalTime("")
 
                 setRow([]);
-                 setRows([]);
+                setRows([]);
                 // handleDriverSendSMS();
                 // handleSendSMS();
-                if(sendEmail){
+                if (sendEmail) {
                     handlecheck();
                 }
                 // handlecheck();
@@ -850,17 +850,22 @@ const useTripsheet = () => {
         const customer = book.customer || formData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
         const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
-        const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
+        const driverName = selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName;
         const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+        const Email = formData.email || selectedCustomerData.email || formValues.email || book.email
+        // console.log("driverName", driverName)
+        // console.log("check", selectedCustomerDatas?.driverName, "2", formData.driverName, "3", selectedCustomerData.driverName, "4", formValues.driverName, "5", book.driverName,)
+        // console.log("book", book,)
+        console.log("cus", customer, "vehno", vehRegNo, "vhtype", vehType, "mob", mobileNo)
 
-        if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
+        if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo || !Email) {
             setError(true);
             setErrorMessage("Please fill all mandatory fields");
             return;
         }
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-            console.log(book,"datttaadd")
+            // console.log(book,"datttaadd")
             const updatedBook = {
                 ...book,
 
@@ -916,7 +921,7 @@ const useTripsheet = () => {
                 toll: book.toll,
                 vendortoll: book.vendortoll,
                 vpermettovendor: book.vpermettovendor,
-                driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                driverName: driverName,
                 vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                 Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
                 hireTypes: selectedCustomerDatas.hiretypes,
@@ -925,7 +930,7 @@ const useTripsheet = () => {
                 request, escort, minHour, minKM, transferreport,
             };
 
-
+            console.log("updatedBook", updatedBook)
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -1436,9 +1441,9 @@ const useTripsheet = () => {
         if (smsguest || formData.smsguest || book.smsguest) {
             try {
                 const dataToSend = {
-                    tripid:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                    tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
                     driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-                    mobileNo:  formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
@@ -1475,9 +1480,9 @@ const useTripsheet = () => {
         if (DriverSMS || formData.DriverSMS || book.DriverSMS) {
             try {
                 const dataSend = {
-                    tripid:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                    tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
                     driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-                    mobileNo:  formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,

@@ -826,6 +826,7 @@ const useBooking = () => {
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
+      const datamode=isEditMode?selectedCustomerData.status:book.status
       try {
         const user = localStorage.getItem("username")
         const dataToSend = {
@@ -856,7 +857,8 @@ const useBooking = () => {
           bookingno: lastBookingno || '',
           customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
           username: user,
-          Address: formData.address1 || selectedCustomerData.address1 || book.address1 || ""
+          Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
+          status: datamode
 
 
 

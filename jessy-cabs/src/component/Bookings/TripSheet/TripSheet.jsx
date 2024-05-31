@@ -517,6 +517,20 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
+                <div className="input">
+                  <div className="icone">
+                    <AttachEmailIcon color="action" />
+                  </div>
+                  <TextField
+                    name="orderbyemail"
+                    value={formData.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
+                    onChange={handleChange}
+                    label="orderbyemail"
+                    id="orderbyemail"
+                    size="small"
+                    autoComplete="password"
+                  />
+                </div>
 
               </div>
 

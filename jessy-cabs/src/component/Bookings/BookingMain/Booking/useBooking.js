@@ -83,9 +83,10 @@ const useBooking = () => {
   const location = useLocation();
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
+  const [infoMessage, setInfoMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [searchText, setSearchText] = useState("");
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -1103,8 +1104,8 @@ const useBooking = () => {
           setSuccessMessage(response.data.message);
 
         } else {
-          setSuccess(true);
-          setSuccessMessage(response.data.message);
+          setInfo(true);
+          setInfoMessage(response.data.message);
         }
 
         setEdit(false)
@@ -1141,9 +1142,15 @@ const useBooking = () => {
         const response = await axios.delete(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno}`);
 
         if (response.data.success) {
+          if (response.status === 201) {
+            setSuccess(true);
+            setSuccessMessage(response.data.message);
+          } else {
+            setInfo(true);
+            setInfoMessage(response.data.message)
+          }
           setSelectedCustomerData(null);
-          setSuccess(true);
-          setSuccessMessage(response.data.message);
+
           setFormData(null);
           handleCancel();
           setRow([]);
@@ -1152,7 +1159,7 @@ const useBooking = () => {
         }
 
       } else if (actionName === "Modify") {
- 
+
         setSendEmail(false)
         handleEdit()
 
@@ -1513,7 +1520,7 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver,
-    vehileName
+    vehileName, infoMessage
   };
 };
 

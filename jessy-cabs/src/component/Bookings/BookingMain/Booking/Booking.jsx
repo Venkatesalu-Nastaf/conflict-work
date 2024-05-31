@@ -136,13 +136,13 @@ const Booking = ({ stationName }) => {
     handleAutocompleteChange,
     setFormData,
     setStartTime,
-    guestsms,
-    setGuestSms,
+    // guestsms,
+    // setGuestSms,
     sendEmail,
     setSendEmail,
     lastBookingNo,
     currentYear,
-    handleClickHide,
+    // handleClickHide,
     searchText,
     setSearchText,
     setreporttime,
@@ -440,7 +440,7 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
               <div className="input">
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
@@ -450,7 +450,7 @@ const Booking = ({ stationName }) => {
                     />
                   }
                   label="Guest SMS"
-                />
+                /> */}
                 <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"

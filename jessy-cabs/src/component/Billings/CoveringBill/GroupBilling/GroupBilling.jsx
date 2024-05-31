@@ -139,7 +139,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                 <div className="detail-container-main detail-container-main-groupbilling">
                     <div className="container-left-groupbilling">
                         <div className="copy-title-btn-GroupBilling">
-                            <div className="input-field inputfeild-group-billing" style={{ flexWrap: 'wrap' }}>
+                            <div className="input-field inputfeild-group-billing">
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
@@ -160,7 +160,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "230px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
@@ -263,7 +263,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "140px" }}>
+                                <div className="input">
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >View Bill</Button>
                                 </div>
                             </div>
@@ -287,7 +287,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         </PopupState>
                     </div>
                     <div className="input-field">
-                        <div className="input" style={{ width: "140px" }}>
+                        <div className="input">
                             <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
                         </div>
                         <div className="input" >
@@ -296,7 +296,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                     </div>
                 </div>
                 <div className="table-bookingCopy-GroupBilling">
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div className='group-billing-table'>
                         <DataGrid
                             rows={rows}
                             columns={columns}
@@ -315,22 +315,22 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                     <div className='alert-popup-main'>
                         {error &&
                             <div className='alert-popup Error' >
-                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <ClearIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{errorMessage}</p>
                             </div>
                         }
                         {success &&
                             <div className='alert-popup Success' >
-                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{successMessage}</p>
                             </div>
                         }
                         {warning &&
                             <div className='alert-popup Warning' >
-                                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{warningMessage}</p>
                             </div>
                         }

@@ -74,6 +74,10 @@
     animation: spin 0.8s linear infinite;
 }
 
+.inputfeild-group-billing {
+    flex-wrap: wrap;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
@@ -122,4 +126,9 @@
         border: none !important;
         border-radius: 15px;
     }
+}
+
+.group-billing-table {
+    height: 400px;
+    width: 100%;
 }

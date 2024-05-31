@@ -169,6 +169,10 @@
     margin-top: 30px;
 }
 
+.template-search-btn {
+    display: flex;
+}
+
 @media screen and (max-width: 410px) {
     .template-input {
         width: 200px !important;
@@ -208,7 +212,9 @@
     }
 }
 
-
+.table-bookingCopy-TransferDataEntry {
+    margin-top: 10px;
+}
 
 @media screen and (min-width: 970px) {
     .table-bookingCopy-TransferDataEntry {
@@ -221,5 +227,28 @@
         width: 94%;
     }
 }
+
+.mail-details-input-field {
+    justify-content: center;
+}
+
+.mail-message-division {
+    text-align: center;
+    margin-top: 10px;
+    color: green;
+    font-weight: 600;
+}
+
+.mailer-search-input-field {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mail-details-table {
+    height: 400px;
+    width: 100%;
+}
+
+
 
 /* .container-left-mailDetails{} */

@@ -48,3 +48,12 @@
 .update-time {
     color: red;
 }
+
+.updates-heading {
+    color: #000;
+    margin: 0px;
+}
+
+.updates-notification-division {
+    margin-bottom: 0.5rem;
+}

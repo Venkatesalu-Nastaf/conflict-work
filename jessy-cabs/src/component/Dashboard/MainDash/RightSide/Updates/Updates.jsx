@@ -6,7 +6,7 @@ import { UpdatesData } from "./Update-Data.js";
 const Updates = () => {
   return (
     <div className="Updates">
-      <h3 style={{ color: '#000000', margin: '0px' }}> Updates</h3>
+      <h3 className="updates-heading"> Updates</h3>
 
       {UpdatesData.map((update) => {
         return (
@@ -15,7 +15,7 @@ const Updates = () => {
               <CgProfile />
             </div>
             <div className="noti">
-              <div style={{ marginBottom: "0.5rem" }}>
+              <div className="updates-notification-division">
                 <span className="update-username">{update.name}</span>
                 <span> {update.noti}</span>
                 <span className="update-time">{update.time}..</span>

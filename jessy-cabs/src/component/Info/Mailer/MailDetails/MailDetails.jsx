@@ -378,11 +378,11 @@ const MailDetails = () => {
           <div className="detail-container-main-mailDetails">
             <div className="container-left-mailDetails">
               <div className="mailDetails-header">
-                <div className="input-field" style={{ justifyContent: "center" }}>
-                  <div className="input" style={{ width: "180px" }}>
+                <div className="input-field mail-details-input-field">
+                  <div className="input">
                     <a href={xlsx} download><Button variant="outlined">Excel Format</Button></a>
                   </div>
-                  <div className="input" style={{ width: "100px" }} onClick={handleIconClick}>
+                  <div className="input" onClick={handleIconClick}>
                     <Button variant="contained">Upload</Button>
                   </div>
                   <input
@@ -393,9 +393,9 @@ const MailDetails = () => {
                     style={{ display: 'none' }}
                   />
                 </div>
-                <div style={{ textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600' }}>{file}</div>
+                <div className="mail-message-division">{file}</div>
                 <div className="input-field ">
-                  <div className=" input-mailer" style={{ width: "400px" }}>
+                  <div className=" input-mailer">
                     <div className="icone">
                       <SmsIcon color="action" />
                     </div>
@@ -417,22 +417,22 @@ const MailDetails = () => {
                       Send
                     </Button>
                   </div>
-                  <div className="input" style={{ width: "20px" }}>
+                  <div className="input">
                   <Button variant="outlined" onClick={handleCleardata}>Clear</Button>
                   </div>
                 </div>
                 <div className='alert-popup-main'>
                   {success &&
                     <div className='alert-popup Success' >
-                      <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                       <p>{successMessage}</p>
                     </div>
                   }
                   {error &&
                     <div className='alert-popup Error' >
-                      <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                      <div className="popup-icon"> <ClearIcon /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                       <p>{errorMessage}</p>
                     </div>
                   }
@@ -444,11 +444,11 @@ const MailDetails = () => {
 
                 <div className="textboxlist-mailer">
                   <div className="textboxlist-customer ">
-                    <div className="input-field" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <div className="input-field mailer-search-input-field">
                       <div>
-                        <div className="input template-input" style={{ width: "300px" }}>
+                        <div className="input template-input">
                           <div className="icone">
-                            <AiOutlineFileSearch style={{ fontSize: '23px' }} />
+                            <AiOutlineFileSearch />
                           </div>
                           <TextField
                             size="small"
@@ -461,8 +461,8 @@ const MailDetails = () => {
                           />
                         </div>
                       </div>
-                      <div className="template-search-btn" style={{ display: 'flex' }}>
-                        <div className="input" style={{ width: "100px" }}>
+                      <div className="template-search-btn">
+                        <div className="input">
                         <Button variant="contained" onClick={()=>handleShowdata()}>Search</Button>
                         </div>
                         <div className="input" onClick={handleTemplateCreation}>
@@ -493,14 +493,12 @@ const MailDetails = () => {
                       </Table>
                     </div> */}
 
-                    <div className="table-bookingCopy-TransferDataEntry" style={{ marginTop: '10px' }}>
-                      <div style={{ height: 400, width: "100%" }}>
+                    <div className="table-bookingCopy-TransferDataEntry">
+                      <div className="mail-details-table">
                         <DataGrid
                           rows={templatedata}
                           columns={columns}
                           onRowClick={handletableClick}
-
-
                         />
                       </div>
                     </div>

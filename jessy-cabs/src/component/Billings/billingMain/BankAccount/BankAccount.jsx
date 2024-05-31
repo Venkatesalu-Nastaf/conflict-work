@@ -100,7 +100,7 @@ const BankAccount = () => {
               <div className="input-field input-field-bankaccount">
                 <div className="input input-bankaccount">
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -124,9 +124,9 @@ const BankAccount = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input input-bankaccount" style={{ width: "230px" }}>
+                <div className="input input-bankaccount">
                   <div className="icone">
-                    <ListAltIcon color="action" style={{ fontSize: "27px" }} />
+                    <ListAltIcon color="action" />
                   </div>
                   <Autocomplete
                     fullWidth
@@ -148,12 +148,12 @@ const BankAccount = () => {
                     }
                   />
                 </div>
-                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
+                <div className="inpu">
                   <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
-                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
+                <div className="inpu">
                   <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
                     <CancelIcon />
                   </Button>
@@ -170,7 +170,7 @@ const BankAccount = () => {
                 <div className="input input-bankname">
                   {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -184,7 +184,7 @@ const BankAccount = () => {
                 </div>
                 <div className="input input-bankname">
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -198,7 +198,7 @@ const BankAccount = () => {
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`}>
                   <label htmlFor={`totalin-${index}`}>TotalIn:</label>
                   <input
                     className="bank-amount-input"
@@ -212,7 +212,7 @@ const BankAccount = () => {
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`}>
                   <label htmlFor={`totalout-${index}`}>TotalOut:</label>
                   <input
                     className="bank-amount-input"
@@ -265,32 +265,32 @@ const BankAccount = () => {
         <div className='alert-popup-main'>
           {error && (
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           )
           }
           {warning && (
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           )
           }
           {info && (
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           )
           }
           {success && (
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           )

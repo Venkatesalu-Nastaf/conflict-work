@@ -129,6 +129,10 @@
   justify-content: center;
 }
 
+.inputfeild-billing-right-margin-bottom{
+  margin-bottom: 30px;
+}
+
 @media screen and (min-width:1032px) and (max-width:1240.99px) {
   .Billing-secend-right {
     width: 40%;
@@ -205,6 +209,15 @@
   width: 100% !important;
 }
 
+.mobile-division-two {
+  flex-wrap: wrap;
+  background-color: #fff;
+  gap: 1px;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0px;
+}
+
 @media screen and (max-width:500px) {
   .desktop-division-one {
     display: none !important;
@@ -227,6 +240,27 @@
   }
 }
 
-.min-charge-value-input{
+.min-charge-value-input {
   padding-top: 20px;
+}
+
+.biling-amount-input {
+  padding-top: 20PX;
+}
+
+.biling-amount-input-total {
+  padding-top: 10px;
+}
+
+.billing-calculation-icon {
+  margin-left: 50%;
+  margin-top: 5px;
+}
+
+.billing-permit-input,
+.billing-permit-input,
+.billing-toll-input,
+.billing-Vpermit-input,
+.billing-vendortoll-input {
+  padding-top: 10px;
 }

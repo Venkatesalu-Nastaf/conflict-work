@@ -296,7 +296,7 @@ const TransferReport = ({ stationName }) => {
         <div className="detail-container-main detail-container-main-tfreport">
           <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
-              <div className="input-field input-field-transfer-report" style={{ flexWrap: 'wrap' }}>
+              <div className="input-field input-field-transfer-report">
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
@@ -373,7 +373,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
                 <div className="input input-transfer-report" >
                   <div className="icone">
-                    <PiMoneyBold color="action" style={{ fontSize: "23px" }} />
+                    <PiMoneyBold color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -399,7 +399,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
                 <div className="input input-transfer-report" >
                   <div className="icone">
-                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -412,7 +412,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
                 <div className="input input-transfer-report" >
                   <div className="icone">
-                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -598,14 +598,14 @@ const TransferReport = ({ stationName }) => {
                 )}
               </PopupState>
             </div>
-            <div className="input" style={{ width: "150px" }}>
+            <div className="input">
               <Button variant="outlined">Remove</Button>
             </div>
           </div>
         </div>
         <div className="billing-tables-TransferReport">
           <div className="table-bookingCopy-TransferReport">
-            <div style={{ height: 400, width: "100%" }}>
+            <div className='transfer-report-table'>
               <DataGrid
                 rows={rows}
                 columns={columns}
@@ -651,29 +651,29 @@ const TransferReport = ({ stationName }) => {
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error'>
-                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"><ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{errorMessage}</p>
               </div>
             }
             {error1 &&
               <div className='alert-popup Error'>
-                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"><ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{errormessage1}</p>
               </div>
             }
             {success &&
               <div className='alert-popup Success'>
-                <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"><FileDownloadDoneIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{successMessage}</p>
               </div>
             }
             {warning &&
               <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{warningMessage}</p>
               </div>
             }

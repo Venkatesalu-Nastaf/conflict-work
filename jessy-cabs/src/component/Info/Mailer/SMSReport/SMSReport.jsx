@@ -218,7 +218,7 @@ const handleExcelDownload = async () => {
           <div className="container-left">
             <div className="copy-title-btn-SMSReport">
               <div className="input-field sms-report-inputfeild">
-                <div className="input" style={{ width: "200px" }}>
+                <div className="input">
                   {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="From Date" defaultValue={dayjs()} />
                   </LocalizationProvider> */}
@@ -231,7 +231,7 @@ const handleExcelDownload = async () => {
                     />
                 </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "200px" }}>
+                <div className="input">
                   {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="To Date" defaultValue={dayjs()} />
                   </LocalizationProvider> */}
@@ -243,7 +243,7 @@ const handleExcelDownload = async () => {
                     />
                 </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "120px" }}>
+                <div className="input">
                   <Button
                     variant="outlined"
                     component="label"
@@ -255,10 +255,10 @@ const handleExcelDownload = async () => {
                   </Button>
                 </div>
               
-                <div className="input" style={{ width: "120px" }}>
+                <div className="input">
                   <Button variant="contained" onClick={filterData}>Show</Button>
                 </div>
-                <div className="input" style={{ width: "120px" }}>
+                <div className="input">
                   <Button variant="outlined" onClick={dataall}>Show All</Button>
                 </div>
               </div>
@@ -266,7 +266,7 @@ const handleExcelDownload = async () => {
           </div>
         </div>
         <div className="table-bookingCopy-SMSReport">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='sms-report-table'>
             <DataGrid
               rows={datafilter?smsreport:filteredReport}
               columns={columns}

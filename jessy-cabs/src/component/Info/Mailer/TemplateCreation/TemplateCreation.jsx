@@ -277,11 +277,11 @@ const TemplateCreation = () => {
 
   return (
     <>
-      <div className='Scroll-Style-hide' style={{ width: '100%', height: '71vh', overflow: 'auto'}}>
-        <div className='mail-template-division' style={{ backgroundColor: '#fff' }}>
+      <div className='Scroll-Style-hide template-creation-main-div'>
+        <div className='mail-template-division'>
           <div className='word-head'>
             <div className='back-input'>
-              <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
+              <div className='back-section-div'><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
               <div>
                 <div>
                   <input type="text" className='template-name' name="TemplateName" value={templatedata.TemplateName || ''} onChange={handleChange} placeholder='Enter a template name' />
@@ -293,7 +293,7 @@ const TemplateCreation = () => {
             </div>
             <div className='right-header'>
               <div className='flex items-center'>
-                <p onClick={handleFileUploadClick} className='attachments' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'white' }}>
+                <p onClick={handleFileUploadClick} className='attachments template-creation-attachments'>
                   Attachments
                 </p>
                 <input

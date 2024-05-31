@@ -1586,7 +1586,7 @@ const Booking = ({ stationName }) => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-Booking">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className="booking-main-table">
             <DataGrid
               rows={reversedRows}
               columns={columns}
@@ -1596,10 +1596,10 @@ const Booking = ({ stationName }) => {
             />
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
-                <div style={{ position: "relative" }}>
+                <div className="booking-main-table-div1">
                   {Array.isArray(allFile) &&
                     allFile.map((img, index) => (
-                      <div key={index} style={{ position: "relative" }}>
+                      <div key={index} className="booking-main-table-div2">
                         <embed
                           src={`${apiUrl}/public/booking_doc/ + img.fileName`}
                           type="application/pdf"
@@ -1607,15 +1607,8 @@ const Booking = ({ stationName }) => {
                           height="600px"
                         />
                         <button
+                          className="booking-main-table-btn"
                           onClick={() => handleimagedelete(img.fileName)}
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            opacity: 0,
-                          }}
                         />
                       </div>
                     ))}

@@ -71,8 +71,8 @@ const FuelRate = () => {
             <form action="">
                 <div className="FuelRate-header">
                     <div className="input-field">
-                        <div className="input fuelrate-input" style={{ width: "570px" }}>
-                            <div className="icone" style={{ paddingBottom: "15px" }} >
+                        <div className="input fuelrate-input">
+                            <div className="icone" >
                                 <FontAwesomeIcon icon={faGasPump} size="xl" />
                             </div>
                             <Autocomplete

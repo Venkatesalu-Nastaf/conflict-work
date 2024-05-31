@@ -298,10 +298,10 @@ const MainDashboard = () => {
                         <div className="alert-popup Success">
                           <div className="popup-icon">
                             {" "}
-                            <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                            <FileDownloadDoneIcon />{" "}
                           </div>
                           <span className="cancel-btn" onClick={hidePopup}>
-                            <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                            <ClearIcon color="action" />{" "}
                           </span>
                           <p>{success}</p>
                         </div>

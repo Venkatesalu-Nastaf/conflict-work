@@ -9,6 +9,11 @@
   width: -webkit-fill-available;
 }
 
+.sidebar-main-menu {
+  display: flex;
+  align-items: center;
+}
+
 .header-user-mobile {
   display: none;
 }
@@ -298,4 +303,18 @@
 .isbillingdropdownclicked,
 .isbookingdropdownclicked {
   transform: scaleY(-1);
+}
+
+.sidebar-main-menu-arrow {
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+.avatar-item-2 {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-update-img{
+  width: 100%;
 }

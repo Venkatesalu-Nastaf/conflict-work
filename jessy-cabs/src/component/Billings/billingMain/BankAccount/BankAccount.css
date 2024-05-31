@@ -84,6 +84,9 @@
 .bank-btn-amount-main {
     width: 130px;
     margin: 0px 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #bank-btn-amountIN label {
@@ -239,4 +242,9 @@
 
 .input-bank-account-icon {
     width: fit-content !important;
+}
+
+.inpu {
+    width: fit-content;
+    margin-top: 10px;
 }

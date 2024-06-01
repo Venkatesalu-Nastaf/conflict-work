@@ -584,7 +584,8 @@ const useExeclpage = () => {
                  
 
                 // Construct the file path for fetching the PDF
-                const filePath = `http://localhost:8081/images/${data.imagees}`;
+                // const filePath = `http://localhost:8081/images/${data.imagees}`;
+                  const filePath = `http://localhost:8081/public/booking_doc/${data.imagees}`;
                 
                 // Fetch the PDF file
                 const response = await fetch(filePath);

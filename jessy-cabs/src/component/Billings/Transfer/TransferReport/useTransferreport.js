@@ -375,7 +375,8 @@ const useTransferreport = () => {
   }, [customer, servicestation, tripData, apiUrl]);
 
   const [attachedImage, setAttachedImage] = useState("");
-
+//  its is booking table or tripsheettabel
+//  i change api for booking mail pdf go to see booking.js
   useEffect(() => {
     const fetchData = async () => {
       try {

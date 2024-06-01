@@ -973,7 +973,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
       if (dataimgetype !== "pdf") {
         return (
           <View key={index} style={{width:'100%',backgroundColor:'green'}}>
-            <Image src={`${apiUrl}/images/${item.imagees}`} style={{height:'500px'}}  />
+            <Image src={`${apiUrl}/public/booking_doc/${item.imagees}`} style={{height:'500px'}}  />
           </View>
         );
       } else {

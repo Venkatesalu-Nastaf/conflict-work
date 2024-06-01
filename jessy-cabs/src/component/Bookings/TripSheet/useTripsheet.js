@@ -619,7 +619,7 @@ const useTripsheet = () => {
                     vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
-                    customeremail: formData.orderedby || selectedCustomerData.orderedby || book.orderedby || '',
+                    // customeremail: formData.orderedby || selectedCustomerData.orderedby || book.orderedby || '',
                     status: formData.status || book.status || selectedCustomerData.status,
                     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
                     servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || ''

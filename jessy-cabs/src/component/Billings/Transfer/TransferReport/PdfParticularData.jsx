@@ -304,7 +304,7 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
     const fetchData = async () => {
       const tripidno = tripno
       try {
-        const response = await fetch(`${apiUrl}/get-attachedmailimage/${tripidno}`);
+        const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
         if (response.status === 200) {
           const data = await response.json();
           console.log(data.files)

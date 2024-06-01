@@ -358,6 +358,16 @@ const useCustomer = () => {
             setErrorMessage("fill mantatory fields");
             return;
         }
+        if (!book.customeremail) {
+            setError(true);
+            setErrorMessage("Enter The Mail");
+            return;
+        }
+        if (!book.phoneno) {
+            setError(true);
+            setErrorMessage("Enter The Phoneno");
+            return;
+        }
 
         try {
             await axios.post(`${apiUrl}/customers`, book);

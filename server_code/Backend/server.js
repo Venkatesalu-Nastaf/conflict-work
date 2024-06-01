@@ -480,6 +480,7 @@ const pdfDirectory = path.join(__dirname, 'uploads');
 app.use('/images', express.static(attachedmailDirectory));
 app.use('/pdf', express.static(pdfDirectory));
 // Example route to serve an image by its filename
+// -----------------its bookingpdf image data  i chnage folder of image i mnot use this api -------------------------------
 app.get('/get-attachedmailimage/:bookingno', (req, res) => {
   const { bookingno } = req.params;
   const query = 'SELECT path FROM tripsheetupload WHERE bookingno = ?';
@@ -504,6 +505,7 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
     res.json({ files });
   });
 });
+// -------------------------------------------------------------------------------------------------------------------------------
 
 //get image for organization
 

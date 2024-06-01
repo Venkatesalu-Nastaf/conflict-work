@@ -53,7 +53,7 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+// import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -110,10 +110,10 @@ const Booking = ({ stationName }) => {
     error,
     success,
     info,
-    warning,
+    // warning,
     successMessage,
     errorMessage,
-    warningMessage,
+    // warningMessage,
     infoMessage,
     book,
     handleClick,
@@ -170,11 +170,11 @@ const Booking = ({ stationName }) => {
     handleimagedelete,
     handleClosedeleteDialog,
     dialogdeleteOpen,
-    handleprevent,
+    // handleprevent,
     rowdriver,
     handleRowClickdriver,
-    setErrorMessage,
-    setError,
+    // setErrorMessage,
+    // setError,
     edit,
     handleKeyEnterdriver,
     vehileName,
@@ -357,25 +357,45 @@ const Booking = ({ stationName }) => {
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-stationname"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+                  // value={ book.servicestation || selectedCustomerData.servicestation||formData.servicestation||''}
+
+                  value={stationName.find((option) => option.Option)?.label || book?.servicestation || selectedCustomerData.servicestation||formData.servicestation||''}
                   options={stationName.map((option) => ({
                     label: option.Stationname,
                   }))}
-                  getOptionLabel={(option) => option.label || book?.stationname || ''}
+                  // getOptionLabel={(option) => option.label || book?.servicestation ||selectedCustomerData.servicestation||formData.servicestation|| ''}
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Service Station" name="servicestation" />
+                      <TextField {...params} label="servicestation" name="servicestation" />
                     )
                   }
                   }
-                />
+                /> */}
+                <Autocomplete
+                fullWidth
+                id="free-solo-demo"
+                freeSolo
+                size="small"
+                value={ book.servicestation || selectedCustomerData.servicestation||formData.servicestation||selectedCustomerDatas.servicestation||''}
+                options={stationName?.map((option) => ({
+                  label: option?.Stationname,
+                }))}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "servicestation")
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="servicestation" name="servicestation" inputRef={params.inputRef} />
+                  );
+                }}
+              />
               </div>
               <div className="input">
                 <div className="icone">
@@ -859,9 +879,9 @@ const Booking = ({ stationName }) => {
               </div> */}
             {/* <div style={{display:'flex',flexWrap:'wrap'}}> */}
             <div className="input-dummy">
-              {formData.bookingno ||
+              {/* {formData.bookingno ||
                 selectedCustomerData.bookingno ||
-                book.bookingno ? (
+                book.bookingno ? ( */}
                 <Button
                   color="primary"
                   variant="contained"
@@ -872,11 +892,11 @@ const Booking = ({ stationName }) => {
                   <input
                     type="file"
                     style={{ display: "none" }}
-                    onClick={handleprevent}
+                    // onClick={handleprevent}
                     onChange={(e) => setFile(e.target.files[0])}
                   />
                 </Button>
-              ) : (
+              {/* ) : (
                 <Button
                   color="primary"
                   variant="contained"
@@ -888,7 +908,7 @@ const Booking = ({ stationName }) => {
                 >
                   Attach File
                 </Button>
-              )}
+              )} */}
             </div>
             <div className="input-dummy">
               <Button
@@ -1478,7 +1498,7 @@ const Booking = ({ stationName }) => {
               <p>{errorMessage}</p>
             </div>
           )}
-          {warning && (
+          {/* {warning && (
             <div className="alert-popup Warning">
               <div className="popup-icon">
                 {" "}
@@ -1489,7 +1509,7 @@ const Booking = ({ stationName }) => {
               </span>
               <p>{warningMessage}</p>
             </div>
-          )}
+          )} */}
           {info && (
             <div className="alert-popup Info">
               <div className="popup-icon">
@@ -1601,14 +1621,16 @@ const Booking = ({ stationName }) => {
                     allFile.map((img, index) => (
                       <div key={index} className="booking-main-table-div2">
                         <embed
-                          src={`${apiUrl}/public/booking_doc/ + img.fileName`}
-                          type="application/pdf"
+                          // src={`${apiUrl}/public/booking_doc/ + img.fileName`}
+                          src={`${apiUrl}/public/booking_doc/${img.path}`}
+                          // type="application/pdf"
                           width="100%"
                           height="600px"
+                          style={{ width: '800px', maxWidth: '100%' }}
                         />
                         <button
                           className="booking-main-table-btn"
-                          onClick={() => handleimagedelete(img.fileName)}
+                          onClick={() => handleimagedelete(img.path)}
                         />
                       </div>
                     ))}

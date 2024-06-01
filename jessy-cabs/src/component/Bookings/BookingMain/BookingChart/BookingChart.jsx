@@ -26,16 +26,19 @@ const BookingChart = () => {
     vehicleOnlineDetails
 
   } = useBookingchart();
+  
+  
   useEffect(() => {
     if (actionName === "List") {
       handleClick(null, "List");
     }
   }, [actionName, handleClick]);
+
+
   const [clickedSegment, setClickedSegment] = useState('Active');
   const [vehicleDetail, setVehicleDetail] = useState('')
   const [getVehicleDetail, setGetVehicleDetail] = useState([])
   const [vehdriverNames, setVehdriverNames] = useState([])
-  // const [vehStatus, setVehStatus] = useState([])
   const [latestVehicleDetail, setLatestVehicleDetail] = useState([])
   const apiUrl = APIURL;
 

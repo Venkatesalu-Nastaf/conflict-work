@@ -31,7 +31,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehiclestatement from './useVehiclestatement';
 import { IoBusinessSharp } from "react-icons/io5";
-// import { MdDateRange } from "react-icons/md";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -105,7 +104,7 @@ const VehicleStatement = () => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="vendor_name_from"
                     freeSolo
                     size="small"
                     value={servicestation}
@@ -125,7 +124,7 @@ const VehicleStatement = () => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="vendorNameTo"
                     freeSolo
                     size="small"
                     value={servicestation}
@@ -146,6 +145,7 @@ const VehicleStatement = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
+                        id="fromDate"
                         label="From Date"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
@@ -160,6 +160,7 @@ const VehicleStatement = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
+                        id="dateTo"
                         label="To Date"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
@@ -174,14 +175,7 @@ const VehicleStatement = () => {
                   <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
-              {/* <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
-                <div className="input" style={{ width: "130px" }} >
-                  <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
-                </div>
-                <div className="input" style={{ width: "110px" }} >
-                  <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
-                </div>
-              </div> */}
+
               <div className="input-field paid-amount-input-field">
                 <div className="input">
                   <TextField
@@ -204,14 +198,7 @@ const VehicleStatement = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                    <SpeedDialAction
-                      key={action.name}
-                      icon={action.icon}
-                      tooltipTitle={action.name}
-                      onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                    />
-                  ))} */}
+        
               {TripStatus_read === 1 && (
                 <SpeedDialAction
                   key="list"

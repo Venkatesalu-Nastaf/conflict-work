@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
@@ -80,7 +79,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-customer"
                                         freeSolo
                                         size="small"
                                         value={customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
@@ -100,6 +99,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                            id="formdate"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -123,6 +123,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                            id="toDate"
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -145,7 +146,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-solo-station"
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}

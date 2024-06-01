@@ -236,3 +236,55 @@
   color: #fff;
   font-size: larger;
 }
+
+.vehicle-info-table1 {
+  height: 220px;
+  overflow: scroll;
+}
+
+.vehicle-info-table-heading-first {
+  border-top-left-radius: 10px;
+}
+
+.vehicle-info-table-heading-first {
+  border-top-right-radius: 10px;
+}
+
+.vehicle-info-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.vehicle-info-upload-btn-width {
+  width: 100%;
+}
+
+.vehicle-info-search-input-field {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.vehicle-info-main-table {
+  height: 400px;
+  width: 100%;
+}
+
+.vehicle-info-dailog-box-div1 {
+  position: relative;
+}
+
+.vehicle-info-dailog-box-btn {
+  margin-bottom: 10px;
+}
+
+.vehicle-info-dailog-box-btn-division {
+  border-bottom: 1px solid black;
+}
+
+.vehicle-info-dailog-box-delete-print-division {
+  display: flex;
+  padding: 10px;
+  gap: 15px;
+}

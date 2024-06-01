@@ -202,3 +202,17 @@
   padding-left: 0px;
   font-weight: 500;
 }
+
+.customer-billing-group-input {
+  display: grid;
+}
+
+.customer-billing-group-input-division {
+  display: flex;
+  align-items: center;
+}
+
+.customer-speeddail {
+  padding: 26px !important;
+  margin: 50px !important;
+}

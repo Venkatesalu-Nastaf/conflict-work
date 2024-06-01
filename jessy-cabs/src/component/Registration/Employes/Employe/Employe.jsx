@@ -127,82 +127,82 @@ const Employe = () => {
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
             <div className="input-field employee-input-feilds">
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="empid"
+                  className="full-width"
                   label="Employe ID"
                   name="empid"
                   autoComplete="new-password"
                   value={selectedCustomerData?.empid || book.empid}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="empname"
+                  className="full-width"
                   label="Name"
                   name="empname"
                   autoComplete="new-password"
                   value={selectedCustomerData?.empname || book.empname}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <EmailIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="empemailid"
+                  className="full-width"
                   label="Email Id"
                   name="empemailid"
                   autoComplete="new-password"
                   value={selectedCustomerData?.empemailid || book.empemailid}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PhoneIphoneIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="empmobile"
+                  className="full-width"
                   label="Mobile"
                   name="empmobile"
                   autoComplete="new-password"
                   value={selectedCustomerData?.empmobile || book.empmobile}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <WorkOutlineRoundedIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="jobroll"
+                  className="full-width"
                   label="Job Roll"
                   name="jobroll"
                   autoComplete="new-password"
                   value={selectedCustomerData?.jobroll || book.jobroll}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -228,145 +228,145 @@ const Employe = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <TransgenderRoundedIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="gender"
+                  className="full-width"
                   label="Gender"
                   name="gender"
                   autoComplete="new-password"
                   value={selectedCustomerData?.gender || book.gender}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <BloodtypeIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="bloodgroup"
+                  className="full-width"
                   label="Blood Group"
                   name="bloodgroup"
                   autoComplete="new-password"
                   value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input input-address" style={{ paddingRight: '15px' }}>
+              <div className="input input-address">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
                   id="address1"
+                  className="full-width"
                   label="Address"
                   name="address1"
                   multiline
                   rows={2}
                   sx={{ width: "100%" }}
                   autoComplete="new-password"
-                  style={{ width: '100%' }}
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <ContactMailIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="aadharcard"
+                  className="full-width"
                   label="Aadhar Card"
                   name="aadharcard"
                   autoComplete="new-password"
                   value={selectedCustomerData?.aadharcard || book.aadharcard}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <FactCheckIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="pancard"
+                  className="full-width"
                   label="Pan Card"
                   name="pancard"
                   autoComplete="new-password"
                   value={selectedCustomerData?.pancard || book.pancard}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <EscalatorWarningIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="guardian"
+                  className="full-width"
                   label="Guardian"
                   name="guardian"
                   autoComplete="new-password"
                   value={selectedCustomerData?.guardian || book.guardian}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <CurrencyRupeeIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="fixedsalary"
+                  className="full-width"
                   label="Fixed Salary"
                   name="fixedsalary"
                   autoComplete="new-password"
                   value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <DeviceHubRoundedIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="uanid"
+                  className="full-width"
                   label="UAN Id"
                   name="uanid"
                   autoComplete="new-password"
                   value={selectedCustomerData?.uanid || book.uanid}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <MedicalInformationIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="esino"
+                  className="full-width"
                   label="ESI No"
                   name="esino"
                   autoComplete="new-password"
                   value={selectedCustomerData?.esino || book.esino}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
+              <div className="employee-licence-no-input-division">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
@@ -380,7 +380,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
 
-                <div style={{ paddingLeft: '20px' }}>
+                <div className="employee-file-upload-division">
                   {selectedCustomerData?.empid || book.empid ? (
                     <Button component="label">
                       <UploadFileIcon />
@@ -403,7 +403,7 @@ const Employe = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "160px" }}>
+              <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -417,11 +417,10 @@ const Employe = () => {
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
-
-                <ClearIcon style={{ color: "#fff" }} />
+                <ClearIcon />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />
+                <ClearIcon color="action" />
               </span>
               <p>{errorMessage}</p>
             </div>
@@ -429,10 +428,10 @@ const Employe = () => {
           {warning && (
             <div className="alert-popup Warning">
               <div className="popup-icon">
-                <ErrorOutlineIcon style={{ color: "#fff" }} />
+                <ErrorOutlineIcon />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />
+                <ClearIcon color="action" />
               </span>
               <p>{warningMessage}</p>
             </div>
@@ -441,10 +440,10 @@ const Employe = () => {
             <div className="alert-popup Success">
               <div className="popup-icon">
 
-                <FileDownloadDoneIcon style={{ color: "#fff" }} />
+                <FileDownloadDoneIcon />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />
+                <ClearIcon color="action" />
               </span>
               <p>{successMessage}</p>
             </div>
@@ -453,10 +452,10 @@ const Employe = () => {
             <div className="alert-popup Info">
               <div className="popup-icon">
 
-                <BsInfo style={{ color: "#fff" }} />
+                <BsInfo />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />
+                <ClearIcon color="action" />
               </span>
               <p>{infoMessage}</p>
             </div>
@@ -510,12 +509,11 @@ const Employe = () => {
           </StyledSpeedDial>
         </Box>
         <div className="Employe-search-container">
-          <div className="input-field  Employe-search-input" style={{ justifyContent: "center" }}>
-            <div className="input" style={{ width: "230px" }}>
+          <div className="input-field Employe-search-input">
+            <div className="input">
               <div className="icone">
                 <AiOutlineFileSearch
                   color="action"
-                  style={{ fontSize: "27px" }}
                 />
               </div>
               <TextField
@@ -527,7 +525,7 @@ const Employe = () => {
                 onChange={(e) => setSearchText(e.target.value)}
               />
             </div>
-            <div className="input" style={{ width: "140px" }}>
+            <div className="input">
               <Button variant="contained" onClick={handleShowAll}>Search</Button>
             </div>
           </div>
@@ -552,7 +550,7 @@ const Employe = () => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-Employe ">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className="registration-employee-table">
             <DataGrid
               className="Scroll-Style"
               rows={rows}
@@ -563,12 +561,12 @@ const Employe = () => {
           </div>
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
-              <div style={{ position: 'relative' }}>
+              <div className="employee-dialogbox-div1">
                 {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index} style={{ position: 'relative' }}>
+                  <div key={index} className="employee-dialogbox-div2">
 
                     <embed src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                    <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
+                    <button onClick={() => handleimagedelete(img.fileName)} className="employee-dialogbox-btn" />
                   </div>
                 ))}
               </div>

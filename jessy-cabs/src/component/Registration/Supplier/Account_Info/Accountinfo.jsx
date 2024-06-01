@@ -108,7 +108,7 @@ const Accuntinfo = () => {
         <div className="detail-container-main-account">
           <div className="container-left-account">
             <div className="input-field account-info-input-feild">
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
@@ -118,14 +118,14 @@ const Accuntinfo = () => {
                   margin="normal"
                   size="small"
                   id="accountNo"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <CalendarMonthIcon color="action" />
                 </div>
@@ -143,72 +143,72 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
                   name="vehicleTravels"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.vehicleTravels || book.vehicleTravels}
                   onChange={handleChange}
                   label="Vehicle/Travels"
                   id="vehicleTravels"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <ContactPhoneIcon color="action" />
                 </div>
                 <TextField
                   name="phone"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.phone || book.phone}
                   onChange={handleChange}
                   label="Phone"
                   id="phone"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
                   id="address123"
+                  className='full-width'
                   label="Address"
                   name="address1"
                   multiline
                   rows={2}
                   sx={{ width: "100%" }}
                   autoComplete="new-password"
-                  style={{ width: '100%' }}
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
                   name="cperson"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.cperson || book.cperson}
                   onChange={handleChange}
                   label="C Person"
                   id="cperson"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input radio" style={{ paddingRight: '15px' }}>
+              <div className="input radio">
                 <div className='icone'>
-                  <GrSelect style={{ fontSize: '25px' }} />
+                  <GrSelect />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -230,24 +230,24 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
-              <div className="input" style={{ paddingRight: "15px" }}>
+              <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
                   name="email"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
                   label="Email"
                   id="email"
                   variant="standard"
-                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: "15px" }}>
+              <div className="input">
                 <div className='icone'>
-                  <FaCarOn style={{ fontSize: '25px' }} />
+                  <FaCarOn />
                 </div>
                 <TextField
                   type="number"
@@ -266,24 +266,24 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-              <div className="input radio" style={{ paddingRight: "15px" }}>
+              <div className="input radio">
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
                 <TextField
                   name="entity"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
                   label="Opening Balance"
                   id="entity"
                   variant="standard"
-                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className='icone'>
-                  <FaCarOn style={{ fontSize: '25px' }} />
+                  <FaCarOn />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -328,22 +328,22 @@ const Accuntinfo = () => {
               </RadioGroup>
             </FormControl>
           </div>
-          <div className="input" style={{ paddingRight: '15px' }}>
+          <div className="input">
             <div className="icone">
               <RateReviewIcon color="action" />
             </div>
             <TextField
               name="rateType"
               autoComplete="new-password"
+              className='full-width'
               value={selectedCustomerData?.rateType || book.rateType}
               onChange={handleChange}
               label="Rate Type"
               id="rateType"
               variant="standard"
-              style={{ width: '100%' }}
             />
           </div>
-          <div className="input" style={{ width: "160px" }}>
+          <div className="input">
             {isEditMode ? (
               <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
             ) : (
@@ -354,34 +354,34 @@ const Accuntinfo = () => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
         </div>
-        <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
+        <div className="SpeedDial account-info-speed-dail">
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

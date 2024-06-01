@@ -118,12 +118,11 @@ const BackUp = () => {
         setSuccessMessage("Data Downloaded!");
     }
     return (
-        <div className="BackUp-form" style={{ width: '100%' }}>
+        <div className="BackUp-form">
             <form action="">
                 <div className="BackUp-header">
-                    <div className="input-field backup-inputs" style={{ justifyContent: 'center', marginTop: '20px' }}>
+                    <div className="input-field backup-inputs">
                         <div className="input">
-
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
                                     <DatePicker
@@ -147,12 +146,12 @@ const BackUp = () => {
                                 </DemoItem>
                             </LocalizationProvider>
                         </div>
-                        <div className="input" style={{ marginTop: '40px' }}>
+                        <div className="input back-up-btns">
                             <Button startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
                                 Data BackUp
                             </Button>
                         </div>
-                        <div className="input" style={{ marginTop: '40px' }}>
+                        <div className="input back-up-btns">
                             <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
                                 Import Data
                             </Button>
@@ -161,8 +160,8 @@ const BackUp = () => {
                     <div className="loading-spinner-container">
                         {progress >= 100 ? (
                             <div className="content">
-                                <div className="input-field" style={{ justifyContent: 'center', marginTop: '20px' }}>
-                                    <div className="input" style={{ marginTop: '40px' }}>
+                                <div className="input-field">
+                                    <div className="input back-up-btns">
                                         <Button onClick={DownloadSuccess} startIcon={<FontAwesomeIcon icon={faDownload} size="lg" />} variant="contained">
                                             Download
                                         </Button>
@@ -180,29 +179,29 @@ const BackUp = () => {
             <div className='alert-popup-main'>
                 {error &&
                     <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <ClearIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{errorMessage}</p>
                     </div>
                 }
                 {info &&
                     <div className='alert-popup Info' >
-                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <BsInfo /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{infoMessage}</p>
                     </div>
                 }
                 {warning &&
                     <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{warningMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{successMessage}</p>
                     </div>
                 }

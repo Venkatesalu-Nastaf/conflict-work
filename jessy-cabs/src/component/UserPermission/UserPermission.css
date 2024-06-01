@@ -17,6 +17,7 @@
 
 .td-content {
     text-align: center;
+    background-color: #E0F1F9;
 }
 
 .table-header>.th-content {
@@ -41,4 +42,13 @@
 
 .table-up-down-icon {
     font-size: 20px;
+}
+
+.user-permission-table-title {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user-permission-dashboard-row {
+    background-color: #E0F1F9;
 }

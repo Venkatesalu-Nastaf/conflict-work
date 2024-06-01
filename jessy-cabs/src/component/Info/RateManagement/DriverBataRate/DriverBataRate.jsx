@@ -21,14 +21,12 @@ import CarCrashIcon from '@mui/icons-material/CarCrash';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-// import EngineeringIcon from "@mui/icons-material/Engineering";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
-// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -92,12 +90,13 @@ const DriverBataRate = () => {
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      id="from_date"
                       label="From Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -109,12 +108,13 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      id="to_end"
                       label="To Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
@@ -126,7 +126,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -149,16 +149,16 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input">
                   <Button variant="contained">Show</Button>
                 </div>
               </div>
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo-VehicleType"
+                    id="free-solo-demo-duty"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
                     value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.Duty || ''}
@@ -174,37 +174,37 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraHours"
+                    className='full-width'
                     label="ExtraHours"
                     name="ExtraHours"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraHours || book.ExtraHours}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraDays"
+                    className='full-width'
                     label="ExtraDays"
                     name="ExtraDays"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraDays || book.ExtraDays}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraPerHoursPrice"
                     label="ExtraPerHoursPrice"
                     name="ExtraPerHoursPrice"
                     autoComplete="new-password"
@@ -218,11 +218,11 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraPerDayPrice"
                     label="ExtraPerDayPrice"
                     name="ExtraPerDayPrice"
                     autoComplete="new-password"
@@ -236,20 +236,20 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="Bata"
+                    className='full-width'
                     label="Bata"
                     name="Bata"
                     autoComplete="new-password"
                     value={selectedCustomerData?.Bata || book.Bata}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ width: "160px" }}>
+                <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
@@ -263,29 +263,29 @@ const DriverBataRate = () => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
@@ -296,14 +296,7 @@ const DriverBataRate = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))} */}
+
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -345,7 +338,7 @@ const DriverBataRate = () => {
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-DriverBataRate">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='driver-bata-rate-table'>
             <DataGrid
               rows={rows}
               columns={columns}

@@ -72,4 +72,14 @@
 
 .backup-inputs {
   flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.BackUp-form{
+  width: 100%;
+}
+
+.back-up-btns{
+  margin-top: 40px;
 }

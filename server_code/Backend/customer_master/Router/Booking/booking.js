@@ -10,7 +10,7 @@ const path = require('path');
 const query = util.promisify(db.query).bind(db)
 
 router.use(express.static('customer_master'));
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
 
 router.post('/booking', (req, res) => {
     const bookData = req.body;
@@ -161,27 +161,27 @@ router.get('booking', async (req, res) => {
     }
 });
 // bookingfile upload
-router.post('/upload', upload.single('file'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded.' });
-    }
+// router.post('/upload', upload.single('file'), (req, res) => {
+//     if (!req.file) {
+//         return res.status(400).json({ error: 'No file uploaded.' });
+//     }
 
-    const fileData = {
-        name: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        path: req.file.path,
-        bookingno: req.body.bookingno,
-    };
+//     const fileData = {
+//         name: req.file.originalname,
+//         mimetype: req.file.mimetype,
+//         size: req.file.size,
+//         path: req.file.path,
+//         bookingno: req.body.bookingno,
+//     };
 
-    const query = 'INSERT INTO upload SET ?';
-    db.query(query, fileData, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error storing file in the database.' });
-        }
-        return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
-    });
-});
+//     const query = 'INSERT INTO upload SET ?';
+//     db.query(query, fileData, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Error storing file in the database.' });
+//         }
+//         return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+//     });
+// });
 // collect data from vehicleInfo database
 router.get('/name-customers/:customer', (req, res) => {
     const customer = req.params.customer; // Access the parameter using req.params
@@ -604,8 +604,8 @@ router.get('/table-for-booking', (req, res) => {
 // its for multer file- 1
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // cb(null, './customer_master/public/booking_doc')
-        cb(null, './uploads')
+        cb(null, './customer_master/public/booking_doc')
+        // cb(null, './uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -615,18 +615,25 @@ const booking_storage = multer.diskStorage({
 
 const booking_uploadfile = multer({ storage: booking_storage });
 
-router.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
+router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
-    const path = req.file.filename;
+    // const path = req.file.filename;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
-    const documenttype = "mail"
-    // const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
-    const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
+    // const documenttype = "mail"
+    console.log(booking_id,typeof(booking_id),fileType,fileName,"data")
+    const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    // const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
     db.query(sql, (err, result) => {
-        if (err) return res.json({ Message: "Error" });
-        return res.json({ Status: "success" });
+        if (err)
+            {
+                console.log(err)
+             return res.json({ Message: "Error" });
+            }
+            console.log(result)
+        return res.json("successs upload");
     })
+    
 })
 
 // booking_id	fileName	file_type	
@@ -640,6 +647,37 @@ router.get('/booking-docView/:id', (req, res) => {
         return res.json(result);
     })
 })
+
+router.get('/booking-docPDFView/:bookingno', (req, res) => {
+    const bookingno = req.params.bookingno;
+    const query = 'select * from booking_doc where booking_id=?';
+    console.log(bookingno,"book")
+  
+    db.query(query, [bookingno], (err, results) => {
+      if (err) {
+        return res.status(500).send('Internal Server Error');
+      }
+  
+      if (results.length === 0) {
+        // No record found for the given tripid
+        return res.status(404).send('Images not found');
+      }
+      console.log(results,"reeee")
+  
+      const files = results.map(result => ({
+        path: result.fileName,
+        mimetype: result.fileName.split('.').pop()// assuming 'type' indicates whether it's an image or PDF
+      }));
+      console.log(files)
+  
+  
+      res.json({ files });
+    });
+  });
+
+
+
+
 
 ///--------------------------------------------------------------------------------
 

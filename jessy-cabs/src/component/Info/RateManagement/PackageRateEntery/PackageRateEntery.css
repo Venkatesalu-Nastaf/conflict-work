@@ -176,3 +176,12 @@
         justify-content: center !important;
     }
 }
+
+.package-rate-entry-edit-division {
+    margin: 10px 0px 0px 10px;
+}
+
+.package-rate-entry-table{
+    height: 400px;
+    width: 100%;
+}

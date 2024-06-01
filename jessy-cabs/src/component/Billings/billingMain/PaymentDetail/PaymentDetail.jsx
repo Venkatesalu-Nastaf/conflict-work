@@ -71,10 +71,10 @@ const PaymentDetail = ({ organizationNames }) => {
         <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
-              <div className="input-field input-field-payment" style={{ flexWrap: 'wrap', alignItems: 'baseline' }}>
+              <div className="input-field input-field-payment">
                 <div className="input input-payment"  >
                   <div className="icone">
-                    <ListAltIcon color="action" style={{ fontSize: "27px" }} />
+                    <ListAltIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -137,8 +137,8 @@ const PaymentDetail = ({ organizationNames }) => {
                   </LocalizationProvider>
                 </div>
               </div>
-              <div className="input-field" style={{ justifyContent: 'center' }}>
-                <div className="input" style={{ width: "140px" }}>
+              <div className="input-field payment-search-field">
+                <div className="input">
                   <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>
@@ -148,30 +148,30 @@ const PaymentDetail = ({ organizationNames }) => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
 
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
@@ -208,7 +208,7 @@ const PaymentDetail = ({ organizationNames }) => {
           </div>
         </div>
         <div className="table-bookingCopy-PaymentDetail">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='payment-table'>
             <DataGrid
               rows={reversedRows}
               columns={columns}

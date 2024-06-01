@@ -465,3 +465,22 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+.booking-main-table {
+  height: 400px;
+  width: 100%;
+}
+
+.booking-main-table-div1,
+.booking-main-table-div2 {
+  position: relative;
+}
+
+.booking-main-table-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}

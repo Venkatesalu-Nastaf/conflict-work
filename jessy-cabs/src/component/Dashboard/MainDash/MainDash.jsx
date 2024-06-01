@@ -22,7 +22,7 @@ const MainDash = () => {
   return (
     <>
       {isBelow768px ? (
-        <div style={{ height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px' }}>
+        <div className="main-dash-main-section">
           <div className="MainDash">
             <Cards />
             <Table />

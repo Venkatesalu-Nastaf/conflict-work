@@ -604,13 +604,11 @@ const Sidebar = () => {
                           <div className="popup-icon">
                             {" "}
                             <FileDownloadDoneIcon
-                              style={{ color: "#fff" }}
                             />{" "}
                           </div>
                           <span className="cancel-btn" onClick={hidePopup}>
                             <ClearIcon
                               color="action"
-                              style={{ fontSize: "14px" }}
                             />{" "}
                           </span>
                           <p>{success}</p>
@@ -645,10 +643,10 @@ const Sidebar = () => {
           <div className="alert-popup Info">
             <div className="popup-icon">
               {" "}
-              <BsInfo style={{ color: "#fff" }} />{" "}
+              <BsInfo />{" "}
             </div>
             <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              <ClearIcon color="action" />{" "}
             </span>
             <p>{infoMessage}</p>
           </div>
@@ -692,11 +690,11 @@ const Sidebar = () => {
               <motion.div>
                 <MenuItem
                   label={
-                    <span style={{ display: 'flex', alignItems: "center" }}>
+                    <span className="sidebar-main-menu">
                       <span>
                         Booking
                       </span>
-                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <span className="sidebar-main-menu-arrow">
                         <FaChevronDown className={isbookingdropdownclicked ? 'isbookingdropdownclicked' : ''} />
                       </span>
                     </span>
@@ -746,11 +744,11 @@ const Sidebar = () => {
               <motion.div>
                 <MenuItem
                   label={
-                    <span style={{ display: 'flex', alignItems: "center" }}>
+                    <span className="sidebar-main-menu">
                       <span>
                         Billing
                       </span>
-                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <span className="sidebar-main-menu-arrow">
                         <FaChevronDown className={isbillingdropdownclicked ? 'isbillingdropdownclicked' : ''} />
                       </span>
                     </span>
@@ -800,11 +798,11 @@ const Sidebar = () => {
               <motion.div>
                 <MenuItem
                   label={
-                    <span style={{ display: 'flex', alignItems: "center" }}>
+                    <span className="sidebar-main-menu">
                       <span>
                         Register
                       </span>
-                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <span className="sidebar-main-menu-arrow">
                         <FaChevronDown className={isRegisterdropdownclicked ? 'isRegisterdropdownclicked' : ''} />
                       </span>
                     </span>
@@ -854,11 +852,11 @@ const Sidebar = () => {
               <motion.div >
                 <MenuItem
                   label={
-                    <span style={{ display: 'flex', alignItems: "center" }}>
+                    <span className="sidebar-main-menu">
                       <span>
                         Settings
                       </span>
-                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <span className="sidebar-main-menu-arrow">
                         <FaChevronDown className={issettingdropdownclicked ? 'issettingdropdownclicked' : ''} />
                       </span>
                     </span>
@@ -911,11 +909,11 @@ const Sidebar = () => {
               <motion.div >
                 <MenuItem
                   label={
-                    <span style={{ display: 'flex', alignItems: "center" }}>
+                    <span className="sidebar-main-menu">
                       <span>
                         info
                       </span>
-                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <span className="sidebar-main-menu-arrow">
                         <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
                       </span>
                     </span>
@@ -1001,13 +999,11 @@ const Sidebar = () => {
                               <div className="popup-icon">
                                 {" "}
                                 <FileDownloadDoneIcon
-                                  style={{ color: "#fff" }}
                                 />{" "}
                               </div>
                               <span className="cancel-btn" onClick={hidePopup}>
                                 <ClearIcon
                                   color="action"
-                                  style={{ fontSize: "14px" }}
                                 />{" "}
                               </span>
                               <p>{success}</p>
@@ -1022,7 +1018,7 @@ const Sidebar = () => {
                     )}
                   </div>
                 </div>
-                <div className="avatar-item" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="avatar-item avatar-item-2">
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -1045,10 +1041,10 @@ const Sidebar = () => {
                 <div className="alert-popup Info">
                   <div className="popup-icon">
                     {" "}
-                    <BsInfo style={{ color: "#fff" }} />{" "}
+                    <BsInfo />{" "}
                   </div>
                   <span className="cancel-btn" onClick={hidePopup}>
-                    <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                    <ClearIcon color="action" />{" "}
                   </span>
                   <p>{infoMessage}</p>
                 </div>
@@ -1070,7 +1066,7 @@ const Sidebar = () => {
           p: 4,
         }}>
           <div>
-            <img src={update} alt="update-img" style={{ width: '100%' }} />
+            <img src={update} className="sidebar-update-img" alt="update-img" />
           </div>
           <Button onClick={handleClosemodal} variant="contained">
             Close

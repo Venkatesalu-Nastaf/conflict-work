@@ -741,6 +741,7 @@ const TripSheet = ({ stationName }) => {
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
+                      {/* {console.log("hello jsx", selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName)} */}
                       <TextField
                         name="driverName"
                         className='full-width'

@@ -121,3 +121,8 @@
         border: none !important;
     }
 }
+
+.driver-bata-rate-table{
+    height: 400px;
+    width: 100%;
+}

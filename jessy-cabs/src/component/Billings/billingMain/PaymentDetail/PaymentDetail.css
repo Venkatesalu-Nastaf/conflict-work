@@ -147,6 +147,11 @@
     padding: 5px;
 }
 
+.input-field-payment {
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
 .input-field-payment .input {
     width: 255px !important;
 }
@@ -203,4 +208,13 @@
     .detail-container-main-payment {
         margin: 20px;
     }
+}
+
+.payment-search-field {
+    justify-content: center;
+}
+
+.payment-table {
+    height: 400px;
+    width: 100%;
 }

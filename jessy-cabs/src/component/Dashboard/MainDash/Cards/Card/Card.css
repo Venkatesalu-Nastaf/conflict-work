@@ -136,3 +136,9 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+.card-division {
+  align-self: flex-end;
+  cursor: pointer;
+  color: white;
+}

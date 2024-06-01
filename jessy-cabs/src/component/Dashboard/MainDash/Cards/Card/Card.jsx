@@ -110,7 +110,7 @@ function ExpandedCard({ param, setExpanded }) {
       }}
       layoutId="expandableCard"
     >
-      <div style={{ alignSelf: "flex-end", cursor: "pointer", color: "white" }}>
+      <div className="card-division">
         <MdCancel onClick={setExpanded} />
       </div>
       <span>{param.title}</span>

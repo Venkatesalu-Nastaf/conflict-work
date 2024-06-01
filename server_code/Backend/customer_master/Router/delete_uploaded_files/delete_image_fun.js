@@ -155,12 +155,25 @@ router.delete('/booking_doc/:filename', (req, res) => {
      
     if (oldFileName) {
       const oldImagePath = path.join("./customer_master/public/booking_doc", oldFileName);
-      try {
-        fs.unlinkSync(oldImagePath)
-      } catch { }
+      console.log(oldImagePath)
+    //   try {
+    //     fs.unlinkSync(oldImagePath)
+    //   } catch { }
+    if (fs.existsSync(oldImagePath)) {
+        try {
+            // Delete the file
+            fs.unlinkSync(oldImagePath );
+            console.log('File deleted successfully:', oldFileName);
+        } catch (error) {
+            console.error('Error deleting file:', error);
+        }
+    } else {
+        console.log('File does not exist:', oldFileName);
+    }
     }
     db.query(sql, [fileName], (err, result) => {
         if (err) return res.json({ Message: "Error inside serevre" });
+        console.log(result)
         return res.json(result);
     })
 })

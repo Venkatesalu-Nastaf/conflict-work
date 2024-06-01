@@ -213,7 +213,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     value={selectedCustomerData?.vehicleId || ""}
                     onChange={handleChange}
                     label="Vehicle ID"
-                    id="standard-size-normal"
+                    id="vehicleId"
                     variant="standard"
                     style={{ width: '100%' }}
                   />
@@ -229,7 +229,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     onChange={handleChange}
                     onKeyDown={handleKeyEnter}
                     label="Vehicle Name"
-                    id="standard-size-normal"
+                    id="vehiclename"
                     variant="standard"
                     style={{ width: '100%' }}
                   />
@@ -241,7 +241,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="hiretypes"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) =>
@@ -280,7 +280,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="vechtype"
                     freeSolo
                     size="small"
                     value={book?.vechtype || selectedCustomerData?.vechtype || ''}
@@ -303,7 +303,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Groups"
                     freeSolo
                     size="small"
                     value={book?.Groups || selectedCustomerData?.Groups || ''}
@@ -326,7 +326,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="fueltype"
                     freeSolo
                     size="small"
                     value={book.fueltype || selectedCustomerData?.fueltype || ''}
@@ -350,7 +350,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <TextField
                     margin="normal"
                     size="small"
-                    id="veh_reg_no"
+                    id="vehRegNo"
                     label="Vehicle Reg No"
                     name="vehRegNo"
                     value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
@@ -365,7 +365,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo-stationname"
+                    id="stations"
                     freeSolo
                     sx={{ width: "100%" }}
                     value={stationName?.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
@@ -517,7 +517,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.insuranceno || book.insuranceno || ""}
                 onChange={handleChange}
                 label="Insurance No"
-                id="tank_cap"
+                id="insuranceno"
                 style={{ width: '100%' }}
               />
             </div>
@@ -528,6 +528,7 @@ const Vehicaleinfo = ({ stationName }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Insurance Due Date"
+                  id="Insurance_date"
                   format="DD/MM/YYYY"
                   value={selectedCustomerData?.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
                   onChange={(date) => handleDateChange(date, 'insduedate')}
@@ -561,7 +562,7 @@ const Vehicaleinfo = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo-pricetag"
+                id="driverName"
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleAutocompleteChange(event, value, "driverName")}
@@ -584,6 +585,7 @@ const Vehicaleinfo = ({ stationName }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Attached Date"
+                  id="Attached_date"
                   format="DD/MM/YYYY"
                   value={
                     selectedCustomerData?.doadate
@@ -611,7 +613,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.nationalpermito || book.nationalpermito || ""}
                 onChange={handleChange}
                 label="National Permit No"
-                id="tank_cap"
+                id="nationalpermito"
                 style={{ width: '100%' }}
               />
             </div>
@@ -644,6 +646,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <FiUpload />
                   <span>National Permit Copy</span>
                   <input
+                    id="National_permit"
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setNationalPermit(e.target.files[0])}
@@ -656,6 +659,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <SpeedIcon color="action" />
               </div>
               <TextField
+
                 name="avgmileage"
                 value={selectedCustomerData?.avgmileage || book.avgmileage || ""}
                 onChange={handleChange}
@@ -676,7 +680,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.statepermito || book.statepermito || ""}
                 onChange={handleChange}
                 label="State Permit No"
-                id="tank_cap"
+                id="statepermito"
                 style={{ width: '100%' }}
               />
             </div>
@@ -687,6 +691,7 @@ const Vehicaleinfo = ({ stationName }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="State Permit Date"
+                  id="State_Permit"
                   format="DD/MM/YYYY"
                   value={
                     selectedCustomerData?.spdate
@@ -713,6 +718,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </span>
                   <input
                     type="file"
+                    id=" State_Permit "
                     style={{ display: "none" }}
                     onChange={(e) => setStatePermit(e.target.files[0])}
                   />
@@ -744,7 +750,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.rcbookno || book.rcbookno || ""}
                 onChange={handleChange}
                 label="RC Book No"
-                id="tank_cap"
+                id="rcbookno"
                 style={{ width: '100%' }}
               />
             </div>
@@ -756,6 +762,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DatePicker
                   label="FC Date"
                   format="DD/MM/YYYY"
+                  id="fc_date"
                   value={
                     selectedCustomerData?.fcdate
                       ? dayjs(selectedCustomerData.fcdate)
@@ -779,6 +786,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     RC-Book Copy
                   </span>
                   <input
+                    id="rc_book"
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setRcbook(e.target.files[0])}
@@ -794,6 +802,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     FC Copy
                   </span>
                   <input
+                    id="fc_copy"
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setFcCopy(e.target.files[0])}
@@ -822,6 +831,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   Active
                 </FormLabel>
                 <RadioGroup
+                  id="active"
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
                   name="active"
@@ -889,7 +899,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="searchText"
                     label="Search"
                     name="searchText"
                     value={searchText}
@@ -903,6 +913,7 @@ const Vehicaleinfo = ({ stationName }) => {
                       <DateRangeIcon color="action" />
                     </div>
                     <DatePicker
+                      id="fromDate"
                       label="From Date"
                       format="DD/MM/YYYY"
                       name='fromDate'
@@ -917,6 +928,7 @@ const Vehicaleinfo = ({ stationName }) => {
                       <DateRangeIcon color="action" />
                     </div>
                     <DatePicker
+                      id="toDate"
                       label="To Date"
                       format="DD/MM/YYYY"
                       name="toDate"

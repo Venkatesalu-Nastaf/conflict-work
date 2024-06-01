@@ -458,7 +458,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
@@ -477,7 +477,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -495,7 +495,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faRoad} />
@@ -517,7 +517,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile" >
@@ -539,7 +539,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -558,7 +558,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faStopwatch} />
                                         </div>
@@ -578,7 +578,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
@@ -597,7 +597,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -615,7 +615,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faStopwatch} />
@@ -636,7 +636,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile" >
@@ -658,7 +658,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile" >
@@ -677,7 +677,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faCloudMoon} />
                                         </div>
@@ -693,7 +693,7 @@ const Billing = () => {
                                             variant="standard"
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
@@ -710,7 +710,7 @@ const Billing = () => {
                                                 ),
                                             }} />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -729,7 +729,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field  mobile-division-two">
                                 <div className="input  input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faCloudMoon} />
@@ -746,7 +746,7 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input  input-mobile">
@@ -766,7 +766,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -786,7 +786,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faMoneyBill1Wave} />
                                         </div>
@@ -803,7 +803,7 @@ const Billing = () => {
                                             variant="standard"
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
@@ -820,7 +820,7 @@ const Billing = () => {
                                                 ),
                                             }} />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -839,7 +839,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
@@ -857,7 +857,7 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile">
@@ -877,7 +877,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -895,7 +895,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "355px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
@@ -911,7 +911,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                <div className="input biling-amount-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -928,7 +928,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-permit-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -943,7 +943,7 @@ const Billing = () => {
                                         id="amount"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input c">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>
@@ -960,7 +960,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-toll-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -975,7 +975,7 @@ const Billing = () => {
                                         id="amount"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-Vpermit-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>
@@ -992,7 +992,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-vendortoll-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -1077,7 +1077,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field inputfeild-billing-right">
-                                <div className="input input-billing" style={{ width: "200px" }}>
+                                <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faTags} size="lg" />
                                     </div>
@@ -1174,7 +1174,7 @@ const Billing = () => {
                             <div className="input-field inputfeild-billing-right">
                                 <div className="input input-billing" >
                                     <div className="icone">
-                                        <GiMoneyStack style={{ fontSize: '23px' }} />
+                                        <GiMoneyStack />
                                     </div>
                                     <TextField
                                         margin="normal"
@@ -1203,7 +1203,7 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="input-field inputfeild-billing-right" style={{ marginBottom: '30px' }} >
+                            <div className="input-field inputfeild-billing-right inputfeild-billing-right-margin-bottom">
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <PendingActionsIcon />
@@ -1291,29 +1291,29 @@ const Billing = () => {
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ClearIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{errorMessage}</p>
                         </div>
                     }
                     {info &&
                         <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <BsInfo /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{infoMessage}</p>
                         </div>
                     }
                     {warning &&
                         <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{warningMessage}</p>
                         </div>
                     }
                     {success &&
                         <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{successMessage}</p>
                         </div>
                     }

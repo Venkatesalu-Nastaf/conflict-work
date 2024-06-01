@@ -388,10 +388,6 @@
   width: 100%;
 }
 
-.d-grid {
-  display: grid;
-}
-
 .total-amount-textfield {
   margin-top: 25px;
   margin-left: 15px;

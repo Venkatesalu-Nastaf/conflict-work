@@ -148,7 +148,7 @@ const TripStatus = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Status"
                     freeSolo
                     size="small"
                     value={statusvalue}
@@ -169,7 +169,7 @@ const TripStatus = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Department"
                     freeSolo
                     size="small"
                     value={department}

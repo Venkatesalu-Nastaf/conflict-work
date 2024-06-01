@@ -53,7 +53,6 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -110,10 +109,10 @@ const Booking = ({ stationName }) => {
     error,
     success,
     info,
-    warning,
+    // warning,
     successMessage,
     errorMessage,
-    warningMessage,
+    // warningMessage,
     infoMessage,
     book,
     handleClick,
@@ -170,11 +169,11 @@ const Booking = ({ stationName }) => {
     handleimagedelete,
     handleClosedeleteDialog,
     dialogdeleteOpen,
-    handleprevent,
+    // handleprevent,
     rowdriver,
     handleRowClickdriver,
-    setErrorMessage,
-    setError,
+    // setErrorMessage,
+    // setError,
     edit,
     handleKeyEnterdriver,
     vehileName,
@@ -208,7 +207,7 @@ const Booking = ({ stationName }) => {
                   name="bookingno"
                   className="full-width"
                   label="Booking"
-                  id="standard-size-normal"
+                  id="standard-size-bookingno"
                   autoComplete="new-password"
                   value={
                     formData.bookingno ||
@@ -259,6 +258,7 @@ const Booking = ({ stationName }) => {
                     <label>Booking Time</label>
                     <input
                       type="time"
+                      id="Booking_time"
                       value={
                         formData.bookingtime ||
                         selectedCustomerData.bookingtime ||
@@ -289,6 +289,7 @@ const Booking = ({ stationName }) => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
+                    id="status"
                     autoComplete="new-password"
                     value={
                       formData.status ||
@@ -327,7 +328,7 @@ const Booking = ({ stationName }) => {
                   }
                   onChange={handleChange}
                   label="Trip Id"
-                  id="standard-size-normal"
+                  id="tripid"
                   variant="standard"
                 />
               </div>
@@ -357,24 +358,24 @@ const Booking = ({ stationName }) => {
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
+
                 <Autocomplete
                   fullWidth
-                  size="small"
-                  id="free-solo-demo-stationname"
+                  id="servicestation"
                   freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
-                  options={stationName.map((option) => ({
-                    label: option.Stationname,
+                  size="small"
+                  value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                  options={stationName?.map((option) => ({
+                    label: option?.Stationname,
                   }))}
-                  getOptionLabel={(option) => option.label || book?.stationname || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "servicestation")
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Service Station" name="servicestation" />
-                    )
-                  }
-                  }
+                      <TextField {...params} label="servicestation" name="servicestation" inputRef={params.inputRef} />
+                    );
+                  }}
                 />
               </div>
               <div className="input">
@@ -440,17 +441,7 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
               <div className="input">
-                {/* <FormControlLabel
-                  value="guestsms"
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={guestsms}
-                      onChange={(event) => setGuestSms(event.target.checked)}
-                    />
-                  }
-                  label="Guest SMS"
-                /> */}
+
                 <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
@@ -508,7 +499,7 @@ const Booking = ({ stationName }) => {
                 }
                 onChange={handleChange}
                 label="Mobile No"
-                id="mobile"
+                id="mobile_no"
                 variant="standard"
               />
             </div>
@@ -644,7 +635,7 @@ const Booking = ({ stationName }) => {
               </div>
               <TextField
                 margin="normal"
-                id="streetname"
+                id="address12"
                 label="Address"
                 name="address1"
                 multiline
@@ -667,7 +658,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="fine_years"
                 value={currentYear}
                 options={[currentYear]}
                 renderInput={(params) => (
@@ -682,7 +673,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="report"
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) =>
@@ -725,7 +716,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="paymenttype"
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) =>
@@ -767,6 +758,7 @@ const Booking = ({ stationName }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Report Date"
+                  id="report_date"
                   value={
                     formData.startdate || selectedCustomerData.startdate
                       ? dayjs(selectedCustomerData.startdate)
@@ -796,6 +788,7 @@ const Booking = ({ stationName }) => {
                   <label>Start Time</label>
                   <input
                     type="time"
+                    id="starttime"
                     value={
                       formData.starttime ||
                       selectedCustomerData.starttime ||
@@ -825,6 +818,7 @@ const Booking = ({ stationName }) => {
                   <label>Report Time</label>
                   <input
                     type="time"
+                    id="reporttime"
                     name="reporttime"
                     value={
                       formData.reporttime ||
@@ -848,47 +842,22 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
             </div>
-            {/* <div style={{ width: '100%' }}> */}
-            {/* <div className="input-field">
-                <div className="input-btn">
-                  <span onClick={handleClickHide} className="btn">
-                    Hide
-                  </span>
-                  <span className="btn">Copy</span>
-                </div>
-              </div> */}
-            {/* <div style={{display:'flex',flexWrap:'wrap'}}> */}
+
+
             <div className="input-dummy">
-              {formData.bookingno ||
-                selectedCustomerData.bookingno ||
-                book.bookingno ? (
-                <Button
-                  color="primary"
-                  variant="contained"
+              <Button
+                color="primary"
+                variant="contained"
 
-                  component="label"
-                >
-                  Attach File
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onClick={handleprevent}
-                    onChange={(e) => setFile(e.target.files[0])}
-                  />
-                </Button>
-              ) : (
-                <Button
-                  color="primary"
-                  variant="contained"
-
-                  onClick={() => {
-                    setError(true);
-                    setErrorMessage("Please Enter Booking No");
-                  }}
-                >
-                  Attach File
-                </Button>
-              )}
+                component="label"
+              >
+                Attach File
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+              </Button>
             </div>
             <div className="input-dummy">
               <Button
@@ -898,13 +867,7 @@ const Booking = ({ stationName }) => {
                 View
               </Button>
             </div>
-            {/* </div> */}
-            {/* </div> */}
           </div>
-
-
-
-
 
           <div className="booking-main-section2">
             <div className="sub-section1 sub-section-second-division">
@@ -915,7 +878,7 @@ const Booking = ({ stationName }) => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="free-solo-duty"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) =>
@@ -957,7 +920,7 @@ const Booking = ({ stationName }) => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="streetname"
+                  id="pickup"
                   label="PickUp"
                   name="pickup"
                   autoComplete="new-password"
@@ -1027,7 +990,7 @@ const Booking = ({ stationName }) => {
                   }
                   onChange={handleChange}
                   label="Flight No"
-                  id="flight"
+                  id="flightno"
                   variant="standard"
                 />
               </div>
@@ -1179,7 +1142,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="hireTypes"
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) =>
@@ -1262,7 +1225,7 @@ const Booking = ({ stationName }) => {
               </div>
               <Autocomplete
                 fullWidth
-                id="free-solo-demo"
+                id="vehiclemodule"
                 freeSolo
                 size="small"
                 value={
@@ -1292,7 +1255,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="vehType"
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) =>
@@ -1333,7 +1296,7 @@ const Booking = ({ stationName }) => {
               </div>
               <Autocomplete
                 fullWidth
-                id="free-solo-demo"
+                id="Groups"
                 freeSolo
                 size="small"
                 value={
@@ -1478,26 +1441,14 @@ const Booking = ({ stationName }) => {
               <p>{errorMessage}</p>
             </div>
           )}
-          {warning && (
-            <div className="alert-popup Warning">
-              <div className="popup-icon">
-                {" "}
-                <ErrorOutlineIcon />{" "}
-              </div>
-              <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" />{" "}
-              </span>
-              <p>{warningMessage}</p>
-            </div>
-          )}
+
           {info && (
             <div className="alert-popup Info">
               <div className="popup-icon">
-                {" "}
-                <BsInfo />{" "}
+                <BsInfo />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" />{" "}
+                <ClearIcon color="action" />
               </span>
               <p>{infoMessage}</p>
             </div>
@@ -1505,11 +1456,10 @@ const Booking = ({ stationName }) => {
           {success && (
             <div className="alert-popup Success">
               <div className="popup-icon">
-                {" "}
-                <FileDownloadDoneIcon />{" "}
+                <FileDownloadDoneIcon />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" />{" "}
+                <ClearIcon color="action" />
               </span>
               <p>{successMessage}</p>
             </div>
@@ -1527,7 +1477,7 @@ const Booking = ({ stationName }) => {
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="searchText"
                     label="Search"
                     name="searchText"
                     value={searchText || ""}
@@ -1539,6 +1489,7 @@ const Booking = ({ stationName }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      id="fromDate"
                       name="fromDate"
                       format="DD/MM/YYYY"
                       value={fromDate}
@@ -1551,6 +1502,7 @@ const Booking = ({ stationName }) => {
                     <DatePicker
                       label="To Date"
                       name="toDate"
+                      id="toDate"
                       format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
@@ -1586,7 +1538,7 @@ const Booking = ({ stationName }) => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-Booking">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className="booking-main-table">
             <DataGrid
               rows={reversedRows}
               columns={columns}
@@ -1596,26 +1548,19 @@ const Booking = ({ stationName }) => {
             />
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
-                <div style={{ position: "relative" }}>
+                <div className="booking-main-table-div1">
                   {Array.isArray(allFile) &&
                     allFile.map((img, index) => (
-                      <div key={index} style={{ position: "relative" }}>
+                      <div key={index} className="booking-main-table-div2">
                         <embed
-                          src={`${apiUrl}/public/booking_doc/ + img.fileName`}
-                          type="application/pdf"
+                          src={`${apiUrl}/public/booking_doc/${img.path}`}
                           width="100%"
                           height="600px"
+                          style={{ width: '800px', maxWidth: '100%' }}
                         />
                         <button
-                          onClick={() => handleimagedelete(img.fileName)}
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            opacity: 0,
-                          }}
+                          className="booking-main-table-btn"
+                          onClick={() => handleimagedelete(img.path)}
                         />
                       </div>
                     ))}

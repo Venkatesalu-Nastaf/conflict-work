@@ -113,7 +113,7 @@ const StationCreation = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="id"
+                  id="stationid"
                   label="ID"
                   name="stationid"
                   value={selectedCustomerData?.stationid || book.stationid}
@@ -172,17 +172,7 @@ const StationCreation = () => {
                   autoComplete="password"
                 />
               </div>
-              {/* <TextField
-                margin="normal"
-                size="small"
-                id="address"
-                label="Adress"
-                name="address"
-                value={selectedCustomerData?.address || book.address}
-                autoComplete="new-password"
-                onChange={handleChange}
-                variant="standard"
-              /> */}
+
               <div className='input' style={{ paddingRight: '15px' }}>
                 <div className='icone'>
                   <MdNumbers color='action' />
@@ -209,6 +199,7 @@ const StationCreation = () => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="active"
+                    id="radio1"
                     value={selectedCustomerData?.active || book.active}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -235,6 +226,7 @@ const StationCreation = () => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="ownbranch"
+                    id="ownbranch"
                     value={selectedCustomerData?.ownbranch || book.ownbranch}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -297,14 +289,6 @@ const StationCreation = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                />
-              ))} */}
 
               {StationCreation_read === 1 && (
                 <SpeedDialAction

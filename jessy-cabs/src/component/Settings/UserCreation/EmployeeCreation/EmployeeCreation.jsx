@@ -20,7 +20,6 @@ import { PermissionContext } from '../../../context/permissionContext';
 import { AiOutlineSearch } from 'react-icons/ai';
 
 // FONTAWESOME
-// import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
@@ -107,18 +106,15 @@ const EmployeeCreation = ({ stationName }) => {
   }, [stationName]);
 
 
-
-
   //  for showing table
   const [showPermission, setShowPermission] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
-
     setShowPermission(!showPermission);
     setSelectedUserId(row.userid)
   };
-  //table completed
+
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
@@ -151,7 +147,7 @@ const EmployeeCreation = ({ stationName }) => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="id"
+                  id="userid"
                   label="ID"
                   name="userid"
                   value={book.userid}
@@ -282,7 +278,6 @@ const EmployeeCreation = ({ stationName }) => {
                   <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
                   <div className='add-permission'>
-                    {/* <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button> */}
                     <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
                   </div>
                 )}

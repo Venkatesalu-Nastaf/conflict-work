@@ -99,6 +99,7 @@ const TaxSetting = () => {
                             </div>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
+                                    id="tate_tax_form"
                                     label="Date Tax From"
                                     value={formData.startdate || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null || book.DateTaxFrom ? dayjs(book.DateTaxFrom) : null}
                                     format="DD/MM/YYYY"
@@ -116,6 +117,7 @@ const TaxSetting = () => {
                             </div>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
+                                    id="date_tax_to"
                                     label="Date Tax To"
                                     value={formData.startdate || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null || book.DateTaxTo ? dayjs(book.DateTaxTo) : null}
                                     format="DD/MM/YYYY"
@@ -219,7 +221,7 @@ const TaxSetting = () => {
                             <TextField
                                 margin="normal"
                                 size="small"
-                                id="KKCess"
+                                id="KKCess_Des"
                                 className='full-width'
                                 label="KKCess-Des"
                                 name="KKCess_Des"
@@ -300,14 +302,7 @@ const TaxSetting = () => {
                                 icon={<SpeedDialIcon />}
                                 direction="left"
                             >
-                                {/* {actions.map((action) => (
-                                    <SpeedDialAction
-                                        key={action.name}
-                                        icon={action.icon}
-                                        tooltipTitle={action.name}
-                                        onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                                    />
-                                ))} */}
+
                                 {MainSetting_read === 1 && (
                                     <SpeedDialAction
                                         key="list"

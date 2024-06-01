@@ -13,9 +13,14 @@ import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { APIURL } from "../url.js";
 
+import { useData } from "../Dashboard/MainDash/Sildebar/DataContext2.js";
+
 
 
 const Login = () => {
+
+  const { setLogoTrigger } = useData()
+
   const apiUrl = APIURL;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -64,13 +69,14 @@ const Login = () => {
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
-        setUserdashboard(true)
-
+        setUserdashboard(true) // its for logo trigger
+        setLogoTrigger(prev => !prev)
         loginUser(input.username);
         localStorage.setItem("username", input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
+
       }
       else {
         setError(true);

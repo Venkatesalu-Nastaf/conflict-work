@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
@@ -42,6 +42,10 @@ import { PermissionContext } from "./component/context/permissionContext";
 import axios from "axios";
 import { APIURL } from "../src/component/url";
 import NoPermission from "./component/permissionContext/NoPermission/NoPermission";
+import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
+
+
+
 
 function App() {
   const apiUrl = APIURL;
@@ -122,9 +126,32 @@ function App() {
   }, [apiUrl]); // Empty dependency array to ensure it runs only once
 
   //--------------------------------------------------------
+  //fetch org logo
+  const { logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
 
+  const fetchOrgLogo = useCallback(async () => {
+    try {
+      const organizationname = localStorage.getItem('usercompany');
+      console.log("organizationname", organizationname)
+      if (!organizationname || organizationname === undefined) return
+      const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
+      if (response?.status === 200) {
+        const logoImage = response?.data[0]?.fileName;
+        setLogo(logoImage)
+        setLogoTrigger(false)
 
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }, [apiUrl, setLogo, setLogoTrigger])
+
+  useEffect(() => {
+    fetchOrgLogo()
+  }, [logotrigger, fetchOrgLogo])
+
+  //-------------------------------------------------------------------------------------------------
 
 
   return (
@@ -186,7 +213,7 @@ function App() {
                 <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
                 <Route
                   path="/home/billing/coveringbill"
-                    element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames }/> : <NoPermission />}
+                  element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
@@ -207,7 +234,7 @@ function App() {
                 />
                 <Route
                   path="/home/settings/mainsetting"
-                  element={Main_Setting !== 0 ? <MainSetting /> : <NoPermission />}
+                  element={Main_Setting !== 0 ? <MainSetting logoImage={logo} /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/usersettings" element={<UserSettings />}>

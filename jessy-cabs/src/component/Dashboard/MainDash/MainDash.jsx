@@ -22,7 +22,7 @@ const MainDash = () => {
   return (
     <>
       {isBelow768px ? (
-        <div style={{ height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px' }}>
+        <div className="main-dash-main-section">
           <div className="MainDash">
             <Cards />
             <Table />
@@ -31,7 +31,7 @@ const MainDash = () => {
         </div>
       ) : (
         <>
-          <div className="main-dash-first-section">
+          {/* <div className="main-dash-first-section">
             <div className="MainDash">
               <Cards />
               <Table />
@@ -39,6 +39,16 @@ const MainDash = () => {
           </div>
           <div style={{height: '93vh', overflow: 'auto'}}>
             <RightSide />
+          </div> */}
+
+          <div className="first-div">
+            <div className="left-div">
+              <Cards />
+              <Table />
+            </div>
+            <div className="right-div">
+              <RightSide />
+            </div>
           </div>
         </>
       )}

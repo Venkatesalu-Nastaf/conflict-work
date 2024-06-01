@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
@@ -73,14 +72,14 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                 <div className="detail-container-main detail-container-main-coveringbill">
                     <div className="container-left-coveringbill">
                         <div className="copy-title-btn-CoveringSubmit">
-                            <div className="input-field input-feild-coveringbill" style={{ flexWrap: 'wrap' }}>
+                            <div className="input-field input-feild-coveringbill">
                                 <div className="input">
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-customer"
                                         freeSolo
                                         size="small"
                                         value={customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
@@ -100,6 +99,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                            id="formdate"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -123,6 +123,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                            id="toDate"
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -145,7 +146,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-solo-station"
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
@@ -160,7 +161,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "140px" }}>
+                                <div className="input">
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
@@ -183,7 +184,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                     </PopupState>
                 </div>
                 <div className="table-bookingCopy-CoveringSubmit">
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div className='covering-submit-table'>
                         <DataGrid
                             rows={rows}
                             columns={columns}
@@ -197,22 +198,22 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
             <div className='alert-popup-main'>
                 {error &&
                     <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <ClearIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success'>
-                        <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"><FileDownloadDoneIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{successMessage}</p>
                     </div>
                 }
                 {warning &&
                     <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{warningMessage}</p>
                     </div>
                 }

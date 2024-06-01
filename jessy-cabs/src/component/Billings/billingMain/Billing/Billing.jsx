@@ -47,10 +47,8 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendarDays } from "react-icons/fa6";
 import { RiPinDistanceLine } from "react-icons/ri";
 import { IoIosTime } from "react-icons/io";
-// import { FaCalendarDay } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -65,13 +63,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-// const actions = [
-//     { icon: <PrintIcon />, name: "Print" },
-//     { icon: <CancelPresentationIcon />, name: "Cancel" },
-//     { icon: <DeleteIcon />, name: "Delete" },
-//     { icon: <ModeEditIcon />, name: "Edit" },
-//     { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
+
 
 const Billing = () => {
 
@@ -185,7 +177,7 @@ const Billing = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="invoiceno"
+                                    id="department"
                                     label="Station"
                                     name="department"
                                     autoComplete="new-password"
@@ -199,6 +191,7 @@ const Billing = () => {
                                 </div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
+                                        id="billingDate"
                                         label="Billing Date"
                                         value={book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         format="DD/MM/YYYY"
@@ -210,13 +203,14 @@ const Billing = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "120px" }}>
+                            <div className="input">
                                 <div className="icone">
-                                    <RiPinDistanceLine color="action" style={{ fontSize: '20px' }} />
+                                    <RiPinDistanceLine color="action" />
                                 </div>
                                 <TextField
                                     type='number'
                                     margin="normal"
+                                    id="totalkm1"
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
@@ -225,14 +219,14 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "120px" }}>
-                                <div className="icone" style={{ fontSize: '20px' }} >
+                            <div className="input">
+                                <div className="icone" >
                                     <IoIosTime color="action" />
                                 </div>
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="TotalHours"
+                                    id="totaltime"
                                     label="Total Hours"
                                     name="totaltime"
                                     autoComplete="new-password"
@@ -240,7 +234,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <HailOutlinedIcon color="action" />
                                 </div>
@@ -256,7 +250,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBoxesPacking} size="lg" />
                                 </div>
@@ -279,6 +273,7 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
+                                        id="tripDate"
                                         value={book.startdate ? dayjs(book.startdate) : null}
                                         format="DD/MM/YYYY"
                                         onChange={(date) => handleDateChange(date, 'startdate')}
@@ -289,7 +284,7 @@ const Billing = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "111px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
                                 </div>
@@ -305,7 +300,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />
                                 </div>
@@ -321,7 +316,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "300px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                 </div>
@@ -372,7 +367,7 @@ const Billing = () => {
                     <div className="Billing-page-secend-container">
                         <div className="Billing-secend-left">
                             <div className="input-field input-feild-booking ">
-                                <div className="input" style={{ width: "360px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <CarCrashIcon color="action" />
                                     </div>
@@ -387,7 +382,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <EngineeringIcon color="action" />
                                     </div>
@@ -403,7 +398,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "360px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <Inventory2Icon color="action" />
                                     </div>
@@ -419,7 +414,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                <div className="input min-charge-value-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -437,7 +432,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faRoad} />
                                         </div>
@@ -448,7 +443,7 @@ const Billing = () => {
                                             value={book?.extraKM || ''}
                                             onChange={handleChange}
                                             label="Charges For Extra"
-                                            id="ChargesForExtra"
+                                            id="extraKM"
                                             size="small"
                                             variant="standard"
                                             InputProps={{
@@ -458,13 +453,14 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
                                         <TextField size="small"
                                             type='number'
                                             name='extrakm_amount'
+                                            id='extrakm_amountNumer'
                                             autoComplete="new-password"
                                             value={book.extrakm_amount || ''}
                                             onChange={handleChange}
@@ -477,7 +473,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -488,14 +484,14 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount1"
-                                            id="cfeamount"
+                                            id="ex_kmAmountEX"
                                             variant="standard"
                                         />
                                     </div>
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faRoad} />
@@ -507,7 +503,7 @@ const Billing = () => {
                                         value={book?.extraKM || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
-                                        id="ChargesForExtra"
+                                        id="extraKM098"
                                         size="small"
                                         variant="standard"
                                         InputProps={{
@@ -517,7 +513,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile" >
@@ -527,6 +523,7 @@ const Billing = () => {
                                     <TextField size="small"
                                         type='number'
                                         name='extrakm_amount'
+                                        id='extrakm_amount'
                                         autoComplete="new-password"
                                         value={book.extrakm_amount || ''}
                                         onChange={handleChange}
@@ -539,7 +536,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -550,7 +547,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount1"
-                                        id="cfeamount"
+                                        id="ex_kmAmount78"
                                         variant="standard"
                                     />
                                 </div>
@@ -558,7 +555,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faStopwatch} />
                                         </div>
@@ -568,7 +565,7 @@ const Billing = () => {
                                             value={book.extraHR || ''}
                                             onChange={handleChange}
                                             label="Charges For Extra"
-                                            id="ChargesForExtra"
+                                            id="extraHR"
                                             size="small"
                                             variant="standard"
                                             InputProps={{
@@ -578,13 +575,14 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
                                         <TextField size="small"
                                             type='number'
                                             name='extrahr_amount'
+                                            id='extrahr_amount'
                                             autoComplete="new-password"
                                             value={book.extrahr_amount || ''}
                                             onChange={handleChange}
@@ -597,7 +595,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -608,14 +606,14 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount2"
-                                            id="cfehamount"
+                                            id="ex_hrAmount_Amount2"
                                             variant="standard"
                                         />
                                     </div>
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faStopwatch} />
@@ -626,7 +624,7 @@ const Billing = () => {
                                         value={book.extraHR || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
-                                        id="ChargesForExtra"
+                                        id="extraHR_chargeForExtra"
                                         size="small"
                                         variant="standard"
                                         InputProps={{
@@ -636,7 +634,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile" >
@@ -646,6 +644,7 @@ const Billing = () => {
                                     <TextField size="small"
                                         type='number'
                                         name='extrahr_amount'
+                                        id='extrahr_amountEx'
                                         autoComplete="new-password"
                                         value={book.extrahr_amount || ''}
                                         onChange={handleChange}
@@ -658,7 +657,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile" >
@@ -669,7 +668,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount2"
-                                        id="cfehamount"
+                                        id="ex_hrAmount_A2"
                                         variant="standard"
                                     />
                                 </div>
@@ -677,7 +676,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faCloudMoon} />
                                         </div>
@@ -688,18 +687,19 @@ const Billing = () => {
                                             value={book.nightBta || ''}
                                             onChange={handleChange}
                                             label="Night Halt"
-                                            id="NightHalt"
+                                            id="nightBta_NB"
                                             size="small"
                                             variant="standard"
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
                                         <TextField size="small" variant="standard"
                                             type='number'
                                             name='nightCount'
+                                            id='nightCount_NC'
                                             autoComplete="new-password"
                                             value={book.nightCount || ''}
                                             onChange={handleChange}
@@ -710,7 +710,7 @@ const Billing = () => {
                                                 ),
                                             }} />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -721,15 +721,15 @@ const Billing = () => {
                                             value={total_Nighthalt_Amount() || book.nhamount || ''}
                                             onChange={handleChange}
                                             size="small"
-                                            label="Amount"
-                                            id="nhamount"
+                                            label="Amount1"
+                                            id="nhamountNA1"
                                             variant="standard"
                                         />
                                     </div>
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field  mobile-division-two">
                                 <div className="input  input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faCloudMoon} />
@@ -741,12 +741,12 @@ const Billing = () => {
                                         value={book.nightBta || ''}
                                         onChange={handleChange}
                                         label="Night Halt"
-                                        id="NightHalt"
+                                        id="nightBta"
                                         size="small"
                                         variant="standard"
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input  input-mobile">
@@ -756,6 +756,7 @@ const Billing = () => {
                                     <TextField size="small" variant="standard"
                                         type='number'
                                         name='nightCount'
+                                        id='nightCount'
                                         autoComplete="new-password"
                                         value={book.nightCount || ''}
                                         onChange={handleChange}
@@ -766,7 +767,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -786,7 +787,7 @@ const Billing = () => {
                             {/* for desktop view */}
                             <div className="desktop-division-one">
                                 <div className="input-field">
-                                    <div className="input" style={{ width: "170px" }}>
+                                    <div className="input">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faMoneyBill1Wave} />
                                         </div>
@@ -798,18 +799,19 @@ const Billing = () => {
 
                                             value={book.driverBeta || ''}
                                             onChange={handleChange}
-                                            id="driverbata"
+                                            id="driverbataamount1"
                                             size="small"
                                             variant="standard"
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                    <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
                                         <TextField size="small" variant="standard"
                                             type='number'
                                             name='driverbeta_Count'
+                                            id='driverbeta_count67'
                                             autoComplete="new-password"
                                             value={book.driverbeta_Count || ''}
                                             onChange={handleChange}
@@ -820,7 +822,7 @@ const Billing = () => {
                                                 ),
                                             }} />
                                     </div>
-                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                    <div className="input biling-amount-input-total">
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
@@ -832,14 +834,14 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount"
-                                            id="dbamount"
+                                            id="driverBeta_amount12"
                                             variant="standard"
                                         />
                                     </div>
                                 </div>
                             </div>
                             {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                            <div className="input-field mobile-division-two">
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
@@ -857,7 +859,7 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FaPlus />
                                 </div>
                                 <div className="input input-mobile">
@@ -867,6 +869,7 @@ const Billing = () => {
                                     <TextField size="small" variant="standard"
                                         type='number'
                                         name='driverbeta_Count'
+                                        id='driverbeta_Count'
                                         autoComplete="new-password"
                                         value={book.driverbeta_Count || ''}
                                         onChange={handleChange}
@@ -877,7 +880,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                <div className='billing-calculation-icon'>
                                     <FontAwesomeIcon icon={faEquals} />
                                 </div>
                                 <div className="input input-mobile">
@@ -889,13 +892,13 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="dbamount"
+                                        id="driverBeta_amount"
                                         variant="standard"
                                     />
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "355px" }}>
+                                <div className="input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
@@ -911,7 +914,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                <div className="input biling-amount-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -922,13 +925,13 @@ const Billing = () => {
                                         value={book.OtherChargesamount || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="OtherChargesamount"
                                         variant="standard"
                                     />
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-permit-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -940,10 +943,10 @@ const Billing = () => {
                                         value={book.permit || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="permit"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input c">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>
@@ -955,12 +958,12 @@ const Billing = () => {
                                         value={book.parking || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="parking"
                                     />
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-toll-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -972,10 +975,10 @@ const Billing = () => {
                                         value={book.toll || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="toll"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-Vpermit-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>
@@ -987,12 +990,12 @@ const Billing = () => {
                                         value={book.vpermettovendor || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="vpermettovendor"
                                     />
                                 </div>
                             </div>
                             <div className="input-field input-feild-left-bottom">
-                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                <div className="input billing-vendortoll-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -1004,7 +1007,7 @@ const Billing = () => {
                                         value={book.vendortoll || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="vendortoll"
                                     />
                                 </div>
 
@@ -1019,7 +1022,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         size="small"
-                                        id="MinKilometers"
+                                        id="minKM"
                                         label="Min Kilometers"
                                         name="minKM"
                                         autoComplete="new-password"
@@ -1034,7 +1037,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         size="small"
-                                        id="MinHours"
+                                        id="minHour"
                                         label="Min Hours"
                                         name="minHour"
                                         autoComplete="new-password"
@@ -1077,7 +1080,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field inputfeild-billing-right">
-                                <div className="input input-billing" style={{ width: "200px" }}>
+                                <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faTags} size="lg" />
                                     </div>
@@ -1088,7 +1091,6 @@ const Billing = () => {
                                         label="Discount Amount"
                                         name="DiscountAmount"
                                         autoComplete="new-password"
-                                        // value={discound_PercentageCalc() || book.DiscountAmount || ''}
                                         value={book.DiscountAmount || discound_PercentageCalc() || ''}
                                         onChange={handleChange}
                                     />
@@ -1100,6 +1102,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         name='DiscountAmount2'
+                                        id='DiscountAmount2'
                                         size="small"
                                         autoComplete="new-password"
                                         value={book.DiscountAmount2 || ''}
@@ -1174,7 +1177,7 @@ const Billing = () => {
                             <div className="input-field inputfeild-billing-right">
                                 <div className="input input-billing" >
                                     <div className="icone">
-                                        <GiMoneyStack style={{ fontSize: '23px' }} />
+                                        <GiMoneyStack />
                                     </div>
                                     <TextField
                                         margin="normal"
@@ -1203,7 +1206,7 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="input-field inputfeild-billing-right" style={{ marginBottom: '30px' }} >
+                            <div className="input-field inputfeild-billing-right inputfeild-billing-right-margin-bottom">
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <PendingActionsIcon />
@@ -1248,18 +1251,14 @@ const Billing = () => {
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
                             <Paymentinvoice
-                                //  tripSheetData={tripSheetData}
+
                                 triprequest={triprequest}
                                 tripcode={tripcode}
                                 selectedImage={selectedImage}
                                 organizationdata={organizationdata}
                                 tripdepartment={tripdepartment}
                                 routeData={routeData}
-                                // BalanceValue={BalanceValue}
-                                // TotalAmountValue={TotalAmountValue}
-                                // roundOff={roundOffValue}
                                 book={book}
-                                // selectedCustomerData={book}
                                 tripShedkm={tripShedkm}
                                 tripshedin={tripshedin}
                                 tripshedout={tripshedout}
@@ -1291,29 +1290,29 @@ const Billing = () => {
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ClearIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{errorMessage}</p>
                         </div>
                     }
                     {info &&
                         <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <BsInfo /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{infoMessage}</p>
                         </div>
                     }
                     {warning &&
                         <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{warningMessage}</p>
                         </div>
                     }
                     {success &&
                         <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{successMessage}</p>
                         </div>
                     }
@@ -1324,14 +1323,6 @@ const Billing = () => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name)}
-                            />
-                        ))} */}
 
                         {Billing_new === 1 && (
                             <SpeedDialAction

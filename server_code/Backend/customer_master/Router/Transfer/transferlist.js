@@ -458,7 +458,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         vi.Groups AS Groups, 
         c.gstTax AS gstTax,
         c.address1 AS Customeraddress1,
-        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.name)) AS bookattachedimage,
+        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.FileName)) AS bookattachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
         JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
@@ -478,7 +478,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     LEFT JOIN 
         tripsheetupload AS us ON ts.tripid = us.tripid
     LEFT JOIN 
-        tripsheetupload AS tri ON ts.tripid = tri.bookingno
+        booking_doc AS tri ON ts.tripid = tri.bookingno
     WHERE 
         ts.customer = ? AND ts.tripid = ?
     GROUP BY 

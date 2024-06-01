@@ -5,7 +5,6 @@ import generatePDF from 'react-to-pdf';
 
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
   const targetRef = useRef();
-  // console.log("selectedImage", selectedImage, organizationdata)
   return (
     <>
       <div className="invoice-wrapper" ref={targetRef}>
@@ -14,7 +13,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
           <div className='invoice-container-header'>
             <div className="logo-image-invoice">
               {selectedImage && <img src={selectedImage[0]} alt={"Logo"} />}
-              {/* {console.log("selected image ", selectedImage)} */}
             </div>
             <div className="invoice-address">
               <address >
@@ -90,7 +88,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               </table>
             </div>
             <div >
-              <label >  <span style={{ fontWeight: 600, fontSize: '75%', backgroundColor: '#E8EAE9' }}>Remarks : </span><span style={{ fontSize: 13, padding: 10 }}>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
+              <label><span className='invoice-remarks-main'>Remarks : </span><span className='invoice-remarks-sub'>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
               </label>
             </div>
             <div className="secondTable">
@@ -135,7 +133,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 <div className="guest-sign">
                   {signimageUrl !== "" ?
                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-                  <p style={{ textAlign: 'center' }}>Guest Signature</p>
+                  <p className='guest-sign-text'>Guest Signature</p>
                 </div>
               </div>
             </div>
@@ -160,7 +158,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <ol type="1">
               {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (
                 <img className='attached-image' key={index} src={image} alt={`image_${index}`} />
-                // <embed key={index} style={{ width: "100%", height: "350px", }} type="application/pdf" src={image} alt={`image_${index}`} />
               ))}
             </ol>
           </div>

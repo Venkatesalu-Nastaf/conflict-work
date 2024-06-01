@@ -19,10 +19,10 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { PermissionContext } from '../../../context/permissionContext';
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
-import { APIURL } from "../../../url";
 
-const Organization = () => {
-    const apiUrl = APIURL;
+const Organization = ({ logoImage }) => {
+
+
     const {
         selectedCustomerData,
         actionName,
@@ -39,7 +39,7 @@ const Organization = () => {
         handleChange,
         handleAdd,
         hidePopup,
-        selectedImage,
+
         editMode,
         handleUpload,
         toggleEditMode,
@@ -58,6 +58,8 @@ const Organization = () => {
     const { permissions } = useContext(PermissionContext)
     const MainSetting_modify = permissions[15]?.modify;
 
+
+
     return (
         <div className="organisation-form Scroll-Style-hide">
             <form>
@@ -70,10 +72,10 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={`${apiUrl}/public/org_logo/${selectedImage}`}
+                                            src={logoImage}
                                         >
-                                            {selectedImage ? null : (
-                                                <div style={{ 'fontSize': "55px" }}>
+                                            {logoImage ? null : (
+                                                <div className='organisation-avatar-icon'>
                                                     <BiBuildings />
                                                 </div>
                                             )}
@@ -92,14 +94,14 @@ const Organization = () => {
                             </div>
                             <div className='container-organisation-right'>
                                 <div className="input-field organisation-details-input-feilds">
-                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small">
                                         <div className="icone">
                                             <BadgeIcon color="action" />
                                         </div>
                                         <TextField
                                             margin="normal"
                                             size="small"
-                                            id="id"
+                                            id="organizationname"
                                             label="Organization Name"
                                             name="organizationname"
                                             sx={{ width: "280px" }}
@@ -109,13 +111,13 @@ const Organization = () => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small">
                                         <div className="icone">
                                             <WorkspacePremiumIcon color="action" />
                                         </div>
                                         <TextField
                                             size="small"
-                                            id="role"
+                                            id="organizationtype"
                                             label="Organization Type"
                                             name="organizationtype"
                                             sx={{ width: "280px" }}
@@ -127,14 +129,14 @@ const Organization = () => {
                                     </div>
                                 </div>
                                 <div className="input-field organisation-details-input-feilds">
-                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small">
                                         <div className="icone">
                                             <SettingsPhoneIcon color="action" />
                                         </div>
                                         <TextField
                                             type='number'
                                             size="small"
-                                            id="mobile"
+                                            id="contactPhoneNumber"
                                             label="Mobile"
                                             name="contactPhoneNumber"
                                             sx={{ width: "280px" }}
@@ -144,14 +146,14 @@ const Organization = () => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small">
                                         <div className="icone">
                                             <AttachEmailIcon color="action" />
                                         </div>
                                         <TextField
                                             sx={{ width: "280ch" }}
                                             size="small"
-                                            id="email"
+                                            id="contactEmail"
                                             label="Email"
                                             name="contactEmail"
                                             autoComplete="new-password"
@@ -163,12 +165,12 @@ const Organization = () => {
                                 </div>
                                 {editMode ? (
                                     <div className="input-field save-cancel-inputs">
-                                        <div className="input" style={{ width: "150px" }}>
+                                        <div className="input">
                                             <Button variant="outlined" onClick={toggleEditMode}>
                                                 Cancel
                                             </Button>
                                         </div>
-                                        <div className="input" style={{ width: "150px" }}>
+                                        <div className="input">
                                             <Button variant="contained" onClick={handleUpdate} disabled={!MainSetting_modify}   >
                                                 Update
                                             </Button>
@@ -184,22 +186,22 @@ const Organization = () => {
                                 <div className='alert-popup-main'>
                                     {error &&
                                         <div className='alert-popup Error' >
-                                            <div className="popup-icon"> <ClearIcon styleName={{ color: '#fff' }} /> </div>
-                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <div className="popup-icon"> <ClearIcon /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                             <p>{errorMessage}</p>
                                         </div>
                                     }
                                     {success &&
                                         <div className='alert-popup Success' >
-                                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                             <p>{successMessage}</p>
                                         </div>
                                     }
                                     {warning &&
                                         <div className='alert-popup Warning' >
-                                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                             <p>{warningMessage}</p>
                                         </div>
                                     }
@@ -209,8 +211,8 @@ const Organization = () => {
                     </div>
                 </div>
                 <div className="organisation-details ">
-                    <div className="input-field organisation-details-input" style={{padding:'20px'}}>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent:'space-between', width: '68vw', gap: '10px' }}>
+                    <div className="input-field organisation-details-input">
+                        <div className='organisation-details-input-sub-division'>
                             <div className="input organization-input">
                                 <label htmlFor="">Type of Organization:</label>
                                 <TextField
@@ -235,18 +237,17 @@ const Organization = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input organization-text-area" >
+                            <div className="input organization-text-area">
                                 <TextField
                                     size="small"
                                     name="remark"
-                                    className='address-field'
+                                    className='address-field organisation-address-field'
                                     value={selectedCustomerData?.addressLine1 || book.addressLine1}
                                     onChange={handleChange}
                                     label="Address"
                                     id="remark"
                                     multiline
                                     rows={5}
-                                    style={{ width: '87%' }}
                                     autoComplete="password"
                                 />
                             </div>
@@ -255,7 +256,7 @@ const Organization = () => {
                                 <TextField
                                     sx={{ width: "100%" }}
                                     size="small"
-                                    id="taxIDNumber"
+                                    id="pannumber"
                                     name="pannumber"
                                     className='organisation-input-field'
                                     value={selectedCustomerData?.pannumber || book.pannumber}
@@ -323,10 +324,10 @@ const Organization = () => {
                                 />
                             </div>
                         </div>
-                        <div className='organisation-input-row' style={{ paddingBottom: '20px' }}>
+                        <div className='organisation-input-row'>
                             {selectedCustomerData?.length === 0 ?
-                                <div className='organisation-btn-row' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                                    <div className="input organisation-btn" style={{ width: "150px" }}>
+                                <div className='organisation-btn-row'>
+                                    <div className="input organisation-btn">
 
                                         <Button variant="contained" onClick={handleAdd} >
                                             Save
@@ -334,15 +335,15 @@ const Organization = () => {
                                     </div>
                                 </div> :
                                 <>
-                                    <div className='organisation-btn-row' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                                        <div className='organisation-btn' style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                                            <div className="input" style={{ width: "150px" }}>
+                                    <div className='organisation-btn-row'>
+                                        <div className='organisation-btn'>
+                                            <div className="input">
                                                 <Button variant="outlined" disabled={!MainSetting_modify} onClick={handleCancel}>
                                                     Cancel
                                                 </Button>
                                             </div>
 
-                                            <div className="input" style={{ width: "150px" }}>
+                                            <div className="input">
                                                 <Button variant="contained" disabled={!MainSetting_modify} onClick={handleUpdate}  >
                                                     Update
                                                 </Button>
@@ -356,8 +357,8 @@ const Organization = () => {
                     <div className='alert-popup-main'>
                         {info &&
                             <div className='alert-popup Info' >
-                                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <BsInfo /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{infoMessage}</p>
                             </div>
                         }

@@ -53,7 +53,6 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -110,10 +109,10 @@ const Booking = ({ stationName }) => {
     error,
     success,
     info,
-    warning,
+    // warning,
     successMessage,
     errorMessage,
-    warningMessage,
+    // warningMessage,
     infoMessage,
     book,
     handleClick,
@@ -136,13 +135,13 @@ const Booking = ({ stationName }) => {
     handleAutocompleteChange,
     setFormData,
     setStartTime,
-    guestsms,
-    setGuestSms,
+    // guestsms,
+    // setGuestSms,
     sendEmail,
     setSendEmail,
     lastBookingNo,
     currentYear,
-    handleClickHide,
+    // handleClickHide,
     searchText,
     setSearchText,
     setreporttime,
@@ -170,11 +169,11 @@ const Booking = ({ stationName }) => {
     handleimagedelete,
     handleClosedeleteDialog,
     dialogdeleteOpen,
-    handleprevent,
+    // handleprevent,
     rowdriver,
     handleRowClickdriver,
-    setErrorMessage,
-    setError,
+    // setErrorMessage,
+    // setError,
     edit,
     handleKeyEnterdriver,
     vehileName,
@@ -199,15 +198,16 @@ const Booking = ({ stationName }) => {
       <form onSubmit={handleClick}>
         <div className="booking-main-section1">
           <div className="sub-section1">
-            <div className="first-division" style={{ display: 'flex', flexWrap: 'wrap' }}>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="first-division">
+              <div className="input">
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
                 <TextField
                   name="bookingno"
+                  className="full-width"
                   label="Booking"
-                  id="standard-size-normal"
+                  id="standard-size-bookingno"
                   autoComplete="new-password"
                   value={
                     formData.bookingno ||
@@ -219,12 +219,11 @@ const Booking = ({ stationName }) => {
                   onKeyDown={handleKeyDown}
                   variant="standard"
                   autoFocus
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
-                  <CalendarMonthIcon color="action" style={{ paddingTop: '20px' }} />
+                  <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
@@ -250,15 +249,16 @@ const Booking = ({ stationName }) => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="booking-time-main-div">
+                <div className="input time">
                   <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
+                    <MdOutlineAccessTimeFilled />
                   </div>
-                  <div style={{ display: 'grid', width: '100%' }}>
+                  <div className="input-type-grid">
                     <label>Booking Time</label>
                     <input
                       type="time"
+                      id="Booking_time"
                       value={
                         formData.bookingtime ||
                         selectedCustomerData.bookingtime ||
@@ -280,7 +280,7 @@ const Booking = ({ stationName }) => {
                   </div>
                 </div>
               </div>
-              <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Status
@@ -289,6 +289,7 @@ const Booking = ({ stationName }) => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
+                    id="status"
                     autoComplete="new-password"
                     value={
                       formData.status ||
@@ -311,13 +312,14 @@ const Booking = ({ stationName }) => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <SellIcon color="action" />
                 </div>
                 <TextField
                   name="tripid"
                   autoComplete="new-password"
+                  className="full-width"
                   value={
                     formData.tripid ||
                     selectedCustomerData.tripid ||
@@ -326,12 +328,11 @@ const Booking = ({ stationName }) => {
                   }
                   onChange={handleChange}
                   label="Trip Id"
-                  id="standard-size-normal"
+                  id="tripid"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ width: '200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -353,37 +354,38 @@ const Booking = ({ stationName }) => {
                   autoComplete="new-password"
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+              <div className="input service-station-input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
+
                 <Autocomplete
                   fullWidth
-                  size="small"
-                  id="free-solo-demo-stationname"
+                  id="servicestation"
                   freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
-                  options={stationName.map((option) => ({
-                    label: option.Stationname,
+                  size="small"
+                  value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                  options={stationName?.map((option) => ({
+                    label: option?.Stationname,
                   }))}
-                  getOptionLabel={(option) => option.label || book?.stationname || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "servicestation")
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Service Station" name="servicestation" />
-                    )
-                  }
-                  }
+                      <TextField {...params} label="servicestation" name="servicestation" inputRef={params.inputRef} />
+                    );
+                  }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+              <div className="input">
                 <div className="icone">
                   <FmdBadIcon color="action" />
                 </div>
                 <TextField
                   name="remarks"
                   autoComplete="new-password"
+                  className="full-width"
                   value={
                     formData.remarks ||
                     selectedCustomerData.remarks ||
@@ -394,92 +396,79 @@ const Booking = ({ stationName }) => {
                   label="Remarks"
                   id="remarks"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
             </div>
           </div>
           <div className="sub-section2 sub-section2-booking">
             <div className="first-table-driver">
-            <div className="booking-update-main">
-              <div className="booking-update">
-                <div
-                  className="Scroll-Style"
-                  style={{ overflow: "scroll", height: "220px" }}
-                >
-                  <table>
-                    <thead id="update-header">
-                      <tr >
-                        <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}>Organization_Name</th>
-                        <th className="table-head-booking">Organizer</th>
-                        <th className="table-head-booking">Email_Id</th>
-                        <th className="table-head-booking">Address</th>
-                        <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>Phone_No</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.length === 0 ? (
-                        <tr>
-                          <td colSpan={6}>No data available.</td>
+              <div className="booking-update-main">
+                <div className="booking-update">
+                  <div className="Scroll-Style booking-update-main-table">
+                    <table>
+                      <thead id="update-header">
+                        <tr >
+                          <th className="table-head-booking table-heading-first">Organization_Name</th>
+                          <th className="table-head-booking">Organizer</th>
+                          <th className="table-head-booking">Email_Id</th>
+                          <th className="table-head-booking">Address</th>
+                          <th className="table-head-booking table-heading-last">Phone_No</th>
                         </tr>
-                      ) : (
-                        rows.map((row) => (
-                          <tr
-                            id="update-row"
-                            key={row.id}
-                            onClick={() => handleRowClick(row)}
-                          >
-                            <td>{row.customer}</td>
-                            <td>{row.name}</td>
-                            <td>{row.email}</td>
-                            <td>{row.address1}</td>
-                            <td>{row.phoneno}</td>
+                      </thead>
+                      <tbody>
+                        {rows.length === 0 ? (
+                          <tr>
+                            <td colSpan={6}>No data available.</td>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+                        ) : (
+                          rows.map((row) => (
+                            <tr
+                              id="update-row"
+                              key={row.id}
+                              onClick={() => handleRowClick(row)}
+                            >
+                              <td>{row.customer}</td>
+                              <td>{row.name}</td>
+                              <td>{row.email}</td>
+                              <td>{row.address1}</td>
+                              <td>{row.phoneno}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
+              <div className="input">
+
+                <FormControlLabel
+                  id="sendMailCheckbox"
+                  value="sendemail"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={sendEmail}
+                      onChange={(event) => setSendEmail(event.target.checked)}
+                    />
+                  }
+                  label="Send Email"
+                />
+              </div>
             </div>
-            <div className="input">
-              <FormControlLabel
-                value="guestsms"
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={guestsms}
-                    onChange={(event) => setGuestSms(event.target.checked)}
-                  />
-                }
-                label="Guest SMS"
-              />
-              <FormControlLabel
-                id="sendMailCheckbox"
-                value="sendemail"
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={sendEmail}
-                    onChange={(event) => setSendEmail(event.target.checked)}
-                  />
-                }
-                label="Send Email"
-              />
-            </div>
-            </div>
-            
+
           </div>
         </div>
         <div>
-          <div className="second-division second-division-booking" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' ,alignItems:'center'}}>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+          <div className="second-division second-division-booking">
+            <div className="input">
               <div className="icone">
                 <HomeRepairServiceTwoToneIcon color="action" />
               </div>
               <TextField
                 name="orderedby"
                 autoComplete="new-password"
+                className="full-width"
                 value={
                   formData.orderedby ||
                   selectedCustomerData.orderedby ||
@@ -491,16 +480,16 @@ const Booking = ({ stationName }) => {
                 label="Ordered by"
                 id="orderedby"
                 variant="standard"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
               </div>
               <TextField
                 name="mobile"
                 autoComplete="new-password"
+                className="full-width"
                 value={
                   formData.mobile ||
                   selectedCustomerData.mobile ||
@@ -510,18 +499,18 @@ const Booking = ({ stationName }) => {
                 }
                 onChange={handleChange}
                 label="Mobile No"
-                id="mobile"
+                id="mobile_no"
                 variant="standard"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AccountCircleTwoToneIcon color="action" />
               </div>
               <TextField
                 name="guestname"
                 autoComplete="new-password"
+                className="full-width"
                 value={
                   formData.guestname ||
                   selectedCustomerData.guestname ||
@@ -534,12 +523,11 @@ const Booking = ({ stationName }) => {
                 id="guestname"
                 variant="standard"
                 required
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
-                <MdDataUsage style={{ fontSize: '25px' }} />
+                <MdDataUsage />
               </div>
               <TextField
                 margin="normal"
@@ -558,13 +546,14 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
                 name="guestmobileno"
                 autoComplete="new-password"
+                className="full-width"
                 value={
                   formData.guestmobileno ||
                   selectedCustomerData.guestmobileno ||
@@ -576,15 +565,15 @@ const Booking = ({ stationName }) => {
                 label="Guest Mobile No"
                 id="guestmobileno"
                 variant="standard"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input radio">
               <div className="icone">
                 <AttachEmailIcon color="action" />
               </div>
               <TextField
                 name="email"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.email ||
@@ -597,15 +586,15 @@ const Booking = ({ stationName }) => {
                 label="Email"
                 id="email"
                 variant="standard"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input radio">
               <div className="icone">
                 <RateReviewIcon color="action" />
               </div>
               <TextField
                 name="employeeno"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.employeeno ||
@@ -617,10 +606,9 @@ const Booking = ({ stationName }) => {
                 label="Employee No"
                 id="employeeno"
                 variant="standard"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <PermIdentityIcon color="action" />
               </div>
@@ -641,20 +629,19 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AddHomeWorkIcon color="action" />
               </div>
               <TextField
                 margin="normal"
-                id="streetname"
+                id="address12"
                 label="Address"
                 name="address1"
                 multiline
                 rows={2}
                 sx={{ width: "100%" }}
                 autoComplete="new-password"
-                style={{ width: '100%' }}
                 value={
                   formData.address1 ||
                   selectedCustomerData.address1 ||
@@ -664,14 +651,14 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="fine_years"
                 value={currentYear}
                 options={[currentYear]}
                 renderInput={(params) => (
@@ -679,14 +666,14 @@ const Booking = ({ stationName }) => {
                 )}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="report"
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) =>
@@ -722,14 +709,14 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AccountBalanceWalletTwoToneIcon color="action" />
               </div>
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="paymenttype"
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) =>
@@ -764,13 +751,14 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Report Date"
+                  id="report_date"
                   value={
                     formData.startdate || selectedCustomerData.startdate
                       ? dayjs(selectedCustomerData.startdate)
@@ -791,15 +779,16 @@ const Booking = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="" style={{ paddingRight: '15px' }}>
-              <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
+            <div>
+              <div className="input time">
                 <div className="icone">
-                  <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
+                  <MdOutlineAccessTimeFilled />
                 </div>
-                <div style={{ display: 'grid', width: '100%' }}>
+                <div className="input-type-grid">
                   <label>Start Time</label>
                   <input
                     type="time"
+                    id="starttime"
                     value={
                       formData.starttime ||
                       selectedCustomerData.starttime ||
@@ -820,15 +809,16 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
             </div>
-            <div className="" style={{ paddingRight: '15px' }}>
-              <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
+            <div>
+              <div className="input time">
                 <div className="icone">
-                  <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
+                  <MdOutlineAccessTimeFilled />
                 </div>
-                <div style={{ display: 'grid', width: '100%' }}>
+                <div className="input-type-grid">
                   <label>Report Time</label>
                   <input
                     type="time"
+                    id="reporttime"
                     name="reporttime"
                     value={
                       formData.reporttime ||
@@ -852,74 +842,43 @@ const Booking = ({ stationName }) => {
                 </div>
               </div>
             </div>
-            {/* <div style={{ width: '100%' }}> */}
-              {/* <div className="input-field">
-                <div className="input-btn">
-                  <span onClick={handleClickHide} className="btn">
-                    Hide
-                  </span>
-                  <span className="btn">Copy</span>
-                </div>
-              </div> */}
-              {/* <div style={{display:'flex',flexWrap:'wrap'}}> */}
-                <div className="input-dummy" style={{display:'inline'}}>
-                  {formData.bookingno ||
-                    selectedCustomerData.bookingno ||
-                    book.bookingno ? (
-                    <Button
-                      color="primary"
-                      variant="contained"
 
-                      component="label"
-                    >
-                      Attach File
-                      <input
-                        type="file"
-                        style={{ display: "none" }}
-                        onClick={handleprevent}
-                        onChange={(e) => setFile(e.target.files[0])}
-                      />
-                    </Button>
-                  ) : (
-                    <Button
-                      color="primary"
-                      variant="contained"
 
-                      onClick={() => {
-                        setError(true);
-                        setErrorMessage("Please Enter Booking No");
-                      }}
-                    >
-                      Attach File
-                    </Button>
-                  )}
-                </div>
-                <div className="input-dummy">
-                  <Button
-                    variant="outlined"
-                    onClick={handleButtonClick}
-                  >
-                    View
-                  </Button>
-                </div>
-              {/* </div> */}
-            {/* </div> */}
+            <div className="input-dummy">
+              <Button
+                color="primary"
+                variant="contained"
+
+                component="label"
+              >
+                Attach File
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+              </Button>
+            </div>
+            <div className="input-dummy">
+              <Button
+                variant="outlined"
+                onClick={handleButtonClick}
+              >
+                View
+              </Button>
+            </div>
           </div>
 
-
-
-
-
-          <div className="booking-main-section2" style={{marginTop:'30px'}}>
-            <div className="sub-section1 sub-section-second-division" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+          <div className="booking-main-section2">
+            <div className="sub-section1 sub-section-second-division">
+              <div className="input">
                 <div className="icone">
                   <EngineeringIcon color="action" />
                 </div>
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="free-solo-duty"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) =>
@@ -954,14 +913,14 @@ const Booking = ({ stationName }) => {
                   }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
                   size="small"
-                  id="streetname"
+                  id="pickup"
                   label="PickUp"
                   name="pickup"
                   autoComplete="new-password"
@@ -975,12 +934,13 @@ const Booking = ({ stationName }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <QrCodeIcon color="action" />
                 </div>
                 <TextField
                   name="customercode"
+                  className="full-width"
                   autoComplete="new-password"
                   value={
                     formData.customercode ||
@@ -992,15 +952,15 @@ const Booking = ({ stationName }) => {
                   label="Customer code"
                   id="customercode"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AppRegistrationIcon color="action" />
                 </div>
                 <TextField
                   name="registerno"
+                  className="full-width"
                   autoComplete="new-password"
                   value={
                     formData.registerno ||
@@ -1012,15 +972,15 @@ const Booking = ({ stationName }) => {
                   label="Request No"
                   id="registerno"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AirplaneTicketIcon color="action" />
                 </div>
                 <TextField
                   name="flightno"
+                  className="full-width"
                   autoComplete="new-password"
                   value={
                     formData.flightno ||
@@ -1030,17 +990,17 @@ const Booking = ({ stationName }) => {
                   }
                   onChange={handleChange}
                   label="Flight No"
-                  id="flight"
+                  id="flightno"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <ForwardToInboxIcon color="action" />
                 </div>
                 <TextField
                   name="orderbyemail"
+                  className="full-width"
                   autoComplete="new-password"
                   value={
                     formData.orderbyemail ||
@@ -1053,10 +1013,9 @@ const Booking = ({ stationName }) => {
                   label="Order By Email"
                   id="orederbyemail"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+              <div className="input advance-input">
                 <div className="icone">
                   <InfoIcon color="action" />
                 </div>
@@ -1083,48 +1042,45 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
             <div className="sub-section2-driver">
-            <div className="second-table-driver">
-              <div className="booking-update-main driver-table" style={{ marginTop: '20px' }}>
-                <div className="booking-update">
-                  <div
-                    className="Scroll-Style"
-                    style={{ overflow: "scroll", height: "220px" }}
-                  >
-                    <table>
-                      <thead id="update-header">
-                        <tr>
-                          <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}>Driver_NAME</th>
-                          <th className="table-head-booking">VEHICLE_Name</th>
-                          <th className="table-head-booking">VEHICLE NO</th>
-                          <th className="table-head-booking">HIRE TYPES</th>
-                          <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>ACTIVE</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rowdriver?.length === 0 ? (
+              <div className="second-table-driver">
+                <div className="booking-update-main driver-table">
+                  <div className="booking-update">
+                    <div className="Scroll-Style booking-driver-table">
+                      <table>
+                        <thead id="update-header">
                           <tr>
-                            <td colSpan={6}>No data available.</td>
+                            <th className="table-head-booking table-heading-first">Driver_NAME</th>
+                            <th className="table-head-booking">VEHICLE_Name</th>
+                            <th className="table-head-booking">VEHICLE NO</th>
+                            <th className="table-head-booking">HIRE TYPES</th>
+                            <th className="table-head-booking table-heading-last">ACTIVE</th>
                           </tr>
-                        ) : (
-                          rowdriver?.map((row) => (
-                            <tr
-                              id="update-row"
-                              key={row.id}
-                              onClick={() => handleRowClickdriver(row)}
-                            >
-                              <td>{row.driverName}</td>
-                              <td>{row.vehType}</td>
-                              <td>{row.vehRegNo}</td>
-                              <td>{row.hireTypes}</td>
-                              <td>{row.active}</td>
+                        </thead>
+                        <tbody>
+                          {rowdriver?.length === 0 ? (
+                            <tr>
+                              <td colSpan={6}>No data available.</td>
                             </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
+                          ) : (
+                            rowdriver?.map((row) => (
+                              <tr
+                                id="update-row"
+                                key={row.id}
+                                onClick={() => handleRowClickdriver(row)}
+                              >
+                                <td>{row.driverName}</td>
+                                <td>{row.vehType}</td>
+                                <td>{row.vehRegNo}</td>
+                                <td>{row.hireTypes}</td>
+                                <td>{row.active}</td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
@@ -1177,10 +1133,8 @@ const Booking = ({ stationName }) => {
         </Box>
         {/**  helloo */}
 
-        <div className="vehicle-confirm" style={{ marginTop: '25px' }}>
-          <div className="input-field input-feild-vehicle-confirm" style={{ flexWrap: 'wrap' }}>
-     
-     
+        <div className="vehicle-confirm">
+          <div className="input-field input-feild-vehicle-confirm">
             <div className="input">
               <div className="icone">
                 <AirportShuttleIcon color="action" />
@@ -1188,7 +1142,7 @@ const Booking = ({ stationName }) => {
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="hireTypes"
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) =>
@@ -1271,7 +1225,7 @@ const Booking = ({ stationName }) => {
               </div>
               <Autocomplete
                 fullWidth
-                id="free-solo-demo"
+                id="vehiclemodule"
                 freeSolo
                 size="small"
                 value={
@@ -1294,14 +1248,14 @@ const Booking = ({ stationName }) => {
               />
             </div>
 
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
               </div>
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="vehType"
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) =>
@@ -1342,7 +1296,7 @@ const Booking = ({ stationName }) => {
               </div>
               <Autocomplete
                 fullWidth
-                id="free-solo-demo"
+                id="Groups"
                 freeSolo
                 size="small"
                 value={
@@ -1426,8 +1380,8 @@ const Booking = ({ stationName }) => {
               />
             </div>
 
-            <div className="input" style={{ width: "100px" }}>
-              <div className="input" style={{ width: "160px" }}>
+            <div className="input">
+              <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
                     Edit
@@ -1454,7 +1408,7 @@ const Booking = ({ stationName }) => {
                     Add New</Button> : <></>
               }
             </div>
-            
+
           </div>
         </div>
 
@@ -1479,34 +1433,22 @@ const Booking = ({ stationName }) => {
             <div className="alert-popup Error">
               <div className="popup-icon">
                 {" "}
-                <ClearIcon style={{ color: "#fff" }} />{" "}
+                <ClearIcon />{" "}
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" />{" "}
               </span>
               <p>{errorMessage}</p>
             </div>
           )}
-          {warning && (
-            <div className="alert-popup Warning">
-              <div className="popup-icon">
-                {" "}
-                <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
-              </div>
-              <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-              </span>
-              <p>{warningMessage}</p>
-            </div>
-          )}
+
           {info && (
             <div className="alert-popup Info">
               <div className="popup-icon">
-                {" "}
-                <BsInfo style={{ color: "#fff" }} />{" "}
+                <BsInfo />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" />
               </span>
               <p>{infoMessage}</p>
             </div>
@@ -1514,11 +1456,10 @@ const Booking = ({ stationName }) => {
           {success && (
             <div className="alert-popup Success">
               <div className="popup-icon">
-                {" "}
-                <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                <FileDownloadDoneIcon />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" />
               </span>
               <p>{successMessage}</p>
             </div>
@@ -1527,17 +1468,16 @@ const Booking = ({ stationName }) => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field search-division">
+                <div className="input">
                   <div className="icone">
                     <AiOutlineFileSearch
                       color="action"
-                      style={{ fontSize: "27px" }}
                     />
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="searchText"
                     label="Search"
                     name="searchText"
                     value={searchText || ""}
@@ -1549,6 +1489,7 @@ const Booking = ({ stationName }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      id="fromDate"
                       name="fromDate"
                       format="DD/MM/YYYY"
                       value={fromDate}
@@ -1561,13 +1502,14 @@ const Booking = ({ stationName }) => {
                     <DatePicker
                       label="To Date"
                       name="toDate"
+                      id="toDate"
                       format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "140px" }}>
+                <div className="input">
                   <Button variant="contained" onClick={handleShowAll}>
                     Search
                   </Button>
@@ -1596,7 +1538,7 @@ const Booking = ({ stationName }) => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-Booking">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className="booking-main-table">
             <DataGrid
               rows={reversedRows}
               columns={columns}
@@ -1606,26 +1548,19 @@ const Booking = ({ stationName }) => {
             />
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
-                <div style={{ position: "relative" }}>
+                <div className="booking-main-table-div1">
                   {Array.isArray(allFile) &&
                     allFile.map((img, index) => (
-                      <div key={index} style={{ position: "relative" }}>
+                      <div key={index} className="booking-main-table-div2">
                         <embed
-                          src={`${apiUrl}/public/booking_doc/ + img.fileName`}
-                          type="application/pdf"
+                          src={`${apiUrl}/public/booking_doc/${img.path}`}
                           width="100%"
                           height="600px"
+                          style={{ width: '800px', maxWidth: '100%' }}
                         />
                         <button
-                          onClick={() => handleimagedelete(img.fileName)}
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            opacity: 0,
-                          }}
+                          className="booking-main-table-btn"
+                          onClick={() => handleimagedelete(img.path)}
                         />
                       </div>
                     ))}

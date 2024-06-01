@@ -74,16 +74,16 @@ const BankAccount = () => {
         <div className="total-account">
           <div className='amount-calculate'>
             <div className='total-inputs' >
-              <label htmlFor="">Total Capital:</label>
-              <input type="number" value={totalcapital} readOnly />
+              <label htmlFor="totalCapital">Total Capital:</label>
+              <input type="number" id="totalCapital" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
-              <label htmlFor="">Total-In:</label>
-              <input type="number" value={totalIn} readOnly />
+              <label htmlFor="totalIn">Total-In:</label>
+              <input type="number" id="totalIn" value={totalIn} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountOUT`} >
-              <label htmlFor="">Total-Out:</label>
-              <input type="number" value={totalOut !== isNaN ? totalOut : 0} readOnly />
+              <label htmlFor="totalOut">Total-Out:</label>
+              <input type="number" id="totalOut" value={totalOut !== isNaN ? totalOut : 0} readOnly />
             </div>
           </div>
         </div>
@@ -100,12 +100,13 @@ const BankAccount = () => {
               <div className="input-field input-field-bankaccount">
                 <div className="input input-bankaccount">
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
                     label="Bank Name"
                     name="bankname"
+                    id="banknameHDFC"
                     autoFocus
                     value={book.bankname || ''}
                     onChange={handleChange}
@@ -120,13 +121,14 @@ const BankAccount = () => {
                     size="small"
                     label="Capital Amount"
                     name="capital"
+                    id="capital"
                     value={book.capital || ''}
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input input-bankaccount" style={{ width: "230px" }}>
+                <div className="input input-bankaccount">
                   <div className="icone">
-                    <ListAltIcon color="action" style={{ fontSize: "27px" }} />
+                    <ListAltIcon color="action" />
                   </div>
                   <Autocomplete
                     fullWidth
@@ -148,12 +150,12 @@ const BankAccount = () => {
                     }
                   />
                 </div>
-                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
+                <div className="inpu">
                   <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
-                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
+                <div className="inpu">
                   <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
                     <CancelIcon />
                   </Button>
@@ -168,15 +170,14 @@ const BankAccount = () => {
               <div className="input-field input-field-bankaccount input-Field-bank-account">
 
                 <div className="input input-bankname">
-                  {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
                     label="Bank Name"
+                    id="bankname02"
                     name="bankname2"
-                    // value={bankDetails[index]?.bankname2 || book.bankname2 || ''}
                     value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -184,42 +185,38 @@ const BankAccount = () => {
                 </div>
                 <div className="input input-bankname">
                   <div className="icone">
-                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                    <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
                     label="Net Balance"
                     name="netbalance"
+                    id="netbalance89"
                     type="number"
-                    // value={bankDetails[index]?.netbalance || book.netbalance || ''}
-                    // value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
                     value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`}>
                   <label htmlFor={`totalin-${index}`}>TotalIn:</label>
                   <input
                     className="bank-amount-input"
                     name="totalin"
                     type="number"
                     id={`totalin-${index}`}
-                    // value={bankDetails[index]?.totalin || book.netbalance || ''}
-                    // value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
                     value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`}>
                   <label htmlFor={`totalout-${index}`}>TotalOut:</label>
                   <input
                     className="bank-amount-input"
                     name="totalout"
                     type="number"
                     id={`totalout-${index}`}
-                    // value={bankDetails[index]?.totalout || book.totalout || ''}
                     value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -265,32 +262,32 @@ const BankAccount = () => {
         <div className='alert-popup-main'>
           {error && (
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           )
           }
           {warning && (
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           )
           }
           {info && (
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           )
           }
           {success && (
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           )

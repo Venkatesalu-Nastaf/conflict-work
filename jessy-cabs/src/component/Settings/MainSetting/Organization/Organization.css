@@ -235,6 +235,7 @@ border-right: 1px solid transparent !important;
 .organisation-details-input {
     flex-wrap: wrap;
     justify-content: center;
+    padding: 20px;
 }
 
 @media screen and (max-width: 465px) {
@@ -280,6 +281,7 @@ border-right: 1px solid transparent !important;
 .organisation-input-row {
     display: flex;
     width: 100%;
+    padding-bottom: 20px;
 }
 
 .organisation-input-row .office-address,
@@ -309,6 +311,12 @@ border-right: 1px solid transparent !important;
     }
 }
 
+.organisation-btn-row, .organisation-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 @media screen and (min-width: 1041px) {
     .organisation-btn-row {
         position: relative;
@@ -321,11 +329,28 @@ border-right: 1px solid transparent !important;
    width:  300px;
 } */
 
-.organisation-details-input .organization-input{
+.organisation-details-input .organization-input {
     width: 300px !important;
     gap: 10px;
 }
 
-.organisation-details-input .organization-text-area{
+.organisation-details-input .organization-text-area {
     width: 300px !important;
+}
+
+.organisation-details-input-sub-division {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    width: 68vw;
+    gap: 10px;
+}
+
+.organisation-address-field {
+    width: 87%;
+}
+
+.organisation-avatar-icon{
+    font-size: 55px;
 }

@@ -121,6 +121,14 @@ body {
   margin: 3px;
 }
 
+.alert-popup .popup-icon svg{
+  color: #fff;
+}
+
+.alert-popup .cancel-btn svg{
+  font-size: 14px;
+}
+
 .alert-popup .cancel-btn {
   font-weight: 500;
   cursor: pointer;
@@ -560,5 +568,22 @@ body {
     gap: 0;
   }
 }
+
+.input {
+  width: 255px !important;
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.d-grid {
+  display: grid;
+}
+
+.d-flex{
+  display: flex;
+}
+
+
 
 /* MENUBAR FOR ALL PAGES ENDS*/

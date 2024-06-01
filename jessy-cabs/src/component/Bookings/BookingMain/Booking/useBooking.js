@@ -13,6 +13,7 @@ import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
 import Excel from 'exceljs';
+// import { toast } from 'react-toastify';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -82,9 +83,10 @@ const useBooking = () => {
   const location = useLocation();
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
+  const [infoMessage, setInfoMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  // const [warningMessage, setWarningMessage] = useState({});
   const [searchText, setSearchText] = useState("");
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -93,9 +95,9 @@ const useBooking = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupOpenmail, setpopupOpenmail] = useState(false);
   const [edit, setEdit] = useState(false)
-  const [guestsms, setGuestSms] = useState(true);
+  // const [guestsms, setGuestSms] = useState(true);
   const [sendEmail, setSendEmail] = useState(true);
-  const [sendguestsms, setSendGuestsms] = useState(false);
+  // const [sendguestsms, setSendGuestsms] = useState(false);
   const [sendmailguestsms, setSendmailGuestsms] = useState(false);
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -157,7 +159,7 @@ const useBooking = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get("status") || "pending";
-    const stationValue = params.get("servicestation") || "Chennai";
+    const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const formData = {};
 
@@ -394,6 +396,8 @@ const useBooking = () => {
           };
         });
       });
+
+
       // write the content using writeBuffer
       const buf = await workbook.xlsx.writeBuffer();
 
@@ -705,19 +709,24 @@ const useBooking = () => {
   // ------------------------------------------------------------
   const [allFile, setAllFile] = useState([]);
 
-  const showPdf = () => {
-    axios
-      .get(`${apiUrl}/booking-docView/${booking_id}`)
-      .then((res) => {
-        if (res.data.length > 0) {
-          setAllFile(res.data);
+  const showPdf = async() => {
+    try{
+      const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
+     
+      if(response.data.files.length > 0){
+        setAllFile(response.data.files);
+         
           setDialogOpen(true);
-        } else {
+
+      }
+      else {
           setError(true);
           setErrorMessage("No data found");
+      }
+    }
+        catch(err){
+          console.log(err)
         }
-      })
-      .catch();
   };
 
   const handleCloseDialog = () => {
@@ -725,104 +734,118 @@ const useBooking = () => {
   };
 
   const [file, setFile] = useState(null);
-  const addPdf = async () => {
+
+  const addPdf = async (lastbookid) => {
     if (file !== null) {
       const formData = new FormData();
 
+
       formData.append("file", file);
-      await axios
-        .post(`${apiUrl}/bookingpdf/${booking_id}`, formData)
-        .then((res) => { })
-        .catch();
-    } else {
-      return;
+      try{
+  
+     const response= await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
+       console.log(response,"data")
+       setFile(null)
+       
+    } 
+    catch(err) {
+      console.log(err)
     }
+  }
+  else{
+    return
+  }
   };
 
   //--------------------------------------------------------------
 
-  const handleSendSMS = async (trip) => {
-    const bookingno = trip
+  // const handleSendSMS = async (trip) => {
+  //   const bookingno = trip
 
-    // if (guestsms || formData.guestsms || book.guestsms) {
-    if (guestsms || sendguestsms) {
-      try {
-        const dataToSend = {
-          guestname:
-            formValues.guestname ||
-            selectedCustomerData.guestname ||
-            book.guestname ||
-            formData.guestname ||
-            "",
-          guestmobileno:
-            formValues.guestmobileno ||
-            selectedCustomerData.guestmobileno ||
-            book.guestmobileno ||
-            formData.guestmobileno ||
-            "",
-          tripid: bookingno,
-          email:
-            formValues.email ||
-            selectedCustomerData.email ||
-            book.email ||
-            formData.pickup ||
-            "",
-          pickup:
-            formValues.pickup ||
-            selectedCustomerData.pickup ||
-            book.pickup ||
-            formData.pickup ||
-            "",
-          useage:
-            formValues.useage ||
-            selectedCustomerData.useage ||
-            book.useage ||
-            formData.useage ||
-            "",
-          reporttime:
-            formValues.reporttime ||
-            formData.reporttime ||
-            selectedCustomerData.reporttime ||
-            book.reporttime ||
-            "",
-          startdate:
-            formValues.startdate ||
-            formData.startdate ||
-            selectedCustomerData.startdate ||
-            book.startdate || dayjs() ||
-            "",
-          address1:
-            formValues.address1 ||
-            formData.address1 ||
-            selectedCustomerData.address1 ||
-            book.address1 ||
-            "",
-        };
+  //   // if (guestsms || formData.guestsms || book.guestsms) {
+  //   if (guestsms || sendguestsms) {
+  //     try {
+  //       const dataToSend = {
+  //         guestname:
+  //           formValues.guestname ||
+  //           selectedCustomerData.guestname ||
+  //           book.guestname ||
+  //           formData.guestname ||
+  //           "",
+  //         guestmobileno:
+  //           formValues.guestmobileno ||
+  //           selectedCustomerData.guestmobileno ||
+  //           book.guestmobileno ||
+  //           formData.guestmobileno ||
+  //           "",
+  //         tripid: bookingno,
+  //         email:
+  //           formValues.email ||
+  //           selectedCustomerData.email ||
+  //           book.email ||
+  //           formData.pickup ||
+  //           "",
+  //         pickup:
+  //           formValues.pickup ||
+  //           selectedCustomerData.pickup ||
+  //           book.pickup ||
+  //           formData.pickup ||
+  //           "",
+  //         useage:
+  //           formValues.useage ||
+  //           selectedCustomerData.useage ||
+  //           book.useage ||
+  //           formData.useage ||
+  //           "",
+  //         reporttime:
+  //           formValues.reporttime ||
+  //           formData.reporttime ||
+  //           selectedCustomerData.reporttime ||
+  //           book.reporttime ||
+  //           "",
+  //         startdate:
+  //           formValues.startdate ||
+  //           formData.startdate ||
+  //           selectedCustomerData.startdate ||
+  //           book.startdate || dayjs() ||
+  //           "",
+  //         address1:
+  //           formValues.address1 ||
+  //           formData.address1 ||
+  //           selectedCustomerData.address1 ||
+  //           book.address1 ||
+  //           "",
+  //       };
 
-        const response = await fetch(`${apiUrl}/send-sms`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        });
+  //       const response = await fetch(`${apiUrl}/send-sms`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(dataToSend),
+  //       });
 
-        if (response.ok) {
-          setSuccess(true);
-          setSuccessMessage("SMS sent correctly");
-        } else {
-          setError(true);
-          setErrorMessage("Failed to send SMS");
-        }
-      } catch {
-        setError(true);
-        setErrorMessage("Error sending SMS");
-      }
-    }
-  };
+  //       if (response.ok) {
+  //         setSuccess(true);
+  //         setSuccessMessage("SMS sent correctly");
+  //       } else {
+  //         setError(true);
+  //         setErrorMessage("Failed to send SMS");
+  //       }
+  //     } catch {
+  //       setError(true);
+  //       setErrorMessage("Error sending SMS");
+  //     }
+  //   }
+  // };
+
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
+      // console.log(sendEmail,sendmailguestsms,lastBookingno,"bookemail")
+     
+      const datamode = isEditMode ? selectedCustomerData.status : book.status
       try {
+        const user = localStorage.getItem("username")
         const dataToSend = {
           guestname:
             formValues.guestname ||
@@ -844,11 +867,18 @@ const useBooking = () => {
           mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
           vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
           tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
-          status: book.status || formData.status || selectedCustomerData.status,
+          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation,
+          // status: book.status || formData.status || selectedCustomerData.status,
           requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
           duty: formData.duty || selectedCustomerData.duty || book.duty || "",
-          bookingno: lastBookingno || ''
+          bookingno: lastBookingno || '',
+          customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
+          username: user,
+          Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
+          status: datamode
+
+
+
         };
         await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
@@ -873,7 +903,7 @@ const useBooking = () => {
     if (!selectedCustomerData.guestmobileno) {
       setError(true);
       setErrorMessage("Enter Guest Mobile Number");
-      setGuestSms(false);
+      // setGuestSms(false);
       return;
     }
 
@@ -888,16 +918,7 @@ const useBooking = () => {
       setErrorMessage("Enter Customer Name")
       return
     }
-    if (!selectedCustomerData.email) {
-      setError(true)
-      setErrorMessage("Enter Email Field")
-      return
-    }
-    if (!selectedCustomerData.vehType) {
-      setError(true)
-      setErrorMessage("Enter VehicleType")
-      return
-    }
+   
     if (!selectedCustomerData.starttime) {
       setError(true)
       setErrorMessage("Enter starting Time")
@@ -935,6 +956,7 @@ const useBooking = () => {
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
+      console.log(formData.servicestation,selectedCustomerData.servicestation,book.servicestation,selectedCustomerDatas.servicestation,"add")
 
       const updatedBook = {
 
@@ -968,7 +990,7 @@ const useBooking = () => {
         flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
         orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
-        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
+        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
@@ -985,24 +1007,28 @@ const useBooking = () => {
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
       };
-      setSendGuestsms(true)
+
       setSendmailGuestsms(true)
+      console.log(updatedBook)
       await axios.post(`${apiUrl}/booking`, updatedBook);
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-      // setGuestSms(true)
+      console.log(lastBookingno)
+     
+
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();
       setRowsdriver([])
-      addPdf();
+      // addPdf(lastBookingNo);
       setRow([]);
       setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-      // handlecheck();
-      handlecheck(lastBookingno);
-      handleSendSMS(lastBookingno);
+     
+       handlecheck(lastBookingno);
+     addPdf(lastBookingno);
+     
       setEdit(false)
     } catch (error) {
       console.error("An error occurred:", error);
@@ -1015,108 +1041,106 @@ const useBooking = () => {
 
   const handleEdit = async (userid) => {
 
-    setError(true);
-    setErrorMessage("Booking can't be Edited..")
-
-    // try {
-
-
-    //   setEdit(false)
-    //   const selectedCustomer = rows.find(
-    //     (row) =>
-    //       row.bookingno === selectedCustomerData.bookingno ||
-    //       formData.bookingno
-    //   );
+    try {
+      const selectedCustomer = rows.find(
+        (row) =>
+          row.bookingno === selectedCustomerData.bookingno ||
+          formData.bookingno
+      );
 
 
-    //   const selectedBookingDate =
-    //     selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+      const selectedBookingDate =
+        selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
 
-    //   const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
-    //   const { id, ...restSelectedCustomerData } = selectedCustomerData;
-    //   let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-    //   const updatedCustomer = {
-    //     ...selectedCustomer,
-    //     // ...book,
-    //     // ...formData,
-    //     // ...selectedCustomerData,
-    //     // ...restSelectedCustomerData, // Use the modified object without 'id'
-    //     // ...selectedCustomerDatas,
-    //     // ...restSelectedCustomerDatas,
-    //     bookingtime: bookingtime || getCurrentTime(),
-    //     bookingdate: selectedBookingDate,
-    //     starttime: restSelectedCustomerData.starttime,
-    //     status: book.status,
-    //     mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
-    //     guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
-    //     guestmobileno: formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno,
-    //     email: formData.email || selectedCustomerData.email || formValues.email || book.email,
-    //     employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
-    //     address1: formData.address1 || selectedCustomerData.address1 || book.address1,
-    //     // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
-    //     // city: formData.city || selectedCustomerData.city || book.city,
-    //     report: formData.report || selectedCustomerData.report || book.report,
-    //     vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
-    //     paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
-    //     startdate: bookingstartdate,
-    //     duty: formData.duty || selectedCustomerData.duty || book.duty,
-    //     pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
-    //     customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,
-    //     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
-    //     registerno: formData.registerno || selectedCustomerData.registerno || book.registerno,
-    //     flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
-    //     orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
-    //     remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
-    //     servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
-    //     advance: formData.advance || selectedCustomerData.advance || book.advance,
-    //     hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
-    //     travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
-    //     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
-    //     vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
-    //     driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
-    //     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
-    //     travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
-    //     reporttime: restSelectedCustomerData.reporttime,
-    //     // triptime: triptime,
-    //     username: storedUsername,
-    //     Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
+      const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
+      const booking_no =
+      formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+      const { id, ...restSelectedCustomerData } = selectedCustomerData;
+      let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
+      const updatedCustomer = {
+        ...selectedCustomer,
+        //     // ...book,
+        //     // ...formData,
+        //     // ...selectedCustomerData,
+        //     // ...restSelectedCustomerData, // Use the modified object without 'id'
+        //     // ...selectedCustomerDatas,
+        //     // ...restSelectedCustomerDatas,
+        bookingtime: bookingtime || getCurrentTime(),
+        bookingdate: selectedBookingDate,
+        starttime: restSelectedCustomerData.starttime,
+        status: selectedCustomerData.status,
+        mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
+        guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
+        guestmobileno: formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno,
+        email: formData.email || selectedCustomerData.email || formValues.email || book.email,
+        employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
+        address1: formData.address1 || selectedCustomerData.address1 || book.address1,
+        // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
+        // city: formData.city || selectedCustomerData.city || book.city,
+        report: formData.report || selectedCustomerData.report || book.report,
+        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+        paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
+        startdate: bookingstartdate,
+        duty: formData.duty || selectedCustomerData.duty || book.duty,
+        pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+        customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,
+        useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
+        registerno: formData.registerno || selectedCustomerData.registerno || book.registerno,
+        flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
+        orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
+        remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
+        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation||"",
+        advance: formData.advance || selectedCustomerData.advance || book.advance,
+        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
+        travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
+        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
+        travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
+        reporttime: restSelectedCustomerData.reporttime,
+        // triptime: triptime,
+        username: storedUsername,
+        Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
 
+        orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
+        customer: restSelectedCustomerData.customer
+      };
+      const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
 
-    //     orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
-    //     customer: restSelectedCustomerData.customer
-    //   };
+      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
+        updatedCustomer
+      )
 
-    //   await axios.put(
-    //     `${apiUrl}/booking/${book.bookingno ||
-    //     selectedCustomerData.bookingno ||
-    //     formData.bookingno
-    //     }`,
-    //     updatedCustomer
-    //   )
+      if (response.data.success) {
+        if (response.status === 201) {
+          setSuccess(true);
+          setSuccessMessage(response.data.message);
 
-    //   setEdit(false)
+        } else {
+          setInfo(true);
+          setInfoMessage(response.data.message);
+        }
 
-    //   // handleCancel();
-    //   addPdf();
-    //   setRow([]);
-    //   setRowsdriver([])
-    //   setRows([]);
-    //   handleCancel();
-    //   if (sendEmail) {
-    //     handlecheck();
-    //   }
-    //   setSuccess(true);
+        setEdit(false)
+        addPdf(booking_no);
+        setRow([]);
+        setRowsdriver([])
+        setRows([]);
+        handleCancel();
+        if (sendEmail) {
+          handlecheck(editbookno);
+        }
+      }
 
-    //   setSuccessMessage("Successfully Updated");
-
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
-    //   setError(true);
-    //   setErrorMessage("Check your Network Connection");
-    // }
-    // // setSendEmail(true)
-    // // setGuestSms(true)
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setError(true);
+      setErrorMessage("Check your Network Connection");
+    }
   };
+
+
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
@@ -1128,29 +1152,30 @@ const useBooking = () => {
         setRow([]);
         setRowsdriver([])
       } else if (actionName === "Delete") {
-        setError(true);
-        setErrorMessage("Booking can't be Deleted..")
 
+        const response = await axios.delete(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno}`);
 
-        // await axios.delete(
-        //   `${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno
-        //   }`
-        // );
-        // setSelectedCustomerData(null);
-        // // setSuccess(true);
-        // // setSuccessMessage("Successfully Deleted");
-        // setFormData(null);
-        // handleCancel();
-        // setRow([]);
-        // setRows([]);
-        // setRowsdriver([])
+        if (response.data.success) {
+          if (response.status === 201) {
+            setSuccess(true);
+            setSuccessMessage(response.data.message);
+          } else {
+            setInfo(true);
+            setInfoMessage(response.data.message)
+          }
+          setSelectedCustomerData(null);
+
+          setFormData(null);
+          handleCancel();
+          setRow([]);
+          setRows([]);
+          setRowsdriver([])
+        }
 
       } else if (actionName === "Modify") {
-        setGuestSms(false)
+
         setSendEmail(false)
-        setError(true);
-        setErrorMessage("Booking can't be Edited..")
-        // handleEdit()
+        handleEdit()
 
       } else if (actionName === "Copy This") {
         handleClickShow();
@@ -1200,7 +1225,7 @@ const useBooking = () => {
         setIsEditMode(true);
         setEdit(true)
         setSendEmail(false);
-        setGuestSms(false)
+        // setGuestSms(false)
       } catch {
         setError(true);
         setErrorMessage("Error retrieving booking details");
@@ -1290,7 +1315,7 @@ const useBooking = () => {
   const handleRowClickdriver = (params) => {
 
     setSelectedCustomerdriver(params);
-    setSelectedCustomerDatas(params);
+    // setSelectedCustomerDatas(params);
     const keys = Object.keys(params);
 
     // Iterate over the keys using forEach
@@ -1305,7 +1330,7 @@ const useBooking = () => {
 
 
   const handletableClick = useCallback((params) => {
-    setGuestSms(false)
+    // setGuestSms(false)
     setSendEmail(false)
     setEdit(true)
     const customerData = params.row;
@@ -1384,27 +1409,27 @@ const useBooking = () => {
 
 
 
-  const [attachedImage, setAttachedImage] = useState("");
+  // const [attachedImage, setAttachedImage] = useState("");
 
-  const handleGetMail = useCallback(async () => {
-    try {
-      const bookingno = book.bookingno || selectedCustomerData.bookingno;
-      if (!bookingno) {
-        setError(true);
-        setErrorMessage("Enter booking No");
-        return;
-      }
-      const response = await fetch(
-        `${apiUrl}/get-attachedmailimage/${bookingno}`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setAttachedImage(data.files);
-      setpopupOpenmail(true);
-    } catch { }
-  }, [book.bookingno, selectedCustomerData.bookingno, apiUrl]);
+  // const handleGetMail = useCallback(async () => {
+  //   try {
+  //     const bookingno = book.bookingno || selectedCustomerData.bookingno;
+  //     if (!bookingno) {
+  //       setError(true);
+  //       setErrorMessage("Enter booking No");
+  //       return;
+  //     }
+  //     const response = await fetch(
+  //       `${apiUrl}/get-attachedmailimage/${bookingno}`
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setAttachedImage(data.files);
+  //     setpopupOpenmail(true);
+  //   } catch { }
+  // }, [book.bookingno, selectedCustomerData.bookingno, apiUrl]);
 
   const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -1414,10 +1439,12 @@ const useBooking = () => {
 
   const [imagedata, setImagedata] = useState(null);
 
+
   const handleimagedelete = (imageName) => {
     setImagedata(imageName);
     setDialogdeleteOpen(true);
   };
+ 
 
   const handleContextMenu = () => {
     axios
@@ -1439,17 +1466,17 @@ const useBooking = () => {
     warning,
     successMessage,
     errorMessage,
-    warningMessage,
+    // warningMessage,
     book,
     handleClick,
     handleChange,
-    attachedImage,
+    // attachedImage,
     handleRowClick,
     handleAdd,
     hidePopup,
     formData,
     handleKeyDown,
-    handleGetMail,
+    // handleGetMail,
     handleDateChange,
     getCurrentTime,
     setBook,
@@ -1461,8 +1488,8 @@ const useBooking = () => {
     handleAutocompleteChange,
     setFormData,
     setStartTime,
-    guestsms,
-    setGuestSms,
+    // guestsms,
+    // setGuestSms,
     popupOpenmail,
     sendEmail,
     setSendEmail,
@@ -1509,7 +1536,7 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver,
-    vehileName
+    vehileName, infoMessage
   };
 };
 

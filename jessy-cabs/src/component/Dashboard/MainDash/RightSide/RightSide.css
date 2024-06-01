@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   margin-top: 100px;
+  padding-bottom: 25px;
 }
 
 
@@ -11,7 +12,7 @@
 
   .RightSide {
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     width: max-content;
     gap: 20px;
     justify-content: space-around;
@@ -24,13 +25,19 @@
 @media only screen and (min-width:888.99px) and (max-width:971px) {
   .RightSide {
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     width: max-content;
     gap: 20px;
     justify-content: space-around;
     margin-top: 60px;
     position: relative;
-    left: 30px;
+    left: 0px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 971px) {
+  .RightSide {
+    width: 100%;
   }
 }
 
@@ -41,7 +48,7 @@
     width: max-content;
     gap: 20px;
     justify-content: space-around;
-    margin-top: 60px;
+    margin-top: 0px;
     position: relative;
     left: 40px;
   }
@@ -51,12 +58,12 @@
   .RightSide {
     display: flex;
     flex-direction: row;
-    width: max-content;
+    /* width: max-content; */
     gap: 20px;
     justify-content: space-around;
-    margin-top: 60px;
+    margin-top: 0px;
     position: relative;
-    left: 60px;
+    left: 10px;
   }
 }
 
@@ -81,7 +88,7 @@
     width: 100%;
     margin-top: 40px;
     position: relative;
-    left: 5px;
+    left: 10px;
   }
 }
 
@@ -97,5 +104,12 @@
 @media screen and (min-width:769px) and (max-width: 1219px) {
   .RightSide {
     align-items: center !important;
+    padding-bottom: 85px;
+  }
+}
+
+@media screen and (max-width:768px) {
+  .RightSide {
+    padding-bottom: 140px;
   }
 }

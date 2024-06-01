@@ -59,8 +59,8 @@
 }
 
 @media screen and (max-width: 768px) {
- .form-container-tripsheet {
-      width: 97% !important;
+  .form-container-tripsheet {
+    width: 97% !important;
   }
 }
 
@@ -225,6 +225,8 @@
 
 .input {
   width: 255px !important;
+  display: flex;
+  align-items: center;
 }
 
 .tripsheet-table1 {
@@ -243,7 +245,6 @@
 }
 
 .tripsheet-division1,
-.tripsheet-division2,
 .tripsheet-division3 {
   display: flex;
   align-items: center;
@@ -251,6 +252,17 @@
   gap: 12px;
   border-bottom: 1px solid #ccc;
   justify-content: left;
+  padding: 30px 0px 30px 20px;
+  width: 79vw;
+}
+
+.tripsheet-division2 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid #ccc;
+  justify-content: center;
   padding: 30px 0px 30px 20px;
   width: 79vw;
 }
@@ -350,9 +362,50 @@
 }
 
 @media screen and (max-width:1080px) {
+
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
     justify-content: center;
   }
+}
+
+.vehicle-confirm {
+  margin-bottom: 15px;
+}
+
+.input-feild-vehicle-confirm {
+  flex-wrap: wrap;
+}
+
+.input-type-grid {
+  width: 100%;
+  display: grid;
+}
+
+.tripsheet-booking-table {
+  height: 400px;
+  width: 100%;
+}
+
+.total-amount-textfield {
+  margin-top: 25px;
+  margin-left: 15px;
+}
+
+.tripsheet-cancel-button {
+  background-color: red;
+  color: white;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.tripsheet-table1 .table-heading-1 {
+  border-top-left-radius: 10px;
+}
+
+.tripsheet-cancel-save-btn {
+  padding: 20px;
 }

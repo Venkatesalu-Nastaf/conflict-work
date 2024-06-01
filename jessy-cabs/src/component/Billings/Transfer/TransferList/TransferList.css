@@ -57,6 +57,10 @@
     background-color: #457cdc;
 }
 
+.input-field-transferlist {
+    flex-wrap: wrap;
+}
+
 @media screen and (max-width:1164px) {
     .input-field-transferlist {
         justify-content: center !important;
@@ -99,4 +103,9 @@
     .input-field.input-transferlist {
         width: 205px !important;
     }
+}
+
+.transfer-list-table {
+    height: 400px;
+    width: 100%;
 }

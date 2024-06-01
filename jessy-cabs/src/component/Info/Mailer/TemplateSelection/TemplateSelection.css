@@ -54,6 +54,7 @@
   border-radius: 6px !important;
   position: relative !important;
   background-color: #fff;
+  margin: 0px 25px 20px 0px;
 }
 
 .templates {
@@ -142,4 +143,31 @@
 
 .template-selection-btn:hover {
   color: navy;
+}
+
+.template-selection-main {
+  width: 100%;
+}
+
+.template-selection-back-division {
+  cursor: pointer;
+}
+
+.template-selection-back-division svg {
+  font-size: 30px;
+}
+
+.template-selection-menu {
+  background-color: #fff;
+  padding: 24px;
+  height: 100vh;
+  width: 220px;
+}
+
+.template-selection-template-section {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  background-color: #e9e9e9;
+  padding: 25px;
 }

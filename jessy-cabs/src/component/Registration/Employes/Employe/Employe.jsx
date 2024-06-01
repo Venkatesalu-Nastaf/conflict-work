@@ -133,7 +133,7 @@ const Employe = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="id"
+                  id="empid"
                   label="Employe ID"
                   name="empid"
                   autoComplete="new-password"
@@ -148,7 +148,7 @@ const Employe = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="name"
+                  id="empname"
                   label="Name"
                   name="empname"
                   autoComplete="new-password"
@@ -163,7 +163,7 @@ const Employe = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="emailid"
+                  id="empemailid"
                   label="Email Id"
                   name="empemailid"
                   autoComplete="new-password"
@@ -178,7 +178,7 @@ const Employe = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="mobile"
+                  id="empmobile"
                   label="Mobile"
                   name="empmobile"
                   autoComplete="new-password"
@@ -208,6 +208,7 @@ const Employe = () => {
                     <CalendarMonthIcon color="action" />
                   </div>
                   <DatePicker
+                    id="Joining_Date"
                     label="Joining Date"
                     format="DD/MM/YYYY"
                     value={
@@ -371,7 +372,7 @@ const Employe = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="drivinglicence no"
+                  id="licenceno"
                   label="Driving Licence No"
                   name="licenceno"
                   autoComplete="new-password"
@@ -384,6 +385,7 @@ const Employe = () => {
                     <Button component="label">
                       <UploadFileIcon />
                       <input
+                        id="empid_file"
                         type="file"
                         style={{ display: "none" }}
                         onChange={(e) => setFile(e.target.files[0])}
@@ -415,11 +417,11 @@ const Employe = () => {
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
-                {" "}
-                <ClearIcon style={{ color: "#fff" }} />{" "}
+
+                <ClearIcon style={{ color: "#fff" }} />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />
               </span>
               <p>{errorMessage}</p>
             </div>
@@ -427,11 +429,10 @@ const Employe = () => {
           {warning && (
             <div className="alert-popup Warning">
               <div className="popup-icon">
-                {" "}
-                <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+                <ErrorOutlineIcon style={{ color: "#fff" }} />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />
               </span>
               <p>{warningMessage}</p>
             </div>
@@ -439,11 +440,11 @@ const Employe = () => {
           {success && (
             <div className="alert-popup Success">
               <div className="popup-icon">
-                {" "}
-                <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+
+                <FileDownloadDoneIcon style={{ color: "#fff" }} />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />
               </span>
               <p>{successMessage}</p>
             </div>
@@ -451,11 +452,11 @@ const Employe = () => {
           {info && (
             <div className="alert-popup Info">
               <div className="popup-icon">
-                {" "}
-                <BsInfo style={{ color: "#fff" }} />{" "}
+
+                <BsInfo style={{ color: "#fff" }} />
               </div>
               <span className="cancel-btn" onClick={hidePopup}>
-                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />
               </span>
               <p>{infoMessage}</p>
             </div>
@@ -463,6 +464,7 @@ const Employe = () => {
         </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
+
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
             direction="left"
@@ -518,7 +520,7 @@ const Employe = () => {
               </div>
               <TextField
                 size="small"
-                id="id"
+                id="searchText"
                 label="Search"
                 name="searchText"
                 value={searchText || ''}

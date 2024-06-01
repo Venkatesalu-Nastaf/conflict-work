@@ -132,3 +132,8 @@
         width: 97% !important;
     }
 }
+
+.milage-details-table{
+    height: 400px;
+    width: 100%;
+}

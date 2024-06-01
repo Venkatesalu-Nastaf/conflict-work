@@ -47,27 +47,27 @@
 
 @media screen and (min-width: 970px) and (max-width:1285px) {
 
-.textbox-mailer{
-    width: 75vw !important;
-    padding-left: 0px !important; 
-}
+    .textbox-mailer {
+        width: 75vw !important;
+        padding-left: 0px !important;
+    }
 }
 
 @media screen and (min-width: 769px) and (max-width:969.99px) {
 
-    .textbox-mailer{
+    .textbox-mailer {
         width: 65vw !important;
-        padding-left: 0px !important; 
+        padding-left: 0px !important;
     }
+}
+
+@media screen and (min-width: 650.99px) and (max-width:768.99px) {
+
+    .textbox-mailer {
+        width: 73vw !important;
+        padding-left: 0px !important;
     }
-
-    @media screen and (min-width: 650.99px) and (max-width:768.99px) {
-
-        .textbox-mailer{
-            width: 73vw !important;
-            padding-left: 0px !important; 
-        }
-        }
+}
 
 .detail-container-main-mailDetails {
     border-top: 1px solid #ccc;
@@ -169,6 +169,10 @@
     margin-top: 30px;
 }
 
+.template-search-btn {
+    display: flex;
+}
+
 @media screen and (max-width: 410px) {
     .template-input {
         width: 200px !important;
@@ -179,16 +183,16 @@
         justify-content: center;
     }
 
-    .textboxlist-mailer{
+    .textboxlist-mailer {
         height: 285px;
     }
 }
 
-.textbox.textboxlist-mailer{
+.textbox.textboxlist-mailer {
     height: fit-content !important;
 }
 
- .input-mailer{
+.input-mailer {
     width: 400px !important;
     display: flex;
     align-items: center;
@@ -197,15 +201,54 @@
 }
 
 @media screen and (min-width:769px) and (max-width:820px) {
-    .container-left-mailDetails{
+    .container-left-mailDetails {
         width: 500px;
     }
 }
 
 @media screen and (min-width:560px) and (max-width:630px) {
-    .container-left-mailDetails{
+    .container-left-mailDetails {
         width: 550px;
     }
 }
+
+.table-bookingCopy-TransferDataEntry {
+    margin-top: 10px;
+}
+
+@media screen and (min-width: 970px) {
+    .table-bookingCopy-TransferDataEntry {
+        width: 71vw;
+    }
+}
+
+@media screen and (max-width: 969.99px) {
+    .table-bookingCopy-TransferDataEntry {
+        width: 94%;
+    }
+}
+
+.mail-details-input-field {
+    justify-content: center;
+}
+
+.mail-message-division {
+    text-align: center;
+    margin-top: 10px;
+    color: green;
+    font-weight: 600;
+}
+
+.mailer-search-input-field {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mail-details-table {
+    height: 400px;
+    width: 100%;
+}
+
+
 
 /* .container-left-mailDetails{} */

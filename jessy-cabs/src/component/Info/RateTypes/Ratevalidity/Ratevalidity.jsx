@@ -22,7 +22,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import useRatevalidity from './useRatevalidity';
-// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -90,42 +89,43 @@ const Ratevalidity = () => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
                             <div className="input-field RateValidity-input-feilds">
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="driverid"
+                                        className='full-width'
                                         label="ID"
                                         name="driverid"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="ratename"
+                                        className='full-width'
                                         label="Rate Name"
                                         name="ratename"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            id="fromdate"
                                             label="From Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -137,12 +137,13 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            id="todate"
                                             label="To Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
@@ -154,22 +155,22 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="Remarks"
+                                        className='full-width'
                                         label="ReMarks"
                                         name="Remarks"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.Remarks || book.Remarks}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px" }}>
+                                <div className="input radio">
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active
@@ -195,7 +196,7 @@ const Ratevalidity = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className="input RateValidity-input" style={{ width: "160px" }}>
+                                <div className="input RateValidity-input">
                                     {isEditMode ? (
                                         <Button variant="contained" disabled={!INFO_modify} onClick={handleEdit}>Edit</Button>
                                     ) : (
@@ -209,29 +210,29 @@ const Ratevalidity = () => {
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ClearIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{errorMessage}</p>
                         </div>
                     }
                     {warning &&
                         <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{warningMessage}</p>
                         </div>
                     }
                     {success &&
                         <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{successMessage}</p>
                         </div>
                     }
                     {info &&
                         <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <BsInfo /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{infoMessage}</p>
                         </div>
                     }
@@ -242,14 +243,7 @@ const Ratevalidity = () => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                            />
-                        ))} */}
+                     
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -291,7 +285,7 @@ const Ratevalidity = () => {
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateValidity">
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div className='rate-validity-table' style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}

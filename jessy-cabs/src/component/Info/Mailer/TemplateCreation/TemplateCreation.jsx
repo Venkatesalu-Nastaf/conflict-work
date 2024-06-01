@@ -78,29 +78,6 @@ const TemplateCreation = () => {
 
   }, [location, apiurl, setImageData]);
 
-  // const attacheimagedataedit = useCallback(async (templateid) => {
-  //   try {
-  //     const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
-  //     const dataimage = response.data;
-  //     setImagedataedit(dataimage);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [apiurl, setImagedataedit]);
-
-  //  async function attacheimagedataedit(templateid){
-  //       try{
-  //       const response=await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
-  //       const dataimage=response.data
-  //       setImagedataedit(dataimage)
-
-  //     }
-  //     catch(err){
-  //      console.log(err)
-  //     }
-  //   }
-
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -191,22 +168,7 @@ const TemplateCreation = () => {
 
     }
   }
-  // const handleSubmit = async () => {
-  //   try {
-  //     const formDataToSend = new FormData();
-  //     images.forEach((image) => {
-  //       formDataToSend.append('images', image);
-  //     });
-  //     for (const key in formData) {
-  //       formDataToSend.append(key, formData[key]);
-  //     }
-  //     await axios.post(`/templateattachmentimage/${formData.templateId}`, formDataToSend);
-  //     // Clear form and images after successful upload
 
-  //   } catch (error) {
-  //     console.error('Error uploading images:', error);
-  //   }
-  // };
 
   const handleEdit = async () => {
     const formDataeditToSend = new FormData();
@@ -222,7 +184,6 @@ const TemplateCreation = () => {
         await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`, formDataeditToSend)
 
       }
-      // console.log(response2)
       navigate("/home/info/mailer");
 
     }
@@ -277,11 +238,11 @@ const TemplateCreation = () => {
 
   return (
     <>
-      <div className='Scroll-Style-hide' style={{ width: '100%', height: '71vh', overflow: 'auto'}}>
-        <div className='mail-template-division' style={{ backgroundColor: '#fff' }}>
+      <div className='Scroll-Style-hide template-creation-main-div'>
+        <div className='mail-template-division'>
           <div className='word-head'>
             <div className='back-input'>
-              <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
+              <div className='back-section-div'><p className='back-section text-white' onClick={BackToSelection}><IoChevronBack /></p></div>
               <div>
                 <div>
                   <input type="text" className='template-name' name="TemplateName" value={templatedata.TemplateName || ''} onChange={handleChange} placeholder='Enter a template name' />
@@ -293,11 +254,12 @@ const TemplateCreation = () => {
             </div>
             <div className='right-header'>
               <div className='flex items-center'>
-                <p onClick={handleFileUploadClick} className='attachments' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'white' }}>
+                <p onClick={handleFileUploadClick} className='attachments template-creation-attachments'>
                   Attachments
                 </p>
                 <input
                   type="file"
+                  id="imagestemplate"
                   name="imagestemplate"
                   ref={fileInputRef}
                   style={{ display: 'none' }}
@@ -317,13 +279,13 @@ const TemplateCreation = () => {
                     aria-describedby="keep-mounted-modal-description"
                   >
                     <Box className="mass-email-box" sx={style1}>
-                      <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <BsExclamationCircle style={{ color: '#7c7c7c', fontSize: 40 }} />
+                      <div className='cancel-popup-icon-division'>
+                        <BsExclamationCircle className='cancel-popup-icon' />
                       </div>
-                      <Typography id="keep-mounted-modal-description" style={{ textAlign: 'center' }} sx={{ mt: 2 }}>
+                      <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                         Are you sure want to cancel?
                       </Typography>
-                      <div className='mt-10' style={{ display: 'flex', justifyContent: 'center' }}>
+                      <div className='cancel-popup-confirm-division'>
                         <button onClick={BackToSelection} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
                           Yes, I'm sure
                         </button>
@@ -384,10 +346,10 @@ const TemplateCreation = () => {
           {editmode ?
             <>
               {imagedataedit.length > 0 && (
-                <div style={{ paddingLeft: '20px'}}>
+                <div style={{ paddingLeft: '20px' }}>
                   {imagedataedit.map((data, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                      <p style={{color: '#000'}}>{data.templateimage || data.name}</p>
+                      <p style={{ color: '#000' }}>{data.templateimage || data.name}</p>
                       <Button onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
                     </div>
 
@@ -397,7 +359,7 @@ const TemplateCreation = () => {
             </> :
             <>
               {imagedata.length > 0 && (
-                <div style={{ paddingLeft: '20px'}}>
+                <div style={{ paddingLeft: '20px' }}>
                   {imagedata.map((data, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                       <p>{data.name}</p>
@@ -415,15 +377,15 @@ const TemplateCreation = () => {
       <div className='alert-popup-main'>
         {error && (
           <div className='alert-popup Error'>
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <div className="popup-icon"> <ClearIcon /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
             <p>{errorMessage}</p>
           </div>
         )}
         {success && (
           <div className='alert-popup Success'>
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
             <p>{successMessage}</p>
           </div>
         )}

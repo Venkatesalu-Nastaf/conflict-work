@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads/' });  
 app.use(express.static('customer_master'));
 
 const storage1 = multer.diskStorage({
@@ -165,6 +165,8 @@ app.post('/updatethemename', (req, res) => {
     res.status(200).json({ message: 'Status updated successfully' });
   });
 });
+
+
 
 
 //map image upload
@@ -478,6 +480,7 @@ const pdfDirectory = path.join(__dirname, 'uploads');
 app.use('/images', express.static(attachedmailDirectory));
 app.use('/pdf', express.static(pdfDirectory));
 // Example route to serve an image by its filename
+// -----------------its bookingpdf image data  i chnage folder of image i mnot use this api -------------------------------
 app.get('/get-attachedmailimage/:bookingno', (req, res) => {
   const { bookingno } = req.params;
   const query = 'SELECT path FROM tripsheetupload WHERE bookingno = ?';
@@ -502,6 +505,7 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
     res.json({ files });
   });
 });
+// -------------------------------------------------------------------------------------------------------------------------------
 
 //get image for organization
 
@@ -611,7 +615,6 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 
 app.get('/use-permissions/:userid', (req, res) => {
   const userid = req.params.userid;
-  console.log(userid)
 
   const sql = `select * from user_permissions where user_id=?`;
   db.query(sql, [userid], (err, result) => {

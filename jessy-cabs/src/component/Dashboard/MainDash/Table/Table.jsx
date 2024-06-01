@@ -67,6 +67,7 @@ export default function BasicTable() {
   };
 
   const handleButtonClickTripsheet = (trip) => {
+    console.log(trip,"ttt")
     setSelectedTrip(trip);
     setPopupOpen(true);
   };
@@ -105,7 +106,7 @@ export default function BasicTable() {
                     <TableCell className="Details driver-details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>
-                    <Dialog open={popupOpen} className="dialog-box-TripDetails" >
+                    {/* <Dialog open={popupOpen} className="dialog-box-TripDetails" >
                       <div className="dialog-close-btn">
                         <DialogActions>
                           <IconButton onClick={handlePopupClose} aria-label="delete">
@@ -116,7 +117,7 @@ export default function BasicTable() {
                       <DialogContent>
                         {selectedTrip && <Tripdetails tripData={selectedTrip} />}
                       </DialogContent>
-                    </Dialog>
+                    </Dialog> */}
                   </TableRow>
                 ))
               ) : (
@@ -128,6 +129,19 @@ export default function BasicTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog open={popupOpen} className="dialog-box-TripDetails" >
+                      <div className="dialog-close-btn">
+                        <DialogActions>
+                          <IconButton onClick={handlePopupClose} aria-label="delete">
+                            <HighlightOffIcon />
+                          </IconButton>
+                        </DialogActions>
+                      </div>
+                      <DialogContent>
+                        {/* {selectedTrip && <Tripdetails tripData={selectedTrip} />} */}
+                        {selectedTrip && <Tripdetails tripData={selectedTrip} />}
+                      </DialogContent>
+                    </Dialog>
     </div>
   );
 } 

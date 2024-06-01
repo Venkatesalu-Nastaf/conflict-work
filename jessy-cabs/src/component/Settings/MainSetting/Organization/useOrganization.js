@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
 import { APIURL } from "../../../url";
+import imageToBase64 from '../../../../helper/imagetoBase64';
+
 
 const useOrganization = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
-    const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
@@ -17,14 +17,8 @@ const useOrganization = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
-    // const [infoMessage, setInfoMessage] = useState({});
-    const { setSharedData, sharedData } = useData();
-    const [dataclose,setDataclose]=useState(false)
-
-    // for logo-------------------
-    useEffect(() => {
-        setSelectedImage(sharedData)
-    }, [sharedData])
+    const { setLogoTrigger } = useData();
+    const [dataclose, setDataclose] = useState(false)
 
     //----------------------popup----
 
@@ -52,27 +46,15 @@ const useOrganization = () => {
         organizationname: '',
         organizationtype: '',
         addressLine1: '',
-        // addressLine2: '',
-        // city: '',
         contactPhoneNumber: '',
         contactEmail: '',
         location: '',
         website: '',
-        // ownershipLeadership: '',
-        // productsServices: '',
-        // marketPresence: '',
         employees: '',
-        // legalStructure: '',
-        // customerBase: '',
         partnershipsAlliances: '',
-        // recentNewsDevelopments: '',
         pannumber: '',
         gstnumber: '',
-        // socialMediaPresence: '',
-        // sustainabilityCSR: '',
-        // customerReviewsFeedback: '',
-        // industrySpecificDetails: '',
-        telephone:''
+        telephone: ''
     });
 
 
@@ -139,7 +121,7 @@ const useOrganization = () => {
             [name]: value,
         }));
     };
-    const handleCancel=async()=>{
+    const handleCancel = async () => {
         setDataclose(true)
     }
 
@@ -169,7 +151,7 @@ const useOrganization = () => {
             }
         };
         fetchData();
-    }, [apiUrl,dataclose]);
+    }, [apiUrl, dataclose]);
 
 
 
@@ -188,26 +170,20 @@ const useOrganization = () => {
         input.click();
     };
 
-
-
-    const handleFileChange = (event) => {
-
+    const handleFileChange = async (event) => {
         try {
             const organizationname = localStorage.getItem('usercompany');
             const file = event.target.files[0];
             if (!file) return;
-            console.log("organisa", organizationname)
-            setSharedData(file.name);
-            // setSelectedImage(file)
 
-            if (file && organizationname !== "undefined") {
-                // console.log("0", organizationname)
-                const formData = new FormData();
-                formData.append('image', file);
-                axios.put(`${apiUrl}/logo-upload/${organizationname}`, formData)
+            const base64Format = await imageToBase64(file)
+             const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
+
+            if (response.status === 200) {
+                setLogoTrigger(true)
             }
         } catch (err) {
-            // console.log(err)
+            console.log(err)
         }
 
     };
@@ -226,9 +202,7 @@ const useOrganization = () => {
         handleChange,
         handleAdd,
         hidePopup,
-        selectedImage,
         info,
-        // infoMessage,
         editMode,
         handleFileChange,
         handleUpload,

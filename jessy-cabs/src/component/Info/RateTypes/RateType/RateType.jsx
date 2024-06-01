@@ -100,29 +100,29 @@ const RateType = ({ stationName, organizationNames }) => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
                             <div className="input-field rate-type-inputs">
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="driverid"
+                                        className='full-width'
                                         label="ID"
                                         name="driverid"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
                                     <Autocomplete
                                         fullWidth
                                         size="small"
-                                        id="free-solo-demo-customerType"
+                                        id="stations"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
                                         value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
@@ -138,14 +138,14 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
                                     <Autocomplete
                                         fullWidth
                                         size="small"
-                                        id="free-solo-demo-pricetag"
+                                        id="ratename"
                                         freeSolo
                                         sx={{ width: "100%" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
@@ -160,22 +160,22 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="validity"
+                                        className='full-width'
                                         label="Validity"
                                         name="validity"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px", paddingLeft: '10px' }}>
+                                <div className="input radio">
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active
@@ -201,13 +201,14 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className='icone'>
-                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
+                                                id="startDate"
                                                 value={
                                                     selectedCustomerData.starttime
                                                         ? dayjs(selectedCustomerData.starttime)
@@ -229,13 +230,14 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{ paddingRight: '15px' }}>
+                                <div className="input">
                                     <div className='icone'>
-                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
+                                                id="startDate2"
                                                 value={
                                                     selectedCustomerData.closetime
                                                         ? dayjs(selectedCustomerData.closetime)
@@ -257,7 +259,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{ width: "160px" }}>
+                                <div className="input">
                                     {isEditMode ? (
                                         <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
                                     ) : (
@@ -271,29 +273,29 @@ const RateType = ({ stationName, organizationNames }) => {
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ClearIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{errorMessage}</p>
                         </div>
                     }
                     {warning &&
                         <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{warningMessage}</p>
                         </div>
                     }
                     {success &&
                         <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{successMessage}</p>
                         </div>
                     }
                     {info &&
                         <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <BsInfo /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{infoMessage}</p>
                         </div>
                     }
@@ -321,14 +323,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                            />
-                        ))} */}
+                  
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -370,7 +365,7 @@ const RateType = ({ stationName, organizationNames }) => {
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateType">
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div className='ratetype-table'>
                         <DataGrid
                             rows={rows}
                             columns={columns}

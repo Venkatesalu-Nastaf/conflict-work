@@ -103,7 +103,7 @@ const Pending = () => {
                 <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Stations"
                     freeSolo
                     size="small"
                     value={servicestation}

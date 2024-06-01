@@ -52,13 +52,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-// const actions = [
-//   { icon: <ChecklistIcon />, name: "List" },
-//   { icon: <CancelPresentationIcon />, name: "Cancel" },
-//   { icon: <DeleteIcon />, name: "Delete" },
-//   { icon: <ModeEditIcon />, name: "Edit" },
-//   { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
+
 
 const MailageDetails = () => {
 
@@ -117,37 +111,37 @@ const MailageDetails = () => {
           <div className="MailageDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field detailsFuel-inputs">
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     id="VehicleNo"
+                    className='full-width'
                     label="Vehicle No"
                     name="VehicleNo"
                     autoComplete="new-password"
                     value={selectedCustomerData?.VehicleNo || book.VehicleNo}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <CommuteIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     id="VehicleName"
+                    className='full-width'
                     label="Vehicle Name"
                     name="VehicleName"
                     autoComplete="new-password"
                     value={selectedCustomerData?.VehicleName || book.VehicleName}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -155,6 +149,7 @@ const MailageDetails = () => {
                     <DatePicker
                       label="Fill Date"
                       format="DD/MM/YYYY"
+                      id="fill_date1"
                       value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null}
                       onChange={(date) => handleDateChange(date, 'filldate')}
                     >
@@ -164,12 +159,13 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
                     <DatePicker
+                      id="empty_Date"
                       label="Empty Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null}
@@ -181,37 +177,37 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     id="DriverName"
+                    className='full-width'
                     label="Driver Name"
                     name="DriverName"
                     autoComplete="new-password"
                     value={selectedCustomerData?.DriverName || book.DriverName}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <CurrencyRupeeIcon color='action' />
                   </div>
                   <TextField
                     size="small"
                     id="FuelPrice"
+                    className='full-width'
                     label="Fuel Price"
                     name="FuelPrice"
                     autoComplete="new-password"
                     value={selectedCustomerData?.FuelPrice || book.FuelPrice}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeSimple} size="lg" />
                   </div>
@@ -230,13 +226,14 @@ const MailageDetails = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeHigh} size="lg" />
                   </div>
                   <TextField
                     size="small"
                     id="FinalOdometerReading"
+                    className='full-width'
                     label="Final Odometer Reading"
                     sx={{ width: "250px" }}
                     name="FinalOdometerReading"
@@ -247,10 +244,9 @@ const MailageDetails = () => {
                       handleChange(e);
                       setFinalOdometer(e.target.value);
                     }}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faGasPump} size="xl" />
                   </div>
@@ -274,8 +270,8 @@ const MailageDetails = () => {
                     Calculate Mileage
                   </Button>
                 </div>
-                <div className="input" style={{ width: "70px" }}>
-                  <div className="input" style={{ width: "160px" }}>
+                <div className="input">
+                  <div className="input">
                     {isEditMode ? (
                       <Button variant="contained" disabled={!FuelInfo_modify} onClick={handleEdit}>Edit</Button>
                     ) : (
@@ -297,29 +293,29 @@ const MailageDetails = () => {
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
-                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ClearIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{errorMessage}</p>
                 </div>
               }
               {warning &&
                 <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{warningMessage}</p>
                 </div>
               }
               {success &&
                 <div className='alert-popup Success' >
-                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{successMessage}</p>
                 </div>
               }
               {info &&
                 <div className='alert-popup Info' >
-                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <BsInfo /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{infoMessage}</p>
                 </div>
               }
@@ -330,14 +326,7 @@ const MailageDetails = () => {
                 icon={<SpeedDialIcon />}
                 direction="left"
               >
-                {/* {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                  />
-                ))} */}
+
                 {FuelInfo_read === 1 && (
                   <SpeedDialAction
                     key="list"
@@ -394,7 +383,7 @@ const MailageDetails = () => {
               </PopupState>
             </div>
             <div className="table-bookingCopy-Employe">
-              <div style={{ height: 400, width: "100%" }}>
+              <div className='milage-details-table'>
                 <DataGrid
                   rows={rows}
                   columns={columns}

@@ -61,7 +61,7 @@
 
 @media screen and (max-width: 768px) {
   .form-container-Mailer .container-main {
-      width: 93vw;
+    width: 93vw;
   }
 }
 
@@ -133,4 +133,9 @@
     background-color: transparent;
     border: none;
   }
+}
+
+.sms-report-table {
+  height: 400px;
+  width: 100%;
 }

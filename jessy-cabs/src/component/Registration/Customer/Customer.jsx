@@ -119,7 +119,7 @@ const Customer = ({ stationName }) => {
                 <TextField
                   name="customerId"
                   label="Customer ID"
-                  id="standard-size-normal"
+                  id="customerId"
                   autoComplete="new-password"
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
@@ -210,7 +210,7 @@ const Customer = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.customeremail || book.customeremail}
                   onChange={handleChange}
-                  id="standard-size-normal"
+                  id="customeremail"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -225,7 +225,7 @@ const Customer = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.rateType || book.rateType}
                   onChange={handleChange}
-                  id="standard-size-normal"
+                  id="ratetype"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -240,7 +240,7 @@ const Customer = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.opBalance || book.opBalance}
                   onChange={handleChange}
-                  id="standard-size-normal"
+                  id="opBalance"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -255,7 +255,7 @@ const Customer = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.phoneno || book.phoneno}
                   onChange={handleChange}
-                  id="Phone"
+                  id="phoneno"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -269,6 +269,7 @@ const Customer = ({ stationName }) => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="acType"
+                    id="acType"
                     autoComplete="new-password"
                     onChange={handleChange}
                     value={selectedCustomerData?.acType || book.acType}
@@ -296,7 +297,7 @@ const Customer = ({ stationName }) => {
                 </div>
                 <TextField
                   margin="normal"
-                  id="remark"
+                  id="address1"
                   label="Address"
                   name="address1"
                   multiline
@@ -310,6 +311,7 @@ const Customer = ({ stationName }) => {
               </div>
               <FormControlLabel
                 name="printBill"
+                id="printBill"
                 value="Printbill"
                 control={<Checkbox size="small" />}
                 label="Print Bill"
@@ -319,6 +321,7 @@ const Customer = ({ stationName }) => {
               />
               <FormControlLabel
                 name="userName"
+                id="userName"
                 value="Username"
                 control={<Checkbox size="small" />}
                 label="User Name"
@@ -328,6 +331,7 @@ const Customer = ({ stationName }) => {
               />
               <FormControlLabel
                 name="bookName"
+                id="bookName"
                 value="Bookname"
                 control={<Checkbox size="small" />}
                 label="Book Name"
@@ -337,6 +341,7 @@ const Customer = ({ stationName }) => {
               />
               <FormControlLabel
                 name="division"
+                id="division"
                 value="Divistion"
                 control={<Checkbox size="small" />}
                 label="Divistion"
@@ -346,6 +351,7 @@ const Customer = ({ stationName }) => {
               />
               <FormControlLabel
                 size="small"
+                id="hourRoundedOff"
                 name="hourRoundedOff"
                 value="Hourroundedoff"
                 control={<Checkbox size="small" />}
@@ -361,7 +367,7 @@ const Customer = ({ stationName }) => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="servicestation"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
@@ -385,7 +391,7 @@ const Customer = ({ stationName }) => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo-select"
+                  id="selectOption"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
@@ -412,7 +418,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
                   label="Entity"
-                  id="standard-size-normal"
+                  id="entity"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -464,8 +470,8 @@ const Customer = ({ stationName }) => {
                 />
               </div>
               <div className="input dropdown" style={{ paddingRight: '15px' }}>
-                <label htmlFor="">GST</label>
-                <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{ width: '100%' }}>
+                <label htmlFor="gstTax">GST</label>
+                <select id="gstTax" name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{ width: '100%' }}>
                   <option value="" >None</option>
                   <option value="5%">5%</option>
                   <option value="12%">12%</option>
@@ -477,8 +483,8 @@ const Customer = ({ stationName }) => {
             <div className="input-field customer-input-feild-add">
               <div className="input" style={{ display: 'grid' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <FormLabel>BillingGroup</FormLabel>
-                  <Switch label='' onClick={handleButtonClick} />
+                  <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
+                  <Switch label='label' id="billinggrouph" onClick={handleButtonClick} />
                 </div>
                 {isInputVisible && (
                   <CustomInput />
@@ -491,7 +497,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.gstnumber || book.gstnumber}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  id="gstin"
+                  id="gstnumber"
                   size='small'
                 />
               </div>

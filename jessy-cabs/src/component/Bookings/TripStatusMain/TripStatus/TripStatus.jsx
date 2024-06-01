@@ -103,7 +103,7 @@ const TripStatus = ({ stationName }) => {
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">
                 <div className="input">
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                  <div className="icone">
                     <MdOutlineCalendarMonth color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -118,7 +118,7 @@ const TripStatus = ({ stationName }) => {
                   </LocalizationProvider>
                 </div>
                 <div className="input dispatch-input">
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                  <div className="icone">
                     <MdOutlineCalendarMonth color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -137,18 +137,18 @@ const TripStatus = ({ stationName }) => {
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                    <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
               </div>
               <div className="input-field TripStatus-input-feilds">
-                <div className="input" style={{ width: "300px" }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input">
+                  <div className="icone">
                     <SiStatuspal color="action" />
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Status"
                     freeSolo
                     size="small"
                     value={statusvalue}
@@ -163,13 +163,13 @@ const TripStatus = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ width: "300px" }}>
-                  <div className="icone" style={{ fontSize: '25px' }}>
+                <div className="input">
+                  <div className="icone">
                     <GiMatterStates color="action" />
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="Department"
                     freeSolo
                     size="small"
                     value={department}
@@ -189,36 +189,36 @@ const TripStatus = ({ stationName }) => {
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
-                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ClearIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{errorMessage}</p>
                 </div>
               }
               {warning &&
                 <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{warningMessage}</p>
                 </div>
               }
               {success &&
                 <div className='alert-popup Success' >
-                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{successMessage}</p>
                 </div>
               }
               {info &&
                 <div className='alert-popup Info' >
-                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <BsInfo /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{infoMessage}</p>
                 </div>
               }
             </div>
           </div>
         </div>
-        <div className="SpeedDial" style={{ padding: '26px', margin: '14px -35px 0px 0px' }}>
+        <div className="SpeedDial">
           <Box sx={{ position: "relative", mt: 2, }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -258,7 +258,7 @@ const TripStatus = ({ stationName }) => {
               )}
             </PopupState>
           </div>
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='trip-status-table'>
             <DataGrid
               rows={reversedRows}
               columns={columnshowall ? columns : filteredColumns}

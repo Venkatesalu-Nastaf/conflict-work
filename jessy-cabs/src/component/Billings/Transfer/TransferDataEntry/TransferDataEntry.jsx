@@ -23,11 +23,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
-// import { useData } from '../../../Dashboard/Maindashboard/DataContext';
-// import { FaCalendar } from "react-icons/fa";
-// import { FaCalendarPlus } from "react-icons/fa";
-// import { FaCalendarMinus } from "react-icons/fa";
-
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
@@ -41,9 +36,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     successMessage,
     errorMessage,
     warningMessage,
-    // book,
     handleClick,
-    // handleChange,
     hidePopup,
     date,
     Billingdate,
@@ -52,7 +45,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleKeyenter,
     customer,
     tripData,
-    // bankOptions,
     setCustomer,
     fromDate,
     handleDateChange,
@@ -101,14 +93,14 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
           <div className="TransferDataEntry">
             <div className="container-left-transferdata">
               <div className="copy-title-btn-TransferDataEntry">
-                <div className="input-field input-feild-transferdata" style={{ flexWrap: 'wrap' }} >
-                  <div className="input" style={{ width: "230px" }}>
+                <div className="input-field input-feild-transferdata">
+                  <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faTags} size="lg" />
                     </div>
                     <TextField
                       size="small"
-                      id="id"
+                      id="tripid"
                       label="Group Trip ID"
                       name="tripid"
                       value={groupId || ''}
@@ -124,6 +116,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
                           label="Date"
+                          id="date"
                           name="date"
                           value={date}
                           format="DD/MM/YYYY"
@@ -138,9 +131,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                          id="Billingdate"
                           label="Bill Date"
                           name="Billingdate"
-                          // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
                           value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
                           format="DD/MM/YYYY"
                         />
@@ -153,26 +146,24 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <TextField
                       size="small"
-                      id="id"
+                      id="invoiceno"
                       label="Invoice No"
                       name="invoiceno"
                       value={invoiceno || ''}
-                      // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
                       onKeyDown={handleKeyenter}
                     />
                   </div>
-                  <div className="input" style={{ width: "420px" }}>
+                  <div className="input">
                     <div className="icone">
                       <HailOutlinedIcon color="action" />
                     </div>
                     <Autocomplete
                       fullWidth
-                      id="free-solo-demo"
+                      id="free-solo-Organization"
                       freeSolo
                       size="small"
-                      // value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer?.Organization_name || ''}
                       value={customer || ''}
                       options={organizationNames}
                       onChange={(event, value) => setCustomer(value)}
@@ -190,6 +181,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        id="fromDate"
                           value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -213,6 +205,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        id="toDate"
                           value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -235,7 +228,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <Autocomplete
                       fullWidth
-                      id="free-solo-demo"
+                      id="free-station"
                       freeSolo
                       size="small"
                       value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
@@ -264,7 +257,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
             </div>
           </div>
         </div>
-        <div className="total-container-TransferDataEntry" style={{ flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="total-container-TransferDataEntry">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -280,11 +273,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               )}
             </PopupState>
           </div>
-          <div className='amount-calculator' style={{ flexWrap: 'wrap', gap: '20px' }}>
-            <div className="total-inputs" style={{ marginTop: '25px' }}>
+          <div className='amount-calculator'>
+            <div className="total-inputs">
               <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
             </div>
-            <div className="total-inputs" style={{ marginTop: '25px' }}>
+            <div className="total-inputs">
               <Button variant="outlined" onClick={handleBillRemove} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
@@ -302,7 +295,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
           </div>
         </div>
         <div className="table-bookingCopy-TransferDataEntry">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='transfer-data-entry-table'>
             <DataGrid
               rows={rows}
               columns={columns}
@@ -317,29 +310,29 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error'>
-                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"><ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{errorMessage}</p>
               </div>
             }
             {success &&
               <div className='alert-popup Success'>
-                <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"><FileDownloadDoneIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{successMessage}</p>
               </div>
             }
             {warning &&
               <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{warningMessage}</p>
               </div>
             }
             {info &&
               <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <div className="popup-icon"> <BsInfo /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                 <p>{infoMessage}</p>
               </div>
             }

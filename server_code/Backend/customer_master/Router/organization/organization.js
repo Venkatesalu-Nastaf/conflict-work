@@ -36,7 +36,7 @@ router.get('/organizationdata/:organizationname', (req, res) => {
         return res.status(200).json(routeData);
     });
 });
-router.get('/organisationpdfdata',(req,res)=>{
+router.get('/organisationpdfdata', (req, res) => {
     db.query('SELECT * FROM organizationdetails ', (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
@@ -46,7 +46,7 @@ router.get('/organisationpdfdata',(req,res)=>{
             return res.status(404).json({ error: 'Route data not found' });
         }
 
-    
+
         return res.status(200).json(result);
     });
 
@@ -85,27 +85,9 @@ router.delete('/companydelete/:organizationname', (req, res) => {
 //----------------------------------logo upload
 
 
-// router.use(express.static('images'));
-// router.use(express.static('customer_master'));
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './customer_master/public/org_logo')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-    }
-
-})
-
-const upload = multer({
-    storage: storage
-})
-
-router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) => {
+router.put('/logo-base64/:organizationname', (req, res) => {
     const organizationN_Name = req.params.organizationname;
-    const fileName = req.file.filename;
-    console.log(organizationN_Name, "jj")
+    const { data } = req.body;
 
     // Check if the user profile already exists
     const checkIfExistsQuery = `SELECT * FROM organisation_logo WHERE organisation_name = ?`;
@@ -116,20 +98,10 @@ router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) 
 
         // Profile already exists, update the record
         if (rows.length > 0) {
-            console.log(rows[0])
 
-            // to unlink image file
-            const oldFileName = rows[0].fileName;
-            console.log(oldFileName, "kkcghcgvhhbb")
 
-            if (oldFileName) {
-                const oldImagePath = path.join("./customer_master/public/org_logo", oldFileName);
-                try {
-                    fs.unlinkSync(oldImagePath)
-                } catch { }
-            }
             const updateQuery = `UPDATE organisation_logo SET fileName = ? WHERE organisation_name = ?`;
-            db.query(updateQuery, [fileName, organizationN_Name], (err, result) => {
+            db.query(updateQuery, [data, organizationN_Name], (err, result) => {
                 if (err) {
                     return res.status(500).json({ Message: "Error updating profile picture", err });
                 }
@@ -138,7 +110,7 @@ router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) 
         } else {
             // Profile doesn't exist, insert a new record
             const insertQuery = `INSERT INTO organisation_logo (organisation_name, fileName) VALUES (?, ?)`;
-            db.query(insertQuery, [organizationN_Name, fileName], (err, result) => {
+            db.query(insertQuery, [organizationN_Name, data], (err, result) => {
                 if (err) {
                     return res.status(500).json({ Message: "Error inserting profile picture", err });
                 }
@@ -149,17 +121,27 @@ router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) 
 });
 
 
+
 //getting logo image
 
-router.get('/logo-view/:organizationname', (req, res) => {
-    const organization_Name = req.params.organizationname
+// router.get('/logo-view/:organizationname', (req, res) => {
+//     const organization_Name = req.params.organizationname
+//     const sql = 'select * from organisation_logo where organisation_name=?';
+//     db.query(sql, [organization_Name], (err, result) => {
+//         if (err) return res.json({ message: "error" })
+//         return res.json(result);
+//     })
+// })
+
+// fetching base64 image 
+router.get("/fetchorg-logo/:organizationname", (req, res) => {
+    const orgName = req.params.organizationname
     const sql = 'select * from organisation_logo where organisation_name=?';
-    db.query(sql, [organization_Name], (err, result) => {
-        if (err) return res.json({ Message: "error" })
-        return res.json(result);
+    db.query(sql, [orgName], (err, result) => {
+        if (err) return res.json({ message: "error fetching logo" })
+        return res.json(result)
     })
 })
-
 //----------------------------------logo upload
 
 module.exports = router;

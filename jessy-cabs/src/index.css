@@ -241,6 +241,28 @@ body {
   border-radius: 20px;
 }
 
+.Scroll-Style-Slim {
+  overflow: scroll;
+}
+
+.Scroll-Style-Slim::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  cursor: pointer;
+  position: absolute;
+}
+
+.Scroll-Style-Slim::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+}
+
+.Scroll-Style-Slim::-webkit-scrollbar-thumb {
+  background-color: #6d6d6d;
+  width: 0px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
 .css-204u17-MuiDataGrid-main {
   overflow: scroll;
 }

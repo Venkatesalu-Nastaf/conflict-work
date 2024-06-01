@@ -27,7 +27,6 @@ import useGroupbilling from './useGroupbilling';
 import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendarAlt } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const GroupBilling = ({ stationName, organizationNames }) => {
@@ -78,11 +77,15 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         setGstno,
         handleRemoveData
     } = useGroupbilling();
+
+
     const { refPdfPrint, refCustomer, referNo } = RefPdfData()
     const [organizationsdetail, setOrganizationDetail] = useState([]);
     const [imageorganisation, setSelectedImageorganisation] = useState(null);
     const { sharedData } = useData();
     const apiUrl = APIURL
+
+
     useEffect(() => {
         setSelectedImageorganisation(sharedData)
     }, [sharedData])
@@ -91,6 +94,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
 
     useEffect(() => {
         const fetchdata = async () => {
@@ -133,6 +137,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const CoveringBill_read = permissions[7]?.read;
     const CoveringBill_new = permissions[7]?.new;
 
+
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
@@ -146,7 +151,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-solo-ReferenceNo"
                                         freeSolo
                                         size="small"
                                         value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
@@ -166,7 +171,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-solo-customer"
                                         freeSolo
                                         size="small"
                                         value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
@@ -186,6 +191,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                                id="Billingdate"
                                                 label="Bill Date"
                                                 name="Billingdate"
                                                 value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
@@ -201,6 +207,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                                id="fromdate"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -226,6 +233,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                             <DatePicker
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
+                                                id="todate"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'todate');
                                                     const formattedDate = dayjs(date).format('YYYY-MM-DD');
@@ -246,7 +254,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="freestation"
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}

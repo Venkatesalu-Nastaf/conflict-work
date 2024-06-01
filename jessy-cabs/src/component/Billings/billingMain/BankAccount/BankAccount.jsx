@@ -74,16 +74,16 @@ const BankAccount = () => {
         <div className="total-account">
           <div className='amount-calculate'>
             <div className='total-inputs' >
-              <label htmlFor="">Total Capital:</label>
-              <input type="number" value={totalcapital} readOnly />
+              <label htmlFor="totalCapital">Total Capital:</label>
+              <input type="number" id="totalCapital" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
-              <label htmlFor="">Total-In:</label>
-              <input type="number" value={totalIn} readOnly />
+              <label htmlFor="totalIn">Total-In:</label>
+              <input type="number" id="totalIn" value={totalIn} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountOUT`} >
-              <label htmlFor="">Total-Out:</label>
-              <input type="number" value={totalOut !== isNaN ? totalOut : 0} readOnly />
+              <label htmlFor="totalOut">Total-Out:</label>
+              <input type="number" id="totalOut" value={totalOut !== isNaN ? totalOut : 0} readOnly />
             </div>
           </div>
         </div>
@@ -106,6 +106,7 @@ const BankAccount = () => {
                     size="small"
                     label="Bank Name"
                     name="bankname"
+                    id="banknameHDFC"
                     autoFocus
                     value={book.bankname || ''}
                     onChange={handleChange}
@@ -120,6 +121,7 @@ const BankAccount = () => {
                     size="small"
                     label="Capital Amount"
                     name="capital"
+                    id="capital"
                     value={book.capital || ''}
                     onChange={handleChange}
                   />
@@ -168,15 +170,14 @@ const BankAccount = () => {
               <div className="input-field input-field-bankaccount input-Field-bank-account">
 
                 <div className="input input-bankname">
-                  {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
                     <AiFillBank color="action" />
                   </div>
                   <TextField
                     size="small"
                     label="Bank Name"
+                    id="bankname02"
                     name="bankname2"
-                    // value={bankDetails[index]?.bankname2 || book.bankname2 || ''}
                     value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -190,9 +191,8 @@ const BankAccount = () => {
                     size="small"
                     label="Net Balance"
                     name="netbalance"
+                    id="netbalance89"
                     type="number"
-                    // value={bankDetails[index]?.netbalance || book.netbalance || ''}
-                    // value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
                     value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -205,8 +205,6 @@ const BankAccount = () => {
                     name="totalin"
                     type="number"
                     id={`totalin-${index}`}
-                    // value={bankDetails[index]?.totalin || book.netbalance || ''}
-                    // value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
                     value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -219,7 +217,6 @@ const BankAccount = () => {
                     name="totalout"
                     type="number"
                     id={`totalout-${index}`}
-                    // value={bankDetails[index]?.totalout || book.totalout || ''}
                     value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}

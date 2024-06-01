@@ -23,11 +23,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
-// import { useData } from '../../../Dashboard/Maindashboard/DataContext';
-// import { FaCalendar } from "react-icons/fa";
-// import { FaCalendarPlus } from "react-icons/fa";
-// import { FaCalendarMinus } from "react-icons/fa";
-
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
@@ -41,9 +36,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     successMessage,
     errorMessage,
     warningMessage,
-    // book,
     handleClick,
-    // handleChange,
     hidePopup,
     date,
     Billingdate,
@@ -52,7 +45,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleKeyenter,
     customer,
     tripData,
-    // bankOptions,
     setCustomer,
     fromDate,
     handleDateChange,
@@ -108,7 +100,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <TextField
                       size="small"
-                      id="id"
+                      id="tripid"
                       label="Group Trip ID"
                       name="tripid"
                       value={groupId || ''}
@@ -124,6 +116,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
                           label="Date"
+                          id="date"
                           name="date"
                           value={date}
                           format="DD/MM/YYYY"
@@ -138,9 +131,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                          id="Billingdate"
                           label="Bill Date"
                           name="Billingdate"
-                          // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
                           value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
                           format="DD/MM/YYYY"
                         />
@@ -153,11 +146,10 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <TextField
                       size="small"
-                      id="id"
+                      id="invoiceno"
                       label="Invoice No"
                       name="invoiceno"
                       value={invoiceno || ''}
-                      // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
                       onKeyDown={handleKeyenter}
@@ -169,10 +161,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <Autocomplete
                       fullWidth
-                      id="free-solo-demo"
+                      id="free-solo-Organization"
                       freeSolo
                       size="small"
-                      // value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer?.Organization_name || ''}
                       value={customer || ''}
                       options={organizationNames}
                       onChange={(event, value) => setCustomer(value)}
@@ -190,6 +181,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        id="fromDate"
                           value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -213,6 +205,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        id="toDate"
                           value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -235,7 +228,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <Autocomplete
                       fullWidth
-                      id="free-solo-demo"
+                      id="free-station"
                       freeSolo
                       size="small"
                       value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}

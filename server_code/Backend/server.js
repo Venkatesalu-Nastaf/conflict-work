@@ -167,6 +167,8 @@ app.post('/updatethemename', (req, res) => {
 });
 
 
+
+
 //map image upload
 app.post('/mapuploads', upload2.single('file'), (req, res) => {
   if (!req.file) {

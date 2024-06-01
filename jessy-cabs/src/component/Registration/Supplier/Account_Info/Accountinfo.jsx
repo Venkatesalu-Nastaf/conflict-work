@@ -117,7 +117,7 @@ const Accuntinfo = () => {
                   label="Account No"
                   margin="normal"
                   size="small"
-                  id="standard-size-normal"
+                  id="accountNo"
                   autoComplete="new-password"
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
@@ -132,6 +132,7 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    id="date1"
                     value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null || book.Accdate ? dayjs(book.Accdate) : null}
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'Accdate')}
@@ -152,7 +153,7 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.vehicleTravels || book.vehicleTravels}
                   onChange={handleChange}
                   label="Vehicle/Travels"
-                  id="standard-size-normal"
+                  id="vehicleTravels"
                   variant="standard"
                   style={{ width: '100%' }}
                 />
@@ -178,7 +179,7 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   margin="normal"
-                  id="remark"
+                  id="address123"
                   label="Address"
                   name="address1"
                   multiline
@@ -212,7 +213,7 @@ const Accuntinfo = () => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo-vehicleInfo"
+                  id="underGroup"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
@@ -239,7 +240,7 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
                   label="Email"
-                  id="standard-size-normal"
+                  id="email"
                   variant="standard"
                   style={{ width: "100%" }}
                 />
@@ -256,7 +257,7 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="Veh.Commission"
                   size="small"
-                  id="outlined-start-adornment"
+                  id="vehCommission"
                   sx={{ width: "100%" }}
                   InputProps={{
                     startAdornment: (
@@ -275,7 +276,7 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
                   label="Opening Balance"
-                  id="standard-size-normal"
+                  id="entity"
                   variant="standard"
                   style={{ width: "100%" }}
                 />
@@ -287,7 +288,7 @@ const Accuntinfo = () => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo-vehicleInfo"
+                  id="vehicleInfo"
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
@@ -317,6 +318,7 @@ const Accuntinfo = () => {
                 row
                 aria-labelledby="demo-row-radio-buttons-group-label"
                 name="acType"
+                id="acType"
                 autoComplete="new-password"
                 onChange={handleChange}
                 value={selectedCustomerData?.acType || book.acType}
@@ -336,7 +338,7 @@ const Accuntinfo = () => {
               value={selectedCustomerData?.rateType || book.rateType}
               onChange={handleChange}
               label="Rate Type"
-              id="standard-size-normal"
+              id="rateType"
               variant="standard"
               style={{ width: '100%' }}
             />

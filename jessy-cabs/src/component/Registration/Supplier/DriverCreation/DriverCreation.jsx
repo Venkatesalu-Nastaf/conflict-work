@@ -149,7 +149,7 @@ const DriverCreation = ({ stationName }) => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="id"
+                                    id="driverid"
                                     label="Driver ID"
                                     name="driverid"
                                     value={selectedCustomerData.driverid || book.driverid || ''}
@@ -210,7 +210,7 @@ const DriverCreation = ({ stationName }) => {
                                 <Autocomplete
                                     fullWidth
                                     size="small"
-                                    id="free-solo-demo-stationname"
+                                    id="stations"
                                     freeSolo
                                     sx={{ width: "100%" }}
                                     value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
@@ -237,7 +237,7 @@ const DriverCreation = ({ stationName }) => {
                                         name="userpassword"
                                         value={selectedCustomerData?.userpassword || book.userpassword}
                                         onChange={handleChange}
-                                        id="password"
+                                        id="userpassword"
                                         type={showPasswords ? 'text' : 'password'}
                                         endAdornment={
                                             <InputAdornment position="end">
@@ -291,6 +291,7 @@ const DriverCreation = ({ stationName }) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Badge Exp date "
+                                        id="date2"
                                         value={
                                             selectedCustomerData.badgeexpdate
                                                 ? dayjs(selectedCustomerData.badgeexpdate)
@@ -325,7 +326,7 @@ const DriverCreation = ({ stationName }) => {
                                     }
                                     onChange={handleChange}
                                     label="Mobile No"
-                                    id="mobile"
+                                    id="Mobileno"
                                     variant="standard"
                                     style={{ width: '100%' }}
                                 />
@@ -372,6 +373,7 @@ const DriverCreation = ({ stationName }) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="joining Date"
+                                        id="date3"
                                         value={
                                             selectedCustomerData.joiningdate
                                                 ? dayjs(selectedCustomerData.joiningdate)
@@ -413,6 +415,7 @@ const DriverCreation = ({ stationName }) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="License Exp Date "
+                                        id="date4"
                                         value={
                                             selectedCustomerData.licenseexpdate
                                                 ? dayjs(selectedCustomerData.licenseexpdate)
@@ -489,7 +492,7 @@ const DriverCreation = ({ stationName }) => {
                                             </div>
                                             <TextField
                                                 size="small"
-                                                id="search"
+                                                id="searchText"
                                                 label="Search"
                                                 name="searchText"
                                                 value={searchText || ""}
@@ -503,6 +506,7 @@ const DriverCreation = ({ stationName }) => {
                                             </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
+                                                    id="date5"
                                                     label="From Date"
                                                     name="fromDate"
                                                     format="DD/MM/YYYY"
@@ -517,6 +521,7 @@ const DriverCreation = ({ stationName }) => {
                                             </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
+                                                    id="date6"
                                                     label="To Date"
                                                     name="toDate"
                                                     format="DD/MM/YYYY"

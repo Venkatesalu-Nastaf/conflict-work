@@ -20,7 +20,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferlist from './useTransferlist';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
@@ -80,7 +79,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-solo-Organization"
                                         freeSolo
                                         size="small"
                                         value={customer}
@@ -100,6 +99,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                                id="fromDate"
                                                 label="From Date"
                                                 format="DD/MM/YYYY"
                                                 value={fromDate}
@@ -115,6 +115,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
+                                                id="toDate"
                                                 label="To Date"
                                                 format="DD/MM/YYYY"
                                                 value={toDate}
@@ -140,7 +141,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     </div>
                                     <Autocomplete
                                         fullWidth
-                                        id="free-solo-demo"
+                                        id="free-Stations"
                                         freeSolo
                                         size="small"
                                         value={servicestation}

@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads/' });  
 app.use(express.static('customer_master'));
 
 const storage1 = multer.diskStorage({

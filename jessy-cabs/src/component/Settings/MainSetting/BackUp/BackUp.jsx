@@ -41,37 +41,14 @@ const BackUp = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
 
     // LOADING
     function LinearProgressWithLabel(props) {
@@ -126,6 +103,7 @@ const BackUp = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
                                     <DatePicker
+                                        id="start_date"
                                         format="DD/MM/YYYY"
                                         defaultValue={today}
                                         minDate={tomorrow}
@@ -138,6 +116,7 @@ const BackUp = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="END Date">
                                     <DatePicker
+                                        id="end_date"
                                         format="DD/MM/YYYY"
                                         defaultValue={today}
                                         minDate={tomorrow}

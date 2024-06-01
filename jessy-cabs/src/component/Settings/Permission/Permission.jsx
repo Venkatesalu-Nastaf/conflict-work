@@ -57,7 +57,7 @@ const Permission = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="id"
+                  id="userid"
                   label="ID"
                   name="userid"
                   autoComplete="off"
@@ -131,14 +131,7 @@ const Permission = () => {
               <div className="table-container Scroll-Style">
                 <table className="responsive-table ">
                   <thead>
-                    {/* <tr>
-                      <th>ID</th>
-                      <th>Form Name</th>
-                      <th>Read</th>
-                      <th>New</th>
-                      <th>Modify</th>
-                      <th>Delete</th>
-                    </tr> */}
+               
                     <tr>
                       <th>ID</th>
                       <th>Form Name</th>
@@ -176,6 +169,7 @@ const Permission = () => {
                         <td>
                           <input
                             type="checkbox"
+                            id="read"
                             checked={Boolean(permission.read)}
                             onChange={() =>
                               handlePermissionChange(permission.id, "read")
@@ -185,6 +179,7 @@ const Permission = () => {
                         <td>
                           <input
                             type="checkbox"
+                            id="new"
                             checked={Boolean(permission.new)}
                             onChange={() =>
                               handlePermissionChange(permission.id, "new")
@@ -194,6 +189,7 @@ const Permission = () => {
                         <td>
                           <input
                             type="checkbox"
+                            id="modify"
                             checked={Boolean(permission.modify)}
                             onChange={() =>
                               handlePermissionChange(permission.id, "modify")
@@ -203,6 +199,7 @@ const Permission = () => {
                         <td>
                           <input
                             type="checkbox"
+                            id="delete"
                             checked={Boolean(permission.delete)}
                             onChange={() =>
                               handlePermissionChange(permission.id, "delete")

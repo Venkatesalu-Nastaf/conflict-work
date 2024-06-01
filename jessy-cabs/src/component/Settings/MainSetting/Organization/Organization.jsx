@@ -101,7 +101,7 @@ const Organization = ({ logoImage }) => {
                                         <TextField
                                             margin="normal"
                                             size="small"
-                                            id="id"
+                                            id="organizationname"
                                             label="Organization Name"
                                             name="organizationname"
                                             sx={{ width: "280px" }}
@@ -117,7 +117,7 @@ const Organization = ({ logoImage }) => {
                                         </div>
                                         <TextField
                                             size="small"
-                                            id="role"
+                                            id="organizationtype"
                                             label="Organization Type"
                                             name="organizationtype"
                                             sx={{ width: "280px" }}
@@ -136,7 +136,7 @@ const Organization = ({ logoImage }) => {
                                         <TextField
                                             type='number'
                                             size="small"
-                                            id="mobile"
+                                            id="contactPhoneNumber"
                                             label="Mobile"
                                             name="contactPhoneNumber"
                                             sx={{ width: "280px" }}
@@ -153,7 +153,7 @@ const Organization = ({ logoImage }) => {
                                         <TextField
                                             sx={{ width: "280ch" }}
                                             size="small"
-                                            id="email"
+                                            id="contactEmail"
                                             label="Email"
                                             name="contactEmail"
                                             autoComplete="new-password"
@@ -256,7 +256,7 @@ const Organization = ({ logoImage }) => {
                                 <TextField
                                     sx={{ width: "100%" }}
                                     size="small"
-                                    id="taxIDNumber"
+                                    id="pannumber"
                                     name="pannumber"
                                     className='organisation-input-field'
                                     value={selectedCustomerData?.pannumber || book.pannumber}

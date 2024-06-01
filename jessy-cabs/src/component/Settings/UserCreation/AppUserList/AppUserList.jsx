@@ -56,6 +56,7 @@ const AppUserList = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="AppUserActive"
+                      id="AppUserActive"
                       autoComplete="new-password"
                       value={apps}
                       onChange={handleChangeStatus}

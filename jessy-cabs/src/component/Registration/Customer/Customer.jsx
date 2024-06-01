@@ -112,7 +112,7 @@ const Customer = ({ stationName }) => {
           </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
@@ -120,14 +120,14 @@ const Customer = ({ stationName }) => {
                   name="customerId"
                   label="Customer ID"
                   id="customerId"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -135,16 +135,16 @@ const Customer = ({ stationName }) => {
                   margin="normal"
                   size="small"
                   id="customer"
+                  className='full-width'
                   label="Organization Name"
                   value={selectedCustomerData?.customer || book.customer}
                   autoComplete="new-password"
                   variant="standard"
                   onChange={handleChange}
                   name="customer"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -159,7 +159,7 @@ const Customer = ({ stationName }) => {
                   name="name"
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -183,7 +183,7 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <CalendarMonthIcon color="action" />
                 </div>
@@ -200,64 +200,64 @@ const Customer = ({ stationName }) => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
                   name="customeremail"
                   label="Email"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.customeremail || book.customeremail}
                   onChange={handleChange}
                   id="customeremail"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
                 </div>
                 <TextField
                   name="rateType"
                   label="Rate Type"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.rateType || book.rateType}
                   onChange={handleChange}
                   id="ratetype"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
                   name="opBalance"
                   label="OP Balanace"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.opBalance || book.opBalance}
                   onChange={handleChange}
                   id="opBalance"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <LocalPhoneIcon color="action" />
                 </div>
                 <TextField
                   name="phoneno"
                   label="Phone"
+                  className='full-width'
                   autoComplete="new-password"
                   value={selectedCustomerData?.phoneno || book.phoneno}
                   onChange={handleChange}
                   id="phoneno"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
               <div className="input radio">
@@ -291,7 +291,7 @@ const Customer = ({ stationName }) => {
           </div>
           <div className="Customer-page-secend-containers">
             <div className="input-field  checkbox customer-input-feild">
-              <div className="input input-address" style={{ width: "400px" }}>
+              <div className="input input-address">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
@@ -300,11 +300,11 @@ const Customer = ({ stationName }) => {
                   id="address1"
                   label="Address"
                   name="address1"
+                  className='full-width'
                   multiline
                   rows={2}
                   sx={{ width: "100%" }}
                   autoComplete="new-password"
-                  style={{ width: '100%' }}
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
                 />
@@ -360,7 +360,7 @@ const Customer = ({ stationName }) => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
               />
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -384,9 +384,9 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className='icone'>
-                  <GrSelect style={{ fontSize: '25px' }} />
+                  <GrSelect />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -408,24 +408,24 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
                 <TextField
                   name="entity"
                   autoComplete="new-password"
+                  className='full-width'
                   value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
                   label="Entity"
                   id="entity"
                   variant="standard"
-                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className='icone'>
-                  <GrSelect style={{ fontSize: '25px' }} />
+                  <GrSelect />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -446,9 +446,9 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{ paddingRight: '15px' }}>
+              <div className="input">
                 <div className='icone'>
-                  <GrSelect style={{ fontSize: '25px' }} />
+                  <GrSelect />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -469,9 +469,9 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input dropdown" style={{ paddingRight: '15px' }}>
+              <div className="input dropdown">
                 <label htmlFor="gstTax">GST</label>
-                <select id="gstTax" name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{ width: '100%' }}>
+                <select id="gstTax" className='full-width' name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange}>
                   <option value="" >None</option>
                   <option value="5%">5%</option>
                   <option value="12%">12%</option>
@@ -481,8 +481,8 @@ const Customer = ({ stationName }) => {
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field customer-input-feild-add">
-              <div className="input" style={{ display: 'grid' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="input customer-billing-group-input">
+                <div className='customer-billing-group-input-division'>
                   <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
                   <Switch label='label' id="billinggrouph" onClick={handleButtonClick} />
                 </div>
@@ -524,7 +524,7 @@ const Customer = ({ stationName }) => {
                   size='small'
                 />
               </div>
-              <div className="input" style={{ width: "160px" }}>
+              <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -535,34 +535,34 @@ const Customer = ({ stationName }) => {
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
-                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ClearIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{errorMessage}</p>
                 </div>
               }
               {info &&
                 <div className='alert-popup Info' >
-                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <BsInfo /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{infoMessage}</p>
                 </div>
               }
               {warning &&
                 <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{warningMessage}</p>
                 </div>
               }
               {success &&
                 <div className='alert-popup Success' >
-                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                   <p>{successMessage}</p>
                 </div>
               }
             </div>
-            <div className="SpeedDial" style={{ padding: '26px', margin: '50px' }}>
+            <div className="SpeedDial customer-speeddail">
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"

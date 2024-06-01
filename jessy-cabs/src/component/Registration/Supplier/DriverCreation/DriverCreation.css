@@ -105,3 +105,44 @@
     border: none !important;
   }
 }
+
+.driver-creation-input-field {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.driver-creation-dialog-box-div1 {
+  position: relative;
+}
+
+.driver-creation-dialog-box-btn {
+  margin-bottom: 10px;
+}
+
+.driver-creation-dialog-box-div2 {
+  border-bottom: 1px solid black;
+}
+
+.driver-creation-delete-print-btn-section {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+}
+
+.driver-creation-delete-succesfully {
+  display: flex;
+  align-items: center;
+}
+
+.driver-creation-delete-succesfully-icon {
+  color: green;
+  font-size: 25px;
+  padding-left: 10px;
+}
+
+.driver-creation-delete-succesfully-text {
+  font-size: 15px;
+  color: green;
+  font-weight: 500;
+  padding: 10px;
+}

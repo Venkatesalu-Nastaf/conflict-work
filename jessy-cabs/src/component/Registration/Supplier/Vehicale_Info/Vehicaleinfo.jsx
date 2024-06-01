@@ -204,7 +204,7 @@ const Vehicaleinfo = ({ stationName }) => {
           <div className="vehicaleinfo-container">
             <div className="vehicaleinfo-container-left">
               <div className="input-field vehicleinfo-inputfeild">
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <MinorCrashIcon color="action" />
                   </div>
@@ -214,11 +214,11 @@ const Vehicaleinfo = ({ stationName }) => {
                     onChange={handleChange}
                     label="Vehicle ID"
                     id="vehicleId"
+                    className='full-width'
                     variant="standard"
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <FaCar />
                   </div>
@@ -230,11 +230,11 @@ const Vehicaleinfo = ({ stationName }) => {
                     onKeyDown={handleKeyEnter}
                     label="Vehicle Name"
                     id="vehiclename"
+                    className='full-width'
                     variant="standard"
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <AirportShuttleIcon color="action" />
                   </div>
@@ -274,7 +274,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input radio" style={{ paddingRight: '15px' }}>
+                <div className="input radio">
                   <div className="icone">
                     <PiCarSimpleFill color="action" />
                   </div>
@@ -297,7 +297,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
@@ -320,7 +320,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input radio" style={{ paddingRight: '15px' }}>
+                <div className="input radio">
                   <div className="icone">
                     <BsFillFuelPumpFill color="action" />
                   </div>
@@ -343,7 +343,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -351,14 +351,14 @@ const Vehicaleinfo = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     id="vehRegNo"
+                    className='full-width'
                     label="Vehicle Reg No"
                     name="vehRegNo"
                     value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} />
                   </div>
@@ -387,18 +387,17 @@ const Vehicaleinfo = ({ stationName }) => {
                 <div className="vehicaleinfo-update-main">
                   <div className="vehicaleinfo-update">
                     <div
-                      className="Scroll-Style"
-                      style={{ overflow: "scroll", height: "220px" }}
+                      className="Scroll-Style vehicle-info-table1"
                     >
                       <table>
                         <thead id="update-header">
                           <tr>
-                            <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}>ID</th>
+                            <th className="table-head-booking vehicle-info-table-heading-first">ID</th>
                             <th className="table-head-booking">Vehicle_Name</th>
                             <th className="table-head-booking">Owner</th>
                             <th className="table-head-booking">Vehicle_Type</th>
                             <th className="table-head-booking">status</th>
-                            <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>Group</th>
+                            <th className="table-head-booking vehicle-info-table-heading-first">Group</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -431,13 +430,14 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           </div>
           <div className="input-field vehicleinfo-inputfeild">
-            <div className="input" style={{ paddingRight: "15px" }}>
+            <div className="input">
               <div className="icone">
                 <ContactMailIcon color="action" />
               </div>
               <TextField
                 size="small"
                 id="Segment"
+                className='full-width'
                 label="Segment"
                 name="segement"
                 value={
@@ -445,68 +445,67 @@ const Vehicaleinfo = ({ stationName }) => {
                   ""
                 }
                 onChange={handleChange}
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AssessmentIcon color="action" />
               </div>
               <TextField
                 margin="normal"
                 size="small"
+                className='full-width'
                 id="year_model"
                 name="yearModel"
                 value={selectedCustomerData?.yearModel || book.yearModel || ""}
                 onChange={handleChange}
                 label="Year Model"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <EmojiTransportationIcon color="action" />
               </div>
               <TextField
                 name="owner"
+                className='full-width'
                 value={selectedCustomerData?.owner || book.owner || ""}
                 onChange={handleChange}
                 label="Owner"
                 id="owner"
                 size='small'
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
                 name="mobileNo"
+                className='full-width'
                 value={selectedCustomerData?.mobileNo || book.mobileNo || ""}
                 onChange={handleChange}
                 label="Mobile No"
                 id="mobile_no"
                 size='small'
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AttachEmailIcon color="action" />
               </div>
               <TextField
                 name="email"
                 size='small'
+                className='full-width'
                 value={selectedCustomerData?.email || book.email || ""}
                 onChange={handleChange}
                 label="Email"
                 id="email"
-                style={{ width: '100%' }}
               />
             </div>
 
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
               </div>
@@ -514,14 +513,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 margin="normal"
                 size="small"
                 name="insuranceno"
+                className='full-width'
                 value={selectedCustomerData?.insuranceno || book.insuranceno || ""}
                 onChange={handleChange}
                 label="Insurance No"
                 id="insuranceno"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -539,10 +538,10 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
-              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+            <div className="input">
+              <Button size="md" className='vehicle-info-upload-btn' component="label">
 
-                <span class="button-29" style={{ width: '100%' }}>
+                <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
                   <span>
                     Insurance Copy
@@ -555,7 +554,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </span>
               </Button>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AirlineSeatReclineExtraIcon color="action" />
               </div>
@@ -578,7 +577,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 }
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -602,7 +601,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <DocumentScannerIcon color="action" />
               </div>
@@ -610,14 +609,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 margin="normal"
                 size="small"
                 name="nationalpermito"
+                className='full-width'
                 value={selectedCustomerData?.nationalpermito || book.nationalpermito || ""}
                 onChange={handleChange}
                 label="National Permit No"
                 id="nationalpermito"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -640,9 +639,9 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
-              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <span class="button-29" style={{ width: '100%' }}>
+            <div className="input">
+              <Button size="md" className='vehicle-info-upload-btn' component="label">
+                <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
                   <span>National Permit Copy</span>
                   <input
@@ -654,22 +653,21 @@ const Vehicaleinfo = ({ stationName }) => {
                 </span>
               </Button>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <SpeedIcon color="action" />
               </div>
               <TextField
-
+                className='full-width'
                 name="avgmileage"
                 value={selectedCustomerData?.avgmileage || book.avgmileage || ""}
                 onChange={handleChange}
                 label="AVG Mileage"
                 id="avgmileage"
                 size="small"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <DocumentScannerIcon color="action" />
               </div>
@@ -677,14 +675,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 margin="normal"
                 size="small"
                 name="statepermito"
+                className='full-width'
                 value={selectedCustomerData?.statepermito || book.statepermito || ""}
                 onChange={handleChange}
                 label="State Permit No"
                 id="statepermito"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -708,10 +706,10 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
 
-              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <span class="button-29" style={{ width: '100%' }}>
+              <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
                   <span>
                     State Permit Copy
@@ -725,7 +723,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </span>
               </Button>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <AccountBalanceWalletIcon color="action" />
               </div>
@@ -734,27 +732,27 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.financer || book.financer || ""}
                 onChange={handleChange}
                 label="Financer"
+                className='full-width'
                 id="financer"
                 size="small"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <HistoryEduIcon color="action" />
               </div>
               <TextField
                 margin="normal"
                 size="small"
+                className='full-width'
                 name="rcbookno"
                 value={selectedCustomerData?.rcbookno || book.rcbookno || ""}
                 onChange={handleChange}
                 label="RC Book No"
                 id="rcbookno"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -778,9 +776,9 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
-              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <span class="button-29" style={{ width: '100%' }}>
+            <div className="input">
+              <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
                   <span>
                     RC-Book Copy
@@ -794,9 +792,9 @@ const Vehicaleinfo = ({ stationName }) => {
                 </span>
               </Button>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
-              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <span class="button-29" style={{ width: '100%' }}>
+            <div className="input">
+              <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
                   <span>
                     FC Copy
@@ -810,22 +808,22 @@ const Vehicaleinfo = ({ stationName }) => {
                 </span>
               </Button>
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
                 margin="normal"
                 size="small"
+                className='full-width'
                 name="tankCap"
                 value={selectedCustomerData?.tankCap || book.tankCap}
                 onChange={handleChange}
                 label="Tank Capacity"
                 id="tank_cap"
-                style={{ width: '100%' }}
               />
             </div>
-            <div className="input" style={{ paddingRight: '15px' }}>
+            <div className="input">
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                   Active
@@ -852,7 +850,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </RadioGroup>
               </FormControl>
             </div>
-            <div className="input" style={{ width: "160px" }}>
+            <div className="input">
               {isEditMode ? (
                 <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
               ) : (
@@ -863,28 +861,28 @@ const Vehicaleinfo = ({ stationName }) => {
         </div>
         <div className='alert-popup-main'>
           {error && <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <div className="popup-icon"> <ClearIcon /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
             <p>{errorMessage}</p>
           </div>}
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
@@ -892,10 +890,10 @@ const Vehicaleinfo = ({ stationName }) => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field vehicle-info-search-input-field">
+                <div className="input">
                   <div className="icone">
-                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                    <AiOutlineFileSearch color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -937,7 +935,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "140px" }}>
+                <div className="input">
                   <Button variant="contained" onClick={handleSearch}>Search</Button>
                 </div>
               </div>
@@ -1006,7 +1004,7 @@ const Vehicaleinfo = ({ stationName }) => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-Booking">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='vehicle-info-main-table'>
             <DataGrid
               rows={rows}
               columns={columns}
@@ -1016,11 +1014,11 @@ const Vehicaleinfo = ({ stationName }) => {
           </div>
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
-              <div style={{ position: 'relative' }}>
-                <Button variant='contained' style={{ marginBottom: 10 }} onClick={handleSelectAll}>
+              <div className='vehicle-info-dailog-box-div1'>
+                <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
                   {selectAll ? 'Deselect All' : 'Select All'}
                 </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index} style={{ borderBottom: '1px solid black' }} >
+                  <div key={index} className='vehicle-info-dailog-box-btn-division'>
                     {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
                       ? <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
                       <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
@@ -1032,7 +1030,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'flex', padding: 10, gap: 15 }}>
+              <div className='vehicle-info-dailog-box-delete-print-division'>
                 <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>

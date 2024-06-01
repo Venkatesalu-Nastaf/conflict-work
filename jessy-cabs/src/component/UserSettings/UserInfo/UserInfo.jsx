@@ -103,7 +103,7 @@ const UserSetting = () => {
               </div>
               <div className="container-userinfo-right">
                 <div className=" userInfo-inputs-feilds input-field">
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
@@ -118,7 +118,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "240px" }}>
+                  <div className="input">
                     <div className="icone">
                       <WorkspacePremiumIcon color="action" />
                     </div>
@@ -135,7 +135,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <AccountCircleIcon color="action" />
                     </div>
@@ -151,7 +151,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
@@ -169,7 +169,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
@@ -185,7 +185,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />
                     </div>
@@ -202,7 +202,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <AttachEmailIcon color="action" />
                     </div>
@@ -219,7 +219,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                     </div>
@@ -257,7 +257,7 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
-                  <div className="input" style={{ width: "240px" }}>
+                  <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faLock} size="lg" />
                     </div>
@@ -300,12 +300,12 @@ const UserSetting = () => {
                 </div>
                 {editMode ? (
                   <div className="input-field">
-                    <div className="input" style={{ width: "150px" }}>
+                    <div className="input">
                       <Button variant="outlined" onClick={toggleEditMode}>
                         Cancel
                       </Button>
                     </div>
-                    <div className="input" style={{ width: "150px" }}>
+                    <div className="input">
                       <Button variant="contained" onClick={handleUpdate}>
                         Save
                       </Button>
@@ -329,10 +329,10 @@ const UserSetting = () => {
                     <div className="alert-popup Error">
                       <div className="popup-icon">
                         {" "}
-                        <ClearIcon style={{ color: "#fff" }} />{" "}
+                        <ClearIcon />{" "}
                       </div>
                       <span className="cancel-btn" onClick={hidePopup}>
-                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        <ClearIcon color="action" />{" "}
                       </span>
                       <p>{errorMessage}</p>
                     </div>
@@ -341,10 +341,10 @@ const UserSetting = () => {
                     <div className="alert-popup Warning">
                       <div className="popup-icon">
                         {" "}
-                        <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+                        <ErrorOutlineIcon />{" "}
                       </div>
                       <span className="cancel-btn" onClick={hidePopup}>
-                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        <ClearIcon color="action" />{" "}
                       </span>
                       <p>{warningMessage}</p>
                     </div>
@@ -353,10 +353,10 @@ const UserSetting = () => {
                     <div className="alert-popup Success">
                       <div className="popup-icon">
                         {" "}
-                        <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                        <FileDownloadDoneIcon />{" "}
                       </div>
                       <span className="cancel-btn" onClick={hidePopup}>
-                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        <ClearIcon color="action" />{" "}
                       </span>
                       <p>{successMessage}</p>
                     </div>
@@ -365,10 +365,10 @@ const UserSetting = () => {
                     <div className="alert-popup Info">
                       <div className="popup-icon">
                         {" "}
-                        <BsInfo style={{ color: "#fff" }} />{" "}
+                        <BsInfo />{" "}
                       </div>
                       <span className="cancel-btn" onClick={hidePopup}>
-                        <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        <ClearIcon color="action" />{" "}
                       </span>
                       <p>{infoMessage}</p>
                     </div>

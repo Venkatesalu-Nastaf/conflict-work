@@ -78,7 +78,7 @@ const FuelRate = () => {
                             <Autocomplete
                                 // fullWidth
                                 size="small"
-                                id="free-solo-demo"
+                                id="Select_State"
                                 freeSolo
                                 value={selectedState}
                                 options={StationName}

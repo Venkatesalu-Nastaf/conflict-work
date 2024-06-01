@@ -28,7 +28,6 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
-// import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
 import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 
@@ -127,7 +126,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo-pricetag"
+                    id="OrganizationName"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
@@ -165,14 +164,14 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                     }
                   />
-                </div>                
+                </div>
                 <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="Validity"
                     sx={{ width: "300px" }}
                     label="Validity"
                     name="Validity"
@@ -191,7 +190,7 @@ const PackageRateEntery = ({ organizationNames }) => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}         
+          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">
@@ -226,7 +225,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                   <div className="input">
                     <TextField
                       size="small"
-                      id="id"
+                      id="Package"
                       className='full-width'
                       sx={{ width: "300px" }}
                       label="Package"
@@ -241,7 +240,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="Hours"
                       className='full-width'
                       label="Hours"
                       name="Hours"
@@ -254,7 +253,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="kms"
                       className='full-width'
                       label="KMS"
                       name="KMS"
@@ -267,7 +266,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="Rate"
                       className='full-width'
                       label="Rate"
                       name="Rate"
@@ -280,7 +279,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="UptoHours"
                       className='full-width'
                       label="UptoHours  "
                       name="UptoHours"
@@ -293,7 +292,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="UptoKMS"
                       className='full-width'
                       label="UptoKMS"
                       name="UptoKMS"
@@ -301,12 +300,12 @@ const PackageRateEntery = ({ organizationNames }) => {
                       value={fieldSet.UptoKMS || ""}
                       onChange={(e) => handleChange(e, index)}
                     />
-                  </div>             
+                  </div>
                   <div className="input">
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="extraHours"
                       className='full-width'
                       label="ExtraHours"
                       name="extraHours"
@@ -319,7 +318,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="extraKMS"
                       className='full-width'
                       label="ExtraKMS"
                       name="extraKMS"
@@ -332,7 +331,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="AKMS"
                       className='full-width'
                       label="A.KMS"
                       name="AKMS"
@@ -345,7 +344,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="NHalt"
                       className='full-width'
                       label="N.Halt"
                       name="NHalt"
@@ -358,7 +357,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="id"
+                      id="Bata"
                       className='full-width'
                       label="Bata"
                       name="Bata"
@@ -367,18 +366,13 @@ const PackageRateEntery = ({ organizationNames }) => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}
                   {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
                     <MdCancelPresentation className='icon-cancel' />
                   </div>}
                 </div>
               </div>
             </div>
-          ))}         
-
-          {/* {details.map((detail, index) => (
-            <React.Fragment key={index}>{detail}</React.Fragment>
-          ))} */}
+          ))}
 
           <div className="input package-rate-entry-edit-division">
             {isEditMode ? (
@@ -424,14 +418,7 @@ const PackageRateEntery = ({ organizationNames }) => {
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))} */}
+
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"

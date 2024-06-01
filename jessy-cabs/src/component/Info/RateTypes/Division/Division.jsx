@@ -99,7 +99,7 @@ const Division = () => {
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="driverid"
                     className='full-width'
                     label="ID"
                     name="driverid"
@@ -114,7 +114,7 @@ const Division = () => {
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="DivisionName"
                     className='full-width'
                     label="Division Name"
                     name="DivisionName"
@@ -155,6 +155,7 @@ const Division = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="active"
+
                       autoComplete="new-password"
                       value={selectedCustomerData?.active || book.active}
                       onChange={handleChange}
@@ -219,14 +220,7 @@ const Division = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))} */}
+
             {INFO_read === 1 && (
               <SpeedDialAction
                 key="list"

@@ -78,29 +78,6 @@ const TemplateCreation = () => {
 
   }, [location, apiurl, setImageData]);
 
-  // const attacheimagedataedit = useCallback(async (templateid) => {
-  //   try {
-  //     const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
-  //     const dataimage = response.data;
-  //     setImagedataedit(dataimage);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [apiurl, setImagedataedit]);
-
-  //  async function attacheimagedataedit(templateid){
-  //       try{
-  //       const response=await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
-  //       const dataimage=response.data
-  //       setImagedataedit(dataimage)
-
-  //     }
-  //     catch(err){
-  //      console.log(err)
-  //     }
-  //   }
-
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -191,22 +168,7 @@ const TemplateCreation = () => {
 
     }
   }
-  // const handleSubmit = async () => {
-  //   try {
-  //     const formDataToSend = new FormData();
-  //     images.forEach((image) => {
-  //       formDataToSend.append('images', image);
-  //     });
-  //     for (const key in formData) {
-  //       formDataToSend.append(key, formData[key]);
-  //     }
-  //     await axios.post(`/templateattachmentimage/${formData.templateId}`, formDataToSend);
-  //     // Clear form and images after successful upload
 
-  //   } catch (error) {
-  //     console.error('Error uploading images:', error);
-  //   }
-  // };
 
   const handleEdit = async () => {
     const formDataeditToSend = new FormData();
@@ -222,7 +184,6 @@ const TemplateCreation = () => {
         await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`, formDataeditToSend)
 
       }
-      // console.log(response2)
       navigate("/home/info/mailer");
 
     }
@@ -298,6 +259,7 @@ const TemplateCreation = () => {
                 </p>
                 <input
                   type="file"
+                  id="imagestemplate"
                   name="imagestemplate"
                   ref={fileInputRef}
                   style={{ display: 'none' }}
@@ -384,10 +346,10 @@ const TemplateCreation = () => {
           {editmode ?
             <>
               {imagedataedit.length > 0 && (
-                <div style={{ paddingLeft: '20px'}}>
+                <div style={{ paddingLeft: '20px' }}>
                   {imagedataedit.map((data, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                      <p style={{color: '#000'}}>{data.templateimage || data.name}</p>
+                      <p style={{ color: '#000' }}>{data.templateimage || data.name}</p>
                       <Button onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
                     </div>
 
@@ -397,7 +359,7 @@ const TemplateCreation = () => {
             </> :
             <>
               {imagedata.length > 0 && (
-                <div style={{ paddingLeft: '20px'}}>
+                <div style={{ paddingLeft: '20px' }}>
                   {imagedata.map((data, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                       <p>{data.name}</p>

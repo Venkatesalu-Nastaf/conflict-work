@@ -22,7 +22,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import useRatevalidity from './useRatevalidity';
-// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -96,7 +95,7 @@ const Ratevalidity = () => {
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="driverid"
                                         className='full-width'
                                         label="ID"
                                         name="driverid"
@@ -111,7 +110,7 @@ const Ratevalidity = () => {
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="ratename"
                                         className='full-width'
                                         label="Rate Name"
                                         name="ratename"
@@ -126,6 +125,7 @@ const Ratevalidity = () => {
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            id="fromdate"
                                             label="From Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -143,6 +143,7 @@ const Ratevalidity = () => {
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            id="todate"
                                             label="To Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
@@ -160,7 +161,7 @@ const Ratevalidity = () => {
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="Remarks"
                                         className='full-width'
                                         label="ReMarks"
                                         name="Remarks"
@@ -242,14 +243,7 @@ const Ratevalidity = () => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                            />
-                        ))} */}
+                     
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"

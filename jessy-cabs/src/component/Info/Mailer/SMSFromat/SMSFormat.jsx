@@ -17,7 +17,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">Booking Confirmtion SMS</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-1"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -28,7 +28,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">Booking Vehicle Confirm</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-static2"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -41,7 +41,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">Booking Cancelled</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-static3"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -52,7 +52,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">Trip Sheet SMS</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-static4"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -65,7 +65,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">Trip Sheet Driver</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-static5"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -76,7 +76,7 @@ const SMSFormat = () => {
                             <span className="Title-Name">URL Trip Closing</span>
                             <TextField
                                 className='sms-box'
-                                id="outlined-multiline-static"
+                                id="outlined-static6"
                                 multiline
                                 sx={{ mt: 2, width: "53ch" }}
                                 rows={4}
@@ -96,8 +96,9 @@ const SMSFormat = () => {
                             <span className="Title-Name">Key-Words</span>
                             <TextField
                                 className='sms-box'
+
                                 fullWidth
-                                id="outlined-multiline-static"
+                                id="outlined-7"
                                 multiline
                                 sx={{ mt: 5, width: "100%" }}
                                 rows={4}

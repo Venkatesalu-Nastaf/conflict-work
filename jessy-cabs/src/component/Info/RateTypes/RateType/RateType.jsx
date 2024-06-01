@@ -106,7 +106,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="driverid"
                                         className='full-width'
                                         label="ID"
                                         name="driverid"
@@ -122,7 +122,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         size="small"
-                                        id="free-solo-demo-customerType"
+                                        id="stations"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
                                         value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
@@ -145,7 +145,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         size="small"
-                                        id="free-solo-demo-pricetag"
+                                        id="ratename"
                                         freeSolo
                                         sx={{ width: "100%" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
@@ -166,7 +166,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     </div>
                                     <TextField
                                         size="small"
-                                        id="id"
+                                        id="validity"
                                         className='full-width'
                                         label="Validity"
                                         name="validity"
@@ -208,6 +208,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
+                                                id="startDate"
                                                 value={
                                                     selectedCustomerData.starttime
                                                         ? dayjs(selectedCustomerData.starttime)
@@ -236,6 +237,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
+                                                id="startDate2"
                                                 value={
                                                     selectedCustomerData.closetime
                                                         ? dayjs(selectedCustomerData.closetime)
@@ -321,14 +323,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                            />
-                        ))} */}
+                  
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"

@@ -21,14 +21,12 @@ import CarCrashIcon from '@mui/icons-material/CarCrash';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-// import EngineeringIcon from "@mui/icons-material/Engineering";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
-// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -98,6 +96,7 @@ const DriverBataRate = () => {
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      id="from_date"
                       label="From Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -115,6 +114,7 @@ const DriverBataRate = () => {
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      id="to_end"
                       label="To Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
@@ -158,7 +158,7 @@ const DriverBataRate = () => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo-VehicleType"
+                    id="free-solo-demo-duty"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
                     value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.Duty || ''}
@@ -178,7 +178,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraHours"
                     className='full-width'
                     label="ExtraHours"
                     name="ExtraHours"
@@ -191,7 +191,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraDays"
                     className='full-width'
                     label="ExtraDays"
                     name="ExtraDays"
@@ -204,7 +204,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraPerHoursPrice"
                     label="ExtraPerHoursPrice"
                     name="ExtraPerHoursPrice"
                     autoComplete="new-password"
@@ -222,7 +222,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="ExtraPerDayPrice"
                     label="ExtraPerDayPrice"
                     name="ExtraPerDayPrice"
                     autoComplete="new-password"
@@ -240,7 +240,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
-                    id="id"
+                    id="Bata"
                     className='full-width'
                     label="Bata"
                     name="Bata"
@@ -296,14 +296,7 @@ const DriverBataRate = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))} */}
+
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"

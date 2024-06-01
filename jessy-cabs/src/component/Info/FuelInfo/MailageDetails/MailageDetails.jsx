@@ -52,13 +52,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-// const actions = [
-//   { icon: <ChecklistIcon />, name: "List" },
-//   { icon: <CancelPresentationIcon />, name: "Cancel" },
-//   { icon: <DeleteIcon />, name: "Delete" },
-//   { icon: <ModeEditIcon />, name: "Edit" },
-//   { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
+
 
 const MailageDetails = () => {
 
@@ -155,6 +149,7 @@ const MailageDetails = () => {
                     <DatePicker
                       label="Fill Date"
                       format="DD/MM/YYYY"
+                      id="fill_date1"
                       value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null}
                       onChange={(date) => handleDateChange(date, 'filldate')}
                     >
@@ -170,6 +165,7 @@ const MailageDetails = () => {
                       <CalendarMonthIcon color="action" />
                     </div>
                     <DatePicker
+                      id="empty_Date"
                       label="Empty Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null}
@@ -330,14 +326,7 @@ const MailageDetails = () => {
                 icon={<SpeedDialIcon />}
                 direction="left"
               >
-                {/* {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                  />
-                ))} */}
+
                 {FuelInfo_read === 1 && (
                   <SpeedDialAction
                     key="list"

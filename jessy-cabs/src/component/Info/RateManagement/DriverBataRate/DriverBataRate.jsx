@@ -92,7 +92,7 @@ const DriverBataRate = () => {
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -109,7 +109,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -126,7 +126,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ paddingRight: '15px' }}>
+                <div className="input DriverBataRate-input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -149,12 +149,12 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input">
                   <Button variant="contained">Show</Button>
                 </div>
               </div>
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -174,33 +174,33 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
                     id="id"
+                    className='full-width'
                     label="ExtraHours"
                     name="ExtraHours"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraHours || book.ExtraHours}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
                     id="id"
+                    className='full-width'
                     label="ExtraDays"
                     name="ExtraDays"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraDays || book.ExtraDays}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
@@ -218,7 +218,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
@@ -236,20 +236,20 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
                     id="id"
+                    className='full-width'
                     label="Bata"
                     name="Bata"
                     autoComplete="new-password"
                     value={selectedCustomerData?.Bata || book.Bata}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ width: "160px" }}>
+                <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
@@ -263,29 +263,29 @@ const DriverBataRate = () => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
@@ -345,7 +345,7 @@ const DriverBataRate = () => {
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-DriverBataRate">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='driver-bata-rate-table'>
             <DataGrid
               rows={rows}
               columns={columns}

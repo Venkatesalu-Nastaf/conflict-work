@@ -576,6 +576,14 @@ body {
   padding-right: 15px;
 }
 
+.d-grid {
+  display: grid;
+}
+
+.d-flex{
+  display: flex;
+}
+
 
 
 /* MENUBAR FOR ALL PAGES ENDS*/

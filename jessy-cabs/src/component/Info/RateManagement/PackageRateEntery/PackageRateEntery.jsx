@@ -97,7 +97,7 @@ const PackageRateEntery = ({ organizationNames }) => {
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field PackageRateEntery-input-feild">
-                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
+                <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -120,7 +120,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
+                <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -142,7 +142,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
+                <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -166,7 +166,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>                
-                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
+                <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -196,7 +196,7 @@ const PackageRateEntery = ({ organizationNames }) => {
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">
               <div>
-                <div className="input" style={{ width: "200px" }}>
+                <div className="input">
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
@@ -223,10 +223,11 @@ const PackageRateEntery = ({ organizationNames }) => {
               </div>
               <div>
                 <div className='first'>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       size="small"
                       id="id"
+                      className='full-width'
                       sx={{ width: "300px" }}
                       label="Package"
                       name="package"
@@ -234,137 +235,136 @@ const PackageRateEntery = ({ organizationNames }) => {
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                       variant="standard"
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="Hours"
                       name="Hours"
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="KMS"
                       name="KMS"
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="Rate"
                       name="Rate"
                       autoComplete="new-password"
                       value={fieldSet.Rate || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="UptoHours  "
                       name="UptoHours"
                       autoComplete="new-password"
                       value={fieldSet.UptoHours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="UptoKMS"
                       name="UptoKMS"
                       autoComplete="new-password"
                       value={fieldSet.UptoKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>             
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="ExtraHours"
                       name="extraHours"
                       autoComplete="new-password"
                       value={fieldSet.extraHours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="ExtraKMS"
                       name="extraKMS"
                       autoComplete="new-password"
                       value={fieldSet.extraKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="A.KMS"
                       name="AKMS"
                       autoComplete="new-password"
                       value={fieldSet.AKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="N.Halt"
                       name="NHalt"
                       autoComplete="new-password"
                       value={fieldSet.NHalt || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="input">
                     <TextField
                       type='number'
                       size="small"
                       id="id"
+                      className='full-width'
                       label="Bata"
                       name="Bata"
                       autoComplete="new-password"
                       value={fieldSet.Bata || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{ width: '100%' }}
                     />
                   </div>
                   {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}
@@ -380,7 +380,7 @@ const PackageRateEntery = ({ organizationNames }) => {
             <React.Fragment key={index}>{detail}</React.Fragment>
           ))} */}
 
-          <div className="input" style={{ width: "100px", marginTop: '10px', marginLeft: '10px' }}>
+          <div className="input package-rate-entry-edit-division">
             {isEditMode ? (
               <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
             ) : (
@@ -392,29 +392,29 @@ const PackageRateEntery = ({ organizationNames }) => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
@@ -473,7 +473,7 @@ const PackageRateEntery = ({ organizationNames }) => {
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='package-rate-entry-table'>
             <DataGrid
               rows={rows}
               columns={columns}

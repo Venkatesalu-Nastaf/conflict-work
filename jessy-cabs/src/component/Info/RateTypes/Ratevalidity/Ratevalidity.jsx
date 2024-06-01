@@ -90,37 +90,37 @@ const Ratevalidity = () => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
                             <div className="input-field RateValidity-input-feilds">
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
                                         id="id"
+                                        className='full-width'
                                         label="ID"
                                         name="driverid"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
                                         id="id"
+                                        className='full-width'
                                         label="Rate Name"
                                         name="ratename"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
@@ -137,7 +137,7 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
@@ -154,22 +154,22 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" style={{ paddingRight: '15px' }}>
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
                                         id="id"
+                                        className='full-width'
                                         label="ReMarks"
                                         name="Remarks"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.Remarks || book.Remarks}
                                         onChange={handleChange}
-                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px" }}>
+                                <div className="input radio">
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active
@@ -195,7 +195,7 @@ const Ratevalidity = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className="input RateValidity-input" style={{ width: "160px" }}>
+                                <div className="input RateValidity-input">
                                     {isEditMode ? (
                                         <Button variant="contained" disabled={!INFO_modify} onClick={handleEdit}>Edit</Button>
                                     ) : (
@@ -209,29 +209,29 @@ const Ratevalidity = () => {
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ClearIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{errorMessage}</p>
                         </div>
                     }
                     {warning &&
                         <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{warningMessage}</p>
                         </div>
                     }
                     {success &&
                         <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{successMessage}</p>
                         </div>
                     }
                     {info &&
                         <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <div className="popup-icon"> <BsInfo /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                             <p>{infoMessage}</p>
                         </div>
                     }
@@ -291,7 +291,7 @@ const Ratevalidity = () => {
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateValidity">
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div className='rate-validity-table' style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}

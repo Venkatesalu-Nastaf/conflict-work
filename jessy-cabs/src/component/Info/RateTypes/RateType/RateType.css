@@ -124,3 +124,12 @@
         width: 88% !important;
     }
 }
+
+.ratetype-startdate-icon{
+    padding-top: 20px;
+}
+
+.ratetype-table{
+    height: 400px;
+    width: 100%;
+}

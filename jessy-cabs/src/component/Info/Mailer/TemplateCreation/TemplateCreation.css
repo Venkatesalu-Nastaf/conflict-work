@@ -206,3 +206,22 @@
     text-decoration: underline;
     color: white;
 }
+
+.cancel-popup-icon-division {
+    display: flex;
+    justify-content: center;
+}
+
+.cancel-popup-icon {
+    color: #7c7c7c;
+    font-size: 40px;
+}
+
+#keep-mounted-modal-description {
+    text-align: center;
+}
+
+.cancel-popup-confirm-division {
+    display: flex;
+    justify-content: center;
+}

@@ -17,11 +17,11 @@ const TemplateSelection = () => {
 
   return (
     <>
-      <div style={{ width: '100%' }}>
-        <div style={{ cursor: 'pointer' }} onClick={backToMailer}> <IoChevronBack style={{ fontSize: '30px' }} /></div>
-        <div style={{ display: 'flex' }}>
-          <div style={{ backgroundColor: "#fff", padding: '24px', height: '100vh', width: '220px' }}>
-            <div style={{ display: 'grid' }}>
+      <div className='template-selection-main'>
+        <div className='template-selection-back-division' onClick={backToMailer}> <IoChevronBack /></div>
+        <div className='d-flex'>
+          <div className='template-selection-menu'>
+            <div className='d-grid'>
               <button className='template-selection-btn'>All</button>
               <button className='template-selection-btn'>Basic</button>
               <button className='template-selection-btn'>Celebration</button>
@@ -30,8 +30,8 @@ const TemplateSelection = () => {
               <button className='template-selection-btn'>Product Promotion</button>
             </div>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%', backgroundColor: "#e9e9e9", padding: '25px' }}>
-            <div className='blank-template' style={{ marginRight: '25px', marginBottom: '20px' }}>
+          <div className='template-selection-template-section'>
+            <div className='blank-template'>
               <div class="overlay">
                 <div class="text">
                   <button className='template-select-button' onClick={NavToTemplateCreation}>Select</button>

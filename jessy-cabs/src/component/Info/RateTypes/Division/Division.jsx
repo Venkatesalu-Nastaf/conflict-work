@@ -93,37 +93,37 @@ const Division = () => {
           <div className="container-left">
             <div className="copy-title-btn-Division">
               <div className="input-field divisionform-inputfeilds">
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="ID"
                     name="driverid"
                     autoComplete="new-password"
                     value={selectedCustomerData?.driverid || book.driverid}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input division-form-size" style={{ paddingRight: '15px' }}>
+                <div className="input division-form-size">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="Division Name"
                     name="DivisionName"
                     autoComplete="new-password"
                     value={selectedCustomerData?.DivisionName || book.DivisionName}
                     onChange={handleChange}
-                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input division-form-size" style={{ paddingRight: '15px' }}>
+                <div className="input division-form-size">
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
@@ -172,7 +172,7 @@ const Division = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input" style={{ width: "100px" }}>
+                <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
@@ -186,29 +186,29 @@ const Division = () => {
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{infoMessage}</p>
             </div>
           }
@@ -268,7 +268,7 @@ const Division = () => {
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-Division">
-          <div style={{ height: 400, width: "100%" }}>
+          <div className='booking-copy-division-table'>
             <DataGrid
               rows={rows}
               columns={columns}

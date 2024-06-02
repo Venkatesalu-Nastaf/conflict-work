@@ -19,7 +19,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import usePaymentdetails from './usePaymentdetails';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaRegCalendarAlt } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const PaymentDetail = ({ organizationNames }) => {
@@ -39,7 +38,6 @@ const PaymentDetail = ({ organizationNames }) => {
     billingno,
     handleInputChange,
     customer,
-    // bankOptions,
     fromDate,
     setFromDate,
     toDate,
@@ -78,7 +76,7 @@ const PaymentDetail = ({ organizationNames }) => {
                   </div>
                   <TextField
                     size="small"
-                    id="id"
+                    id="billingno"
                     label="Billing No"
                     name="billingno"
                     value={billingno || ''}
@@ -92,11 +90,10 @@ const PaymentDetail = ({ organizationNames }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="free-solo-Organization"
                     freeSolo
                     size="small"
                     value={customer}
-                    // options={bankOptions}
                     options={organizationNames}
                     onChange={handleInputChange}
                     renderInput={(params) => {
@@ -114,6 +111,7 @@ const PaymentDetail = ({ organizationNames }) => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="From Date"
+                        id="fromDate"
                         format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
@@ -129,6 +127,7 @@ const PaymentDetail = ({ organizationNames }) => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="To Date"
+                        id="toDate"
                         format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
@@ -194,16 +193,16 @@ const PaymentDetail = ({ organizationNames }) => {
           </div>
           <div className='amount-calculator'>
             <div className='total-inputs' >
-              <label htmlFor="">Total Amount:</label>
-              <input type="number" value={totalAmount} readOnly />
+              <label htmlFor="toatlAmount">Total Amount:</label>
+              <input type="number" id="toatlAmount" value={totalAmount} readOnly />
             </div>
             <div className='total-inputs' >
-              <label htmlFor="">Paid Amount:</label>
-              <input type="number" value={paidAmount} readOnly />
+              <label htmlFor="paindAmounts">Paid Amount:</label>
+              <input type="number" id="paindAmounts" value={paidAmount} readOnly />
             </div>
             <div className='total-inputs' >
-              <label htmlFor="">Pending Amount:</label>
-              <input type="number" value={pendingAmount} readOnly />
+              <label htmlFor="pendingAmount">Pending Amount:</label>
+              <input type="number" id="pendingAmount" value={pendingAmount} readOnly />
             </div>
           </div>
         </div>

@@ -47,10 +47,8 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
 import { PermissionContext } from '../../../context/permissionContext';
-// import { FaCalendarDays } from "react-icons/fa6";
 import { RiPinDistanceLine } from "react-icons/ri";
 import { IoIosTime } from "react-icons/io";
-// import { FaCalendarDay } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -65,13 +63,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-// const actions = [
-//     { icon: <PrintIcon />, name: "Print" },
-//     { icon: <CancelPresentationIcon />, name: "Cancel" },
-//     { icon: <DeleteIcon />, name: "Delete" },
-//     { icon: <ModeEditIcon />, name: "Edit" },
-//     { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
+
 
 const Billing = () => {
 
@@ -185,7 +177,7 @@ const Billing = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="invoiceno"
+                                    id="department"
                                     label="Station"
                                     name="department"
                                     autoComplete="new-password"
@@ -199,6 +191,7 @@ const Billing = () => {
                                 </div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
+                                        id="billingDate"
                                         label="Billing Date"
                                         value={book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         format="DD/MM/YYYY"
@@ -217,6 +210,7 @@ const Billing = () => {
                                 <TextField
                                     type='number'
                                     margin="normal"
+                                    id="totalkm1"
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
@@ -232,7 +226,7 @@ const Billing = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="TotalHours"
+                                    id="totaltime"
                                     label="Total Hours"
                                     name="totaltime"
                                     autoComplete="new-password"
@@ -279,6 +273,7 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
+                                        id="tripDate"
                                         value={book.startdate ? dayjs(book.startdate) : null}
                                         format="DD/MM/YYYY"
                                         onChange={(date) => handleDateChange(date, 'startdate')}
@@ -448,7 +443,7 @@ const Billing = () => {
                                             value={book?.extraKM || ''}
                                             onChange={handleChange}
                                             label="Charges For Extra"
-                                            id="ChargesForExtra"
+                                            id="extraKM"
                                             size="small"
                                             variant="standard"
                                             InputProps={{
@@ -465,6 +460,7 @@ const Billing = () => {
                                         <TextField size="small"
                                             type='number'
                                             name='extrakm_amount'
+                                            id='extrakm_amountNumer'
                                             autoComplete="new-password"
                                             value={book.extrakm_amount || ''}
                                             onChange={handleChange}
@@ -488,7 +484,7 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount1"
-                                            id="cfeamount"
+                                            id="ex_kmAmountEX"
                                             variant="standard"
                                         />
                                     </div>
@@ -507,7 +503,7 @@ const Billing = () => {
                                         value={book?.extraKM || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
-                                        id="ChargesForExtra"
+                                        id="extraKM098"
                                         size="small"
                                         variant="standard"
                                         InputProps={{
@@ -527,6 +523,7 @@ const Billing = () => {
                                     <TextField size="small"
                                         type='number'
                                         name='extrakm_amount'
+                                        id='extrakm_amount'
                                         autoComplete="new-password"
                                         value={book.extrakm_amount || ''}
                                         onChange={handleChange}
@@ -550,7 +547,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount1"
-                                        id="cfeamount"
+                                        id="ex_kmAmount78"
                                         variant="standard"
                                     />
                                 </div>
@@ -568,7 +565,7 @@ const Billing = () => {
                                             value={book.extraHR || ''}
                                             onChange={handleChange}
                                             label="Charges For Extra"
-                                            id="ChargesForExtra"
+                                            id="extraHR"
                                             size="small"
                                             variant="standard"
                                             InputProps={{
@@ -585,6 +582,7 @@ const Billing = () => {
                                         <TextField size="small"
                                             type='number'
                                             name='extrahr_amount'
+                                            id='extrahr_amount'
                                             autoComplete="new-password"
                                             value={book.extrahr_amount || ''}
                                             onChange={handleChange}
@@ -608,7 +606,7 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount2"
-                                            id="cfehamount"
+                                            id="ex_hrAmount_Amount2"
                                             variant="standard"
                                         />
                                     </div>
@@ -626,7 +624,7 @@ const Billing = () => {
                                         value={book.extraHR || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
-                                        id="ChargesForExtra"
+                                        id="extraHR_chargeForExtra"
                                         size="small"
                                         variant="standard"
                                         InputProps={{
@@ -646,6 +644,7 @@ const Billing = () => {
                                     <TextField size="small"
                                         type='number'
                                         name='extrahr_amount'
+                                        id='extrahr_amountEx'
                                         autoComplete="new-password"
                                         value={book.extrahr_amount || ''}
                                         onChange={handleChange}
@@ -669,7 +668,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount2"
-                                        id="cfehamount"
+                                        id="ex_hrAmount_A2"
                                         variant="standard"
                                     />
                                 </div>
@@ -688,7 +687,7 @@ const Billing = () => {
                                             value={book.nightBta || ''}
                                             onChange={handleChange}
                                             label="Night Halt"
-                                            id="NightHalt"
+                                            id="nightBta_NB"
                                             size="small"
                                             variant="standard"
                                         />
@@ -700,6 +699,7 @@ const Billing = () => {
                                         <TextField size="small" variant="standard"
                                             type='number'
                                             name='nightCount'
+                                            id='nightCount_NC'
                                             autoComplete="new-password"
                                             value={book.nightCount || ''}
                                             onChange={handleChange}
@@ -721,8 +721,8 @@ const Billing = () => {
                                             value={total_Nighthalt_Amount() || book.nhamount || ''}
                                             onChange={handleChange}
                                             size="small"
-                                            label="Amount"
-                                            id="nhamount"
+                                            label="Amount1"
+                                            id="nhamountNA1"
                                             variant="standard"
                                         />
                                     </div>
@@ -741,7 +741,7 @@ const Billing = () => {
                                         value={book.nightBta || ''}
                                         onChange={handleChange}
                                         label="Night Halt"
-                                        id="NightHalt"
+                                        id="nightBta"
                                         size="small"
                                         variant="standard"
                                     />
@@ -756,6 +756,7 @@ const Billing = () => {
                                     <TextField size="small" variant="standard"
                                         type='number'
                                         name='nightCount'
+                                        id='nightCount'
                                         autoComplete="new-password"
                                         value={book.nightCount || ''}
                                         onChange={handleChange}
@@ -798,7 +799,7 @@ const Billing = () => {
 
                                             value={book.driverBeta || ''}
                                             onChange={handleChange}
-                                            id="driverbata"
+                                            id="driverbataamount1"
                                             size="small"
                                             variant="standard"
                                         />
@@ -810,6 +811,7 @@ const Billing = () => {
                                         <TextField size="small" variant="standard"
                                             type='number'
                                             name='driverbeta_Count'
+                                            id='driverbeta_count67'
                                             autoComplete="new-password"
                                             value={book.driverbeta_Count || ''}
                                             onChange={handleChange}
@@ -832,7 +834,7 @@ const Billing = () => {
                                             onChange={handleChange}
                                             size="small"
                                             label="Amount"
-                                            id="dbamount"
+                                            id="driverBeta_amount12"
                                             variant="standard"
                                         />
                                     </div>
@@ -867,6 +869,7 @@ const Billing = () => {
                                     <TextField size="small" variant="standard"
                                         type='number'
                                         name='driverbeta_Count'
+                                        id='driverbeta_Count'
                                         autoComplete="new-password"
                                         value={book.driverbeta_Count || ''}
                                         onChange={handleChange}
@@ -889,7 +892,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="dbamount"
+                                        id="driverBeta_amount"
                                         variant="standard"
                                     />
                                 </div>
@@ -922,7 +925,7 @@ const Billing = () => {
                                         value={book.OtherChargesamount || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="OtherChargesamount"
                                         variant="standard"
                                     />
                                 </div>
@@ -940,7 +943,7 @@ const Billing = () => {
                                         value={book.permit || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="permit"
                                     />
                                 </div>
                                 <div className="input c">
@@ -955,7 +958,7 @@ const Billing = () => {
                                         value={book.parking || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="parking"
                                     />
                                 </div>
                             </div>
@@ -972,7 +975,7 @@ const Billing = () => {
                                         value={book.toll || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="toll"
                                     />
                                 </div>
                                 <div className="input billing-Vpermit-input">
@@ -987,7 +990,7 @@ const Billing = () => {
                                         value={book.vpermettovendor || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="vpermettovendor"
                                     />
                                 </div>
                             </div>
@@ -1004,7 +1007,7 @@ const Billing = () => {
                                         value={book.vendortoll || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="vendortoll"
                                     />
                                 </div>
 
@@ -1019,7 +1022,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         size="small"
-                                        id="MinKilometers"
+                                        id="minKM"
                                         label="Min Kilometers"
                                         name="minKM"
                                         autoComplete="new-password"
@@ -1034,7 +1037,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         size="small"
-                                        id="MinHours"
+                                        id="minHour"
                                         label="Min Hours"
                                         name="minHour"
                                         autoComplete="new-password"
@@ -1088,7 +1091,6 @@ const Billing = () => {
                                         label="Discount Amount"
                                         name="DiscountAmount"
                                         autoComplete="new-password"
-                                        // value={discound_PercentageCalc() || book.DiscountAmount || ''}
                                         value={book.DiscountAmount || discound_PercentageCalc() || ''}
                                         onChange={handleChange}
                                     />
@@ -1100,6 +1102,7 @@ const Billing = () => {
                                     <TextField
                                         margin="normal"
                                         name='DiscountAmount2'
+                                        id='DiscountAmount2'
                                         size="small"
                                         autoComplete="new-password"
                                         value={book.DiscountAmount2 || ''}
@@ -1248,18 +1251,14 @@ const Billing = () => {
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
                             <Paymentinvoice
-                                //  tripSheetData={tripSheetData}
+
                                 triprequest={triprequest}
                                 tripcode={tripcode}
                                 selectedImage={selectedImage}
                                 organizationdata={organizationdata}
                                 tripdepartment={tripdepartment}
                                 routeData={routeData}
-                                // BalanceValue={BalanceValue}
-                                // TotalAmountValue={TotalAmountValue}
-                                // roundOff={roundOffValue}
                                 book={book}
-                                // selectedCustomerData={book}
                                 tripShedkm={tripShedkm}
                                 tripshedin={tripshedin}
                                 tripshedout={tripshedout}
@@ -1324,14 +1323,6 @@ const Billing = () => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {/* {actions.map((action) => (
-                            <SpeedDialAction
-                                key={action.name}
-                                icon={action.icon}
-                                tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name)}
-                            />
-                        ))} */}
 
                         {Billing_new === 1 && (
                             <SpeedDialAction

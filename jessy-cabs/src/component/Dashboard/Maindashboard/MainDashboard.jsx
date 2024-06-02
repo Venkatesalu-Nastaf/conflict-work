@@ -291,8 +291,9 @@ const MainDashboard = () => {
               </div>
               <div className="user-name-item">
                 {storedUsername ? (
-                  <div>
-                    <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                  <div className="tooltip">
+                    <p className="login-user-name-text" onClick={navigateToUserSettings}>{storedUsername}</p>
+                    <span class="tooltiptext">{storedUsername}</span>
                     <div className="alert-popup-main">
                       {success && (
                         <div className="alert-popup Success">

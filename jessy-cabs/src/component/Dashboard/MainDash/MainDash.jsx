@@ -42,11 +42,11 @@ const MainDash = () => {
           </div> */}
 
           <div className="first-div">
-            <div className="left-div">
+            <div className="left-div Scroll-Style-Slim">
               <Cards />
               <Table />
             </div>
-            <div className="right-div">
+            <div className="right-div Scroll-Style-Slim">
               <RightSide />
             </div>
           </div>

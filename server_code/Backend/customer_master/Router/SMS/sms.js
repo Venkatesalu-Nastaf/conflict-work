@@ -86,7 +86,7 @@ router.post('/tripguest-send-sms', async (req, res) => {
     const tripid=response.tripid
     // db.query("insert into")
     if(messageId && tripid){
-    console.log(messageId,tripid,"tt")
+    console.log(messageId,tripid,"guestsms")
     db.query("insert into SmsReport(tripid,SmsMessageid) values(?,?)",[tripid,messageId],(err,results)=>{
         if(err){
             return res.status(500).json({ error: "Internal server error" });
@@ -149,7 +149,7 @@ router.post('/tripdriver-send-sms', async (req, res) => {
     const tripid=response.tripid
     // db.query("insert into")
     if(messageId && tripid){
-    // console.log(messageId,tripid,"tt")
+    console.log(messageId,tripid,"driversms")
     db.query("insert into SmsReport(tripid,SmsMessageid) values(?,?)",[tripid,messageId],(err,results)=>{
         if(err){
             return res.status(500).json({ error: "Internal server error" });
@@ -164,22 +164,23 @@ else{
     // res.send('SMS sent!');
     }
     catch(err){
+        
         console.log(err)
+
     }
 });
-
+//  Message: `Reporting to ${guestname} Vehicle Details - ${vehType} Vehicle Number - ${vehRegNo} Driver Name-${driverName} Mobile No ${mobileNo} Trip Date ${startdate} Reporting Time ${reporttime} from JESSY CABS ${ofclanno} -JESSYC`,
 // Your sendSMS function
 async function tripdriversendSMS(dataSend) {
-    const {tripid, guestname, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno } = dataSend;
-    console.log(tripid, guestname, vehRegNo, vehType, driverName, mobileNo, reporttime, startdate, ofclanno ,"driversms")
+    const {tripid, guestname,guestmobileno ,mobileNo, reporttime, startdate, address1} = dataSend;
+    console.log(tripid, guestname,guestmobileno, mobileNo, reporttime, startdate,address1,"driversms")
     const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const params = {
         SenderId: 'JSYCAB',
-        // Message: `Reporting to ${guestname} Vehicle Details - ${vehType} Vehicle Number - ${vehRegNo} Driver Name-${driverName} Mobile No ${mobileNo} Trip Date ${startdate} Reporting Time ${reporttime} from JESSY CABS ${ofclanno} -JESSYC`,
         Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,
-
         MobileNumbers: `${mobileNo}`,
-        TemplateId: '1107169000156593966',
+        // TemplateId: '1107169000156593966',
+        TemplateId: '1107169000164228655',
         ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
         ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',
     };

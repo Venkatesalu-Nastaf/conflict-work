@@ -5,7 +5,7 @@ import { APIURL } from "../../url";
 
 const useUserinfo = () => {
     const apiUrl = APIURL;
-    const { sharedData, setSharedData } = useData(); // -->  its for context for image
+    const { sharedData, setSharedData,SetDataTrigUser } = useData(); // -->  its for context for image
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [showPasswords, setShowPasswords] = useState(false);
@@ -30,23 +30,39 @@ const useUserinfo = () => {
     const [book, setBook] = useState({
         userid: '',
         username: '',
-        ufirstname: '',
-        ulastname: '',
+        // ufirstname: '',
+        // ulastname: '',
         mobileno: '',
         email: '',
         designation: '',
         userpassword: '',
-        userconfirmpassword: '',
+        // userconfirmpassword: '',
     });
 
     const handleUpdate = async (userid) => {
         try {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`${apiUrl}/usercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
+            console.log(updatedCustomer,"vjjjjjj")
+           const response= await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
+           
+           const dataresponse=response.data.affectedRows
+           if(dataresponse >= 1){
+           
+            localStorage.setItem("username",updatedCustomer.username)
+            SetDataTrigUser(updatedCustomer.username)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setEditMode((prevEditMode) => !prevEditMode);
+            // console.log(updatedCustomer.name,"local")
+            // localStorage.setItem("username",updatedCustomer.name)
+            
+
+           }
+           
+            // setSuccess(true);
+            // setSuccessMessage("Successfully updated");
+            // setEditMode((prevEditMode) => !prevEditMode);
         }
         catch {
             setError(true);
@@ -106,7 +122,7 @@ const useUserinfo = () => {
         }
     };
 
-
+    const useriddata = localStorage.getItem('useridno');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -132,7 +148,7 @@ const useUserinfo = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,useriddata]);
 
     const hidePopup = () => {
         setSuccess(false);

@@ -36,7 +36,7 @@ import Tooltip from '@mui/material/Tooltip';
 const MainDashboard = () => {
 
   const apiUrl = APIURL;
-  const { sharedData, setFilteredData } = useData();
+  const { sharedData, setFilteredData,datatriguserinfo } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
@@ -151,7 +151,7 @@ const MainDashboard = () => {
       const successMessagepopup = `Login successful ${user.username}`;
       setSuccess(successMessagepopup);
     }
-  }, [user]);
+  }, [user,datatriguserinfo ]);
 
   const storedUsername = localStorage.getItem("username");
 

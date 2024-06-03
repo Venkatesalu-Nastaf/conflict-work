@@ -94,7 +94,8 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
-  const { userid, username, stationname, designation, organizationname, userpassword, active } = updatedCustomer;
+  const { userid, username, stationname, designation, organizationname, userpassword, active,mobileno,email } = updatedCustomer;
+  
 
   try {
     // Clear existing permissions for the user
@@ -109,9 +110,9 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
     }
 
     // Update user details
-    await db.query(
-      'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?, active=? WHERE userid = ?',
-      [username, stationname, designation, organizationname, userpassword, active, userid]
+   await db.query(
+      'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
+      [username, stationname, designation, organizationname, userpassword, active,mobileno,email,userid]
     );
 
     res.status(200).json({ message: 'Permissions saved successfully' });
@@ -259,6 +260,23 @@ router.get('/userprofileview/:id', (req, res) => {
   })
 })
 
+
+router.put("/usercreationdataupdate/:editid",(req,res)=>{
+  const editid=req.params.editid
+  const updatedata=req.body
+
+  const {username,designation,userpassword,email,mobileno}=updatedata
+
+  db.query("update usercreation set username=?,designation=?,userpassword=?,email=?,mobileno=? where userid=?",[username,designation,userpassword,email,mobileno,editid],(err,results)=>
+  {
+    if(err){
+      return res.status(500).json({ Message: "Error updating data", err });
+    }
+
+    return res.status(200).json(results)
+  })
+  
+})
 
 
 

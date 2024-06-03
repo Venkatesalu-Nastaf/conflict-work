@@ -74,7 +74,7 @@ export default function BasicTable() {
 
   return (
     <div className="Table">
-      <h1>Live Driver Status</h1>
+      <h1 className="live-driver-status-heading">Live Driver Status</h1>
       <TableContainer
         className="Scroll-Style total-table"
         component={Paper}

@@ -15,6 +15,7 @@ export const DataProvider = ({ children }) => {
 
     const [sharedData, setSharedData] = useState('');
     const [filteredData, setFilteredData] = useState([])
+    const [datatriguserinfo,SetDataTrigUser]=useState('')
 
 
     useEffect(() => {
@@ -38,7 +39,7 @@ export const DataProvider = ({ children }) => {
     }, [sharedData, setSharedData]);
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData, filteredData, setFilteredData }}>
+        <DataContext.Provider value={{ sharedData, setSharedData, filteredData, setFilteredData,datatriguserinfo,SetDataTrigUser }}>
             {children}
         </DataContext.Provider>
     );

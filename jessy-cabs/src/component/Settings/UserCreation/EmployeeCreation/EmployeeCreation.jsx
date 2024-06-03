@@ -23,7 +23,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
-import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+import { faUnlockKeyhole,faMailBulk,faPhone} from "@fortawesome/free-solid-svg-icons";
 
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -170,6 +170,36 @@ const EmployeeCreation = ({ stationName }) => {
                   onChange={handleChange}
                 />
               </div>
+              <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="icone">
+                  <FontAwesomeIcon icon={faMailBulk} size="lg" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="user-mail"
+                  label="User Mail"
+                  name="email"
+                  value={book.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="input" style={{ paddingRight: '15px' }}>
+                    <div className="icone">
+                    <FontAwesomeIcon icon={faPhone} size="lg" />
+                    </div>
+                    <TextField
+                      type="number"
+                      size="small"
+                      id="mobile"
+                      label="Mobile"
+                      name="mobileno"
+                    
+                      value={book.mobileno}
+                      onChange={handleChange}
+                     
+                    />
+                  </div>
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />

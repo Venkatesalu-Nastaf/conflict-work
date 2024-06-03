@@ -26,7 +26,7 @@ import useUserinfo from "./useUserinfo";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 // FONTAWESOME
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { APIURL } from "../../url";
@@ -54,11 +54,11 @@ const UserSetting = () => {
     toggleEditMode,
     showPasswords,
     handleClickShowPasswords,
-    handleClickShowPassword,
-    handleMouseDownPassword,
+    // handleClickShowPassword,
+    // handleMouseDownPassword,
     handleUpload,
     handleMouseDownPasswords,
-    showPassword,
+    // showPassword,
     handleUpdate,
   } = useUserinfo();
 
@@ -151,7 +151,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input">
+                  {/* <div className="input">
                     <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
@@ -184,7 +184,7 @@ const UserSetting = () => {
                       autoFocus
                       disabled={!editMode}
                     />
-                  </div>
+                  </div> */}
                   <div className="input">
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />
@@ -257,7 +257,7 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
-                  <div className="input">
+                  {/* <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faLock} size="lg" />
                     </div>
@@ -296,7 +296,7 @@ const UserSetting = () => {
                         }
                       />
                     </FormControl>
-                  </div>
+                  </div> */}
                 </div>
                 {editMode ? (
                   <div className="input-field">

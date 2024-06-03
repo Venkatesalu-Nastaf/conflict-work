@@ -111,6 +111,9 @@ const BankAccount = () => {
                     value={book.bankname || ''}
                     onChange={handleChange}
                   />
+
+
+                  
                 </div>
                 <div className="input input-bankaccount">
                   <div className="icone">

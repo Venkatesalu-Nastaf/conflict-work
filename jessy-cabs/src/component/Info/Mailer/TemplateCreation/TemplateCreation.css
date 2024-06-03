@@ -90,7 +90,6 @@
     background-color: #fff;
     width: 100%;
     color: #000;
-    border-bottom: 1px solid #000;
 }
 
 @media only screen and (max-width:728px) {
@@ -224,4 +223,24 @@
 .cancel-popup-confirm-division {
     display: flex;
     justify-content: center;
+}
+
+.template-creation-document-main-division {
+    padding-left: 20px;
+}
+
+.template-creation-document-sub-division {
+    display: flex;
+    align-items: center;
+}
+
+.template-creation-document-text {
+    color: #000;
+    width: 260px;
+}
+
+@media screen and (max-width: 370px) {
+    .template-creation-document-text {
+        width: 230px;
+    }
 }

@@ -341,7 +341,7 @@ border-right: 1px solid transparent !important;
 .organisation-details-input-sub-division {
     display: flex;
     flex-wrap: wrap;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-between;
     width: 68vw;
     gap: 10px;

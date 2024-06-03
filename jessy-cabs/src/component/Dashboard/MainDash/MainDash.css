@@ -42,9 +42,10 @@
 
     .left-div {
         width: 52vw;
-        height: 93vh;
+        height: 88vh;
         overflow: auto;
         padding: 20px;
+        display: grid;
     }
 
     .right-div {

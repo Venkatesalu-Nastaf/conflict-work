@@ -47,6 +47,37 @@
   background-image: url('https://nastaf.com/themes/theme-8.jpg');
 }
 
+.dash-board.theme1 .live-driver-status-heading, .dash-board.theme1 .card-filter-label{
+  color: #242d49;
+}
+
+.dash-board.theme2 .live-driver-status-heading, .dash-board.theme2 .card-filter-label{
+  color: #fff;
+}
+
+.dash-board.theme3 .live-driver-status-heading, .dash-board.theme3 .card-filter-label{
+  color: #fff;
+}
+
+.dash-board.theme4 .live-driver-status-heading, .dash-board.theme4 .card-filter-label{
+  color: #fff;
+}
+
+.dash-board.theme5 .live-driver-status-heading, .dash-board.theme5 .card-filter-label{
+  color: #fff;
+}
+
+.dash-board.theme6 .live-driver-status-heading, .dash-board.theme6 .card-filter-label{
+  color: #242d49;
+}
+
+.dash-board.theme7 .live-driver-status-heading, .dash-board.theme7 .card-filter-label{
+  color: #242d49;
+}
+
+.dash-board.theme8 .live-driver-status-heading, .dash-board.theme8 .card-filter-label{
+  color: #fff;
+}
 
 .dash-board {
   color: var(--black);

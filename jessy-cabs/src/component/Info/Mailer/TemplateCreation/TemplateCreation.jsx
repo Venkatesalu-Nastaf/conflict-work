@@ -346,10 +346,10 @@ const TemplateCreation = () => {
           {editmode ?
             <>
               {imagedataedit.length > 0 && (
-                <div style={{ paddingLeft: '20px' }}>
+                <div className='template-creation-document-main-division'>
                   {imagedataedit.map((data, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                      <p style={{ color: '#000' }}>{data.templateimage || data.name}</p>
+                    <div className='template-creation-document-sub-division' key={index}>
+                      <p className='template-creation-document-text'>{data.templateimage || data.name}</p>
                       <Button onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
                     </div>
 
@@ -359,10 +359,10 @@ const TemplateCreation = () => {
             </> :
             <>
               {imagedata.length > 0 && (
-                <div style={{ paddingLeft: '20px' }}>
+                <div className='template-creation-document-main-division'>
                   {imagedata.map((data, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                      <p>{data.name}</p>
+                    <div className='template-creation-document-sub-division' key={index}>
+                      <p className='template-creation-document-text'>{data.name}</p>
                       <Button onClick={() => handleCancel(index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
                     </div>
                   ))}

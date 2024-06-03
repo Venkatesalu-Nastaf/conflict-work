@@ -168,7 +168,7 @@ const Cards = () => {
   return (
     <div className="cards-container">
       <div className="card-filter">
-        <label htmlFor="month">Select Month</label>
+        <label className="card-filter-label" htmlFor="month">Select Month</label>
         <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
           <option value="0">January</option>
           <option value="1">February</option>

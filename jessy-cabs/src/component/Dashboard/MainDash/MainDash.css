@@ -45,6 +45,7 @@
         height: 93vh;
         overflow: auto;
         padding: 20px;
+        display: grid;
     }
 
     .right-div {

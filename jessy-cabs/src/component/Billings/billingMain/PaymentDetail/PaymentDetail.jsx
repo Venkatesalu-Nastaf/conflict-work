@@ -221,6 +221,7 @@ const PaymentDetail = ({ organizationNames }) => {
       </form>
     </div>
   )
+
 }
 
 export default PaymentDetail

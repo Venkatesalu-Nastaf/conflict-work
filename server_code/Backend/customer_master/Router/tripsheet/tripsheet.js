@@ -9,8 +9,8 @@ const moment = require('moment');
 // add tripsheet database-------------------------------------------- 
 router.post('/tripsheet-add', (req, res) => {
 
-    const {
-        tripid,
+
+    const { tripid,
         bookingno,
         tripsheetdate,
         status,
@@ -29,9 +29,9 @@ router.post('/tripsheet-add', (req, res) => {
         department,
         vehRegNo,
         vehType,
+        Groups,
         driverName,
         mobileNo,
-        driversmsexbetta,
         gps,
         duty,
         pickup,
@@ -62,23 +62,32 @@ router.post('/tripsheet-add', (req, res) => {
         email1,
         remark,
         smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
         starttime2,
         closetime2,
         totaltime,
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
-
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        remark1,
+        escort,
+        transferreport,
+        minHour,
+        minKM,
+        calcPackage,
+        extraHR,
+        extraKM,
+        package_amount,
+        extrakm_amount,
+        extrahr_amount,
+        ex_kmAmount,
+        ex_hrAmount,
+        nightBta,
+        nightCount,
+        night_totalAmount,
+        driverBeta,
+        driverbeta_Count,
+        driverBeta_amount,
+        totalcalcAmount,
         nightThrs,
         dtc,
         dtc2,
@@ -87,39 +96,15 @@ router.post('/tripsheet-add', (req, res) => {
         exHrsTHrs2,
         netamount,
         vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
         discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
         selects,
         documenttype,
         on1,
         smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail } = req.body;
-
+        travelsname,
+        travelsemail,
+        vehicleName,
+        orderbyemail } = req.body
 
 
     const addCustomerData = {
@@ -142,9 +127,9 @@ router.post('/tripsheet-add', (req, res) => {
         department,
         vehRegNo,
         vehType,
+        Groups,
         driverName,
         mobileNo,
-        driversmsexbetta,
         gps,
         duty,
         pickup,
@@ -175,22 +160,32 @@ router.post('/tripsheet-add', (req, res) => {
         email1,
         remark,
         smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
         starttime2,
         closetime2,
         totaltime,
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        remark1,
+        escort,
+        transferreport,
+        minHour,
+        minKM,
+        calcPackage,
+        extraHR,
+        extraKM,
+        package_amount,
+        extrakm_amount,
+        extrahr_amount,
+        ex_kmAmount,
+        ex_hrAmount,
+        nightBta,
+        nightCount,
+        night_totalAmount,
+        driverBeta,
+        driverbeta_Count,
+        driverBeta_amount,
+        totalcalcAmount,
         nightThrs,
         dtc,
         dtc2,
@@ -199,44 +194,16 @@ router.post('/tripsheet-add', (req, res) => {
         exHrsTHrs2,
         netamount,
         vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
         discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
         selects,
         documenttype,
         on1,
         smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss,
-        Groups,
-        transferreport, travelsemail, travelsname, vechtype,orderbyemail
-    };
-
-
-
+        travelsname,
+        travelsemail,
+        vehicleName,
+        orderbyemail
+    }
 
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -252,7 +219,7 @@ router.post('/tripsheet-add', (req, res) => {
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
 
         if (err) {
-            s
+
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         if (result.affectedRows > 0) {
@@ -294,9 +261,231 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 
 // update tripsheet details------------------------------------------------
 router.put('/tripsheet-edit/:tripid', (req, res) => {
-    const tripid = req.params.tripid;
-    const {
+    // const tripid = req.params.tripid;
+    // const {
 
+    //     bookingno,
+    //     tripsheetdate,
+    //     status,
+    //     billingno,
+    //     apps,
+    //     customer,
+    //     orderedby,
+    //     mobile,
+    //     guestname,
+    //     guestmobileno,
+    //     email,
+    //     address1,
+    //     streetno,
+    //     city,
+    //     hireTypes,
+    //     department,
+    //     vehRegNo,
+    //     vehType,
+    //     driverName,
+    //     mobileNo,
+    //     driversmsexbetta,
+    //     gps,
+    //     duty,
+    //     pickup,
+    //     useage,
+    //     request,
+    //     startdate,
+    //     closedate,
+    //     totaldays,
+    //     employeeno,
+    //     reporttime,
+    //     starttime,
+    //     closetime,
+    //     additionaltime,
+    //     advancepaidtovendor,
+    //     customercode,
+    //     startkm,
+    //     closekm,
+    //     shedkm,
+    //     shedin,
+    //     shedout,
+    //     shedintime,
+    //     permit,
+    //     parking,
+    //     toll,
+    //     vpermettovendor,
+    //     vendortoll,
+    //     customeradvance,
+    //     email1,
+    //     remark,
+    //     smsguest,
+    //     documentnotes,
+    //     VendorTripNo,
+    //     vehicles,
+    //     duty1,
+    //     startdate1,
+    //     closedate1,
+    //     totaldays1,
+    //     locks,
+    //     starttime2,
+    //     closetime2,
+    //     totaltime,
+    //     startkm1,
+    //     closekm1,
+    //     totalkm1,
+    //     remark1, escort, minHour, minKM,
+    //     calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+    //     nightThrs,
+    //     dtc,
+    //     dtc2,
+    //     nightThrs2,
+    //     exkmTkm2,
+    //     exHrsTHrs2,
+    //     netamount,
+    //     vehcommission,
+    //     caramount1,
+    //     manualbills,
+    //     pack,
+    //     amount5,
+    //     exkm1,
+    //     amount6,
+    //     exHrs1,
+    //     amount7,
+    //     night1,
+    //     amount8,
+    //     driverconvenience1,
+    //     amount9,
+    //     rud,
+    //     netamount1,
+    //     discount,
+    //     ons,
+    //     manualbills1,
+    //     balance,
+    //     fcdate,
+    //     taxdate,
+    //     insdate,
+    //     stpermit,
+    //     maintenancetype,
+    //     kilometer,
+    //     selects,
+    //     documenttype,
+    //     on1,
+    //     smsgust,
+    //     emailcheck,
+    //     booker,
+    //     reload,
+    //     manualbillss, Groups, transferreport, travelsemail, travelsname, vehileName, orderbyemail } = req.body;
+
+    // const updatedCustomerData = {
+    //     bookingno,
+    //     tripsheetdate,
+    //     status,
+    //     billingno,
+    //     apps,
+    //     customer,
+    //     orderedby,
+    //     mobile,
+    //     guestname,
+    //     guestmobileno,
+    //     email,
+    //     address1,
+    //     streetno,
+    //     city,
+    //     hireTypes,
+    //     department,
+    //     vehRegNo,
+    //     vehType,
+    //     driverName,
+    //     mobileNo,
+    //     driversmsexbetta,
+    //     gps,
+    //     duty,
+    //     pickup,
+    //     useage,
+    //     request,
+    //     startdate,
+    //     closedate,
+    //     totaldays,
+    //     employeeno,
+    //     reporttime,
+    //     starttime,
+    //     closetime,
+    //     additionaltime,
+    //     advancepaidtovendor,
+    //     customercode,
+    //     startkm,
+    //     closekm,
+    //     shedkm,
+    //     shedin,
+    //     shedout,
+    //     shedintime,
+    //     permit,
+    //     parking,
+    //     toll,
+    //     vpermettovendor,
+    //     vendortoll,
+    //     customeradvance,
+    //     email1,
+    //     remark,
+    //     smsguest,
+    //     documentnotes,
+    //     VendorTripNo,
+    //     vehicles,
+    //     duty1,
+    //     startdate1,
+    //     closedate1,
+    //     totaldays1,
+    //     locks,
+    //     starttime2,
+    //     closetime2,
+    //     totaltime,
+    //     startkm1,
+    //     closekm1,
+    //     totalkm1,
+    //     remark1, escort, minHour, minKM,
+    //     calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+    //     nightThrs,
+    //     dtc,
+    //     dtc2,
+    //     nightThrs2,
+    //     exkmTkm2,
+    //     exHrsTHrs2,
+    //     netamount,
+    //     vehcommission,
+    //     caramount1,
+    //     manualbills,
+    //     pack,
+    //     amount5,
+    //     exkm1,
+    //     amount6,
+    //     exHrs1,
+    //     amount7,
+    //     night1,
+    //     amount8,
+    //     driverconvenience1,
+    //     amount9,
+    //     rud,
+    //     netamount1,
+    //     discount,
+    //     ons,
+    //     manualbills1,
+    //     balance,
+    //     fcdate,
+    //     taxdate,
+    //     insdate,
+    //     stpermit,
+    //     maintenancetype,
+    //     kilometer,
+    //     selects,
+    //     documenttype,
+    //     on1,
+    //     smsgust,
+    //     emailcheck,
+    //     booker,
+    //     reload,
+    //     manualbillss,
+    //     Groups,
+    //     transferreport, travelsemail, travelsname, vehileName, orderbyemail
+    // };
+
+
+    const { tripid,
         bookingno,
         tripsheetdate,
         status,
@@ -315,9 +504,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         department,
         vehRegNo,
         vehType,
+        Groups,
         driverName,
         mobileNo,
-        driversmsexbetta,
         gps,
         duty,
         pickup,
@@ -348,22 +537,32 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         email1,
         remark,
         smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
         starttime2,
         closetime2,
         totaltime,
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        remark1,
+        escort,
+        transferreport,
+        minHour,
+        minKM,
+        calcPackage,
+        extraHR,
+        extraKM,
+        package_amount,
+        extrakm_amount,
+        extrahr_amount,
+        ex_kmAmount,
+        ex_hrAmount,
+        nightBta,
+        nightCount,
+        night_totalAmount,
+        driverBeta,
+        driverbeta_Count,
+        driverBeta_amount,
+        totalcalcAmount,
         nightThrs,
         dtc,
         dtc2,
@@ -372,40 +571,19 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         exHrsTHrs2,
         netamount,
         vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
         discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
         selects,
         documenttype,
         on1,
         smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail } = req.body;
+        travelsname,
+        travelsemail,
+        vehicleName,
+        orderbyemail } = req.body
+
 
     const updatedCustomerData = {
+        tripid,
         bookingno,
         tripsheetdate,
         status,
@@ -424,9 +602,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         department,
         vehRegNo,
         vehType,
+        Groups,
         driverName,
         mobileNo,
-        driversmsexbetta,
         gps,
         duty,
         pickup,
@@ -457,22 +635,32 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         email1,
         remark,
         smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
         starttime2,
         closetime2,
         totaltime,
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        remark1,
+        escort,
+        transferreport,
+        minHour,
+        minKM,
+        calcPackage,
+        extraHR,
+        extraKM,
+        package_amount,
+        extrakm_amount,
+        extrahr_amount,
+        ex_kmAmount,
+        ex_hrAmount,
+        nightBta,
+        nightCount,
+        night_totalAmount,
+        driverBeta,
+        driverbeta_Count,
+        driverBeta_amount,
+        totalcalcAmount,
         nightThrs,
         dtc,
         dtc2,
@@ -481,41 +669,17 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         exHrsTHrs2,
         netamount,
         vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
         discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
         selects,
         documenttype,
         on1,
         smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss,
-        Groups,
-        transferreport, travelsemail, travelsname, vechtype,orderbyemail
-    };
+        travelsname,
+        travelsemail,
+        vehicleName,
+        orderbyemail
+    }
+
 
 
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
@@ -544,6 +708,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
     // const tripid = req.params.tripid;
     // const updatedCustomerData = req.body;
     const tripid = req.params.tripid;
+
     const {
 
         bookingno,
@@ -652,7 +817,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype,orderbyemail} = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vehileName, orderbyemail } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -763,8 +928,10 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport, travelsemail, travelsname, vechtype,orderbyemail
+        transferreport, travelsemail, travelsname, vehileName, orderbyemail
     };
+
+
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -870,8 +1037,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail,guestname, guestmobileno, email,vehType,bookingno,starttime,startdate,vehRegNo,driverName,mobileNo,status,servicestation} = req.body;
-        console.log(customeremail,guestname, guestmobileno, email,vehType,bookingno,starttime,startdate,vehRegNo,driverName,mobileNo,status,servicestation,"mail")
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation } = req.body;
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -888,14 +1054,14 @@ router.post('/send-tripsheet-email', async (req, res) => {
         });
         // Email content for the owner
 
-        if(status === "Cancelled"){
-       
-        // Email content for the customer
-        const customerMailOptions = {
-            from: 'foxfahad386@gmail.com',
-            to: `${email},${customeremail}`, 
-            subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
-            html: `
+        if (status === "Cancelled") {
+
+            // Email content for the customer
+            const customerMailOptions = {
+                from: 'foxfahad386@gmail.com',
+                to: `${email},${customeremail}`,
+                subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
+                html: `
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
                         <tr>
@@ -941,18 +1107,17 @@ router.post('/send-tripsheet-email', async (req, res) => {
 
         
           `,
+            }
+            // Send greeting email to the customer
+            await transporter.sendMail(customerMailOptions);
+            res.status(200).json({ message: 'Email sent successfully' });
         }
-        // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions);
-        res.status(200).json({ message: 'Email sent successfully' });
-    }
-    else
-    {
-        const customerMailOptions1 = {
-            from: 'foxfahad386@gmail.com',
-            to: `${email},${customeremail}`,
-            subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
-            html: `
+        else {
+            const customerMailOptions1 = {
+                from: 'foxfahad386@gmail.com',
+                to: `${email},${customeremail}`,
+                subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
+                html: `
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
@@ -1000,12 +1165,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
         
           `,
-        }
-        // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions1);
-        res.status(200).json({ message: 'Email sent successfully' });
+            }
+            // Send greeting email to the customer
+            await transporter.sendMail(customerMailOptions1);
+            res.status(200).json({ message: 'Email sent successfully' });
 
-    }
+        }
 
         // res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
@@ -1024,31 +1189,7 @@ router.get('/tripuploadcollect/:tripid', (req, res) => {
         return res.status(200).json(results);
     });
 });
-//end collect data
-// End tripsheet database
-//get data from ratemanagement for package database
-// router.get('/getPackageDetails', (req, res) => {
-//     const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
 
-//     const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
-//     const params = [vehType, customer, duty, totaltime, totalkm1];
-
-//     db.query(query, params, (err, result) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
-//         }
-//         // Check if there are matching records
-//         if (result.length > 0) {
-//             // Send the matching records as a response
-//             return res.status(200).json(result);
-//         } else {
-//             // No matching records found
-//             return res.status(404).json({ message: 'No matching records found' });
-//         }
-//     });
-// });
-//end package database
-//for map database
 router.post('/gmap-submitForm', (req, res) => {
     const date = req.body.date;
     const time = req.body.time;

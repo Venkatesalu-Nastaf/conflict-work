@@ -502,7 +502,7 @@ const useTripsheet = () => {
                 };
                 await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
-                setSendEmail(false)
+                // setSendEmail(false)
             } catch {
                 alert('An error occurred while sending the email');
             }
@@ -614,20 +614,21 @@ const useTripsheet = () => {
                 }
 
                 await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-                handleCancel();
+                // handleCancel();
                 setShedKilometers("")
                 setAdditionalTime("")
 
                 setRow([]);
                 setRows([]);
                 if (sendEmail) {
-                    handlecheck();
+                   await handlecheck();
                 }
 
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
                 setSuccess(true);
+                handleCancel();
                 setSuccessMessage("Successfully updated");
             } catch {
                 setError(true);
@@ -1338,15 +1339,13 @@ const useTripsheet = () => {
             try {
                 const dataSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-                    driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                    address1:formData.address1 || selectedCustomerData.address1  || formValues.address1 || selectedCustomerDatas.address1  || book.address1  || '',
+
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
-                    vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
-                    ofclanno: '044-49105959',
                 };
 
                 const response = await fetch(`${apiUrl}/tripdriver-send-sms`, {

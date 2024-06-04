@@ -1228,12 +1228,15 @@ router.get(`/t4hr-pack`, (req, res) => {
     // Extract dynamic inputs from query parameters
     const totalHours = req.query.totalHours;
     // const vehicletype = req.query.vehicletype;
-    const vehicletype = "AUDI A6";
+    const VehicleName = req.query.vehicleName;
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
 
-    if (!totalHours || !vehicletype || !duty || !totkm || !OrganizationName) {
+    console.log("1", totalHours, "2", VehicleName, "3", duty, "4", totkm, "5", OrganizationName)
+    // console.log(req.query)
+
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1241,18 +1244,14 @@ router.get(`/t4hr-pack`, (req, res) => {
     const sql = `SELECT * 
                     FROM ratemanagement
                     WHERE duty = ?
-                        AND vehicleType = ?
+                        AND VehicleName = ?
                         AND OrganizationName =?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND vehicleType = ? AND OrganizationName =?))
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
                     ORDER BY UptoHours 
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, vehicletype, OrganizationName, totalHours, totkm, duty, vehicletype, OrganizationName], (error, results) => {
-        if (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-
+    db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });

@@ -109,11 +109,14 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
       );
     }
 
+
+
+    
     // Update user details
    await db.query(
       'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
       [username, stationname, designation, organizationname, userpassword, active,mobileno,email,userid]
-    );
+    ); 
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {

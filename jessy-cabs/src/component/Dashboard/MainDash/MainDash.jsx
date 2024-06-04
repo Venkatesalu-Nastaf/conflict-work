@@ -3,7 +3,7 @@ import "./MainDash.css";
 import RightSide from "./RightSide/RightSide";
 import Cards from "./Cards/Cards";
 import Table from "./Table/Table";
-const MainDash = () => {
+const MainDash = ({stationName}) => {
 
   const [isBelow768px, setIsBelow768px] = useState(false);
   useEffect(() => {
@@ -27,7 +27,7 @@ const MainDash = () => {
             <Cards />
             <Table />
           </div>
-          <RightSide />
+          <RightSide  stationName={stationName} />
         </div>
       ) : (
         <>
@@ -48,7 +48,7 @@ const MainDash = () => {
                 <Table />
               </div>
               <div className="right-div">
-                <RightSide />
+                <RightSide  stationName={stationName} />
               </div>
             </div>
           </div>

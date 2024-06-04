@@ -253,13 +253,9 @@ const useTripsheet = () => {
     }, [error, success, warning, info]);
 
 
-    const [request, setRequest] = useState("");
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const request = params.get('request') || "";
-        setRequest(request);
-
 
         //calc---------------
         const calcPackage = params.get('calcPackage');
@@ -470,7 +466,6 @@ const useTripsheet = () => {
         setPackageDetails({});
         setIsEditMode(false);
         calcCancel();
-        setRequest("");
         setCalcCheck(false);
         setEscort("No");
         setMinHour();
@@ -558,7 +553,6 @@ const useTripsheet = () => {
 
 
     const handleEdit = async () => {
-
         try {
             try {
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
@@ -602,10 +596,10 @@ const useTripsheet = () => {
                     pack: packageDetails[0]?.package,
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
-                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request, escort, minHour, minKM, transferreport
+                    vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport
 
                 };
-
 
                 for (const key in updatedCustomer) {
                     if (key === '0') {
@@ -621,7 +615,7 @@ const useTripsheet = () => {
                 setRow([]);
                 setRows([]);
                 if (sendEmail) {
-                   await handlecheck();
+                    await handlecheck();
                 }
 
                 setSendEmail(true)
@@ -720,19 +714,50 @@ const useTripsheet = () => {
 
     const handleAdd = async () => {
 
-        const customer = book.customer || formData.customer;
+        const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
         const driverName = selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName;
         const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
         const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
-
-
-        if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo || !Email) {
+        // const
+        if (!customer) {
             setError(true);
-            setErrorMessage("Please fill all mandatory fields");
+            setErrorMessage("Please fill customer field");
             return;
         }
+        if (!vehRegNo) {
+            setError(true);
+            setErrorMessage("Please fill vehRegNo field");
+            return;
+        }
+        if (!vehType) {
+            setError(true);
+            setErrorMessage("Please fill vehType field");
+            return;
+        }
+        if (!driverName) {
+            setError(true);
+            setErrorMessage("Please fill driverName field");
+            return;
+        }
+        if (!mobileNo) {
+            setError(true);
+            setErrorMessage("Please fill mobileNo field");
+            return;
+        }
+        if (!Email) {
+            setError(true);
+            setErrorMessage("Please fill Email field");
+            return;
+        }
+
+
+        // if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo || !Email) {
+        //     setError(true);
+        //     setErrorMessage("Please fill all mandatory fields");
+        //     return;
+        // }
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
             const updatedBook = {
@@ -783,12 +808,14 @@ const useTripsheet = () => {
                 vendortoll: book.vendortoll,
                 vpermettovendor: book.vpermettovendor,
                 driverName: driverName,
+                request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
+                vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                 vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                 Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
                 hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                 mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-                request, escort, minHour, minKM, transferreport,
+                escort, minHour, minKM, transferreport,
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
@@ -813,6 +840,10 @@ const useTripsheet = () => {
             [name]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
+        setSelectedCustomerDatas((prevData) => ({
             ...prevData,
             [name]: selectedOption,
         }));
@@ -905,7 +936,7 @@ const useTripsheet = () => {
 
 
     const calculateTotalTime = () => {
-        const shedoutTime = book?.starttime || formData?.starttime || '';
+        const shedoutTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
 
         const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
 
@@ -1032,7 +1063,7 @@ const useTripsheet = () => {
 
     const calculateTotalKilometers = () => {
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
-        const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
+        const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
 
         if (startKm !== undefined && closeKm !== undefined) {
             let totalKm = parseInt(closeKm) - parseInt(startKm);
@@ -1245,7 +1276,7 @@ const useTripsheet = () => {
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
 
                             //---------------------------
-                            setRequest(bookingDetails.request)
+
                             setEscort(bookingDetails.escort)
                             setTransferreport(bookingDetails.transferreport)
                             //----------
@@ -1290,10 +1321,9 @@ const useTripsheet = () => {
         setSelectedCustomerDatas(params);
         handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
+        handleChange({ target: { name: "vehType", value: params.vehType } })
     };
 
-
-    // const [smsguest, setSmsGuest] = useState(false);
 
     const handleSendSMS = async () => {
         if (smsguest || formData.smsguest || book.smsguest) {
@@ -1339,7 +1369,7 @@ const useTripsheet = () => {
             try {
                 const dataSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-                    address1:formData.address1 || selectedCustomerData.address1  || formValues.address1 || selectedCustomerDatas.address1  || book.address1  || '',
+                    address1: formData.address1 || selectedCustomerData.address1 || formValues.address1 || selectedCustomerDatas.address1 || book.address1 || '',
 
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -1515,18 +1545,6 @@ const useTripsheet = () => {
 
 
 
-    // ayyanar bill calc------------------------------------------------------------------
-
-    // convert time into minutes     
-    // function convertTimeToNumber(timeString) {
-
-    //     const [hours, minutes] = timeString.split('h').map(str => parseInt(str));  // Split the time string into hours and minutes
-
-    //     // Calculate the total minutes
-    //     const totalMinutes = (hours * 60) + (minutes || 0); // if no minutes provided, consider it as 0
-
-    //     return totalMinutes;
-    // }
 
     //-----------------------------------------------extra amounts 
 
@@ -1643,78 +1661,73 @@ const useTripsheet = () => {
         setdriverbeta_Count();
         setdriverBeta_amount();
         setTotalcalcAmount();
-
-
     }
-
-
 
     // calc function
 
-    let data, totkm, tothr, totalHours, duty, vehiletype, organizationname;
+    let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname;
     const handleCalc = async () => {
         try {
 
             duty = formData.duty || selectedCustomerData.duty || book.duty;
-            vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+            vehicleNames = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
             totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
             organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
 
-            if (!totkm || !tothr || !duty || !vehiletype || !organizationname) {
+
+            if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {
                 setError(true);
                 setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
                 return;
-
-            } else {
-
-                totalHours = await convertTimeToNumber(tothr);
-                const consvertedTotalHour = parseFloat(totalHours.toFixed(2))
-
-                const response = await axios.get(`${apiUrl}/t4hr-pack`, {
-                    params: {
-                        totkm: totkm,
-                        totalHours: totalHours,
-                        duty: duty,
-                        vehicletype: vehiletype,
-                        organizationname: organizationname,
-                    }
-                });
-                data = response.data;
-
-                const packages = data.package;
-                const Hours = Number(data.Hours);
-                const KMS = Number(data.KMS);
-                const Rate = Number(data.Rate);
-                const extraHours = Number(data.extraHours);
-                const extraKMS = Number(data.extraKMS);
-                const NHalt = Number(data.NHalt);
-                const Bata = Number(data.Bata);
-
-                if (consvertedTotalHour > Hours) {
-
-                    let time = consvertedTotalHour - Hours;
-                    const convertedTime = Number(time.toFixed(2))
-                    setExtraHR(convertedTime);
-                }
-
-                if (totkm > KMS) {
-                    let KM = (Number(totkm) - Number(KMS))
-                    setExtraKM(KM);
-                }
-
-                setcalcPackage(packages);
-                setpackage_amount(Rate);
-                setextrakm_amount(extraKMS);
-                setextrahr_amount(extraHours);
-                setNightBeta(NHalt);
-                setdriverBeta(Bata);
-
-                setMinHour(Hours);
-                setMinKM(KMS);
-
             }
 
+            totalHours = await convertTimeToNumber(tothr);
+            const consvertedTotalHour = parseFloat(totalHours.toFixed(2))
+
+            const response = await axios.get(`${apiUrl}/t4hr-pack`, {
+                params: {
+                    totkm: totkm,
+                    totalHours: totalHours,
+                    duty: duty,
+                    vehicleName: vehicleNames,
+                    organizationname: organizationname,
+                }
+            });
+            data = response.data;
+
+            const packages = data.package;
+            const Hours = Number(data.Hours);
+            const KMS = Number(data.KMS);
+            const Rate = Number(data.Rate);
+            const extraHours = Number(data.extraHours);
+            const extraKMS = Number(data.extraKMS);
+            const NHalt = Number(data.NHalt);
+            const Bata = Number(data.Bata);
+
+            if (consvertedTotalHour > Hours) {
+
+                let time = consvertedTotalHour - Hours;
+                const convertedTime = Number(time.toFixed(2))
+                setExtraHR(convertedTime);
+            }
+
+            if (totkm > KMS) {
+                let KM = (Number(totkm) - Number(KMS))
+                setExtraKM(KM);
+            }
+
+            handleClickOpen() // for calc pop up
+
+            setcalcPackage(packages);
+            setpackage_amount(Rate);
+            setextrakm_amount(extraKMS);
+            setextrahr_amount(extraHours);
+            setNightBeta(NHalt);
+            setdriverBeta(Bata);
+
+            setMinHour(Hours);
+            setMinKM(KMS);
         }
         catch (err) {
 
@@ -1742,7 +1755,7 @@ const useTripsheet = () => {
             const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
             const data = response.data;
             const name = data?.map((res) => res.vehicleName)
-            console.log("names ", name)
+
             setVehicleNames(name)
         }
         getvehicleName()
@@ -1765,12 +1778,12 @@ const useTripsheet = () => {
     const handleClickOpen = async () => {
 
         duty = formData.duty || selectedCustomerData.duty || book.duty;
-        vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+        vehicleNames = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
         totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
         tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
         organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
 
-        if (!totkm || !tothr || !duty || !vehiletype || !organizationname) {
+        if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {
             setError(true);
             setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
             return;
@@ -1907,7 +1920,7 @@ const useTripsheet = () => {
         handleEdit,
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount, request, setRequest, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails,
+        setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails,
 
 
 

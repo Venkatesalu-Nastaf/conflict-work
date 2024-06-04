@@ -397,7 +397,7 @@ const Vehicaleinfo = ({ stationName }) => {
                             <th className="table-head-booking">Owner</th>
                             <th className="table-head-booking">Vehicle_Type</th>
                             <th className="table-head-booking">status</th>
-                            <th className="table-head-booking vehicle-info-table-heading-first">Group</th>
+                            <th className="table-head-booking vehicle-info-table-heading-last">Group</th>
                           </tr>
                         </thead>
                         <tbody>

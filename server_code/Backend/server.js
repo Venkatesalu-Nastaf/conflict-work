@@ -29,7 +29,7 @@ const upload2 = multer({
 })
 
 app.get('/', (req, res) => {
-  return res.json({ message: "Hello from the backend side" });
+  return res.json({ message: "Hello from the bac  nd side" });
 });
 
 //connect using route

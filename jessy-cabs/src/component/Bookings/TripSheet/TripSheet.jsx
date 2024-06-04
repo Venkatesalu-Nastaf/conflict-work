@@ -167,7 +167,7 @@ const TripSheet = ({ stationName }) => {
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileNames,
+    selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,
     rows, handleKeyEnterDriverDetails,
     actionName,
     error,
@@ -586,8 +586,8 @@ const TripSheet = ({ stationName }) => {
                             <tr key={row.id} onClick={() => handleRowClick(row)}>
                               <td>{row.driverName}</td>
                               <td>{row.mobileNo}</td>
-                              <td>{row.vehiclename}</td>
                               <td>{row.vehicleName}</td>
+                              <td>{row.vechtype}</td>
                               <td>{row.vehRegNo}</td>
                               <td>{row.hiretypes}</td>
                               <td>{row.Groups}</td>
@@ -628,7 +628,6 @@ const TripSheet = ({ stationName }) => {
                         }
                       />
                     </div>
-
                     <div className="input">
                       <div className="icone">
                         <AltRouteIcon color="action" />
@@ -684,7 +683,7 @@ const TripSheet = ({ stationName }) => {
                           label: option?.Option,
                         }))}
                         onChange={(event, value) =>
-                          handleAutocompleteChange(event, value, "vehiclemodule")
+                          handleAutocompleteChange(event, value, "vehType")
                         }
                         renderInput={(params) => {
                           return (
@@ -693,25 +692,24 @@ const TripSheet = ({ stationName }) => {
                         }}
                       />
                     </div>
-
                     <div className="input">
                       <div className="icone">
                         <NoCrashIcon color="action" />
                       </div>
+                      {console.log("0", selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName)}
                       <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-vehileName"
                         freeSolo
                         sx={{ width: "100%" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
                         value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
                         }))}
-                        getOptionLabel={(option) => option.label || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || selectedCustomerDatas.vehicleName || packageData.vehicleName || book.vehicleName || ''}
                         renderInput={(params) => (
-                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehileName" inputRef={params.inputRef} />
+                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
                         )}
                       />
 
@@ -951,9 +949,9 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     size="small"
-                    name="Request"
-                    value={request || ''}
-                    onChange={(e) => { setRequest(e.target.value) }}
+                    name="request"
+                    value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
+                    onChange={handleChange}
                     label="Request"
                     id="request"
                     autoComplete="password"
@@ -1067,7 +1065,7 @@ const TripSheet = ({ stationName }) => {
                       type="time"
                       id="starttime"
                       name='starttime'
-                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                       onChange={(event) => {
                         setBook({ ...book, starttime: event.target.value });
                         setStartTime(event.target.value);
@@ -1142,7 +1140,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="shedout"
-                    value={formData.shedout || book.shedout || selectedCustomerData.shedout || ''}
+                    value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
                     onChange={handleChange}
                     label="Shed Out"
                     id="shedout"
@@ -1157,7 +1155,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="startkm"
-                    value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
+                    value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
                     onChange={handleChange}
                     size="small"
                     label="Start KM"
@@ -1187,7 +1185,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="shedin"
-                    value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
+                    value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
                     onChange={handleChange}
                     label="Shed In"
                     type="number"
@@ -1219,7 +1217,8 @@ const TripSheet = ({ stationName }) => {
 
                     // ayyanar total km
                     name="totalkm1"
-                    value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
+                    // value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
+                    value={calculateTotalKilometers() || ''}
                     onChange={handleChange}
                     label="Total KM"
                     id="totalkm1"
@@ -1304,7 +1303,7 @@ const TripSheet = ({ stationName }) => {
                   <Button variant="contained"
                     onClick={() => {
                       handleCalc();
-                      handleClickOpen();
+                      // handleClickOpen();
                     }}
                   >
                     calculate
@@ -1823,7 +1822,8 @@ const TripSheet = ({ stationName }) => {
                   <Tab>GPS Att</Tab>
                   <Tab>Message</Tab>
                 </TabList>
-                <TabPanel value={0} sx={{ p: 2 }}>
+
+                {/* <TabPanel value={0} sx={{ p: 2 }}>
                   <div className="Customer-Booking-Slider">
                     <div className="input-field table-input-field">
                       <div className="input">
@@ -1919,6 +1919,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
                   </div>
                 </TabPanel>
+
                 <TabPanel value={1} sx={{ p: 2 }}>
                   <div className="Customer-Vendor-Info-Slider">
                     <div className="input-field">
@@ -2055,7 +2056,7 @@ const TripSheet = ({ stationName }) => {
                         <input
                           type="time"
                           id="closetime2"
-                          value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                          value={formData.closetime || selectedCustomerData.closetime || book.closetime || selectedCustomerData.closetime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
@@ -2152,6 +2153,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
                   </div>
                 </TabPanel>
+
                 <TabPanel value={2} sx={{ p: 2 }}>
                   <div className="Customer-Vendor-Bill-Slider">
                     <div className="input-field">
@@ -2443,7 +2445,8 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                   </div>
-                </TabPanel>
+                </TabPanel> */}
+
                 <TabPanel value={3} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
@@ -2451,17 +2454,10 @@ const TripSheet = ({ stationName }) => {
                         <div className="icone">
                           <Inventory2Icon color="action" />
                         </div>
-                        {/* ayyanar */}
-                        {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
-
-
 
                         <TextField
                           name="pack"
-                          // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
                           value={calcPackage || formData.calcPackage || ''}
-                          // onChange={handleChange}
-
                           label="Pack"
                           id="pack"
                           size="small"
@@ -2476,9 +2472,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount5"
-                          // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
                           value={package_amount || formData.calcPackage || ''}
-                          // onChange={handleChange}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -2494,8 +2488,6 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="exkm1"
-                          // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
-                          // onChange={handleChange} 
                           value={extraKM || formData.calcPackage || 0}
                           label="Ex.Km"
                           id="ex-km"
@@ -2510,9 +2502,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField size="small"
                           name='exkmTkm2'
-                          // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
                           value={extrakm_amount || formData.calcPackage || ''}
-                          // onChange={handleChange}
                           id="exkmTkm"
                           variant="standard"
                           autoComplete="password"
@@ -2524,7 +2514,6 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount6"
-                          // value={book.amount6 || calculateExkmAmount2() || ''}
                           value={ex_kmAmount || formData.calcPackage || 0}
                           size="small"
                           label="Amount"
@@ -2542,9 +2531,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="exHrs1"
-                          // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
                           value={extraHR || formData.calcPackage || ''}
-                          // onChange={handleChange}
                           label="Ex.Hrs"
                           id="ex-Hrs"
                           size="small"
@@ -2559,13 +2546,9 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='exHrsTHrs2'
-                          // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
                           value={extrahr_amount || formData.calcPackage || ''}
-                          // onChange={handleChange}
                           variant="standard"
                         />
-
-                        {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
 
                       </div>
                       <div className="input">
@@ -2574,8 +2557,6 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount7"
-                          // value={book.amount7 || calculateExHrsAmount2() || ''}
-                          // onChange={caculate_extraHR}
                           value={ex_hrAmount || formData.calcPackage || 0}
                           size="small"
                           label="Amount"
@@ -2694,7 +2675,8 @@ const TripSheet = ({ stationName }) => {
                     </div>
                   </div>
                 </TabPanel>
-                <TabPanel value={4} sx={{ p: 2 }}>
+
+                {/* <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Alert-Slider">
                     <div className="input-field">
                       <div className="input">
@@ -2846,7 +2828,8 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                   </div>
-                </TabPanel>
+                </TabPanel> */}
+
                 <TabPanel value={5} sx={{ p: 2 }}>
                   <div className="Customer-Gps-att-Slider">
                     <div className="input-field">
@@ -2993,6 +2976,7 @@ const TripSheet = ({ stationName }) => {
                     </Dialog>
                   </div>
                 </TabPanel>
+
                 <TabPanel value={6} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
@@ -3018,6 +3002,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
                   </div>
                 </TabPanel>
+
               </Tabs>
             </div>
 

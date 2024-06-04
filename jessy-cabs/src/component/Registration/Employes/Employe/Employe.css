@@ -160,3 +160,33 @@
   top: -19px;
   z-index: 5;
 }
+
+.employee-licence-no-input-division {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.employee-file-upload-division {
+  padding-left: 20px;
+}
+
+.registration-employee-table {
+  height: 400px;
+  width: 100%;
+}
+
+.employee-dialogbox-div1,
+.employee-dialogbox-div2 {
+  position: relative;
+}
+
+.employee-dialogbox-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}

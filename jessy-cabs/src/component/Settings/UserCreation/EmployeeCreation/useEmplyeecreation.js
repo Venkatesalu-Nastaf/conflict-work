@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+// import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
 const useEmplyeecreation = () => {
@@ -9,7 +10,7 @@ const useEmplyeecreation = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -167,6 +168,8 @@ const useEmplyeecreation = () => {
     const [book, setBook] = useState({
         userid: '',
         username: '',
+        email: '',
+        mobileno: '',
         stationname: '',
         designation: '',
         organizationname: '',
@@ -191,9 +194,9 @@ const useEmplyeecreation = () => {
                 [name]: value,
             }));
 
-            if (name === 'userpassword') {
-                setPassword(value);
-            }
+            // if (name === 'userpassword') {
+            //     setPassword(value);
+            // }
         }
     };
 
@@ -214,6 +217,8 @@ const useEmplyeecreation = () => {
             ...prevBook,
             userid: '',
             username: '',
+            email: '',
+            mobileno: '',
             stationname: '',
             designation: '',
             organizationname: '',
@@ -236,6 +241,9 @@ const useEmplyeecreation = () => {
         const designation = book.designation;
         const organisation = book.organizationname
         const active = book.active
+        const email = book.email
+        const mobileno = book.mobileno
+        const password = book.userpassword
 
         if (!password) {
             setError(true);
@@ -246,6 +254,16 @@ const useEmplyeecreation = () => {
         if (!username) {
             setError(true);
             setErrorMessage("Fill UserName..");
+            return;
+        }
+        if (!email) {
+            setError(true);
+            setErrorMessage("Fill Email");
+            return;
+        }
+        if (!mobileno) {
+            setError(true);
+            setErrorMessage("Fill Mobileno");
             return;
         }
 
@@ -300,8 +318,12 @@ const useEmplyeecreation = () => {
             const designation = book.designation;
             const organisation = book.organizationname
             const active = book.active
+            const email = book.email
+            const mobileno = book.mobileno
+            const password = book.userpassword
 
-            console.log("NASTAF Technologies", branchName, "book", book)
+
+            // console.log("NASTAF Technologies", branchName, "book", book)
 
             if (!password) {
                 setError(true);
@@ -312,6 +334,16 @@ const useEmplyeecreation = () => {
             if (!username) {
                 setError(true);
                 setErrorMessage("Fill UserName..");
+                return;
+            }
+            if (!email) {
+                setError(true);
+                setErrorMessage("Fill Email..");
+                return;
+            }
+            if (!mobileno) {
+                setError(true);
+                setErrorMessage("Fill Mobile..");
                 return;
             }
 
@@ -342,6 +374,7 @@ const useEmplyeecreation = () => {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
+            // console.log(data)
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             setSuccess(true);
@@ -476,7 +509,7 @@ const useEmplyeecreation = () => {
 
     const handleRowClickUser = async (params) => {
         setBook(params)
-        console.log("params", params    )
+        console.log("params", params)
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {

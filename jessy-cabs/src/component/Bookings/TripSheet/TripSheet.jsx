@@ -167,7 +167,7 @@ const TripSheet = ({ stationName }) => {
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileName,
+    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileNames,
     rows, handleKeyEnterDriverDetails,
     actionName,
     error,
@@ -284,6 +284,7 @@ const TripSheet = ({ stationName }) => {
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
+
                   <TextField
                     margin="normal"
                     size="small"
@@ -305,7 +306,7 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     margin="normal"
                     size="small"
-                    id="bookingid"
+                    id="bookingno"
                     label="Booking ID"
                     name="bookingno"
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
@@ -320,6 +321,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      id="tripsheetdate"
                       value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
                       format="DD/MM/YYYY"
                       label='Tripsheet Date'
@@ -340,7 +342,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-Status"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
@@ -382,7 +384,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-apps"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
@@ -408,7 +410,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
                     onChange={handleChange}
                     label="Customer"
-                    id="standard-size-normal"
+                    id="standard-size-customer"
                     variant="standard"
                     required
                     autoComplete="password"
@@ -423,7 +425,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
                     label="Ordered By"
-                    id="standard-size-normal"
+                    id="standard-size-orderedby"
                     variant="standard"
                     autoComplete="password"
                     required
@@ -445,6 +447,7 @@ const TripSheet = ({ stationName }) => {
 
                   <FormControlLabel
                     value="email"
+                    id="email"
                     control={
                       <Checkbox
                         size="small"
@@ -465,7 +468,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                     onChange={handleChange}
                     label="Mobile"
-                    id="standard-size-normal"
+                    id="standard-size-mobile"
                     size="small"
                     autoComplete="password"
                     required
@@ -478,7 +481,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     margin="normal"
-                    id="username"
+                    id="guestname"
                     label="Guest Name"
                     name="guestname"
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
@@ -497,7 +500,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
                     label="Phone (Cell)"
-                    id="Phonecell"
+                    id="guestmobileno"
                     size="small"
                     autoComplete="password"
                   />
@@ -545,7 +548,7 @@ const TripSheet = ({ stationName }) => {
                     </div>
                     <TextField
                       margin="normal"
-                      id="streetname"
+                      id="address1"
                       label="Address"
                       name="address1"
                       multiline
@@ -584,7 +587,7 @@ const TripSheet = ({ stationName }) => {
                               <td>{row.driverName}</td>
                               <td>{row.mobileNo}</td>
                               <td>{row.vehiclename}</td>
-                              <td>{row.vechtype}</td>
+                              <td>{row.vehicleName}</td>
                               <td>{row.vehRegNo}</td>
                               <td>{row.hiretypes}</td>
                               <td>{row.Groups}</td>
@@ -608,7 +611,7 @@ const TripSheet = ({ stationName }) => {
                       <Autocomplete
                         fullWidth
                         size="small"
-                        id="free-solo-demo"
+                        id="free-solo-hireTypes"
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
@@ -654,7 +657,7 @@ const TripSheet = ({ stationName }) => {
                       <TextField
                         margin="normal"
                         size="small"
-                        id="vehiclerigsterno"
+                        id="vehRegNo"
                         label="Vehicle Rigster No"
                         name="vehRegNo"
                         value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
@@ -662,20 +665,20 @@ const TripSheet = ({ stationName }) => {
                         autoComplete="password"
                       />
                     </div>
-
                     <div className="input">
                       <div className="icone">
                         <PiCarSimpleFill color="action" />
                       </div>
+
                       <Autocomplete
                         fullWidth
-                        id="free-solo-demo"
+                        id="free-solo-vehType"
                         freeSolo
                         size="small"
                         value={
-                          selectedCustomerDatas.vechtype || formData.vechtype ||
-                          selectedCustomerData.vechtype ||
-                          book.vechtype || ""
+                          selectedCustomerDatas.vehType || formData.vehType ||
+                          selectedCustomerData.vehType ||
+                          book.vehType || ""
                         }
                         options={vehicaleinfos?.map((option) => ({
                           label: option?.Option,
@@ -685,7 +688,7 @@ const TripSheet = ({ stationName }) => {
                         }
                         renderInput={(params) => {
                           return (
-                            <TextField {...params} name='vechtype' label="Vehicle Type" inputRef={params.inputRef} />
+                            <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
                           );
                         }}
                       />
@@ -698,17 +701,17 @@ const TripSheet = ({ stationName }) => {
                       <Autocomplete
                         fullWidth
                         size="small"
-                        id="free-solo-demo"
+                        id="free-solo-vehileName"
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                        value={selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType || ''}
-                        options={vehileName?.map((option) => ({
+                        value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
+                        options={vehileNames?.map((option) => ({
                           label: option,
                         }))}
-                        getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehiclename || packageData.vehType || book.vehType || ''}
+                        getOptionLabel={(option) => option.label || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || selectedCustomerDatas.vehicleName || packageData.vehicleName || book.vehicleName || ''}
                         renderInput={(params) => (
-                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehileName" inputRef={params.inputRef} />
                         )}
                       />
 
@@ -721,7 +724,7 @@ const TripSheet = ({ stationName }) => {
                       </div>
                       <Autocomplete
                         fullWidth
-                        id="free-solo-demo"
+                        id="free-solo-Groups"
                         freeSolo
                         size="small"
                         value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
@@ -741,14 +744,13 @@ const TripSheet = ({ stationName }) => {
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
-                      {/* {console.log("hello jsx", selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName)} */}
                       <TextField
                         name="driverName"
                         className='full-width'
                         value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
                         onChange={handleChange}
                         label="Driver Name"
-                        id="drivername"
+                        id="driverName"
                         variant="standard"
                         autoComplete="password"
                         onKeyDown={handleKeyEnterDriverDetails}
@@ -765,7 +767,7 @@ const TripSheet = ({ stationName }) => {
                         value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
                         onChange={handleChange}
                         label="Cell"
-                        id="cell"
+                        id="mobileNo"
                         variant="standard"
                         autoComplete="password"
                       />
@@ -801,7 +803,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-department"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
@@ -824,7 +826,7 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
+                    id="free-Groups_solo-"
                     freeSolo
                     size="small"
                     value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
@@ -861,7 +863,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-email1"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
@@ -887,7 +889,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-duty"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
@@ -911,7 +913,7 @@ const TripSheet = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo"
+                    id="free-solo-pickup"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
@@ -939,7 +941,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
-                    id="usage"
+                    id="useage"
                     autoComplete="password"
                   />
                 </div>
@@ -951,7 +953,6 @@ const TripSheet = ({ stationName }) => {
                     size="small"
                     name="Request"
                     value={request || ''}
-                    // onChange={handleChange}
                     onChange={(e) => { setRequest(e.target.value) }}
                     label="Request"
                     id="request"
@@ -969,7 +970,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
                     label="Customer Code"
-                    id="customer-code"
+                    id="customer-customercode"
                     autoComplete="password"
                   />
                 </div>
@@ -981,6 +982,7 @@ const TripSheet = ({ stationName }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Start Date"
+                      id="startdate"
                       value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'startdate')}
@@ -998,6 +1000,7 @@ const TripSheet = ({ stationName }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Close Date"
+                      id="closedate"
                       value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'closedate')}
@@ -1019,7 +1022,7 @@ const TripSheet = ({ stationName }) => {
                       label="Total Days"
                       size="small"
                       type="number"
-                      id="total-days"
+                      id="totaldays"
                       variant="standard"
                       autoComplete="password"
                     />
@@ -1049,7 +1052,7 @@ const TripSheet = ({ stationName }) => {
                     name="advancepaidtovendor"
                     value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
                     onChange={handleChange}
-                    label="Advance-Paid-To-Vendor"
+                    label="advancepaidtovendor"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
                   />
@@ -1062,6 +1065,7 @@ const TripSheet = ({ stationName }) => {
                     <label>shed out Time</label>
                     <input
                       type="time"
+                      id="starttime"
                       name='starttime'
                       value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                       onChange={(event) => {
@@ -1115,11 +1119,12 @@ const TripSheet = ({ stationName }) => {
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div className='input-type-grid'>
+                  <div className='closetime'>
                     <label>Shed-In Time</label>
                     <input
                       type="time"
                       name="closetime"
+                      id="closetime"
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
@@ -1157,7 +1162,7 @@ const TripSheet = ({ stationName }) => {
                     size="small"
                     label="Start KM"
                     type="number"
-                    id="outlined-start-adornment"
+                    id="startkm"
                     autoComplete="password"
                   />
                 </div>
@@ -1172,7 +1177,7 @@ const TripSheet = ({ stationName }) => {
                     label="Close KM"
                     size="small"
                     type="number"
-                    id="outlined-start-adornment"
+                    id="outlined-start-closekm"
                     autoComplete="password"
                   />
                 </div>
@@ -1243,7 +1248,6 @@ const TripSheet = ({ stationName }) => {
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
                   <TextField
-                    // ayyanar total time
                     name="totaltime"
                     value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
                     onChange={handleChange}
@@ -1290,17 +1294,13 @@ const TripSheet = ({ stationName }) => {
                     value={formData.toll || selectedCustomerData.toll || book.toll || ''}
                     onChange={handleChange}
                     label="Toll"
-                    id="Toll"
+                    id="toll"
                     variant="standard"
                     autoComplete="password"
                   />
                 </div>
                 <div className="input">
 
-                  {/* ggggggggg */}
-                  {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
-                    calculate
-                  </Button> */}
                   <Button variant="contained"
                     onClick={() => {
                       handleCalc();
@@ -1310,7 +1310,6 @@ const TripSheet = ({ stationName }) => {
                     calculate
                   </Button>
                 </div>
-                {/* ////gggggggggggg */}
 
                 <React.Fragment>
 
@@ -1331,17 +1330,10 @@ const TripSheet = ({ stationName }) => {
                               <div className="icone">
                                 <Inventory2Icon color="action" />
                               </div>
-                              {/* ayyanar */}
-                              {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
-
-
 
                               <TextField
                                 name="pack"
-                                // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
                                 value={calcPackage || formData.calcPackage || ''}
-                                // onChange={handleChange}
-
                                 label="Pack"
                                 id="pack"
                                 size="small"
@@ -1356,13 +1348,11 @@ const TripSheet = ({ stationName }) => {
                               </div>
                               <TextField
                                 name="amount5"
-                                // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
                                 value={package_amount || formData.calcPackage || ''}
-                                // onChange={handleChange}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
-                                id="amount"
+                                id="amount5"
                                 variant="standard"
                               />
                             </div>
@@ -1375,11 +1365,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="exkm1"
                                 className='customer-bill-input'
-                                // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
-                                // onChange={handleChange} 
                                 value={extraKM || formData.calcPackage || 0}
                                 label="Ex.Km"
-                                id="ex-km"
+                                id="ex-exkm1"
                                 autoComplete="password"
                                 size="small"
                                 variant="standard"
@@ -1392,10 +1380,8 @@ const TripSheet = ({ stationName }) => {
                               <TextField size="small"
                                 name='exkmTkm2'
                                 className='customer-bill-input'
-                                // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
                                 value={extrakm_amount || formData.calcPackage || ''}
-                                // onChange={handleChange}
-                                id="exkmTkm"
+                                id="exkmTkm2"
                                 variant="standard"
                                 autoComplete="password"
                               />
@@ -1407,12 +1393,11 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="amount6"
                                 className='customer-bill-input'
-                                // value={book.amount6 || calculateExkmAmount2() || ''}
                                 value={ex_kmAmount || formData.calcPackage || 0}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
-                                id="amount"
+                                id="amount6"
                                 variant="standard"
                               />
                             </div>
@@ -1426,11 +1411,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="exHrs1"
                                 className='customer-bill-input'
-                                // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
                                 value={extraHR || formData.calcPackage || ''}
-                                // onChange={handleChange}
-                                label="Ex.Hrs"
-                                id="ex-Hrs"
+                                label="exHrs1"
+                                id="ex-exHrs1"
                                 size="small"
                                 autoComplete="password"
                                 variant="standard"
@@ -1442,15 +1425,12 @@ const TripSheet = ({ stationName }) => {
                               </div>
                               <TextField
                                 size="small"
+                                id="exHrsTHrs2"
                                 name='exHrsTHrs2'
                                 className='customer-bill-input'
-                                // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
                                 value={extrahr_amount || formData.calcPackage || ''}
-                                // onChange={handleChange}
                                 variant="standard"
                               />
-
-                              {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
 
                             </div>
                             <div className="input">
@@ -1460,13 +1440,11 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="amount7"
                                 className='customer-bill-input'
-                                // value={book.amount7 || calculateExHrsAmount2() || ''}
-                                // onChange={caculate_extraHR}
                                 value={ex_hrAmount || formData.calcPackage || 0}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
-                                id="amount"
+                                id="amouamount7"
                                 variant="standard"
                               />
                             </div>
@@ -1482,7 +1460,7 @@ const TripSheet = ({ stationName }) => {
                                 value={nightBta || ''}
                                 onChange={(e) => setNightBeta(e.target.value)}
                                 label="Night"
-                                id="night"
+                                id="night1"
                                 autoComplete="password"
                                 size="small"
                                 variant="standard"
@@ -1496,6 +1474,7 @@ const TripSheet = ({ stationName }) => {
                                 size="small"
                                 className='customer-bill-input'
                                 name='nightThrs2'
+                                id="nightThrs2"
                                 value={nightCount || ''}
                                 onChange={(e) => setNightCount(e.target.value)}
                                 variant="standard"
@@ -1513,7 +1492,7 @@ const TripSheet = ({ stationName }) => {
                                 size="small"
                                 autoComplete="password"
                                 label="Amount"
-                                id="amount"
+                                id="amount8"
                                 variant="standard"
                               />
                             </div>
@@ -1530,7 +1509,7 @@ const TripSheet = ({ stationName }) => {
                                 onChange={driverBeta_calc}
                                 label="Driver Convenience"
                                 autoComplete="password"
-                                id="driver-convenience"
+                                id="driverconvenience1"
                                 size="small"
                                 variant="standard"
                               />
@@ -1542,6 +1521,7 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 size="small"
                                 name='dtc2'
+                                id='dtc2'
                                 className='customer-bill-input'
                                 value={driverbeta_Count || formData.driverbeta_Count || ''}
                                 onChange={driverbeta_Count_calc}
@@ -1559,7 +1539,7 @@ const TripSheet = ({ stationName }) => {
                                 value={driverBeta_amount || 0}
                                 size="small"
                                 label="Amount"
-                                id="amount"
+                                id="amount9"
                                 autoComplete="password"
                                 variant="standard"
                               />
@@ -1572,7 +1552,7 @@ const TripSheet = ({ stationName }) => {
                             value={totalcalcAmount || 0}
                             size="small"
                             label="Total Amount"
-                            id="amount"
+                            id="amount-amount9"
                             autoComplete="password"
                             variant="standard"
                           />
@@ -1605,7 +1585,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
                     onChange={handleChange}
                     label="v-permet-To-Vendor"
-                    id="v-permet-to-vendor"
+                    id="vpermettovendor"
                     autoComplete="password"
                   />
                 </div>
@@ -1620,7 +1600,7 @@ const TripSheet = ({ stationName }) => {
                     value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ''}
                     onChange={handleChange}
                     label="Vendor-Toll"
-                    id="vendor-toll"
+                    id="vendor-vendortoll"
                     autoComplete="password"
                   />
                 </div>
@@ -1633,7 +1613,7 @@ const TripSheet = ({ stationName }) => {
                     name="customeradvance"
                     value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
                     onChange={handleChange}
-                    label="Customer-Advance"
+                    label="Customer-customeradvance"
                     id="customer-advance"
                     autoComplete="password"
                   />
@@ -1667,6 +1647,7 @@ const TripSheet = ({ stationName }) => {
                   <span>
                     <label>
                       <input
+                        id="radioNo"
                         type="radio"
                         value="Yes"
                         checked={escort === "Yes"}
@@ -1676,6 +1657,7 @@ const TripSheet = ({ stationName }) => {
                     </label>
                     <label>
                       <input
+                        id="radioyes"
                         type="radio"
                         value="No"
                         checked={escort === "No"}
@@ -1691,6 +1673,7 @@ const TripSheet = ({ stationName }) => {
                   <span>
                     <label>
                       <input
+                        id="radioYes-TransferChange"
                         type="radio"
                         value="Yes"
                         checked={transferreport === "Yes"}
@@ -1702,6 +1685,7 @@ const TripSheet = ({ stationName }) => {
                       <input
                         type="radio"
                         value="No"
+                        id="radioNo-TransferChange"
                         checked={transferreport === "No"}
                         onChange={handleTransferChange}
                       />
@@ -1791,7 +1775,6 @@ const TripSheet = ({ stationName }) => {
             <div className="Tipsheet-content-table-main">
               <Tabs
                 className='Scroll-Style'
-                // size="sm"
                 aria-label="Pricing plan"
                 defaultValue={0}
                 sx={(theme) => ({
@@ -1886,7 +1869,7 @@ const TripSheet = ({ stationName }) => {
                         <Autocomplete
                           fullWidth
                           size="small"
-                          id="free-solo-demo"
+                          id="free-solo-documenttype"
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
@@ -1912,7 +1895,7 @@ const TripSheet = ({ stationName }) => {
                           value={formData.documentnotes || selectedCustomerData.documentnotes || book.documentnotes || ''}
                           onChange={handleChange}
                           label="Document Notes"
-                          id="document-notes"
+                          id="document-documentnotes"
                           variant="standard"
                           autoComplete="password"
                         />
@@ -1960,7 +1943,7 @@ const TripSheet = ({ stationName }) => {
                         <Autocomplete
                           fullWidth
                           size="small"
-                          id="free-solo-demo"
+                          id="free-solo-vehType"
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
@@ -1984,7 +1967,7 @@ const TripSheet = ({ stationName }) => {
                         <Autocomplete
                           fullWidth
                           size="small"
-                          id="free-solo-demo"
+                          id="free-solo-duty1"
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
@@ -2007,6 +1990,7 @@ const TripSheet = ({ stationName }) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoItem label="Start Date">
                             <DatePicker
+                              id="startdate1"
                               value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                               onChange={(date) => handleDateChange(date, 'startdate1')}
                             >
@@ -2021,6 +2005,7 @@ const TripSheet = ({ stationName }) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoItem label="Close Date">
                             <DatePicker
+                              id="closedate1"
                               value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                               onChange={(date) => handleDateChange(date, 'closedate1')}
                             >
@@ -2054,6 +2039,7 @@ const TripSheet = ({ stationName }) => {
                         <label>Start Time</label>
                         <input
                           type="time"
+                          id="starttime2"
                           value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
@@ -2068,6 +2054,7 @@ const TripSheet = ({ stationName }) => {
                         <label>Close Time</label>
                         <input
                           type="time"
+                          id="closetime2"
                           value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });

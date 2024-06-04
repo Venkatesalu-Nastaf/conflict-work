@@ -142,7 +142,7 @@ const DriverCreation = ({ stationName }) => {
                 <form onSubmit={handleClick}>
                     <div className="DriverCreation-header">
                         <div className="input-field driver-info-inputs">
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
                                 </div>
@@ -150,15 +150,15 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="driverid"
+                                    className='full-width'
                                     label="Driver ID"
                                     name="driverid"
                                     value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
                                     variant="standard"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -166,14 +166,14 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="drivername"
+                                    className='full-width'
                                     label="Driver Name"
                                     name="drivername"
                                     value={selectedCustomerData?.drivername || book.drivername}
                                     onChange={handleChange}
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -181,14 +181,14 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="username"
+                                    className='full-width'
                                     label="User Name"
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
                                     onChange={handleChange}
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -196,14 +196,14 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="Email"
+                                    className='full-width'
                                     label="Email Id"
                                     name="Email"
                                     value={selectedCustomerData?.Email || book.Email}
                                     onChange={handleChange}
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                                 </div>
@@ -227,7 +227,7 @@ const DriverCreation = ({ stationName }) => {
                                     }
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                                 </div>
@@ -253,13 +253,14 @@ const DriverCreation = ({ stationName }) => {
                                     />
                                 </FormControl>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <AddHomeWorkIcon color="action" />
                                 </div>
                                 <TextField
                                     margin="normal"
                                     name="address1"
+                                    className='full-width'
                                     multiline
                                     rows={2}
                                     sx={{ width: "100%" }}
@@ -267,24 +268,23 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Address"
                                     id="address1"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <PostAddIcon color="action" />
                                 </div>
                                 <TextField
                                     size="small"
                                     name="badgeno"
+                                    className='full-width'
                                     value={selectedCustomerData?.badgeno || book.badgeno}
                                     onChange={handleChange}
                                     label="Badge No"
                                     id="badgeno"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className='icone'>
                                     <CalendarMonthIcon />
                                 </div>
@@ -312,7 +312,7 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <AddIcCallTwoToneIcon color="action" />
                                 </div>
@@ -327,25 +327,25 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Mobile No"
                                     id="Mobileno"
+                                    className='full-width'
                                     variant="standard"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
                                 <TextField
                                     size="small"
                                     name="aadharno"
+                                    className='full-width'
                                     value={selectedCustomerData?.aadharno || book.aadharno}
                                     onChange={handleChange}
                                     label="Aadhar-card No"
                                     id="aadharno"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     aadhar card
                                     <input
@@ -355,7 +355,7 @@ const DriverCreation = ({ stationName }) => {
                                     />
                                 </Button>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     PROFILE IMAGE
                                     <input
@@ -366,7 +366,7 @@ const DriverCreation = ({ stationName }) => {
                                     />
                                 </Button>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className='icone'>
                                     <CalendarMonthIcon />
                                 </div>
@@ -394,21 +394,21 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <TaxiAlertIcon color="action" />
                                 </div>
                                 <TextField
                                     size="small"
                                     name="licenseno"
+                                    className='full-width'
                                     value={selectedCustomerData?.licenseno || book.licenseno}
                                     onChange={handleChange}
                                     label="License No"
                                     id="licenseno"
-                                    style={{ width: '100%' }}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <div className='icone'>
                                     <CalendarMonthIcon />
                                 </div>
@@ -436,7 +436,7 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input" style={{ paddingRight: '15px' }}>
+                            <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     License
                                     <input
@@ -471,7 +471,7 @@ const DriverCreation = ({ stationName }) => {
                                     </RadioGroup>
                                 </FormControl>
                             </div>
-                            <div className="input" style={{ width: "160px" }}>
+                            <div className="input">
                                 {isEditMode ? (
                                     <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
                                 ) : (
@@ -482,12 +482,11 @@ const DriverCreation = ({ stationName }) => {
                         <div className="detail-container-main detail-container-main-crivercreation">
                             <div className="container-left">
                                 <div className="copy-title-btn-Booking">
-                                    <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap' }}>
-                                        <div className="input" style={{ paddingRight: '15px' }}>
+                                    <div className="input-field driver-creation-input-field">
+                                        <div className="input">
                                             <div className="icone">
                                                 <AiOutlineFileSearch
                                                     color="action"
-                                                    style={{ fontSize: "27px" }}
                                                 />
                                             </div>
                                             <TextField
@@ -500,7 +499,7 @@ const DriverCreation = ({ stationName }) => {
                                                 onChange={(e) => setSearchText(e.target.value)}
                                             />
                                         </div>
-                                        <div className="input" style={{ paddingRight: '15px' }}>
+                                        <div className="input">
                                             <div className='icone'>
                                                 <CalendarMonthIcon />
                                             </div>
@@ -515,7 +514,7 @@ const DriverCreation = ({ stationName }) => {
                                                 />
                                             </LocalizationProvider>
                                         </div>
-                                        <div className="input" style={{ paddingRight: '15px' }}>
+                                        <div className="input">
                                             <div className='icone'>
                                                 <CalendarMonthIcon />
                                             </div>
@@ -530,7 +529,7 @@ const DriverCreation = ({ stationName }) => {
                                                 />
                                             </LocalizationProvider>
                                         </div>
-                                        <div className="input" style={{ width: "140px" }}>
+                                        <div className="input">
                                             <Button variant="contained"
                                                 onClick={handleShowAll}
                                             >
@@ -560,29 +559,29 @@ const DriverCreation = ({ stationName }) => {
                     <div className='alert-popup-main'>
                         {error &&
                             <div className='alert-popup Error' >
-                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <ClearIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{errorMessage}</p>
                             </div>
                         }
                         {warning &&
                             <div className='alert-popup Warning' >
-                                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{warningMessage}</p>
                             </div>
                         }
                         {success &&
                             <div className='alert-popup Success' >
-                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{successMessage}</p>
                             </div>
                         }
                         {info &&
                             <div className='alert-popup Info' >
-                                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <div className="popup-icon"> <BsInfo /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                                 <p>{infoMessage}</p>
                             </div>
                         }
@@ -651,11 +650,11 @@ const DriverCreation = ({ stationName }) => {
                         </div>
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>
-                                <div style={{ position: 'relative' }}>
-                                    <Button variant='contained' style={{ marginBottom: 10 }} onClick={handleSelectAll}>
+                                <div className='driver-creation-dialog-box-div1'>
+                                    <Button variant='contained' className='driver-creation-dialog-box-btn' onClick={handleSelectAll}>
                                         {selectAll ? 'Deselect All' : 'Select All'}
                                     </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                                        <div key={index} style={{ borderBottom: '1px solid black' }} >
+                                        <div key={index} className='driver-creation-dialog-box-div2'>
                                             {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
                                                 ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
                                                 <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
@@ -669,7 +668,7 @@ const DriverCreation = ({ stationName }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <div style={{ display: 'flex', padding: 10, gap: 15 }}>
+                                <div className='driver-creation-delete-print-btn-section'>
                                     <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                                     <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
                                 </div>
@@ -687,9 +686,9 @@ const DriverCreation = ({ stationName }) => {
                             </DialogContent>
                         </Dialog>
                         <Dialog open={Deleted}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green', fontSize: 25, paddingLeft: 10 }} />
-                                <p style={{ fontSize: 15, color: 'green', fontWeight: 500, padding: 10 }}>Deleted Successfully...</p>
+                            <div className='driver-creation-delete-succesfully'>
+                                <FontAwesomeIcon icon={faCheckCircle} className='driver-creation-delete-succesfully-icon' />
+                                <p className='driver-creation-delete-succesfully-text'>Deleted Successfully...</p>
                             </div>
                         </Dialog>
                     </div>

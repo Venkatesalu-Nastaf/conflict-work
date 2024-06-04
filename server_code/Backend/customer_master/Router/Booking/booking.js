@@ -357,7 +357,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
-                            <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
+                            <td style="padding: 8px;color: #000"">${driverName}</td>
                         </tr>
                     </tbody>
                 </table>

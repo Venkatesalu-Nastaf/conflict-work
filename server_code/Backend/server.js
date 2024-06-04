@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
-const upload = multer({ dest: 'uploads/' });  
+const upload = multer({ dest: 'uploads/' });
 app.use(express.static('customer_master'));
 
 const storage1 = multer.diskStorage({
@@ -175,7 +175,6 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
     return res.status(400).json({ error: 'No file uploaded.' });
   }
   const fileData = {
-    // path: req.file.path.replace(/\\/g, '/').replace(/^cutomer_master\//public\//map_iamges\//, ''),
     path: req.file.path.split('\\').pop(),
     tripid: req.body.tripid,
   };
@@ -187,8 +186,7 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
       return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
-      // No record found for the given tripid
-      // return res.status(404).send('Image not found');
+
       db.query(query2, fileData, (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Error storing file in the database.' });
@@ -210,7 +208,6 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
 
 
 //get map image from the folder
-// const mapimageDirectory = path.join('./','customer_master','public', 'map_images');
 const mapimageDirectory = path.join(__dirname, 'customer_master', 'public', 'map_images')
 
 app.use('/mapimages', express.static(mapimageDirectory));

@@ -67,14 +67,14 @@ export default function BasicTable() {
   };
 
   const handleButtonClickTripsheet = (trip) => {
-    console.log(trip,"ttt")
+    console.log(trip, "ttt")
     setSelectedTrip(trip);
     setPopupOpen(true);
   };
 
   return (
     <div className="Table">
-      <h1>Live Driver Status</h1>
+      <h1 className="live-driver-status-heading">Live Driver Status</h1>
       <TableContainer
         className="Scroll-Style total-table"
         component={Paper}
@@ -130,18 +130,18 @@ export default function BasicTable() {
         </Table>
       </TableContainer>
       <Dialog open={popupOpen} className="dialog-box-TripDetails" >
-                      <div className="dialog-close-btn">
-                        <DialogActions>
-                          <IconButton onClick={handlePopupClose} aria-label="delete">
-                            <HighlightOffIcon />
-                          </IconButton>
-                        </DialogActions>
-                      </div>
-                      <DialogContent>
-                        {/* {selectedTrip && <Tripdetails tripData={selectedTrip} />} */}
-                        {selectedTrip && <Tripdetails tripData={selectedTrip} />}
-                      </DialogContent>
-                    </Dialog>
+        <div className="dialog-close-btn">
+          <DialogActions>
+            <IconButton onClick={handlePopupClose} aria-label="delete">
+              <HighlightOffIcon />
+            </IconButton>
+          </DialogActions>
+        </div>
+        <DialogContent className="Scroll-Style-Slim">
+          {/* {selectedTrip && <Tripdetails tripData={selectedTrip} />} */}
+          {selectedTrip && <Tripdetails tripData={selectedTrip} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

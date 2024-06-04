@@ -33,6 +33,7 @@
 
 .first-div {
     height: 97vh;
+    overflow: auto;
 }
 
 @media screen and (min-width: 1219px) {
@@ -43,7 +44,7 @@
     .left-div {
         width: 52vw;
         height: 88vh;
-        overflow: auto;
+        /* overflow: auto; */
         padding: 20px;
         display: grid;
     }
@@ -51,7 +52,7 @@
     .right-div {
         height: 93vh;
         padding: 20px;
-        overflow: auto;
+        /* overflow: auto; */
     }
 }
 

@@ -122,6 +122,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const moment = require('moment');
 
 const { subMonths, startOfMonth, endOfMonth, format, addMonths, addDays, getYear, getMonth } = require('date-fns');
 const validator = require('validator');
@@ -292,6 +293,152 @@ router.get('/monthly_data2', (req, res) => {
     });
 });
 
+
+
+// router.get("/customerreviewdataall/:station",(req,res)=>{
+//     const station =req.params.station
+//     // console.log(station,"hh")
+//     db.query("select * from booking where status='Opened'",(err,result)=>{
+//         if(err){
+//             return res.status(500).json({ error: 'Internal Server Error' });
+
+//         }
+//         if(result.lenght>0){
+//             return res.status(500).json({ error: 'result not found'});
+//         }
+//         // console.log(result)
+//         return res.json(result)
+//     })
+// })
+
+// router.get("/customerreviewdataall/:station", (req, res) => {
+//     const station = req.params.station;
+
+//     db.query("SELECT COUNT(*) AS count FROM booking WHERE status ='Opened' and servicestation=?", [station], (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'No data found' });
+//         }
+//         const data={station: station, count: result[0].count }
+//     console.log(data)
+//         return res.json({ station: station, count: result[0].count });
+//     });
+// });
+
+
+router.get("/customerreviewdataall/:station", (req, res) => {
+    const station = req.params.station;
+    const stationname = station.split(',');
+    // console.log(stationname,"name")
+ 
+    const promises = stationname.map(data => {
+        return new Promise((resolve, reject) => {
+          
+
+    
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=?", [data], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+    
+          resolve(result[0]); // Assuming we expect only one result per tripid
+        }
+      }
+    );
+  });
+});
+
+Promise.all(promises)
+.then(results => {
+//   console.log(results,"data")
+  return res.status(200).json(results);
+})
+.catch(error => {
+//   console.log(error)
+  return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+});
+})
+router.get("/customerreviewtoday/:station/:dateoftoday", (req, res) => {
+  
+    const dateoftoday=req.params.dateoftoday
+   
+    const station = req.params.station;
+    const stationname = station.split(',');
+    // console.log(stationname,"name")
+    // console.log(dateoftoday,"of date")
+ 
+    const promises = stationname.map(data => {
+        return new Promise((resolve, reject) => {
+          
+
+    
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) ", [data,dateoftoday], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+    
+          resolve(result[0]); // Assuming we expect only one result per tripid
+        }
+      }
+    );
+  });
+});
+
+Promise.all(promises)
+.then(results => {
+//   console.log(results,"data")
+  return res.status(200).json(results);
+})
+.catch(error => {
+//   console.log(error)
+  return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+});
+})
+
+router.get("/customerreviecustomerdate", (req, res) => {
+
+    const { station, fromDate, toDate } = req.query;
+    const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+    const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+    // console.log(formattedFromDate,"for",formattedToDate)
+  
+    // const dateoftoday=req.params.dateoftoday
+    //  console.log(station, fromDate, toDate,"dtae")
+    // const station = req.params.station;
+    const stationname = station?.split(',');
+    // console.log(stationname,"name")
+   
+ 
+    const promises = stationname.map(data => {
+        return new Promise((resolve, reject) => {
+          
+
+    
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) and bookingdate <= DATE_ADD(?, INTERVAL 1 DAY);", [data,formattedFromDate,formattedToDate], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+    
+          resolve(result[0]); // Assuming we expect only one result per tripid
+        }
+      }
+    );
+  });
+});
+
+Promise.all(promises)
+.then(results => {
+//   console.log(results,"data")
+  return res.status(200).json(results);
+})
+.catch(error => {
+//   console.log(error)
+  return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+});
+})
 
 
 module.exports = router;

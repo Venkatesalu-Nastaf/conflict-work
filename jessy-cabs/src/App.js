@@ -167,7 +167,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
-              <Route path="/home/dashboard" element={Dashbord_read !== 0 ? <MainDash /> : <Navigate to="/home/bookings/booking" />} />
+              <Route path="/home/dashboard" element={Dashbord_read !== 0 ? <MainDash stationName={stationName} /> : <Navigate to="/home/bookings/booking" />} />
 
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route

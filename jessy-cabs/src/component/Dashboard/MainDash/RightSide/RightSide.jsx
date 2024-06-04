@@ -3,7 +3,7 @@ import CustomerReview from "./CustomerReview/CustomerReview";
 import Updates from "./Updates/Updates";
 import "./RightSide.css";
 
-const RightSide = () => {
+const RightSide = ({stationName}) => {
   return (
     <div className="RightSide">
       <div className="updates-comp">
@@ -11,7 +11,7 @@ const RightSide = () => {
       </div>
       <div className="area-chart">
         <h3 className="area-chart-text">Area Chart</h3>
-        <CustomerReview />
+        <CustomerReview  station={stationName}/>
       </div>
     </div>
   );

@@ -1546,6 +1546,7 @@ const Booking = ({ stationName }) => {
               pageSize={5}
               checkboxSelection
             />
+
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
                 <div className="booking-main-table-div1">
@@ -1553,7 +1554,7 @@ const Booking = ({ stationName }) => {
                     allFile.map((img, index) => (
                       <div key={index} className="booking-main-table-div2">
                         <embed
-                          src={`${apiUrl}/public/booking_doc/${img.path}`}
+                          src={`${apiUrl}/images/${img.path}`}
                           width="100%"
                           height="600px"
                           style={{ width: '800px', maxWidth: '100%' }}

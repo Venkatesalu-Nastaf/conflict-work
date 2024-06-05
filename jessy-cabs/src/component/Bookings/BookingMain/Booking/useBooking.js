@@ -695,8 +695,7 @@ const useBooking = () => {
   const booking_id =
     formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   const handleButtonClick = () => {
-    const booking_no =
-      formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
     if (!booking_no) {
       setError(true);
       setErrorMessage("PLease Enter Booking No");
@@ -709,24 +708,24 @@ const useBooking = () => {
   // ------------------------------------------------------------
   const [allFile, setAllFile] = useState([]);
 
-  const showPdf = async() => {
-    try{
+  const showPdf = async () => {
+    try {
       const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
-     
-      if(response.data.files.length > 0){
+
+      if (response.data.files.length > 0) {
         setAllFile(response.data.files);
-         
-          setDialogOpen(true);
+
+        setDialogOpen(true);
 
       }
       else {
-          setError(true);
-          setErrorMessage("No data found");
+        setError(true);
+        setErrorMessage("No data found");
       }
     }
-        catch(err){
-          console.log(err)
-        }
+    catch (err) {
+      console.log(err)
+    }
   };
 
   const handleCloseDialog = () => {
@@ -738,23 +737,19 @@ const useBooking = () => {
   const addPdf = async (lastbookid) => {
     if (file !== null) {
       const formData = new FormData();
-
-
       formData.append("file", file);
-      try{
-  
-     const response= await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
-       console.log(response,"data")
-       setFile(null)
-       
-    } 
-    catch(err) {
-      console.log(err)
+      try {
+        const response = await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
+        setFile(null)
+
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
-  }
-  else{
-    return
-  }
+    else {
+      return
+    }
   };
 
   //--------------------------------------------------------------
@@ -841,8 +836,7 @@ const useBooking = () => {
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
-      // console.log(sendEmail,sendmailguestsms,lastBookingno,"bookemail")
-     
+
       const datamode = isEditMode ? selectedCustomerData.status : book.status
       try {
         const user = localStorage.getItem("username")
@@ -867,7 +861,7 @@ const useBooking = () => {
           mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
           vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
           tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation,
+          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation || selectedCustomerDatas.servicestation,
           // status: book.status || formData.status || selectedCustomerData.status,
           requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
           duty: formData.duty || selectedCustomerData.duty || book.duty || "",
@@ -918,7 +912,7 @@ const useBooking = () => {
       setErrorMessage("Enter Customer Name")
       return
     }
-   
+
     if (!selectedCustomerData.starttime) {
       setError(true)
       setErrorMessage("Enter starting Time")
@@ -956,7 +950,6 @@ const useBooking = () => {
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-      console.log(formData.servicestation,selectedCustomerData.servicestation,book.servicestation,selectedCustomerDatas.servicestation,"add")
 
       const updatedBook = {
 
@@ -990,7 +983,7 @@ const useBooking = () => {
         flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
         orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
-        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation,
+        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation || selectedCustomerDatas.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
@@ -1009,12 +1002,9 @@ const useBooking = () => {
       };
 
       setSendmailGuestsms(true)
-      console.log(updatedBook)
       await axios.post(`${apiUrl}/booking`, updatedBook);
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-      console.log(lastBookingno)
-     
 
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
@@ -1025,10 +1015,10 @@ const useBooking = () => {
       setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-     
-       handlecheck(lastBookingno);
-     addPdf(lastBookingno);
-     
+
+      handlecheck(lastBookingno);
+      addPdf(lastBookingno);
+
       setEdit(false)
     } catch (error) {
       console.error("An error occurred:", error);
@@ -1054,7 +1044,7 @@ const useBooking = () => {
 
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const booking_no =
-      formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
@@ -1089,7 +1079,7 @@ const useBooking = () => {
         flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
         orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
-        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation||selectedCustomerDatas.servicestation||"",
+        servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation || selectedCustomerDatas.servicestation || "",
         advance: formData.advance || selectedCustomerData.advance || book.advance,
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
@@ -1444,7 +1434,7 @@ const useBooking = () => {
     setImagedata(imageName);
     setDialogdeleteOpen(true);
   };
- 
+
 
   const handleContextMenu = () => {
     axios

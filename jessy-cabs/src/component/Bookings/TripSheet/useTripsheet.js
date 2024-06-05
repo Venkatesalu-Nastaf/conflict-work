@@ -181,15 +181,32 @@ const useTripsheet = () => {
     //refresh button function
     const handleRefresh = async () => {
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
         try {
             if (!tripid) {
                 setError(true);
                 setErrorMessage("Please enter the tripid");
             } else {
-                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}`);
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
                 const data = response.data;
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
+
+                //sepration of data----------------------------
+                let tripResults = [];
+                let bookingResults = [];
+
+                data.map((item) => {
+                    if (item.type === "tripResults") {
+                        tripResults = item.data
+                    } else if (item.type === "bookingResults") {
+                        bookingResults = item.data
+                    }
+                })
+                const bothData = [...tripResults, ...bookingResults]
+                console.log("bothData", bothData)
+                //------------------------
+
+                if (bothData.length > 0) {
+                    const rowsWithUniqueId = bothData.map((row, index) => ({
                         ...row,
                         id: index + 1,
                     }));
@@ -923,7 +940,6 @@ const useTripsheet = () => {
         const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
-        // setStateChange((prev) => !prev)
         if (!file) return;
         if (file) {
             const formData = new FormData();

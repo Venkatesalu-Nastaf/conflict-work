@@ -4,7 +4,7 @@ import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import Dialog from '@mui/material//Dialog';
+import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
 import { Status } from "./TripStatusData.js";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -15,8 +15,8 @@ import { GiMatterStates } from "react-icons/gi";
 import Box from "@mui/material/Box";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -24,7 +24,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { PermissionContext } from '../../../context/permissionContext.js';
 
 // ICONS

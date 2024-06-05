@@ -1,6 +1,6 @@
 import React from 'react';
 import './Mailpdf.css';
-import { Button } from '@mui/material';
+import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 const PrintableInvoice = ({ attachedImage }) => {
 

@@ -29,9 +29,9 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 //for pdf
 
 //dialog box
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";

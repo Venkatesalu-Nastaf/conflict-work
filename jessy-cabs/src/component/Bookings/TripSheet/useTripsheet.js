@@ -202,7 +202,6 @@ const useTripsheet = () => {
                     }
                 })
                 const bothData = [...tripResults, ...bookingResults]
-                console.log("bothData", bothData)
                 //------------------------
 
                 if (bothData.length > 0) {
@@ -1845,6 +1844,17 @@ const useTripsheet = () => {
 
     }
 
+    const handleimagedelete = async (imagepath) => {
+
+        try {
+            const path = imagepath?.path
+            const res = await axios.delete(`${apiUrl}/tripsheet-imagedelete`, { params: { path } })
+            console.log("delte image", imagepath?.path)
+        } catch (err) {
+
+        }
+    }
+
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount, escort, setEscort, driverdetails,
@@ -1937,7 +1947,7 @@ const useTripsheet = () => {
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails,
-
+        handleimagedelete,
 
 
     };

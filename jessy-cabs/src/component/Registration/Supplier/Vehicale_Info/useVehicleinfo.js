@@ -6,17 +6,11 @@ import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
-// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
-// import DeleteIcon from "@mui/icons-material/Delete";
-// import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    // const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
     const [rows1, setRows1] = useState([]);
@@ -78,9 +72,7 @@ const useVehicleinfo = () => {
             field: "insduedate", headerName: "Insurance Due Date", width: 150,
             valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
         },
-        // { field: "licenseno", headerName: "License No", width: 130 },
-        // { field: "licensebatchno", headerName: "License Batch No", width: 140 },
-        // { field: "licduedate", headerName: "License Due Date", width: 140 },
+
         { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
         {
             field: "npdate", headerName: "Notional Permit Date", width: 150,
@@ -102,19 +94,7 @@ const useVehicleinfo = () => {
         { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
         { field: "driverName", headerName: "Driver Name", width: 130 },
         { field: "tankCap", headerName: "Tank Cap", width: 130 },
-        // { field: "routeno", headerName: "Route No", width: 130 },
-        // { field: "remarks", headerName: "Remarks", width: 130 },
-        // { field: "OwnerType", headerName: "Owner Type", width: 130 },
     ];
-
-  
-
-    // const actions = [
-    //     { icon: <CancelPresentationIcon />, name: "Cancel" },
-    //     { icon: <DeleteIcon />, name: "Delete" },
-    //     { icon: <ModeEditIcon />, name: "Edit" },
-    //     edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
-    // ];
 
     const handleSelectAll = () => {
         if (selectAll) {
@@ -126,6 +106,7 @@ const useVehicleinfo = () => {
         }
         setSelectAll(prevState => !prevState);
     };
+
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
@@ -149,12 +130,6 @@ const useVehicleinfo = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
-        // if (!vehicleId) {
-        //     setError(true);
-        //     setErrorMessage("PLease Enter vehicleId");
-        //     return;
-        // }
-
         showPdf(vehicleId);
     };
 
@@ -178,17 +153,7 @@ const useVehicleinfo = () => {
     //---------------------------------------
 
 
-    // const convertToCSV = (data) => {
-    //     const header = columns.map((column) => column.headerName).join(",");
-    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //     return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //     const csvData = convertToCSV(rows);
-    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //     saveAs(blob, "VehicleStatement Reports.csv");
-    // };
-    const handleExcelDownload=async()=>{
+    const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
 
@@ -199,8 +164,8 @@ const useVehicleinfo = () => {
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
             //         console.log(headers,"hed")
-                    const columnsExcel = headers.map(key => ({ key, header: key }));
-            
+            const columnsExcel = headers.map(key => ({ key, header: key }));
+
             worksheet.columns = columnsExcel;
 
             // updated the font for first row.
@@ -224,7 +189,7 @@ const useVehicleinfo = () => {
             });
 
             rows.forEach((singleData, index) => {
-             
+
 
                 worksheet.addRow(singleData);
 
@@ -283,12 +248,12 @@ const useVehicleinfo = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("VehicleInfo Details", 10, 10);
-         const header = Object.keys(rows[0]);
-      
+        const header = Object.keys(rows[0]);
+
         // Extracting body
         const body = rows.map(row => Object.values(row));
-        console.log(header.length,"len")
-      
+        console.log(header.length, "len")
+
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -297,8 +262,8 @@ const useVehicleinfo = () => {
             fontdata = 11;
         }
         else if (header.length >= 19 && header.length <= 20) {
-          fontdata = 10;
-      } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 10;
+        } else if (header.length >= 21 && header.length <= 23) {
             fontdata = 9;
         }
         else if (header.length >= 24 && header.length <= 26) {
@@ -316,48 +281,48 @@ const useVehicleinfo = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata,"data")
-        
+        console.log(fontdata, "data")
+
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-      
+
             headStyles: {
                 // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-      
+
                 minCellHeigh: 8,
                 valign: 'middle',
-      
+
                 font: 'helvetica', // Set font type for body
-      
+
                 cellWidth: 'wrap',
                 // cellWidth: 'auto'
             },
-      
+
             bodyStyles: {
                 // fontSize:4,
                 // fontSize: fontdata-1
-                fontSize: fontdata-1,
+                fontSize: fontdata - 1,
                 valign: 'middle',
                 //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-      
+
             },
             columnWidth: 'auto'
-      
-      });
+
+        });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         console.log(scaleFactor, "SCALE")
-      
+
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'VehicleStatementReports.pdf');
-      };
+    };
 
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF('p', 'pt', 'letter');
@@ -389,7 +354,7 @@ const useVehicleinfo = () => {
 
     //         // For each row, iterate through the properties of selectedCustomerData
     //         Object.entries(book).forEach(([label, value]) => {
-           
+
     //             // Skip if the label is 'id' or undefined value
     //             if (label === 'id' || rowData[label] === undefined) return;
 
@@ -848,19 +813,17 @@ const useVehicleinfo = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
+
+
     const [deletefile, setDeleteFile] = useState([])
-
-
     const handlecheckbox = (fileName) => {
-        console.log(fileName, ';;;;;;');
-
-        if (deletefile.includes(fileName)) {
+            if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
         } else {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
-
         }
     };
+
     const handleDocumentDownload = async () => {
         try {
             // Filter selected files
@@ -1065,7 +1028,6 @@ const useVehicleinfo = () => {
     const [imagedata, setImagedata] = useState(null);
 
     const handleimagedelete = (imageName) => {
-        console.log(deletefile, 'fileeee');
 
         if (deletefile.length > 0) {
             setImagedata(prevDeleteFile => {
@@ -1081,7 +1043,6 @@ const useVehicleinfo = () => {
 
     const handleContextMenu = () => {
         try {
-            console.log(imagedata, '---------');
 
             axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
                 .then(() => {

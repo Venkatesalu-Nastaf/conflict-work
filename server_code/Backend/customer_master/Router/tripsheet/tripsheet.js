@@ -1179,6 +1179,9 @@ router.post('/send-tripsheet-email', async (req, res) => {
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
+
+
+
 //end tripsheet mail
 //collect data
 // router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
@@ -1206,13 +1209,13 @@ router.post('/send-tripsheet-email', async (req, res) => {
 
 //     return res.status(200), json({ image1, image2 })
 // });
-
 // router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
-//     const tripid = req.params.tripid;
-//     const bookingno = req.params.bookingno;
+    //     const tripid = req.params.tripid;
+    //     const bookingno = req.params.bookingno;
+    
+    //     let image1, image2;
 
-//     let image1, image2;
-
+    
 //     db.query("SELECT * FROM tripsheetupload WHERE tripid=? OR bookingno=?", [tripid, bookingno], (err, results) => {
 //         if (err) {
 //             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
@@ -1243,7 +1246,6 @@ router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        // console.log("tripResults", tripResults)
         const bookingImage = 'SELECT * FROM booking_doc WHERE booking_id=?';
 
         db.query(bookingImage, [bookingno], (err, bookingResults) => {
@@ -1256,7 +1258,6 @@ router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
                 { type: 'tripResults', data: tripResults },
                 { type: 'bookingResults', data: bookingResults }
             ];
-            console.log("combinedResults", combinedResults)
             return res.status(200).json(combinedResults);
         });
     });

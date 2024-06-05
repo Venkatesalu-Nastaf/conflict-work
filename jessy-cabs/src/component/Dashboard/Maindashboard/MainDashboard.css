@@ -51,19 +51,19 @@
   color: #242d49;
 }
 
-.dash-board.theme2 .live-driver-status-heading, .dash-board.theme2 .card-filter-label{
+.dash-board.theme2 .live-driver-status-heading, .dash-board.theme2 .card-filter-label, .dash-board.theme2 .area-chart-text{
   color: #fff;
 }
 
-.dash-board.theme3 .live-driver-status-heading, .dash-board.theme3 .card-filter-label{
+.dash-board.theme3 .live-driver-status-heading, .dash-board.theme3 .card-filter-label, .dash-board.theme3 .area-chart-text{
   color: #fff;
 }
 
-.dash-board.theme4 .live-driver-status-heading, .dash-board.theme4 .card-filter-label{
+.dash-board.theme4 .live-driver-status-heading, .dash-board.theme4 .card-filter-label, .dash-board.theme4 .area-chart-text{
   color: #fff;
 }
 
-.dash-board.theme5 .live-driver-status-heading, .dash-board.theme5 .card-filter-label{
+.dash-board.theme5 .live-driver-status-heading, .dash-board.theme5 .card-filter-label, .dash-board.theme5 .area-chart-text{
   color: #fff;
 }
 
@@ -75,9 +75,11 @@
   color: #242d49;
 }
 
-.dash-board.theme8 .live-driver-status-heading, .dash-board.theme8 .card-filter-label{
+.dash-board.theme8 .live-driver-status-heading, .dash-board.theme8 .card-filter-label, .dash-board.theme8 .area-chart-text{
   color: #fff;
 }
+
+
 
 .dash-board {
   color: var(--black);

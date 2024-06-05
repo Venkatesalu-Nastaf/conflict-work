@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserInfo.css";
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
@@ -22,6 +22,12 @@ import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import useUserinfo from "./useUserinfo";
 
+
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
@@ -30,6 +36,15 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { APIURL } from "../../url";
+
+import avatar1 from "../../../assets/img/avatar1.jpg";
+import avatar2 from "../../../assets/img/avatar2.jpg";
+import avatar3 from "../../../assets/img/avatar3.jpg";
+import avatar4 from "../../../assets/img/avatar4.jpg";
+import avatar5 from "../../../assets/img/avatar5.jpg";
+import avatar6 from "../../../assets/img/avatar6.jpg";
+
+
 
 const UserSetting = () => {
   const apiUrl = APIURL;
@@ -68,6 +83,48 @@ const UserSetting = () => {
     }
   }, [actionName, handleClick]);
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2
+  };
+
+  const avatars = [
+    avatar1,
+    avatar2,
+    avatar3,
+    avatar4,
+    avatar5,
+    avatar6
+  ];
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [userAvatarValue, setUserAvatarValue] = useState('');
+
+  const avatarChangeValue = (value, avatarNumber) => {
+    // const avatarElement = document.getElementById(`avatar-image-${avatarNumber}`);
+    // if (avatarElement) {
+    //   avatarElement.classList.add('selected-avatar');
+    // }
+    setUserAvatarValue(value);
+  }
+
+  const [userAvatar, setUserAvatar] = useState('');
+
+  const avatarChange = (avatarValue) => {
+    setUserAvatar(avatarValue);
+    handleClose();
+  }
+
   return (
     <div className="userinfo-form Scroll-Style-hide">
       <form>
@@ -75,13 +132,20 @@ const UserSetting = () => {
           <div className="container-userinfo">
             <div className="container-userinfo-main">
               <div className="container-userinfo-left">
-                <div className="input-field">
+                <div className="input-field" onClick={handleOpen}>
                   <div className="input">
-                    <Avatar
-                      sx={{ width: "12ch", height: "12ch" }}
-                      alt="userimage"
-                      src={`${apiUrl}/public/user_profile/${selectedImage}`}
-                    />
+                    {(userAvatar == '') ? (
+                      <Avatar
+                        sx={{ width: "12ch", height: "12ch" }}
+                        alt="userimage"
+                        src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                      />
+                    ) : (
+                      <div>
+                        <img src={userAvatar} alt="" className="user-selected-avatar" />
+                      </div>
+                    )}
+
                   </div>
                 </div>
                 <div className="input-field">
@@ -379,7 +443,69 @@ const UserSetting = () => {
           </div>
         </div>
       </form>
+
+      <div>
+        {/* <Button onClick={handleOpen}>Open modal</Button> */}
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={style}>
+              <Typography id="transition-modal-title" variant="h6" component="h2">
+                Select the Avatar
+              </Typography>
+              <div className="avatar-list">
+                {avatars.map((avatar, index) => (
+                  <img
+                    key={index}
+                    src={avatar}
+                    alt={`avatar-${index + 1}`}
+                    onClick={() => avatarChangeValue(avatar)}
+                    className={`avatar ${userAvatarValue === avatar ? 'selected-avatar' : ''}`}
+                    tabIndex="0" // Make the image focusable
+                  />
+                ))}
+              </div>
+              <div className="select-avatar-btn-division">
+                <Button
+                  color="primary"
+                  size="small"
+                  variant="contained"
+                  onClick={handleClose}
+                  component="label"
+                >
+                  {" "}
+                  Close
+                </Button>
+
+                <Button
+                  color="primary"
+                  size="small"
+                  variant="contained"
+                  onClick={() => avatarChange(userAvatarValue)}
+                  component="label"
+                >
+                  {" "}
+                  Done
+                </Button>
+              </div>
+            </Box>
+          </Fade>
+        </Modal>
+      </div>
     </div>
+
+
   );
 };
 

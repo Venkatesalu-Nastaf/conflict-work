@@ -10,7 +10,7 @@ const RightSide = ({stationName}) => {
         <Updates />
       </div>
       <div className="area-chart">
-        <h3 className="area-chart-text">Area Chart</h3>
+        <h3 cl className="area-chart-text">Area Chart</h3>
         <CustomerReview  station={stationName}/>
       </div>
     </div>

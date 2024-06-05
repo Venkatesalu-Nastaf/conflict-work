@@ -696,7 +696,6 @@ const TripSheet = ({ stationName }) => {
                       <div className="icone">
                         <NoCrashIcon color="action" />
                       </div>
-                      {console.log("0", selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName)}
                       <Autocomplete
                         fullWidth
                         size="small"

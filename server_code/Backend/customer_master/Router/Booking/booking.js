@@ -17,16 +17,13 @@ router.post('/booking', (req, res) => {
 
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
         if (err) {
-            console.error("Error inserting data into MySQL:", err);
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
         // Check if the insertion was successful (affectedRows > 0)
         if (result.affectedRows > 0) {
-            console.log("Data inserted successfully");
             return res.status(200).json({ message: "Data inserted successfully" });
         } else {
-            console.error("No rows affected during insertion");
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
     });
@@ -200,7 +197,6 @@ router.get('/name-customers/:customer', (req, res) => {
 
 router.get('/drivername-details/:driver', (req, res) => {
     const customer = req.params.driver;
-    console.log(customer, "re") // Access the parameter using req.params
     // Modify the query to use the LIKE operator for partial matching
     // db.query('SELECT * FROM  vehicleinfo WHERE driverName OR  vehRegNo LIKE ? ', [`${customer}%`], (err, result) => {
     db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`${customer}%`, `${customer}%`], (err, result) => {
@@ -216,7 +212,6 @@ router.get('/drivername-details/:driver', (req, res) => {
 
         let vehderivername = result.map(obj => obj.driverName);
 
-        // console.log(vehderivername,"name")
         db.query('select Mobileno,driverName from drivercreation where driverName in (?)', [vehderivername], (err, result1) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
@@ -224,7 +219,6 @@ router.get('/drivername-details/:driver', (req, res) => {
             if (result1.length === 0) {
                 return res.status(404).json({ error: 'Customer not found' });
             }
-            // console.log(result1,"da")
             const vehicleDataname = {};
 
             result1.forEach(row => {
@@ -238,11 +232,9 @@ router.get('/drivername-details/:driver', (req, res) => {
                 obj.driverno = vehicle ? vehicle.MobileNo : 'Unknown'; // Set default value if fueltype not found
 
             });
-            //   console.log(result)
             return res.status(200).json(result);
         })
 
-        // return res.status(200).json(result);
     });
 });
 
@@ -296,7 +288,6 @@ router.get('/drivername-details/:driver', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username } = req.body;
-        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, "data")
 
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -442,12 +433,7 @@ router.post('/send-email', async (req, res) => {
 
         }
 
-        // Send greeting email to the customer
-        // await transporter.sendMail(customerMailOptions);
-
-        // res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -602,10 +588,21 @@ router.get('/table-for-booking', (req, res) => {
 /// booking ->booking----------------------------------------
 
 // its for multer file- 1
+// const booking_storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, './customer_master/public/booking_doc')
+//         // cb(null, './uploads')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//     }
+
+// })
+
+
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/booking_doc')
-        // cb(null, './uploads')
+        cb(null, 'uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -620,20 +617,17 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     // const path = req.file.filename;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
+    console.log(req.query)
     // const documenttype = "mail"
-    console.log(booking_id,typeof(booking_id),fileType,fileName,"data")
-    const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    const sql = `insert into booking_doc(booking_id, path, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
     // const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
     db.query(sql, (err, result) => {
-        if (err)
-            {
-                console.log(err)
-             return res.json({ Message: "Error" });
-            }
-            console.log(result)
+        if (err) {
+            return res.json({ Message: "Error" });
+        }
         return res.json("successs upload");
     })
-    
+
 })
 
 // booking_id	fileName	file_type	
@@ -651,29 +645,26 @@ router.get('/booking-docView/:id', (req, res) => {
 router.get('/booking-docPDFView/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
     const query = 'select * from booking_doc where booking_id=?';
-    console.log(bookingno,"book")
-  
+
     db.query(query, [bookingno], (err, results) => {
-      if (err) {
-        return res.status(500).send('Internal Server Error');
-      }
-  
-      if (results.length === 0) {
-        // No record found for the given tripid
-        return res.status(404).send('Images not found');
-      }
-      console.log(results,"reeee")
-  
-      const files = results.map(result => ({
-        path: result.fileName,
-        mimetype: result.fileName.split('.').pop()// assuming 'type' indicates whether it's an image or PDF
-      }));
-      console.log(files)
-  
-  
-      res.json({ files });
+        if (err) {
+            return res.status(500).send('Internal Server Error');
+        }
+
+        if (results.length === 0) {
+            // No record found for the given tripid
+            return res.status(404).send('Images not found');
+        }
+
+        const files = results.map(result => ({
+            path: result.path,
+            mimetype: result.path.split('.').pop()// assuming 'type' indicates whether it's an image or PDF
+        }));
+
+
+        res.json({ files });
     });
-  });
+});
 
 
 

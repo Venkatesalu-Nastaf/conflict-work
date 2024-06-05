@@ -4,10 +4,10 @@ import "./CustomerReview.css";
 import { APIURL } from '../../../../url' ;
 import axios from 'axios'
 import dayjs from "dayjs";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog from "@mui/material/Dialog";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DialogContent from "@material-ui/core/DialogContent";
+import DialogContent from "@mui/material/DialogContent";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Button from "@mui/material/Button";

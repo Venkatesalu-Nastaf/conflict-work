@@ -1,44 +1,133 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "./CustomerReview.css";
+import { APIURL } from '../../../../url' ;
+import axios from 'axios'
+import dayjs from "dayjs";
+import Dialog from "@material-ui/core/Dialog";
 
-const CustomerReview = () => {
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import DialogContent from "@material-ui/core/DialogContent";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Button from "@mui/material/Button";
+
+const CustomerReview = ({station}) => {
   const [viewType, setViewType] = useState("monthly");
+  const [stationdata,setStationdata]=useState([])
+  const [todaybooking,setTodayBooking]=useState([])
+   const [popupOpen, setPopupOpen] = useState(false);
+   const [toDate, setToDate] = useState(dayjs());
+   const [fromDate, setFromDate] = useState(dayjs());
+  const apiurl=APIURL
+  // console.log(station,"datastation")
+  const stationarray= station?.map((data)=> data.Stationname)
+  // console.log(stationarray,"dattaerrrr")
+ 
+  const data2=stationdata?.map((data)=> data.count)
+  
+  const todaybook=todaybooking?.map((data)=> data.count)
 
-  const handleWeeklyView = () => {
-    setViewType("weekly");
-  };
+
+  // const handleWeeklyView = () => {
+  //   setViewType("weekly");
+  //   toadybookingdate()
+
+  // };
 
   const handleMonthlyView = () => {
     setViewType("monthly");
   };
+ 
+  const dateoftoday=dayjs().format("YYYY-MM-DD")
+  
+
+  
+  useEffect(()=>{
+    const fetchdata=async()=>{
+      try{
+        if(stationarray.length>0){
+        const response= await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+        const data=response.data
+        setStationdata(data)
+      }
+      else{
+        return
+      }
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+    fetchdata()
+  },[apiurl,stationdata,stationarray])
+  
 
   const handleYesterdayView = () => {
-    // Logic to fetch data for yesterday
-    // For example, you can fetch data from an API or calculate it based on existing data
-    const yesterdayData = [25, 30, 35, 40, 35, 45, 50, 60, 55];
-    const categories = ["Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9"]; // Sample categories
-
-    setViewType("yesterday");
-    setChartData({ categories, data: yesterdayData });
+    setPopupOpen(true)
+  
+  
   };
 
-  const [chartData, setChartData] = useState({
-    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-    data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
-  });
+  // const [chartData, setChartData] = useState({
+  //   categories: station.map((data)=> data.Stationname),
+  //   data:data2,
+  // });
+  // console.log(chartData,"char")
+const  toadybookingdate=async()=>{
+    try{
+     const response=await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+     const data=response.data
+     setTodayBooking(data)
+    
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  const handleWeeklyView = () => {
+    toadybookingdate()
+    setViewType("weekly");
+    // toadybookingdate()
+
+  };
+
+  const custombookingdate=async()=>{
+    try{
+     const response=await axios.get(`${apiurl}/customerreviecustomerdate?station=${stationarray}&fromDate=${fromDate}&toDate=${toDate}`)
+     const data=response.data
+     setTodayBooking(data)
+     setPopupOpen(false)
+     setFromDate(dayjs())
+     setToDate(dayjs())
+    
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+
 
   const getData = () => {
     if (viewType === "monthly") {
-      return chartData;
+      return {
+        categories: stationarray,
+    data:data2,
+      }
     } else if (viewType === "weekly") {
       return {
-        categories: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8", "Week 9"],
-        data: [10, 20, 15, 30, 25, 35, 40, 50, 45],
+        categories: stationarray,
+        data:todaybook,
       };
-    } else {
+    }
+     else {
       // Yesterday data is already set in state
-      return chartData;
+      return {
+        categories: stationarray,
+        data:todaybook,
+      };
     }
   };
 
@@ -58,15 +147,53 @@ const CustomerReview = () => {
       },
     },
   };
+  const handleCloseDialog=()=>{
+    setPopupOpen(false)
+  }
+
 
   return (
     <div className="CustomerReview weekly-chart" id="areachart">
       <div className="button-container ">
         <button onClick={handleMonthlyView} className="graph-all-button">All</button>
-        <button onClick={handleWeeklyView} className="graph-weekly-button">Weekly</button>
-        <button onClick={handleYesterdayView} className="graph-yesterday-button">Yesterday</button>
+        <button onClick={handleWeeklyView} className="graph-weekly-button">Today</button>
+        <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button>
       </div>
       <Chart options={data.options} series={data.series} type="bar" />
+
+      <Dialog open={popupOpen} onClose={handleCloseDialog}>
+              <DialogContent style={{backgroundColor:'yellow',display:"flex",gap:'10px',width:550,justifyContent:"space-around"}}>
+              <div  style={{width:150}}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="From Date"
+                      id="fromDate"
+                      name="fromDate"
+                      format="DD/MM/YYYY"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{width:150}}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="To Date"
+                      name="toDate"
+                      id="toDate"
+                      format="DD/MM/YYYY"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="input" >
+                  <Button variant="contained" onClick={custombookingdate}>
+                    Search
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
     </div>
   );
 };

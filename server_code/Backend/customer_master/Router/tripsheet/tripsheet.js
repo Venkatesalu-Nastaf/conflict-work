@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const moment = require('moment');
+const { json } = require('body-parser');
 // trip sheet database:
 
 
@@ -1180,15 +1181,89 @@ router.post('/send-tripsheet-email', async (req, res) => {
 });
 //end tripsheet mail
 //collect data
-router.get('/tripuploadcollect/:tripid', (req, res) => {
+// router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
+//     const tripid = req.params.tripid;
+//     const bookingno = req.params.bookingno;
+
+//     let image1, image2;
+
+
+//     db.query("SELECT * FROM tripsheetupload where tripid=? or bookingno=?", [tripid, bookingno], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+//         }
+//         // console.log(results)
+//         // return res.status(200).json(results);
+//         image1 = results
+//     });
+
+//     const bookingImage = 'select * from booking_doc where booking_id=?';
+
+//     db.query(bookingImage, [bookingno], (err, result) => {
+//         image2 = result
+//     })
+//     console.log(image1, image2)
+
+//     return res.status(200), json({ image1, image2 })
+// });
+
+// router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
+//     const tripid = req.params.tripid;
+//     const bookingno = req.params.bookingno;
+
+//     let image1, image2;
+
+//     db.query("SELECT * FROM tripsheetupload WHERE tripid=? OR bookingno=?", [tripid, bookingno], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+//         }
+//         image1 = results;
+
+//         const bookingImage = 'SELECT * FROM booking_doc WHERE booking_id=?';
+
+//         db.query(bookingImage, [bookingno], (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+//             }
+//             image2 = result;
+
+//             // console.log(image1, image2);
+//             const combainedData = [...image1, ...image2]
+
+//             return res.status(200).json(combainedData);
+//         });
+//     });
+// });
+
+router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
     const tripid = req.params.tripid;
-    db.query("SELECT * FROM tripsheetupload where tripid=? or bookingno=?", [tripid, tripid], (err, results) => {
+    const bookingno = req.params.bookingno;
+
+    db.query("SELECT * FROM tripsheetupload WHERE tripid=? ", [tripid], (err, tripResults) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        return res.status(200).json(results);
+        // console.log("tripResults", tripResults)
+        const bookingImage = 'SELECT * FROM booking_doc WHERE booking_id=?';
+
+        db.query(bookingImage, [bookingno], (err, bookingResults) => {
+            if (err) {
+                return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+            }
+
+            // Combine the results into an array with separate keys
+            const combinedResults = [
+                { type: 'tripResults', data: tripResults },
+                { type: 'bookingResults', data: bookingResults }
+            ];
+            console.log("combinedResults", combinedResults)
+            return res.status(200).json(combinedResults);
+        });
     });
 });
+
+
+
 
 router.post('/gmap-submitForm', (req, res) => {
     const date = req.body.date;
@@ -1228,12 +1303,13 @@ router.get(`/t4hr-pack`, (req, res) => {
     // Extract dynamic inputs from query parameters
     const totalHours = req.query.totalHours;
     // const vehicletype = req.query.vehicletype;
-    const vehicletype = "AUDI A6";
+    const VehicleName = req.query.vehicleName;
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
 
-    if (!totalHours || !vehicletype || !duty || !totkm || !OrganizationName) {
+
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1241,18 +1317,14 @@ router.get(`/t4hr-pack`, (req, res) => {
     const sql = `SELECT * 
                     FROM ratemanagement
                     WHERE duty = ?
-                        AND vehicleType = ?
+                        AND VehicleName = ?
                         AND OrganizationName =?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND vehicleType = ? AND OrganizationName =?))
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
                     ORDER BY UptoHours 
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, vehicletype, OrganizationName, totalHours, totkm, duty, vehicletype, OrganizationName], (error, results) => {
-        if (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-
+    db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });

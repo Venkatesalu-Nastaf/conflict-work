@@ -37,12 +37,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { APIURL } from "../../url";
 
-import avatar1 from "../../../assets/img/avatar1.jpg";
-import avatar2 from "../../../assets/img/avatar2.jpg";
-import avatar3 from "../../../assets/img/avatar3.jpg";
-import avatar4 from "../../../assets/img/avatar4.jpg";
-import avatar5 from "../../../assets/img/avatar5.jpg";
-import avatar6 from "../../../assets/img/avatar6.jpg";
+import avatar1 from "../../../assets/img/avatar1.png";
+import avatar2 from "../../../assets/img/avatar2.png";
+import avatar3 from "../../../assets/img/avatar3.png";
+import avatar4 from "../../../assets/img/avatar4.png";
+import avatar5 from "../../../assets/img/avatar5.png";
+import avatar6 from "../../../assets/img/avatar6.png";
 
 
 
@@ -132,17 +132,30 @@ const UserSetting = () => {
           <div className="container-userinfo">
             <div className="container-userinfo-main">
               <div className="container-userinfo-left">
-                <div className="input-field" onClick={handleOpen}>
-                  <div className="input">
+                <div className="input-field">
+                  <div className="" style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                    <IconButton
+                      color="primary"
+                      onClick={handleOpen}
+                      size="small"
+                      variant="outlined"
+                      component="label"
+                      style={{ position: 'absolute', top: '10px', right: '15px', backgroundColor: '#e2e2e2' }}
+                    >
+                      <ModeEditIcon />
+                    </IconButton>
                     {(userAvatar == '') ? (
                       <Avatar
-                        sx={{ width: "12ch", height: "12ch" }}
+                        sx={{ width: "18ch", height: "18ch" }}
                         alt="userimage"
                         src={`${apiUrl}/public/user_profile/${selectedImage}`}
                       />
                     ) : (
                       <div>
-                        <img src={userAvatar} alt="" className="user-selected-avatar" />
+
+                        <div className="user-selected-avatar-division">
+                          <img src={userAvatar} alt="" className="user-selected-avatar" />
+                        </div>
                       </div>
                     )}
 

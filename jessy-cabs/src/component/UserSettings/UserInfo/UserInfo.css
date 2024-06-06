@@ -209,7 +209,7 @@
 }
 
 .selected-avatar {
-    border: 1px solid;
+    background-color: #e0f1ff;
 }
 
 .user-selected-avatar {
@@ -221,4 +221,10 @@
     justify-content: flex-end;
     margin-top: 20px;
     gap: 20px;
+}
+
+.user-selected-avatar-division {
+    padding: 35px;
+    background-color: #fff;
+    border-radius: 50%;
 }

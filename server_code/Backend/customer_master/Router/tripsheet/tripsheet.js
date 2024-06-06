@@ -1210,12 +1210,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
 //     return res.status(200), json({ image1, image2 })
 // });
 // router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
-    //     const tripid = req.params.tripid;
-    //     const bookingno = req.params.bookingno;
-    
-    //     let image1, image2;
+//     const tripid = req.params.tripid;
+//     const bookingno = req.params.bookingno;
 
-    
+//     let image1, image2;
+
+
 //     db.query("SELECT * FROM tripsheetupload WHERE tripid=? OR bookingno=?", [tripid, bookingno], (err, results) => {
 //         if (err) {
 //             return res.status(500).json({ error: "Failed to fetch data from MySQL" });

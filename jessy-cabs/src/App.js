@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
@@ -129,6 +129,8 @@ function App() {
   //fetch org logo
   const { logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
 
+  const ref = useRef(false)
+
   const fetchOrgLogo = useCallback(async () => {
     try {
       const organizationname = localStorage.getItem('usercompany');
@@ -140,7 +142,8 @@ function App() {
         const logoImage = response?.data[0]?.fileName;
         setLogo(logoImage)
         setLogoTrigger(false)
-
+        ref.current = true
+        // console.log("org", organizationname)
       }
     } catch (err) {
       console.log(err)
@@ -148,7 +151,10 @@ function App() {
   }, [apiUrl, setLogo, setLogoTrigger])
 
   useEffect(() => {
-    fetchOrgLogo()
+    if (!ref.current) {
+      fetchOrgLogo()
+    }
+
   }, [logotrigger, fetchOrgLogo])
 
   //-------------------------------------------------------------------------------------------------

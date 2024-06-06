@@ -2962,7 +2962,7 @@ const TripSheet = ({ stationName }) => {
                         />
                       </div>
                     </div>
-                    {/* ayan */}
+                
                     <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
                         {selectedRow && (
@@ -2975,9 +2975,6 @@ const TripSheet = ({ stationName }) => {
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                           Cancel
                         </Button>
-
-
-
                       </DialogActions>
                     </Dialog>
                   </div>

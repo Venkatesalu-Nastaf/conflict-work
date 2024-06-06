@@ -111,10 +111,12 @@ import useTripsheet from './useTripsheet';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "name", headerName: "Attach Name", width: 130 },
-  { field: "path", headerName: "Attach Path", width: 130 },
-  { field: "documenttype", headerName: "Document Type", width: 130 },
-  { field: "tripid", headerName: "Trip ID", width: 90 },
+  // { field: "name", headerName: "Attach Name", width: 130 },
+  { field: "documenttype", headerName: "Document Type", width: 140 },
+  { field: "path", headerName: "Attach Path", width: 160 },
+
+  { field: "tripid", headerName: "TripID", width: 100 },
+  { field: "booking_id", headerName: "Booking ID", width: 110 },
 ];
 // Update Table
 const UpdateTbaleColumns = [
@@ -168,7 +170,7 @@ const TripSheet = ({ stationName }) => {
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,
-    rows, handleKeyEnterDriverDetails,
+    rows, handleKeyEnterDriverDetails, handleimagedelete,
     actionName,
     error,
     success,
@@ -2960,14 +2962,16 @@ const TripSheet = ({ stationName }) => {
                         />
                       </div>
                     </div>
+                
                     <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
                         {selectedRow && (
-                          // <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
                           <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
                         )}
                       </DialogContent>
                       <DialogActions>
+
+                        <Button variant="contained" onClick={() => { handleimagedelete(selectedRow); handleimgPopupClose(); handleRefresh() }}>Delete</Button>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                           Cancel
                         </Button>

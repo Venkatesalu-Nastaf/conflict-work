@@ -12,9 +12,9 @@ import format from 'date-fns/format';
 import "./Table.css";
 import { Button, IconButton } from "@mui/material";
 //dialog box
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 // import { APIURL } from "../../../url";
 import { useData } from "../../Maindashboard/DataContext";
 

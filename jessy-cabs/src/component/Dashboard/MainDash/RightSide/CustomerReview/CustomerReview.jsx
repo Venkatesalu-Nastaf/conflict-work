@@ -63,11 +63,11 @@ const CustomerReview = ({ station }) => {
   }, [apiurl, stationdata, stationarray])
 
 
-  const handleYesterdayView = () => {
-    setPopupOpen(true)
+  // const handleYesterdayView = () => {
+  //   setPopupOpen(true)
 
 
-  };
+  // };
 
   // const [chartData, setChartData] = useState({
   //   categories: station.map((data)=> data.Stationname),
@@ -152,40 +152,63 @@ const CustomerReview = ({ station }) => {
   }
 
 
+  const [showdDate, setShowDate] = useState(false);
+
+
+
+  const showDateFunction = () => {
+
+    setShowDate(!showdDate);
+
+  }
+
+
+
+  const closeDateFunction = () => {
+
+    setShowDate(false);
+
+  }
+
   return (
     <div className="CustomerReview weekly-chart" id="areachart">
-      <div className="button-container" style={{ position: 'relative' }}>
+      <div className="button-container date-button-container">
         <button onClick={handleMonthlyView} className="graph-all-button">All</button>
         <button onClick={handleWeeklyView} className="graph-weekly-button">Today</button>
-        <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button>
-        <div style={{ width: '100%', height: '200px', backgroundColor: 'red', padding: '25px 0px', marginTop: '20px', position: 'absolute', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', zIndex: '1', display: 'grid', justifyContent: 'center' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="From Date"
-              id="fromDate"
-              name="fromDate"
-              format="DD/MM/YYYY"
-              value={fromDate}
-              onChange={(date) => setFromDate(date)}
-            />
-          </LocalizationProvider>
-
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="To Date"
-              name="toDate"
-              id="toDate"
-              format="DD/MM/YYYY"
-              value={toDate}
-              onChange={(date) => setToDate(date)}
-            />
-          </LocalizationProvider>
-          <div className="input">
-            <Button variant="contained" onClick={custombookingdate}>
-              Search
-            </Button>
+        {/* <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button> */}
+        <button onClick={showDateFunction} className="graph-yesterday-button">custom date</button>
+        {showdDate &&
+          <div className="dashboard-date-popup">
+            <div className="dashboard-date-popup-close" onClick={closeDateFunction}>x</div>
+            <div className="dashboard-date-popup-main-division">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="From Date"
+                  id="fromDate"
+                  name="fromDate"
+                  format="DD/MM/YYYY"
+                  value={fromDate}
+                  onChange={(date) => setFromDate(date)}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="To Date"
+                  name="toDate"
+                  id="toDate"
+                  format="DD/MM/YYYY"
+                  value={toDate}
+                  onChange={(date) => setToDate(date)}
+                />
+              </LocalizationProvider>
+            </div>
+            <div className="dashboard-date-popup-search-division">
+              <Button variant="contained" onClick={custombookingdate}>
+                Search
+              </Button>
+            </div>
           </div>
-        </div>
+        }
       </div>
       <Chart options={data.options} series={data.series} type="bar" />
 

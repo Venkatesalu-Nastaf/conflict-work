@@ -83,7 +83,8 @@
     .weekly-chart {
         width: 385px;
     }
-    .RightSide{
+
+    .RightSide {
         flex-direction: column;
     }
 }
@@ -117,4 +118,39 @@
     .weekly-chart {
         width: 300px !important;
     }
+}
+
+.date-button-container {
+    position: relative;
+}
+
+.dashboard-date-popup {
+    width: 100%;
+    background-color: #fff;
+    padding: 5px 0px 25px 0px;
+    margin-top: 20px;
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    z-index: 12;
+    display: grid;
+    justify-content: center;
+}
+
+.dashboard-date-popup-close {
+    text-align: right;
+    font-size: 20px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.dashboard-date-popup-main-division {
+    display: flex;
+    padding: 15px;
+    gap: 10px;
+}
+
+.dashboard-date-popup-search-division {
+    display: flex;
+    height: fit-content;
+    justify-content: center;
 }

@@ -1017,7 +1017,8 @@ const Vehicaleinfo = ({ stationName }) => {
               <div className='vehicle-info-dailog-box-div1'>
                 <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
                   {selectAll ? 'Deselect All' : 'Select All'}
-                </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
+                </Button>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} className='vehicle-info-dailog-box-btn-division'>
                     {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
                       ? <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
@@ -1034,8 +1035,9 @@ const Vehicaleinfo = ({ stationName }) => {
                 <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
-            </DialogContent>
+            </DialogContent>            
           </Dialog>
+          
           <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
             <DialogContent>
               <div>

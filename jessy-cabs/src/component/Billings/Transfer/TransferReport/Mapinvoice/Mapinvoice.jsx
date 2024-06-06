@@ -1,6 +1,6 @@
 import React from 'react';
 import './Mapinvoice.css';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import Locationimg from "../../../billingMain/Accountsinvoice/location.png";

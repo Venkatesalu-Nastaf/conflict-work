@@ -71,9 +71,9 @@ import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceW
 import useBooking from "./useBooking";
 import { PermissionContext } from "../../../context/permissionContext";
 //dialog box
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../../url";
 
 // spped dial 

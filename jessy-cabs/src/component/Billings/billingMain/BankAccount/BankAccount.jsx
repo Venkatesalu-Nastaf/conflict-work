@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@mui/material/Dialog';
 import { AccountType } from './BankAccountData';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import { AiFillBank } from "@react-icons/all-files/ai/AiFillBank";
 import { Autocomplete, IconButton, TextField } from "@mui/material";
 

@@ -404,7 +404,6 @@ const useBooking = () => {
       // download the processed file
       saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-      console.error('<<<ERRROR>>>', error);
       console.error('Something Went Wrong', error.message);
     } finally {
       // removing worksheet's instance to create new one
@@ -694,6 +693,7 @@ const useBooking = () => {
 
   const booking_id =
     formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+
   const handleButtonClick = () => {
     const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
     if (!booking_no) {
@@ -714,9 +714,7 @@ const useBooking = () => {
 
       if (response.data.files.length > 0) {
         setAllFile(response.data.files);
-
         setDialogOpen(true);
-
       }
       else {
         setError(true);
@@ -1003,15 +1001,12 @@ const useBooking = () => {
 
       setSendmailGuestsms(true)
       const bookingResponse = await axios.post(`${apiUrl}/booking`, updatedBook);
-      console.log("bookingResponse", bookingResponse)
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-      console.log("response booking no", response)
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();
       setRowsdriver([])
-      // addPdf(lastBookingNo);
       setRow([]);
       setRows([]);
       setSuccess(true);
@@ -1431,22 +1426,69 @@ const useBooking = () => {
   const [imagedata, setImagedata] = useState(null);
 
 
-  const handleimagedelete = (imageName) => {
-    setImagedata(imageName);
-    setDialogdeleteOpen(true);
-  };
-
-
   const handleContextMenu = () => {
     axios
-      .delete(`${apiUrl}/booking_doc/` + imagedata)
-      .then((res) => { })
+      .delete(`${apiUrl}/booking_doc-delete/` + imagedata)
+      .then((res) => {
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+        setImagedata([]);
+        setDeleteFile([]);
+        setSelectAll(false)
+      })
       .catch((err) => console.log(err));
     setDialogdeleteOpen(false);
     setDialogOpen(false);
   };
 
+
+
+  //-----------------------------------------------------
+
+  const [selectAll, setSelectAll] = useState(false);
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setDeleteFile([]);
+    } else {
+      const allFiles = allFile.map(img => img.path);
+      setDeleteFile(allFiles);
+      setSelectAll(false)
+    }
+    setSelectAll(prevState => !prevState);
+  };
+
+
+
+  const [deletefile, setDeleteFile] = useState([])
+
+  const handlecheckbox = (fileName) => {
+    if (deletefile.includes(fileName)) {
+      setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+    } else {
+      setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+    }
+  };
+
+  const handleimagedelete = (imageName) => {
+    if (deletefile.length > 0) {
+      setImagedata(prevDeleteFile => {
+        if (!prevDeleteFile || !Array.isArray(prevDeleteFile)) {
+          return [imageName]; // Initialize as array if not already
+        }
+        return [...prevDeleteFile, imageName]; // Spread if already an array
+      });
+      setDialogdeleteOpen(true);
+      setDeleteFile([]);
+    }
+  };
+
+
+  //--------------------------------------------------------
+
+
   return {
+    handleSelectAll, handlecheckbox, selectAll, deletefile,
     selectedCustomerData,
     selectedCustomerId,
     rows,

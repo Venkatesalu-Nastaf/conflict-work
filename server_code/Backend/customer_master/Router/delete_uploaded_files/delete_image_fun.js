@@ -170,6 +170,40 @@ router.delete('/tripsheet-imagedelete', (req, res) => {
 })
 
 
+//delte attached doc  in BOOKING
+
+router.delete('/booking_doc-delete/:imagedata', (req, res) => {
+    const image = req.params.imagedata
+    const deleteImage = image.split(',')
+    const sql = 'delete from booking_doc where path=?'
+    const findImage = 'select * from booking_doc where path=?'
+
+    deleteImage.forEach((img) => {
+        db.query(findImage, [img], (err, result) => {
+            if (err) {
+                console.log("err", err)
+            }
+            if (result.length > 0) {
+                db.query(sql, [img], (err, result) => {
+                    if (err) {
+                        console.log("err", err);
+                        res.status(500).json({ message: "error inside server when deleteing image ", success: false })
+                    }
+                })
+            }
+            const deleteImagePath = path.join('./uploads', img)
+            if (fs.existsSync(deleteImagePath)) {
+                try {
+                    fs.unlinkSync(deleteImagePath)
+                } catch (err) {
+                    console.log("err", err)
+                }
+            } else {
+                console.log("file dosent exist")
+            }
+        })
+    })
+})
 
 
 

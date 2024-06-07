@@ -177,7 +177,8 @@ const Booking = ({ stationName }) => {
     edit,
     handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver
+    selectedCustomerdriver,
+    handleSelectAll, handlecheckbox, selectAll, deletefile,
   } = useBooking();
 
   useEffect(() => {
@@ -192,6 +193,7 @@ const Booking = ({ stationName }) => {
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
+
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1547,7 +1549,8 @@ const Booking = ({ stationName }) => {
               checkboxSelection
             />
 
-            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+
+            {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
                 <div className="booking-main-table-div1">
                   {Array.isArray(allFile) &&
@@ -1567,7 +1570,40 @@ const Booking = ({ stationName }) => {
                     ))}
                 </div>
               </DialogContent>
+            </Dialog> */}
+
+
+            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+              <DialogContent>
+                <div className='vehicle-info-dailog-box-div1'>
+                  <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
+                    {selectAll ? 'Deselect All' : 'Select All'}
+                  </Button>
+                  {Array.isArray(allFile) && allFile.map((img, index) => (
+                    <div key={index} className='vehicle-info-dailog-box-btn-division'>
+                      {img.mimetype === "image/jpg" || img.mimetype === "image/jpeg" || img.mimetype === "image/png" || img.mimetype === "image/gif" || img.mimetype === "image/svg"
+                        ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                        <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" width="100%" height="400px" />}
+
+                      <Checkbox typeof='checked'
+                        checked={deletefile.includes(img.path)}
+                        onClick={(event) => {
+                          handlecheckbox(img.path)
+
+                        }} />
+                    </div>
+                  ))}
+                </div>
+                <div className='vehicle-info-dailog-box-delete-print-division'>
+                  <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                </div>
+              </DialogContent>
             </Dialog>
+
+
+
+//----------------------------------------------------------------------------------------------
+
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>

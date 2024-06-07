@@ -12,7 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
-import Avatar from "../../../../assets/img/avatar.png"
+// import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
 
@@ -42,6 +42,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
+import Avatar from "@mui/material/Avatar";
 
 
 
@@ -412,7 +413,10 @@ const EmployeeCreation = ({ stationName }) => {
                       handleRowClickUser(row)
                     }}
                       key={index}>
-                      <img src={Avatar} alt="profile" width="50" />
+                      {/* <img src={row.profile_image} alt="profile" width="50" /> */}
+                      <Avatar
+                      alt="userimage"
+                      src={row.profile_image}                    />
                       <div>
                         <h3 className="user-name-text">{row.username}</h3>
                         <p className="user-details-text">{row.designation}</p>

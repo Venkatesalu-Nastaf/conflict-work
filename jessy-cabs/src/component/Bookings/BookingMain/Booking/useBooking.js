@@ -676,7 +676,7 @@ const useBooking = () => {
       try {
         const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
         const data = response.data
-        const name = data?.map((res) => res.vehiclename)
+        const name = data?.map((res) => res.vehicleName)
 
         setVehicleName(name)
 
@@ -1002,10 +1002,11 @@ const useBooking = () => {
       };
 
       setSendmailGuestsms(true)
-      await axios.post(`${apiUrl}/booking`, updatedBook);
+      const bookingResponse = await axios.post(`${apiUrl}/booking`, updatedBook);
+      console.log("bookingResponse", bookingResponse)
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-
+      console.log("response booking no", response)
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();

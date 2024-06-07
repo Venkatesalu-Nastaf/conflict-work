@@ -322,6 +322,8 @@ const useTripsheet = () => {
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
 
+        console.log("form data", formData)
+
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);

@@ -30,20 +30,22 @@ import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../url";
 import Tooltip from '@mui/material/Tooltip';
 
+
 // import Modal from '@mui/material/Modal';
 // import Box from '@mui/material/Box';
 
 const MainDashboard = () => {
 
   const apiUrl = APIURL;
-  const { sharedData, setFilteredData,datatriguserinfo } = useData();
+  // const { sharedData, setFilteredData,datatriguserinfo } = useData();
+  const { setFilteredData,datatriguserinfo } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
-  const { selectedTheme } = useThemes();
-  const { setSelectedTheme } = useThemes();
+  const { selectedTheme,setSelectedAvatar,selectedavtar, setSelectedTheme } = useThemes();
+  // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
   const data1 = localStorage.getItem("useridno")
   const data2 = localStorage.getItem("usercompany")
@@ -52,11 +54,12 @@ const MainDashboard = () => {
   const data6 = localStorage.getItem("organizationimages")
 
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
+ 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    setSelectedImage(sharedData)
-  }, [sharedData])
+  //   setSelectedImage(sharedData)
+  // }, [sharedData])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -95,7 +98,7 @@ const MainDashboard = () => {
       navigate("/");
       setMakeRender((prev) => !prev);
     },
-    [navigate]
+    [navigate,setMakeRender,setPermission]
   );
 
   useEffect(() => {
@@ -177,13 +180,18 @@ const MainDashboard = () => {
         }
         const routeData = await response.json();
         const usertheme = routeData[0]?.theme;
+        const userprofile=routeData[0]?.profile_image
+        console.log(usertheme,"themme",userprofile)
         setSelectedTheme(usertheme);
+        setSelectedAvatar(userprofile)
+
         localStorage.setItem("selectedusertheme", JSON.stringify(usertheme));
+        localStorage.setItem("selectedProfileimageuser",JSON.stringify(userprofile))
         setRouteData(routeData);
       } catch (error) { }
     };
     fetchData();
-  }, [storeUsername, setSelectedTheme, apiUrl]);
+  }, [storeUsername, setSelectedTheme, apiUrl,setSelectedAvatar]);
   const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
 
   const useridno = routeData[0]?.userid;
@@ -221,13 +229,13 @@ const MainDashboard = () => {
   }, [apiUrl, setFilteredData]);
 
   useEffect(() => {
-    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
+    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null ) {
       setTimeout(() => {
         setUserdashboard(false)
       }, 3000);
 
     }
-  }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme, permissions]);
+  }, [data1, data2, data4, data5, setUserdashboard, data6, storedusertheme, permissions]);
 
   const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -283,7 +291,8 @@ const MainDashboard = () => {
                   >
                     <Avatar
                       alt="userimage"
-                      src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                      // src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                      src={selectedavtar}
                     />
                   </StyledBadge>
                 </Tooltip>

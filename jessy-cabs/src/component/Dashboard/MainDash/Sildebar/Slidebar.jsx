@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
-import axios from "axios";
+// import axios from "axios";
 import "./Sidebar.css";
 import Avatar from "@mui/material/Avatar";
 import { motion } from "framer-motion";
@@ -53,6 +53,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import update from "../../../../assets/img/update.png";
 // import { useData } from "../../MainDash/Sildebar/DataContext2";
+import { useThemes } from "../../../UserSettings/Themes/ThemesContext";
+// import { useData  as datadashboard} from "../../Maindashboard/DataContext"; 
 
 const MenuItem = ({
   label,
@@ -113,6 +115,14 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
+
+  const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
+  const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
+  const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
+  const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
+  const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+
   const closeMenuFunction = () => {
     setExpanded(false);
     setIsRegisterdropdownclicked(false);
@@ -131,18 +141,20 @@ const Sidebar = () => {
 
   //--------------------------to show logo-----------
 
-  const { sharedData, logo } = useData();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedprofileImage, setSelectedprofileImage] = useState(null);
+  const { logo } = useData();
+  const {selectedavtar } = useThemes();
+  // const {datatriguserinfo}=datadashboard()
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedprofileImage, setSelectedprofileImage] = useState(null);
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
   const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
   const [billingDropdownVisible, setBillingDropdownVisible] = useState(false);
   const [bookingDropdownVisible, setBookingDropdownVisible] = useState(false);
 
-  useEffect(() => {
-    setSelectedImage(sharedData)
-  }, [sharedData])
+  // useEffect(() => {
+  //   setSelectedImage(sharedData)
+  // }, [sharedData])
 
   //------------------popup------------------------
 
@@ -362,31 +374,31 @@ const Sidebar = () => {
     fetchData();
   }, [apiUrl]);
 
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  // const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  useEffect(() => {
-    const handleImageView = () => {
-      const userid = localStorage.getItem("useridno");
-      axios
-        .get(`${apiUrl}/userprofileview/${userid}`)
-        .then((res) => {
-          if (res.status === 200) {
-            setSelectedprofileImage(res.data[0]?.filename);
-          } else {
-            const timer = setTimeout(handleImageView, 100);
-            return () => clearTimeout(timer);
-          }
-        });
-    };
-    handleImageView();
-  }, [sharedData, selectedprofileImage, apiUrl]);
+  // useEffect(() => {
+  //   const handleImageView = () => {
+  //     const userid = localStorage.getItem("useridno");
+  //     axios
+  //       .get(`${apiUrl}/userprofileview/${userid}`)
+  //       .then((res) => {
+  //         if (res.status === 200) {
+  //           setSelectedprofileImage(res.data[0]?.filename);
+  //         } else {
+  //           const timer = setTimeout(handleImageView, 100);
+  //           return () => clearTimeout(timer);
+  //         }
+  //       });
+  //   };
+  //   handleImageView();
+  // }, [sharedData, selectedprofileImage, apiUrl]);
 
-  const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
-  const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
-  const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
-  const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
-  const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
+  // const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
+  // const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
+  // const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
+  // const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
+  // const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
+  // const [popupOpen, setPopupOpen] = useState(false);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -631,7 +643,7 @@ const Sidebar = () => {
               >
                 <Avatar
                   alt="userimage"
-                  src={`${apiUrl}/images/${selectedprofileImage}`}
+                  // src={`${apiUrl}/images/${selectedprofileImage}`}
                 />
               </StyledBadge>
             </div>
@@ -656,7 +668,7 @@ const Sidebar = () => {
         expanded && (
           <motion.div className="sidebar mobile-view-sidebar">
             <div className="logo" onClick={closeMenuFunction}>
-              {selectedImage !== null ? (
+              {/* {selectedImage !== null ? (
                 <>
                   {!isImageLoaded && (
                     <div style={{ fontSize: "55px" }}>
@@ -674,8 +686,26 @@ const Sidebar = () => {
                 <div style={{ fontSize: "55px" }}>
                   <BiBuildings />
                 </div>
-              )}
+              )} */}
+              {/* <div className="logo"> */}
+
+{logo ? (
+  <img
+    src={logo}
+    alt=""
+  />) : (<div style={{ 'fontSize': "55px" }}>
+    <BiBuildings />
+  </div>)}
+
+{/* </div> */}
             </div>
+
+
+
+
+
+
+
             <div className="menu">
               {Dashbord_read === 1 && <MenuItem
                 label="Dashboard"
@@ -687,6 +717,8 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={BiHomeAlt}
               />}
+
+
               <motion.div>
                 <MenuItem
                   label={
@@ -973,7 +1005,7 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-              <MenuItem
+<MenuItem
                 label="User"
                 to="/home/usersettings/usersetting"
                 alt="/home/usersettings/usersetting"
@@ -984,7 +1016,60 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={FaUserAstronaut}
               />
-              <div className="header-user-mobile" onClick={closeMenuFunction}>
+
+
+<div className="header-user-mobile" onClick={closeMenuFunction}>
+                <div className="logout-item">
+                  <FiLogOut className="logout-icon" onClick={handleLogout} />
+                </div>
+                <div className="user-name-item">
+                  <div>
+                    {storedUsername ? (
+                      <div>
+                        <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                        <div className="alert-popup-main">
+                          {success && (
+                            <div className="alert-popup Success">
+                              <div className="popup-icon">
+                                {" "}
+                                <FileDownloadDoneIcon
+                                />{" "}
+                              </div>
+                              <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon
+                                  color="action"
+                                />{" "}
+                              </span>
+                              <p>{success}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <p>User not logged in</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="avatar-item avatar-item-2">
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    variant="dot"
+                  >
+                    <Avatar
+                      alt="userimage"
+                     src={selectedavtar}
+                    />
+                  </StyledBadge>
+                  <div className="user-icon-update" onClick={handleClickOpenmodal}>
+                    <FaUser />
+                    <div className="user-icon-update-dot"></div>
+                  </div>
+                </div>
+              </div>
+              {/* <div className="header-user-mobile" onClick={closeMenuFunction}>
                 <div className="logout-item">
                   <FiLogOut className="logout-icon" onClick={handleLogout} />
                 </div>
@@ -1034,7 +1119,7 @@ const Sidebar = () => {
                     <div className="user-icon-update-dot"></div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="alert-popup-main">
               {info && (

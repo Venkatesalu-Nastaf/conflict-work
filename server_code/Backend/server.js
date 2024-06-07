@@ -165,6 +165,17 @@ app.post('/updatethemename', (req, res) => {
     res.status(200).json({ message: 'Status updated successfully' });
   });
 });
+app.post('/updateprofilename', (req, res) => {
+  const { userid, profile_image } = req.body;
+  const query = 'UPDATE usercreation SET profile_image = ? WHERE userid IN (?)';
+  db.query(query, [profile_image, userid], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
 
 
 

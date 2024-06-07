@@ -20,7 +20,6 @@ router.post('/booking', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-        console.log("result", result)
 
         // Check if the insertion was successful (affectedRows > 0)
         if (result.affectedRows > 0) {
@@ -624,7 +623,6 @@ const booking_uploadfile = multer({ storage: booking_storage });
 //     const booking_id = req.params.id;
 //     const fileType = req.file.mimetype;
 //     const fileName = req.file.filename;
-//     console.log("booking_id", booking_id, "2", fileType, "3", fileName)
 
 //     // const documenttype = "mail"
 //     const sql = `insert into booking_doc(booking_id, path, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
@@ -646,15 +644,12 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
-    console.log("booking_id", booking_id, "2", fileType, "3", fileName);
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
     db.query(sql, [booking_id, fileName, fileType], (err, result) => {
         if (err) {
-            console.log("error", err)
             return res.json({ Message: "Error" });
         }
-        console.log("result for image ", result)
         return res.json("success upload");
     });
 });
@@ -687,11 +682,12 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
             path: result.path,
             mimetype: result.path.split('.').pop()// assuming 'type' indicates whether it's an image or PDF
         }));
-
-
         res.json({ files });
     });
 });
+
+
+
 
 
 

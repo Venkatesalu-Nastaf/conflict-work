@@ -1035,9 +1035,9 @@ const Vehicaleinfo = ({ stationName }) => {
                 <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
-            </DialogContent>            
+            </DialogContent>
           </Dialog>
-          
+
           <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
             <DialogContent>
               <div>
@@ -1045,6 +1045,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <div>
                   <Button onClick={handleContextMenu}>yes</Button>
                   <Button onClick={handleClosedeleteDialog}>No</Button>
+
                 </div>
               </div>
             </DialogContent>

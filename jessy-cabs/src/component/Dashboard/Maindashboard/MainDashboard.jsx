@@ -41,8 +41,8 @@ const MainDashboard = () => {
   const { setFilteredData,datatriguserinfo } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
-  const { selectedTheme,setSelectedAvatar,selectedavtar} = useThemes();
-  const { setSelectedTheme } = useThemes();
+  const { selectedTheme,setSelectedAvatar,selectedavtar, setSelectedTheme } = useThemes();
+  // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   // const [selectedImage, setSelectedImage] = useState(null);

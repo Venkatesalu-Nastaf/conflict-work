@@ -146,14 +146,15 @@ const UserSetting = () => {
             <div className="container-userinfo-main">
               <div className="container-userinfo-left">
                 <div className="input-field">
-                  <div className="" style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                  <div className="user-info-user-avatar-division">
                     <IconButton
                       color="primary"
                       onClick={handleOpen}
                       size="small"
+                      className="user-info-user-avatar-edit-icon"
                       variant="outlined"
                       component="label"
-                      style={{ position: 'absolute', top: '10px', right: '15px', backgroundColor: '#e2e2e2' }}
+                      
                     >
                       <ModeEditIcon />
                     </IconButton>

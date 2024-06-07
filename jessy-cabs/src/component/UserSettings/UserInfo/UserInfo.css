@@ -213,7 +213,7 @@
 }
 
 .user-selected-avatar {
-    width: 160px;
+    width: 125px;
 }
 
 .select-avatar-btn-division {
@@ -227,4 +227,19 @@
     padding: 35px;
     background-color: #fff;
     border-radius: 50%;
+}
+
+.user-info-user-avatar-division {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.user-info-user-avatar-edit-icon {
+    position: absolute !important;
+    top: 10px;
+    right: 15px;
+    background-color: #e2e2e2 !important;
+    z-index: 1;
 }

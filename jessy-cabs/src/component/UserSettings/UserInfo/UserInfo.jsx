@@ -28,6 +28,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
@@ -36,6 +37,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { APIURL } from "../../url";
+import { useThemes } from "../Themes/ThemesContext";
 
 import avatar1 from "../../../assets/img/avatar1.png";
 import avatar2 from "../../../assets/img/avatar2.png";
@@ -64,14 +66,14 @@ const UserSetting = () => {
     handleClick,
     handleChange,
     hidePopup,
-    selectedImage,
+    // selectedImage,
     editMode,
     toggleEditMode,
     showPasswords,
     handleClickShowPasswords,
     // handleClickShowPassword,
     // handleMouseDownPassword,
-    handleUpload,
+    // handleUpload,
     handleMouseDownPasswords,
     // showPassword,
     handleUpdate,
@@ -107,10 +109,12 @@ const UserSetting = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {setSelectedAvatar,selectedavtar} = useThemes();
 
   const [userAvatarValue, setUserAvatarValue] = useState('');
 
   const avatarChangeValue = (value, avatarNumber) => {
+    console.log(value,"ggggggg")
     // const avatarElement = document.getElementById(`avatar-image-${avatarNumber}`);
     // if (avatarElement) {
     //   avatarElement.classList.add('selected-avatar');
@@ -118,12 +122,21 @@ const UserSetting = () => {
     setUserAvatarValue(value);
   }
 
-  const [userAvatar, setUserAvatar] = useState('');
+  // const [userAvatar, setUserAvatar] = useState('');
 
-  const avatarChange = (avatarValue) => {
-    setUserAvatar(avatarValue);
+  const avatarChange = async(avatarValue) => {
+    const userid = localStorage.getItem('useridno');
+    setSelectedAvatar(avatarValue)
+    localStorage.removeItem("selectedProfileimageuser");
+
+    await axios.post(`${apiUrl}/updateprofilename`, {
+      userid: userid,
+      profile_image: avatarValue
+    });
+    // setUserAvatar(avatarValue);
     handleClose();
   }
+  
 
   return (
     <div className="userinfo-form Scroll-Style-hide">
@@ -144,24 +157,26 @@ const UserSetting = () => {
                     >
                       <ModeEditIcon />
                     </IconButton>
-                    {(userAvatar == '') ? (
+                    {(selectedavtar === null) ? ( 
                       <Avatar
                         sx={{ width: "18ch", height: "18ch" }}
                         alt="userimage"
-                        src={`${apiUrl}/public/user_profile/${selectedImage}`}
-                      />
-                    ) : (
+                        // src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                        // src={userAvatar}
+                        src={selectedavtar}
+                      /> 
+                     ) : (
                       <div>
 
                         <div className="user-selected-avatar-division">
-                          <img src={userAvatar} alt="" className="user-selected-avatar" />
+                          <img     src={selectedavtar}alt="" className="user-selected-avatar" />
                         </div>
                       </div>
-                    )}
+                  )} 
 
                   </div>
                 </div>
-                <div className="input-field">
+                {/* <div className="input-field">
                   <div className="input">
                     <div className="input-field">
                       <Button
@@ -176,7 +191,7 @@ const UserSetting = () => {
                       </Button>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="container-userinfo-right">
                 <div className=" userInfo-inputs-feilds input-field">

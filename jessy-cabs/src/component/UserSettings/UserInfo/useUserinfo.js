@@ -5,12 +5,12 @@ import { APIURL } from "../../url";
 
 const useUserinfo = () => {
     const apiUrl = APIURL;
-    const { sharedData, setSharedData,SetDataTrigUser } = useData(); // -->  its for context for image
+    const {SetDataTrigUser } = useData(); // -->  its for context for image
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
+    // const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -21,11 +21,11 @@ const useUserinfo = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    useEffect(() => {
-        setSelectedImage(sharedData)
-    }, [sharedData])
+    // useEffect(() => {
+    //     setSelectedImage(sharedData)
+    // }, [sharedData])
 
-    const storeUserId = localStorage.getItem('useridno'); //for getting userid 
+    // const storeUserId = localStorage.getItem('useridno'); //for getting userid 
 
     const [book, setBook] = useState({
         userid: '',
@@ -101,26 +101,26 @@ const useUserinfo = () => {
 
     // profile image upload--------------------------------------
 
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
+    // const handleUpload = () => {
+    //     const input = document.createElement('input');
+    //     input.type = 'file';
+    //     input.accept = '.pdf, .jpg, .jpeg, .png';
+    //     input.onchange = handleFileChange;
+    //     input.click();
+    // };
 
-    const handleFileChange = (event) => {
-        const userid = selectedCustomerData[0]?.userid || book.userid || storeUserId;
-        const file = event.target.files[0];
-        if (!file) return;
-        setSharedData(file.name);
-        setSelectedImage(file)
-        if (file) {
-            const formData = new FormData();
-            formData.append('image', file);
-            axios.put(`${apiUrl}/userprofileupload/${userid}`, formData)
-        }
-    };
+    // const handleFileChange = (event) => {
+    //     const userid = selectedCustomerData[0]?.userid || book.userid || storeUserId;
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     setSharedData(file.name);
+    //     setSelectedImage(file)
+    //     if (file) {
+    //         const formData = new FormData();
+    //         formData.append('image', file);
+    //         axios.put(`${apiUrl}/userprofileupload/${userid}`, formData)
+    //     }
+    // };
 
     const useriddata = localStorage.getItem('useridno');
 
@@ -183,18 +183,18 @@ const useUserinfo = () => {
         book,
         handleChange,
         hidePopup,
-        selectedImage,
+        // selectedImage,
         editMode,
-        handleFileChange,
+        // handleFileChange,
         toggleEditMode,
         showPasswords,
         handleClickShowPasswords,
         handleClickShowPassword,
         handleMouseDownPassword,
-        handleUpload,
+        // handleUpload,
         handleMouseDownPasswords,
         showPassword,
-        handleUpdate, sharedData,
+        handleUpdate,
     };
 };
 

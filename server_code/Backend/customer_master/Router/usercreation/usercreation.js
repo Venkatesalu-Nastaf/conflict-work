@@ -205,63 +205,63 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 
 
 
-router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
-  const userId = req.params.id;
-  const fileName = req.file.filename;
+// router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
+//   const userId = req.params.id;
+//   const fileName = req.file.filename;
 
 
-  // Check if the user profile already exists
-  const checkIfExistsQuery = `SELECT * FROM user_profile WHERE userid = ?`;
-  db.query(checkIfExistsQuery, [userId], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ Message: "Error checking profile existence", err });
-    }
+//   // Check if the user profile already exists
+//   const checkIfExistsQuery = `SELECT * FROM user_profile WHERE userid = ?`;
+//   db.query(checkIfExistsQuery, [userId], (err, rows) => {
+//     if (err) {
+//       return res.status(500).json({ Message: "Error checking profile existence", err });
+//     }
 
-    if (rows.length > 0) {
+//     if (rows.length > 0) {
 
-      // to unlink image file
-      const oldFileName = rows[0].filename;
+//       // to unlink image file
+//       const oldFileName = rows[0].filename;
 
-      if (oldFileName) {
-        const oldImagePath = path.join("./customer_master/public/user_profile", oldFileName);
-        try {
-          fs.unlinkSync(oldImagePath)
-        } catch { }
-      }
+//       if (oldFileName) {
+//         const oldImagePath = path.join("./customer_master/public/user_profile", oldFileName);
+//         try {
+//           fs.unlinkSync(oldImagePath)
+//         } catch { }
+//       }
 
-      // Profile already exists, update the record
-      const updateQuery = `UPDATE user_profile SET filename = ? WHERE userid = ?`;
-      db.query(updateQuery, [fileName, userId], (err, result) => {
-        if (err) {
-          return res.status(500).json({ Message: "Error updating profile picture", err });
-        }
-        return res.status(200).json({ Status: "success" });
-      });
-    }
-    else {
-      // Profile doesn't exist, insert a new record
-      const insertQuery = `INSERT INTO user_profile (userid, filename) VALUES (?, ?)`;
-      db.query(insertQuery, [userId, fileName], (err, result) => {
-        if (err) {
-          return res.status(500).json({ Message: "Error inserting profile picture", err });
-        }
-        return res.status(200).json({ Status: "success" });
-      });
-    }
-  });
-});
+//       // Profile already exists, update the record
+//       const updateQuery = `UPDATE user_profile SET filename = ? WHERE userid = ?`;
+//       db.query(updateQuery, [fileName, userId], (err, result) => {
+//         if (err) {
+//           return res.status(500).json({ Message: "Error updating profile picture", err });
+//         }
+//         return res.status(200).json({ Status: "success" });
+//       });
+//     }
+//     else {
+//       // Profile doesn't exist, insert a new record
+//       const insertQuery = `INSERT INTO user_profile (userid, filename) VALUES (?, ?)`;
+//       db.query(insertQuery, [userId, fileName], (err, result) => {
+//         if (err) {
+//           return res.status(500).json({ Message: "Error inserting profile picture", err });
+//         }
+//         return res.status(200).json({ Status: "success" });
+//       });
+//     }
+//   });
+// });
 
 //getting user profile
 
-router.get('/userprofileview/:id', (req, res) => {
-  const userid = req.params.id
-  const sql = 'select * from user_profile where userid=?';
-  db.query(sql, [userid], (err, result) => {
-    if (err) return res.json({ Message: "error" })
+// router.get('/userprofileview/:id', (req, res) => {
+//   const userid = req.params.id
+//   const sql = 'select * from user_profile where userid=?';
+//   db.query(sql, [userid], (err, result) => {
+//     if (err) return res.json({ Message: "error" })
 
-    return res.json(result);
-  })
-})
+//     return res.json(result);
+//   })
+// })
 
 
 router.put("/usercreationdataupdate/:editid",(req,res)=>{

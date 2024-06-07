@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const util = require('util')
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const multer = require('multer');
 const moment = require('moment');
 const path = require('path');
 
+//its for to use aysn/await 
+const util = require('util')
 const query = util.promisify(db.query).bind(db)
 
 router.use(express.static('customer_master'));
@@ -19,6 +20,7 @@ router.post('/booking', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
+        console.log("result", result)
 
         // Check if the insertion was successful (affectedRows > 0)
         if (result.affectedRows > 0) {
@@ -43,6 +45,8 @@ router.get('/booking/:bookingno', (req, res) => {
         return res.status(200).json(bookingDetails);
     });
 });
+
+
 
 router.get('/last-booking-no', (req, res) => {
     db.query('SELECT * FROM booking ORDER BY bookingno DESC LIMIT 1', (err, result) => {
@@ -95,7 +99,6 @@ router.delete('/booking/:bookingno', async (req, res) => {
 router.put('/booking/:bookingno', async (req, res) => {
     const bookingno = req.params.bookingno;
     const updatedCustomerData = req.body;
-
     try {
         //check this booking added tripsheet or not
         const checkBookingId = await query('select bookingno from tripsheet where bookingno=?', [bookingno])
@@ -145,6 +148,7 @@ router.put('/booking/:bookingno', async (req, res) => {
     //-------------------------------------------------------------------------------------------------
 }
 );
+
 //booking number change
 router.get('booking', async (req, res) => {
     try {
@@ -157,6 +161,8 @@ router.get('booking', async (req, res) => {
         res.status(500).json({ error: 'Error fetching next booking number' });
     }
 });
+
+
 // bookingfile upload
 // router.post('/upload', upload.single('file'), (req, res) => {
 //     if (!req.file) {
@@ -194,6 +200,7 @@ router.get('/name-customers/:customer', (req, res) => {
         return res.status(200).json(customerDetails);
     });
 });
+
 
 router.get('/drivername-details/:driver', (req, res) => {
     const customer = req.params.driver;
@@ -237,6 +244,7 @@ router.get('/drivername-details/:driver', (req, res) => {
 
     });
 });
+
 
 //send email from booking page
 // router.post('/send-email', async (req, res) => {
@@ -612,27 +620,46 @@ const booking_storage = multer.diskStorage({
 
 const booking_uploadfile = multer({ storage: booking_storage });
 
-router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
-    const booking_id = req.params.id;
-    // const path = req.file.filename;
-    const fileType = req.file.mimetype;
-    const fileName = req.file.filename;
-    console.log(req.query)
-    // const documenttype = "mail"
-    const sql = `insert into booking_doc(booking_id, path, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
-    // const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
-    db.query(sql, (err, result) => {
-        if (err) {
-            return res.json({ Message: "Error" });
-        }
-        return res.json("successs upload");
-    })
+// router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
+//     const booking_id = req.params.id;
+//     const fileType = req.file.mimetype;
+//     const fileName = req.file.filename;
+//     console.log("booking_id", booking_id, "2", fileType, "3", fileName)
 
-})
+//     // const documenttype = "mail"
+//     const sql = `insert into booking_doc(booking_id, path, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+//     // const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             return res.json({ Message: "Error" });
+//         }
+//         return res.json("successs upload");
+//     })
+
+// })
 
 // booking_id	fileName	file_type	
 
 //-----------------fetch ---------------
+
+router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
+    const booking_id = req.params.id;
+    const fileType = req.file.mimetype;
+    const fileName = req.file.filename;
+    console.log("booking_id", booking_id, "2", fileType, "3", fileName);
+
+    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
+    db.query(sql, [booking_id, fileName, fileType], (err, result) => {
+        if (err) {
+            console.log("error", err)
+            return res.json({ Message: "Error" });
+        }
+        console.log("result for image ", result)
+        return res.json("success upload");
+    });
+});
+
+
 router.get('/booking-docView/:id', (req, res) => {
     const id = req.params.id
     const sql = 'select * from booking_doc where booking_id=?';

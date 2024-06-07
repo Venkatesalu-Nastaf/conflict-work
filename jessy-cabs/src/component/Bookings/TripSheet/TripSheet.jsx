@@ -2,14 +2,14 @@ import React, { useEffect, useContext } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
-  VehicleRate,
+  // VehicleRate,
   Status,
   HireTypes,
   DocumentType,
   Duty,
   Pickup,
   Email,
-  Select,
+  // Select,
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
@@ -26,7 +26,7 @@ import AltRouteIcon from "@mui/icons-material/AltRoute";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
-import InputAdornment from "@mui/material/InputAdornment";
+// import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -49,7 +49,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+// import EditNoteIcon from "@mui/icons-material/EditNote";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -91,8 +91,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
-import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
-import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+// import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
+// import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
 
 import DialogContentText from '@mui/material/DialogContentText';
@@ -119,27 +119,27 @@ const columns = [
   { field: "booking_id", headerName: "Booking ID", width: 110 },
 ];
 // Update Table
-const UpdateTbaleColumns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "document", headerName: "Document", width: 130 },
-  { field: "documentname", headerName: "Document Name", width: 130 },
-  { field: "filename", headerName: "File Name", width: 90 },
-];
+// const UpdateTbaleColumns = [
+//   { field: "id", headerName: "Sno", width: 70 },
+//   { field: "document", headerName: "Document", width: 130 },
+//   { field: "documentname", headerName: "Document Name", width: 130 },
+//   { field: "filename", headerName: "File Name", width: 90 },
+// ];
 
-const UpdateTbaleRows = [
-  {
-    id: 1,
-    document: 1,
-    documentname: "Employee 1",
-    filename: "John Doe",
-  },
-  {
-    id: 2,
-    document: 2,
-    documentname: "Band 2",
-    filename: "Employee 2",
-  },
-];
+// const UpdateTbaleRows = [
+//   {
+//     id: 1,
+//     document: 1,
+//     documentname: "Employee 1",
+//     filename: "John Doe",
+//   },
+//   {
+//     id: 2,
+//     document: 2,
+//     documentname: "Band 2",
+//     filename: "Employee 2",
+//   },
+// ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -222,14 +222,14 @@ const TripSheet = ({ stationName }) => {
     signimageUrl,
     selectedImage,
     GmapimageUrl,
-    setCloseTime2,
-    setStartTime2,
-    packageDetails,
-    calculateExkmAmount,
-    calculateExHrsAmount,
-    calculateNightAmount,
-    calculateTotalAmount,
-    calculatedriverconvienceAmount,
+    // setCloseTime2,
+    // setStartTime2,
+    // packageDetails,
+    // calculateExkmAmount,
+    // calculateExHrsAmount,
+    // calculateNightAmount,
+    // calculateTotalAmount,
+    // calculatedriverconvienceAmount,
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
@@ -252,7 +252,9 @@ const TripSheet = ({ stationName }) => {
     SignPage, driverdetails,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange, transferreport
+    totalcalcAmount, escort, handleEscortChange,
+    //  handleClickOpen,
+    open, handleClose, handleTransferChange, transferreport
 
   } = useTripsheet();
 
@@ -1085,7 +1087,7 @@ const TripSheet = ({ stationName }) => {
                     <input
                       type="time"
                       name="reporttime"
-                      value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                      value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                       onChange={(event) => {
                         setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
@@ -2962,8 +2964,8 @@ const TripSheet = ({ stationName }) => {
                         />
                       </div>
                     </div>
-                
-                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
+
+                    {/* <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
                         {selectedRow && (
                           <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
@@ -2976,10 +2978,34 @@ const TripSheet = ({ stationName }) => {
                           Cancel
                         </Button>
                       </DialogActions>
+                    </Dialog> */}
+
+                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth>
+                      <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {selectedRow && (
+                          <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />
+                        )}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            handleimagedelete(selectedRow);
+                            handleimgPopupClose();
+                            handleRefresh();
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
                     </Dialog>
+
                   </div>
                 </TabPanel>
-
                 <TabPanel value={6} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">

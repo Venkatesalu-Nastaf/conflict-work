@@ -171,7 +171,7 @@ const CustomerReview = ({ station }) => {
   }
 
   document.addEventListener('click', function (event) {
-    if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup'))) {
+    if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup') && !event.target.closest('.MuiDateCalendar-root'))) {
       closeDateFunction();
     }
   });

@@ -106,7 +106,7 @@ export const Hire = [
     Option: "Own  Vehicle",
     optionvalue: "ownvehicle",
   },
-  
+
 ];
 
 // PickUp DropDown

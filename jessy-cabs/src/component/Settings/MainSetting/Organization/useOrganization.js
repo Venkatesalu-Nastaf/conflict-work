@@ -131,6 +131,7 @@ const useOrganization = () => {
             const organizationname = localStorage.getItem('usercompany');
 
             try {
+                if(!organizationname) return
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
 
@@ -142,10 +143,7 @@ const useOrganization = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                } else {
-                    const timer = setTimeout(fetchData, 50);
-                    return () => clearTimeout(timer);
-                }
+                } 
             }
             catch {
             }

@@ -1121,7 +1121,7 @@ const TripSheet = ({ stationName }) => {
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-                  <div className='closetime'>
+                  <div className='closetime tripsheet-shed-in-time'>
                     <label>Shed-In Time</label>
                     <input
                       type="time"

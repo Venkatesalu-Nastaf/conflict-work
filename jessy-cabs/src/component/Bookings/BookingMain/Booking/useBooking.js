@@ -888,6 +888,28 @@ const useBooking = () => {
 
   const [lastBookingNo, setLastBookingNo] = useState("");
   const reportdate = dayjs(book.startdate)
+  const [imageDialogOpen, setImageDialogOpen] = useState(false)
+  //------------------------------------------------
+  const [selectetImg, setSelectetImg] = useState([])
+  const removeSelectedImage = (index, e) => {
+    e.preventDefault()
+    setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
+  }
+
+  const handleImagechange2 = (e) => {
+    const file = Array.from(e.target.files);
+    setSelectetImg((previmg) => [...previmg, ...file])
+    if (file.length > 0) {
+      setImageDialogOpen(true)
+    }
+  }
+
+  const handleCloseImageDialog = () => {
+    setImageDialogOpen(false)
+  }
+
+
+  //------------------------------------------------------
 
 
   const handleAdd = async () => {
@@ -939,11 +961,7 @@ const useBooking = () => {
     }
 
     try {
-
-
-      const selectedBookingDate =
-        selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-
+      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
@@ -951,12 +969,6 @@ const useBooking = () => {
 
       const updatedBook = {
 
-        // ...book,
-        // ...formData,
-        // ...selectedCustomerData,
-        // ...restSelectedCustomerData, // Use the modified object without 'id'
-        // ...selectedCustomerDatas,
-        // ...restSelectedCustomerDatas,
         bookingtime: bookingtime || getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
@@ -967,8 +979,6 @@ const useBooking = () => {
         email: formData.email || selectedCustomerData.email || formValues.email || book.email,
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
-        // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
-        // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
         vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
@@ -1001,8 +1011,18 @@ const useBooking = () => {
 
       setSendmailGuestsms(true)
       const bookingResponse = await axios.post(`${apiUrl}/booking`, updatedBook);
+
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
+
+      //image upload
+      await Promise.all(selectetImg?.map(async (img) => {
+        const formImageData = new FormData();
+        formImageData.append('file', img);
+        formImageData.append('bookingId', lastBookingno)
+        await axios.post(`${apiUrl}/upload-booking-image`, formImageData)
+      }))
+      setImagedata([])
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();
@@ -1013,7 +1033,7 @@ const useBooking = () => {
       setSuccessMessage("Successfully Added");
 
       handlecheck(lastBookingno);
-      addPdf(lastBookingno);
+      // addPdf(lastBookingno);
 
       setEdit(false)
     } catch (error) {
@@ -1569,7 +1589,7 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver,
-    vehileName, infoMessage
+    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   };
 };
 

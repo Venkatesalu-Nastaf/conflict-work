@@ -409,3 +409,8 @@
 .tripsheet-cancel-save-btn {
   padding: 20px;
 }
+
+.tripsheet-shed-in-time {
+  display: grid;
+  width: 100%;
+}

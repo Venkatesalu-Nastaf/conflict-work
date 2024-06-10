@@ -339,40 +339,42 @@ const Sidebar = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const organizationname = localStorage.getItem("usercompany");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const organizationname = localStorage.getItem("usercompany");
 
-        if (!organizationname) {
-          return;
-        }
-        if (organizationname !== "undefined" && organizationname) {
+  //       if (!organizationname) {
+  //         return;
+  //       }
+  //       if (organizationname !== "undefined" && organizationname) {
 
-          const response = await fetch(
-            `${apiUrl}/get-companyimage/${organizationname}`
-          );
+  //         const response = await fetch(
+  //           `${apiUrl}/get-companyimage/${organizationname}`
+  //         );
 
-          if (response.status === 200) {
-            const data = await response.json();
-            const attachedImageUrls = data.imagePaths.map(
-              (path) => `${apiUrl}/images/${path}`
-            );
+  //         if (response.status === 200) {
+  //           const data = await response.json();
+  //           const attachedImageUrls = data.imagePaths.map(
+  //             (path) => `${apiUrl}/images/${path}`
+  //           );
 
-            localStorage.setItem("selectedImage", JSON.stringify(attachedImageUrls));
-          }
-          else {
-            const timer = setTimeout(fetchData, 2000);
-            return () => clearTimeout(timer);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching image data:", error);
-      }
-    };
+  //           localStorage.setItem("selectedImage", JSON.stringify(attachedImageUrls));
+  //         }
+  //         else {
+            
+  //           const timer = setTimeout(fetchData, 2000);
 
-    fetchData();
-  }, [apiUrl]);
+  //           return () => clearTimeout(timer);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching image data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [apiUrl]);
 
   // const [isImageLoaded, setIsImageLoaded] = useState(false);
 

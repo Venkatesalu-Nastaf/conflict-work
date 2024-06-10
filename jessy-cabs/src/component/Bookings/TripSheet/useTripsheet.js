@@ -321,9 +321,6 @@ const useTripsheet = () => {
 
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
-
-        console.log("form data", formData)
-
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);
@@ -770,12 +767,6 @@ const useTripsheet = () => {
             return;
         }
 
-
-        // if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo || !Email) {
-        //     setError(true);
-        //     setErrorMessage("Please fill all mandatory fields");
-        //     return;
-        // }
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
             const updatedBook = {
@@ -814,7 +805,7 @@ const useTripsheet = () => {
                 permit: book.permit,
                 travelsname: selectedCustomerDatas.travelsname || formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
                 remark: book.remark,
-                reporttime: formData.reporttime,
+                reporttime: formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime,
                 shedin: book.shedin,
                 shedintime: book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
                 shedkm: book.shedkm || shedKilometers.shedkm,
@@ -1261,7 +1252,6 @@ const useTripsheet = () => {
                     const bookingDetails = response.data;
 
                     if (response.status === 200 && bookingDetails) {
-
                         if (bookingDetails.status === "Cancelled") {
                             setError(true)
                             setErrorMessage("Trip Cancelled")
@@ -1270,7 +1260,6 @@ const useTripsheet = () => {
                             return
                         }
                         else {
-
                             setSelectedCustomerData(bookingDetails);
                             setSelectedCustomerId(bookingDetails.tripid);
 
@@ -1851,7 +1840,6 @@ const useTripsheet = () => {
         try {
             const path = imagepath?.path
             const res = await axios.delete(`${apiUrl}/tripsheet-imagedelete`, { params: { path } })
-            console.log("delte image", imagepath?.path)
         } catch (err) {
 
         }

@@ -1082,6 +1082,7 @@ const TripSheet = ({ stationName }) => {
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
+               
                   <div className='input-type-grid'>
                     <label>Report Time</label>
                     <input

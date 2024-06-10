@@ -170,13 +170,19 @@ const CustomerReview = ({ station }) => {
 
   }
 
+  document.addEventListener('click', function (event) {
+    if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup'))) {
+      closeDateFunction();
+    }
+  });
+
   return (
     <div className="CustomerReview weekly-chart" id="areachart">
       <div className="button-container date-button-container">
         <button onClick={handleMonthlyView} className="graph-all-button">All</button>
         <button onClick={handleWeeklyView} className="graph-weekly-button">Today</button>
         {/* <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button> */}
-        <button onClick={showDateFunction} className="graph-yesterday-button">custom date</button>
+        <button onClick={showDateFunction} id="custom-date" className="graph-yesterday-button">custom date</button>
         {showdDate &&
           <div className="dashboard-date-popup">
             <div className="dashboard-date-popup-close" onClick={closeDateFunction}>x</div>

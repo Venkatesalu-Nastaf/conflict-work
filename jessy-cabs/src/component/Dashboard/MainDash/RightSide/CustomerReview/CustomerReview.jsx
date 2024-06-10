@@ -171,7 +171,7 @@ const CustomerReview = ({ station }) => {
   }
 
   document.addEventListener('click', function (event) {
-    if (!event.target.closest('#custom-date')) {
+    if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup'))) {
       closeDateFunction();
     }
   });

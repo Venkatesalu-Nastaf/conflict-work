@@ -48,8 +48,9 @@ const useUserinfo = () => {
            
            const dataresponse=response.data.affectedRows
            if(dataresponse >= 1){
-           
-            localStorage.setItem("username",updatedCustomer.username)
+            console.log(dataresponse,"dataresp",updatedCustomer.username)
+           localStorage.removeItem("username")
+           localStorage.setItem("username",updatedCustomer.username)
             SetDataTrigUser(updatedCustomer.username)
             setSuccess(true);
             setSuccessMessage("Successfully updated");

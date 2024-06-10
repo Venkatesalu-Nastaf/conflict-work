@@ -484,3 +484,10 @@
   height: 100%;
   opacity: 0;
 }
+
+@media screen and (max-width: 828px) {
+  .booking-date-input-division,
+  .booking-time-main-div {
+    margin-top: 17px;
+  }
+}

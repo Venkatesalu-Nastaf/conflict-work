@@ -223,7 +223,7 @@ const Booking = ({ stationName }) => {
                   autoFocus
                 />
               </div>
-              <div className="input">
+              <div className="input booking-date-input-division">
                 <div className="icone">
                   <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>

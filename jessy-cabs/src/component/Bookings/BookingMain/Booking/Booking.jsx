@@ -375,7 +375,7 @@ const Booking = ({ stationName }) => {
                   }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="servicestation" name="servicestation" inputRef={params.inputRef} />
+                      <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
                     );
                   }}
                 />

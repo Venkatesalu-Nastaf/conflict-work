@@ -102,7 +102,7 @@ const Booking = ({ stationName }) => {
 
   const apiUrl = APIURL;
   const {
-    selectedCustomerData,
+    selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
     selectedCustomerId,
     rows,
     actionName,
@@ -178,7 +178,7 @@ const Booking = ({ stationName }) => {
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
-    handleSelectAll, handlecheckbox, selectAll, deletefile,
+    handleSelectAll, handlecheckbox, selectAll, deletefile, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   } = useBooking();
 
   useEffect(() => {
@@ -223,7 +223,7 @@ const Booking = ({ stationName }) => {
                   autoFocus
                 />
               </div>
-              <div className="input">
+              <div className="input booking-date-input-division">
                 <div className="icone">
                   <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>
@@ -375,7 +375,7 @@ const Booking = ({ stationName }) => {
                   }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="servicestation" name="servicestation" inputRef={params.inputRef} />
+                      <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
                     );
                   }}
                 />
@@ -846,30 +846,100 @@ const Booking = ({ stationName }) => {
             </div>
 
 
-            <div className="input-dummy">
-              <Button
-                color="primary"
-                variant="contained"
-
-                component="label"
-              >
-                Attach File
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setFile(e.target.files[0])}
-                />
-              </Button>
-            </div>
-            <div className="input-dummy">
-              <Button
-                variant="outlined"
-                onClick={handleButtonClick}
-              >
-                View
-              </Button>
-            </div>
           </div>
+
+          {isEditMode ? (
+            <div>
+              <div className="input-dummy">
+                <Button
+                  color="primary"
+                  variant="contained"
+
+                  component="label"
+                >
+                  Attach File
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                </Button>
+              </div>
+              <div className="input-dummy" style={{ marginLeft: "10px/" }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleButtonClick}
+                >
+                  View
+                </Button>
+              </div>
+            </div>
+          ) : (
+
+            <div >
+
+              <input
+                style={{
+                  marginBottom: "10px",
+                  padding: "10px",
+                  border: "2px solid #ccc",
+                  borderRadius: "5px",
+                  backgroundColor: "#fff",
+                  color: "#333",
+                  cursor: "pointer",
+                  marginRight: "10px",
+                }}
+                type="file" multiple onChange={handleImagechange2} />
+
+
+              <span>{selectetImg.length} images selected</span>
+              <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
+            </div>
+          )}
+
+
+          <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
+            <DialogContent>
+              <div
+                style={{
+                  display: "flex",
+                  overflowX: "auto",
+                  backgroundColor: "#E5E5E5",
+                  padding: selectetImg.length > 0 ? "10px" : "0",
+                }}
+              >
+                {selectetImg &&
+                  selectetImg.map((img, index) => (
+                    <div
+                      key={index}
+                      style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}
+                    >
+                      <img
+                        src={URL.createObjectURL(img)}
+                        alt="img"
+                        style={{ width: "200px", height: "200px" }}
+                      />
+                      <p
+                        style={{
+                          width: "180px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {img.name}
+                      </p>
+                      <button
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => removeSelectedImage(index, e)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           <div className="booking-main-section2">
             <div className="sub-section1 sub-section-second-division">
@@ -1572,7 +1642,6 @@ const Booking = ({ stationName }) => {
               </DialogContent>
             </Dialog> */}
 
-
             <Dialog open={dialogOpen} onClose={handleCloseDialog} >
               <DialogContent>
                 <div className='vehicle-info-dailog-box-div1'>
@@ -1599,10 +1668,6 @@ const Booking = ({ stationName }) => {
                 </div>
               </DialogContent>
             </Dialog>
-
-
-
-//----------------------------------------------------------------------------------------------
 
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>

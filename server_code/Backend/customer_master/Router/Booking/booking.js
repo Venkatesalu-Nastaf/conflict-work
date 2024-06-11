@@ -13,7 +13,7 @@ const query = util.promisify(db.query).bind(db)
 router.use(express.static('customer_master'));
 // const upload = multer({ dest: 'uploads/' });
 
-router.post('/booking', (req, res) => {
+router.post('/booking', async (req, res) => {
     const bookData = req.body;
 
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
@@ -23,11 +23,29 @@ router.post('/booking', (req, res) => {
 
         // Check if the insertion was successful (affectedRows > 0)
         if (result.affectedRows > 0) {
-            return res.status(200).json({ message: "Data inserted successfully" });
+            return res.status(200).json({ message: "Data inserted successfully", data: result });
         } else {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
     });
+    // try {
+    //     const response = await db.query('INSERT INTO booking SET ?', [bookData])
+    //     console.log("res-------------", response)
+    //     res.json({
+    //         message: "Booking successful",
+    //         error: false,
+    //         success: true,
+    //         data: response
+    //     })
+    // } catch (err) {
+    //     console.log("err", err)
+    //     res.status(500).json({
+    //         message: err.message,
+    //         success: false,
+    //         error: true
+    //     })
+    // }
+
 });
 
 // collect details from Booking
@@ -592,21 +610,7 @@ router.get('/table-for-booking', (req, res) => {
 });
 
 
-/// booking ->booking----------------------------------------
-
-// its for multer file- 1
-// const booking_storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './customer_master/public/booking_doc')
-//         // cb(null, './uploads')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-//     }
-
-// })
-
-
+// image or pdf upload 
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads')
@@ -614,31 +618,10 @@ const booking_storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
     }
-
 })
-
 const booking_uploadfile = multer({ storage: booking_storage });
 
-// router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
-//     const booking_id = req.params.id;
-//     const fileType = req.file.mimetype;
-//     const fileName = req.file.filename;
-
-//     // const documenttype = "mail"
-//     const sql = `insert into booking_doc(booking_id, path, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
-//     // const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
-//     db.query(sql, (err, result) => {
-//         if (err) {
-//             return res.json({ Message: "Error" });
-//         }
-//         return res.json("successs upload");
-//     })
-
-// })
-
-// booking_id	fileName	file_type	
-
-//-----------------fetch ---------------
+//-----------------post ---------------
 
 router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
@@ -654,6 +637,22 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     });
 });
 
+
+router.post('/upload-booking-image', booking_uploadfile.single("file"), async (req, res) => {
+    const booking_id = req.body.bookingId;
+    const fileType = req.file.mimetype;
+    const fileName = req.file.filename;
+    const path = req.file.path;
+
+    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
+    db.query(sql, [booking_id, fileName, fileType], (err, result) => {
+        if (err) {
+            return res.json({ Message: "Error" });
+        }
+        return res.json("success upload");
+    });
+});
+//-------------------------------------------------------
 
 router.get('/booking-docView/:id', (req, res) => {
     const id = req.params.id

@@ -297,15 +297,19 @@
 @media screen and (max-width: 987px) {
   .detail-container-main .container-left {
     position: relative;
-    left: -20px;
+    left: 0px;
   }
 }
 
 @media screen and (max-width: 375px) {
   .detail-container-main .container-left {
     position: relative;
-    left: 10px;
+    left: 50px !important;
   }
+}
+
+.detail-container-main{
+  padding: 0px !important;
 }
 
 @media screen and (min-width: 769px) and (max-width: 944px) {
@@ -316,7 +320,7 @@
 
 @media screen and (max-width: 768px) {
   .driver-table {
-    width: 71vw;
+    width: 80vw;
   }
 }
 
@@ -486,8 +490,16 @@
 }
 
 @media screen and (max-width: 828px) {
+
   .booking-date-input-division,
   .booking-time-main-div {
     margin-top: 17px;
+  }
+
+  .fin-years-input,
+  .booking-report-input,
+  .booking-payment-type-input,
+  .booking-report-date-input {
+    margin-top: 15px;
   }
 }

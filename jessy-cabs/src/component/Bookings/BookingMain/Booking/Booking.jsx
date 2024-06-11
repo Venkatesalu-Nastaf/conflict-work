@@ -653,7 +653,7 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input">
+            <div className="input fin-years-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>
@@ -668,7 +668,7 @@ const Booking = ({ stationName }) => {
                 )}
               />
             </div>
-            <div className="input">
+            <div className="input booking-report-input">
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
@@ -711,7 +711,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
-            <div className="input">
+            <div className="input booking-payment-type-input">
               <div className="icone">
                 <AccountBalanceWalletTwoToneIcon color="action" />
               </div>
@@ -753,7 +753,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
-            <div className="input">
+            <div className="input booking-report-date-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>

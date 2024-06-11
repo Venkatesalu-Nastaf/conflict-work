@@ -31,6 +31,12 @@
   background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+  .form-container-Transfer .container-main {
+    width: 93vw;
+  }
+}
+
 @media screen and (min-width:970px) and (max-width:1240px) {
   .form-container-Transfer .container-main-transfer {
     width: 76vw !important;

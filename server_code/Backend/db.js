@@ -1,10 +1,17 @@
 const mysql = require('mysql');
 
+// const db = mysql.createConnection({
+//   host: '162.214.81.14',
+//   user: 'dzupsnmy_taaf_user',
+//   password: 'taafapplicationusers',
+//   database: 'dzupsnmy_taaf_application',
+//   port: 3306
+// });
 const db = mysql.createConnection({
-  host: '162.214.81.14',
-  user: 'dzupsnmy_taaf_user',
-  password: 'taafapplicationusers',
-  database: 'dzupsnmy_taaf_application',
+  host: '172.31.25.17',
+  user: 'root',
+  password: 'NASTAF@786',
+  database: 'NASTAF_Application',
   port: 3306
 });
 

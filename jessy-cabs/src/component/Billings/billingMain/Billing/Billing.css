@@ -129,7 +129,7 @@
   justify-content: center;
 }
 
-.inputfeild-billing-right-margin-bottom{
+.inputfeild-billing-right-margin-bottom {
   margin-bottom: 30px;
 }
 
@@ -169,16 +169,24 @@
     flex-wrap: wrap;
   }
 
+  .Billing-secend-left {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 968px) {
   .Billing-secend-right {
     width: 80%;
   }
-
-  .Billing-secend-left {
-    width: 80%;
-
-  }
-
 }
+
+@media screen and (max-width: 768px) {
+  .Billing-secend-right {
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+
 
 @media screen and (max-width:600px) {
   .inputfeild-billing-right {

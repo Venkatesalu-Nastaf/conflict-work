@@ -39,7 +39,7 @@
   border: 2px solid #ccc;
   border-radius: 15px;
   background-color: var(--glass);
-  margin-top: 30px;
+  margin-top: 0px;
 }
 
 .form-container-TripStatus .container-main::-webkit-scrollbar-thumb {

@@ -52,7 +52,7 @@ router.get('/vechiclenameinfo', (req, res) => {
   // Modify the query to use the LIKE operator for partial matching
   // console.log(vehicletypename,"namevecile")
 
-  db.query('SELECT * FROM vehicleinfo WHERE vehiclename LIKE ?', [`${vehicletypename}%`], (err, result) => {
+  db.query('SELECT * FROM vehicleinfo WHERE vehicleName LIKE ?', [`${vehicletypename}%`], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
     }
@@ -119,9 +119,9 @@ console.log(searchText,fromDate,toDate,"dateeeee")
   if (searchText) {
     const columnsToSearch = [
       'vehicleId',
-      'vehiclename',
+      'vehicleName',
       'hiretypes',
-      'vechtype',
+      'vehType',
       'fueltype',
       'Groups',
       'doadate',

@@ -223,13 +223,13 @@ const Vehicaleinfo = ({ stationName }) => {
                     <FaCar />
                   </div>
                   <TextField
-                    name="vehiclename"
+                    name="vehicleName"
                     value={
-                      book.vehiclename || selectedCustomerData?.vehiclename || ""}
+                      book.vehicleName || selectedCustomerData?.vehicleName || ""}
                     onChange={handleChange}
                     onKeyDown={handleKeyEnter}
                     label="Vehicle Name"
-                    id="vehiclename"
+                    id="vehicleName"
                     className='full-width'
                     variant="standard"
                   />
@@ -280,15 +280,15 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="vechtype"
+                    id="vehType"
                     freeSolo
                     size="small"
-                    value={book?.vechtype || selectedCustomerData?.vechtype || ''}
+                    value={book?.vehType || selectedCustomerData?.vehType || ''}
                     options={vehicaleinfos?.map((option) => ({
                       label: option?.Option,
                     }))}
                     onChange={(event, value) =>
-                      handleAutocompleteChange(event, value, "vechtype")
+                      handleAutocompleteChange(event, value, "vehType")
                     }
                     renderInput={(params) => {
                       return (
@@ -413,9 +413,9 @@ const Vehicaleinfo = ({ stationName }) => {
                                 onClick={() => handleRowClick(row)}
                               >
                                 <td>{row.vehicleId}</td>
-                                <td>{row.vehiclename}</td>
+                                <td>{row.vehicleName}</td>
                                 <td>{row.owner}</td>
-                                <td>{row.vechtype}</td>
+                                <td>{row.vehType}</td>
                                 <td>{row.active}</td>
                                 <td>{row.Groups}</td>
                               </tr>

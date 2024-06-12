@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
@@ -91,10 +91,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
-// import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
-// import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
-
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -166,7 +163,6 @@ const maplogcolumns = [
 const TripSheet = ({ stationName }) => {
 
 
-
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,
@@ -222,14 +218,6 @@ const TripSheet = ({ stationName }) => {
     signimageUrl,
     selectedImage,
     GmapimageUrl,
-    // setCloseTime2,
-    // setStartTime2,
-    // packageDetails,
-    // calculateExkmAmount,
-    // calculateExHrsAmount,
-    // calculateNightAmount,
-    // calculateTotalAmount,
-    // calculatedriverconvienceAmount,
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
@@ -253,7 +241,6 @@ const TripSheet = ({ stationName }) => {
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
-    //  handleClickOpen,
     open, handleClose, handleTransferChange, transferreport
 
   } = useTripsheet();
@@ -272,6 +259,25 @@ const TripSheet = ({ stationName }) => {
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
+
+  // varibles for validation 
+
+  // time 
+  let startTimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime
+  let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+  let shedInTimeVar = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
+  let closeTimeVar = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime
+
+  // kilometer
+  const [kmValue, setKmValue] = useState({
+    shedOutState: '',
+    startKMState: '',
+    closeKMState: '',
+    shedInState: '',
+    startDate: '',
+    closeDate: '',
+    totalDays: '',
+  })
 
 
 
@@ -977,6 +983,8 @@ const TripSheet = ({ stationName }) => {
                 </div>
 
                 <div className="input">
+
+
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -986,7 +994,10 @@ const TripSheet = ({ stationName }) => {
                       id="startdate"
                       value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                       format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, 'startdate')}
+                      onChange={(date) => {
+                        setKmValue((prev) => ({ ...prev, startDate: date }));
+                        handleDateChange(date, 'startdate')
+                      }}
                     >
                       {({ inputProps, inputRef }) => (
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
@@ -994,7 +1005,11 @@ const TripSheet = ({ stationName }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
+
+
                 <div className="input">
+                  {kmValue.startDate && (kmValue.closeDate ? "" : <lable className='invalid-km'>Give Date</lable>)}
+                  {/* {kmValue.totalDays === 0 && <lable className='invalid-km'>Give Correct Date</lable>} */}
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1004,7 +1019,21 @@ const TripSheet = ({ stationName }) => {
                       id="closedate"
                       value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                       format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, 'closedate')}
+                      onChange={(date) => {
+                        handleDateChange(date, 'closedate')
+                        setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                        const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                        const closeDate = date
+
+                        if (startDate && closeDate) {
+                          const startDateObj = dayjs(startDate);
+                          const closeDateObj = dayjs(closeDate);
+                          const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                          setKmValue(prev => ({ ...prev, totalDays: totalDays }))
+                          console.log("total days ----", totalDays)
+                        }
+                      }}
                     >
                       {({ inputProps, inputRef }) => (
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
@@ -1019,7 +1048,7 @@ const TripSheet = ({ stationName }) => {
                   <DemoItem>
                     <TextField
                       name="totaldays"
-                      value={formData.totaldays || calculateTotalDays() || book.totaldays || ''}
+                      value={calculateTotalDays()}
                       label="Total Days"
                       size="small"
                       type="number"
@@ -1082,18 +1111,26 @@ const TripSheet = ({ stationName }) => {
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
-               
+
+
                   <div className='input-type-grid'>
-                    <label>Report Time</label>
+
+                    {(startTimeVar && ((startTimeVar < reportTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Report Time</label>)}
+
                     <input
                       type="time"
                       name="reporttime"
                       value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                       onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                        setBook({ ...book, reporttime: event.target.value });
-                        setreporttime(event.target.value);
+                        const rTime = event.target.value;
+                        if ((startTimeVar && rTime <= startTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                          setBook({ ...book, reporttime: event.target.value });
+                          setreporttime(event.target.value);
+                        }
                       }}
                     />
                   </div>
@@ -1103,36 +1140,52 @@ const TripSheet = ({ stationName }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    <label>Close Time</label>
+                    {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)}
+
                     <input
                       type="time"
                       name="shedintime"
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                        setBook({ ...book, shedintime: event.target.value });
-                        setshedintime(event.target.value);
+                        const rTime = event.target.value;
+                        if ((Number(kmValue.totalDays) === 1) && (reportTimeVar && rTime <= reportTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
+                          setBook({ ...book, shedintime: event.target.value });
+                          setshedintime(event.target.value);
+                        }
+
                       }}
                     />
                   </div>
                 </div>
+
+
                 <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
-                    <label>Shed-In Time</label>
+                    {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)}
+
                     <input
                       type="time"
                       name="closetime"
                       id="closetime"
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                        setBook({ ...book, closetime: event.target.value });
-                        setCloseTime(event.target.value);
+                        const rTime = event.target.value;
+                        if ((Number(kmValue.totalDays) === 1) && (shedInTimeVar && rTime <= shedInTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                          setBook({ ...book, closetime: event.target.value });
+                          setCloseTime(event.target.value);
+                        }
+
                       }}
                     />
                   </div>
@@ -1145,7 +1198,14 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     name="shedout"
                     value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      if (value >= 0) {
+                        handleChange(e)
+                        setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                      }
+                    }}
+
                     label="Shed Out"
                     id="shedout"
                     size='small'
@@ -1153,51 +1213,89 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
+
+
+                <div style={{ display: "grid" }} className="input">
+                  {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>}
+
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+
+                    <TextField
+                      name="startkm"
+                      value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value >= 0) {
+                          handleChange(e)
+                          setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                        }
+                      }}
+                      size="small"
+                      label="Start KM"
+                      type="number"
+                      id="startkm"
+                      autoComplete="password"
+                    />
                   </div>
-                  <TextField
-                    name="startkm"
-                    value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
-                    onChange={handleChange}
-                    size="small"
-                    label="Start KM"
-                    type="number"
-                    id="startkm"
-                    autoComplete="password"
-                  />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
+
+
+                <div className="input" style={{ display: "grid" }}>
+                  {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+                    <TextField
+                      name="closekm"
+                      value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
+
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value >= 0) {
+                          setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
+                          handleChange(e)
+                        }
+                      }}
+                      label="Close KM"
+                      size="small"
+                      type="number"
+                      id="outlined-start-closekm"
+                      autoComplete="password"
+                    />
                   </div>
-                  <TextField
-                    name="closekm"
-                    value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
-                    onChange={handleChange}
-                    label="Close KM"
-                    size="small"
-                    type="number"
-                    id="outlined-start-closekm"
-                    autoComplete="password"
-                  />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
+
+                <div style={{ display: "grid" }} className="input">
+                  {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+
+                    <TextField
+                      name="shedin"
+                      value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        if (value >= 0) {
+                          setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
+                          handleChange(e)
+                        }
+                      }}
+                      label="Shed In"
+                      type="number"
+                      id="shedin"
+                      size='small'
+                      autoComplete="password"
+                    />
                   </div>
-                  <TextField
-                    name="shedin"
-                    value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
-                    onChange={handleChange}
-                    label="Shed In"
-                    type="number"
-                    id="shedin"
-                    size='small'
-                    autoComplete="password"
-                  />
                 </div>
+
+
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1205,7 +1303,12 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     name="shedkm"
                     value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value >= 0) {
+                        handleChange(e)
+                      }
+                    }}
                     label="Add KM"
                     type="number"
                     id="shedkm"
@@ -1219,9 +1322,8 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
 
-                    // ayyanar total km
+
                     name="totalkm1"
-                    // value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
                     value={calculateTotalKilometers() || ''}
                     onChange={handleChange}
                     label="Total KM"
@@ -3070,8 +3172,8 @@ const TripSheet = ({ stationName }) => {
           </div>
 
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

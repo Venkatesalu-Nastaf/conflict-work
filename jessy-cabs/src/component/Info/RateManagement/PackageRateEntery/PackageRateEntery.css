@@ -71,7 +71,7 @@
 }
 
 .copy-title-btn-PackageRateEntery {
-    width: 100%;
+    width: 110%;
     margin-top: 30px;
     background-color: var(--glass);
     padding: 20px 20px;
@@ -134,7 +134,7 @@
 
 @media only screen and (min-width:300px) and (max-width:380px) {
     .copy-title-btn-PackageRateEntery {
-        width: 100%;
+        width: 110%;
         margin-top: 0px !important;
         border: none !important;
     }

@@ -230,6 +230,14 @@
 .booking-main-section1 .sub-section1 .first-division {
   display: flex;
   flex-wrap: wrap;
+  animation: fadeInUp 1s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sub-section-second-division {

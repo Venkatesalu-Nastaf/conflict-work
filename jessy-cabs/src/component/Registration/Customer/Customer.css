@@ -213,6 +213,6 @@
 }
 
 .customer-speeddail {
-  padding: 26px !important;
-  margin: 50px !important;
+  padding: 26px 26px 0px 0px !important;
+  margin-top: 20px !important;
 }

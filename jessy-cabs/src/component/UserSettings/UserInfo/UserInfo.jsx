@@ -392,7 +392,7 @@ const UserSetting = () => {
                   </div> */}
                 </div>
                 {editMode ? (
-                  <div className="input-field">
+                  <div className="input-field user-info-edit-input-field">
                     <div className="input">
                       <Button variant="outlined" onClick={toggleEditMode}>
                         Cancel

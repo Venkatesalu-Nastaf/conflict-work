@@ -131,8 +131,8 @@ const useBooking = () => {
       driverName: originalRow.driverName,
       vehRegNo: originalRow.vehRegNo,
       hireTypes: originalRow.hiretypes,
-      vehType: originalRow.vehiclename,
-      vehiclemodule: originalRow.vechtype,
+      vehType: originalRow.vehicleName,
+      vehiclemodule: originalRow.vehType,
       mobileNo: originalRow.driverno,
       active: originalRow.active,
       Groups: originalRow.Groups

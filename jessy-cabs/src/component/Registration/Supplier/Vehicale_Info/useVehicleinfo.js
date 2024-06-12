@@ -49,7 +49,7 @@ const useVehicleinfo = () => {
             ),
         },
         { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
-        { field: "vehiclename", headerName: "Vehicle Name", width: 130 },
+        { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
         {
             field: "doadate", headerName: "Attached Date", width: 130,
 
@@ -59,7 +59,7 @@ const useVehicleinfo = () => {
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
         { field: "stations", headerName: "Stations", width: 170 },
         { field: "hiretypes", headerName: "Hire types", width: 170 },
-        { field: "vechtype", headerName: "Vehicle Type", width: 130 },
+        { field: "vehType", headerName: "Vehicle Type", width: 130 },
         { field: "fueltype", headerName: "Fuel Type", width: 130 },
         { field: "Groups", headerName: "Groups Type", width: 130 },
         { field: "owner", headerName: "Owner", width: 90 },
@@ -438,9 +438,9 @@ const useVehicleinfo = () => {
 
     const [book, setBook] = useState({
 
-        vehiclename: '',
+        vehicleName: '',
         hiretypes: '',
-        vechtype: '',
+        vehType: '',
         fueltype: '',
         Groups: '',
         doadate: dayjs(),
@@ -469,9 +469,9 @@ const useVehicleinfo = () => {
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            vehiclename: '',
+            vehicleName: '',
             hiretypes: '',
-            vechtype: '',
+            vehType: '',
             fueltype: '',
             Groups: '',
             doadate: dayjs(),
@@ -589,7 +589,7 @@ const useVehicleinfo = () => {
                     if (selectedRow) {
                         setSelectedCustomerData(selectedRow);
                         handleChange({
-                            target: { name: "vehiclename", value: selectedRow.vehiclename },
+                            target: { name: "vehicleName", value: selectedRow.vehicleName },
                         });
                     }
                 }
@@ -729,7 +729,7 @@ const useVehicleinfo = () => {
     const handleAdd = async () => {
 
 
-        if (!book.vehiclename) {
+        if (!book.vehicleName) {
             setError(true);
             setErrorMessage("Enter Vehiclename");
             return;
@@ -753,7 +753,7 @@ const useVehicleinfo = () => {
             return;
 
         }
-        if (!book.vechtype) {
+        if (!book.vehType) {
             setError(true);
             setErrorMessage("Choose vehicletype");
             return;
@@ -1004,7 +1004,7 @@ const useVehicleinfo = () => {
         const customerData = params
         setSelectedCustomerData(customerData);
         handleChange({
-            target: { name: "vehiclename", value: customerData.vehiclename },
+            target: { name: "vehicleName", value: customerData.vehicleName },
         });
 
         setEdit(true)

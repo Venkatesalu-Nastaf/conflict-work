@@ -195,6 +195,13 @@ const Booking = ({ stationName }) => {
   const Booking_delete = permissions[1]?.delete;
 
 
+  // varibale setting for
+  const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
+  let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
+
+
+
+
   return (
     <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -781,7 +788,40 @@ const Booking = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
+
             <div>
+              <div className="input time">
+                <div className="icone">
+                  <MdOutlineAccessTimeFilled />
+                </div>
+                <div className="input-type-grid">
+                  <label>Start Time</label>
+                  <input
+                    type="time"
+                    id="starttime"
+                    value={
+                      formData.starttime ||
+                      selectedCustomerData.starttime ||
+                      book.starttime ||
+                      ""
+                    }
+                    onChange={(event) => {
+                      reportTimeVar = ""
+                      setFormData({ ...formData, starttime: event.target.value });
+                      setSelectedCustomerData({
+                        ...selectedCustomerData,
+                        starttime: event.target.value,
+                      });
+                      setBook({ ...book, starttime: event.target.value });
+                      setStartTime(event.target.value);
+                    }}
+                    name="starttime"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* <div>
               <div className="input time">
                 <div className="icone">
                   <MdOutlineAccessTimeFilled />
@@ -810,8 +850,39 @@ const Booking = ({ stationName }) => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
+
             <div>
+              <div className="input time">
+                <div className="icone">
+                  <MdOutlineAccessTimeFilled />
+                </div>
+                <div className="input-type-grid">
+                  {starttimeVar && ((starttimeVar < reportTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>)) || !starttimeVar && <label>Report Time</label>}
+                  <input
+                    type="time"
+                    id="reporttime"
+                    name="reporttime"
+                    value={starttimeVar && (starttimeVar < reportTimeVar) ? reportTimeVar : ""}
+                    onChange={(event) => {
+                      const strtTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
+                      const rTime = event.target.value;
+                      if (strtTime && rTime <= strtTime) {
+                        // alert("Report time must be greater than start time")\
+                        return;
+                      } else {
+                        setBook({ ...book, reporttime: event.target.value });
+                        setreporttime(event.target.value);
+                        setFormData({ ...formData, reporttime: event.target.value });
+                        setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* <div>
               <div className="input time">
                 <div className="icone">
                   <MdOutlineAccessTimeFilled />
@@ -843,7 +914,7 @@ const Booking = ({ stationName }) => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
 
           </div>

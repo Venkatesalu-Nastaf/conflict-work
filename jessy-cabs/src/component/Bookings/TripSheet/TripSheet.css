@@ -414,3 +414,13 @@
   display: grid;
   width: 100%;
 }
+
+.invalid-km {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: red;
+  font-size: 15px;
+  padding-bottom: 5px;
+  margin-top: -23px;
+}

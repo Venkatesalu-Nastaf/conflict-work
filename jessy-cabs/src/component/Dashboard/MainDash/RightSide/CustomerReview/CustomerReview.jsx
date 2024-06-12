@@ -60,7 +60,7 @@ const CustomerReview = ({ station }) => {
       }
     }
     fetchdata()
-  }, [apiurl, stationdata, stationarray])
+  }, [apiurl, stationarray])
 
 
   // const handleYesterdayView = () => {
@@ -101,6 +101,7 @@ const CustomerReview = ({ station }) => {
       setPopupOpen(false)
       setFromDate(dayjs())
       setToDate(dayjs())
+      setShowDate(false)
 
     }
     catch (err) {

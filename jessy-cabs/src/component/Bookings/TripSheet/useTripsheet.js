@@ -194,7 +194,7 @@ const useTripsheet = () => {
                 let tripResults = [];
                 let bookingResults = [];
 
-                data.map((item) => {
+                data?.map((item) => {
                     if (item.type === "tripResults") {
                         tripResults = item.data
                     } else if (item.type === "bookingResults") {
@@ -945,8 +945,9 @@ const useTripsheet = () => {
 
     const calculateTotalTime = () => {
         const shedoutTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
-
         const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
+        const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+        const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
 
         if (shedoutTime && shedinTime) {
             const startTimeObj = dayjs(shedoutTime, 'HH:mm');
@@ -955,10 +956,10 @@ const useTripsheet = () => {
             let additionalMinutes = 0;
 
             // Parse additional time value if available
-            const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
             if (additionalTimeValue) {
                 const hoursMatch = additionalTimeValue.match(/(\d+)h/);
                 const minutesMatch = additionalTimeValue.match(/(\d+)m/);
+
                 const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
                 const additionalMinutesFromHours = additionalHours * 60;
                 additionalMinutes += additionalMinutesFromHours;
@@ -967,9 +968,38 @@ const useTripsheet = () => {
                 additionalMinutes += additionalMinutesValue;
             }
 
+
             totalTimeMinutes += additionalMinutes;
             const hours = Math.floor(totalTimeMinutes / 60);
             const minutes = totalTimeMinutes % 60;
+
+            //-------------converting sheOuttime in to minuts -------------
+            const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
+            const ouHhoursInt = parseInt(ouHhourStr, 10);
+            const outMinutsInt = parseInt(outMinutsStr, 10);
+            const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
+
+            //------converting shedin time to minuts ------------
+            const [inHoursStr, inMinutsStr] = shedinTime.split(':');
+            const inHoursInt = parseInt(inHoursStr, 10);
+            const inMinutsInt = parseInt(inMinutsStr, 10);
+            const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
+
+            if (totalDays === 2) {
+                let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
+                num1 += additionalMinutes;
+                const hours = Math.floor(num1 / 60);
+                const minutes = num1 % 60;
+                return `${hours}h ${minutes}m`
+            }
+
+            if ((totalDays) >= 3) {
+                let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
+                num2 += additionalMinutes;
+                const hours = Math.floor(num2 / 60);
+                const minutes = num2 % 60;
+                return `${hours}h ${minutes}m`
+            }
             return `${hours}h ${minutes}m`;
         }
         return '';
@@ -1063,6 +1093,7 @@ const useTripsheet = () => {
             const startDateObj = dayjs(startDate);
             const closeDateObj = dayjs(closeDate);
             const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+
             return totalDays;
         }
 
@@ -1839,7 +1870,7 @@ const useTripsheet = () => {
 
         try {
             const path = imagepath?.path
-            const res = await axios.delete(`${apiUrl}/tripsheet-imagedelete`, { params: { path } })
+            await axios.delete(`${apiUrl}/tripsheet-imagedelete`, { params: { path } })
         } catch (err) {
 
         }

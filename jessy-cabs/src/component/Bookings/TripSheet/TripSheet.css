@@ -244,6 +244,17 @@
   }
 }
 
+.tripsheet-division1 {
+  animation: fadeInUp 1s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .tripsheet-division1,
 .tripsheet-division3 {
   display: flex;
@@ -413,4 +424,14 @@
 .tripsheet-shed-in-time {
   display: grid;
   width: 100%;
+}
+
+.invalid-km {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: red;
+  font-size: 15px;
+  padding-bottom: 5px;
+  margin-top: -23px;
 }

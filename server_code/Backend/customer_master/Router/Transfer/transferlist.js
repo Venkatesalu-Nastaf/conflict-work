@@ -48,7 +48,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
     }
 
     let vehtypes = result.map(obj => obj.vehType);
-    db.query('select vehiclename, fueltype ,segement ,Groups from vehicleinfo where vehiclename IN (?)', [vehtypes], (err, result1) => {
+    db.query('select vehicleName, fueltype ,segement ,Groups from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
       if (err) {
 
         return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -58,7 +58,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       }
       const vehicleDataMap = {};
       result1.forEach(row => {
-        vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
+        vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
 
       });
       db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
@@ -466,7 +466,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     FROM 
         tripsheet AS ts
     LEFT JOIN 
-        vehicleinfo AS vi ON ts.vehType = vi.vehiclename
+        vehicleinfo AS vi ON ts.vehType = vi.vehicleName
     LEFT JOIN 
         customers AS c ON ts.customer = c.customer
     LEFT JOIN 

@@ -164,7 +164,7 @@ const TripDetails = ({ tripData }) => {
         <div>
             <h1 className="trip-Title">View Duty</h1>
             <form className='TripDetails-container'>
-                <div className="field-item">
+                <div className="field-item dashboard-view-details-popup">
                     <div className="input">
                         <label htmlFor="tripid">Trip No :</label>
                         <TextField size='small' id="tripid" name="tripid" value={tripData?.tripid} readOnly />

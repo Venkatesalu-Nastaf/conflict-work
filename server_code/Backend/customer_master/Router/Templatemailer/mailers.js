@@ -6,6 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const axios = require('axios');
+require('dotenv').config()
 
 router.use(express.static('customer_master'));
 const storage = multer.diskStorage({
@@ -181,9 +182,13 @@ router.post('/send-emailtemplate', async (req, res) => {
             host: 'smtp.gmail.com',
             port: 465,
             secure: true,
+            // auth: {
+            //     user: 'foxfahad386@gmail.com',
+            //     pass: 'vwmh mtxr qdnk tldd',
+            // },
             auth: {
-                user: 'foxfahad386@gmail.com',
-                pass: 'vwmh mtxr qdnk tldd',
+                user:process.env.MAIL_AUTH,
+                pass: process.env.MAIL_PASS,
             },
             tls: {
                 rejectUnauthorized: false
@@ -236,7 +241,8 @@ router.post('/send-emailtemplate', async (req, res) => {
             // console.log(finalMessage,"mess")
 
             const customerMailOptions = {
-                from: 'foxfahad386@gmail.com',
+                // from: 'foxfahad386@gmail.com',
+                from:process.env.MAIL_AUTH,
                 to: data.Email, // Ensure the correct key is used here
                 subject: templatemessage.TemplateSubject,
                 html: finalMessage,
@@ -423,8 +429,10 @@ router.get('/tabletemplateseatch', (req, res) => {
 // })
 
 router.get('/smsreportdata', async (req, res) => {
-    const apiKey = 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=';
-    const clientId = 'a5b891d0-9e91-442b-921b-3f2547a96c8e';
+    // const apiKey = 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=';
+    // const clientId = 'a5b891d0-9e91-442b-921b-3f2547a96c8e';
+    const apiKey = process.env.SMS_ApiKey;
+    const clientId = process.env.SMS_ClientId;
 
     try {
         db.query('SELECT * FROM SmsReport', async (err, results) => {

@@ -22,13 +22,13 @@
 
 @media only screen and (min-width: 768px) and (max-width:836px){
   .user-inputs-feilds{
-    width: 66% !important;
+    width: 96% !important;
   }
 }
 
 @media only screen and (min-width: 836.99px) and (max-width:1130px){
   .user-inputs-feilds{
-    width: 70% !important;
+    width: 97% !important;
   }
 }
 

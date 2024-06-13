@@ -32,3 +32,12 @@
 .MuiPaper-elevation24 {
     box-shadow: none !important;
 }
+
+.dashboard-view-details-popup .input{
+    display: grid !important;
+}
+
+.dashboard-view-details-popup .input label{
+    margin-bottom: 5px;
+    font-weight: bolder !important;
+}

@@ -23,7 +23,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
-import { faUnlockKeyhole,faMailBulk,faPhone} from "@fortawesome/free-solid-svg-icons";
+import { faUnlockKeyhole, faMailBulk, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -151,7 +151,7 @@ const EmployeeCreation = ({ stationName }) => {
                   id="userid"
                   label="ID"
                   name="userid"
-                  value={book.userid}
+                  value={book.userid || ''}
                   // onChange={handleChange}
                   variant="standard"
                   style={{ width: '100%' }}
@@ -167,7 +167,7 @@ const EmployeeCreation = ({ stationName }) => {
                   id="user-name"
                   label="User Mail-Id"
                   name="username"
-                  value={book.username}
+                  value={book.username || ''}
                   onChange={handleChange}
                 />
               </div>
@@ -181,26 +181,26 @@ const EmployeeCreation = ({ stationName }) => {
                   id="user-mail"
                   label="User Mail"
                   name="email"
-                  value={book.email}
+                  value={book.email || ''}
                   onChange={handleChange}
                 />
               </div>
               <div className="input" style={{ paddingRight: '15px' }}>
-                    <div className="icone">
-                    <FontAwesomeIcon icon={faPhone} size="lg" />
-                    </div>
-                    <TextField
-                      type="number"
-                      size="small"
-                      id="mobile"
-                      label="Mobile"
-                      name="mobileno"
-                    
-                      value={book.mobileno}
-                      onChange={handleChange}
-                     
-                    />
-                  </div>
+                <div className="icone">
+                  <FontAwesomeIcon icon={faPhone} size="lg" />
+                </div>
+                <TextField
+                  type="number"
+                  size="small"
+                  id="mobile"
+                  label="Mobile"
+                  name="mobileno"
+
+                  value={book.mobileno || ''}
+                  onChange={handleChange}
+
+                />
+              </div>
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
@@ -232,7 +232,7 @@ const EmployeeCreation = ({ stationName }) => {
                 <TextField
                   size="small"
                   name="designation"
-                  value={book.designation}
+                  value={book.designation || ''}
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
@@ -245,7 +245,7 @@ const EmployeeCreation = ({ stationName }) => {
                 <TextField
                   size="small"
                   name="organizationname"
-                  value={book.organizationname}
+                  value={book.organizationname || ''}
                   onChange={handleChange}
                   label="Organization"
                   id="organizationname"
@@ -261,7 +261,7 @@ const EmployeeCreation = ({ stationName }) => {
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     name="userpassword"
-                    value={book.userpassword}
+                    value={book.userpassword || ''}
                     onChange={handleChange}
                     id="password"
                     type={showPasswords ? 'text' : 'password'}
@@ -404,7 +404,7 @@ const EmployeeCreation = ({ stationName }) => {
                   InputProps={{
                     endAdornment: <AiOutlineSearch />,
                   }}
-                  style={{marginLeft: '15px'}}
+                  style={{ marginLeft: '15px' }}
                 />
                 <div className='Scroll-Style-hide' style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
                   {filteruser.map((row, index) => (
@@ -415,8 +415,8 @@ const EmployeeCreation = ({ stationName }) => {
                       key={index}>
                       {/* <img src={row.profile_image} alt="profile" width="50" /> */}
                       <Avatar
-                      alt="userimage"
-                      src={row.profile_image}                    />
+                        alt="userimage"
+                        src={row.profile_image} />
                       <div>
                         <h3 className="user-name-text">{row.username}</h3>
                         <p className="user-details-text">{row.designation}</p>

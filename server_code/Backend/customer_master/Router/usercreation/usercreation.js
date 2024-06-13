@@ -27,11 +27,12 @@ const upload = multer({
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData } = req.body;
-  const { username, stationname, designation, organizationname, userpassword, active } = book;
+  const { username, stationname, designation, organizationname, userpassword, active, email, mobileno } = book;
+  console.log("email", email, "mobile", mobileno)
 
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active)
-VALUES (?,?,?,?,?,?)`, [username, stationname, designation, organizationname, userpassword, active]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno)
+VALUES (?,?,?,?,?,?,?,?)`, [username, stationname, designation, organizationname, userpassword, active, email, mobileno]);
 
     db.query(
       'SELECT userid FROM usercreation WHERE username = ?', [username], (err, result) => {
@@ -94,8 +95,8 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
-  const { userid, username, stationname, designation, organizationname, userpassword, active,mobileno,email } = updatedCustomer;
-  
+  const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email } = updatedCustomer;
+
 
   try {
     // Clear existing permissions for the user
@@ -111,12 +112,12 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
 
 
-    
+
     // Update user details
-   await db.query(
+    await db.query(
       'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
-      [username, stationname, designation, organizationname, userpassword, active,mobileno,email,userid]
-    ); 
+      [username, stationname, designation, organizationname, userpassword, active, mobileno, email, userid]
+    );
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {
@@ -264,21 +265,20 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 // })
 
 
-router.put("/usercreationdataupdate/:editid",(req,res)=>{
-  const editid=req.params.editid
-  const updatedata=req.body
+router.put("/usercreationdataupdate/:editid", (req, res) => {
+  const editid = req.params.editid
+  const updatedata = req.body
 
-  const {username,designation,userpassword,email,mobileno}=updatedata
+  const { username, designation, userpassword, email, mobileno } = updatedata
 
-  db.query("update usercreation set username=?,designation=?,userpassword=?,email=?,mobileno=? where userid=?",[username,designation,userpassword,email,mobileno,editid],(err,results)=>
-  {
-    if(err){
+  db.query("update usercreation set username=?,designation=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, userpassword, email, mobileno, editid], (err, results) => {
+    if (err) {
       return res.status(500).json({ Message: "Error updating data", err });
     }
 
     return res.status(200).json(results)
   })
-  
+
 })
 
 

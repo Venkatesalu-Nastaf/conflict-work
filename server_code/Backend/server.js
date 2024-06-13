@@ -323,9 +323,11 @@ app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'),
 
   } else {
     return res.status(500).json({ Message: "some data undefind" })
-  }
+  }  
 
 });
+
+
 
 // login page databse fetch:
 app.post('/login', (req, res) => {

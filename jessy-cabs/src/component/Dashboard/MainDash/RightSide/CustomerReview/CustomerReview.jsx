@@ -6,6 +6,8 @@ import axios from 'axios'
 import dayjs from "dayjs";
 import Dialog from "@mui/material/Dialog";
 
+
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DialogContent from "@mui/material/DialogContent";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -19,6 +21,7 @@ const CustomerReview = ({ station }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
+
   const apiurl = APIURL
   // console.log(station,"datastation")
   const stationarray = station?.map((data) => data.Stationname)
@@ -42,13 +45,14 @@ const CustomerReview = ({ station }) => {
   const dateoftoday = dayjs().format("YYYY-MM-DD")
 
 
-
+const datato=localStorage.getItem("tokensdata")
   useEffect(() => {
     const fetchdata = async () => {
       try {
         if (stationarray.length > 0) {
           const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
           const data = response.data
+          
           setStationdata(data)
         }
         else {
@@ -57,11 +61,13 @@ const CustomerReview = ({ station }) => {
       }
       catch (err) {
         console.log(err)
+      
+       
       }
     }
     fetchdata()
-  }, [apiurl, stationarray])
-
+  }, [apiurl,stationarray,datato])
+  
 
   // const handleYesterdayView = () => {
   //   setPopupOpen(true)

@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
+const jwt=require('jsonwebtoken')
 
 const { subMonths, startOfMonth, endOfMonth, format, addMonths, addDays, getYear, getMonth } = require('date-fns');
 const validator = require('validator');
@@ -208,8 +209,26 @@ router.get('/monthly_data2', (req, res) => {
 //     });
 // });
 
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('x-auth-token');
+  // console.log(token,"kk")
+  if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-router.get("/customerreviewdataall/:station", (req, res) => {
+  try {
+    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
+    req.user = decoded;
+    // console.log(decoded,"dee")
+    next();
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ message: 'expired token' });
+  }
+};
+router.get('/checktokenexpire',authenticateJWT,(req,res)=>{
+  return res.json({message:"TOKEN NOT EXPIRED"})
+})
+
+router.get("/customerreviewdataall/:station",(req, res) => {
     const station = req.params.station;
     const stationname = station.split(',');
     // console.log(stationname,"name")

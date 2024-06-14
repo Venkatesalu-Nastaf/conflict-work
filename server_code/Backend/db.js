@@ -1,40 +1,38 @@
-const mysql = require('mysql');
+const mysql = require("mysql");
 // require('dotenv').config()
 
+// const db = mysql.createConnection({
+//   host: '162.214.81.14',
+//   user: 'dzupsnmy_taaf_user',
+//   password: 'taafapplicationusers',
+//   database: 'dzupsnmy_taaf_application',
+//   port: 3306
+// });
+
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//     return;
+//   }
+//   console.log('Connected to BlueHost database');
+// });
+
 const db = mysql.createConnection({
-  host: '162.214.81.14',
-  user: 'dzupsnmy_taaf_user',
-  password: 'taafapplicationusers',
-  database: 'dzupsnmy_taaf_application',
-  port: 3306
+  host:process.env.DB_HOST,
+  user:process.env.DB_USER,
+  password:process.env.DB_PASSWORD,
+  database:process.env.DB_DATABASE,
+  port:process.env.DB_PORT,
 });
 
 db.connect((err) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err);
+    console.error("Error connecting to MySQL:", err);
     return;
   }
-  console.log('Connected to BlueHost database');
+  console.log("Connected to BlueHost database");
 });
-
-// const db = mysql.createConnection({
-//     host:process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_DATABASE,
-//     port:process.env.DB_PORT
-//   });
-
-//   db.connect((err) => {
-//     if (err) {
-//       console.error('Error connecting to MySQL:', err);
-//       return;
-//     }
-//     console.log('Connected to BlueHost database');
-//   });
 module.exports = db;
-
-
 
 // Hostingerr-------------------------
 // const mysql = require('mysql');
@@ -59,7 +57,6 @@ module.exports = db;
 
 //------------------------------------------
 
-
 // const mysql = require('mysql');
 
 // const db = mysql.createConnection({
@@ -79,5 +76,3 @@ module.exports = db;
 // });
 
 // module.exports = db;
-
-

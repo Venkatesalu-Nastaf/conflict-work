@@ -8,8 +8,8 @@ const db = require('./db');
 const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
-const jwt=require('jsonwebtoken')
-// require('dotenv').config()
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
@@ -220,13 +220,15 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
 const mapimageDirectory = path.join(__dirname, 'customer_master', 'public', 'map_images')
 
 app.use('/mapimages', express.static(mapimageDirectory));
+
 app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
-
+  console.log("imgs")
 
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
     if (err) {
+      console.log("err", err)
       return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
@@ -234,6 +236,7 @@ app.get('/getmapimages/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(mapimageDirectory, results[0].path);
+    console.log("imagePath", imagePath)
 
     res.sendFile(imagePath, (err) => {
       if (err) {
@@ -324,7 +327,7 @@ app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'),
 
   } else {
     return res.status(500).json({ Message: "some data undefind" })
-  }  
+  }
 
 });
 
@@ -345,12 +348,12 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
     // console.log(process.env.JSON_SECERETKEY)
-    const secretKey="NASTAF_APPLICATION_DATAKEY@123"
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username },secretKey,{ expiresIn: '1h' });
-   
+    const secretKey = "NASTAF_APPLICATION_DATAKEY@123"
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '1h' });
+
     // console.log(result[0].userid,"res",token)
 
-    return res.status(200).json({ message: 'Login successful', user: result[0],datatoken:token });
+    return res.status(200).json({ message: 'Login successful', user: result[0], datatoken: token });
 
     // return res.status(200).json({ message: 'Login successful', user: result[0] });
   });
@@ -644,7 +647,9 @@ app.get('/use-permissions/:userid', (req, res) => {
 
 
 
-const port = 8081;
+// const port = 8081;
+const port = process.env.PORT;
+console.log(port)
 
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

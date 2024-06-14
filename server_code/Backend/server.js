@@ -348,9 +348,15 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
     // console.log(process.env.JSON_SECERETKEY)
+<<<<<<< HEAD
     const secretKey = "NASTAF_APPLICATION_DATAKEY@123"
     const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '1h' });
 
+=======
+    // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username },process.env.JSON_SECERETKEY,{ expiresIn: '1h' });
+   
+>>>>>>> 99fc54c29b8ac2af8cf953fc4f4ca931f7e5f410
     // console.log(result[0].userid,"res",token)
 
     return res.status(200).json({ message: 'Login successful', user: result[0], datatoken: token });

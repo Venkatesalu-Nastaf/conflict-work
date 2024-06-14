@@ -184,6 +184,9 @@
 
 .booking-main-section1 {
   display: flex;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards;
 }
 
 .sub-section1 {
@@ -230,6 +233,8 @@
 .booking-main-section1 .sub-section1 .first-division {
   display: flex;
   flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
   animation: fadeInUp 1s forwards;
 }
 
@@ -316,7 +321,7 @@
   }
 }
 
-.detail-container-main{
+.detail-container-main {
   padding: 0px !important;
 }
 
@@ -510,4 +515,20 @@
   .booking-report-date-input {
     margin-top: 15px;
   }
+}
+
+.booking-image-attach-input-division {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.booking-image-attach-view-division{
+  display: grid;
+}
+
+.booking-image-attach-view-division span{
+  margin-bottom: 5px;
 }

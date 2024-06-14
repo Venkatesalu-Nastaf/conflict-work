@@ -928,7 +928,7 @@ const Booking = ({ stationName }) => {
 
                   component="label"
                 >
-                  Attach File
+                  Attach Image
                   <input
                     type="file"
                     style={{ display: "none" }}
@@ -936,7 +936,7 @@ const Booking = ({ stationName }) => {
                   />
                 </Button>
               </div>
-              <div className="input-dummy" style={{ marginLeft: "10px/" }}>
+              <div className="input-dummy" style={{ marginLeft: "10px" }}>
                 <Button
                   variant="outlined"
                   onClick={handleButtonClick}
@@ -947,9 +947,9 @@ const Booking = ({ stationName }) => {
             </div>
           ) : (
 
-            <div >
+            <div className="booking-image-attach-input-division">
 
-              <input
+              {/* <input
                 style={{
                   marginBottom: "10px",
                   padding: "10px",
@@ -960,11 +960,27 @@ const Booking = ({ stationName }) => {
                   cursor: "pointer",
                   marginRight: "10px",
                 }}
-                type="file" multiple onChange={handleImagechange2} />
+                type="file" multiple onChange={handleImagechange2} /> */}
 
+              <div className="input-dummy">
+                <Button
+                  color="primary"
+                  variant="contained"
 
-              <span>{selectetImg.length} images selected</span>
-              <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
+                  component="label"
+                >
+                  Attach File
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={handleImagechange2}
+                  />
+                </Button>
+              </div>
+              <div className="booking-image-attach-view-division">
+                <span>{selectetImg.length} images selected</span>
+                <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
+              </div>
             </div>
           )}
 

@@ -245,6 +245,8 @@
 }
 
 .tripsheet-division1 {
+  opacity: 0;
+  transform: translateY(20px);
   animation: fadeInUp 1s forwards;
 }
 

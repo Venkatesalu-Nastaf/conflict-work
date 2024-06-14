@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
+  console.log("selectedImage", selectedImage)
   const targetRef = useRef();
   return (
     <>
@@ -12,7 +13,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
 
           <div className='invoice-container-header'>
             <div className="logo-image-invoice">
-              {selectedImage && <img src={selectedImage[0]} alt={"Logo"} />}
+              {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
               <address >

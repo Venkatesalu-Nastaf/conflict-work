@@ -1303,6 +1303,19 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
 });
 
 
+router.delete('/dlete-mapLocationPoint/:payload', (req, res) => {
+    const id = req.params.payload;
+    db.query('delete from gmapdata where id=?', [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'faild to fetch error' })
+        }
+        return res.status(200).json(result)
+    })
+})
+
+
+
+
 //ayyanar 4hr and 8hr pack fetch
 
 //------------------------------------

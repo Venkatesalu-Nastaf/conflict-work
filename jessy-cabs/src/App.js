@@ -182,7 +182,7 @@ function App() {
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={TriSheet !== 0 ? <TripSheet stationName={stationName} /> : <NoPermission />}
+                    element={TriSheet !== 0 ? <TripSheet stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route

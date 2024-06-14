@@ -6,6 +6,7 @@ import {
     VehicleRate,
 } from "./TripSheetdata";
 import { APIURL } from "../../url";
+import { Button } from '@mui/material';
 
 const useTripsheet = () => {
     const apiUrl = APIURL;
@@ -92,6 +93,46 @@ const useTripsheet = () => {
         duty: '',
     });
 
+
+    const maplogcolumns = [
+        { field: "id", headerName: "Sno", width: 70 },
+        { field: "tripid", headerName: "TripSheet No", width: 130 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 130,
+            renderCell: (params) => (
+                <Button
+                    onClick={() => handleRemoveMapLogPoint(params)}
+                    aria-label="open-dialog"
+                >
+                    <Button variant="contained" color="primary">
+                        Remove
+                    </Button>
+                </Button>
+            ),
+        },
+        { field: "date", headerName: "Trip Date", width: 160 },
+        { field: "time", headerName: "Trip Time", width: 130 },
+        { field: "trip_type", headerName: "Trip Type", width: 160 },
+        { field: "place_name", headerName: "Place Name", width: 600 },
+
+    ];
+
+
+    const handleRemoveMapLogPoint = async (params) => {
+        try {
+            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            const id = params.id
+            const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
+            if (resdata.status === 200) {
+                handleTripmaplogClick()
+            }
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
     const handleButtonClick = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         if (!tripid) {
@@ -150,17 +191,21 @@ const useTripsheet = () => {
                 return;
             }
             const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+            console.log(" map---", response)
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
+            console.log("imageUrl", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
         }
     };
+
+
 
     const handleTripmaplogClick = async () => {
         try {
@@ -525,13 +570,16 @@ const useTripsheet = () => {
     //607
     const handleETripsheetClick = async (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-
         if (!tripid) {
             setError(true);
             setErrorMessage("please enter the tripid");
         }
         else {
             localStorage.setItem('selectedTripid', tripid);
+            getMapImaage();
+            getSignatureImage();
+            invoiceRouteData();
+            getAttachedImage();
             setPopupOpen(true);
 
         }
@@ -1967,7 +2015,7 @@ const useTripsheet = () => {
         handleEdit,
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails,
+        setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns,
         handleimagedelete,
 
 

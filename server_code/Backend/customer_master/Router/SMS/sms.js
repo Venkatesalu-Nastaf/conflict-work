@@ -112,8 +112,8 @@ async function tripguestsendSMS(dataToSend) {
     const { guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno } = dataToSend;
     console.log(guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno,"guestsms")
 
-    // const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
-    const apiUrl = process.env.SMS_APIURL;
+    const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
+    // const apiUrl = process.env.SMS_APIURL;
     const params = {
         SenderId: 'JSYCAB',
         Message: `Reporting to ${guestname} Vehicle Details - ${vehType} Vehicle Number - ${vehRegNo} Driver Name-${driverName} Mobile No ${mobileNo} Trip Date ${startdate} Reporting Time ${reporttime} from JESSY CABS ${ofclanno} -JESSYC`,
@@ -180,8 +180,8 @@ else{
 async function tripdriversendSMS(dataSend) {
     const {tripid, guestname,guestmobileno ,mobileNo, reporttime, startdate, address1} = dataSend;
     console.log(tripid, guestname,guestmobileno, mobileNo, reporttime, startdate,address1,"driversms")
-    // const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
-    const apiUrl = process.env.SMS_APIURL;
+    const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
+    // const apiUrl = process.env.SMS_APIURL;
     const params = {
         SenderId: 'JSYCAB',
         Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,

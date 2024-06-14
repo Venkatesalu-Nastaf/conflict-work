@@ -125,6 +125,12 @@
     }
 }
 
+@media only screen and (min-width:320px) and (max-width:373.9px) {
+    .copy-title-btn-RateType {
+        width: 84% !important;
+    }
+}
+
 .ratetype-startdate-icon{
     padding-top: 20px;
 }

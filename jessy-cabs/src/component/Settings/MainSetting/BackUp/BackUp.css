@@ -6,7 +6,7 @@
 .BackUp-header {
   height: 60.7vh;
   background: var(--glass);
-  padding: 20px;
+  padding: 0px;
   width: 100%;
 }
 
@@ -73,7 +73,7 @@
 .backup-inputs {
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .BackUp-form{

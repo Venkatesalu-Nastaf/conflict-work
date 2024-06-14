@@ -10,7 +10,7 @@ const columns = [
     { field: "ratetype", headerName: "Rate Type", width: 120 },
     { field: "duty", headerName: "Duty", width: 100 },
     { field: "OrganizationName", headerName: "Organization Name", width: 150 },
-    { field: "vehicleType", headerName: "vehicle Type", width: 110 },
+    { field: "vehicleName", headerName: "vehicle Type", width: 110 },
     { field: "package", headerName: "Package", width: 80 },
     { field: "Hours", headerName: "Hours", width: 70 },
     { field: "KMS", headerName: "KMS", width: 70 },
@@ -49,7 +49,8 @@ const usePackagerateentry = () => {
         //static data
         ratetype: '',
         OrganizationName: "",
-        vehicleType: '',
+        // vehicleType: '',
+        vehicleName:'',
         Validity: '',
     });
 
@@ -210,7 +211,7 @@ const usePackagerateentry = () => {
         setCommonData(prev => ({
             ratetype: '',
             OrganizationName: '',
-            vehicleType: '',
+            vehicleName: '',
             Validity: '',
         }))
 
@@ -238,11 +239,11 @@ const usePackagerateentry = () => {
         }]);
 
         // Extract relevant properties for commonData
-        const { ratetype, OrganizationName, vehicleType, Validity } = customerData;
+        const { ratetype, OrganizationName, vehicleName, Validity } = customerData;
         setCommonData({
             ratetype,
             OrganizationName,
-            vehicleType,
+            vehicleName,
             Validity,
         });
         setSelectedCustomerId(params.row.id);

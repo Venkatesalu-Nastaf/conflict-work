@@ -346,7 +346,7 @@ app.post('/login', (req, res) => {
     }
     // console.log(process.env.JSON_SECERETKEY)
     const secretKey=process.env.JSON_SECERETKEY
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey,{ expiresIn: '120s' });
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey,{ expiresIn: '1h' });
    
     // console.log(result[0].userid,"res",token)
 

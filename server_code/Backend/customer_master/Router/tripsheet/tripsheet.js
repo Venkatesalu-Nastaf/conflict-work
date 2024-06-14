@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const moment = require('moment');
 // const { json } = require('body-parser');
-require('dotenv').config()
+// require('dotenv').config()
 // trip sheet database:
 
 
@@ -1045,14 +1045,14 @@ router.post('/send-tripsheet-email', async (req, res) => {
             host: 'smtp.gmail.com',
             port: 465,
             secure: true,
-            // auth: {
-            //     user: 'foxfahad386@gmail.com',
-            //     pass: 'vwmh mtxr qdnk tldd',
-            // },
             auth: {
-                user:process.env.MAIL_AUTH,
-                pass:process.env.MAIL_PASS,
+                user: 'foxfahad386@gmail.com',
+                pass: 'vwmh mtxr qdnk tldd',
             },
+            // auth: {
+            //     user:process.env.MAIL_AUTH,
+            //     pass:process.env.MAIL_PASS,
+            // },
             tls: {
                 // Ignore SSL certificate errors
                 rejectUnauthorized: false
@@ -1064,8 +1064,8 @@ router.post('/send-tripsheet-email', async (req, res) => {
 
             // Email content for the customer
             const customerMailOptions = {
-                // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from: 'foxfahad386@gmail.com',
+                // from:process.env.MAIL_AUTH,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
                 html: `
@@ -1121,8 +1121,8 @@ router.post('/send-tripsheet-email', async (req, res) => {
         }
         else {
             const customerMailOptions1 = {
-                // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from: 'foxfahad386@gmail.com',
+                // from:process.env.MAIL_AUTH,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `

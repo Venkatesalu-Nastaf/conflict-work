@@ -215,7 +215,8 @@ const authenticateJWT = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
   try {
-    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
+     const secretKey1="NASTAF_APPLICATION_DATAKEY@123"
+    const decoded = jwt.verify(token,secretKey1);
     req.user = decoded;
     // console.log(decoded,"dee")
     next();

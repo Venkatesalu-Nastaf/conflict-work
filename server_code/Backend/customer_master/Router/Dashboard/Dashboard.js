@@ -4,6 +4,8 @@ const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
 const jwt=require('jsonwebtoken')
+require('dotenv').config()
+
 
 const { subMonths, startOfMonth, endOfMonth, format, addMonths, addDays, getYear, getMonth } = require('date-fns');
 const validator = require('validator');
@@ -215,8 +217,9 @@ const authenticateJWT = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
   try {
-     const secretKey1="NASTAF_APPLICATION_DATAKEY@123"
-    const decoded = jwt.verify(token,secretKey1);
+    
+    //  const secretKey1="NASTAF_APPLICATION_DATAKEY@123"
+    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
     req.user = decoded;
     // console.log(decoded,"dee")
     next();

@@ -151,15 +151,15 @@ const PackageRateEntery = ({ organizationNames }) => {
                     id="free-solo-demo-vehicleType"
                     freeSolo
                     sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleType")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleType || ''}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleName || ''}
                     options={VehicleType.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || commonData?.vehicleType || ''}
+                    getOptionLabel={(option) => option.label || commonData?.vehicleName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="VehicleType" name="vehicleType" inputRef={params.inputRef} />
+                        <TextField {...params} label="VehicleType" name="vehicleName" inputRef={params.inputRef} />
                       )
                     }
                     }

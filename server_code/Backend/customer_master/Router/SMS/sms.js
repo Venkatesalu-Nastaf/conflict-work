@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios'); // Import the axios library
 const db = require('../../../db');
-require('dotenv').config()
+// require('dotenv').config()
 
 
 // // Send guest SMS from booking when the button is clicked
@@ -118,12 +118,12 @@ async function tripguestsendSMS(dataToSend) {
         SenderId: 'JSYCAB',
         Message: `Reporting to ${guestname} Vehicle Details - ${vehType} Vehicle Number - ${vehRegNo} Driver Name-${driverName} Mobile No ${mobileNo} Trip Date ${startdate} Reporting Time ${reporttime} from JESSY CABS ${ofclanno} -JESSYC`,
         MobileNumbers: `${guestmobileno}`,
-        // TemplateId: '1107169000156593966',
-        // ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
-        // ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',
-        TemplateId:process.env.GUESTSMS_TEMPLATEId,
-        ApiKey:process.env.SMS_ApiKey,
-        ClientId:process.env.SMS_ClientId,
+        TemplateId: '1107169000156593966',
+        ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
+        ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',
+        // TemplateId:process.env.GUESTSMS_TEMPLATEId,
+        // ApiKey:process.env.SMS_ApiKey,
+        // ClientId:process.env.SMS_ClientId,
     };
 
     try {
@@ -187,12 +187,12 @@ async function tripdriversendSMS(dataSend) {
         Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,
         MobileNumbers: `${mobileNo}`,
         // TemplateId: '1107169000156593966',
-        // TemplateId: '1107169000164228655',
-        // ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
-        // ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',
-        TemplateId:process.env.DRIVER_TEMPLATEId,
-        ApiKey:process.env.SMS_ApiKey,
-        ClientId:process.env.SMS_ClientId,
+        TemplateId: '1107169000164228655',
+        ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
+        ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',
+        // TemplateId:process.env.DRIVER_TEMPLATEId,
+        // ApiKey:process.env.SMS_ApiKey,
+        // ClientId:process.env.SMS_ClientId,
     };
 
     try {

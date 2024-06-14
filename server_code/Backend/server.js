@@ -9,7 +9,7 @@ const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
 const jwt=require('jsonwebtoken')
-require('dotenv').config()
+// require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
@@ -345,8 +345,8 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
     // console.log(process.env.JSON_SECERETKEY)
-    const secretKey=process.env.JSON_SECERETKEY
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey,{ expiresIn: '1h' });
+    // const secretKey=process.env.JSON_SECERETKEY
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username },"NASTAF_APPLICATION_DATAKEY@123",{ expiresIn: '1h' });
    
     // console.log(result[0].userid,"res",token)
 
@@ -644,7 +644,7 @@ app.get('/use-permissions/:userid', (req, res) => {
 
 
 
-const port = process.env.PORT || 3000;
+const port = 8081;
 
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

@@ -6,7 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const axios = require('axios');
-require('dotenv').config()
+// require('dotenv').config()
 
 router.use(express.static('customer_master'));
 const storage = multer.diskStorage({

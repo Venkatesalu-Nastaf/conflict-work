@@ -194,6 +194,10 @@ export const VehicleType = [
       optionvalue: "20SEATERBUS",
     },
     {
+      option: "minicop 64cc",
+      optionvalue: "minicop 64cc",
+    },
+    {
       option: "45 SEATER BUS",
       optionvalue: "45SEATERBUS",
     },

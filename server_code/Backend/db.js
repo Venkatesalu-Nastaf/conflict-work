@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-// require('dotenv').config()
+require('dotenv').config()
 
 const db = mysql.createConnection({
   host: '162.214.81.14',
@@ -32,7 +32,7 @@ db.connect((err) => {
 //     }
 //     console.log('Connected to BlueHost database');
 //   });
-module.exports = db;
+// module.exports = db;
 
 
 

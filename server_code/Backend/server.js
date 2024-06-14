@@ -9,7 +9,7 @@ const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
 const jwt=require('jsonwebtoken')
-// require('dotenv').config()
+require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
@@ -644,7 +644,7 @@ app.get('/use-permissions/:userid', (req, res) => {
 
 
 
-const port = 8081;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

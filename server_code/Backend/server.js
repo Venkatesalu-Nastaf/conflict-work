@@ -8,6 +8,7 @@ const db = require('./db');
 const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
+const jwt=require('jsonwebtoken')
 require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
@@ -323,9 +324,11 @@ app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'),
 
   } else {
     return res.status(500).json({ Message: "some data undefind" })
-  }
+  }  
 
 });
+
+
 
 // login page databse fetch:
 app.post('/login', (req, res) => {
@@ -341,8 +344,15 @@ app.post('/login', (req, res) => {
     if (result.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
+    // console.log(process.env.JSON_SECERETKEY)
+    const secretKey=process.env.JSON_SECERETKEY
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey,{ expiresIn: '120s' });
+   
+    // console.log(result[0].userid,"res",token)
 
-    return res.status(200).json({ message: 'Login successful', user: result[0] });
+    return res.status(200).json({ message: 'Login successful', user: result[0],datatoken:token });
+
+    // return res.status(200).json({ message: 'Login successful', user: result[0] });
   });
 });
 // for save map image

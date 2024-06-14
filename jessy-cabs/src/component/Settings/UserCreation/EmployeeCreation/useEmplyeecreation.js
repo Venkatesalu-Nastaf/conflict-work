@@ -214,7 +214,6 @@ const useEmplyeecreation = () => {
     // cancel
     const handleCancel = () => {
         setBook((prevBook) => ({
-            ...prevBook,
             userid: '',
             username: '',
             email: '',
@@ -223,7 +222,7 @@ const useEmplyeecreation = () => {
             designation: '',
             organizationname: '',
             userpassword: '',
-            active: '',
+            active: false,
         }));
 
         setPermissionsData(initialPermissionsData);
@@ -234,16 +233,22 @@ const useEmplyeecreation = () => {
         setIsEditMode(false)
     };
 
+    // console.log("book", book)
+
     // add
     const handleAdd = async () => {
         const username = book.username;
-        const branchName = book.branchName;
+        const branchName = book.stationname;
         const designation = book.designation;
         const organisation = book.organizationname
         const active = book.active
         const email = book.email
         const mobileno = book.mobileno
         const password = book.userpassword
+
+        console.log("branchName", branchName)
+        console.log("email", email)
+        console.log("mobileno", mobileno)
 
         if (!password) {
             setError(true);
@@ -509,7 +514,7 @@ const useEmplyeecreation = () => {
 
     const handleRowClickUser = async (params) => {
         setBook(params)
-        console.log("params", params)
+        console.log("params-user", params)
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {

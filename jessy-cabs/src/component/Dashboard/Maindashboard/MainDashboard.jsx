@@ -21,6 +21,7 @@ import { PermissionContext } from "../../context/permissionContext";
 import update from "../../../assets/img/update.png"
 import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
 import { FaBell } from "react-icons/fa";
+import axios  from 'axios'
 // import axios from "axios";
 
 //dialog box
@@ -45,6 +46,7 @@ const MainDashboard = () => {
   // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [popupOpentoken, setPopupOpenToken] = useState(false);
   // const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
   const data1 = localStorage.getItem("useridno")
@@ -92,6 +94,9 @@ const MainDashboard = () => {
       localStorage.removeItem("organizationimages")
       localStorage.removeItem("selectedusertheme")
       localStorage.removeItem("username")
+      localStorage.removeItem("tokensdata")
+      
+
 
       setPermission([]);
       setExpanded(true);
@@ -155,6 +160,30 @@ const MainDashboard = () => {
       setSuccess(successMessagepopup);
     }
   }, [user,datatriguserinfo ]);
+  
+
+  const checkertoken=()=>{
+    setPopupOpenToken(true)
+  }
+  useEffect(()=>{
+    const fetchdata=async()=>{
+      try{
+        await axios.get(`${apiUrl}/checktokenexpire`, {headers: {
+          'x-auth-token': localStorage.getItem("tokensdata")
+        }})
+        // console.log(response)
+        // if(response.)
+      }
+      catch(err){
+        console.log(err,"data")
+        checkertoken()
+      }
+    }
+    fetchdata()
+  })
+  // console.log(popupOpentoken,"ty")
+
+ 
 
   const storedUsername = localStorage.getItem("username");
 
@@ -217,7 +246,8 @@ const MainDashboard = () => {
             }
           } else {
           }
-        } else {
+        } 
+        else {
           const timer = setTimeout(fetchData, 2000);
           return () => clearTimeout(timer);
         }
@@ -353,6 +383,21 @@ const MainDashboard = () => {
                 className="logout-cancel-btn"
               >
                 NO, Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={popupOpentoken}>
+            <DialogContent>
+              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
+              <p className="modal-warning-text">YOUR SESSSION IS EXPIRED <br /> </p>
+            </DialogContent>
+            <DialogActions className="yes-no-buttons">
+              <Button
+                onClick={handleLogoutdialog}
+                variant="contained"
+                className="logout-btn"
+              >
+                Yes, I'm Sure
               </Button>
             </DialogActions>
           </Dialog>

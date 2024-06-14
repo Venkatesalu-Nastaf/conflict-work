@@ -17,9 +17,10 @@ import { useData } from "../Dashboard/MainDash/Sildebar/DataContext2.js";
 
 
 
+
 const Login = () => {
 
-  const { setLogoTrigger } = useData()
+  const { setLogoTrigger} = useData()
 
   const apiUrl = APIURL;
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
+      
       if (response.status === 200) {
         setUserdashboard(true) // its for logo trigger
         setLogoTrigger(prev => !prev)
@@ -76,6 +78,9 @@ const Login = () => {
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
+        const datatokens=response.data.datatoken
+        localStorage.setItem("tokensdata",datatokens)
+    
 
       }
       else {

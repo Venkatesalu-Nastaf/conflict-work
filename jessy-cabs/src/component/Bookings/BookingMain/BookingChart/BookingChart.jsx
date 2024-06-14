@@ -26,8 +26,8 @@ const BookingChart = () => {
     vehicleOnlineDetails
 
   } = useBookingchart();
-  
-  
+
+
   useEffect(() => {
     if (actionName === "List") {
       handleClick(null, "List");
@@ -135,9 +135,10 @@ const BookingChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/getDriverIdStatus/${vehdriverNames}`, {
 
-        });
+        if (!vehdriverNames || vehdriverNames === null || vehdriverNames.length < 1) return;
+        console.log("vehdriverNames", vehdriverNames)
+        const response = await axios.get(`${apiUrl}/getDriverIdStatus/${vehdriverNames}`);
         const datas = response.data;
 
         const updatedDetails = getVehicleDetail.map(vehicle => {
@@ -149,7 +150,7 @@ const BookingChart = () => {
         });
         setLatestVehicleDetail(updatedDetails)
       } catch (error) {
-        console.error('Error fetching driver id status:', error);
+        console.error('Error fetching driver id status:', error.message);
       }
     };
     fetchData();
@@ -422,7 +423,7 @@ const BookingChart = () => {
           <div className="search-bar-input">
             <div className="search-button">
               <FaSearch />
-              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place"/>
+              <input type="search" placeholder="Search vehicle detai.." value={vehicleDetail} onChange={(e) => setVehicleDetail(e.target.value)} className="input-search-place" />
             </div>
             <button className="chart-search-btn" onClick={handleButtonClick}>search</button>
           </div>

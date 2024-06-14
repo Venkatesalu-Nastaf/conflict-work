@@ -24,7 +24,7 @@ const db = mysql.createConnection({
     database: process.env.DB_DATABASE,
     port:process.env.DB_PORT
   });
-  
+
   db.connect((err) => {
     if (err) {
       console.error('Error connecting to MySQL:', err);
@@ -66,7 +66,7 @@ module.exports = db;
 //   host: 'localhost',
 //   user: 'root',
 //   password: '',
-//   database: 'dzupsnmy_taaf_application _1',
+//   database: 'dzupsnmy_taaf_application _2',
 //   port: 3306
 // });
 

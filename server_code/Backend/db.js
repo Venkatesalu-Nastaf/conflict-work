@@ -1,5 +1,5 @@
-// const mysql = require('mysql');
-// require('dotenv').config()
+const mysql = require('mysql');
+require('dotenv').config()
 
 // const db = mysql.createConnection({
 //   host: '162.214.81.14',
@@ -17,22 +17,22 @@
 //   console.log('Connected to BlueHost database');
 // });
 
-// const db = mysql.createConnection({
-//     host:process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_DATABASE,
-//     port:process.env.DB_PORT
-//   });
+const db = mysql.createConnection({
+    host:process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    port:process.env.DB_PORT
+  });
 
-//   db.connect((err) => {
-//     if (err) {
-//       console.error('Error connecting to MySQL:', err);
-//       return;
-//     }
-//     console.log('Connected to BlueHost database');
-//   });
-// module.exports = db;
+  db.connect((err) => {
+    if (err) {
+      console.error('Error connecting to MySQL:', err);
+      return;
+    }
+    console.log('Connected to BlueHost database');
+  });
+module.exports = db;
 
 
 
@@ -60,24 +60,24 @@
 //------------------------------------------
 
 
-const mysql = require('mysql');
+// const mysql = require('mysql');
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'dzupsnmy_taaf_application _2',
-  port: 3306
-});
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'dzupsnmy_taaf_application _2',
+//   port: 3306
+// });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-    return;
-  }
-  console.log('Connected Local MySQL database');
-});
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//     return;
+//   }
+//   console.log('Connected Local MySQL database');
+// });
 
-module.exports = db;
+// module.exports = db;
 
 

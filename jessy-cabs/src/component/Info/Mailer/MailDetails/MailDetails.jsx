@@ -63,6 +63,7 @@ const MailDetails = () => {
   const [success, setSuccess] = useState(false);
   const [searchname, setSearchname] = useState('')
   const navigate = useNavigate();
+  const [organistaionsendmail,setOrganisationSendEmail]=useState([])
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 70 },
@@ -210,7 +211,7 @@ const MailDetails = () => {
   }
 
   const handleIconClick = () => {
-    document.getElementById('fileInput').click();
+    document.getElementById('fileInput_upload').click();
   };
 
   const handleTemplateCreation = () => {
@@ -253,7 +254,9 @@ const MailDetails = () => {
       const datatosend = {
         templatemessage: selecteddata,
         emaildata: data,
-        templateimagedata: templateimage
+        templateimagedata: templateimage,
+        Sendmailauth:organistaionsendmail.Sender_Mail,
+        Mailauthpass:organistaionsendmail.EmailApp_Password
       }
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
@@ -276,6 +279,33 @@ const MailDetails = () => {
     setSelectedData([])
 
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const organizationname = localStorage.getItem('usercompany');
+
+        try {
+            if(!organizationname) return
+            const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
+            if (response.status === 200) {
+
+                const userDataArray = await response.json();
+                if (userDataArray.length > 0) {
+                  setOrganisationSendEmail(userDataArray[0])
+                 
+                   
+                  
+                } else {
+                    setErrorMessage('User data not found.');
+                    setError(true);
+                }
+            } 
+        }
+        catch {
+        }
+    };
+    fetchData();
+}, [apiurl,selecteddata]);
   const handleShowdata = async () => {
 
     try {

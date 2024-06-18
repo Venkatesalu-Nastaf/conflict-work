@@ -6,7 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const axios = require('axios');
-require('dotenv').config()
+
 
 router.use(express.static('customer_master'));
 const storage = multer.diskStorage({
@@ -173,8 +173,8 @@ router.get('/gettemplateattachimage/:templateid', (req, res) => {
 
 router.post('/send-emailtemplate', async (req, res) => {
     try {
-        const { templatemessage, emaildata, templateimagedata } = req.body;
-        // console.log(templatemessage,emaildata,templateimagedata)
+        const { templatemessage, emaildata, templateimagedata,Sendmailauth, Mailauthpass } = req.body;
+        console.log(templatemessage,emaildata,templateimagedata,Sendmailauth, Mailauthpass)
 
 
         // Create a Nodemailer transporter
@@ -186,10 +186,15 @@ router.post('/send-emailtemplate', async (req, res) => {
             //     user: 'foxfahad386@gmail.com',
             //     pass: 'vwmh mtxr qdnk tldd',
             // },
+            // auth: {
+            //     user:process.env.MAIL_AUTH,
+            //     pass: process.env.MAIL_PASS,
+            // },
             auth: {
-                user:process.env.MAIL_AUTH,
-                pass: process.env.MAIL_PASS,
+                user:Sendmailauth,
+                pass:Mailauthpass,
             },
+
             tls: {
                 rejectUnauthorized: false
             }
@@ -242,7 +247,7 @@ router.post('/send-emailtemplate', async (req, res) => {
 
             const customerMailOptions = {
                 // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from:Sendmailauth,
                 to: data.Email, // Ensure the correct key is used here
                 subject: templatemessage.TemplateSubject,
                 html: finalMessage,

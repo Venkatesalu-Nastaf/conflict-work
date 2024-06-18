@@ -45,7 +45,7 @@ export const PermissionProvider = ({ children }) => {
 
         }
         fetchPermission();
-    }, [makeRender, userid])
+    }, [makeRender, userid,token])
 
 
 

@@ -323,6 +323,32 @@ const Organization = ({ logoImage }) => {
                                     onChange={handleChange}
                                 />
                             </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Sender Mail:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="telephone"
+                                    name="telephone"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData.telephone || book.telephone || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">App Password:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="telephone"
+                                    name="telephone"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData.telephone || book.telephone || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
                         <div className='organisation-input-row'>
                             {selectedCustomerData?.length === 0 ?

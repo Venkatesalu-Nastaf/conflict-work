@@ -54,7 +54,9 @@ const useOrganization = () => {
         partnershipsAlliances: '',
         pannumber: '',
         gstnumber: '',
-        telephone: ''
+        telephone: '',
+        Sender_Mail:'',
+        EmailApp_Password:''
     });
 
 
@@ -83,6 +85,7 @@ const useOrganization = () => {
             return;
         }
         try {
+            console.log(book,"ookk")
             await axios.post(`${apiUrl}/addcompany`, book);
             setSuccess(true);
             setSuccessMessage("Organization Added Successfully");
@@ -99,6 +102,7 @@ const useOrganization = () => {
             const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
             const encode = companyname;
             const decode = decodeURIComponent(encode);
+            console.log(updatedCustomer,"ccccc")
             await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");

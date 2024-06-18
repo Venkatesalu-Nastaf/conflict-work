@@ -1039,7 +1039,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth,Mailauthpass } = req.body;
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -1049,9 +1049,13 @@ router.post('/send-tripsheet-email', async (req, res) => {
             //     user: 'foxfahad386@gmail.com',
             //     pass: 'vwmh mtxr qdnk tldd',
             // },
+            // auth: {
+            //     user:process.env.MAIL_AUTH,
+            //     pass:process.env.MAIL_PASS,
+            // },
             auth: {
-                user:process.env.MAIL_AUTH,
-                pass:process.env.MAIL_PASS,
+                user:Sendmailauth,
+                pass:Mailauthpass,
             },
             tls: {
                 // Ignore SSL certificate errors
@@ -1064,8 +1068,8 @@ router.post('/send-tripsheet-email', async (req, res) => {
 
             // Email content for the customer
             const customerMailOptions = {
-                from: 'foxfahad386@gmail.com',
-                // from:process.env.MAIL_AUTH,
+                // from: 'foxfahad386@gmail.com',
+                from:Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
                 html: `
@@ -1122,7 +1126,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
         else {
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from:Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `

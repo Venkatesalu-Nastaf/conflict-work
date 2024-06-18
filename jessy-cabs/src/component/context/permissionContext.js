@@ -12,14 +12,23 @@ export const PermissionProvider = ({ children }) => {
     const [makeRender, setMakeRender] = useState(false);
     const [user_id, setUser_id] = useState("")
     const userid = localStorage.getItem('useridno') || user_id;
+    const token=localStorage.getItem("tokensdata")
+    
 
     useEffect(() => {
         const fetchPermission = async () => {
             try {
 
-                if (userid !== "undefined" && userid && userid !== undefined && userid !== null) {
+                // if (userid !== "undefined" && userid && userid !== undefined && userid !== null)
+                if (userid !== "undefined" && userid && userid !== undefined && userid !== null&& token !== "undefined" && token && token !== undefined && token!== null)
+                     {
 
-                    const response = await axios.get(`${apiurl}/use-permissions/${userid}`)
+                    const response = await axios.get(`${apiurl}/use-permissions/${userid}`, {
+                        headers: {
+                          'x-auth-token': token,
+                          
+                        }
+                      })
                     console.log('response.data', response.data);
                     const data = response.data;
                     setPermission(data);

@@ -234,7 +234,7 @@ const Booking = ({ stationName }) => {
                 <div className="icone">
                   <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} className='booking-date-main'>
                   <DemoItem label="Booking Date">
                     <DatePicker
                       value={
@@ -351,6 +351,7 @@ const Booking = ({ stationName }) => {
                   id="customer"
                   label="Customer"
                   name="customer"
+                  className="full-width"
                   value={
                     formData.customer ||
                     selectedCustomerData.customer ||
@@ -1645,6 +1646,9 @@ const Booking = ({ stationName }) => {
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
@@ -1657,6 +1661,9 @@ const Booking = ({ stationName }) => {
                   </LocalizationProvider>
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"

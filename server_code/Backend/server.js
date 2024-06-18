@@ -630,8 +630,25 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 
 
 // Permission 
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('x-auth-token');
+  // console.log(token,"kk")
+  if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-app.get('/use-permissions/:userid', (req, res) => {
+  try {
+    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
+    req.user = decoded;
+    // console.log(decoded,"dee")
+    next();
+  } catch (error) {
+    // console.log(error,"gggggggg")
+    res.status(400).json({ message: 'expired token' });
+  }
+
+};
+
+
+app.get('/use-permissions/:userid',authenticateJWT, (req, res) => {
   const userid = req.params.userid;
 
   const sql = `select * from user_permissions where user_id=?`;

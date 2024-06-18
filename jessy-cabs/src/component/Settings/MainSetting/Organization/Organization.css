@@ -311,7 +311,8 @@ border-right: 1px solid transparent !important;
     }
 }
 
-.organisation-btn-row, .organisation-btn {
+.organisation-btn-row,
+.organisation-btn {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -332,6 +333,7 @@ border-right: 1px solid transparent !important;
 .organisation-details-input .organization-input {
     width: 300px !important;
     gap: 10px;
+    display: grid !important;
 }
 
 .organisation-details-input .organization-text-area {
@@ -342,7 +344,7 @@ border-right: 1px solid transparent !important;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 68vw;
     gap: 10px;
 }
@@ -351,6 +353,6 @@ border-right: 1px solid transparent !important;
     width: 87%;
 }
 
-.organisation-avatar-icon{
+.organisation-avatar-icon {
     font-size: 55px;
 }

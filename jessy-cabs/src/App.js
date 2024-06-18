@@ -84,6 +84,19 @@ function App() {
   const Dashbord_read = permissions[20]?.read;
 
 
+  const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
+  const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
+  const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
+  const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+
+  //   let landingPAge ;
+
+  // const entryPAgeFun = ()=>{
+
+  // }
+
+
   //--------   fetch station name ------------------------------------------------------------
 
   const loginUserName = localStorage.getItem("username")
@@ -173,7 +186,19 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
-              <Route path="/home/dashboard" element={Dashbord_read !== 0 ? <MainDash stationName={stationName} /> : <Navigate to="/home/bookings/booking" />} />
+              <Route path="/home/dashboard" element={Dashbord_read ? <MainDash stationName={stationName} /> :
+
+                (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+                  (
+                    Billing_permission ? (<Navigate to="/home/billing/billing" />) :
+                      (
+                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : <Navigate to="/home/info/ratetype" />)
+                      )
+                  )
+                )
+              }
+
+              />
 
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route
@@ -182,7 +207,7 @@ function App() {
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                    element={TriSheet !== 0 ? <TripSheet stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={TriSheet !== 0 ? <TripSheet stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route

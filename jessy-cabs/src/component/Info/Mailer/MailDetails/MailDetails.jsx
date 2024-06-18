@@ -283,9 +283,14 @@ const MailDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
         const organizationname = localStorage.getItem('usercompany');
+       
 
         try {
-            if(!organizationname) return
+            if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
+              {
+                return
+              }
+          else{
             const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
             if (response.status === 200) {
 
@@ -300,6 +305,7 @@ const MailDetails = () => {
                     setError(true);
                 }
             } 
+          }
         }
         catch {
         }

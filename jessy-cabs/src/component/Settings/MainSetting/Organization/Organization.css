@@ -87,7 +87,7 @@
 .form-container-UserSettings .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
-    height: 77vh;
+    height: 80vh;
     width: 81vw;
     display: flex;
     flex-direction: column;
@@ -111,7 +111,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     width: 70vw;
     /* width: 100%; */
     margin: 30px auto;

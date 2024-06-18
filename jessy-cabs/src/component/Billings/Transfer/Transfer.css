@@ -22,7 +22,7 @@
 .form-container-Transfer .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 71vh;
+  height: 80vh;
   width: 81vw;
   display: flex;
   flex-direction: column;

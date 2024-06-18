@@ -4,8 +4,14 @@
   flex-direction: column;
   grid-gap: 1rem;
   gap: 1rem;
-  margin-top: 80px;
+  margin-top: 30px;
   align-items: center;
+}
+
+@media screen and (min-width: 769px) and (max-width: 1135px) {
+  .Settings-main {
+    margin-top: 70px;
+  }
 }
 
 @media screen and (max-width: 768px) {

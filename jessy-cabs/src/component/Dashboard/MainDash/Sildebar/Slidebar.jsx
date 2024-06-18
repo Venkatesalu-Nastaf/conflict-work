@@ -1,6 +1,6 @@
+
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
-// import axios from "axios";
 import "./Sidebar.css";
 import Avatar from "@mui/material/Avatar";
 import { motion } from "framer-motion";
@@ -42,7 +42,6 @@ import { GiReceiveMoney } from "react-icons/gi";
 import { MdGroup } from "react-icons/md";
 import { MdGroupRemove } from "react-icons/md";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { APIURL } from "../../../url";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -52,9 +51,7 @@ import { FaUser } from "react-icons/fa";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import update from "../../../../assets/img/update.png";
-// import { useData } from "../../MainDash/Sildebar/DataContext2";
 import { useThemes } from "../../../UserSettings/Themes/ThemesContext";
-// import { useData  as datadashboard} from "../../Maindashboard/DataContext"; 
 
 const MenuItem = ({
   label,
@@ -101,9 +98,6 @@ const MenuItem = ({
 
 const Sidebar = () => {
 
-
-
-  const apiUrl = APIURL;
   const location = useLocation();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
@@ -142,19 +136,12 @@ const Sidebar = () => {
   //--------------------------to show logo-----------
 
   const { logo } = useData();
-  const {selectedavtar } = useThemes();
-  // const {datatriguserinfo}=datadashboard()
-  // const [selectedImage, setSelectedImage] = useState(null);
-  // const [selectedprofileImage, setSelectedprofileImage] = useState(null);
+  const { selectedavtar } = useThemes();
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
   const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
   const [billingDropdownVisible, setBillingDropdownVisible] = useState(false);
   const [bookingDropdownVisible, setBookingDropdownVisible] = useState(false);
-
-  // useEffect(() => {
-  //   setSelectedImage(sharedData)
-  // }, [sharedData])
 
   //------------------popup------------------------
 
@@ -239,6 +226,14 @@ const Sidebar = () => {
   const INFO = permissions[16]?.read;
   const Dashbord_read = permissions[20]?.read;
 
+
+  // its for hiding navigation based on permission 
+  const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
+  const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
+  const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
+  const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
@@ -257,7 +252,6 @@ const Sidebar = () => {
         hasPermission = REGISTER;
         break;
       case "Settings page":
-        // hasPermission = 1;
         hasPermission = SETTING;
         break;
       case "Info page":
@@ -273,7 +267,6 @@ const Sidebar = () => {
         break;
     }
 
-    // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
     try {
 
@@ -289,6 +282,7 @@ const Sidebar = () => {
     } catch {
     }
   };
+
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
@@ -339,68 +333,6 @@ const Sidebar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const organizationname = localStorage.getItem("usercompany");
-
-  //       if (!organizationname) {
-  //         return;
-  //       }
-  //       if (organizationname !== "undefined" && organizationname) {
-
-  //         const response = await fetch(
-  //           `${apiUrl}/get-companyimage/${organizationname}`
-  //         );
-
-  //         if (response.status === 200) {
-  //           const data = await response.json();
-  //           const attachedImageUrls = data.imagePaths.map(
-  //             (path) => `${apiUrl}/images/${path}`
-  //           );
-
-  //           localStorage.setItem("selectedImage", JSON.stringify(attachedImageUrls));
-  //         }
-  //         else {
-            
-  //           const timer = setTimeout(fetchData, 2000);
-
-  //           return () => clearTimeout(timer);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching image data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [apiUrl]);
-
-  // const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  // useEffect(() => {
-  //   const handleImageView = () => {
-  //     const userid = localStorage.getItem("useridno");
-  //     axios
-  //       .get(`${apiUrl}/userprofileview/${userid}`)
-  //       .then((res) => {
-  //         if (res.status === 200) {
-  //           setSelectedprofileImage(res.data[0]?.filename);
-  //         } else {
-  //           const timer = setTimeout(handleImageView, 100);
-  //           return () => clearTimeout(timer);
-  //         }
-  //       });
-  //   };
-  //   handleImageView();
-  // }, [sharedData, selectedprofileImage, apiUrl]);
-
-  // const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
-  // const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
-  // const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
-  // const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
-  // const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
-  // const [popupOpen, setPopupOpen] = useState(false);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -536,7 +468,8 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
           />}
-          <MenuItem
+
+          {booking_page_permission && <MenuItem
             label="Booking"
             to={BOOKING && ("/home/bookings/booking")}
             alt="/home/bookings/booking"
@@ -546,8 +479,9 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={HiOutlineUsers}
-          />
-          <MenuItem
+          />}
+
+          {Billing_permission && <MenuItem
             label="Billing"
             to={BILLING && ("/home/billing/billing")}
             // to={"/home/billing/billing"}
@@ -558,8 +492,9 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiBarChartSquare}
-          />
-          <MenuItem
+          />}
+
+          {Register_page_permission && <MenuItem
             label="Register"
             to={REGISTER && ("/home/registration/customer")}
             alt="/home/registration/customer"
@@ -570,7 +505,9 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
-          <MenuItem
+          }
+
+          {Setting_page_permission && <MenuItem
             label="Settings"
             to={SETTING && ("/home/settings/usercreation")}
             alt="/home/settings/usercreation"
@@ -580,8 +517,10 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          />
-          <MenuItem
+          />}
+
+
+          {Info_page_permission && <MenuItem
             label="Info"
             to={INFO && ("/home/info/ratetype")}
             alt="/home/info/ratetype"
@@ -591,7 +530,8 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineInfoCircle}
-          />
+          />}
+
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"
@@ -645,7 +585,7 @@ const Sidebar = () => {
               >
                 <Avatar
                   alt="userimage"
-                  // src={`${apiUrl}/images/${selectedprofileImage}`}
+                // src={`${apiUrl}/images/${selectedprofileImage}`}
                 />
               </StyledBadge>
             </div>
@@ -691,15 +631,15 @@ const Sidebar = () => {
               )} */}
               {/* <div className="logo"> */}
 
-{logo ? (
-  <img
-    src={logo}
-    alt=""
-  />) : (<div style={{ 'fontSize': "55px" }}>
-    <BiBuildings />
-  </div>)}
+              {logo ? (
+                <img
+                  src={logo}
+                  alt=""
+                />) : (<div style={{ 'fontSize': "55px" }}>
+                  <BiBuildings />
+                </div>)}
 
-{/* </div> */}
+              {/* </div> */}
             </div>
 
 
@@ -1007,7 +947,7 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-<MenuItem
+              <MenuItem
                 label="User"
                 to="/home/usersettings/usersetting"
                 alt="/home/usersettings/usersetting"
@@ -1020,7 +960,7 @@ const Sidebar = () => {
               />
 
 
-<div className="header-user-mobile" onClick={closeMenuFunction}>
+              <div className="header-user-mobile" onClick={closeMenuFunction}>
                 <div className="logout-item">
                   <FiLogOut className="logout-icon" onClick={handleLogout} />
                 </div>
@@ -1062,7 +1002,7 @@ const Sidebar = () => {
                   >
                     <Avatar
                       alt="userimage"
-                     src={selectedavtar}
+                      src={selectedavtar}
                     />
                   </StyledBadge>
                   <div className="user-icon-update" onClick={handleClickOpenmodal}>
@@ -1071,57 +1011,7 @@ const Sidebar = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="header-user-mobile" onClick={closeMenuFunction}>
-                <div className="logout-item">
-                  <FiLogOut className="logout-icon" onClick={handleLogout} />
-                </div>
-                <div className="user-name-item">
-                  <div>
-                    {storedUsername ? (
-                      <div>
-                        <p onClick={navigateToUserSettings}>{storedUsername}</p>
-                        <div className="alert-popup-main">
-                          {success && (
-                            <div className="alert-popup Success">
-                              <div className="popup-icon">
-                                {" "}
-                                <FileDownloadDoneIcon
-                                />{" "}
-                              </div>
-                              <span className="cancel-btn" onClick={hidePopup}>
-                                <ClearIcon
-                                  color="action"
-                                />{" "}
-                              </span>
-                              <p>{success}</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <p>User not logged in</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="avatar-item avatar-item-2">
-                  <StyledBadge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    variant="dot"
-                  >
-                    <Avatar
-                      alt="userimage"
-                      src={`${apiUrl}/images/${selectedprofileImage}`}
-                    />
-                  </StyledBadge>
-                  <div className="user-icon-update" onClick={handleClickOpenmodal}>
-                    <FaUser />
-                    <div className="user-icon-update-dot"></div>
-                  </div>
-                </div>
-              </div> */}
+
             </div>
             <div className="alert-popup-main">
               {info && (

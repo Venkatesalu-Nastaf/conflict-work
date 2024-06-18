@@ -53,6 +53,8 @@ const useTripsheet = () => {
     const [smsguest, setSmsGuest] = useState(true);
     const [DriverSMS, setDriverSMS] = useState(true);
     const [sendEmail, setSendEmail] = useState(true);
+    const [organizationdata, setorganizationData] = useState('');
+    
 
     //-------------------------calc-------------------
 
@@ -78,6 +80,7 @@ const useTripsheet = () => {
     let [driverBeta, setdriverBeta] = useState('')
     let [driverbeta_Count, setdriverbeta_Count] = useState('')
     let [driverBeta_amount, setdriverBeta_amount] = useState(0)
+    
     //--------------------------------------------------------------
 
     const [packageData, setPackageData] = useState({
@@ -552,7 +555,10 @@ const useTripsheet = () => {
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
                     status: formData.status || book.status || selectedCustomerData.status,
                     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
-                    servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || ''
+                    servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
+                    Sendmailauth:organizationdata.Sender_Mail,
+                    Mailauthpass:organizationdata.EmailApp_Password
+
 
                 };
                 await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
@@ -1593,7 +1599,7 @@ const useTripsheet = () => {
     }, [apiUrl]);
 
 
-    const [organizationdata, setorganizationData] = useState('');
+  
 
     useEffect(() => {
         const fetchData = async () => {

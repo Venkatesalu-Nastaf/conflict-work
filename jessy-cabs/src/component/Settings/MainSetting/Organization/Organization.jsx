@@ -329,10 +329,10 @@ const Organization = ({ logoImage }) => {
                                 <TextField
                                     sx={{ width: "100%" }}
                                     size="small"
-                                    id="telephone"
-                                    name="telephone"
+                                    id="Sender_Mail"
+                                    name="Sender_Mail"
                                     className='organisation-input-field'
-                                    value={selectedCustomerData.telephone || book.telephone || ''}
+                                    value={selectedCustomerData.Sender_Mail || book.Sender_Mail || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -342,10 +342,10 @@ const Organization = ({ logoImage }) => {
                                 <TextField
                                     sx={{ width: "100%" }}
                                     size="small"
-                                    id="telephone"
-                                    name="telephone"
+                                    id="EmailApp_Password"
+                                    name="EmailApp_Password"
                                     className='organisation-input-field'
-                                    value={selectedCustomerData.telephone || book.telephone || ''}
+                                    value={selectedCustomerData.EmailApp_Password || book.EmailApp_Password || ''}
                                     onChange={handleChange}
                                 />
                             </div>

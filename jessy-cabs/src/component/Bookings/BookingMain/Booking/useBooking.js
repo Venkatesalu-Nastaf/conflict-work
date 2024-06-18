@@ -99,6 +99,8 @@ const useBooking = () => {
   const [sendEmail, setSendEmail] = useState(true);
   // const [sendguestsms, setSendGuestsms] = useState(false);
   const [sendmailguestsms, setSendmailGuestsms] = useState(false);
+  const [organistaionsendmail,setOrganisationSendEmail]=useState([])
+ 
   const handlePopupClose = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
@@ -687,6 +689,32 @@ const useBooking = () => {
     };
     fetchgetvehicleName()
   }, [apiUrl])
+  useEffect(() => {
+    const fetchData = async () => {
+        const organizationname = localStorage.getItem('usercompany');
+
+        try {
+            if(!organizationname) return
+            const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+            if (response.status === 200) {
+
+                const userDataArray = await response.json();
+                if (userDataArray.length > 0) {
+                  setOrganisationSendEmail(userDataArray[0])
+                 
+                   
+                  
+                } else {
+                    setErrorMessage('User data not found.');
+                    setError(true);
+                }
+            } 
+        }
+        catch {
+        }
+    };
+    fetchData();
+}, [apiUrl]);
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -867,7 +895,9 @@ const useBooking = () => {
           customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
-          status: datamode
+          status: datamode,
+          Sendmailauth:organistaionsendmail.Sender_Mail,
+          Mailauthpass:organistaionsendmail.EmailApp_Password
 
 
 

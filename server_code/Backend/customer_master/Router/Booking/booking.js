@@ -9,7 +9,7 @@ const path = require('path');
 //its for to use aysn/await 
 const util = require('util')
 const query = util.promisify(db.query).bind(db)
-require('dotenv').config()
+
 
 router.use(express.static('customer_master'));
 // const upload = multer({ dest: 'uploads/' });
@@ -313,7 +313,7 @@ router.get('/drivername-details/:driver', (req, res) => {
 
 router.post('/send-email', async (req, res) => {
     try {
-        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username } = req.body;
+        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username,Sendmailauth, Mailauthpass } = req.body;
 
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -324,9 +324,13 @@ router.post('/send-email', async (req, res) => {
             //     user: 'foxfahad386@gmail.com',
             //     pass: 'vwmh mtxr qdnk tldd',
             // },
+            // auth: {
+            //     user: process.env.MAIL_AUTH,
+            //     pass:process.env.MAIL_PASS,
+            // },
             auth: {
-                user: process.env.MAIL_AUTH,
-                pass:process.env.MAIL_PASS,
+                user:Sendmailauth,
+                pass:Mailauthpass,
             },
             tls: {
                 rejectUnauthorized: false
@@ -338,7 +342,7 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions = {
                 // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from:Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
                 html: `
@@ -397,7 +401,7 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',
-                from:process.env.MAIL_AUTH,
+                from:Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
@@ -691,6 +695,8 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
         res.json({ files });
     });
 });
+
+
 
 
 

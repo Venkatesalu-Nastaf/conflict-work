@@ -525,14 +525,18 @@
   justify-content: center;
 }
 
-.booking-image-attach-view-division{
+.booking-image-attach-view-division {
   display: grid;
 }
 
-.booking-image-attach-view-division span{
+.booking-image-attach-view-division span {
   margin-bottom: 5px;
 }
 
-.booking-date-main{
+.booking-date-main {
   width: 100%;
+}
+
+.booking-start-time-input input {
+  margin-bottom: 0px !important;
 }

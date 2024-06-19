@@ -272,3 +272,23 @@
 .billing-vendortoll-input {
   padding-top: 10px;
 }
+
+@media screen and (max-width: 768px) {
+  .Billing-page-header .input {
+    margin-top: 0px !important;
+  }
+}
+
+.billing-inputfield-last {
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+  .billing-inputfield-last .input {
+    margin-top: -10px;
+  }
+
+  .billing-inputfield-last{
+    margin: 20px 0px;
+  }
+}

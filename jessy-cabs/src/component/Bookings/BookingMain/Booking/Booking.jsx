@@ -234,29 +234,31 @@ const Booking = ({ stationName }) => {
                 <div className="icone">
                   <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs} className='booking-date-main'>
-                  <DemoItem label="Booking Date">
-                    <DatePicker
-                      value={
-                        formData.bookingdate || selectedCustomerData.bookingdate
-                          ? dayjs(selectedCustomerData.bookingdate)
-                          : null || book.bookingdate
-                            ? dayjs(book.bookingdate)
-                            : dayjs()
-                      }
-                      format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, "bookingdate")}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField
-                          {...inputProps}
-                          inputRef={inputRef}
-                          value={selectedCustomerData?.bookingdate}
-                        />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider>
+                <div className='full-width'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoItem label="Booking Date">
+                      <DatePicker
+                        value={
+                          formData.bookingdate || selectedCustomerData.bookingdate
+                            ? dayjs(selectedCustomerData.bookingdate)
+                            : null || book.bookingdate
+                              ? dayjs(book.bookingdate)
+                              : dayjs()
+                        }
+                        format="DD/MM/YYYY"
+                        onChange={(date) => handleDateChange(date, "bookingdate")}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField
+                            {...inputProps}
+                            inputRef={inputRef}
+                            value={selectedCustomerData?.bookingdate}
+                          />
+                        )}
+                      </DatePicker>
+                    </DemoItem>
+                  </LocalizationProvider>
+                </div>
               </div>
               <div className="booking-time-main-div">
                 <div className="input time">
@@ -765,33 +767,35 @@ const Booking = ({ stationName }) => {
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Report Date"
-                  id="report_date"
-                  value={
-                    formData.startdate || selectedCustomerData.startdate
-                      ? dayjs(selectedCustomerData.startdate)
-                      : dayjs() || book.startdate
-                        ? dayjs(book.startdate)
-                        : dayjs()
-                  }
-                  format="DD/MM/YYYY"
-                  onChange={(date) => handleDateChange(date, "startdate")}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField
-                      {...inputProps}
-                      inputRef={inputRef}
-                      value={selectedCustomerData?.startdate}
-                    />
-                  )}
-                </DatePicker>
-              </LocalizationProvider>
+              <div className="full-width">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Report Date"
+                    id="report_date"
+                    value={
+                      formData.startdate || selectedCustomerData.startdate
+                        ? dayjs(selectedCustomerData.startdate)
+                        : dayjs() || book.startdate
+                          ? dayjs(book.startdate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "startdate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.startdate}
+                      />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider>
+              </div>
             </div>
 
             <div>
-              <div className="input time">
+              <div className="input time booking-start-time-input">
                 <div className="icone">
                   <MdOutlineAccessTimeFilled />
                 </div>
@@ -854,7 +858,7 @@ const Booking = ({ stationName }) => {
             </div> */}
 
             <div>
-              <div className="input time">
+              <div className="input time booking-start-time-input">
                 <div className="icone">
                   <MdOutlineAccessTimeFilled />
                 </div>

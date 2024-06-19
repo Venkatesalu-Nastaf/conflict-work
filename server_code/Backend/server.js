@@ -590,7 +590,6 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (err) {
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
-        // const link = `http://localhost:3000/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         res.status(200).json({ message: 'Status updated successfully', link });
       });
@@ -600,7 +599,6 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (insertErr) {
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
-        // const link = `http://localhost:3000/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         res.status(200).json({ link });
       });

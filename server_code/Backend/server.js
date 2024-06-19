@@ -183,10 +183,15 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' });
   }
+  // const fileData = {
+  //   path: req.file.path.split('\\').pop(),
+  //   tripid: req.body.tripid,
+  // };
   const fileData = {
-    path: req.file.path.split('\\').pop(),
+    path: req.file.filename,
     tripid: req.body.tripid,
   };
+  console.log(fileData);
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   const query2 = 'INSERT INTO mapimage SET ?';
   const updatequery = 'update mapimage set path=? where tripid = ?'

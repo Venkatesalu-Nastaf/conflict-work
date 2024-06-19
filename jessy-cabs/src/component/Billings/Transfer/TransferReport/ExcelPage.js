@@ -561,10 +561,6 @@ const useExeclpage = () => {
               
             const reactPDFDocument = await PDFDocument.load(pdfBytes);
            
-            // const filePath="http://localhost:8081/images/file_1714625961618.pdf"
-            // const externalPDFBytes = await fetch(filePath).then((response) => response.arrayBuffer());
-            
-        
             const data=  await JSON.parse(pdfData.bookattachedimage)
             const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
             const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
@@ -585,8 +581,6 @@ const useExeclpage = () => {
                     
                  
 
-                // Construct the file path for fetching the PDF
-                // const filePath = `http://localhost:8081/images/${data.imagees}`;
                   const filePath = `${apiurl}/public/booking_doc/${data.imagees}`;
                 
                 // Fetch the PDF file
@@ -604,12 +598,6 @@ const useExeclpage = () => {
             }
             
            
-            // const filePath = `http://localhost:8081/images/${datalink.imagees}`;
-// const response = await fetch(filePath);
-// const pdfBytes3 = await response.arrayBuffer();
-            // console.log(pdfBytes3,"byyyy")
-            // const externalPDFDocument = await PDFDocument.load(pdfBytes3);
-            // console.log(externalPDFDocument,"external",typeof(externalPDFDocument))
             const mergedPDFDocument = await PDFDocument.create();
             // console.log(mergedPDFDocument)
 

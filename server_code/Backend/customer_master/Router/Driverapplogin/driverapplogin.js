@@ -5,7 +5,23 @@ const moment = require('moment');
 const multer = require('multer');
 const path = require('path');
 router.use(express.static('customer_master'));
+const jwt = require('jsonwebtoken')
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('x-auth-token');
+  console.log(token,"kk")
+  if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
+  try {
+    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
+    req.user = decoded;
+    console.log(decoded,"dee")
+    next();
+  } catch (error) {
+    console.log(error,"gggggggg")
+    res.status(400).json({ message: 'expired token' });
+  }
+
+};
 // user creation database
 // add user creation database
 
@@ -39,7 +55,7 @@ const storage = multer.diskStorage({
 const uploadfile = multer({ storage: storage });
 
 // Endpoint to handle file upload
-router.post('/drivercreation', uploadfile.single('Profile_image'), (req, res) => {
+router.post('/drivercreation',authenticateJWT, uploadfile.single('Profile_image'), (req, res) => {
   // const profile_image = req.file.filename;
   let profile_image=null
   if(!req.file){

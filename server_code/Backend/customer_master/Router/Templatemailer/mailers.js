@@ -239,9 +239,6 @@ router.post('/send-emailtemplate', async (req, res) => {
 
 
 
-            // const imagesHtml = templateimagedata.map(image => `<img src=http://localhost:8081/public/Templateimage/${image.templateimage} alt="${image.templateimage}" />`).join('');
-            //  console.log(imagesHtml,"html")
-            // Append the generated imagesHtml to the personalized message
             const finalMessage = `${personalizedMessage}`;
             // console.log(finalMessage,"mess")
 

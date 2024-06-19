@@ -286,6 +286,7 @@ const MailDetails = () => {
     setData({})
     setFile(null)
     setSelectedData([])
+    fileInputRef.current.value = '';
 
   }
 

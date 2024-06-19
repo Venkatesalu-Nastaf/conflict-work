@@ -668,7 +668,6 @@ app.get('/use-permissions/:userid',authenticateJWT, (req, res) => {
 
 // const port = 8081;
 const port = process.env.PORT;
-console.log(port)
 
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

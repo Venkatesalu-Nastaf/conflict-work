@@ -10,6 +10,7 @@ import {  pdf } from '@react-pdf/renderer';
 import { PDFDocument } from 'pdf-lib';
 
 import PdfzipParticularData from './Pdfpatricularzipdata'
+import { APIURL } from "../../../url";
 
 
 
@@ -19,6 +20,7 @@ const useExeclpage = () => {
     // const [misformat,setMisformat]=useState('')
     const [error1, setError1] = useState(false)
     const [errormessage1, setErrorMessage1] = useState({})
+    const apiurl=APIURL
     
     const columns2 = [
         { key: "SNo", header: "Ref", width: 130 },
@@ -585,7 +587,7 @@ const useExeclpage = () => {
 
                 // Construct the file path for fetching the PDF
                 // const filePath = `http://localhost:8081/images/${data.imagees}`;
-                  const filePath = `http://localhost:8081/public/booking_doc/${data.imagees}`;
+                  const filePath = `${apiurl}/public/booking_doc/${data.imagees}`;
                 
                 // Fetch the PDF file
                 const response = await fetch(filePath);

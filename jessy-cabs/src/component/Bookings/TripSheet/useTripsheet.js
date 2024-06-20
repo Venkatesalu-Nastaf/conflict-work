@@ -163,7 +163,6 @@ const useTripsheet = () => {
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
             const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            console.log("setlink reponse", response)
             setLink(response.data.link);
         } catch {
         }
@@ -180,14 +179,10 @@ const useTripsheet = () => {
             setTimeout(() => {
                 setSign(false)
             }, 2000)
-        }
-        else {
+        } else {
             alert("no link data ", link)
         }
-
     }
-
-
 
 
     const handlePopupClose = () => {

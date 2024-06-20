@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import "./MailDetails.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -64,6 +64,8 @@ const MailDetails = () => {
   const [searchname, setSearchname] = useState('')
   const navigate = useNavigate();
   const [organistaionsendmail,setOrganisationSendEmail]=useState([])
+  const [datatrigger,setDataTrigger]=useState(false)
+  const fileInputRef = useRef(null);
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 70 },
@@ -163,6 +165,7 @@ const MailDetails = () => {
     const selectedFile = event.target.files[0].name;
     const file = event.target.files[0];
     setFile(selectedFile)
+    setDataTrigger(!datatrigger)
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -211,7 +214,9 @@ const MailDetails = () => {
   }
 
   const handleIconClick = () => {
-    document.getElementById('fileInput_upload').click();
+    // document.getElementById('fileInput_upload').click();
+  
+    fileInputRef.current.click();
   };
 
   const handleTemplateCreation = () => {
@@ -235,6 +240,7 @@ const MailDetails = () => {
 
     setSelectedData(params.row)
     Attachedimagedata(params.row.Templateid)
+    setDataTrigger(!datatrigger)
   }
 
   const handlesendbulkemail = async () => {
@@ -257,11 +263,14 @@ const MailDetails = () => {
         templateimagedata: templateimage,
         Sendmailauth:organistaionsendmail.Sender_Mail,
         Mailauthpass:organistaionsendmail.EmailApp_Password
+        
       }
+      
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
       setData({})
       setFile(null)
+      fileInputRef.current.value = '';
       setSelectedData([])
       setSuccess(true)
       setSuccessMessage("Mail Sent Successfully")
@@ -277,6 +286,7 @@ const MailDetails = () => {
     setData({})
     setFile(null)
     setSelectedData([])
+    fileInputRef.current.value = '';
 
   }
 
@@ -286,17 +296,18 @@ const MailDetails = () => {
        
 
         try {
-            if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
-              {
-                return
-              }
-          else{
+            // if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
+            //   {
+            //     return
+            //   }
+          // else{
             const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
             if (response.status === 200) {
 
                 const userDataArray = await response.json();
                 if (userDataArray.length > 0) {
                   setOrganisationSendEmail(userDataArray[0])
+                  setDataTrigger(!datatrigger)
                  
                    
                   
@@ -305,13 +316,13 @@ const MailDetails = () => {
                     setError(true);
                 }
             } 
-          }
+          // }
         }
         catch {
         }
     };
     fetchData();
-}, [apiurl,selecteddata]);
+}, [apiurl,selecteddata,file,datatrigger]);
   const handleShowdata = async () => {
 
     try {
@@ -357,6 +368,7 @@ const MailDetails = () => {
                   <input
                     type="file"
                     id="fileInput_upload"
+                    ref={fileInputRef}
                     onChange={handleFileUpload}
                     style={{ display: 'none' }}
                   />

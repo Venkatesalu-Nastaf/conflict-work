@@ -799,13 +799,10 @@ const useBooking = () => {
     const getImageCount = async () => {
       try {
         if (!booking_id) return
-        console.log("booking id", booking_id)
         const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
         const count = response.data.files.length
-        console.log("response ", response)
 
         if (count > 0) {
-          console.log("count", count)
           setAvilableimageCount(count)
         }
 

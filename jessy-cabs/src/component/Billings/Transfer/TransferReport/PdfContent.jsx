@@ -253,12 +253,13 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
       let permitamount = 0
       let exkmamount = 0
       invdata?.map((li) => {
-        totalamount += parseInt(li.netamount || 0)
+        totalamount += parseInt(li.totalcalcAmount || 0)
         parkingamount += parseInt(li.parking || 0)
         permitamount += parseInt(li.permit || 0)
         exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
         return null
       })
+      // console.log(totalAmount,'totalAmount');
       setTotalAmount(totalamount)
       setParking(parkingamount)
       setPermit(permitamount)
@@ -288,7 +289,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
     }
   }, [apiUrl, customeraddress])
 
-  const fullAmount = parseInt(totalAmount) + parseInt(extraKmAmount)
+  const fullAmount = parseInt(totalAmount) 
   const cgst = fullAmount * 2.5 / 100
   const sgst = fullAmount * 2.5 / 100
   const park = parseInt(parking)
@@ -390,7 +391,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
                             <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}{item.pickup}</Text></View>
                             <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View>
-                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.netamount} {'\n'} {item.ex_kmAmount}</Text></View>
+                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.totalcalcAmount} </Text></View>
                           </React.Fragment>
                         </View>
                       ))}

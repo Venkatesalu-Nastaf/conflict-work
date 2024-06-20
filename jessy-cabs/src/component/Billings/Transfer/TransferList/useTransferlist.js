@@ -255,7 +255,6 @@ const useTransferlist = () => {
 
       });
       const data = response.data;
-
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
           ...row,

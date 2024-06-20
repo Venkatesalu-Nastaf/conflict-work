@@ -102,6 +102,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                             id="formdate"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
+                                                label="From Date"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'fromdate');
                                                     const formattedDate = dayjs(date).format('YYYY-MM-DD');
@@ -126,6 +127,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                             id="toDate"
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
+                                                label="To Date"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'todate');
                                                     const formattedDate = dayjs(date).format('YYYY-MM-DD');

@@ -30,7 +30,7 @@ const columns = [
     { field: "billno", headerName: "BillNo", width: 130 },
     { field: "exHrs", headerName: "ExtraHrsAmount", width: 130 },
     { field: "exkm", headerName: "ExtrakmsAmount", width: 130 },
-    { field: "netamount", headerName: "Amount", width: 130 },
+    { field: "totalcalcAmount", headerName: "Amount", width: 130 },
     { field: "grouptripno", headerName: "GroupTripNo", width: 130 },
     { field: "billtype", headerName: "BillType", width: 130 },
     { field: "advancepaidtovendor", headerName: "Advance", width: 130 },
@@ -385,7 +385,7 @@ const useTransferdataentry = () => {
 
     //calculate total amount in column
     useEffect(() => {
-        const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.netamount || 0), 0);
+        const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.totalcalcAmount || 0), 0);
         if (!isNaN(calculatedTotalAmount)) {
             setTotalAmount(calculatedTotalAmount.toFixed(2));
         } else {
@@ -516,6 +516,7 @@ const useTransferdataentry = () => {
             }
 
             const id = rowSelectionModel;
+            // console.log(id,'checkid');
             const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
 
             // Sending PUT requests
@@ -825,14 +826,14 @@ const useTransferdataentry = () => {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            // const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
             const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
                     toDate: toDateValue,
-                    // servicestation: servicestationValue
+                    servicestation: servicestationValue
                 },
             });
             const data = response.data;

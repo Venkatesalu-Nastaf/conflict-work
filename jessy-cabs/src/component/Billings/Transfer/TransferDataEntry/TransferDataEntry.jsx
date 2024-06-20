@@ -181,6 +181,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        label="From Date"
                         id="fromDate"
                           value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
@@ -205,6 +206,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
+                        label="To Date"
                         id="toDate"
                           value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"

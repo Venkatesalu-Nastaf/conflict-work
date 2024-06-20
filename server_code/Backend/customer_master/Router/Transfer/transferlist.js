@@ -36,18 +36,19 @@ router.get('/payment-detail', (req, res) => {
 router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
-
+  // console.log(customer, tripid, 'trip customer');
   const decodedCustomer = decodeURIComponent(customer);
+  // Query to get tripsheet details
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
     if (err) {
-
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }
     if (result.length === 0) {
       return res.status(404).json({ error: 'Tripsheet not found' });
     }
 
-    let vehtypes = result.map(obj => obj.vehType);
+    let vehtypes = result.map(obj => obj.vehicleName);
+    // console.log(vehtypes,'vehtypes');
     db.query('select vehicleName, fueltype ,segement ,Groups from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
       if (err) {
 
@@ -56,6 +57,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       if (result1.length === 0) {
         return res.status(404).json({ error: 'Tripsheet not found' });
       }
+      // console.log(result1,'result vehicle');
       const vehicleDataMap = {};
       result1.forEach(row => {
         vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
@@ -73,7 +75,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
 
         result2.forEach(row => {
           // vehicleDataMap[row.customer]={gsttax:row.gstTax}
-          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1 };
+          vehicleDataMap[row.customer] = { gsttax: row.gstTax, Customeraddress1: row.address1 };
 
         })
 
@@ -249,18 +251,18 @@ router.get('/gettransfer_list', (req, res) => {
 router.put('/updateList', async (req, res) => {
   try {
     const { Trip_id, Trips, Amount } = req.body;
-    console.log(typeof(Trip_id), Trip_id, Trips, Amount, 'response');
+    // console.log(typeof (Trip_id), Trip_id, Trips, Amount, 'response');
 
     const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
-    
+
     const updatePromises = Trip_id.map(tripId => {
       return new Promise((resolve, reject) => {
         db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
           if (err) {
-            console.log(err, 'error');
+            // console.log(err, 'error');
             reject(err);
           } else {
-            console.log(updateGroupBillingResult, 'result');
+            // console.log(updateGroupBillingResult, 'result');
             if (updateGroupBillingResult.affectedRows > 0) {
               resolve(updateGroupBillingResult);
             } else {
@@ -283,7 +285,7 @@ router.put('/updateList', async (req, res) => {
 
 router.post('/tripsheetUpdate', (req, res) => {
   const { tripids, status } = req.body;
-  console.log(tripids, status,'rrrrrrrrrr');
+  // console.log(tripids, status, 'rrrrrrrrrr');
   const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
@@ -340,25 +342,25 @@ router.post('/tripsheetUpdate', (req, res) => {
 
 
 router.get('/updateTransferListdata/:groupId', (req, res) => {
-  const groupId= req.params.groupId;
-  console.log(groupId,'gid');
+  const groupId = req.params.groupId;
+  // console.log(groupId, 'gid');
   const sqlquery = "SELECT * FROM Transfer_list where Grouptrip_id = ?";
-  
-  db.query(sqlquery,[groupId], (err, result) => {
+
+  db.query(sqlquery, [groupId], (err, result) => {
     if (err) {
       console.log(err, 'error');
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(result,'getlist');
+    // console.log(result, 'getlist');
     return res.status(200).json(result);
   });
 });
 
 router.delete('/deleteTransfer/:groupid', (req, res) => {
   const groupid = req.params.groupid;
-  console.log(groupid,'idddd');
+  // console.log(groupid, 'idddd');
   const sql = "DELETE FROM Transfer_list WHERE Grouptrip_id = ?";
-  
+
   db.query(sql, [groupid], (err, result) => {
     if (err) {
       console.log(err, 'error');
@@ -372,12 +374,12 @@ router.delete('/deleteTransfer/:groupid', (req, res) => {
 
 
 
-router.put('/statusChangeTransfer/:invoiceno',(req,res)=>{
-  const {invoiceno} = req.params;
+router.put('/statusChangeTransfer/:invoiceno', (req, res) => {
+  const { invoiceno } = req.params;
   const sqlquery = 'update Transfer_list set Status="Billed" where Invoice_no = ? ';
-  db.query(sqlquery,[invoiceno],(err,result)=>{
-    if(err){
-      console.log(err,'error');
+  db.query(sqlquery, [invoiceno], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
     }
     return res.status(200).json({ message: "Data updated successfully" });
 
@@ -386,6 +388,7 @@ router.put('/statusChangeTransfer/:invoiceno',(req,res)=>{
 
 router.put('/statusChangeTripsheet/:tripid', (req, res) => {
   const { tripid } = req.params;
+  // console.log(tripid,'update');
 
   // Check if tripid is defined
   if (!tripid) {
@@ -393,14 +396,15 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
   }
 
   const tripIds = tripid.split(',');
-
-  const sqlquery = 'UPDATE tripsheet SET status="Transfer_Billed" AND apps="Closed" WHERE tripid IN (?)';
+// console.log(tripIds,'tripisss');
+  const sqlquery = 'UPDATE tripsheet SET status="Transfer_Billed", apps="Closed" WHERE tripid IN (?)';
 
   db.query(sqlquery, [tripIds], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Internal server error" });
     }
+    // console.log(result,'result tripsheet');
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
@@ -415,6 +419,26 @@ router.get('/gettransfer_listdatas', (req, res) => {
     db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [Organization_name, FromDate, EndDate], (err, result) => {
       // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
       // 
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+      }
+      return res.status(200).json(result);
+
+    });
+  }
+  else if (Status === "billed") {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [Organization_name, FromDate, EndDate, Status], (err, result) => {
+
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+      }
+      return res.status(200).json(result);
+
+    });
+  }
+  else if (Status === "notbilled") {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [Organization_name, FromDate, EndDate, Status], (err, result) => {
+
       if (err) {
         return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
       }
@@ -438,7 +462,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
 })
 
 
- 
+
 
 router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
@@ -499,7 +523,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
   Promise.all(promises)
     .then(results => {
-    
+
       return res.status(200).json(results);
     })
     .catch(error => {
@@ -510,5 +534,5 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
 
 
- 
+
 module.exports = router;

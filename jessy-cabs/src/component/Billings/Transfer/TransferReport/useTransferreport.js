@@ -185,6 +185,7 @@ const useTransferreport = () => {
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
+        // console.log(tripid,customer,'11tripid');
 
         if (!customer || !tripid) return
 
@@ -211,6 +212,7 @@ const useTransferreport = () => {
               ...row,
               id: index + 1,
             }));
+            console.log(rowsWithUniqueId,'rows..');
             setRows(rowsWithUniqueId);
             // setSuccess(true);
             setSuccessMessage("successfully listed");

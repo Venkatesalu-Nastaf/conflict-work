@@ -31,7 +31,6 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const GroupBilling = ({ stationName, organizationNames }) => {
     const apiurl = APIURL;
-
     const {
         rows,
         actionName,
@@ -208,6 +207,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 id="fromdate"
+                                                label="From Date"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
                                                 onChange={(date) => {
@@ -234,6 +234,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
                                                 id="todate"
+                                                label="ToDate"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'todate');
                                                     const formattedDate = dayjs(date).format('YYYY-MM-DD');

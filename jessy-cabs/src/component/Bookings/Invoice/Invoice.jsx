@@ -5,7 +5,7 @@ import generatePDF from 'react-to-pdf';
 
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
   console.log("selectedImage", selectedImage)
- 
+
   const targetRef = useRef();
   return (
     <>
@@ -81,7 +81,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </tr>
                 <tr>
                   <th id='table-header'><span >Driver Name:</span></th>
-                  <td id='table-data'><span>{tripSheetData.driverName || selectedCustomerData.driverName || selectedCustomerDatas.driverName || book.driverName}</span></td>
+                  <td id='table-data'><span>{selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName}</span></td>
                 </tr>
                 <tr>
                   <th id='table-header'><span >Driver Mobile:</span></th>
@@ -146,10 +146,10 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
           <div className='tripsheet-location-img'>
-            
+
             {/* <img src={GmapimageUrl} alt='mapimage' /> */}
-            {GmapimageUrl!== "" ?
-                     <img src={GmapimageUrl} alt='mapimage' /> :<></>}
+            {GmapimageUrl !== "" ?
+              <img src={GmapimageUrl} alt='mapimage' /> : <></>}
           </div>
           <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>

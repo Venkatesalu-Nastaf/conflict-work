@@ -125,7 +125,7 @@ const useTripsheet = () => {
 
     const handleRemoveMapLogPoint = async (params) => {
         try {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            // const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             const id = params.id
             const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
@@ -536,10 +536,10 @@ const useTripsheet = () => {
         setTransferreport("No");
         localStorage.removeItem('selectedTripid');
     };
-
+  
     const handlecheck = async () => {
         if (sendEmail) {
-
+        
             try {
 
                 const dataToSend = {
@@ -1538,6 +1538,7 @@ const useTripsheet = () => {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
+                
                 }
             }
             return '';
@@ -1605,20 +1606,21 @@ const useTripsheet = () => {
         const fetchData = async () => {
             const encoded = localStorage.getItem('usercompany');
             localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
+            // const storedcomanyname = localStorage.getItem('usercompanyname');
+            // const organizationname = decodeURIComponent(storedcomanyname);
 
-            if (organizationname === "undefined") {
+            if (encoded === "undefined") {
                 return;
             }
 
             try {
-                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
+                       
                     }
                 }
 
@@ -1632,7 +1634,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,sendEmail,location,organizationdata]);
 
 
 

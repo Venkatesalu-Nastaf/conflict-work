@@ -7,7 +7,7 @@ import {
   HireTypes,
   DocumentType,
   Duty,
-  Pickup,
+  // Pickup,
   Email,
   // Select,
   GroupTypes
@@ -910,7 +910,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-pickup"
@@ -928,7 +928,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                       )
                     }
                     }
-                  />
+                  /> */}
+                  <TextField
+                  margin="normal"
+                  size="small"
+                  id="pickup1"
+                  label="PickUp"
+                  name="pickup"
+                  autoComplete="new-password"
+                  value={
+                    formData.pickup ||
+                    selectedCustomerData.pickup ||
+                    formValues.pickup ||
+                    book.pickup ||
+                    ""
+                  }
+                  onChange={handleChange}
+                />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -1132,7 +1148,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)}
+                    {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)}
 
                     <input
                       type="time"
@@ -1160,7 +1176,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
-                    {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)}
+                    {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)}
 
                     <input
                       type="time"

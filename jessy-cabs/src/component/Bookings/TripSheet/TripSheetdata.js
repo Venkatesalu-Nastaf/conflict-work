@@ -526,92 +526,92 @@ export const Duty = [
 ];
 // Pickup
 
-export const Pickup = [
-  {
-    option: "AIRPORT PICKUP",
-    optionvalue: "AIRPORT-PICKUP",
-  },
-  {
-    option: "AMBATTUR",
-    optionvalue: "AMBATTUR",
-  },
-  {
-    option: "CENTRAL",
-    optionvalue: "CENTRAL",
-  },
-  {
-    option: "CROWNE PLAZA",
-    optionvalue: "CROWNE-PLAZA",
-  },
-  {
-    option: "ETA NAVALLUR",
-    optionvalue: "ETA-NAVALLUR",
-  },
-  {
-    option: "GATEWAY HOTEL",
-    optionvalue: "GATEWAY-HOTEL",
-  },
-  {
-    option: "HCL AMBATTUR",
-    optionvalue: "HCL-AMBATTUR",
-  },
-  {
-    option: "HCL CAMPUS",
-    optionvalue: "HCL-CAMPUS",
-  },
-  {
-    option: "HILTON HOTEL",
-    optionvalue: "HILTON-HOTEL",
-  },
-  {
-    option: "HOLIDAY INN",
-    optionvalue: "HOLIDAY-INN",
-  },
-  {
-    option: "HOLIDAY-IN-EXPRESS",
-    optionvalue: "HOLIDAY-IN-EXPRESS",
-  },
-  {
-    option: "ITC-GRAND-CHOLA",
-    optionvalue: "ITC-GRAND-CHOLA",
-  },
-  {
-    option: "KOYAMBEDU",
-    optionvalue: "KOYAMBEDU",
-  },
-  {
-    option: "LEELA PALACE",
-    optionvalue: "LEELA-PALACE",
-  },
-  {
-    option: "MADURAI",
-    optionvalue: "MADURAI",
-  },
-  {
-    option: "MARRIOT HOTEL",
-    optionvalue: "MARRIOT-HOTEL",
-  },
-  {
-    option: "NOVOTAL",
-    optionvalue: "NOVOTAL",
-  },
-  {
-    option: "PANDI",
-    optionvalue: "PANDI",
-  },
-  {
-    option: "PARK HYATH HOTEL",
-    optionvalue: "PARK-HYATH-HOTEL",
-  },
-  {
-    option: "SADAN A/C",
-    optionvalue: "SADAN-A/C",
-  },
-  {
-    option: "TEYNAMPET",
-    optionvalue: "TEYNAMPET",
-  },
-];
+// export const Pickup = [
+//   {
+//     option: "AIRPORT PICKUP",
+//     optionvalue: "AIRPORT-PICKUP",
+//   },
+//   {
+//     option: "AMBATTUR",
+//     optionvalue: "AMBATTUR",
+//   },
+//   {
+//     option: "CENTRAL",
+//     optionvalue: "CENTRAL",
+//   },
+//   {
+//     option: "CROWNE PLAZA",
+//     optionvalue: "CROWNE-PLAZA",
+//   },
+//   {
+//     option: "ETA NAVALLUR",
+//     optionvalue: "ETA-NAVALLUR",
+//   },
+//   {
+//     option: "GATEWAY HOTEL",
+//     optionvalue: "GATEWAY-HOTEL",
+//   },
+//   {
+//     option: "HCL AMBATTUR",
+//     optionvalue: "HCL-AMBATTUR",
+//   },
+//   {
+//     option: "HCL CAMPUS",
+//     optionvalue: "HCL-CAMPUS",
+//   },
+//   {
+//     option: "HILTON HOTEL",
+//     optionvalue: "HILTON-HOTEL",
+//   },
+//   {
+//     option: "HOLIDAY INN",
+//     optionvalue: "HOLIDAY-INN",
+//   },
+//   {
+//     option: "HOLIDAY-IN-EXPRESS",
+//     optionvalue: "HOLIDAY-IN-EXPRESS",
+//   },
+//   {
+//     option: "ITC-GRAND-CHOLA",
+//     optionvalue: "ITC-GRAND-CHOLA",
+//   },
+//   {
+//     option: "KOYAMBEDU",
+//     optionvalue: "KOYAMBEDU",
+//   },
+//   {
+//     option: "LEELA PALACE",
+//     optionvalue: "LEELA-PALACE",
+//   },
+//   {
+//     option: "MADURAI",
+//     optionvalue: "MADURAI",
+//   },
+//   {
+//     option: "MARRIOT HOTEL",
+//     optionvalue: "MARRIOT-HOTEL",
+//   },
+//   {
+//     option: "NOVOTAL",
+//     optionvalue: "NOVOTAL",
+//   },
+//   {
+//     option: "PANDI",
+//     optionvalue: "PANDI",
+//   },
+//   {
+//     option: "PARK HYATH HOTEL",
+//     optionvalue: "PARK-HYATH-HOTEL",
+//   },
+//   {
+//     option: "SADAN A/C",
+//     optionvalue: "SADAN-A/C",
+//   },
+//   {
+//     option: "TEYNAMPET",
+//     optionvalue: "TEYNAMPET",
+//   },
+// ];
 
 // States
 

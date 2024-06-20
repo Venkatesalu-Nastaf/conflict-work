@@ -1,6 +1,8 @@
 const mysql = require("mysql");
 require('dotenv').config()
 
+//--------------------------------------------------------
+
 // const db = mysql.createConnection({
 //   host: '162.214.81.14',
 //   user: 'dzupsnmy_taaf_user',
@@ -16,6 +18,8 @@ require('dotenv').config()
 //   }
 //   console.log('Connected to BlueHost database');
 // });
+
+//---------------------------------------------------------------
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -34,9 +38,8 @@ db.connect((err) => {
 });
 module.exports = db;
 
-// Hostingerr-------------------------
-// const mysql = require('mysql');
 
+// Hostingerr--------------------------------------------
 // const db = mysql.createConnection({
 //   host: '89.117.27.152',
 //   user: 'u273842280_fahad',
@@ -52,12 +55,9 @@ module.exports = db;
 //   }
 //   console.log('Connected Hostinger  database');
 // });
-
 // module.exports = db;
 
 //------------------------------------------
-
-// const mysql = require('mysql');
 
 // const db = mysql.createConnection({
 //   host: 'localhost',

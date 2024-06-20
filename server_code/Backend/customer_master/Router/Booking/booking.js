@@ -313,7 +313,7 @@ router.get('/drivername-details/:driver', (req, res) => {
 
 router.post('/send-email', async (req, res) => {
     try {
-        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username,Sendmailauth, Mailauthpass } = req.body;
+        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
 
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -329,8 +329,8 @@ router.post('/send-email', async (req, res) => {
             //     pass:process.env.MAIL_PASS,
             // },
             auth: {
-                user:Sendmailauth,
-                pass:Mailauthpass,
+                user: Sendmailauth,
+                pass: Mailauthpass,
             },
             tls: {
                 rejectUnauthorized: false
@@ -342,7 +342,7 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions = {
                 // from: 'foxfahad386@gmail.com',
-                from:Sendmailauth,
+                from: Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS CONFIRMS CANCELLATION OF BOOKING For ${guestname}-Tripsheet No.${bookingno}`,
                 html: `
@@ -401,7 +401,7 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',
-                from:Sendmailauth,
+                from: Sendmailauth,
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
@@ -638,6 +638,8 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
+    console.log("booking_id", booking_id, fileType, fileName)
+    console.log("id", booking_id)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
     db.query(sql, [booking_id, fileName, fileType], (err, result) => {

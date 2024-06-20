@@ -198,9 +198,12 @@ router.delete('/booking_doc-delete/:imagedata', (req, res) => {
                 } catch (err) {
                     console.log("err", err)
                 }
+
             } else {
                 console.log("file dosent exist")
             }
+
+            res.json({ success: true, message: "sucess" })
         })
     })
 })

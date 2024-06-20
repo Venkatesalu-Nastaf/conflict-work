@@ -54,7 +54,7 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(true);
     const [sendEmail, setSendEmail] = useState(true);
     const [organizationdata, setorganizationData] = useState('');
-    
+
 
     //-------------------------calc-------------------
 
@@ -80,7 +80,7 @@ const useTripsheet = () => {
     let [driverBeta, setdriverBeta] = useState('')
     let [driverbeta_Count, setdriverbeta_Count] = useState('')
     let [driverBeta_amount, setdriverBeta_amount] = useState(0)
-    
+
     //--------------------------------------------------------------
 
     const [packageData, setPackageData] = useState({
@@ -125,7 +125,7 @@ const useTripsheet = () => {
 
     const handleRemoveMapLogPoint = async (params) => {
         try {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            // const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             const id = params.id
             const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
@@ -169,13 +169,19 @@ const useTripsheet = () => {
     };
 
 
-    const SignPage = (event) => {
+    const SignPage = async (event) => {
         event.preventDefault();
-        navigator.clipboard.writeText(link);
-        setSign(true)
-        setTimeout(() => {
-            setSign(false)
-        }, 2000)
+        console.log("link", link)
+        if (link) {
+            await navigator.clipboard.writeText(link);
+            console.log("text--", navigator.clipboard.writeText(link))
+            setSign(true)
+            setTimeout(() => {
+                setSign(false)
+            }, 2000)
+        } else {
+            alert("no link data ", link)
+        }
     }
 
 
@@ -556,8 +562,8 @@ const useTripsheet = () => {
                     status: formData.status || book.status || selectedCustomerData.status,
                     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
                     servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
-                    Sendmailauth:organizationdata.Sender_Mail,
-                    Mailauthpass:organizationdata.EmailApp_Password
+                    Sendmailauth: organizationdata.Sender_Mail,
+                    Mailauthpass: organizationdata.EmailApp_Password
 
 
                 };
@@ -1538,6 +1544,7 @@ const useTripsheet = () => {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
+
                 }
             }
             return '';
@@ -1599,26 +1606,27 @@ const useTripsheet = () => {
     }, [apiUrl]);
 
 
-  
+
 
     useEffect(() => {
         const fetchData = async () => {
             const encoded = localStorage.getItem('usercompany');
             localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
+            // const storedcomanyname = localStorage.getItem('usercompanyname');
+            // const organizationname = decodeURIComponent(storedcomanyname);
 
-            if (organizationname === "undefined") {
+            if (encoded === "undefined") {
                 return;
             }
 
             try {
-                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
+
                     }
                 }
 
@@ -1632,7 +1640,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl, sendEmail, location, organizationdata]);
 
 
 

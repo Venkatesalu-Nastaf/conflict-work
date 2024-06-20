@@ -183,10 +183,15 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' });
   }
+  // const fileData = {
+  //   path: req.file.path.split('\\').pop(),
+  //   tripid: req.body.tripid,
+  // };
   const fileData = {
-    path: req.file.path.split('\\').pop(),
+    path: req.file.filename,
     tripid: req.body.tripid,
   };
+  console.log(fileData);
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   const query2 = 'INSERT INTO mapimage SET ?';
   const updatequery = 'update mapimage set path=? where tripid = ?'
@@ -590,7 +595,6 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (err) {
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
-        // const link = `http://localhost:3000/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         res.status(200).json({ message: 'Status updated successfully', link });
       });
@@ -600,7 +604,6 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (insertErr) {
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
-        // const link = `http://localhost:3000/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         res.status(200).json({ link });
       });
@@ -668,7 +671,6 @@ app.get('/use-permissions/:userid',authenticateJWT, (req, res) => {
 
 // const port = 8081;
 const port = process.env.PORT;
-console.log(port)
 
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

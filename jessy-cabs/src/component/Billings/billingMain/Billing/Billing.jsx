@@ -1014,7 +1014,7 @@ const Billing = () => {
                             </div>
                         </div>
                         <div className="Billing-secend-right">
-                            <div className="input-field inputfeild-billing-right">
+                            <div className="input-field inputfeild-billing-right billing-inputfield-last">
                                 <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faRoad} />
@@ -1045,8 +1045,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faMagnifyingGlassChart} size="lg" />
@@ -1078,8 +1078,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faTags} size="lg" />
@@ -1109,8 +1109,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faArrowRightArrowLeft} size="lg" />
@@ -1141,8 +1141,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <ChangeCircleIcon color="active" />
@@ -1173,8 +1173,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <GiMoneyStack />
@@ -1205,8 +1205,8 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field inputfeild-billing-right inputfeild-billing-right-margin-bottom">
+                            {/* </div>
+                            <div className="input-field inputfeild-billing-right inputfeild-billing-right-margin-bottom"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <PendingActionsIcon />

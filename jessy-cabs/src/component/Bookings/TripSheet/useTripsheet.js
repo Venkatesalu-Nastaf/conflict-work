@@ -181,6 +181,9 @@ const useTripsheet = () => {
                 setSign(false)
             }, 2000)
         }
+        else {
+            alert("no link data ", link)
+        }
 
     }
 

@@ -135,8 +135,7 @@ const Booking = ({ stationName }) => {
     handleAutocompleteChange,
     setFormData,
     setStartTime,
-    // guestsms,
-    // setGuestSms,
+    handleChangeFile,
     sendEmail,
     setSendEmail,
     lastBookingNo,
@@ -174,7 +173,7 @@ const Booking = ({ stationName }) => {
     handleRowClickdriver,
     // setErrorMessage,
     // setError,
-    edit,
+    edit, AvilableimageCount,
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
@@ -937,7 +936,8 @@ const Booking = ({ stationName }) => {
                   <input
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e) => setFile(e.target.files[0])}
+                    // onChange={(e) => setFile(e.target.files[0])}
+                    onChange={handleChangeFile}
                   />
                 </Button>
               </div>
@@ -948,6 +948,9 @@ const Booking = ({ stationName }) => {
                 >
                   View
                 </Button>
+              </div>
+              <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                <p>Image Count : {AvilableimageCount}</p>
               </div>
             </div>
           ) : (

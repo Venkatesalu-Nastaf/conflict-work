@@ -99,8 +99,8 @@ const useBooking = () => {
   const [sendEmail, setSendEmail] = useState(true);
   // const [sendguestsms, setSendGuestsms] = useState(false);
   const [sendmailguestsms, setSendmailGuestsms] = useState(false);
-  const [organistaionsendmail,setOrganisationSendEmail]=useState([])
- 
+  const [organistaionsendmail, setOrganisationSendEmail] = useState([])
+
   const handlePopupClose = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
@@ -691,36 +691,35 @@ const useBooking = () => {
   }, [apiUrl])
   useEffect(() => {
     const fetchData = async () => {
-        const organizationname = localStorage.getItem('usercompany');
+      const organizationname = localStorage.getItem('usercompany');
 
-        try {
-            if(!organizationname) return
-            const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-            if (response.status === 200) {
+      try {
+        if (!organizationname) return
+        const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        if (response.status === 200) {
 
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                  setOrganisationSendEmail(userDataArray[0])
-                 
-                   
-                  
-                } else {
-                    setErrorMessage('User data not found.');
-                    setError(true);
-                }
-            } 
+          const userDataArray = await response.json();
+          if (userDataArray.length > 0) {
+            setOrganisationSendEmail(userDataArray[0])
+
+
+
+          } else {
+            setErrorMessage('User data not found.');
+            setError(true);
+          }
         }
-        catch {
-        }
+      }
+      catch {
+      }
     };
     fetchData();
-}, [apiUrl]);
+  }, [apiUrl]);
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const booking_id =
-    formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+  const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
 
   const handleButtonClick = () => {
     const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
@@ -735,6 +734,7 @@ const useBooking = () => {
 
   // ------------------------------------------------------------
   const [allFile, setAllFile] = useState([]);
+  const [AvilableimageCount, setAvilableimageCount] = useState(0)
 
   const showPdf = async () => {
     try {
@@ -760,10 +760,13 @@ const useBooking = () => {
 
   const [file, setFile] = useState(null);
 
-  const addPdf = async (lastbookid) => {
-    if (file !== null) {
+
+
+  const addPdf = async (lastbookid, fileData) => {
+    const uploadFile = fileData || file
+    if (uploadFile !== null) {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", uploadFile);
       try {
         const response = await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
         setFile(null)
@@ -777,6 +780,43 @@ const useBooking = () => {
       return
     }
   };
+
+  const handleChangeFile = (e) => {
+    const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    const file = e.target.files[0]
+    if (file) {
+      setFile(file)
+    }
+    if (booking_no && file) {
+      addPdf(booking_no, file)
+    }
+  }
+
+  const [triggerCount, setTriggerCount] = useState(false)
+
+  useEffect(() => {
+
+    const getImageCount = async () => {
+      try {
+        if (!booking_id) return
+        console.log("booking id", booking_id)
+        const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
+        const count = response.data.files.length
+        console.log("response ", response)
+
+        if (count > 0) {
+          console.log("count", count)
+          setAvilableimageCount(count)
+        }
+
+      }
+      catch (err) {
+        console.log("err", err.message)
+      }
+    }
+    getImageCount()
+
+  }, [file, triggerCount])
 
   //--------------------------------------------------------------
 
@@ -896,8 +936,8 @@ const useBooking = () => {
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
           status: datamode,
-          Sendmailauth:organistaionsendmail.Sender_Mail,
-          Mailauthpass:organistaionsendmail.EmailApp_Password
+          Sendmailauth: organistaionsendmail.Sender_Mail,
+          Mailauthpass: organistaionsendmail.EmailApp_Password
 
 
 
@@ -1084,23 +1124,14 @@ const useBooking = () => {
           formData.bookingno
       );
 
-
-      const selectedBookingDate =
-        selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-
+      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
-      const booking_no =
-        formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+      const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
+
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
         ...selectedCustomer,
-        //     // ...book,
-        //     // ...formData,
-        //     // ...selectedCustomerData,
-        //     // ...restSelectedCustomerData, // Use the modified object without 'id'
-        //     // ...selectedCustomerDatas,
-        //     // ...restSelectedCustomerDatas,
         bookingtime: bookingtime || getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
@@ -1111,8 +1142,6 @@ const useBooking = () => {
         email: formData.email || selectedCustomerData.email || formValues.email || book.email,
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
-        // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
-        // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
         vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
@@ -1135,10 +1164,8 @@ const useBooking = () => {
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
-        // triptime: triptime,
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
-
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
       };
@@ -1152,14 +1179,12 @@ const useBooking = () => {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
-
         } else {
           setInfo(true);
           setInfoMessage(response.data.message);
         }
-
         setEdit(false)
-        addPdf(booking_no);
+        // addPdf(booking_no);
         setRow([]);
         setRowsdriver([])
         setRows([]);
@@ -1168,7 +1193,6 @@ const useBooking = () => {
           handlecheck(editbookno);
         }
       }
-
     } catch (error) {
       console.error("An error occurred:", error);
       setError(true);
@@ -1251,6 +1275,7 @@ const useBooking = () => {
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
+      setTriggerCount(prev => !prev)
       try {
         const response = await axios.get(
           `${apiUrl}/booking/${event.target.value}`
@@ -1477,20 +1502,24 @@ const useBooking = () => {
 
 
   const handleContextMenu = () => {
-    axios
-      .delete(`${apiUrl}/booking_doc-delete/` + imagedata)
+    axios.delete(`${apiUrl}/booking_doc-delete/` + imagedata)
       .then((res) => {
-        setDialogdeleteOpen(false);
-        setDialogOpen(false);
-        setImagedata([]);
-        setDeleteFile([]);
-        setSelectAll(false)
+        if (res.data.success) {
+          setTriggerCount(prev => !prev)
+
+          setDialogdeleteOpen(false);
+          setDialogOpen(false);
+          setImagedata([]);
+          setDeleteFile([]);
+          setSelectAll(false);
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log("Error:", err);
+      });
     setDialogdeleteOpen(false);
     setDialogOpen(false);
   };
-
 
 
   //-----------------------------------------------------
@@ -1618,7 +1647,7 @@ const useBooking = () => {
     handleKeyEnterdriver,
     rowdriver,
     handleRowClickdriver,
-    selectedCustomerdriver,
+    selectedCustomerdriver, handleChangeFile, AvilableimageCount,
     vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   };
 };

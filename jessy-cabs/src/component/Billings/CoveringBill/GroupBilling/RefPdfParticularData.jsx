@@ -4,6 +4,7 @@ import generatePDF from 'react-to-pdf';
 import useGroupbilling from "./useGroupbilling";
 import { APIURL } from "../../../url";
 import numWords from 'num-words'
+import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
 
 const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFromDate, refToDate, gstno, referenceno }) => {
     const { handlePopup } = useGroupbilling()
@@ -55,15 +56,15 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
         pdfData?.forEach((li) => {
             address = li.address1
             customer = li.customer
-            totalamount += parseInt(li.netamount)
-            totalcgst += parseInt(li.netamount) * Gst / 100
-            fullamount += parseInt(li.netamount) + parseInt(li.netamount) * Gst / 100 + parseInt(li.netamount) * Gst / 100
+            totalamount += parseInt(li.totalcalcAmount)
+            totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
+            fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100
         })
         setCustomerAddress(address)
         setCustomer(customer)
         setFullAmount(totalamount)
         setTotalCgst(totalcgst)
-        setFullTotal(fullamount)
+        setFullTotal(fullamount.toFixed(2))
     }, [pdfData, Gst])
 
 
@@ -86,9 +87,10 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
         setOrgaddress3(addressthree)
         setOrgname(organisationname)
     }, [organizationdetails])
-
-    const rupeestext = numWords(fullTotal);
-
+   const {logo} = useData()
+    // const rupeestext = numWords(fullTotal);
+    // console.log(rupeestext,typeof(fullTotal),'full');
+    // const rupeestesxt = toWords(fullTotal)
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', width: '784px', padding: 20, }} ref={targetRef}>
@@ -104,7 +106,9 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                         </h3>
                     </div>
                     <div className="imagediv">
-                        <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage" />
+                        {/* <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage" /> */}
+                        <img src={logo} className="image" alt="organisationimage" />
+
                         {/* <h2 className="organisationtext"> GST : {organisationdetails[0].gstnumber}</h2> */}
                     </div>
                 </div>
@@ -153,10 +157,12 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                                     <td className="tdata">{li.InvoiceDate}</td>
                                     <td className="tdata"> {li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
-                                    <td className="tdata">{li.netamount}</td>
-                                    <td className="tdata">{parseInt(li.netamount) * Gst / 100}</td>
-                                    <td className="tdata">{parseInt(li.netamount) * Gst / 100}</td>
-                                    <td className="tdata">{parseInt(li.netamount) + parseInt(li.netamount) * Gst / 100 + parseInt(li.netamount) * Gst / 100}</td>
+                                    <td className="tdata">{li.totalcalcAmount}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(2)}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(2)}</td>
+                                    <td className="tdata">
+                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(2)}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -173,7 +179,7 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                         </tr>
                     </table>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}><h4>Rs .</h4><p style={{ marginLeft: 10 }}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</p></div>
+                {/* <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}><h4>Rs .</h4><p style={{ marginLeft: 10 }}>{rupeestesxt}</p></div> */}
             </div>
             <div className="printdiv">
                 <button className="print" onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })}>PRINT</button>

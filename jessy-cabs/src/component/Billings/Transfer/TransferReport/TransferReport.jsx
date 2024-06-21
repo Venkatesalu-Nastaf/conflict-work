@@ -128,12 +128,11 @@ const TransferReport = ({ stationName }) => {
   const [addressDetails, setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
-  const { sharedData } = useData();
+  const { sharedData,logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint } = PdfData()
-
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -184,7 +183,6 @@ const TransferReport = ({ stationName }) => {
 
     fetchdata();
   }, [apiUrl, customer]);
-
   useEffect(() => {
     const fetchData = async () => {
 
@@ -221,14 +219,14 @@ const TransferReport = ({ stationName }) => {
 
     else if (pdfBillList === "PDF 1") {
       const fileName = 'test.pdf';
-      const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
     }
     else if (pdfBillList === "PDF 2") {
       const fileName = 'test.pdf';
-      const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
@@ -700,7 +698,7 @@ const TransferReport = ({ stationName }) => {
               overflowY: 'auto'
             }}
           >
-            <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno} />
+            <PdfParticularData logo={logo} addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno} />
           </Box>
         </Modal>
       </form>

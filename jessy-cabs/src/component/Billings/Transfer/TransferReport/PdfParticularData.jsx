@@ -10,7 +10,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, imagename, tripno }) => {
+const PdfParticularData = ({ logo,addressDetails, particularPdf, organisationdetail, imagename, tripno }) => {
   console.log(tripno, "tri", organisationdetail, "org", particularPdf, 'modelapdf', typeof (particularPdf), Array.isArray(particularPdf));
 
   const targetRef = useRef();
@@ -352,7 +352,8 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
               </h3>
             </div>
             <div className="imagediv">
-              <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/>
+              {/* <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/> */}
+              <img src={logo} className="image" alt="organisationimage"/>
               {/* <h2 className="organisationtext"> GST : {organisationdetails[0].gstnumber}</h2> */}
             </div>
 

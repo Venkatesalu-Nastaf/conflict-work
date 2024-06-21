@@ -117,6 +117,8 @@ const Customer = ({ stationName }) => {
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
+                  margin="normal"
+                  size="small"
                   name="customerId"
                   label="Customer ID"
                   id="customerId"
@@ -124,7 +126,7 @@ const Customer = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -139,7 +141,7 @@ const Customer = ({ stationName }) => {
                   label="Organization Name"
                   value={selectedCustomerData?.customer || book.customer}
                   autoComplete="new-password"
-                  variant="standard"
+                  // variant="standard"
                   onChange={handleChange}
                   name="customer"
                 />
@@ -205,6 +207,8 @@ const Customer = ({ stationName }) => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="customeremail"
                   label="Email"
                   className='full-width'
@@ -212,7 +216,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.customeremail || book.customeremail}
                   onChange={handleChange}
                   id="customeremail"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -220,6 +224,8 @@ const Customer = ({ stationName }) => {
                   <RateReviewIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="rateType"
                   label="Rate Type"
                   className='full-width'
@@ -227,7 +233,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.rateType || book.rateType}
                   onChange={handleChange}
                   id="ratetype"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -235,6 +241,8 @@ const Customer = ({ stationName }) => {
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="opBalance"
                   label="OP Balanace"
                   className='full-width'
@@ -242,7 +250,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.opBalance || book.opBalance}
                   onChange={handleChange}
                   id="opBalance"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -250,6 +258,8 @@ const Customer = ({ stationName }) => {
                   <LocalPhoneIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="phoneno"
                   label="Phone"
                   className='full-width'
@@ -257,7 +267,7 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.phoneno || book.phoneno}
                   onChange={handleChange}
                   id="phoneno"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input radio">
@@ -295,7 +305,16 @@ const Customer = ({ stationName }) => {
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                <TextField
+                <textarea
+                  id="address1"
+                  className='textarea-input'
+                  name="address1"
+                  rows="3"
+                  value={selectedCustomerData?.address1 || book.address1}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+                {/* <TextField
                   margin="normal"
                   id="address1"
                   label="Address"
@@ -303,11 +322,11 @@ const Customer = ({ stationName }) => {
                   className='full-width'
                   multiline
                   rows={2}
-                  sx={{ width: "100%" }}
+                  sx={{ width: '100%', resize: 'both', overflow: 'auto' }}
                   autoComplete="new-password"
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                />
+                /> */}
               </div>
               <FormControlLabel
                 name="printBill"
@@ -413,6 +432,8 @@ const Customer = ({ stationName }) => {
                   <StoreIcon color="action" />
                 </div>
                 <TextField
+                  margin='noraml'
+                  size='small'
                   name="entity"
                   autoComplete="new-password"
                   className='full-width'
@@ -420,7 +441,7 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   label="Entity"
                   id="entity"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">

@@ -19,7 +19,7 @@ import {
   Duty,
   Hire,
   PayType,
-  Report,
+  // Report,
   GroupTypes,
   vehicaleinfos
 } from "./Booking";
@@ -681,43 +681,22 @@ const Booking = ({ stationName }) => {
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="report"
-                freeSolo
-                sx={{ width: "100%" }}
-                onChange={(event, value) =>
-                  handleAutocompleteChange(event, value, "report")
-                }
+               <TextField
+                margin="normal"
+                  size="small"
+               name="report"
+                className="full-width"
+                autoComplete="new-password"
                 value={
-                  Report.find((option) => option.Option)?.label ||
                   formData.report ||
                   selectedCustomerData.report ||
                   book.report ||
                   ""
                 }
-                options={Report.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) =>
-                  option.label ||
-                  formData.report ||
-                  selectedCustomerData.report ||
-                  book.report ||
-                  ""
-                }
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label="Report"
-                      autoComplete="password"
-                      name="report"
-                      inputRef={params.inputRef}
-                    />
-                  );
-                }}
+                onChange={handleChange}
+                  label="Report"
+                id="Report"
+                
               />
             </div>
             <div className="input booking-payment-type-input">

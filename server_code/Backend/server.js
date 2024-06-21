@@ -228,7 +228,7 @@ app.use('/mapimages', express.static(mapimageDirectory));
 
 app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
-  console.log("imgs")
+  // console.log("imgs")
 
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
@@ -241,7 +241,7 @@ app.get('/getmapimages/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(mapimageDirectory, results[0].path);
-    console.log("imagePath", imagePath)
+    // console.log("imagePath", imagePath)
 
     res.sendFile(imagePath, (err) => {
       if (err) {

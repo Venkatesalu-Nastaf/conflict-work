@@ -241,6 +241,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
   const [address1, setAddress1] = useState('')
   const [gst, setGst] = useState('')
   const [extraKmAmount, setExtraKmAmount] = useState('')
+  const [extraHrAmount,setExtraHrAmount] = useState('')
   const organizationname = customer
   const organisationdetailfill=organisationdetails
   const organisationimage=images
@@ -252,11 +253,13 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
       let parkingamount = 0
       let permitamount = 0
       let exkmamount = 0
+      let exhramount = 0
       invdata?.map((li) => {
-        totalamount += parseInt(li.totalcalcAmount || 0)
+        totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
         permitamount += parseInt(li.permit || 0)
         exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
+        exhramount += parseInt(li.ex_hrAmount || 0)
         return null
       })
       // console.log(totalAmount,'totalAmount');
@@ -264,6 +267,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
       setParking(parkingamount)
       setPermit(permitamount)
       setExtraKmAmount(exkmamount)
+      setExtraHrAmount(exhramount)
     }
   }, [apiUrl, invdata])
 
@@ -289,7 +293,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
     }
   }, [apiUrl, customeraddress])
 
-  const fullAmount = parseInt(totalAmount) 
+  const fullAmount = parseInt(totalAmount) + parseInt(extraKmAmount) + parseInt(extraHrAmount)
   const cgst = fullAmount * 2.5 / 100
   const sgst = fullAmount * 2.5 / 100
   const park = parseInt(parking)
@@ -389,9 +393,9 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
-                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}{item.pickup}</Text></View>
+                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n`:''} {item.pickup}</Text></View>
                             <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View>
-                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.totalcalcAmount} </Text></View>
+                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} </Text></View>
                           </React.Fragment>
                         </View>
                       ))}

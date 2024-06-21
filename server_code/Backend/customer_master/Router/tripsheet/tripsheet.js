@@ -1040,6 +1040,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
         const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth,Mailauthpass } = req.body;
+      
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',

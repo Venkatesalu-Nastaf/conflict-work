@@ -54,6 +54,7 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(true);
     const [sendEmail, setSendEmail] = useState(true);
     const [organizationdata, setorganizationData] = useState('');
+    const [triggerdata,setTriggerData]=useState(true)
 
 
     //-------------------------calc-------------------
@@ -379,6 +380,7 @@ const useTripsheet = () => {
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
+        setTriggerData(!triggerdata)
 
         ///calc------
         setcalcPackage(calcPackage);
@@ -542,6 +544,7 @@ const useTripsheet = () => {
         setTransferreport("No");
         localStorage.removeItem('selectedTripid');
     };
+  
 
     const handlecheck = async () => {
         if (sendEmail) {
@@ -569,9 +572,12 @@ const useTripsheet = () => {
                 };
                 await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
+                setSuccessMessage(" Mail Sent Successfully");
                 // setSendEmail(false)
             } catch {
-                alert('An error occurred while sending the email');
+               
+                setError(true);
+                setErrorMessage("An error occurred while sending the email");
             }
         } else {
         }
@@ -691,6 +697,12 @@ const useTripsheet = () => {
                 setRows([]);
                 if (sendEmail) {
                     await handlecheck();
+                }
+                if(smsguest){
+                    await handleSendSMS()
+                }
+                if(DriverSMS){
+                    await handleDriverSendSMS()
                 }
 
                 setSendEmail(true)
@@ -1608,6 +1620,41 @@ const useTripsheet = () => {
 
 
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const encoded = localStorage.getItem('usercompany');
+    //         localStorage.setItem('usercompanyname', encoded);
+    //         // const storedcomanyname = localStorage.getItem('usercompanyname');
+    //         // const organizationname = decodeURIComponent(storedcomanyname);
+
+    //         if (encoded === "undefined") {
+    //             return;
+    //         }
+
+    //         try {
+    //             const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+    //             if (response.status === 200) {
+
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setorganizationData(userDataArray[0]);
+
+    //                 }
+    //             }
+
+    //             else {
+    //                 const timer = setTimeout(fetchData, 2000);
+    //                 return () => clearTimeout(timer);
+    //             }
+    //         } catch (error) {
+    //             console.log("Error", error)
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [apiUrl, sendEmail, location, organizationdata]);
+    const dataname=localStorage.getItem('usercompany')
+
     useEffect(() => {
         const fetchData = async () => {
             const encoded = localStorage.getItem('usercompany');
@@ -1626,8 +1673,10 @@ const useTripsheet = () => {
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
-
+                        setTriggerData(!triggerdata)
+                       
                     }
+                    
                 }
 
                 else {
@@ -1640,7 +1689,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl, sendEmail, location, organizationdata]);
+    }, [apiUrl,sendEmail,location,organizationdata,triggerdata,dataname]);
 
 
 

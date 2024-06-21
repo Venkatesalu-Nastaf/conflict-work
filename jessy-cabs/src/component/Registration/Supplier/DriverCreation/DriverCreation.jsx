@@ -155,7 +155,7 @@ const DriverCreation = ({ stationName }) => {
                                     name="driverid"
                                     value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
-                                    variant="standard"
+                                // variant="standard"
                                 />
                             </div>
                             <div className="input driver-input">
@@ -257,7 +257,16 @@ const DriverCreation = ({ stationName }) => {
                                 <div className="icone">
                                     <AddHomeWorkIcon color="action" />
                                 </div>
-                                <TextField
+                                <textarea
+                                    id="address1"
+                                    className='textarea-input'
+                                    name="address1"
+                                    rows="3"
+                                    value={selectedCustomerData?.address1 || book.address1}
+                                    onChange={handleChange}
+                                    placeholder="Address"
+                                />
+                                {/* <TextField
                                     margin="normal"
                                     name="address1"
                                     className='full-width'
@@ -268,7 +277,7 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Address"
                                     id="address1"
-                                />
+                                /> */}
                             </div>
                             <div className="input driver-input">
                                 <div className="icone">
@@ -317,6 +326,8 @@ const DriverCreation = ({ stationName }) => {
                                     <AddIcCallTwoToneIcon color="action" />
                                 </div>
                                 <TextField
+                                    margin='normal'
+                                    size='small'
                                     name="Mobileno"
                                     autoComplete="new-password"
                                     value={
@@ -328,7 +339,7 @@ const DriverCreation = ({ stationName }) => {
                                     label="Mobile No"
                                     id="Mobileno"
                                     className='full-width'
-                                    variant="standard"
+                                // variant="standard"
                                 />
                             </div>
                             <div className="input driver-input">

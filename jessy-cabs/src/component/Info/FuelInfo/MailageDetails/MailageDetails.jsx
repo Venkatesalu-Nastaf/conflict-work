@@ -219,7 +219,7 @@ const MailageDetails = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.InitialOdometerReading || book.InitialOdometerReading || initialOdometer}
                     sx={{ width: "100%" }}
-                    variant="standard"
+                    // variant="standard"
                     onChange={(e) => {
                       handleChange(e);
                       setInitialOdometer(e.target.value);
@@ -239,7 +239,7 @@ const MailageDetails = () => {
                     name="FinalOdometerReading"
                     autoComplete="new-password"
                     value={selectedCustomerData?.FinalOdometerReading || book.FinalOdometerReading || finalOdometer}
-                    variant="standard"
+                    // variant="standard"
                     onChange={(e) => {
                       handleChange(e);
                       setFinalOdometer(e.target.value);
@@ -258,7 +258,7 @@ const MailageDetails = () => {
                     name="FuelConsumptioninliters"
                     autoComplete="new-password"
                     value={selectedCustomerData?.FuelConsumptioninliters || book.FuelConsumptioninliters || fuelConsumption}
-                    variant="standard"
+                    // variant="standard"
                     onChange={(e) => {
                       handleChange(e);
                       setFuelConsumption(e.target.value);

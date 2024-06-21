@@ -209,13 +209,15 @@ const Vehicaleinfo = ({ stationName }) => {
                     <MinorCrashIcon color="action" />
                   </div>
                   <TextField
+                    margin='normal'
+                    size='small'
                     name="vehicleId"
                     value={selectedCustomerData?.vehicleId || ""}
                     onChange={handleChange}
                     label="Vehicle ID"
                     id="vehicleId"
-                    className='full-width'
-                    variant="standard"
+                  // className='full-width'
+                  // variant="standard"
                   />
                 </div>
                 <div className="input">
@@ -223,6 +225,8 @@ const Vehicaleinfo = ({ stationName }) => {
                     <FaCar />
                   </div>
                   <TextField
+                    margin='normal'
+                    size='small'
                     name="vehicleName"
                     value={
                       book.vehicleName || selectedCustomerData?.vehicleName || ""}
@@ -231,7 +235,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     label="Vehicle Name"
                     id="vehicleName"
                     className='full-width'
-                    variant="standard"
+                  // variant="standard"
                   />
                 </div>
                 <div className="input">

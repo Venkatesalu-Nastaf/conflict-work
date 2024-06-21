@@ -233,7 +233,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                       autoComplete="new-password"
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
-                      variant="standard"
+                      // variant="standard"
                     />
                   </div>
                   <div className="input">

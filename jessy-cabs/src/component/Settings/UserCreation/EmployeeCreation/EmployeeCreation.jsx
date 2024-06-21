@@ -153,7 +153,7 @@ const EmployeeCreation = ({ stationName }) => {
                   name="userid"
                   value={book.userid || ''}
                   // onChange={handleChange}
-                  variant="standard"
+                  // variant="standard"
                   style={{ width: '100%' }}
                 />
               </div>
@@ -195,10 +195,8 @@ const EmployeeCreation = ({ stationName }) => {
                   id="mobile"
                   label="Mobile"
                   name="mobileno"
-
                   value={book.mobileno || ''}
                   onChange={handleChange}
-
                 />
               </div>
               <div className="input" style={{ paddingRight: '15px' }}>
@@ -249,7 +247,7 @@ const EmployeeCreation = ({ stationName }) => {
                   onChange={handleChange}
                   label="Organization"
                   id="organizationname"
-                  variant="standard"
+                  // variant="standard"
                   style={{ width: '100%' }}
                 />
               </div>

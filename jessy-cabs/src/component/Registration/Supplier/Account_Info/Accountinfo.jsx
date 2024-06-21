@@ -122,7 +122,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -148,6 +148,8 @@ const Accuntinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="vehicleTravels"
                   autoComplete="new-password"
                   className='full-width'
@@ -155,7 +157,7 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="Vehicle/Travels"
                   id="vehicleTravels"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -163,6 +165,8 @@ const Accuntinfo = () => {
                   <ContactPhoneIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="phone"
                   autoComplete="new-password"
                   className='full-width'
@@ -170,14 +174,23 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="Phone"
                   id="phone"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                <TextField
+                <textarea
+                  id="address123"
+                  name="address1"
+                  className='textarea-input'
+                  rows="3"
+                  value={selectedCustomerData?.address1 || book.address1}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+                {/* <TextField
                   margin="normal"
                   id="address123"
                   className='full-width'
@@ -189,13 +202,15 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                />
+                /> */}
               </div>
               <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="cperson"
                   autoComplete="new-password"
                   className='full-width'
@@ -203,7 +218,7 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="C Person"
                   id="cperson"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input radio">
@@ -235,6 +250,8 @@ const Accuntinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="email"
                   autoComplete="new-password"
                   className='full-width'
@@ -242,7 +259,7 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="Email"
                   id="email"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -271,6 +288,8 @@ const Accuntinfo = () => {
                   <StoreIcon color="action" />
                 </div>
                 <TextField
+                  margin='normal'
+                  size='small'
                   name="entity"
                   autoComplete="new-password"
                   className='full-width'
@@ -278,7 +297,7 @@ const Accuntinfo = () => {
                   onChange={handleChange}
                   label="Opening Balance"
                   id="entity"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -333,6 +352,8 @@ const Accuntinfo = () => {
               <RateReviewIcon color="action" />
             </div>
             <TextField
+              margin='normal'
+              size='small'
               name="rateType"
               autoComplete="new-password"
               className='full-width'
@@ -340,7 +361,7 @@ const Accuntinfo = () => {
               onChange={handleChange}
               label="Rate Type"
               id="rateType"
-              variant="standard"
+              // variant="standard"
             />
           </div>
           <div className="input">

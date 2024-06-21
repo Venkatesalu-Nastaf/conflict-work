@@ -692,7 +692,8 @@ const useTripsheet = () => {
                 // handleCancel();
                 setShedKilometers("")
                 setAdditionalTime("")
-
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
                 setRow([]);
                 setRows([]);
                 if (sendEmail) {
@@ -708,9 +709,9 @@ const useTripsheet = () => {
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
-                setSuccess(true);
+                // setSuccess(true);
                 handleCancel();
-                setSuccessMessage("Successfully updated");
+                // setSuccessMessage("Successfully updated");
             } catch {
                 setError(true);
                 setErrorMessage("Check your Network Connection");

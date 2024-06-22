@@ -121,11 +121,11 @@ body {
   margin: 3px;
 }
 
-.alert-popup .popup-icon svg{
+.alert-popup .popup-icon svg {
   color: #fff;
 }
 
-.alert-popup .cancel-btn svg{
+.alert-popup .cancel-btn svg {
   font-size: 14px;
 }
 
@@ -602,7 +602,7 @@ body {
   display: grid;
 }
 
-.d-flex{
+.d-flex {
   display: flex;
 }
 
@@ -610,6 +610,16 @@ body {
 .css-19kzrtu {
   padding: 0px !important;
 }
+
+.textarea-input {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
 
 /* .css-feqhe6{
   width: 210px !important;

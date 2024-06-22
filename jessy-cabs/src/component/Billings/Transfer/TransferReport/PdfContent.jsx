@@ -79,26 +79,26 @@ const styles = StyleSheet.create({
   },
   tableheading: {
     fontSize: '11px',
-    borderTop:'1px solid #000',
-    borderLeft:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderLeft: '1px solid #000',
+    borderBottom: '1px solid #000',
     width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
   tableheadingAmount: {
     fontSize: '11px',
-    borderTop:'1px solid #000',
-    borderRight:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderRight: '1px solid #000',
+    borderBottom: '1px solid #000',
     width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
   tableheadsno: {
     fontSize: '11px',
 
-    borderTop:'1px solid #000',
-    borderLeft:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderLeft: '1px solid #000',
+    borderBottom: '1px solid #000',
     width: '9.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
   tableheadingparticular: {
     width: '62%',
     fontSize: '11px',
-    borderTop:'1px solid #000',
-    borderRight:'1px solid #000',
-    borderLeft:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderRight: '1px solid #000',
+    borderLeft: '1px solid #000',
+    borderBottom: '1px solid #000',
     padding: 5,
 
   },
@@ -126,9 +126,9 @@ const styles = StyleSheet.create({
   },
   tableheadingpermit: {
     width: '16%',
-    borderTop:'1px solid #000',
-    borderRight:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderRight: '1px solid #000',
+    borderBottom: '1px solid #000',
     padding: 5,
     fontSize: '11px',
 
@@ -184,9 +184,9 @@ const styles = StyleSheet.create({
   },
   tableheadtripno: {
     fontSize: '11px',
-    borderTop:'1px solid #000',
-    borderLeft:'1px solid #000',
-    borderBottom:'1px solid #000',
+    borderTop: '1px solid #000',
+    borderLeft: '1px solid #000',
+    borderBottom: '1px solid #000',
     width: '12.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: '30px',
   },
-   lastsectiondiv: {
+  lastsectiondiv: {
     borderRight: '1px solid #000000',
     borderLeft: '1px solid #000000',
     borderBottom: '1px solid #000000',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer,organisationdetails,images }) => {
+const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images }) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -241,10 +241,15 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
   const [address1, setAddress1] = useState('')
   const [gst, setGst] = useState('')
   const [extraKmAmount, setExtraKmAmount] = useState('')
-  const [extraHrAmount,setExtraHrAmount] = useState('')
+  const [extraHrAmount, setExtraHrAmount] = useState('')
+  const [toll, setToll] = useState('')
+  const [vpermettovendor, setVpermettovendor] = useState('')
+  const [vendortoll, setVendortoll] = useState('')
+  const [nightTotalAmount, setNightTotalAmount] = useState('')
+  const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const organizationname = customer
-  const organisationdetailfill=organisationdetails
-  const organisationimage=images
+  const organisationdetailfill = organisationdetails
+  const organisationimage = images
   const apiUrl = APIURL;
 
   useEffect(() => {
@@ -254,12 +259,22 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
       let permitamount = 0
       let exkmamount = 0
       let exhramount = 0
+      let tollamount = 0
+      let vpermet = 0
+      let vendortollamount = 0
+      let nightAmount = 0
+      let driverBeta = 0
       invdata?.map((li) => {
         totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
         permitamount += parseInt(li.permit || 0)
         exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
         exhramount += parseInt(li.ex_hrAmount || 0)
+        tollamount += parseInt(li.toll)
+        vpermet += parseInt(li.vpermettovendor)
+        vendortollamount += parseInt(li.vendortoll)
+        nightAmount += parseInt(li.night_totalAmount)
+        driverBeta += parseInt(li.driverBeta_amount)
         return null
       })
       // console.log(totalAmount,'totalAmount');
@@ -268,6 +283,11 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
       setPermit(permitamount)
       setExtraKmAmount(exkmamount)
       setExtraHrAmount(exhramount)
+      setToll(tollamount)
+      setVpermettovendor(vpermet)
+      setVendortoll(vendortollamount)
+      setNightTotalAmount(nightAmount)
+      setDriverBetaAmount(driverBeta)
     }
   }, [apiUrl, invdata])
 
@@ -293,13 +313,16 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
     }
   }, [apiUrl, customeraddress])
 
-  const fullAmount = parseInt(totalAmount) + parseInt(extraKmAmount) + parseInt(extraHrAmount)
+  const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   const cgst = fullAmount * 2.5 / 100
   const sgst = fullAmount * 2.5 / 100
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
-  const parkpermit = park + permitcharge
-  const FullAmount = fullAmount + cgst + sgst + park + permitcharge
+  const tollAmount = parseInt(toll)
+  const vpermit = parseInt(vpermettovendor)
+  const vendorToll = parseInt(vendortoll)
+  const parkpermit = park + permitcharge + tollAmount + vpermit +vendorToll
+  const FullAmount = fullAmount + cgst + sgst + parkpermit
   const formattedFullAmount = FullAmount.toFixed(2);
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
@@ -317,13 +340,14 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                     <Text style={styles.text2}> Nadanam,Chennai-600 035</Text>
                     <Text style={styles.text2}> booking@jessycabs.in</Text> */}
                     <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
-        <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
+                    <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
+                    <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
+                    <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
                   </View>
                   <View style={styles.logodiv}>
                     {/* <Image src={Logo} style={styles.logo} /> */}
-                    <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} />
+                    {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
+                    <Image src={logo}  style={styles.logo} />
                   </View>
                 </View>
                 <View style={styles.gst}>
@@ -393,9 +417,10 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
-                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n`:''} {item.pickup}</Text></View>
-                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View>
-                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} </Text></View>
+                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` :''} {item.pickup}</Text></View>
+                            {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
+                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{parseInt(item.permit)+parseInt(item.parking)+parseInt(item.toll)+parseInt(item.vpermettovendor)+parseInt(item.vendortoll)}</Text></View>
+                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
                           </React.Fragment>
                         </View>
                       ))}

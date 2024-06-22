@@ -95,6 +95,7 @@ const MainDashboard = () => {
       localStorage.removeItem("selectedusertheme")
       localStorage.removeItem("username")
       localStorage.removeItem("tokensdata")
+      // localStorage.removeItem("expiretime")
       
 
 
@@ -138,6 +139,52 @@ const MainDashboard = () => {
       };
     }
   }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
+//    const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
+//    console.log(IDLE_TIMEOUT_DURATION ,"min")
+//   const checkinactivity=()=>{
+//     const expiretime=localStorage.getItem("expiretime")
+
+//     if(expiretime < Date.now()){
+//         console.log("logout")
+//         // setLogged(false)
+//         handleLogoutdialog()
+
+//     }
+// }
+// const Upadteexpiretime=()=>{
+
+//     const expiretime=Date.now() +10000 ;
+//     localStorage.setItem("expiretime",expiretime)
+// }
+
+// useEffect(()=>{
+//     Upadteexpiretime()
+
+//     window.addEventListener("mousemove",Upadteexpiretime);
+//     window.addEventListener("keypress",Upadteexpiretime);
+//     window.addEventListener("click",Upadteexpiretime);
+//     window.addEventListener("scroll",Upadteexpiretime);
+//     window.addEventListener("keydown", Upadteexpiretime);
+    
+    
+//     return ()=>{
+//         window.removeEventListener("mousemove",Upadteexpiretime);
+//         window.removeEventListener("keypress",Upadteexpiretime);
+//         window.removeEventListener("click",Upadteexpiretime);
+//         window.removeEventListener("scroll",Upadteexpiretime);
+//         window.removeEventListener("keydown", Upadteexpiretime);
+       
+//     }
+// },[]);
+// useEffect(()=>{
+//     const checkintrvval=setInterval(()=>{
+//         checkinactivity();
+//     },IDLE_TIMEOUT_DURATION )
+    
+//     return ()=>clearInterval(checkintrvval)
+// },[])
+
+  
 
   const hidePopup = () => {
     setSuccess(false);

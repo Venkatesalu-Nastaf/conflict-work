@@ -78,7 +78,7 @@ const useGroupbilling = () => {
         { field: "permit", headerName: "Permit", width: 150 },
         { field: "toll", headerName: "Toll", width: 150 },
         { field: "parking", headerName: "Parking", width: 150 },
-        { field: "netamount", headerName: "Net Amount", width: 130 },
+        { field: "totalcalcAmount", headerName: "Net Amount", width: 130 },
         { field: "guestname", headerName: "UserName", width: 150 },
     ];
 
@@ -113,22 +113,21 @@ const useGroupbilling = () => {
 
                 const response = await fetch(`${apiUrl}/ParticularLists/${id}`)
                 const tripData = await response.json();
-                console.log(tripData,'tdata');
                 // setRows(tripData)
                 // const transformedTripData = tripData.map(item => ({
                 //     ...item,
                 //     ...(groupInvoice && { InvoiceNo: groupInvoiceNumber }), // Include InvoiceNo only if groupInvoice is true
                 //     ...{ InvoiceDate: groupInvoiceDate }
                 // }));
-                    // Ensure trip ID is included in the data structure
-                    const transformedTripData = tripData.map(item => ({
-                        ...item,
-                        ...(groupInvoice && { InvoiceNo: groupInvoiceNumber }), // Include InvoiceNo only if groupInvoice is true
-                        InvoiceDate: groupInvoiceDate,
-                        tripid: item.tripid // Make sure tripid is included
-                    }));
+                // Ensure trip ID is included in the data structure
+                const transformedTripData = tripData.map(item => ({
+                    ...item,
+                    ...(groupInvoice && { InvoiceNo: groupInvoiceNumber }), // Include InvoiceNo only if groupInvoice is true
+                    InvoiceDate: groupInvoiceDate,
+                    tripid: item.tripid // Make sure tripid is included
+                }));
                 setRows(transformedTripData);
-                
+
 
             }
             catch (err) {
@@ -207,7 +206,6 @@ const useGroupbilling = () => {
             return sum + netAmountValue;
         }, 0);
     }, []);
-console.log(rows,'hdr');
     const handleKeyDown = async (event) => {
         setGroupInvoice(true)
         if (event.key === 'Enter') {
@@ -215,18 +213,21 @@ console.log(rows,'hdr');
             try {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
-                console.log(GroupReference,'groupss');
                 setRows(GroupReference)
                 // const RefId = GroupReference.map((li) => li.Trip_id)
                 // setParticularId(RefId)
                 const RefId = GroupReference.map((li) => li.Trip_id.split(','));
-                setParticularId(RefId.flat()); 
+                setParticularId(RefId.flat());
                 const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
                 setRefInvNo(RefInvoiceNo)
                 const RefInvDate = GroupReference.map((li) => li.InvoiceDate)
                 setRefInvDate(RefInvDate)
                 const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
                 setReferNo(ReferenceNo)
+                const fromdate = GroupReference.map((li) => li.FromDate)
+                setRefFromDate(fromdate)
+                const todate = GroupReference.map((li) => li.ToDate)
+                setRefToDate(todate)
                 const Tripsid = GroupReference.map((li) => li.Trip_id)
             }
             catch (err) {
@@ -273,7 +274,6 @@ console.log(rows,'hdr');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
-            console.log(customerValue,fromDateValue,toDateValue,servicestationValue,'handleshow');
             const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
@@ -283,7 +283,6 @@ console.log(rows,'hdr');
                 },
             });
             const data = response.data;
-             console.log(data,'group data');
             if (Array.isArray(data) && data.length > 0) {
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
@@ -345,7 +344,7 @@ console.log(rows,'hdr');
             });
 
             rows.forEach((singleData, index) => {
-                
+
                 worksheet.addRow(singleData);
                 // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
@@ -451,7 +450,7 @@ console.log(rows,'hdr');
             .filter((selectedId) => selectedId !== null)
             .map((selectedId) => {
                 const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-                return selectedRow ? parseInt(selectedRow.netamount) : null;
+                return selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
             })
             .filter((tripid) => tripid !== null);
 

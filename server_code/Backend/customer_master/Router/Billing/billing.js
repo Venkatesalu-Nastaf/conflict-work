@@ -18,7 +18,7 @@ router.post('/GroupBillingList', (req, res) => {
   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id } = req.body;
 
   const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  const sqlquery1 = "UPDATE tripsheet SET status = 'Billed' WHERE tripid IN (?)";
+  const sqlquery1 = "UPDATE tripsheet SET status = 'Covering_Billed' WHERE tripid IN (?)";
 
   db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(',')], (err, result) => {
     if (err) {
@@ -292,7 +292,6 @@ router.get('/Group-Billing', (req, res) => {
 router.get('/tripsheet-keydown/:tripid', async (req, res) => {
   const tripid = req.params.tripid;
   const username = req.query.loginUserName;
-  console.log("heelloo", tripid, username)
 
   let data = '';
 
@@ -308,7 +307,6 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
     //------------------------------------------------------------
 
     if (data && data.toLowerCase() === "all") {
-      console.log("llll")
       // its for fetch by All
       await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Transfer_Closed"`, tripid, (err, result) => {
         if (err) {

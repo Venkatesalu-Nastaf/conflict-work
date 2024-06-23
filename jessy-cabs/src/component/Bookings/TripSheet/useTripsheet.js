@@ -54,7 +54,11 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(true);
     const [sendEmail, setSendEmail] = useState(true);
     const [organizationdata, setorganizationData] = useState('');
-    const [triggerdata,setTriggerData]=useState(true)
+    const [triggerdata, setTriggerData] = useState(true)
+
+    const [signaturepopup, setSignaturepopup] = useState(false)
+    const [signatureupload, setSignatureupload] = useState(false)
+
 
 
     //-------------------------calc-------------------
@@ -164,26 +168,30 @@ const useTripsheet = () => {
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
             const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            setLink(response.data.link);
+            console.log(response.data.link, "linkffsd")
+            const data = response.data.link
+            setLink(data);
+            getSignatureImage()
         } catch {
         }
     };
 
 
-    const SignPage = async (event) => {
-        event.preventDefault();
-        console.log("link", link)
-        if (link) {
-            await navigator.clipboard.writeText(link);
-            console.log("text--", navigator.clipboard.writeText(link))
-            setSign(true)
-            setTimeout(() => {
-                setSign(false)
-            }, 2000)
-        } else {
-            alert("no link data ", link)
-        }
-    }
+    // const SignPage = async (event) => {
+    //     event.preventDefault();
+    //     console.log("link", link)
+    //     if (link) {
+    //         await navigator.clipboard.writeText(link);
+    //         console.log("text--", navigator.clipboard.writeText(link))
+    //         setSign(true)
+    //         setTimeout(() => {
+    //             setSign(false)
+    //             setLink("")
+    //         }, 2000)
+    //     } else {
+    //         alert("no link data ", link)
+    //     }
+    // }
 
 
     const handlePopupClose = () => {
@@ -380,7 +388,7 @@ const useTripsheet = () => {
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
-       
+
 
         ///calc------
         setcalcPackage(calcPackage);
@@ -544,8 +552,8 @@ const useTripsheet = () => {
         setTransferreport("No");
         localStorage.removeItem('selectedTripid');
     };
-  
-    
+
+
 
     const handlecheck = async () => {
         if (sendEmail) {
@@ -557,7 +565,7 @@ const useTripsheet = () => {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
                     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
-                    driverName:selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
@@ -577,7 +585,7 @@ const useTripsheet = () => {
                 setSuccessMessage(" Mail Sent Successfully");
                 // setSendEmail(false)
             } catch {
-               
+
                 setError(true);
                 setErrorMessage("An error occurred while sending the email");
             }
@@ -657,7 +665,7 @@ const useTripsheet = () => {
                     tripsheetdate: selectedBookingDate,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
                     // driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-                    driverName:selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
                     totaldays: calculateTotalDays(),
@@ -702,10 +710,10 @@ const useTripsheet = () => {
                 if (sendEmail) {
                     await handlecheck();
                 }
-                if(smsguest){
+                if (smsguest) {
                     await handleSendSMS()
                 }
-                if(DriverSMS){
+                if (DriverSMS) {
                     await handleDriverSendSMS()
                 }
 
@@ -1443,8 +1451,8 @@ const useTripsheet = () => {
             try {
                 const dataToSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-                    driverName:selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
-                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                    // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
@@ -1535,6 +1543,19 @@ const useTripsheet = () => {
         }
     };
 
+    const siganturediaglogclose = () => {
+        setSignaturepopup(false)
+    }
+
+    const handlesignaturemageDownload = () => {
+        const link = document.createElement('a');
+        link.href = signimageUrl;
+        link.download = 'image.png'; // You can change the file name and extension as needed
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
 
     const getSignatureImage = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -1542,7 +1563,9 @@ const useTripsheet = () => {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
                 if (response.status === 200) {
+                    // console.log(response,"kk")
                     const imageUrl = URL.createObjectURL(await response.blob());
+                    // console.log(imageUrl,"gata")
                     setSignImageUrl(imageUrl);
                 }
             }
@@ -1550,6 +1573,47 @@ const useTripsheet = () => {
             console.log(err, 'error');
         }
     };
+    const handleFileChangesignature = async (event) => {
+        const file = event.target.files[0];
+        const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
+        // console.log(tripiddata,"data")
+        if (file !== null) {
+            const formData = new FormData();
+            formData.append("signature_image", file);
+            try {
+                await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}`, formData);
+                getSignatureImage()
+
+
+
+            }
+            catch (err) {
+                console.log(err)
+            }
+
+
+        }
+        else {
+            return
+        }
+    };
+
+    const handlesignaturemageDelete = async () => {
+        const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
+        try {
+
+            const responsedata = await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
+            console.log(responsedata)
+            setSignaturepopup(false);
+            setSignImageUrl('')
+            getSignatureImage()
+        }
+        catch (err) {
+            console.log(err)
+
+        }
+    }
+
 
 
     const getMapImaage = async () => {
@@ -1658,7 +1722,7 @@ const useTripsheet = () => {
 
     //     fetchData();
     // }, [apiUrl, sendEmail, location, organizationdata]);
-    const dataname=localStorage.getItem('usercompany')
+    const dataname = localStorage.getItem('usercompany')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1679,9 +1743,9 @@ const useTripsheet = () => {
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
                         setTriggerData(!triggerdata)
-                       
+
                     }
-                    
+
                 }
 
                 else {
@@ -1694,7 +1758,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl,sendEmail,location,organizationdata,triggerdata,dataname]);
+    }, [apiUrl, sendEmail, location, organizationdata, triggerdata, dataname]);
 
 
 
@@ -1768,7 +1832,8 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const totalAmountCalc = () => {
-            const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
+            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
+            const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
         }
@@ -2081,10 +2146,11 @@ const useTripsheet = () => {
         isSignatureSubmitted,
         isEditMode,
         handleEdit,
-        SignPage,
+        // SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns,
-        handleimagedelete,
+        setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
+        setErrorMessage,
+        handleimagedelete, signaturepopup, siganturediaglogclose, handlesignaturemageDownload, signatureupload, setSignatureupload, setSignaturepopup, handleFileChangesignature, getSignatureImage, handlesignaturemageDelete, setSign, setLink,
 
 
     };

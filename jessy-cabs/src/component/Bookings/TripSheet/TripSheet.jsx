@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
@@ -97,6 +97,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
+
 import {
   vehicaleinfos
 } from "../../Bookings/BookingMain/Booking/Booking";
@@ -149,6 +150,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
 
 
 
@@ -230,11 +232,13 @@ const TripSheet = ({ stationName, logoImage }) => {
     isSignatureSubmitted,
     isEditMode,
     handleEdit,
-    SignPage, driverdetails,
+    // SignPage, 
+    driverdetails,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange,
-    open, handleClose, handleTransferChange, transferreport
+    totalcalcAmount, escort, handleEscortChange, setSign, setLink, setError,
+    setErrorMessage,
+    open, handleClose, handleTransferChange, transferreport, signaturepopup, setSignaturepopup, siganturediaglogclose, handlesignaturemageDownload, setSignatureupload, handleFileChangesignature, getSignatureImage, handlesignaturemageDelete
 
   } = useTripsheet();
 
@@ -247,6 +251,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   // Permission ------------ayyan
   const { permissions } = useContext(PermissionContext)
+  const fileInputRefdata = useRef(null);
 
   const Tripsheet_read = permissions[3]?.read;
   const Tripsheet_new = permissions[3]?.new;
@@ -271,6 +276,66 @@ const TripSheet = ({ stationName, logoImage }) => {
     closeDate: '',
     totalDays: '',
   })
+
+  const handlesignatureimages = () => {
+
+    getSignatureImage()
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+    if (!tripid) {
+
+      setError(true);
+      setErrorMessage("Enter The Tripid")
+      return
+    }
+    else if (signimageUrl === "") {
+      if (fileInputRefdata.current) {
+        fileInputRefdata.current.click();
+        setSignatureupload(false)
+
+      } else {
+        console.error("File input ref is not available");
+      }
+    } else {
+      setSignaturepopup(true);
+      getSignatureImage()
+    }
+  }
+  const textRef = useRef();
+
+
+  const SignPage = async (event) => {
+    event.preventDefault();
+    console.log("link", link)
+    if (link) {
+      const textElement = textRef.current;
+      navigator.clipboard.writeText(textElement.textContent).then(() => {
+        setSign(true)
+        setTimeout(() => {
+          setSign(false)
+          setLink("")
+        }, 2000)
+
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+
+    } else {
+      alert("no link data ", link)
+    }
+  }
+
+  // const handleCopyClick = () => {
+  //   const textElement = textRef.current;
+  //   navigator.clipboard.writeText(textElement.textContent).then(() => {
+  //     alert('Text copied to clipboard');
+  //   }).catch(err => {
+  //     console.error('Failed to copy text: ', err);
+  //   });
+  // };
+
+
+
 
 
 
@@ -930,21 +995,21 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                   /> */}
                   <TextField
-                  margin="normal"
-                  size="small"
-                  id="pickup1"
-                  label="PickUp"
-                  name="pickup"
-                  autoComplete="new-password"
-                  value={
-                    formData.pickup ||
-                    selectedCustomerData.pickup ||
-                    formValues.pickup ||
-                    book.pickup ||
-                    ""
-                  }
-                  onChange={handleChange}
-                />
+                    margin="normal"
+                    size="small"
+                    id="pickup1"
+                    label="PickUp"
+                    name="pickup"
+                    autoComplete="new-password"
+                    value={
+                      formData.pickup ||
+                      selectedCustomerData.pickup ||
+                      formValues.pickup ||
+                      book.pickup ||
+                      ""
+                    }
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -2253,6 +2318,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                       </div>
+
                     </div>
                     <div className="input-field">
                       <div className="input">
@@ -2269,6 +2335,51 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
                       </div>
+                      <div className="input">
+                        <Button onClick={handlesignatureimages} variant="contained">Download signature</Button>
+                      </div>
+
+
+                      <input
+                        ref={fileInputRefdata}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChangesignature}
+                      />
+                      <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
+                        <DialogContent>
+                          <div
+                            style={{
+                              // display: "flex",
+                              overflowY: "auto",
+                              backgroundColor: "#E5E5E5"
+                            }}
+                          >
+
+                            <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
+                            <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
+                            </div>
+                          </div>
+
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => {
+                              handlesignaturemageDownload()
+                            }}
+                          >
+                            DOWNLOAD
+                          </Button>
+                          <Button variant="contained" onClick={() => {
+                            handlesignaturemageDelete()
+                          }} color="primary">
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                     </div>
                     <div className="input-field">
                       <div className="input">
@@ -2341,7 +2452,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <div>
                               <p>Copy this link to send to the passenger:</p>
                               <div className='link-blank-button'>
-                                <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
+                                <textarea ref={textRef} readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
                                 <button onClick={SignPage} className='signature'>Copy </button>
                               </div>
                               {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}

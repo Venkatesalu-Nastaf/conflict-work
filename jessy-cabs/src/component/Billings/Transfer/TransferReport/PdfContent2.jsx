@@ -202,7 +202,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const permitcharge = parseInt(permit)
     // const parkpermit = park + permitcharge
     const FullAmount = fullAmount + cgst + sgst
-    const formattedFullAmount = FullAmount.toFixed(2);
+    const formattedFullAmount = FullAmount.toFixed(0);
     const tripsheetnos = invdata?.length
     const rupeestext = numWords(parseInt(formattedFullAmount));
     return (
@@ -320,8 +320,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                 <View style={styles.lastsectionamount}>
                                     <Text style={{ fontSize: '12px', padding: '5px' }}>{fullAmount}</Text>
-                                    <Text style={styles.text2}>{cgst}</Text>
-                                    <Text style={styles.textgst}>{sgst}</Text>
+                                    <Text style={styles.text2}>{cgst.toFixed(0)}</Text>
+                                    <Text style={styles.textgst}>{sgst.toFixed(0)}</Text>
                                     <Text style={styles.text3}>{formattedFullAmount}</Text>
                                 </View>
                             </View>

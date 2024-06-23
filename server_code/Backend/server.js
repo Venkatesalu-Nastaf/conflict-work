@@ -354,7 +354,7 @@ app.post('/login', (req, res) => {
     }
     // console.log(process.env.JSON_SECERETKEY)
     const secretKey =process.env.JSON_SECERETKEY
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
@@ -398,22 +398,23 @@ app.use('/signimages', express.static(signatureDirectory));
 // app.use('/signimages', express.static('customer_master'));
 app.get('/get-signimage/:tripid', (req, res) => {
   const { tripid } = req.params;
+
   // const query = 'SELECT signature_path FROM signatures WHERE tripid = ?';
   const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
     if (err) {
-      return res.status(500).send('Internal Server Error');
+    return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
       // No record found for the given tripid
       return res.status(404).send('Image not found');
     }
-    if (!results[0].path) {
+  if (!results[0].path) {
       // Handle the case where the path is null or undefined
       return res.status(500).send('Internal Server Error: Image path is missing');
     }
     const imagePath = path.join(signatureDirectory, results[0].path);
-
+    
 
     // res.sendFile(imagePath, (err) => {
     //   if (err) {
@@ -425,8 +426,8 @@ app.get('/get-signimage/:tripid', (req, res) => {
 
         return res.status(404).send('File not found');
       }
-
-      // Send the file
+     
+// Send the file
       res.sendFile(imagePath);
 
     });
@@ -610,7 +611,6 @@ app.post('/generate-link/:tripid', (req, res) => {
     }
   });
 });
-
 
 function generateUniqueNumber() {
   return Math.floor(1000 + Math.random() * 9000);

@@ -119,7 +119,7 @@ const StationCreation = () => {
                   value={selectedCustomerData?.stationid || book.stationid}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  variant="standard"
+                  // variant="standard"
                   style={{ width: '100%' }}
                 />
               </div>
@@ -159,7 +159,16 @@ const StationCreation = () => {
                 <div className='icone'>
                   <AddHomeWorkIcon color='action' />
                 </div>
-                <TextField
+                <textarea
+                  id="remark"
+                  className='textarea-input'
+                  name="remark"
+                  rows="3"
+                  value={selectedCustomerData?.address || book.address}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+                {/* <TextField
                   size="small"
                   name="remark"
                   className='address-field'
@@ -170,7 +179,7 @@ const StationCreation = () => {
                   multiline
                   rows={4}
                   autoComplete="password"
-                />
+                /> */}
               </div>
 
               <div className='input' style={{ paddingRight: '15px' }}>
@@ -186,7 +195,7 @@ const StationCreation = () => {
                   value={selectedCustomerData?.gstno || book.gstno}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  variant="standard"
+                  // variant="standard"
                   style={{ width: '100%' }}
                 />
               </div>

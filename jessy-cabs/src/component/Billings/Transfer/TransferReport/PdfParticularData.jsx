@@ -10,8 +10,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, imagename, tripno }) => {
-  console.log(tripno, "tri", organisationdetail, "org", particularPdf, 'modelapdf', typeof (particularPdf), Array.isArray(particularPdf));
+const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationdetail, imagename, tripno }) => {
 
   const targetRef = useRef();
   const { setPdfPrint } = PdfData()
@@ -122,7 +121,7 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
-      
+
         customers = li.customer
         fueltype = li.fueltype
         employeeno = li.employeeno
@@ -160,7 +159,6 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
 
       })
     }
-    console.log(segment, "seg")
     setAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
@@ -200,7 +198,7 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
     setAddresscustomer(AddressCustomer1)
 
     setCalcPackages(packages)
-  }, [particularPdf,segment])
+  }, [particularPdf, segment])
 
   // useEffect(() => {
   //     let customername = '';
@@ -287,18 +285,13 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
           const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
           setAttachedImage(attachedImageUrls);
         }
-
-        else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
       }
       catch (err) {
         console.log(err, 'error');
       }
     }
     fetchData()
-  }, [apiUrl,tripno])
+  }, [apiUrl, tripno])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -307,12 +300,10 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
         const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data.files)
           const attachedImageUrls = data.files
           // const attachedImageUrls = data.files.map(path => `${apiUrl}/images/${path.path}`);
           // const imagepath=data.files.map
           // console.log(attachedImageUrls, "dataimgaeurls")
-          console.log(attachedImageUrls, "iiiiiiiiiiiiiiiii")
           setBookmailimage(attachedImageUrls);
         }
 
@@ -326,14 +317,14 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
       }
     }
     fetchData()
-  }, [apiUrl,tripno])
+  }, [apiUrl, tripno])
 
   const handlePopup = () => {
     setPdfPrint(false)
   }
 
-  
- 
+
+
 
   return (
     <>
@@ -352,7 +343,8 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
               </h3>
             </div>
             <div className="imagediv">
-              <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/>
+              {/* <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/> */}
+              <img src={logo} className="image" alt="organisationimage" />
               {/* <h2 className="organisationtext"> GST : {organisationdetails[0].gstnumber}</h2> */}
             </div>
 
@@ -485,7 +477,7 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
           </div>
           <div >
             {attachedImage ? <p className="attachtext">Attached Image</p> : <p className="attachtext"> No Attached Image</p>}
-            {attachedImage && Array.isArray(attachedImage) && attachedImage.length> 0 && attachedImage !== ""  ?
+            {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
               attachedImage.map((image, index) => (
                 <img key={index} src={image} alt='' className="attachimage" />
               ))
@@ -526,17 +518,17 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
                     onLoadSuccess={onDocumentLoadSuccess}
                   >
                     {Array.from(new Array(numPages), (el, index) => (
-                   
+
                       <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                     
+
                     ))}
                   </Document>
-                
+
                 </div>
               ) : (
                 <div key={index}>
                   <img src={`${apiUrl}/images/${image.path}`} alt={`image_${index}`} className="bookimage" />
-                  
+
                 </div>
               )
             ))

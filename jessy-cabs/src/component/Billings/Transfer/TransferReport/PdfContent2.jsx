@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
     // },
     text1: {
         fontSize: '17px',
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
     headtext: {
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
     billtext: {
         fontSize: '13px',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     gstno: {
         fontSize: '15px',
         fontWeight: 'bold',
-        marginRight:'40px'
+        marginRight: '40px'
     },
     text2: {
         fontSize: '13px',
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate,organisationname,imagename  }) => {
+const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename }) => {
     const [address1, setAddress1] = useState('')
     const [totalAmount, setTotalAmount] = useState('')
     const [extraKmAmount, setExtraKmAmount] = useState('')
@@ -158,8 +158,8 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
     const [permit, setPermit] = useState('')
     const [gst, setGst] = useState('')
     const apiUrl = APIURL;
-    const organisationdetailfill=organisationname
-    const organisationimage=imagename
+    const organisationdetailfill = organisationname
+    const organisationimage = imagename
     useEffect(() => {
         if (invdata) {
             let totalamount = 0
@@ -195,14 +195,14 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
         }
     }, [apiUrl, customeraddress])
 
-    const fullAmount = parseInt(totalAmount) + parseInt(extraKmAmount)
+    const fullAmount = parseInt(totalAmount)
     const cgst = fullAmount * 2.5 / 100
     const sgst = fullAmount * 2.5 / 100
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
     // const parkpermit = park + permitcharge
-    const FullAmount = fullAmount + cgst + sgst + park + permitcharge
-    const formattedFullAmount = FullAmount.toFixed(2);
+    const FullAmount = fullAmount + cgst + sgst
+    const formattedFullAmount = FullAmount.toFixed(0);
     const tripsheetnos = invdata?.length
     const rupeestext = numWords(parseInt(formattedFullAmount));
     return (
@@ -220,18 +220,18 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
                             <Text style={styles.text2}>booking@jessycabs.in</Text>
                             <Text style={styles.text2}>Tel:044-24354247,Mob:9841505689 </Text> */}
                             <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
-        <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
-        <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone},Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
+                            <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
+                            <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
+                            <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
+                            <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone},Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
 
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                {/* <Image src={Logo} style={styles.logo} /> */}
-                                <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} />
+                                <Image src={logo} style={styles.logo} />
+                                {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
                             </View>
-                            <View style={{ flexDirection: 'row',marginRight:'70px' }}>
+                            <View style={{ flexDirection: 'row', marginRight: '70px' }}>
                                 {/* <Text style={styles.gstno}>GSTIN  :  33AALCCn0190M1ZK</Text> */}
                                 <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text>
                             </View>
@@ -320,8 +320,8 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
 
                                 <View style={styles.lastsectionamount}>
                                     <Text style={{ fontSize: '12px', padding: '5px' }}>{fullAmount}</Text>
-                                    <Text style={styles.text2}>{cgst}</Text>
-                                    <Text style={styles.textgst}>{sgst}</Text>
+                                    <Text style={styles.text2}>{cgst.toFixed(0)}</Text>
+                                    <Text style={styles.textgst}>{sgst.toFixed(0)}</Text>
                                     <Text style={styles.text3}>{formattedFullAmount}</Text>
                                 </View>
                             </View>

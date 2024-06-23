@@ -262,7 +262,16 @@ const Employe = () => {
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                <TextField
+                <textarea
+                  id="address1"
+                  className='textarea-input'
+                  name="address1"
+                  rows="3"
+                  value={selectedCustomerData?.address1 || book.address1}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+                {/* <TextField
                   margin="normal"
                   id="address1"
                   className="full-width"
@@ -274,7 +283,7 @@ const Employe = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                />
+                /> */}
               </div>
               <div className="input">
                 <div className="icone">

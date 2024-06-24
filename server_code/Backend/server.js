@@ -348,8 +348,8 @@ app.post('/login', (req, res) => {
     // console.log(process.env.JSON_SECERETKEY)
     // const secretKey = process.env.JSON_SECERETKEY
     // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
-    const secretKey = process.env.JSON_SECERETKEY
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
+    // const secretKey = process.env.JSON_SECERETKEY
+    // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
@@ -643,19 +643,19 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 //     // console.log(error,"gggggggg")
 //     res.status(400).json({ message: 'expired token' });
 //   }
-const authenticateJWT = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  if (!token) return res.status(401).json({ message: 'Authentication failed' });
+// const authenticateJWT = (req, res, next) => {
+//   const token = req.header('x-auth-token');
+//   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-  try {
-    const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(400).json({ message: 'expired token' });
-  }
+//   try {
+//     const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
+//     req.user = decoded;
+//     next();
+//   } catch (error) {
+//     res.status(400).json({ message: 'expired token' });
+//   }
 
-};
+// };
 
 
 app.get('/use-permissions/:userid', (req, res) => {

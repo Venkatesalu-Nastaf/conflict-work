@@ -31,14 +31,23 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
+    .side-bar-menu-close .form-container-BillingMain .container-main {
+        width: 96vw;
+    }
+
     .form-container-BillingMain .container-main {
-        width: 76vw !important;
+        width: 76vw;
     }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
+
+    .side-bar-menu-close .form-container-BillingMain .container-main {
+        width: 96vw;
+    }
+
     .form-container-BillingMain .container-main {
-        width: 70vw !important;
+        width: 70vw;
     }
 }
 
@@ -68,6 +77,12 @@
 .form-container-BillingMain .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
+}
+
+@media screen and (min-width: 769px) {
+    .side-bar-menu-close .form-container-BillingMain .container-main {
+        width: 96vw;
+    }
 }
 
 .form-container-BillingMain .container-main {

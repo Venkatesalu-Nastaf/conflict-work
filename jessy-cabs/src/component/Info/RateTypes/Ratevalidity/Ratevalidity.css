@@ -47,6 +47,12 @@
     outline: 1px solid transparent;
 }
 
+@media screen and (min-width: 769px) {
+    .side-bar-menu-close .form-container-ratetype .container-main {
+        width: 96vw;
+    }
+}
+
 .form-container-ratetype .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
@@ -123,7 +129,7 @@
     top: 30px;
 }
 
-.rate-validity-table{
+.rate-validity-table {
     height: 400px;
     width: 100%;
 }

@@ -48,6 +48,12 @@
     outline: 1px solid transparent;
 }
 
+@media screen and (min-width: 769px) {
+    .side-bar-menu-close .form-container-PackageRateEntery .container-main {
+        width: 96vw;
+    }
+}
+
 .form-container-PackageRateEntery .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
@@ -181,7 +187,7 @@
     margin: 10px 0px 0px 10px;
 }
 
-.package-rate-entry-table{
+.package-rate-entry-table {
     height: 400px;
     width: 100%;
 }

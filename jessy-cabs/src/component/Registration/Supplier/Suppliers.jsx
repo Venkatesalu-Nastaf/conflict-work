@@ -15,7 +15,7 @@ const Suppliers = ({ stationName }) => {
         setValue(newValue);
     };
     return (
-        <div className="form-container">
+        <div className="form-container form-container-supplier">
             <div className="container-main">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>

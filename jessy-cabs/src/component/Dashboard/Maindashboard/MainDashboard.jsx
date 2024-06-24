@@ -12,7 +12,7 @@ import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
 import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
-import { useData } from "./DataContext"; //- data contaxt
+import { useData1 } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
 // import { FaPowerOff } from "react-icons/fa";
@@ -39,9 +39,10 @@ const MainDashboard = () => {
 
   const apiUrl = APIURL;
   // const { sharedData, setFilteredData,datatriguserinfo } = useData();
-  const { setFilteredData,datatriguserinfo } = useData();
+  // const { setFilteredData,datatriguserinfo } = useData();
+  const { setFilteredData, datatriguserinfo,expanded,setExpanded} = useData1();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(true);
+  // const [expanded, setExpanded] = useState(true);
   const { selectedTheme,setSelectedAvatar,selectedavtar, setSelectedTheme } = useThemes();
   // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
@@ -58,6 +59,16 @@ const MainDashboard = () => {
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
  
 
+// ------------
+
+const [sendTrue,setSendTrue] = useState("");
+const sendTrueValue =(datavaule)=>{
+  setSendTrue(datavaule);
+}
+
+console.log(expanded,"expandedd");
+
+// ------------
   // useEffect(() => {
 
   //   setSelectedImage(sharedData)
@@ -139,7 +150,7 @@ const MainDashboard = () => {
   //     };
   //   }
   // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
-   const IDLE_TIMEOUT_DURATION = 60 * 1000;
+  const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
   //  const INACTIVITY_CHECK_INTERVAL = 1000;
   //  console.log(IDLE_TIMEOUT_DURATION ,"min")
   const checkinactivity=()=>{
@@ -189,6 +200,7 @@ useEffect(()=>{
     
     return ()=>clearInterval(checkintrvval)
 },[])
+
 
   
 
@@ -362,8 +374,9 @@ useEffect(()=>{
         <section
           className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}
         >
-          <div className="glass">
-            <Sidebar expanded={expanded} />
+          {/* <div className="glass"> */}
+          <div className={`glass ${expanded ? 'side-bar-menu-open' : 'side-bar-menu-close'}`}>
+            <Sidebar onData={sendTrueValue} expanded={expanded} />
             <div className="header-user">
               <div className="avatar-item">
                 <Tooltip title={`Hi ${storedUsername}`} arrow>

@@ -60,14 +60,24 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
+
+    .side-bar-menu-close .form-container-ratetype .container-main {
+        width: 96vw;
+    }
+
     .form-container-ratetype .container-main {
-        width: 76vw !important;
+        width: 76vw;
     }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
+
+    .side-bar-menu-close .form-container-ratetype .container-main {
+        width: 96vw;
+    }
+
     .form-container-ratetype .container-main {
-        width: 70vw !important;
+        width: 70vw;
     }
 }
 
@@ -131,11 +141,11 @@
     }
 }
 
-.ratetype-startdate-icon{
+.ratetype-startdate-icon {
     padding-top: 20px;
 }
 
-.ratetype-table{
+.ratetype-table {
     height: 400px;
     width: 100%;
 }

@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
-  console.log("selectedImage", selectedImage)
+
 
   const targetRef = useRef();
   return (

@@ -8,7 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import VehicleStatement from './VehicleStatement/VehicleStatement';
 import TripStatus from './TripStatus/TripStatus';
 
-const TripStatusMain = ({ stationName }) => {
+const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
     const [value, setValue] = React.useState("tripstatus");
 
     const handleChange = (event, newValue) => {
@@ -26,7 +26,7 @@ const TripStatusMain = ({ stationName }) => {
                                 <Tab label="VehicleStatement" value="vehicleStatement" />
                             </TabList>
                         </Box>
-                        <TabPanel value="tripstatus"><TripStatus stationName={stationName} /></TabPanel>
+                        <TabPanel value="tripstatus"><TripStatus stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> /></TabPanel>
                         <TabPanel value="vehicleStatement"><VehicleStatement /></TabPanel>
                     </TabContext>
                 </Box>

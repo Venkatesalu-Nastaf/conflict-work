@@ -681,10 +681,10 @@ const Booking = ({ stationName }) => {
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
-               <TextField
+              <TextField
                 margin="normal"
-                  size="small"
-               name="report"
+                size="small"
+                name="report"
                 className="full-width"
                 autoComplete="new-password"
                 value={
@@ -694,9 +694,9 @@ const Booking = ({ stationName }) => {
                   ""
                 }
                 onChange={handleChange}
-                  label="Report"
+                label="Report"
                 id="Report"
-                
+
               />
             </div>
             <div className="input booking-payment-type-input">
@@ -771,7 +771,7 @@ const Booking = ({ stationName }) => {
                 </LocalizationProvider>
               </div>
             </div>
-
+            {/* 
             <div>
               <div className="input time booking-start-time-input">
                 <div className="icone">
@@ -804,37 +804,7 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
 
-            {/* <div>
-              <div className="input time">
-                <div className="icone">
-                  <MdOutlineAccessTimeFilled />
-                </div>
-                <div className="input-type-grid">
-                  <label>Start Time</label>
-                  <input
-                    type="time"
-                    id="starttime"
-                    value={
-                      formData.starttime ||
-                      selectedCustomerData.starttime ||
-                      book.starttime ||
-                      ""
-                    }
-                    onChange={(event) => {
-                      setFormData({ ...formData, starttime: event.target.value });
-                      setSelectedCustomerData({
-                        ...selectedCustomerData,
-                        starttime: event.target.value,
-                      });
-                      setBook({ ...book, starttime: event.target.value });
-                      setStartTime(event.target.value);
-                    }}
-                    name="starttime"
-                  />
-                </div>
-              </div>
-            </div> */}
-
+  
             <div>
               <div className="input time booking-start-time-input">
                 <div className="icone">
@@ -863,42 +833,58 @@ const Booking = ({ stationName }) => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* <div>
-              <div className="input time">
+            <div>
+              <div className="input time booking-start-time-input">
                 <div className="icone">
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  <label>Report Time</label>
-                  <input
+                  <label>ShedOut Time</label>   <input
                     type="time"
                     id="reporttime"
                     name="reporttime"
-                    value={
-                      formData.reporttime ||
-                      selectedCustomerData.reporttime ||
-                      book.reporttime ||
-                      ""
-                    }
+                    value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime}
                     onChange={(event) => {
                       setBook({ ...book, reporttime: event.target.value });
                       setreporttime(event.target.value);
-                      setFormData({
-                        ...formData,
-                        reporttime: event.target.value,
-                      });
-                      setSelectedCustomerData({
-                        ...selectedCustomerData,
-                        reporttime: event.target.value,
-                      });
+                      setFormData({ ...formData, reporttime: event.target.value });
+                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
+
                     }}
                   />
                 </div>
               </div>
-            </div> */}
+            </div>
 
+            <div>
+              <div className="input time booking-start-time-input">
+                <div className="icone">
+                  <MdOutlineAccessTimeFilled />
+                </div>
+                <div className="input-type-grid">
+                  {reportTimeVar && ((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || !reportTimeVar && <label> Start Time</label>}
+
+                  <input
+                    type="time"
+                    id="starttime"
+                    value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
+                    onChange={(event) => {
+                      const sTime = event.target.value;
+                      if (reportTimeVar && sTime <= reportTimeVar) {
+                        return;
+                      }
+                      setFormData({ ...formData, starttime: event.target.value });
+                      setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                      setBook({ ...book, starttime: event.target.value });
+                      setStartTime(event.target.value);
+                    }}
+                    name="starttime"
+                  />
+                </div>
+              </div>
+            </div>
 
           </div>
 

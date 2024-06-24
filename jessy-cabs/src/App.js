@@ -170,8 +170,32 @@ function App() {
 
   }, [logotrigger, fetchOrgLogo])
 
-  //-------------------------------------------------------------------------------------------------
+  //--------------------------------------------
+  // vehicle No 
+  const [vehicleNo, setVehicleNo] = useState([])
 
+  const getVehicleNo = async () => {
+    const response = await axios.get(`${apiUrl}/get-vehicleNo`)
+    setVehicleNo(response.data.data)
+    console.log("vehcicle no app", response.data.data)
+  }
+
+
+  //-------------------------------------------
+  const [customer, setCustomer] = useState()
+
+  const getCustomer = async () => {
+    const response = await axios.get(`${apiUrl}/get-customer`)
+    setCustomer(response.data)
+    console.log("customer app", response.data)
+  }
+
+  useEffect(() => {
+    getVehicleNo()
+    getCustomer()
+  }, [])
+
+  //-------------------------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -212,7 +236,7 @@ function App() {
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} /> : <NoPermission />}
+                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>

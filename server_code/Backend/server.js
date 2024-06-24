@@ -353,7 +353,7 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
     // console.log(process.env.JSON_SECERETKEY)
-    const secretKey =process.env.JSON_SECERETKEY
+    const secretKey = process.env.JSON_SECERETKEY
     const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
@@ -403,18 +403,18 @@ app.get('/get-signimage/:tripid', (req, res) => {
   const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
     if (err) {
-    return res.status(500).send('Internal Server Error');
+      return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
       // No record found for the given tripid
       return res.status(404).send('Image not found');
     }
-  if (!results[0].path) {
+    if (!results[0].path) {
       // Handle the case where the path is null or undefined
       return res.status(500).send('Internal Server Error: Image path is missing');
     }
     const imagePath = path.join(signatureDirectory, results[0].path);
-    
+
 
     // res.sendFile(imagePath, (err) => {
     //   if (err) {
@@ -426,8 +426,8 @@ app.get('/get-signimage/:tripid', (req, res) => {
 
         return res.status(404).send('File not found');
       }
-     
-// Send the file
+
+      // Send the file
       res.sendFile(imagePath);
 
     });
@@ -580,7 +580,7 @@ app.get('/get-profileimage/:tripid', (req, res) => {
     res.json({ imagePaths });
   });
 });
- console.log(process.env.FRONTEND_APIURL,"kk")
+console.log(process.env.FRONTEND_APIURL, "kk")
 
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
@@ -641,7 +641,7 @@ const authenticateJWT = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
   try {
-    const decoded = jwt.verify(token,process.env.JSON_SECERETKEY);
+    const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
     req.user = decoded;
     // console.log(decoded,"dee")
     next();
@@ -653,7 +653,7 @@ const authenticateJWT = (req, res, next) => {
 };
 
 
-app.get('/use-permissions/:userid',authenticateJWT, (req, res) => {
+app.get('/use-permissions/:userid', authenticateJWT, (req, res) => {
   const userid = req.params.userid;
 
   const sql = `select * from user_permissions where user_id=?`;
@@ -663,6 +663,33 @@ app.get('/use-permissions/:userid',authenticateJWT, (req, res) => {
   })
 })
 
+app.get('/get-vehicleNo', (req, res) => {
+  const sql = `select vehRegNo from vehicleinfo`
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log("vehicleno fetching error", err)
+      return
+    }
+    if (result) {
+      return res.json({ data: result, success: "true" })
+    }
+    return
+  })
+})
+
+app.get(`/get-customer`, (req, res) => {
+  const sql = `select customer from customers`
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log("error fetching CUSTOMER ", err)
+      return
+    }
+    if (result) {
+      return res.json(result)
+    }
+    return
+  })
+})
 
 
 

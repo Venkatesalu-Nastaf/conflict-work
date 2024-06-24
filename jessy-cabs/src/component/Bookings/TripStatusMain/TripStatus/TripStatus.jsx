@@ -53,9 +53,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
-  console.log("customer", customer,)
-  console.log("vehicleNo", vehicleNo,)
-
   const {
     statusvalue, handlestatusChange, VehNo, cutomerName,
     fromDate, handleVechicleNoChange, handleCustomerChange,

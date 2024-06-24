@@ -168,7 +168,6 @@ const useTripsheet = () => {
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
             const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            console.log(response.data.link, "linkffsd")
             const data = response.data.link
             setLink(data);
             getSignatureImage()
@@ -179,10 +178,8 @@ const useTripsheet = () => {
 
     // const SignPage = async (event) => {
     //     event.preventDefault();
-    //     console.log("link", link)
     //     if (link) {
     //         await navigator.clipboard.writeText(link);
-    //         console.log("text--", navigator.clipboard.writeText(link))
     //         setSign(true)
     //         setTimeout(() => {
     //             setSign(false)
@@ -195,11 +192,9 @@ const useTripsheet = () => {
 
     const SignPage = async (event) => {
         event.preventDefault();
-        console.log("link", link);
         if (link) {
             try {
                 await navigator.clipboard.writeText(link);
-                console.log("Text copied to clipboard:", link);
                 setSign(true);
                 setTimeout(() => {
                     setSign(false);
@@ -241,7 +236,6 @@ const useTripsheet = () => {
             document.body.removeChild(textArea);
 
             // Set the confirmation message
-            console.log("Text copied to clipboard:", link);
             setSign(true);
             setTimeout(() => {
                 setSign(false);
@@ -271,14 +265,12 @@ const useTripsheet = () => {
                 return;
             }
             const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-            console.log(" map---", response)
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
-            console.log("imageUrl", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
@@ -1830,9 +1822,7 @@ const useTripsheet = () => {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
                 if (response.status === 200) {
-                    // console.log(response,"kk")
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    // console.log(imageUrl,"gata")
                     setSignImageUrl(imageUrl);
                 }
             }
@@ -1843,7 +1833,6 @@ const useTripsheet = () => {
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
-        // console.log(tripiddata,"data")
         if (file !== null) {
             const formData = new FormData();
             formData.append("signature_image", file);
@@ -1870,7 +1859,6 @@ const useTripsheet = () => {
         try {
 
             const responsedata = await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
-            console.log(responsedata)
             setSignaturepopup(false);
             setSignImageUrl('')
             getSignatureImage()

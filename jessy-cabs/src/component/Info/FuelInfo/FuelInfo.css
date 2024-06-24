@@ -29,6 +29,12 @@
   font-weight: 500;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .FuelInfo-main .FuelInfo-form-container {
+    width: 96vw;
+  }
+}
+
 .FuelInfo-main .FuelInfo-form-container {
   border: 2px solid #ccc;
   overflow: scroll;
@@ -43,7 +49,7 @@
 
 @media screen and (max-width: 768px) {
   .FuelInfo-main .FuelInfo-form-container {
-      width: 93vw;
+    width: 93vw;
   }
 }
 

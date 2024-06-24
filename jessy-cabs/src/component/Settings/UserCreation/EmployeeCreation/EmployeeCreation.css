@@ -6,6 +6,11 @@
   color: #000;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .EmployeeCreation-main .EmployeeCreation-form-container {
+    width: 96vw;
+  }
+}
 
 .EmployeeCreation-main .EmployeeCreation-form-container {
   overflow: scroll;

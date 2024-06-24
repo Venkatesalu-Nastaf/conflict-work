@@ -84,6 +84,12 @@
     outline: 1px solid transparent;
 }
 
+@media screen and (min-width: 769px) {
+    .side-bar-menu-close .form-container-UserSettings .container-main {
+      width: 96vw;
+    }
+  }
+
 .form-container-UserSettings .container-main {
     border: 2px solid #ccc;
     overflow: scroll;

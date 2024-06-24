@@ -104,7 +104,7 @@ const Customer = ({ stationName }) => {
   const Customer_delete = permissions[19]?.delete;
 
   return (
-    <div className="form-container">
+    <div className="form-container form-container-customer">
       <div className="customer-form">
         <form onSubmit={handleClick}>
           <p className="head-tab-customer">

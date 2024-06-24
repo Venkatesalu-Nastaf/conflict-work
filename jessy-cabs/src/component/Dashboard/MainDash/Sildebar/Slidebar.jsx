@@ -52,6 +52,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import update from "../../../../assets/img/update.png";
 import { useThemes } from "../../../UserSettings/Themes/ThemesContext";
+import { useData1 } from "../../Maindashboard/DataContext";
+
 
 const MenuItem = ({
   label,
@@ -97,13 +99,13 @@ const MenuItem = ({
 };
 
 const Sidebar = () => {
-
   const location = useLocation();
+  
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const currentPath = location.pathname;
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {},
     "@keyframes ripple": {},
@@ -135,7 +137,8 @@ const Sidebar = () => {
 
   //--------------------------to show logo-----------
 
-  const { logo } = useData();
+  const { logo} = useData();
+  const {expanded,setExpanded}=useData1()
   const { selectedavtar } = useThemes();
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
@@ -432,7 +435,9 @@ const Sidebar = () => {
       return;
     }
   }
+function sampleDemo(){
 
+}
 
   //------------------------------------------------------------------
 
@@ -441,7 +446,9 @@ const Sidebar = () => {
       <div
         className={`bars ${expanded ? "bars" : "closedsidebar"}`}
         onClick={() => setExpanded(!expanded)}
+
       >
+         
         <AiOutlineBars />
       </div>
       <motion.div
@@ -660,8 +667,23 @@ const Sidebar = () => {
                 icon={BiHomeAlt}
               />}
 
+              {booking_page_permission &&
+                <div className='desktop-menu-without-dropdown'>
+                  <MenuItem
+                    label="Booking"
+                    to={BOOKING && ("/home/bookings/booking")}
+                    alt="/home/bookings/booking"
+                    value="/home/bookings"
+                    menuItemKey="/home/bookings"
+                    name="Booking page"
+                    isActive={isActive}
+                    handleMenuItemClick={handleMenuItemClick}
+                    icon={HiOutlineUsers}
+                  />
+                </div>
+              }
 
-              <motion.div>
+              <motion.div className='mobile-menu-with-dropdown'>
                 <MenuItem
                   label={
                     <span className="sidebar-main-menu">
@@ -681,6 +703,7 @@ const Sidebar = () => {
                   icon={HiOutlineUsers}
                 />
               </motion.div>
+
               {bookingDropdownVisible && (
                 <div className="settings-dropdown">
                   <div className="settings-dropdown-links">
@@ -715,7 +738,22 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-              <motion.div>
+              {Billing_permission &&
+                <div className='desktop-menu-without-dropdown'>
+                  <MenuItem
+                    label="Billing"
+                    to={BILLING && ("/home/billing/billing")}
+                    // to={"/home/billing/billing"}
+                    alt="/home/billing/billing"
+                    value="/home/billing"
+                    menuItemKey="/home/billing"
+                    name="Billing page"
+                    isActive={isActive}
+                    handleMenuItemClick={handleMenuItemClick}
+                    icon={BiBarChartSquare}
+                  />
+                </div>}
+              <motion.div className='mobile-menu-with-dropdown'>
                 <MenuItem
                   label={
                     <span className="sidebar-main-menu">
@@ -769,7 +807,22 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-              <motion.div>
+              {Register_page_permission &&
+                <div className='desktop-menu-without-dropdown'>
+                  <MenuItem
+                    label="Register"
+                    to={REGISTER && ("/home/registration/customer")}
+                    alt="/home/registration/customer"
+                    value="/home/registration"
+                    menuItemKey="/home/registration"
+                    name="Register page"
+                    isActive={isActive}
+                    handleMenuItemClick={handleMenuItemClick}
+                    icon={BiNotepad}
+                  />
+                </div>
+              }
+              <motion.div className='mobile-menu-with-dropdown'>
                 <MenuItem
                   label={
                     <span className="sidebar-main-menu">
@@ -823,7 +876,21 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-              <motion.div >
+              {Setting_page_permission &&
+                <div className='desktop-menu-without-dropdown'>
+                  <MenuItem
+                    label="Settings"
+                    to={SETTING && ("/home/settings/usercreation")}
+                    alt="/home/settings/usercreation"
+                    value="/home/settings"
+                    menuItemKey="/home/settings"
+                    name="Settings page"
+                    isActive={isActive}
+                    handleMenuItemClick={handleMenuItemClick}
+                    icon={AiOutlineSetting}
+                  />
+                </div>}
+              <motion.div className='mobile-menu-with-dropdown'>
                 <MenuItem
                   label={
                     <span className="sidebar-main-menu">
@@ -880,7 +947,21 @@ const Sidebar = () => {
                   </div>
                 </div>
               )}
-              <motion.div >
+              {Info_page_permission &&
+                <div className='desktop-menu-without-dropdown'>
+                  <MenuItem
+                    label="Info"
+                    to={INFO && ("/home/info/ratetype")}
+                    alt="/home/info/ratetype"
+                    value="/home/info"
+                    menuItemKey="/home/info"
+                    name="Info page"
+                    isActive={isActive}
+                    handleMenuItemClick={handleMenuItemClick}
+                    icon={AiOutlineInfoCircle}
+                  />
+                </div>}
+              <motion.div className='mobile-menu-with-dropdown'>
                 <MenuItem
                   label={
                     <span className="sidebar-main-menu">
@@ -1072,6 +1153,7 @@ const Sidebar = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
     </>
   );
 };

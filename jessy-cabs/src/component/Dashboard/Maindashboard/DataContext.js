@@ -7,7 +7,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 const DataContext = createContext();
 
-export const useData = () => {
+export const useData1 = () => {
     return useContext(DataContext);
 };
 
@@ -16,6 +16,7 @@ export const DataProvider = ({ children }) => {
     const [sharedData, setSharedData] = useState('');
     const [filteredData, setFilteredData] = useState([])
     const [datatriguserinfo,SetDataTrigUser]=useState('')
+    const [expanded,setExpanded]=useState(false)
 
 
     // useEffect(() => {
@@ -39,7 +40,7 @@ export const DataProvider = ({ children }) => {
     // }, [sharedData, setSharedData]);
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData, filteredData, setFilteredData,datatriguserinfo,SetDataTrigUser }}>
+        <DataContext.Provider value={{ sharedData, setSharedData, filteredData, setFilteredData,datatriguserinfo,SetDataTrigUser,expanded,setExpanded }}>
             {children}
         </DataContext.Provider>
     );

@@ -48,8 +48,8 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
     }
 
     let vehtypes = result.map(obj => obj.vehicleName);
-    // console.log(vehtypes,'vehtypes');
-    db.query('select vehicleName, fueltype ,segement ,Groups from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
+    
+    db.query('select vehicleName, fueltype ,segement from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
       if (err) {
 
         return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -60,9 +60,10 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       // console.log(result1,'result vehicle');
       const vehicleDataMap = {};
       result1.forEach(row => {
-        vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
+        vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement};
 
       });
+     
       db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -83,11 +84,12 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
 
         // Add fueltype to each object in the result array
         result.forEach(obj => {
-          const vehicleData = vehicleDataMap[obj.vehType];
+          
+          const vehicleData = vehicleDataMap[obj.vehicleName];
           const customerdetails = vehicleDataMap[obj.customer];
           obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
           obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
-          obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
+          // obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown'
         });
@@ -479,10 +481,9 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         ts.*, 
         vi.fueltype AS fueltype, 
         vi.segement AS segment, 
-        vi.Groups AS Groups, 
         c.gstTax AS gstTax,
         c.address1 AS Customeraddress1,
-        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.FileName)) AS bookattachedimage,
+        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.path)) AS bookattachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
         JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
@@ -490,7 +491,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     FROM 
         tripsheet AS ts
     LEFT JOIN 
-        vehicleinfo AS vi ON ts.vehType = vi.vehicleName
+        vehicleinfo AS vi ON ts.vehicleName = vi.vehicleName
     LEFT JOIN 
         customers AS c ON ts.customer = c.customer
     LEFT JOIN 
@@ -502,7 +503,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     LEFT JOIN 
         tripsheetupload AS us ON ts.tripid = us.tripid
     LEFT JOIN 
-        booking_doc AS tri ON ts.tripid = tri.bookingno
+        booking_doc AS tri ON ts.tripid = tri.booking_id
     WHERE 
         ts.customer = ? AND ts.tripid = ?
     GROUP BY 
@@ -523,7 +524,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
   Promise.all(promises)
     .then(results => {
-
+    
       return res.status(200).json(results);
     })
     .catch(error => {

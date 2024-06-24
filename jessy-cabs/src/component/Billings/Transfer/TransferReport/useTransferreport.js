@@ -40,11 +40,10 @@ const useTransferreport = () => {
   const [pdfzipdata, setPdfzipdata] = useState([])
   const location = useLocation()
   const { transferReport, setTransferReport } = PdfData()
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId"
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId",
     ];
 
     const formData = {};
@@ -185,8 +184,6 @@ const useTransferreport = () => {
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
-        // console.log(tripid,customer,'11tripid');
-
         if (!customer || !tripid) return
 
         const response = await fetch(
@@ -212,7 +209,6 @@ const useTransferreport = () => {
               ...row,
               id: index + 1,
             }));
-            console.log(rowsWithUniqueId,'rows..');
             setRows(rowsWithUniqueId);
             // setSuccess(true);
             setSuccessMessage("successfully listed");
@@ -377,30 +373,30 @@ const useTransferreport = () => {
   }, [customer, servicestation, tripData, apiUrl]);
 
   const [attachedImage, setAttachedImage] = useState("");
-//  its is booking table or tripsheettabel
-//  i change api for booking mail pdf go to see booking.js
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const tripid = localStorage.getItem("selectedtripsheetid");
-        if (!tripid) {
-          return;
-        }
-        const response = await fetch(
-          `${apiUrl}/get-attachedmailimage/${tripid}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        const attachedImageUrls = data.imagePaths.map(
-          (path) => `${apiUrl}/images/${path}`
-        );
-        setAttachedImage(attachedImageUrls);
-      } catch { }
-    };
-    fetchData();
-  }, [apiUrl]);
+  //  its is booking table or tripsheettabel
+  //  i change api for booking mail pdf go to see booking.js
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const tripid = localStorage.getItem("selectedtripsheetid");
+  //       if (!tripid) {
+  //         return;
+  //       }
+  //       const response = await fetch(
+  //         `${apiUrl}/get-attachedmailimage/${tripid}`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       const attachedImageUrls = data.imagePaths.map(
+  //         (path) => `${apiUrl}/images/${path}`
+  //       );
+  //       setAttachedImage(attachedImageUrls);
+  //     } catch { }
+  //   };
+  //   fetchData();
+  // }, [apiUrl]);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -506,7 +502,6 @@ const useTransferreport = () => {
     };
     fetchData();
   }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
-
   return {
     rows,
     error,

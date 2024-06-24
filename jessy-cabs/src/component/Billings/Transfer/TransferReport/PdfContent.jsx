@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images }) => {
+const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images }) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -277,7 +277,6 @@ const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, custome
         driverBeta += parseInt(li.driverBeta_amount)
         return null
       })
-      // console.log(totalAmount,'totalAmount');
       setTotalAmount(totalamount)
       setParking(parkingamount)
       setPermit(permitamount)
@@ -314,16 +313,18 @@ const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, custome
   }, [apiUrl, customeraddress])
 
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
-  const cgst = fullAmount * 2.5 / 100
-  const sgst = fullAmount * 2.5 / 100
+  // const cgst = fullAmount * 2.5 / 100
+  // const sgst = fullAmount * 2.5 / 100
+  const cgst = Math.floor(fullAmount * 2.5 / 100);
+  const sgst = Math.floor(fullAmount * 2.5 / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
   const vpermit = parseInt(vpermettovendor)
   const vendorToll = parseInt(vendortoll)
-  const parkpermit = park + permitcharge + tollAmount + vpermit +vendorToll
+  const parkpermit = park + permitcharge + tollAmount + vpermit + vendorToll
   const FullAmount = fullAmount + cgst + sgst + parkpermit
-  const formattedFullAmount = FullAmount.toFixed(2);
+  const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
   return (
@@ -347,7 +348,7 @@ const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, custome
                   <View style={styles.logodiv}>
                     {/* <Image src={Logo} style={styles.logo} /> */}
                     {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
-                    <Image src={logo}  style={styles.logo} />
+                    <Image src={logo} style={styles.logo} />
                   </View>
                 </View>
                 <View style={styles.gst}>
@@ -417,9 +418,9 @@ const PdfContent = ({logo, invdata, invoiceno, invoiceDate, groupTripid, custome
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
-                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` :''} {item.pickup}</Text></View>
+                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
-                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{parseInt(item.permit)+parseInt(item.parking)+parseInt(item.toll)+parseInt(item.vpermettovendor)+parseInt(item.vendortoll)}</Text></View>
+                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{parseInt(item.permit) + parseInt(item.parking) + parseInt(item.toll) + parseInt(item.vpermettovendor) + parseInt(item.vendortoll)}</Text></View>
                             <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
                           </React.Fragment>
                         </View>

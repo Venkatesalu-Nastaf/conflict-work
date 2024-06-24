@@ -67,7 +67,7 @@ const MainDashboard = () => {
     setPopupOpen(false);
   };
 
-  const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
+  // const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {},
@@ -107,82 +107,88 @@ const MainDashboard = () => {
     [navigate,setMakeRender,setPermission]
   );
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (!localStorage.getItem("auth")) {
-      navigate("/");
-    } else {
-      let timeout;
+  //   if (!localStorage.getItem("auth")) {
+  //     navigate("/");
+  //   } else {
+  //     let timeout;
 
-      const resetIdleTimeout = () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        timeout = setTimeout(() => {
-          handleLogout();
-        }, IDLE_TIMEOUT_DURATION);
-      };
+  //     const resetIdleTimeout = () => {
+  //       if (timeout) {
+  //         clearTimeout(timeout);
+  //       }
+  //       timeout = setTimeout(() => {
+  //         handleLogout();
+  //       }, IDLE_TIMEOUT_DURATION);
+  //     };
 
-      const handleUserActivity = () => {
-        resetIdleTimeout();
-      };
+  //     const handleUserActivity = () => {
+  //       resetIdleTimeout();
+  //     };
 
-      window.addEventListener("mousemove", handleUserActivity);
-      window.addEventListener("keydown", handleUserActivity);
+  //     window.addEventListener("mousemove", handleUserActivity);
+  //     window.addEventListener("keydown", handleUserActivity);
 
-      resetIdleTimeout();
+  //     resetIdleTimeout();
 
-      return () => {
-        window.removeEventListener("mousemove", handleUserActivity);
-        window.removeEventListener("keydown", handleUserActivity);
-        clearTimeout(timeout);
-      };
+  //     return () => {
+  //       window.removeEventListener("mousemove", handleUserActivity);
+  //       window.removeEventListener("keydown", handleUserActivity);
+  //       clearTimeout(timeout);
+  //     };
+  //   }
+  // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
+   const IDLE_TIMEOUT_DURATION = 60 * 1000;
+  //  const INACTIVITY_CHECK_INTERVAL = 1000;
+  //  console.log(IDLE_TIMEOUT_DURATION ,"min")
+  const checkinactivity=()=>{
+    const expiretime=localStorage.getItem("expiretime")
+    // console.log(expiretime,"dd",Date.now())
+
+    if(expiretime < Date.now()){
+        console.log("logout")
+        // setLogged(false)
+        handleLogoutdialog()
+
     }
-  }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
-//    const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
-//    console.log(IDLE_TIMEOUT_DURATION ,"min")
-//   const checkinactivity=()=>{
-//     const expiretime=localStorage.getItem("expiretime")
+    console.log("timouit")
+}
+const Upadteexpiretime=()=>{
 
-//     if(expiretime < Date.now()){
-//         console.log("logout")
-//         // setLogged(false)
-//         handleLogoutdialog()
+    const expiretime=Date.now() + 1000 ;
+    // console.log(expiretime,"kkkkkkkkk")
+    localStorage.setItem("expiretime",expiretime)
 
-//     }
-// }
-// const Upadteexpiretime=()=>{
+    // console.log("troll")
+}
 
-//     const expiretime=Date.now() +10000 ;
-//     localStorage.setItem("expiretime",expiretime)
-// }
+useEffect(()=>{
+    Upadteexpiretime()
 
-// useEffect(()=>{
-//     Upadteexpiretime()
-
-//     window.addEventListener("mousemove",Upadteexpiretime);
-//     window.addEventListener("keypress",Upadteexpiretime);
-//     window.addEventListener("click",Upadteexpiretime);
-//     window.addEventListener("scroll",Upadteexpiretime);
-//     window.addEventListener("keydown", Upadteexpiretime);
+    window.addEventListener("mousemove",Upadteexpiretime);
+    window.addEventListener("keypress",Upadteexpiretime);
+    window.addEventListener("click",Upadteexpiretime);
+    window.addEventListener("scroll",Upadteexpiretime);
+    window.addEventListener("keydown", Upadteexpiretime);
     
     
-//     return ()=>{
-//         window.removeEventListener("mousemove",Upadteexpiretime);
-//         window.removeEventListener("keypress",Upadteexpiretime);
-//         window.removeEventListener("click",Upadteexpiretime);
-//         window.removeEventListener("scroll",Upadteexpiretime);
-//         window.removeEventListener("keydown", Upadteexpiretime);
+    return ()=>{
+        window.removeEventListener("mousemove",Upadteexpiretime);
+        window.removeEventListener("keypress",Upadteexpiretime);
+        window.removeEventListener("click",Upadteexpiretime);
+        window.removeEventListener("scroll",Upadteexpiretime);
+        window.removeEventListener("keydown", Upadteexpiretime);
        
-//     }
-// },[]);
-// useEffect(()=>{
-//     const checkintrvval=setInterval(()=>{
-//         checkinactivity();
-//     },IDLE_TIMEOUT_DURATION )
+    }
+},[]);
+useEffect(()=>{
+    const checkintrvval=setInterval(()=>{
+        checkinactivity();
+    },IDLE_TIMEOUT_DURATION  )
     
-//     return ()=>clearInterval(checkintrvval)
-// },[])
+    return ()=>clearInterval(checkintrvval)
+},[])
 
   
 

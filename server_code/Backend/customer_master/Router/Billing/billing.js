@@ -218,7 +218,7 @@ router.get('/ParticularLists/:tripno', (req, res) => {
   const tripno = req.params.tripno;
 
   const tripIds = tripno.split(',');
-  const query = `SELECT * FROM tripsheet WHERE status="Billed" AND tripid IN (?)`;
+  const query = `SELECT * FROM tripsheet WHERE status="Covering_Billed" AND tripid IN (?)`;
   db.query(query, [tripIds], (err, result) => {
     if (err) {
       console.error(err);

@@ -183,15 +183,11 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' });
   }
-  // const fileData = {
-  //   path: req.file.path.split('\\').pop(),
-  //   tripid: req.body.tripid,
-  // };
+
   const fileData = {
     path: req.file.filename,
     tripid: req.body.tripid,
   };
-  console.log(fileData);
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   const query2 = 'INSERT INTO mapimage SET ?';
   const updatequery = 'update mapimage set path=? where tripid = ?'
@@ -228,7 +224,6 @@ app.use('/mapimages', express.static(mapimageDirectory));
 
 app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
-  // console.log("imgs")
 
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
@@ -241,8 +236,6 @@ app.get('/getmapimages/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(mapimageDirectory, results[0].path);
-    // console.log("imagePath", imagePath)
-
     res.sendFile(imagePath, (err) => {
       if (err) {
         return res.status(500).send('Internal Server Error');
@@ -355,6 +348,8 @@ app.post('/login', (req, res) => {
     // console.log(process.env.JSON_SECERETKEY)
     // const secretKey = process.env.JSON_SECERETKEY
     // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
+    const secretKey = process.env.JSON_SECERETKEY
+    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
@@ -580,7 +575,6 @@ app.get('/get-profileimage/:tripid', (req, res) => {
     res.json({ imagePaths });
   });
 });
-console.log(process.env.FRONTEND_APIURL, "kk")
 
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
@@ -649,8 +643,19 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 //     // console.log(error,"gggggggg")
 //     res.status(400).json({ message: 'expired token' });
 //   }
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('x-auth-token');
+  if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-// };
+  try {
+    const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(400).json({ message: 'expired token' });
+  }
+
+};
 
 
 app.get('/use-permissions/:userid', (req, res) => {

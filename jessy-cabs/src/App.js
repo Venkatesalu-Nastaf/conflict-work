@@ -147,7 +147,6 @@ function App() {
   const fetchOrgLogo = useCallback(async () => {
     try {
       const organizationname = localStorage.getItem('usercompany');
-      console.log("organizationname", organizationname)
       if (!organizationname || organizationname === undefined) return
       const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
@@ -156,7 +155,6 @@ function App() {
         setLogo(logoImage)
         setLogoTrigger(false)
         ref.current = true
-        // console.log("org", organizationname)
       }
     } catch (err) {
       console.log(err)
@@ -177,7 +175,6 @@ function App() {
   const getVehicleNo = async () => {
     const response = await axios.get(`${apiUrl}/get-vehicleNo`)
     setVehicleNo(response.data.data)
-    console.log("vehcicle no app", response.data.data)
   }
 
 
@@ -187,7 +184,6 @@ function App() {
   const getCustomer = async () => {
     const response = await axios.get(`${apiUrl}/get-customer`)
     setCustomer(response.data)
-    console.log("customer app", response.data)
   }
 
   useEffect(() => {

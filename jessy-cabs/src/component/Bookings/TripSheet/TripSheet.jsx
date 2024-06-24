@@ -180,7 +180,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     formData,
     handleKeyDown,
     handleDateChange,
-    handleAutocompleteChange,
+    handleAutocompleteChange, copyToClipboard, setFormValues,
     packageData,
     smsguest,
     sendEmail,
@@ -809,7 +809,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
-                      <TextField
+                      {/* <TextField
                         name="driverName"
                         className='full-width'
                         value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
@@ -819,7 +819,27 @@ const TripSheet = ({ stationName, logoImage }) => {
                         variant="standard"
                         autoComplete="password"
                         onKeyDown={handleKeyEnterDriverDetails}
+                      /> */}
+                      <TextField
+                        name="driverName"
+                        className='full-width'
+                        value={selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName || ''}
+                        onChange={(e) => {
+                          handleChange(e)
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value })
+                          setFormData({ ...formData, driverName: e.target.value })
+                          setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
+                          setFormValues({ ...formValues, driverName: e.target.value })
+                          setBook({ ...book, driverName: e.target.value })
+                        }}
+
+                        label="Driver Name"
+                        id="driverName"
+                        variant="standard"
+                        autoComplete="password"
+                        onKeyDown={handleKeyEnterDriverDetails}
                       />
+
                     </div>
 
                     <div className="input">
@@ -2358,7 +2378,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           >
 
                             <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
-                            <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
+                              <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
                             </div>
                           </div>
 
@@ -2454,6 +2474,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <div className='link-blank-button'>
                                 <textarea ref={textRef} readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
                                 <button onClick={SignPage} className='signature'>Copy </button>
+                                <div>
+                                  <button onClick={copyToClipboard}>Copy Link</button>
+
+                                </div>
                               </div>
                               {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                             </div>

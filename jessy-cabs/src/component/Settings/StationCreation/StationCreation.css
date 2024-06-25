@@ -30,6 +30,12 @@
   color: #1976d2;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .stationcreation-main .stationcreation-form-container {
+    width: 96vw;
+  }
+}
+
 .stationcreation-main .stationcreation-form-container {
   border: 2px solid #ccc;
   overflow: scroll;

@@ -471,16 +471,14 @@ const useTransferdataentry = () => {
             .filter((selectedId) => selectedId !== null)
             .map((selectedId) => {
                 const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-                return selectedRow ? parseInt(selectedRow.netamount) : null;
+                return selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
             })
             .filter((tripid) => tripid !== null);
         // selected trips
-
         const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0);
         setTripAmount(totalSelectedTripAmount)
 
         const handleselectTrips = selectedTrips;
-        console.log(handleselectTrips, 'selectes Trips');
         setSelectedRow(selectedTrips)
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
@@ -556,7 +554,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            handleAdd(); 
+            handleAdd();
             handleButtonClickTripsheet();
             const response = await axios.post(`${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
@@ -688,8 +686,6 @@ const useTransferdataentry = () => {
     }, [apiUrl, lengthCheck, latestGroupNo, location, setBillingPage]);
 
 
-
-
     useEffect(() => {
         const fetchData = async () => {
 
@@ -778,9 +774,6 @@ const useTransferdataentry = () => {
             catch (err) {
                 console.log(err, 'error');
             }
-
-
-
 
         } catch (err) {
             setError(true);

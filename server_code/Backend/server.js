@@ -8,7 +8,7 @@ const db = require('./db');
 const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
@@ -345,12 +345,15 @@ app.post('/login', (req, res) => {
     if (result.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
-    const secretKey = process.env.JSON_SECERETKEY
-    const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
+    // console.log(process.env.JSON_SECERETKEY)
+    // const secretKey = process.env.JSON_SECERETKEY
+    // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
+    // const secretKey = process.env.JSON_SECERETKEY
+    // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
-    return res.status(200).json({ message: 'Login successful', user: result[0], datatoken: token });
+    return res.status(200).json({ message: 'Login successful', user: result[0] });
 
     // return res.status(200).json({ message: 'Login successful', user: result[0] });
   });
@@ -626,22 +629,36 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 
 
 // Permission 
-const authenticateJWT = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  if (!token) return res.status(401).json({ message: 'Authentication failed' });
+// const authenticateJWT = (req, res, next) => {
+//   const token = req.header('x-auth-token');
+//   // console.log(token,"kk")
+//   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-  try {
-    const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(400).json({ message: 'expired token' });
-  }
+//   try {
+//     const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
+//     req.user = decoded;
+//     // console.log(decoded,"dee")
+//     next();
+//   } catch (error) {
+//     // console.log(error,"gggggggg")
+//     res.status(400).json({ message: 'expired token' });
+//   }
+// const authenticateJWT = (req, res, next) => {
+//   const token = req.header('x-auth-token');
+//   if (!token) return res.status(401).json({ message: 'Authentication failed' });
 
-};
+//   try {
+//     const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
+//     req.user = decoded;
+//     next();
+//   } catch (error) {
+//     res.status(400).json({ message: 'expired token' });
+//   }
+
+// };
 
 
-app.get('/use-permissions/:userid', authenticateJWT, (req, res) => {
+app.get('/use-permissions/:userid', (req, res) => {
   const userid = req.params.userid;
 
   const sql = `select * from user_permissions where user_id=?`;

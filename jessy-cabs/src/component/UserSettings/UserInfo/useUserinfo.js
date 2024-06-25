@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useData } from '../../Dashboard/Maindashboard/DataContext';
+import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
 import { APIURL } from "../../url";
 
 const useUserinfo = () => {
     const apiUrl = APIURL;
-    const {SetDataTrigUser } = useData(); // -->  its for context for image
+    const {SetDataTrigUser } = useData1(); // -->  its for context for image
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [showPasswords, setShowPasswords] = useState(false);

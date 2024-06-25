@@ -85,6 +85,12 @@
   outline: 1px solid slategrey;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .form-container-customer .customer-form {
+    width: 96vw;
+  }
+}
+
 .form-container .customer-form {
   border: 2px solid #ccc;
   overflow: scroll;
@@ -122,14 +128,22 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
+  .side-bar-menu-close .form-container-customer .customer-form {
+    width: 96vw;
+  }
+
   .form-container .customer-form {
-    width: 76vw !important;
+    width: 76vw;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
+  .side-bar-menu-close .form-container-customer .customer-form {
+    width: 96vw;
+  }
+
   .form-container .customer-form {
-    width: 70vw !important;
+    width: 70vw;
   }
 }
 

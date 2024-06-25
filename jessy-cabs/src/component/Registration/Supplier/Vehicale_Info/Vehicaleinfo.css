@@ -65,6 +65,12 @@
   outline: 1px solid slategrey;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .form-container-supplier .container-main {
+    width: 96vw;
+  }
+}
+
 .form-container .container-main {
   border: 2px solid #ccc;
   overflow: scroll;

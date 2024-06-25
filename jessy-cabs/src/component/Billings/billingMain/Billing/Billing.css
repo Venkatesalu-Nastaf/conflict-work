@@ -80,6 +80,12 @@
   outline: 1px solid slategrey;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .form-container .Billing-form {
+    width: 96vw;
+  }
+}
+
 .form-container .Billing-form {
   overflow: scroll;
   height: 75vh;
@@ -288,7 +294,7 @@
     margin-top: -10px;
   }
 
-  .billing-inputfield-last{
+  .billing-inputfield-last {
     margin: 20px 0px;
   }
 }

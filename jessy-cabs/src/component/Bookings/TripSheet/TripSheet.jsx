@@ -26,7 +26,6 @@ import AltRouteIcon from "@mui/icons-material/AltRoute";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
-// import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -49,7 +48,6 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-// import EditNoteIcon from "@mui/icons-material/EditNote";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -109,35 +107,12 @@ import useTripsheet from './useTripsheet';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  // { field: "name", headerName: "Attach Name", width: 130 },
   { field: "documenttype", headerName: "Document Type", width: 140 },
   { field: "path", headerName: "Attach Path", width: 160 },
-
   { field: "tripid", headerName: "TripID", width: 100 },
   { field: "booking_id", headerName: "Booking ID", width: 110 },
 ];
-// Update Table
-// const UpdateTbaleColumns = [
-//   { field: "id", headerName: "Sno", width: 70 },
-//   { field: "document", headerName: "Document", width: 130 },
-//   { field: "documentname", headerName: "Document Name", width: 130 },
-//   { field: "filename", headerName: "File Name", width: 90 },
-// ];
 
-// const UpdateTbaleRows = [
-//   {
-//     id: 1,
-//     document: 1,
-//     documentname: "Employee 1",
-//     filename: "John Doe",
-//   },
-//   {
-//     id: 2,
-//     document: 2,
-//     documentname: "Band 2",
-//     filename: "Employee 2",
-//   },
-// ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -152,12 +127,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 
-
-
-
 const TripSheet = ({ stationName, logoImage }) => {
-
-
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,
@@ -272,8 +242,14 @@ const TripSheet = ({ stationName, logoImage }) => {
     startKMState: '',
     closeKMState: '',
     shedInState: '',
+    shedOutDate: '',
     startDate: '',
     closeDate: '',
+    shedInDate: '',
+    start_totalDays: '',
+    close_totalDays: '',
+    shedIn_TotalDays: '',
+    close_shedOut_totalDays: '',
     totalDays: '',
   })
 
@@ -306,7 +282,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const SignPage = async (event) => {
     event.preventDefault();
-    console.log("link", link)
+    // console.log("link", link)
     if (link) {
       const textElement = textRef.current;
       navigator.clipboard.writeText(textElement.textContent).then(() => {
@@ -325,16 +301,37 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }
 
-  // const handleCopyClick = () => {
-  //   const textElement = textRef.current;
-  //   navigator.clipboard.writeText(textElement.textContent).then(() => {
-  //     alert('Text copied to clipboard');
-  //   }).catch(err => {
-  //     console.error('Failed to copy text: ', err);
-  //   });
-  // };
+  // { kmValue?.shedOutDate && (kmValue?.shedInDate ? (kmValue?.shedout_totalDays > 0 ? "" : <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>) }
 
 
+  const shedOutLabelShowFun = () => {
+    if (kmValue?.shedOutDate) {
+
+      if (kmValue?.shedInDate) {
+        if (kmValue?.shedout_totalDays > 0) {
+          return '';
+        } else {
+          return <lable className='invalid-km'>Invalid Date</lable>
+        }
+
+      } else {
+        return <lable className='invalid-km'>Give Date</lable>
+      }
+    }
+
+    // if (kmValue?.shedOutDate && kmValue?.closeDate) {
+    //   if (!kmValue?.close_totalDays > 0) return <lable className='invalid-km'>invalid Date</lable>
+    // }
+
+    if (kmValue.shedout_totalDays && kmValue.start_totalDays) {
+      if (!kmValue.shedout_totalDays > kmValue.start_totalDays) {
+        return <lable className='invalid-km'>invalid Date</lable>
+      } else {
+        return '';
+      }
+    }
+
+  }
 
 
 
@@ -1076,8 +1073,33 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
+
+                <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="ShedOut Date"
+                      id="shedOutDate"
+                      value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                      format="DD/MM/YYYY"
+                      onChange={(date) => {
+                        setKmValue((prev) => ({ ...prev, shedOutDate: date }));
+                        handleDateChange(date, 'shedOutDate')
+                      }}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider>
+                </div>
+
+
                 <div className="input">
 
+                  {kmValue?.shedOutDate && ((kmValue.startDate && ((Number(kmValue?.start_totalDays)) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>)))}
 
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -1086,11 +1108,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <DatePicker
                       label="Start Date"
                       id="startdate"
-                      value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                      value={
+                        formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null)|| (book.startdate ? dayjs(book.startdate) : null)
+                      }
                       format="DD/MM/YYYY"
                       onChange={(date) => {
                         setKmValue((prev) => ({ ...prev, startDate: date }));
-                        handleDateChange(date, 'startdate')
+                        handleDateChange(date, 'startdate');
+
+                        const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                        const startdate = date;
+
+                        if (shedoutdate && startdate) {
+                          const shedoutdateObj = dayjs(shedoutdate);
+                          const startdateObj = dayjs(startdate);
+                          const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
+                          setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
+                        }
                       }}
                     >
                       {({ inputProps, inputRef }) => (
@@ -1102,8 +1136,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div className="input">
-                  {kmValue.startDate && (kmValue.closeDate ? "" : <lable className='invalid-km'>Give Date</lable>)}
-                  {/* {kmValue.totalDays === 0 && <lable className='invalid-km'>Give Correct Date</lable>} */}
+                  {kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>))}
+
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1114,6 +1148,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                       format="DD/MM/YYYY"
                       onChange={(date) => {
+
                         handleDateChange(date, 'closedate')
                         setKmValue(prev => ({ ...prev, closeDate: date }))
 
@@ -1124,7 +1159,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           const startDateObj = dayjs(startDate);
                           const closeDateObj = dayjs(closeDate);
                           const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                          setKmValue(prev => ({ ...prev, totalDays: totalDays }))
+                          setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
                         }
                       }}
                     >
@@ -1134,6 +1169,66 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
+
+
+                <div className="input">
+
+                  {/* {shedOutLabelShowFun()} */}
+                  {/* {kmValue?.shedOutDate && (kmValue?.shedInDate ? (kmValue?.shedout_totalDays > 0 ? "" : <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)} */}
+
+                  {/* {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.close_shedOut_totalDays) <= 0 ? <lable className='invalid-km'>invalid Date</lable> : (Number(kmValue.close_totalDays) <= 0 && <lable className='invalid-km'>invalid Date</lable>))) : <lable className='invalid-km'>Give Date</lable>)} */}
+
+
+                  {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)}
+
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="ShedIn Date"
+                      id="shedInDate"
+                      value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
+                      format="DD/MM/YYYY"
+                      onChange={(date) => {
+                        handleDateChange(date, 'shedInDate')
+                        setKmValue(prev => ({ ...prev, shedInDate: date }))
+
+                        // const closedate = formData.closeDate || selectedCustomerData.closeDate || book?.closeDate;
+                        // const startdate = formData.startDate || selectedCustomerData.startDate || book?.startDate;
+                        // const shedoutdate = formData.shedOutDate || formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                        // const shedindate = date
+
+                        const closedate = kmValue.closeDate;
+                        const shedoutdate = kmValue.shedOutDate;
+                        const shedindate = date
+
+                        // console.log("1", closedate, "2", shedoutdate, "3", shedindate)
+
+                        if (shedoutdate && shedindate) {
+                          const shedOutDateObj = dayjs(shedoutdate);
+                          const shedindateObj = dayjs(shedindate);
+                          const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+                          setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
+                        }
+
+                        if (shedindate && closedate) {
+                          const closedateObj = dayjs(closedate);
+                          const shedindateObj = dayjs(shedindate);
+                          const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                          setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                        }
+
+                      }}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider>
+                </div>
+
+
                 <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -1180,7 +1275,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input time">
+
+                {/* <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
@@ -1199,8 +1295,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }}
                     />
                   </div>
-                </div>
-                <div className="input time">
+                </div> */}
+
+                {/* <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
@@ -1227,13 +1324,100 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
+
                 <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)}
+                    <label>ShedOut Time</label>
+                    <input
+                      type="time"
+                      name="reporttime"
+                      value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                      onChange={(event) => {
+                        // const rTime = event.target.value;
+                        // if ((startTimeVar && rTime <= startTimeVar)) {
+                        //   return;
+                        // } else {
+                        setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                        setBook({ ...book, reporttime: event.target.value });
+                        setreporttime(event.target.value);
+                        // }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='input-type-grid'>
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    <input
+                      type="time"
+                      id="starttime"
+                      name='starttime'
+                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
+                      onChange={(event) => {
+
+                        const rTime = event.target.value;
+                        if ((reportTimeVar && rTime <= reportTimeVar)) {
+                          return;
+                        } else {
+
+                          setBook({ ...book, starttime: event.target.value });
+                          setStartTime(event.target.value);
+                          setFormData({ ...formData, starttime: event.target.value });
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='closetime tripsheet-shed-in-time'>
+                    {/* {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)} */}
+                    {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
+
+                    <input
+                      type="time"
+                      name="closetime"
+                      id="closetime"
+                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                      onChange={(event) => {
+                        const rTime = event.target.value;
+                        // if ((Number(kmValue.totalDays) === 1) && (shedInTimeVar && rTime <= shedInTimeVar)) {
+                        if (calculateTotalDays() === 1 && (startTimeVar && rTime <= startTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                          setBook({ ...book, closetime: event.target.value });
+                          setCloseTime(event.target.value);
+                        }
+
+                      }}
+                    />
+                  </div>
+                </div>
+
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='input-type-grid'>
+                    {/* {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)} */}
+                    {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> ShedIn Time</label>)}
 
                     <input
                       type="time"
@@ -1241,7 +1425,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if ((Number(kmValue.totalDays) === 1) && (reportTimeVar && rTime <= reportTimeVar)) {
+                        // if ((Number(kmValue.totalDays) === 1) && (reportTimeVar && rTime <= reportTimeVar)) {
+                        if ((closeTimeVar && rTime <= closeTimeVar)) {
                           return;
                         } else {
                           setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
@@ -1256,33 +1441,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
 
-                <div className="input time">
-                  <div className='icone'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='closetime tripsheet-shed-in-time'>
-                    {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)}
-
-                    <input
-                      type="time"
-                      name="closetime"
-                      id="closetime"
-                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
-                        if ((Number(kmValue.totalDays) === 1) && (shedInTimeVar && rTime <= shedInTimeVar)) {
-                          return;
-                        } else {
-                          setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                          setBook({ ...book, closetime: event.target.value });
-                          setCloseTime(event.target.value);
-                        }
-
-                      }}
-                    />
-                  </div>
-                </div>
 
                 <div className="input">
                   <div className="icone">

@@ -106,6 +106,12 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   </thead>
                   <tbody>
                     <tr>
+                      <td id='table-datas'><span >ShedOut</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
+                    </tr>
+                    <tr>
                       <td id='table-datas'><span >Starting</span></td>
                       <td id='table-datas'><span >{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate}</span></td>
                       <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td>
@@ -118,12 +124,19 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                       <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
                     </tr>
                     <tr>
+                      <td id='table-datas'><span >ShedIn</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
+                    </tr>
+                    <tr>
                       <td id='table-datas'><span >Total</span></td>
                       <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
                       <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
                       <td id='table-datas'><span >{totalhour}</span></td>
                     </tr>
                   </tbody>
+
                 </table>
               </div>
               <div className="guest-signature-details">

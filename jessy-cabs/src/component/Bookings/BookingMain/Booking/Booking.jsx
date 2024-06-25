@@ -748,7 +748,7 @@ const Booking = ({ stationName }) => {
               <div className="full-width">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="Report Date"
+                    label="Start Date"
                     id="report_date"
                     value={
                       formData.startdate || selectedCustomerData.startdate

@@ -1109,7 +1109,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       label="Start Date"
                       id="startdate"
                       value={
-                        formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null)|| (book.startdate ? dayjs(book.startdate) : null)
+                        formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
                       }
                       format="DD/MM/YYYY"
                       onChange={(date) => {
@@ -1154,12 +1154,20 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
                         const closeDate = date
+                        const shedindate = kmValue.shedInDate
 
                         if (startDate && closeDate) {
                           const startDateObj = dayjs(startDate);
                           const closeDateObj = dayjs(closeDate);
                           const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
                           setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                        }
+
+                        if (shedindate && closeDate) {
+                          const closedateObj = dayjs(closeDate);
+                          const shedindateObj = dayjs(shedindate);
+                          const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                          setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
                         }
                       }}
                     >
@@ -1179,8 +1187,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.close_shedOut_totalDays) <= 0 ? <lable className='invalid-km'>invalid Date</lable> : (Number(kmValue.close_totalDays) <= 0 && <lable className='invalid-km'>invalid Date</lable>))) : <lable className='invalid-km'>Give Date</lable>)} */}
 
 
-                  {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)}
-
+                  {/* {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)} */}
+                  {console.log("check", Number(kmValue.close_shedOut_totalDays))}
+                  {kmValue?.shedOutDate && (kmValue.shedInDate ? (kmValue.closeDate ? (Number(kmValue.close_shedOut_totalDays) < 1 && <lable className='invalid-km'>Invalid Date</lable>) : (Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)}
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1276,56 +1285,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                {/* <div className="input time">
-                  <div className='icone'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='input-type-grid'>
-                    <label>shed out Time</label>
-                    <input
-                      type="time"
-                      id="starttime"
-                      name='starttime'
-                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
-                      onChange={(event) => {
-                        setBook({ ...book, starttime: event.target.value });
-                        setStartTime(event.target.value);
-                        setFormData({ ...formData, starttime: event.target.value });
-                        setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                      }}
-                    />
-                  </div>
-                </div> */}
-
-                {/* <div className="input time">
-                  <div className='icone'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-
-
-                  <div className='input-type-grid'>
-
-                    {(startTimeVar && ((startTimeVar < reportTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Report Time</label>)}
-
-                    <input
-                      type="time"
-                      name="reporttime"
-                      value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
-                        if ((startTimeVar && rTime <= startTimeVar)) {
-                          return;
-                        } else {
-                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                          setBook({ ...book, reporttime: event.target.value });
-                          setreporttime(event.target.value);
-                        }
-                      }}
-                    />
-                  </div>
-                </div> */}
-
                 <div className="input time">
                   <div className='icone'>
                     <MdOutlineAccessTimeFilled />
@@ -1337,15 +1296,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       name="reporttime"
                       value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                       onChange={(event) => {
-                        // const rTime = event.target.value;
-                        // if ((startTimeVar && rTime <= startTimeVar)) {
-                        //   return;
-                        // } else {
+
                         setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                         setBook({ ...book, reporttime: event.target.value });
                         setreporttime(event.target.value);
-                        // }
+
                       }}
                     />
                   </div>

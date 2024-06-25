@@ -81,9 +81,19 @@
   background-color: #457cdc;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .form-container-TripStatus .container-main {
+    width: 96vw;
+  }
+}
+
 @media screen and (min-width:970px) and (max-width:1240px) {
+  .side-bar-menu-close .form-container-TripStatus .container-main {
+    width: 96vw;
+  }
+
   .form-container-TripStatus .container-main {
-    width: 76vw !important;
+    width: 76vw;
   }
 }
 

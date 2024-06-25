@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
 });
 
 const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, }) => {
+  console.log(particularPdf, organisationdetail, imagename)
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
@@ -556,7 +557,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
                   <View style={styles.logodiv}>
 
-                    <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} />
+                    <Image src={organisationimage} style={styles.logo} />
                   </View>
                 </View>
                 <View style={styles.gst}>
@@ -572,12 +573,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-
-
-
-
-
-                <View style={styles.maintabble}>
+                 <View style={styles.maintabble}>
 
                   <View style={{ flexDirection: "column", margin: "5px" }}>
 
@@ -694,26 +690,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-
-
-
-
-
-
-
-                <View style={styles.remarksection}>
+               <View style={styles.remarksection}>
                   <Text style={styles.labeltagremark}>Remarks :</Text>
                   <Text style={styles.clientName1}>{remark}</Text>
 
                 </View>
 
-
-
-
-
-
-
-                <View style={styles.tablesigndiv}>
+                 <View style={styles.tablesigndiv}>
                   <View style={styles.tablediv}>
                     {/* <View>
     
@@ -762,9 +745,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                       </View>
 
                     </View>
-
-
-
                     <View style={styles.tablehead2}>
                       <View style={styles.labeltag9}>
                         <Text >Reporting</Text>
@@ -777,9 +757,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-
-
-                      <View style={styles.labeltag10}>
+                        <View style={styles.labeltag10}>
                         <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
 
                       </View>
@@ -827,9 +805,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                         <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
 
                       </View>
-
-
-
                       <View style={styles.labeltag18}>
                         <Text>{'-'}</Text>
 
@@ -852,9 +827,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-
-
-                      <View style={styles.labeltag22}>
+                        <View style={styles.labeltag22}>
                         <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
 
                       </View>
@@ -868,10 +841,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   </View>
 
-
-
-
-                  <View style={styles.signdiv}>
+                    <View style={styles.signdiv}>
                     <View style={styles.signimg}>
                       <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} />
 
@@ -884,15 +854,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
 
                   </View>
-
-
-
-                  {/* </View> */}
-                </View>
-
-
-
-                <View style={styles.topmap}>
+  {/* </View> */}</View>
+                  <View style={styles.topmap}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: '13px' }}>Total Parking:</Text>
                     <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalparking ? totalparking : 0}</Text>
@@ -923,17 +886,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   <Text> Route summary</Text>
 
                   {routemap.map((item, index) => (
-
-
-
-
-
-
-                    <View key={index}>  <Text style={{ fontSize: 10 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
-
-
-
-                  ))
+                <View key={index}>  <Text style={{ fontSize: 10 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
+                    ))
                   }
                 </View>
 
@@ -955,7 +909,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     </>
   ) : (
     
-    <View style={{ width: "100%" ,margin:'auto',marginTop:'100px',backgroundColor:'red'}}>
+    <View style={{ width: "100%" ,margin:'auto',marginTop:'100px'}}>
         <Text style={styles.atimg}>  No Attached image</Text>
       </View>
   )}
@@ -969,11 +923,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
             {bookimage.map((item, index) => {
       const dataimgetype = item.imagees.split('.').pop();
-
+      // URL.createObjectURL(img)
       if (dataimgetype !== "pdf") {
         return (
-          <View key={index} style={{width:'100%',backgroundColor:'green'}}>
-            <Image src={`${apiUrl}/public/booking_doc/${item.imagees}`} style={{height:'500px'}}  />
+          <View key={index} style={{width:'100%'}}>
+            <Image src={`${apiUrl}/images/${item.imagees}`} style={{height:'500px'}}  />
           </View>
         );
       } else {
@@ -988,25 +942,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     
   
 </View>
-
-
-
-             
-
-        
-                {/* </View> */}
-
-
-
-
-
-
-
-
-
-
-
-              </View>
+</View>
 
             </View>
 

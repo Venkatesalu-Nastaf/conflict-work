@@ -187,9 +187,10 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
+                    console.log(index,"innn")
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
-                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
+                    const location = `${singleData.address1}`;
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
@@ -348,7 +349,7 @@ const useExeclpage = () => {
 
 
     const handledatazipDownload = async (misformat, invoice, invoicedate,customer,organizationsdetail1,imageorganisation,rowSelectionModel ) => {
-        // console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo")
+        console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo",imageorganisation)
         const data = invoice;
         const customername=customer;
         const workbook = new Excel.Workbook();
@@ -395,9 +396,10 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
+                   
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
-                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
+                    const location = `${singleData.address1}`;
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
@@ -484,7 +486,7 @@ const useExeclpage = () => {
 
                 data.forEach((singleData, index) => {
                     singleData["SNo"] = index + 1;
-                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
+                    const location = `${singleData.address1}`;
                     singleData['location'] = location
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
@@ -578,10 +580,7 @@ const useExeclpage = () => {
                     const data2=data.imagees.split('.').pop()
                     if(data2 === "pdf"){
 
-                    
-                 
-
-                  const filePath = `${apiurl}/public/booking_doc/${data.imagees}`;
+                const filePath = `${apiurl}/images/${data.imagees}`;
                 
                 // Fetch the PDF file
                 const response = await fetch(filePath);

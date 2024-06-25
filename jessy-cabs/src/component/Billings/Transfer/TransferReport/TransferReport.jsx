@@ -128,14 +128,15 @@ const TransferReport = ({ stationName }) => {
   const [addressDetails, setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
-  const { sharedData,logo } = useData();
+  const {logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint } = PdfData()
-  useEffect(() => {
-    setSelectedImageorganisation(sharedData)
-  }, [sharedData])
+  // useEffect(() => {
+  //   setSelectedImageorganisation(sharedData)
+  // }, [sharedData])
+  
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -194,7 +195,7 @@ const TransferReport = ({ stationName }) => {
         const customer = decodeURIComponent(storedCustomer);
 
         if (!customer || !tripid) return
-
+     
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
@@ -588,7 +589,7 @@ const TransferReport = ({ stationName }) => {
                     </Button>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, imageorganisation, rowSelectionModel)}>  ZIP </MenuItem>
+                      <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel)}>  ZIP </MenuItem>
                       {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                       {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>

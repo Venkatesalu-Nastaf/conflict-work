@@ -12,7 +12,7 @@ import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
 import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
-import { useData } from "./DataContext"; //- data contaxt
+import { useData1 } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
 // import { FaPowerOff } from "react-icons/fa";
@@ -39,14 +39,15 @@ const MainDashboard = () => {
 
   const apiUrl = APIURL;
   // const { sharedData, setFilteredData,datatriguserinfo } = useData();
-  const { setFilteredData,datatriguserinfo } = useData();
+  // const { setFilteredData,datatriguserinfo } = useData();
+  const { setFilteredData, datatriguserinfo,expanded,setExpanded} = useData1();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(true);
+  // const [expanded, setExpanded] = useState(true);
   const { selectedTheme,setSelectedAvatar,selectedavtar, setSelectedTheme } = useThemes();
   // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupOpentoken, setPopupOpenToken] = useState(false);
+  // const [popupOpentoken, setPopupOpenToken] = useState(false);
   // const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
   const data1 = localStorage.getItem("useridno")
@@ -58,6 +59,16 @@ const MainDashboard = () => {
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
  
 
+// ------------
+
+const [sendTrue,setSendTrue] = useState("");
+const sendTrueValue =(datavaule)=>{
+  setSendTrue(datavaule);
+}
+
+console.log(expanded,"expandedd");
+
+// ------------
   // useEffect(() => {
 
   //   setSelectedImage(sharedData)
@@ -67,7 +78,7 @@ const MainDashboard = () => {
     setPopupOpen(false);
   };
 
-  const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
+  // const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {},
@@ -107,82 +118,89 @@ const MainDashboard = () => {
     [navigate,setMakeRender,setPermission]
   );
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (!localStorage.getItem("auth")) {
-      navigate("/");
-    } else {
-      let timeout;
+  //   if (!localStorage.getItem("auth")) {
+  //     navigate("/");
+  //   } else {
+  //     let timeout;
 
-      const resetIdleTimeout = () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        timeout = setTimeout(() => {
-          handleLogout();
-        }, IDLE_TIMEOUT_DURATION);
-      };
+  //     const resetIdleTimeout = () => {
+  //       if (timeout) {
+  //         clearTimeout(timeout);
+  //       }
+  //       timeout = setTimeout(() => {
+  //         handleLogout();
+  //       }, IDLE_TIMEOUT_DURATION);
+  //     };
 
-      const handleUserActivity = () => {
-        resetIdleTimeout();
-      };
+  //     const handleUserActivity = () => {
+  //       resetIdleTimeout();
+  //     };
 
-      window.addEventListener("mousemove", handleUserActivity);
-      window.addEventListener("keydown", handleUserActivity);
+  //     window.addEventListener("mousemove", handleUserActivity);
+  //     window.addEventListener("keydown", handleUserActivity);
 
-      resetIdleTimeout();
+  //     resetIdleTimeout();
 
-      return () => {
-        window.removeEventListener("mousemove", handleUserActivity);
-        window.removeEventListener("keydown", handleUserActivity);
-        clearTimeout(timeout);
-      };
+  //     return () => {
+  //       window.removeEventListener("mousemove", handleUserActivity);
+  //       window.removeEventListener("keydown", handleUserActivity);
+  //       clearTimeout(timeout);
+  //     };
+  //   }
+  // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
+  const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
+  //  const INACTIVITY_CHECK_INTERVAL = 1000;
+  //  console.log(IDLE_TIMEOUT_DURATION ,"min")
+  const checkinactivity=()=>{
+    const expiretime=localStorage.getItem("expiretime")
+    // console.log(expiretime,"dd",Date.now())
+
+    if(expiretime < Date.now()){
+        console.log("logout")
+        // setLogged(false)
+        handleLogoutdialog()
+
     }
-  }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
-//    const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
-//    console.log(IDLE_TIMEOUT_DURATION ,"min")
-//   const checkinactivity=()=>{
-//     const expiretime=localStorage.getItem("expiretime")
+    console.log("timouit")
+}
+const Upadteexpiretime=()=>{
 
-//     if(expiretime < Date.now()){
-//         console.log("logout")
-//         // setLogged(false)
-//         handleLogoutdialog()
+    const expiretime=Date.now() + 1000 ;
+    // console.log(expiretime,"kkkkkkkkk")
+    localStorage.setItem("expiretime",expiretime)
 
-//     }
-// }
-// const Upadteexpiretime=()=>{
+    // console.log("troll")
+}
 
-//     const expiretime=Date.now() +10000 ;
-//     localStorage.setItem("expiretime",expiretime)
-// }
+useEffect(()=>{
+    Upadteexpiretime()
 
-// useEffect(()=>{
-//     Upadteexpiretime()
-
-//     window.addEventListener("mousemove",Upadteexpiretime);
-//     window.addEventListener("keypress",Upadteexpiretime);
-//     window.addEventListener("click",Upadteexpiretime);
-//     window.addEventListener("scroll",Upadteexpiretime);
-//     window.addEventListener("keydown", Upadteexpiretime);
+    window.addEventListener("mousemove",Upadteexpiretime);
+    window.addEventListener("keypress",Upadteexpiretime);
+    window.addEventListener("click",Upadteexpiretime);
+    window.addEventListener("scroll",Upadteexpiretime);
+    window.addEventListener("keydown", Upadteexpiretime);
     
     
-//     return ()=>{
-//         window.removeEventListener("mousemove",Upadteexpiretime);
-//         window.removeEventListener("keypress",Upadteexpiretime);
-//         window.removeEventListener("click",Upadteexpiretime);
-//         window.removeEventListener("scroll",Upadteexpiretime);
-//         window.removeEventListener("keydown", Upadteexpiretime);
+    return ()=>{
+        window.removeEventListener("mousemove",Upadteexpiretime);
+        window.removeEventListener("keypress",Upadteexpiretime);
+        window.removeEventListener("click",Upadteexpiretime);
+        window.removeEventListener("scroll",Upadteexpiretime);
+        window.removeEventListener("keydown", Upadteexpiretime);
        
-//     }
-// },[]);
-// useEffect(()=>{
-//     const checkintrvval=setInterval(()=>{
-//         checkinactivity();
-//     },IDLE_TIMEOUT_DURATION )
+    }
+},[]);
+useEffect(()=>{
+    const checkintrvval=setInterval(()=>{
+        checkinactivity();
+    },IDLE_TIMEOUT_DURATION  )
     
-//     return ()=>clearInterval(checkintrvval)
-// },[])
+    return ()=>clearInterval(checkintrvval)
+},[])
+
 
   
 
@@ -209,25 +227,25 @@ const MainDashboard = () => {
   }, [user,datatriguserinfo ]);
   
 
-  const checkertoken=()=>{
-    setPopupOpenToken(true)
-  }
-  useEffect(()=>{
-    const fetchdata=async()=>{
-      try{
-        await axios.get(`${apiUrl}/checktokenexpire`, {headers: {
-          'x-auth-token': localStorage.getItem("tokensdata")
-        }})
-        // console.log(response)
-        // if(response.)
-      }
-      catch(err){
-        console.log(err,"data")
-        checkertoken()
-      }
-    }
-    fetchdata()
-  })
+  // const checkertoken=()=>{
+  //   setPopupOpenToken(true)
+  // }
+  // useEffect(()=>{
+  //   const fetchdata=async()=>{
+  //     try{
+  //       await axios.get(`${apiUrl}/checktokenexpire`, {headers: {
+  //         'x-auth-token': localStorage.getItem("tokensdata")
+  //       }})
+  //       // console.log(response)
+  //       // if(response.)
+  //     }
+  //     catch(err){
+  //       console.log(err,"data")
+  //       checkertoken()
+  //     }
+  //   }
+  //   fetchdata()
+  // })
   // console.log(popupOpentoken,"ty")
 
  
@@ -356,8 +374,9 @@ const MainDashboard = () => {
         <section
           className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}
         >
-          <div className="glass">
-            <Sidebar expanded={expanded} />
+          {/* <div className="glass"> */}
+          <div className={`glass ${expanded ? 'side-bar-menu-open' : 'side-bar-menu-close'}`}>
+            <Sidebar onData={sendTrueValue} expanded={expanded} />
             <div className="header-user">
               <div className="avatar-item">
                 <Tooltip title={`Hi ${storedUsername}`} arrow>
@@ -430,21 +449,6 @@ const MainDashboard = () => {
                 className="logout-cancel-btn"
               >
                 NO, Cancel
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog open={popupOpentoken}>
-            <DialogContent>
-              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
-              <p className="modal-warning-text">YOUR SESSSION IS EXPIRED <br /> </p>
-            </DialogContent>
-            <DialogActions className="yes-no-buttons">
-              <Button
-                onClick={handleLogoutdialog}
-                variant="contained"
-                className="logout-btn"
-              >
-                Yes, I'm Sure
               </Button>
             </DialogActions>
           </Dialog>

@@ -1,13 +1,14 @@
 .UserSettings-main {
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    grid-gap: 1rem;
-    gap: 1rem;
-    margin-top: 90px;
-    align-items: center;
-  }
-@media only screen and (max-width: 768px)  {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  gap: 1rem;
+  margin-top: 90px;
+  align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
 
   .UserSettings-main {
     color: #fff;
@@ -20,19 +21,28 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width:836px){
-  .user-inputs-feilds{
-    width: 96% !important;
+@media only screen and (min-width: 768px) and (max-width:836px) {
+  .side-bar-menu-close .form-container-UserSettings .container-main {
+    width: 96vw;
+  }
+
+  .user-inputs-feilds {
+    width: 96%;
   }
 }
 
-@media only screen and (min-width: 836.99px) and (max-width:1130px){
-  .user-inputs-feilds{
-    width: 97% !important;
+@media only screen and (min-width: 836.99px) and (max-width:1130px) {
+
+  .side-bar-menu-close .form-container-UserSettings .container-main {
+    width: 96vw;
+  }
+
+  .user-inputs-feilds {
+    width: 97%;
   }
 }
 
-.head-tab-usersetting{
+.head-tab-usersetting {
   position: sticky;
   top: 0px;
   z-index: 5;
@@ -41,6 +51,6 @@
 
 }
 
-.form-container-UserSettings .user-inputs-feilds{
+.form-container-UserSettings .user-inputs-feilds {
   background-color: #f0ece2 !important;
 }

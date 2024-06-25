@@ -29,11 +29,17 @@
   font-weight: 500;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .main-setting-main .main-setting-form-container {
+    width: 96vw;
+  }
+}
+
 .main-setting-main .main-setting-form-container {
   border: 2px solid #ccc;
   overflow: scroll;
   height: 75vh;
-  width: 81vw !important;
+  width: 81vw;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -48,14 +54,23 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
+  .side-bar-menu-close .main-setting-main .main-setting-form-container {
+    width: 96vw;
+  }
+
   .main-setting-main .main-setting-form-container {
-    width: 76vw !important;
+    width: 76vw;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
+
+  .side-bar-menu-close .main-setting-main .main-setting-form-container {
+    width: 96vw;
+  }
+
   .main-setting-main .main-setting-form-container {
-    width: 70vw !important;
+    width: 70vw;
   }
 }
 

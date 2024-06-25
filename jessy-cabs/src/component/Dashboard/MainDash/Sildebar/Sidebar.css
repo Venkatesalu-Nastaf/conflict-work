@@ -166,6 +166,18 @@
   display: none !important;
 }
 
+@media screen and (max-width: 768px) {
+  .desktop-menu-without-dropdown{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .mobile-menu-with-dropdown{
+    display: none;
+  }
+}
+
 .bars {
   display: flex;
   position: sticky;

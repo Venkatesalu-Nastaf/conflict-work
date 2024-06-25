@@ -12,7 +12,7 @@ export const PermissionProvider = ({ children }) => {
     const [makeRender, setMakeRender] = useState(false);
     const [user_id, setUser_id] = useState("")
     const userid = localStorage.getItem('useridno') || user_id;
-    const token=localStorage.getItem("tokensdata")
+    // const token=localStorage.getItem("tokensdata")
     
 
     useEffect(() => {
@@ -20,15 +20,10 @@ export const PermissionProvider = ({ children }) => {
             try {
 
                 // if (userid !== "undefined" && userid && userid !== undefined && userid !== null)
-                if (userid !== "undefined" && userid && userid !== undefined && userid !== null&& token !== "undefined" && token && token !== undefined && token!== null)
+                if (userid !== "undefined" && userid && userid !== undefined && userid !== null)
                      {
 
-                    const response = await axios.get(`${apiurl}/use-permissions/${userid}`, {
-                        headers: {
-                          'x-auth-token': token,
-                          
-                        }
-                      })
+                    const response = await axios.get(`${apiurl}/use-permissions/${userid}`)
                     console.log('response.data', response.data);
                     const data = response.data;
                     setPermission(data);
@@ -45,7 +40,7 @@ export const PermissionProvider = ({ children }) => {
 
         }
         fetchPermission();
-    }, [makeRender, userid,token])
+    }, [makeRender, userid])
 
 
 

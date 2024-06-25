@@ -621,6 +621,14 @@ body {
   border-color: rgba(0, 0, 0, 0.23);
 }
 
+/* @media screen and (min-width: 769px) {
+  .side-bar-menu-close .form-container-booking .container-main,
+  .side-bar-menu-close .form-container-TripStatus .container-main,
+  .side-bar-menu-close .form-container-tripsheet .Tripsheet-form {
+    width: 96vw;
+  }
+} */
+
 
 
 /* .css-feqhe6{

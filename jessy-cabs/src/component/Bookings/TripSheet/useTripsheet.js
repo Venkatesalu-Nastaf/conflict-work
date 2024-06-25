@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -168,7 +168,6 @@ const useTripsheet = () => {
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
             const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            console.log(response.data.link, "linkffsd")
             const data = response.data.link
             setLink(data);
             getSignatureImage()
@@ -179,10 +178,8 @@ const useTripsheet = () => {
 
     // const SignPage = async (event) => {
     //     event.preventDefault();
-    //     console.log("link", link)
     //     if (link) {
     //         await navigator.clipboard.writeText(link);
-    //         console.log("text--", navigator.clipboard.writeText(link))
     //         setSign(true)
     //         setTimeout(() => {
     //             setSign(false)
@@ -192,6 +189,65 @@ const useTripsheet = () => {
     //         alert("no link data ", link)
     //     }
     // }
+
+    const SignPage = async (event) => {
+        event.preventDefault();
+        if (link) {
+            try {
+                await navigator.clipboard.writeText(link);
+                setSign(true);
+                setTimeout(() => {
+                    setSign(false);
+                }, 2000);
+            } catch (error) {
+                console.error("Failed to copy text:", error);
+                alert("Failed to copy text to clipboard. Please try again.");
+            }
+        } else {
+            alert("No link data available.");
+        }
+    }
+
+
+
+
+    //----------------------------------------------
+
+    const hiddenInputRef = useRef(null);
+
+    const hiddenTextAreaRef = useRef(null);
+
+    const copyToClipboard = (e) => {
+        e.preventDefault()
+        if (link) {
+            // Create a hidden textarea and append it to the body
+            const textArea = document.createElement("textarea");
+            textArea.value = link;
+            document.body.appendChild(textArea);
+
+            // Select the text in the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
+
+            // Execute the copy command
+            document.execCommand('copy');
+
+            // Remove the textarea from the document
+            document.body.removeChild(textArea);
+
+            // Set the confirmation message
+            setSign(true);
+            setTimeout(() => {
+                setSign(false);
+            }, 2000);
+        } else {
+            alert("No link data available.");
+        }
+    };
+
+    //----------------------------------------------
+
+
 
 
     const handlePopupClose = () => {
@@ -209,14 +265,12 @@ const useTripsheet = () => {
                 return;
             }
             const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-            console.log(" map---", response)
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
-            console.log("imageUrl", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
@@ -643,6 +697,99 @@ const useTripsheet = () => {
     }
 
 
+    // const handleEdit = async () => {
+    //     try {
+    //         try {
+    //             const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+    //             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+    //             const updatedCustomer = {
+    //                 ...book,
+    //                 ...selectedCustomer,
+    //                 ...vehilcedetails,
+    //                 ...selectedCustomerData,
+    //                 ...formData,
+    //                 apps: book.apps || formData.apps || selectedCustomerData.apps,
+    //                 starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
+    //                 closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+    //                 reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+    //                 shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
+    //                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+    //                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+    //                 additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
+    //                 tripsheetdate: selectedBookingDate,
+    //                 vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+    //                 // driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+    //                 driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+    //                 mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+    //                 shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
+    //                 totaldays: calculateTotalDays(),
+    //                 totalkm1: calculateTotalKilometers(),
+    //                 totaltime: calculateTotalTime(),
+    //                 netamount: calculateTotalAmount(),
+    //                 exkm: packageDetails[0]?.extraKMS,
+    //                 exHrs: packageDetails[0]?.extraHours,
+    //                 night: packageDetails[0]?.NHalt,
+    //                 amount: packageDetails[0]?.Rate,
+    //                 exkm1: packageDetails[0]?.extraKMS,
+    //                 exHrs1: packageDetails[0]?.extraHours,
+    //                 night1: packageDetails[0]?.NHalt,
+    //                 amount5: packageDetails[0]?.Rate,
+    //                 amount1: calculateExkmAmount(),
+    //                 amount2: calculateExHrsAmount(),
+    //                 amount3: calculateNightAmount(),
+    //                 amount4: calculatedriverconvienceAmount(),
+    //                 package: packageDetails[0]?.package,
+    //                 pack: packageDetails[0]?.package,
+    //                 minhrs: packageDetails[0]?.Hours,
+    //                 minkm: packageDetails[0]?.KMS,
+    //                 vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+    //                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport
+
+    //             };
+
+    //             for (const key in updatedCustomer) {
+    //                 if (key === '0') {
+    //                     delete updatedCustomer[key];
+    //                 }
+    //             }
+
+    //             await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+    //             // handleCancel();
+    //             setShedKilometers("")
+    //             setAdditionalTime("")
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully updated");
+    //             setRow([]);
+    //             setRows([]);
+    //             if (sendEmail) {
+    //                 await handlecheck();
+    //             }
+    //             if (smsguest) {
+    //                 await handleSendSMS()
+    //             }
+    //             if (DriverSMS) {
+    //                 await handleDriverSendSMS()
+    //             }
+
+    //             setSendEmail(true)
+    //             setDriverSMS(true)
+    //             setSmsGuest(true)
+    //             // setSuccess(true);
+    //             handleCancel();
+    //             // setSuccessMessage("Successfully updated");
+    //         } catch {
+    //             setError(true);
+    //             setErrorMessage("Check your Network Connection");
+    //         }
+    //     } catch {
+    //         setError(true);
+    //         setErrorMessage("Check your Network Connection");
+    //     }
+    // };
+
+
+    // handleConfirm
+
     const handleEdit = async () => {
         try {
             try {
@@ -663,10 +810,11 @@ const useTripsheet = () => {
                     closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                     additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
                     tripsheetdate: selectedBookingDate,
+                    hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
-                    // driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-                    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                    driverName: selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    mobileNo: selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo,
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
                     totaldays: calculateTotalDays(),
                     totalkm1: calculateTotalKilometers(),
@@ -703,26 +851,19 @@ const useTripsheet = () => {
                 // handleCancel();
                 setShedKilometers("")
                 setAdditionalTime("")
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
+
                 setRow([]);
                 setRows([]);
                 if (sendEmail) {
                     await handlecheck();
                 }
-                if (smsguest) {
-                    await handleSendSMS()
-                }
-                if (DriverSMS) {
-                    await handleDriverSendSMS()
-                }
 
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
-                // setSuccess(true);
+                setSuccess(true);
                 handleCancel();
-                // setSuccessMessage("Successfully updated");
+                setSuccessMessage("Successfully updated");
             } catch {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
@@ -733,8 +874,6 @@ const useTripsheet = () => {
         }
     };
 
-
-    // handleConfirm
 
 
     const handleConfirm = async () => {
@@ -811,12 +950,13 @@ const useTripsheet = () => {
 
 
 
+
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
-        const driverName = selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName;
-        const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+        const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
+        const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
         const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
         // const
@@ -905,6 +1045,7 @@ const useTripsheet = () => {
                 vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                 vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                 Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
+                // hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                 hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                 mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
@@ -925,6 +1066,124 @@ const useTripsheet = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
+
+
+
+
+    // const handleAdd = async () => {
+
+    //     const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+    //     const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+    //     const driverName = selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName;
+    //     const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+    //     const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
+    //     const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+    //     // const
+    //     if (!customer) {
+    //         setError(true);
+    //         setErrorMessage("Please fill customer field");
+    //         return;
+    //     }
+    //     if (!vehRegNo) {
+    //         setError(true);
+    //         setErrorMessage("Please fill vehRegNo field");
+    //         return;
+    //     }
+    //     if (!vehType) {
+    //         setError(true);
+    //         setErrorMessage("Please fill vehType field");
+    //         return;
+    //     }
+    //     if (!driverName) {
+    //         setError(true);
+    //         setErrorMessage("Please fill driverName field");
+    //         return;
+    //     }
+    //     if (!mobileNo) {
+    //         setError(true);
+    //         setErrorMessage("Please fill mobileNo field");
+    //         return;
+    //     }
+    //     if (!Email) {
+    //         setError(true);
+    //         setErrorMessage("Please fill Email field");
+    //         return;
+    //     }
+
+    //     try {
+    //         const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+    //         const updatedBook = {
+    //             ...book,
+    //             starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+    //             closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+    //             tripsheetdate: selectedBookingDate,
+    //             totaldays: calculateTotalDays(),
+    //             totalkm1: calculateTotalKilometers(),
+    //             totaltime: calculateTotalTime(),
+    //             netamount: calculateTotalAmount(),
+    //             exkm: packageDetails[0]?.extraKMS,
+    //             exHrs: packageDetails[0]?.extraHours,
+    //             night: packageDetails[0]?.NHalt,
+    //             amount: packageDetails[0]?.Rate,
+    //             exkm1: packageDetails[0]?.extraKMS,
+    //             exHrs1: packageDetails[0]?.extraHours,
+    //             night1: packageDetails[0]?.NHalt,
+    //             amount5: packageDetails[0]?.Rate,
+    //             amount1: calculateExkmAmount(),
+    //             amount2: calculateExHrsAmount(),
+    //             amount3: calculateNightAmount(),
+    //             amount4: calculatedriverconvienceAmount(),
+    //             package: packageDetails[0]?.package,
+    //             pack: packageDetails[0]?.package,
+    //             minhrs: packageDetails[0]?.Hours,
+    //             minkm: packageDetails[0]?.KMS,
+    //             additionaltime: book.additionaltime || additionalTime.additionaltime,
+    //             billingno: book.billingno,
+    //             closedate: book.closedate,
+    //             closekm: book.closekm,
+    //             closetime: book.closetime,
+    //             customeradvance: book.customeradvance,
+    //             email1: book.email1,
+    //             parking: book.parking,
+    //             permit: book.permit,
+    //             travelsname: selectedCustomerDatas.travelsname || formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
+    //             remark: book.remark,
+    //             reporttime: formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime,
+    //             shedin: book.shedin,
+    //             shedintime: book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+    //             shedkm: book.shedkm || shedKilometers.shedkm,
+    //             shedout: formData.shedout || book.shedout || selectedCustomerData.shedout,
+    //             startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+    //             startkm: book.startkm,
+    //             starttime: formData.starttime || book.starttime || selectedBookingDate.starttime,
+    //             toll: book.toll,
+    //             vendortoll: book.vendortoll,
+    //             vpermettovendor: book.vpermettovendor,
+    //             driverName: driverName,
+    //             request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
+    //             vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+    //             vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+    //             Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
+    //             hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+    //             mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
+    //             calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+    //             escort, minHour, minKM, transferreport,
+    //         };
+
+    //         await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
+    //         handleCancel();
+    //         setRow([]);
+    //         setRows([]);
+    //         setSuccess(true);
+    //         handleSendSMS();
+    //         handleDriverSendSMS();
+    //         handlecheck();
+    //         setSuccessMessage("Successfully Added");
+    //     } catch {
+    //         setError(true);
+    //         setErrorMessage("Check your Network Connection");
+    //     }
+    // };
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
@@ -1563,9 +1822,7 @@ const useTripsheet = () => {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
                 if (response.status === 200) {
-                    // console.log(response,"kk")
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    // console.log(imageUrl,"gata")
                     setSignImageUrl(imageUrl);
                 }
             }
@@ -1576,7 +1833,6 @@ const useTripsheet = () => {
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
-        // console.log(tripiddata,"data")
         if (file !== null) {
             const formData = new FormData();
             formData.append("signature_image", file);
@@ -1603,7 +1859,6 @@ const useTripsheet = () => {
         try {
 
             const responsedata = await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
-            console.log(responsedata)
             setSignaturepopup(false);
             setSignImageUrl('')
             getSignatureImage()
@@ -2145,8 +2400,8 @@ const useTripsheet = () => {
         link,
         isSignatureSubmitted,
         isEditMode,
-        handleEdit,
-        // SignPage,
+        handleEdit, setFormValues, copyToClipboard,
+        SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,

@@ -10,8 +10,9 @@ const path = require('path');
 const util = require('util')
 const query = util.promisify(db.query).bind(db)
 
-
-router.use(express.static('customer_master'));
+const attachedmailDirectory = path.join(__dirname, 'uploads');
+router.use('/images', express.static(attachedmailDirectory));
+// router.use(express.static('customer_master'));
 // const upload = multer({ dest: 'uploads/' });
 
 router.post('/booking', async (req, res) => {

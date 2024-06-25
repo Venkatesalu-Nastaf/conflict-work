@@ -47,6 +47,8 @@
   outline: 1px solid transparent;
 }
 
+
+
 .form-container-TripStatus .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
@@ -101,11 +103,15 @@
   background-color: #457cdc;
 }
 
-@media screen and (min-width:970px) and (max-width:1240px) {
-  .form-container-TripStatus .container-main {
-    width: 76vw !important;
+/* @media screen and (min-width:970px) and (max-width:1240px) {
+  .side-bar-menu-close .form-container-TripStatus .container-main {
+    width: 96vw;
   }
-}
+
+  .form-container-TripStatus .container-main {
+    width: 76vw;
+  }
+} */
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
   .form-container-TripStatus .container-main {
@@ -156,7 +162,7 @@
   margin: 15px 10px 0px 0px;
 }
 
-.vehicle-statement-table{
+.vehicle-statement-table {
   height: 400px;
   width: 100%;
 }

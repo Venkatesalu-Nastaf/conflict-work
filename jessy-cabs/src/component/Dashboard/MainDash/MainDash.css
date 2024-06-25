@@ -42,7 +42,7 @@
     }
 
     .left-div {
-        width: 52vw;
+        width: 65vw;
         height: 88vh;
         /* overflow: auto; */
         padding: 20px;
@@ -62,7 +62,7 @@
     }
 
     .left-div {
-        width: 72vw;
+        width: 94vw;
         padding: 20px;
     }
 }

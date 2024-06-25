@@ -147,7 +147,6 @@ function App() {
   const fetchOrgLogo = useCallback(async () => {
     try {
       const organizationname = localStorage.getItem('usercompany');
-      console.log("organizationname", organizationname)
       if (!organizationname || organizationname === undefined) return
       const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
@@ -156,7 +155,6 @@ function App() {
         setLogo(logoImage)
         setLogoTrigger(false)
         ref.current = true
-        // console.log("org", organizationname)
       }
     } catch (err) {
       console.log(err)
@@ -170,8 +168,30 @@ function App() {
 
   }, [logotrigger, fetchOrgLogo])
 
-  //-------------------------------------------------------------------------------------------------
+  //--------------------------------------------
+  // vehicle No 
+  const [vehicleNo, setVehicleNo] = useState([])
 
+  const getVehicleNo = async () => {
+    const response = await axios.get(`${apiUrl}/get-vehicleNo`)
+    setVehicleNo(response.data.data)
+  }
+
+
+  //-------------------------------------------
+  const [customer, setCustomer] = useState()
+
+  const getCustomer = async () => {
+    const response = await axios.get(`${apiUrl}/get-customer`)
+    setCustomer(response.data)
+  }
+
+  useEffect(() => {
+    getVehicleNo()
+    getCustomer()
+  }, [])
+
+  //-------------------------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -212,7 +232,7 @@ function App() {
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} /> : <NoPermission />}
+                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>

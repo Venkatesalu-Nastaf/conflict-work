@@ -16,7 +16,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 // import { APIURL } from "../../../url";
-import { useData } from "../../Maindashboard/DataContext";
+import { useData1 } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -59,7 +59,7 @@ export default function BasicTable() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  const { filteredData } = useData();
+  const { filteredData } = useData1();
 
   // const data1 = filteredData;
   const handlePopupClose = () => {

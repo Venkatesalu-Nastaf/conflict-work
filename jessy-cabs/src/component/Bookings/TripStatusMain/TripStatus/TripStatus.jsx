@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import "./TripStatus.css";
 import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
@@ -49,11 +49,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 
-const TripStatus = ({ stationName }) => {
+
+
+const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
   const {
-    statusvalue, handlestatusChange,
-    fromDate,
+    statusvalue, handlestatusChange, VehNo, cutomerName,
+    fromDate, handleVechicleNoChange, handleCustomerChange,
     selectedCustomerId,
     setFromDate,
     toDate,
@@ -84,7 +86,7 @@ const TripStatus = ({ stationName }) => {
     handleTripsheetClick,
     columns,
     filteredColumns,
-    columnshowall
+    columnshowall, setCutomerName, setVehNo,
   } = useTripStatus();
 
   useEffect(() => {
@@ -94,6 +96,19 @@ const TripStatus = ({ stationName }) => {
   }, [actionName, handleClick]);
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
+
+  // station name All setup
+
+  const [allStationName, setAllStationName] = useState([])
+
+  useEffect(() => {
+    if (stationName.length > 1) {
+      setAllStationName([...stationName, { Stationname: "All" }])
+    } else {
+      setAllStationName(stationName)
+    }
+  }, [stationName])
+
 
   return (
     <div className="TripStatus-form Scroll-Style-hide">
@@ -146,6 +161,7 @@ const TripStatus = ({ stationName }) => {
                   <div className="icone">
                     <SiStatuspal color="action" />
                   </div>
+
                   <Autocomplete
                     fullWidth
                     id="Status"
@@ -163,6 +179,7 @@ const TripStatus = ({ stationName }) => {
                     }}
                   />
                 </div>
+
                 <div className="input">
                   <div className="icone">
                     <GiMatterStates color="action" />
@@ -173,7 +190,7 @@ const TripStatus = ({ stationName }) => {
                     freeSolo
                     size="small"
                     value={department}
-                    options={stationName?.map((option) => ({
+                    options={allStationName?.map((option) => ({
                       label: option.Stationname,
                     }))}
                     onChange={(event, value) => handleInputChange(event, value)}
@@ -184,6 +201,51 @@ const TripStatus = ({ stationName }) => {
                     }}
                   />
                 </div>
+                <div className="input">
+                  <div className="icone">
+                    <GiMatterStates color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="Customer"
+                    freeSolo
+                    size="small"
+                    value={cutomerName}
+                    options={customer?.map((option) => ({
+                      label: option.customer,
+                    }))}
+                    onChange={(event, value) => handleCustomerChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Customer" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <GiMatterStates color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="vehicleNo"
+                    freeSolo
+                    size="small"
+                    value={VehNo}
+                    options={vehicleNo?.map((option) => ({
+                      label: option.vehRegNo,
+                    }))}
+                    onChange={(event, value) => handleVechicleNoChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="vehicleNo" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+
+
               </div>
             </div>
             <div className='alert-popup-main'>

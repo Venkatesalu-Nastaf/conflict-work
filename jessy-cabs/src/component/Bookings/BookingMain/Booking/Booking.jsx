@@ -2,9 +2,9 @@ import React, { useEffect, useContext } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
-import Menu from "@mui/material/Menu";
+// import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -13,8 +13,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+// import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+// import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import {
   Duty,
   Hire,
@@ -27,20 +27,20 @@ import {
   TextField,
   FormControlLabel,
   FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
+  // FormLabel,
+  // Radio,
+  // RadioGroup,
   Checkbox,
 } from "@mui/material";
 
 // ICONS
 import { PiCarSimpleFill } from "react-icons/pi";
 import InfoIcon from "@mui/icons-material/Info";
-import SellIcon from "@mui/icons-material/Sell";
+// import SellIcon from "@mui/icons-material/Sell";
 import ClearIcon from "@mui/icons-material/Clear";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
-import { AiOutlineFileSearch } from "react-icons/ai";
+// import { AiOutlineFileSearch } from "react-icons/ai";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
@@ -55,7 +55,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
@@ -85,6 +85,11 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -104,7 +109,7 @@ const Booking = ({ stationName }) => {
   const {
     selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
     selectedCustomerId,
-    rows,
+    // rows,
     actionName,
     error,
     success,
@@ -118,7 +123,7 @@ const Booking = ({ stationName }) => {
     handleClick,
     handleChange,
 
-    handleRowClick,
+    // handleRowClick,
     handleAdd,
     hidePopup,
     formData,
@@ -131,7 +136,7 @@ const Booking = ({ stationName }) => {
     selectedCustomerDatas,
     handleKeyEnter,
     formValues,
-    handleenterSearch,
+    // handleenterSearch,
     handleAutocompleteChange,
     setFormData,
     setStartTime,
@@ -141,33 +146,33 @@ const Booking = ({ stationName }) => {
     lastBookingNo,
     currentYear,
     // handleClickHide,
-    searchText,
-    setSearchText,
+    // searchText,
+    // setSearchText,
     setreporttime,
     storedUsername,
-    fromDate,
-    setFromDate,
-    toDate,
-    setToDate,
-    handleShowAll,
+    // fromDate,
+    // setFromDate,
+    // toDate,
+    // setToDate,
+    // handleShowAll,
     popupOpen,
     handlePopupClose,
-    handleExcelDownload,
-    handlePdfDownload,
-    reversedRows,
-    columns,
-    handletableClick,
-    setFile,
-    dialogOpen,
-    handleCloseDialog,
-    allFile,
+    // handleExcelDownload,
+    // handlePdfDownload,
+    // reversedRows,
+    // columns,
+    // handletableClick,
+    // setFile,
+    // dialogOpen,
+    // handleCloseDialog,
+    // allFile,
     handleButtonClick,
     isEditMode,
     handleEdit,
-    handleContextMenu,
-    handleimagedelete,
-    handleClosedeleteDialog,
-    dialogdeleteOpen,
+    // handleContextMenu,
+    // handleimagedelete,
+    // handleClosedeleteDialog,
+    // dialogdeleteOpen,
     // handleprevent,
     rowdriver,
     handleRowClickdriver,
@@ -177,7 +182,8 @@ const Booking = ({ stationName }) => {
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
-    handleSelectAll, handlecheckbox, selectAll, deletefile, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
+    // handleSelectAll, handlecheckbox, selectAll, deletefile, 
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   } = useBooking();
 
   useEffect(() => {
@@ -198,21 +204,420 @@ const Booking = ({ stationName }) => {
   const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
 
+ 
+
+  // const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+  // const selectedDate = formData.bookingdate
+  //   ? dayjs(formData.bookingdate)
+  //   : selectedCustomerData.bookingdate
+  //     ? dayjs(selectedCustomerData.bookingdate)
+  //     : book.bookingdate
+  //       ? dayjs(book.bookingdate)
+  //       : dayjs();
+
+  //       console.log('aaaaa',selectedDate);
+
+  // const handleSelectDateChange = (event) => {
+  //   setSelectedDate(event.target.value);
+  // };
+
+  const [bookingStatus, setBookingStatus] = React.useState('');
+
+  const handleStatusChange = (event) => {
+    setBookingStatus(event.target.value);
+  };
 
 
 
   return (
     <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
+        <div>
+          <div className="booking-top-division">
+            <div className="input">
+              <div className="icone">
+                <SwitchAccountIcon color="action" />
+              </div>
+              <TextField
+                name="bookingno"
+                margin="normal"
+                size="small"
+                className="full-width"
+                label="Booking"
+                id="standard-size-bookingno"
+                autoComplete="new-password"
+                value={
+                  formData.bookingno ||
+                  selectedCustomerData.bookingno ||
+                  book.bookingno ||
+                  ""
+                }
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                // variant="standard"
+                autoFocus
+              />
+            </div>
+            <div className="input radio">
+              <Box sx={{ minWidth: '100%' }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={bookingStatus}
+                    label="Status"
+                    onChange={handleStatusChange}
+                  >
+                    <MenuItem value={'Pending'}>Pending</MenuItem>
+                    <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              {/* <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Status
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="status"
+                  id="status"
+                  autoComplete="new-password"
+                  value={
+                    formData.status ||
+                    selectedCustomerData.status ||
+                    book.status ||
+                    ""
+                  }
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="pending"
+                    control={<Radio />}
+                    label="Pending"
+                  />
+                  <FormControlLabel
+                    value="Cancelled"
+                    control={<Radio />}
+                    label="Cancelled"
+                  />
+                </RadioGroup>
+              </FormControl> */}
+            </div>
+
+            {/* <span className="d-grid">
+              <label>Ordered by</label>
+              <input
+                type="text"
+                value={
+                  formData.orderedby ||
+                  selectedCustomerData.orderedby ||
+                  selectedCustomerDatas.name ||
+                  book.orderedby ||
+                  ""
+                }
+              />
+            </span> */}
+            <span className="d-grid">
+              <label>Username</label>
+              <input type="text" value={formData.username ||
+                selectedCustomerData.username ||
+                book.username ||
+                storedUsername ||
+                ""} />
+            </span>
+            <span className="d-grid">
+              {/* <label>Booking Date</label> */}
+              {/* <input
+                type="date"
+                id="date-input"
+                value={selectedDate}
+                // onChange={handleSelectDateChange}
+                onChange={(date) => handleDateChange(date, "bookingdate")}
+              /> */}
+              {/* <input type="date" value={
+                formData.bookingdate || selectedCustomerData.bookingdate
+                  ? dayjs(selectedCustomerData.bookingdate)
+                  : null || book.bookingdate
+                    ? dayjs(book.bookingdate)
+                    : dayjs()
+              } /> */}
+              <div className="booking-top-division-date">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Booking Date">
+                    <DatePicker
+                      value={
+                        formData.bookingdate || selectedCustomerData.bookingdate
+                          ? dayjs(selectedCustomerData.bookingdate)
+                          : null || book.bookingdate
+                            ? dayjs(book.bookingdate)
+                            : dayjs()
+                      }
+                      format="DD/MM/YYYY"
+                      onChange={(date) => handleDateChange(date, "bookingdate")}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField
+                          {...inputProps}
+                          inputRef={inputRef}
+                          value={selectedCustomerData?.bookingdate}
+                        />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+            </span>
+            <span className="d-grid">
+              <label>Booking Time</label>
+              <input
+                type="time"
+                id="Booking_time"
+                name="bookingtime"
+                value={
+                  formData.bookingtime ||
+                  selectedCustomerData.bookingtime ||
+                  book.bookingtime ||
+                  getCurrentTime() ||
+                  ""
+                }
+                onChange={(event) => {
+                  setBook({ ...book, bookingtime: event.target.value });
+                  setSelectedCustomerData({
+                    ...selectedCustomerData,
+                    bookingtime: event.target.value,
+                  });
+                  setBookingTime(event.target.value);
+                }}
+              />
+            </span>
+            <span className="d-grid">
+              <label>Fin Years</label>
+              <input type="text" value={currentYear} />
+              {/* <div className="">
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="fine_years"
+                  value={currentYear}
+                  options={[currentYear]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Fin Years" />
+                  )}
+                />
+              </div> */}
+            </span>
+            <span>
+              <div className="">
+                <FormControlLabel
+                  id="sendMailCheckbox"
+                  value="sendemail"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={sendEmail}
+                      onChange={(event) => setSendEmail(event.target.checked)}
+                    />
+                  }
+                  label="Send Email"
+                />
+              </div>
+            </span>
+            <span className="d-grid">
+              <label>Trip Id</label>
+              <input
+                type="text"
+                value={
+                  formData.tripid ||
+                  selectedCustomerData.tripid ||
+                  book.tripid ||
+                  ""
+                }
+              />
+            </span>
+            {/* <span>
+              {isEditMode ? (
+                <div>
+                  <div className="input-dummy">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      component="label"
+                    >
+                      Attach Image
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        // onChange={(e) => setFile(e.target.files[0])}
+                        onChange={handleChangeFile}
+                      />
+                    </Button>
+                  </div>
+                  <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                    <Button
+                      variant="outlined"
+                      onClick={handleButtonClick}
+                    >
+                      View
+                    </Button>
+                  </div>
+                  <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                    <p>Image Count : {AvilableimageCount}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="booking-image-attach-input-division">
+                  <div className="input-dummy">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      component="label"
+                      size="small"
+                    >
+                      Attach File
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={handleImagechange2}
+                      />
+                    </Button>
+                  </div>
+                  <div className="booking-image-attach-view-division">
+                    <span>{selectetImg.length} images selected</span>
+                    <Button variant="outlined" size="small" onClick={() => setImageDialogOpen(true)}>view</Button>
+                  </div>
+                </div>
+              )}
+            </span> */}
+          </div>
+          {/* <div className="input">
+            <div className="icone">
+              <PermIdentityIcon color="action" />
+            </div>
+            <TextField
+              margin="normal"
+              size="small"
+              id="username"
+              label="User Name"
+              name="username"
+              autoComplete="new-password"
+              value={
+                formData.username ||
+                selectedCustomerData.username ||
+                book.username ||
+                storedUsername ||
+                ""
+              }
+              onChange={handleChange}
+              style={{ width: '20px', padding: '0px 0px' }}
+            />
+          </div> */}
+          {/* <div className="input booking-date-input-division">
+            <div className="icone">
+              <CalendarMonthIcon color="action" className="booking-date-icon" />
+            </div>
+            <div className='full-width'>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoItem label="Booking Date">
+                  <DatePicker
+                    value={
+                      formData.bookingdate || selectedCustomerData.bookingdate
+                        ? dayjs(selectedCustomerData.bookingdate)
+                        : null || book.bookingdate
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "bookingdate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.bookingdate}
+                      />
+                    )}
+                  </DatePicker>
+                </DemoItem>
+              </LocalizationProvider>
+            </div>
+          </div> */}
+          {/* <div className="booking-time-main-div">
+            <div className="input time">
+              <div className="icone">
+                <MdOutlineAccessTimeFilled />
+              </div>
+              <div className="input-type-grid">
+                <label>Booking Time</label>
+                <input
+                  type="time"
+                  id="Booking_time"
+                  value={
+                    formData.bookingtime ||
+                    selectedCustomerData.bookingtime ||
+                    book.bookingtime ||
+                    getCurrentTime() ||
+                    ""
+                  }
+                  format="DD/MM/YYYY"
+                  onChange={(event) => {
+                    setBook({ ...book, bookingtime: event.target.value });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      bookingtime: event.target.value,
+                    });
+                    setBookingTime(event.target.value);
+                  }}
+                  name="bookingtime"
+                />
+              </div>
+            </div>
+          </div> */}
+          {/* <div className="input">
+            <FormControlLabel
+              id="sendMailCheckbox"
+              value="sendemail"
+              control={
+                <Checkbox
+                  size="small"
+                  checked={sendEmail}
+                  onChange={(event) => setSendEmail(event.target.checked)}
+                />
+              }
+              label="Send Email"
+            />
+          </div> */}
+          {/* <div className="input fin-years-input">
+            <div className="icone">
+              <CalendarMonthIcon color="action" />
+            </div>
+            <Autocomplete
+              fullWidth
+              size="small"
+              id="fine_years"
+              value={currentYear}
+              options={[currentYear]}
+              renderInput={(params) => (
+                <TextField {...params} label="Fin Years" />
+              )}
+            />
+          </div> */}
+        </div>
         <div className="booking-main-section1">
           <div className="sub-section1">
             <div className="first-division">
-              <div className="input">
+              {/* <div className="input">
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
                 <TextField
                   name="bookingno"
+                  margin="normal"
+                  size="small"
                   className="full-width"
                   label="Booking"
                   id="standard-size-bookingno"
@@ -225,11 +630,11 @@ const Booking = ({ stationName }) => {
                   }
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
-                  variant="standard"
+                  // variant="standard"
                   autoFocus
                 />
-              </div>
-              <div className="input booking-date-input-division">
+              </div> */}
+              {/* <div className="input booking-date-input-division">
                 <div className="icone">
                   <CalendarMonthIcon color="action" className="booking-date-icon" />
                 </div>
@@ -258,8 +663,8 @@ const Booking = ({ stationName }) => {
                     </DemoItem>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="booking-time-main-div">
+              </div> */}
+              {/* <div className="booking-time-main-div">
                 <div className="input time">
                   <div className="icone">
                     <MdOutlineAccessTimeFilled />
@@ -289,8 +694,8 @@ const Booking = ({ stationName }) => {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="input radio">
+              </div> */}
+              {/* <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Status
@@ -321,13 +726,15 @@ const Booking = ({ stationName }) => {
                     />
                   </RadioGroup>
                 </FormControl>
-              </div>
-              <div className="input">
+              </div> */}
+              {/* <div className="input">
                 <div className="icone">
                   <SellIcon color="action" />
                 </div>
                 <TextField
                   name="tripid"
+                  margin="normal"
+                  size="small"
                   autoComplete="new-password"
                   className="full-width"
                   value={
@@ -339,10 +746,10 @@ const Booking = ({ stationName }) => {
                   onChange={handleChange}
                   label="Trip Id"
                   id="tripid"
-                  variant="standard"
+                // variant="standard"
                 />
-              </div>
-              <div className="input">
+              </div> */}
+              {/* <div className="input">
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -364,12 +771,11 @@ const Booking = ({ stationName }) => {
                   onKeyDown={handleKeyEnter}
                   autoComplete="new-password"
                 />
-              </div>
-              <div className="input service-station-input">
+              </div> */}
+              {/* <div className="input service-station-input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
-
                 <Autocomplete
                   fullWidth
                   id="servicestation"
@@ -388,13 +794,15 @@ const Booking = ({ stationName }) => {
                     );
                   }}
                 />
-              </div>
-              <div className="input">
+              </div> */}
+              {/* <div className="input">
                 <div className="icone">
                   <FmdBadIcon color="action" />
                 </div>
                 <TextField
                   name="remarks"
+                  margin="normal"
+                  size="small"
                   autoComplete="new-password"
                   className="full-width"
                   value={
@@ -406,12 +814,12 @@ const Booking = ({ stationName }) => {
                   onChange={handleChange}
                   label="Remarks"
                   id="remarks"
-                  variant="standard"
+                // variant="standard"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
-          <div className="sub-section2 sub-section2-booking">
+          {/* <div className="sub-section2 sub-section2-booking">
             <div className="first-table-driver">
               <div className="booking-update-main">
                 <div className="booking-update">
@@ -468,10 +876,172 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
 
-          </div>
+          </div> */}
         </div>
         <div>
           <div className="second-division second-division-booking">
+            {/* <div className="input">
+              <div className="icone">
+                <SwitchAccountIcon color="action" />
+              </div>
+              <TextField
+                name="bookingno"
+                margin="normal"
+                size="small"
+                className="full-width"
+                label="Booking"
+                id="standard-size-bookingno"
+                autoComplete="new-password"
+                value={
+                  formData.bookingno ||
+                  selectedCustomerData.bookingno ||
+                  book.bookingno ||
+                  ""
+                }
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                // variant="standard"
+                autoFocus
+              />
+            </div> */}
+            {/* <div className="input booking-date-input-division">
+                <div className="icone">
+                  <CalendarMonthIcon color="action" className="booking-date-icon" />
+                </div>
+                <div className='full-width'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoItem label="Booking Date">
+                      <DatePicker
+                        value={
+                          formData.bookingdate || selectedCustomerData.bookingdate
+                            ? dayjs(selectedCustomerData.bookingdate)
+                            : null || book.bookingdate
+                              ? dayjs(book.bookingdate)
+                              : dayjs()
+                        }
+                        format="DD/MM/YYYY"
+                        onChange={(date) => handleDateChange(date, "bookingdate")}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField
+                            {...inputProps}
+                            inputRef={inputRef}
+                            value={selectedCustomerData?.bookingdate}
+                          />
+                        )}
+                      </DatePicker>
+                    </DemoItem>
+                  </LocalizationProvider>
+                </div>
+              </div> */}
+            {/* <div className="booking-time-main-div">
+                <div className="input time">
+                  <div className="icone">
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className="input-type-grid">
+                    <label>Booking Time</label>
+                    <input
+                      type="time"
+                      id="Booking_time"
+                      value={
+                        formData.bookingtime ||
+                        selectedCustomerData.bookingtime ||
+                        book.bookingtime ||
+                        getCurrentTime() ||
+                        ""
+                      }
+                      format="DD/MM/YYYY"
+                      onChange={(event) => {
+                        setBook({ ...book, bookingtime: event.target.value });
+                        setSelectedCustomerData({
+                          ...selectedCustomerData,
+                          bookingtime: event.target.value,
+                        });
+                        setBookingTime(event.target.value);
+                      }}
+                      name="bookingtime"
+                    />
+                  </div>
+                </div>
+              </div> */}
+            {/* <div className="input radio">
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Status
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="status"
+                  id="status"
+                  autoComplete="new-password"
+                  value={
+                    formData.status ||
+                    selectedCustomerData.status ||
+                    book.status ||
+                    ""
+                  }
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="pending"
+                    control={<Radio />}
+                    label="Pending"
+                  />
+                  <FormControlLabel
+                    value="Cancelled"
+                    control={<Radio />}
+                    label="Cancelled"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div> */}
+            {/* <div className="input">
+              <div className="icone">
+                <SellIcon color="action" />
+              </div>
+              <TextField
+                name="tripid"
+                margin="normal"
+                size="small"
+                autoComplete="new-password"
+                className="full-width"
+                value={
+                  formData.tripid ||
+                  selectedCustomerData.tripid ||
+                  book.tripid ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Trip Id"
+                id="tripid"
+              // variant="standard"
+              />
+            </div> */}
+            <div className="input">
+              <div className="icone">
+                <PermIdentityIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                id="customer"
+                label="Customer"
+                name="customer"
+                className="full-width"
+                value={
+                  formData.customer ||
+                  selectedCustomerData.customer ||
+                  selectedCustomerDatas.customer ||
+                  book.customer ||
+                  ""
+                }
+                onChange={handleChange}
+                onKeyDown={handleKeyEnter}
+                autoComplete="new-password"
+              />
+            </div>
             <div className="input">
               <div className="icone">
                 <HomeRepairServiceTwoToneIcon color="action" />
@@ -490,9 +1060,35 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 label="Ordered by"
                 id="orderedby"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
+
+            {/* <div className="input">
+              <div className="icone">
+                <FmdBadIcon color="action" />
+              </div>
+              <TextField
+                name="remarks"
+                margin="normal"
+                size="small"
+                autoComplete="new-password"
+                className="full-width"
+                value={
+                  formData.remarks ||
+                  selectedCustomerData.remarks ||
+                  book.remarks ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Remarks"
+                id="remarks"
+              // variant="standard"
+              />
+            </div> */}
+
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -509,9 +1105,57 @@ const Booking = ({ stationName }) => {
                   ""
                 }
                 onChange={handleChange}
-                label="Mobile No"
+                label="Order by Mobile No"
                 id="mobile_no"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <ForwardToInboxIcon color="action" />
+              </div>
+              <TextField
+                name="orderbyemail"
+                className="full-width"
+                autoComplete="new-password"
+                value={
+                  formData.orderbyemail ||
+                  selectedCustomerData.orderbyemail ||
+                  selectedCustomerDatas.customeremail ||
+                  book.orderbyemail ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Order By Email"
+                id="orederbyemail"
+                // variant="standard"
+                margin="normal"
+                size="small"
+              />
+            </div>
+            <div className="input service-station-input">
+              <div className="icone">
+                <DomainAddIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                id="servicestation"
+                freeSolo
+                size="small"
+                value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                options={stationName?.map((option) => ({
+                  label: option?.Stationname,
+                }))}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "servicestation")
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
+                  );
+                }}
               />
             </div>
             <div className="input">
@@ -532,10 +1176,83 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 label="Guest Name"
                 id="guestname"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
                 required
               />
             </div>
+            <div className="input">
+              <div className="icone">
+                <ContactPhoneIcon color="action" />
+              </div>
+              <TextField
+                name="guestmobileno"
+                autoComplete="new-password"
+                className="full-width"
+                value={
+                  formData.guestmobileno ||
+                  selectedCustomerData.guestmobileno ||
+                  formValues.guestmobileno ||
+                  book.guestmobileno ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Guest Mobile No"
+                id="guestmobileno"
+                // variant="standard"
+                margin="normal"
+                size="small"
+              />
+            </div>
+            <div className="input radio">
+              <div className="icone">
+                <AttachEmailIcon color="action" />
+              </div>
+              <TextField
+                name="email"
+                className="full-width"
+                autoComplete="new-password"
+                value={
+                  formData.email ||
+                  selectedCustomerData.email ||
+                  formValues.email ||
+                  book.email ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Guest Email"
+                id="email"
+                // variant="standard"
+                margin="normal"
+                size="small"
+              />
+            </div>
+            <div className="input pick-up-address-input">
+              <div className="icone">
+                <AddHomeWorkIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                id="address12"
+                label="Pick up Address"
+                name="address1"
+                multiline
+                rows={2}
+                sx={{ width: "100%" }}
+                autoComplete="new-password"
+                value={
+                  formData.address1 ||
+                  selectedCustomerData.address1 ||
+                  book.address1 ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div>
+
+
+
             <div className="input">
               <div className="icone">
                 <MdDataUsage />
@@ -557,48 +1274,75 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="input">
               <div className="icone">
-                <ContactPhoneIcon color="action" />
+                <EngineeringIcon color="action" />
               </div>
-              <TextField
-                name="guestmobileno"
-                autoComplete="new-password"
-                className="full-width"
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-duty"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "duty")
+                }
                 value={
-                  formData.guestmobileno ||
-                  selectedCustomerData.guestmobileno ||
-                  formValues.guestmobileno ||
-                  book.guestmobileno ||
+                  Duty.find((option) => option.Option)?.label ||
+                  formData.duty ||
+                  selectedCustomerData.duty ||
+                  book.duty ||
                   ""
                 }
-                onChange={handleChange}
-                label="Guest Mobile No"
-                id="guestmobileno"
-                variant="standard"
+                options={Duty.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.duty ||
+                  selectedCustomerData.duty ||
+                  book.duty ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Duty"
+                      name="duty"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
               />
             </div>
-            <div className="input radio">
+
+
+
+            <div className="input">
               <div className="icone">
-                <AttachEmailIcon color="action" />
+                <AirplaneTicketIcon color="action" />
               </div>
               <TextField
-                name="email"
+                name="flightno"
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.email ||
-                  selectedCustomerData.email ||
-                  formValues.email ||
-                  book.email ||
+                  formData.flightno ||
+                  selectedCustomerData.flightno ||
+                  book.flightno ||
                   ""
                 }
                 onChange={handleChange}
-                label="Email"
-                id="email"
-                variant="standard"
+                label="Flight No"
+                id="flightno"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
+
             <div className="input radio">
               <div className="icone">
                 <RateReviewIcon color="action" />
@@ -614,55 +1358,108 @@ const Booking = ({ stationName }) => {
                   ""
                 }
                 onChange={handleChange}
-                label="Employee No"
+                label="Employee Id"
                 id="employeeno"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <PermIdentityIcon color="action" />
-              </div>
-              <TextField
+                // variant="standard"
                 margin="normal"
                 size="small"
-                id="username"
-                label="User Name"
-                name="username"
-                autoComplete="new-password"
-                value={
-                  formData.username ||
-                  selectedCustomerData.username ||
-                  book.username ||
-                  storedUsername ||
-                  ""
-                }
-                onChange={handleChange}
               />
             </div>
+
+
+
             <div className="input">
               <div className="icone">
-                <AddHomeWorkIcon color="action" />
+                <AppRegistrationIcon color="action" />
               </div>
               <TextField
-                margin="normal"
-                id="address12"
-                label="Address"
-                name="address1"
-                multiline
-                rows={2}
-                sx={{ width: "100%" }}
+                name="registerno"
+                className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.address1 ||
-                  selectedCustomerData.address1 ||
-                  book.address1 ||
+                  formData.registerno ||
+                  selectedCustomerData.registerno ||
+                  book.registerno ||
                   ""
                 }
                 onChange={handleChange}
+                label="Request Id"
+                id="registerno"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
-            <div className="input fin-years-input">
+
+            <div className="input">
+              <div className="icone">
+                <QrCodeIcon color="action" />
+              </div>
+              <TextField
+                name="customercode"
+                className="full-width"
+                autoComplete="new-password"
+                value={
+                  formData.customercode ||
+                  selectedCustomerData.customercode ||
+                  book.customercode ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Cost code"
+                id="customercode"
+                // variant="standard"
+                margin="normal"
+                size="small"
+              />
+            </div>
+
+            <div className="input">
+              <div className="icone">
+                <TaxiAlertTwoToneIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="vehType"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehType")
+                }
+                value={
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType || selectedCustomerdriver.vehType ||
+                  ""
+                }
+                options={vehileName.map((option) => ({
+                  label: option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType || selectedCustomerdriver.vehType ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Vehicle Name"
+                      name="vehType"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+
+
+
+
+            {/* <div className="input fin-years-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
               </div>
@@ -676,8 +1473,8 @@ const Booking = ({ stationName }) => {
                   <TextField {...params} label="Fin Years" />
                 )}
               />
-            </div>
-            <div className="input booking-report-input">
+            </div> */}
+            {/* <div className="input booking-report-input">
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
@@ -698,49 +1495,7 @@ const Booking = ({ stationName }) => {
                 id="Report"
 
               />
-            </div>
-            <div className="input booking-payment-type-input">
-              <div className="icone">
-                <AccountBalanceWalletTwoToneIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="paymenttype"
-                freeSolo
-                sx={{ width: "100%" }}
-                onChange={(event, value) =>
-                  handleAutocompleteChange(event, value, "paymenttype")
-                }
-                value={
-                  PayType.find((option) => option.Option)?.label ||
-                  formData.paymenttype ||
-                  selectedCustomerData.paymenttype ||
-                  book.paymenttype ||
-                  ""
-                }
-                options={PayType.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) =>
-                  option.label ||
-                  formData.paymenttype ||
-                  selectedCustomerData.paymenttype ||
-                  book.paymenttype ||
-                  ""
-                }
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label="Payment Type"
-                      name="paymenttype"
-                      inputRef={params.inputRef}
-                    />
-                  );
-                }}
-              />
-            </div>
+            </div> */}
             <div className="input booking-report-date-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
@@ -748,7 +1503,7 @@ const Booking = ({ stationName }) => {
               <div className="full-width">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="Report Date"
+                    label="Start Date"
                     id="report_date"
                     value={
                       formData.startdate || selectedCustomerData.startdate
@@ -771,6 +1526,8 @@ const Booking = ({ stationName }) => {
                 </LocalizationProvider>
               </div>
             </div>
+
+
             {/* 
             <div>
               <div className="input time booking-start-time-input">
@@ -837,7 +1594,7 @@ const Booking = ({ stationName }) => {
 
             <div>
               <div className="input time booking-start-time-input">
-                <div className="icone">
+                <div className="icone icone-with-margin-top">
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
@@ -860,7 +1617,7 @@ const Booking = ({ stationName }) => {
 
             <div>
               <div className="input time booking-start-time-input">
-                <div className="icone">
+                <div className="icone icone-with-margin-top">
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
@@ -886,9 +1643,79 @@ const Booking = ({ stationName }) => {
               </div>
             </div>
 
-          </div>
+            <div className="input advance-input">
+              <div className="icone">
+                <InfoIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                name="advance"
+                autoComplete="new-password"
+                value={
+                  formData.advance ||
+                  selectedCustomerData.advance ||
+                  book.advance ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Advance"
+                id="advance"
+                sx={{ width: "100%" }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">₹</InputAdornment>
+                  ),
+                }}
+              />
+            </div>
 
-          {isEditMode ? (
+            <div className="input booking-payment-type-input">
+              <div className="icone">
+                <AccountBalanceWalletTwoToneIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="paymenttype"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "paymenttype")
+                }
+                value={
+                  PayType.find((option) => option.Option)?.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                options={PayType.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Payment Type"
+                      name="paymenttype"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+
+
+            {/* </div> */}
+
+            {/* {isEditMode ? (
             <div>
               <div className="input-dummy">
                 <Button
@@ -921,20 +1748,6 @@ const Booking = ({ stationName }) => {
           ) : (
 
             <div className="booking-image-attach-input-division">
-
-              {/* <input
-                style={{
-                  marginBottom: "10px",
-                  padding: "10px",
-                  border: "2px solid #ccc",
-                  borderRadius: "5px",
-                  backgroundColor: "#fff",
-                  color: "#333",
-                  cursor: "pointer",
-                  marginRight: "10px",
-                }}
-                type="file" multiple onChange={handleImagechange2} /> */}
-
               <div className="input-dummy">
                 <Button
                   color="primary"
@@ -955,225 +1768,198 @@ const Booking = ({ stationName }) => {
                 <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
               </div>
             </div>
-          )}
+          )} */}
 
 
-          <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
-            <DialogContent>
-              <div
+            <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
+              <DialogContent>
+                <div
+                  style={{
+                    display: "flex",
+                    overflowX: "auto",
+                    backgroundColor: "#E5E5E5",
+                    padding: selectetImg.length > 0 ? "10px" : "0",
+                  }}
+                >
+                  {selectetImg &&
+                    selectetImg.map((img, index) => (
+                      <div
+                        key={index}
+                        style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}
+                      >
+                        <img
+                          src={URL.createObjectURL(img)}
+                          alt="img"
+                          style={{ width: "200px", height: "200px" }}
+                        />
+                        <p
+                          style={{
+                            width: "180px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {img.name}
+                        </p>
+                        <button
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => removeSelectedImage(index, e)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* <div className="booking-main-section2">
+            <div className="sub-section1 sub-section-second-division"> */}
+
+            {/* <div className="input">
+              <div className="icone">
+                <LocationCityIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                id="pickup"
+                label="PickUp"
+                name="pickup"
+                autoComplete="new-password"
+                value={
+                  formData.pickup ||
+                  selectedCustomerData.pickup ||
+                  formValues.pickup ||
+                  book.pickup ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div> */}
+
+
+
+
+
+            {isEditMode ? (
+              <div>
+                <div className="input-dummy">
+                  <Button
+                    color="primary"
+                    variant="contained"
+
+                    component="label"
+                  >
+                    Attach Image
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      // onChange={(e) => setFile(e.target.files[0])}
+                      onChange={handleChangeFile}
+                    />
+                  </Button>
+                </div>
+                <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleButtonClick}
+                  >
+                    View
+                  </Button>
+                </div>
+                <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                  <p>Image Count : {AvilableimageCount}</p>
+                </div>
+              </div>
+            ) : (
+
+              <div className="booking-image-attach-input-division">
+
+                {/* <input
                 style={{
-                  display: "flex",
-                  overflowX: "auto",
-                  backgroundColor: "#E5E5E5",
-                  padding: selectetImg.length > 0 ? "10px" : "0",
+                  marginBottom: "10px",
+                  padding: "10px",
+                  border: "2px solid #ccc",
+                  borderRadius: "5px",
+                  backgroundColor: "#fff",
+                  color: "#333",
+                  cursor: "pointer",
+                  marginRight: "10px",
                 }}
-              >
-                {selectetImg &&
-                  selectetImg.map((img, index) => (
-                    <div
-                      key={index}
-                      style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}
-                    >
-                      <img
-                        src={URL.createObjectURL(img)}
-                        alt="img"
-                        style={{ width: "200px", height: "200px" }}
-                      />
-                      <p
-                        style={{
-                          width: "180px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {img.name}
-                      </p>
-                      <button
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => removeSelectedImage(index, e)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-              </div>
-            </DialogContent>
-          </Dialog>
+                type="file" multiple onChange={handleImagechange2} /> */}
 
-          <div className="booking-main-section2">
-            <div className="sub-section1 sub-section-second-division">
-              <div className="input">
-                <div className="icone">
-                  <EngineeringIcon color="action" />
+                <div className="input-dummy">
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    component="label"
+                  >
+                    Attach File
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={handleImagechange2}
+                    />
+                  </Button>
                 </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-duty"
-                  freeSolo
-                  sx={{ width: "100%" }}
-                  onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "duty")
-                  }
-                  value={
-                    Duty.find((option) => option.Option)?.label ||
-                    formData.duty ||
-                    selectedCustomerData.duty ||
-                    book.duty ||
-                    ""
-                  }
-                  options={Duty.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) =>
-                    option.label ||
-                    formData.duty ||
-                    selectedCustomerData.duty ||
-                    book.duty ||
-                    ""
-                  }
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Duty"
-                        name="duty"
-                        inputRef={params.inputRef}
-                      />
-                    );
-                  }}
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <LocationCityIcon color="action" />
+                <div className="booking-image-attach-view-division">
+                  <span>{selectetImg.length} images selected</span>
+                  <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="pickup"
-                  label="PickUp"
-                  name="pickup"
-                  autoComplete="new-password"
-                  value={
-                    formData.pickup ||
-                    selectedCustomerData.pickup ||
-                    formValues.pickup ||
-                    book.pickup ||
-                    ""
-                  }
-                  onChange={handleChange}
-                />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <QrCodeIcon color="action" />
-                </div>
-                <TextField
-                  name="customercode"
-                  className="full-width"
-                  autoComplete="new-password"
-                  value={
-                    formData.customercode ||
-                    selectedCustomerData.customercode ||
-                    book.customercode ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Customer code"
-                  id="customercode"
-                  variant="standard"
-                />
+            )}
+
+            {/* <div className="input">
+              <div className="icone">
+                <FmdBadIcon color="action" />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <AppRegistrationIcon color="action" />
-                </div>
-                <TextField
-                  name="registerno"
-                  className="full-width"
-                  autoComplete="new-password"
-                  value={
-                    formData.registerno ||
-                    selectedCustomerData.registerno ||
-                    book.registerno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Request No"
-                  id="registerno"
-                  variant="standard"
-                />
+              <TextField
+                name="remarks"
+                margin="normal"
+                size="small"
+                autoComplete="new-password"
+                className="full-width"
+                value={
+                  formData.remarks ||
+                  selectedCustomerData.remarks ||
+                  book.remarks ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Remarks"
+                id="remarks"
+              // variant="standard"
+              />
+            </div> */}
+
+            <div className="input pick-up-address-input">
+              <div className="icone">
+                <FmdBadIcon color="action" />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <AirplaneTicketIcon color="action" />
-                </div>
-                <TextField
-                  name="flightno"
-                  className="full-width"
-                  autoComplete="new-password"
-                  value={
-                    formData.flightno ||
-                    selectedCustomerData.flightno ||
-                    book.flightno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Flight No"
-                  id="flightno"
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <ForwardToInboxIcon color="action" />
-                </div>
-                <TextField
-                  name="orderbyemail"
-                  className="full-width"
-                  autoComplete="new-password"
-                  value={
-                    formData.orderbyemail ||
-                    selectedCustomerData.orderbyemail ||
-                    selectedCustomerDatas.customeremail ||
-                    book.orderbyemail ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Order By Email"
-                  id="orederbyemail"
-                  variant="standard"
-                />
-              </div>
-              <div className="input advance-input">
-                <div className="icone">
-                  <InfoIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="advance"
-                  autoComplete="new-password"
-                  value={
-                    formData.advance ||
-                    selectedCustomerData.advance ||
-                    book.advance ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Advance"
-                  id="advance"
-                  sx={{ width: "100%" }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">₹</InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
+              <TextField
+                name="remarks"
+                margin="normal"
+                size="small"
+                autoComplete="new-password"
+                className="full-width"
+                onChange={handleChange}
+                label="Remarks"
+                id="remarks"
+                multiline
+                rows={2}
+                sx={{ width: "100%" }}
+                value={
+                  formData.remarks ||
+                  selectedCustomerData.remarks ||
+                  book.remarks ||
+                  ""
+                }
+              />
             </div>
-            <div className="sub-section2-driver">
+          </div>
+          {/* <div className="sub-section2-driver">
               <div className="second-table-driver">
                 <div className="booking-update-main driver-table">
                   <div className="booking-update">
@@ -1214,8 +2000,8 @@ const Booking = ({ stationName }) => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
@@ -1265,7 +2051,7 @@ const Booking = ({ stationName }) => {
         </Box>
         {/**  helloo */}
 
-        <div className="vehicle-confirm">
+        <div className="vehicle-confirm" style={{ display: 'flex' }}>
           <div className="input-field input-feild-vehicle-confirm">
             <div className="input">
               <div className="icone">
@@ -1276,7 +2062,7 @@ const Booking = ({ stationName }) => {
                 size="small"
                 id="hireTypes"
                 freeSolo
-                sx={{ width: "20ch" }}
+                sx={{ width: "100%" }}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "hireTypes")
                 }
@@ -1326,7 +2112,9 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 label="Travels Name"
                 id="travelsname"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
 
@@ -1347,7 +2135,9 @@ const Booking = ({ stationName }) => {
                 onKeyDown={handleKeyEnterdriver}
                 label="Vehicle Register No"
                 id="vehRegNo"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
 
@@ -1380,7 +2170,7 @@ const Booking = ({ stationName }) => {
               />
             </div>
 
-            <div className="input">
+            {/* <div className="input">
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
               </div>
@@ -1389,7 +2179,7 @@ const Booking = ({ stationName }) => {
                 size="small"
                 id="vehType"
                 freeSolo
-                sx={{ width: "20ch" }}
+                sx={{ width: "100%" }}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "vehType")
                 }
@@ -1420,7 +2210,7 @@ const Booking = ({ stationName }) => {
                   );
                 }}
               />
-            </div>
+            </div> */}
 
             <div className="input">
               <div className="icone">
@@ -1468,7 +2258,9 @@ const Booking = ({ stationName }) => {
                 onKeyDown={handleKeyEnterdriver}
                 label="Driver Name"
                 id="drivername"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
 
@@ -1488,7 +2280,9 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 label="Driver Phone"
                 id="mobileNo"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
 
@@ -1508,11 +2302,13 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 label="Travels Email"
                 id="travelsemail"
-                variant="standard"
+                // variant="standard"
+                margin="normal"
+                size="small"
               />
             </div>
 
-            <div className="input">
+            <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
@@ -1541,6 +2337,49 @@ const Booking = ({ stationName }) => {
               }
             </div>
 
+          </div>
+
+          <div className="sub-section2-driver">
+            <div className="second-table-driver">
+              <div className="booking-update-main driver-table">
+                <div className="booking-update">
+                  <div className="Scroll-Style booking-driver-table">
+                    <table>
+                      <thead id="update-header">
+                        <tr>
+                          <th className="table-head-booking table-heading-first">Driver_NAME</th>
+                          <th className="table-head-booking">VEHICLE_Name</th>
+                          <th className="table-head-booking">VEHICLE NO</th>
+                          {/* <th className="table-head-booking">HIRE TYPES</th> */}
+                          {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rowdriver?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6}>No data available.</td>
+                          </tr>
+                        ) : (
+                          rowdriver?.map((row) => (
+                            <tr
+                              id="update-row"
+                              key={row.id}
+                              onClick={() => handleRowClickdriver(row)}
+                            >
+                              <td>{row.driverName}</td>
+                              <td>{row.vehType}</td>
+                              <td>{row.vehRegNo}</td>
+                              {/* <td>{row.hireTypes}</td> */}
+                              {/* <td>{row.active}</td> */}
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1597,7 +2436,7 @@ const Booking = ({ stationName }) => {
             </div>
           )}
         </div>
-        <div className="detail-container-main">
+        {/* <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
               <div className="input-field search-division">
@@ -1652,30 +2491,31 @@ const Booking = ({ stationName }) => {
                     Search
                   </Button>
                 </div>
+                <div className="booking-Download-btn">
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button
+                          variant="contained"
+                          endIcon={<ExpandCircleDownOutlinedIcon />}
+                          {...bindTrigger(popupState)}
+                        >
+                          Download
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                          <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  endIcon={<ExpandCircleDownOutlinedIcon />}
-                  {...bindTrigger(popupState)}
-                >
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
-        <div className="table-bookingCopy-Booking">
+        </div> */}
+
+        {/* <div className="table-bookingCopy-Booking">
           <div className="booking-main-table">
             <DataGrid
               rows={reversedRows}
@@ -1683,10 +2523,10 @@ const Booking = ({ stationName }) => {
               onRowClick={handletableClick}
               pageSize={5}
               checkboxSelection
-            />
+            /> */}
 
 
-            {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
                 <div className="booking-main-table-div1">
                   {Array.isArray(allFile) &&
@@ -1708,7 +2548,7 @@ const Booking = ({ stationName }) => {
               </DialogContent>
             </Dialog> */}
 
-            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+        {/* <Dialog open={dialogOpen} onClose={handleCloseDialog} >
               <DialogContent>
                 <div className='vehicle-info-dailog-box-div1'>
                   <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
@@ -1733,9 +2573,9 @@ const Booking = ({ stationName }) => {
                   <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
-            <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+        {/* <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>
                   <h3>are you sure you want to delete</h3>
@@ -1745,9 +2585,9 @@ const Booking = ({ stationName }) => {
                   </div>
                 </div>
               </DialogContent>
-            </Dialog>
-          </div>
-        </div>
+            </Dialog> */}
+        {/* </div>
+        </div> */}
       </form >
     </div >
   );

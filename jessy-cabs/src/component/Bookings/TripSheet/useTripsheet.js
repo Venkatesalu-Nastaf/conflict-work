@@ -496,8 +496,10 @@ const useTripsheet = () => {
         pickup: '',
         useage: '',
         request: '',
+        shedOutDate: '',
         startdate: '',
         closedate: '',
+        shedInDate: '',
         employeeno: '',
         reporttime: '',
         starttime: '',
@@ -949,9 +951,16 @@ const useTripsheet = () => {
     };
 
 
+    // startdate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+    //     startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
+    //         startdate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
+    //             startdate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
+
 
 
     const handleAdd = async () => {
+
+        console.log()
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
@@ -1034,7 +1043,10 @@ const useTripsheet = () => {
                 shedintime: book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
                 shedkm: book.shedkm || shedKilometers.shedkm,
                 shedout: formData.shedout || book.shedout || selectedCustomerData.shedout,
-                startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+                shedOutDate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+                startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
+                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
+                shedInDate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
                 startkm: book.startkm,
                 starttime: formData.starttime || book.starttime || selectedBookingDate.starttime,
                 toll: book.toll,
@@ -1051,6 +1063,8 @@ const useTripsheet = () => {
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
                 escort, minHour, minKM, transferreport,
             };
+
+            console.log("updatedBook", updatedBook)
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -1287,8 +1301,9 @@ const useTripsheet = () => {
 
 
     const calculateTotalTime = () => {
-        const shedoutTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
-        const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
+        const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+        // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
+        const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
         const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
 
@@ -1430,14 +1445,29 @@ const useTripsheet = () => {
     };
 
     const calculateTotalDays = () => {
-        const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-        const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
-        if (startDate && closeDate) {
+        const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+        const closeDate = selectedCustomerData.closedate || selectedCustomerData.startdate || book.closedate;
+        const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+        const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+
+
+        if (shedoutdate && shedindate) {
+            const shedOutDateObj = dayjs(shedoutdate);
+            const shedindateObj = dayjs(shedindate);
+            const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+            if (totalDays > 0) {
+                return totalDays;
+            }
+            return '';
+        }
+        else if (startDate && closeDate && !shedoutdate && !shedindate) {
             const startDateObj = dayjs(startDate);
             const closeDateObj = dayjs(closeDate);
             const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-
-            return totalDays;
+            if (totalDays > 0) {
+                return totalDays;
+            }
+            return '';
         }
 
         return '';

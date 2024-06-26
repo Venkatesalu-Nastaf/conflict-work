@@ -545,6 +545,7 @@
   margin-bottom: 0px !important;
   margin-top: 0px !important;
   padding: 8px 5px;
+  width: 96% !important;
 }
 
 .booking-top-division {
@@ -601,4 +602,8 @@
 
 .icone-with-margin-top{
   margin-top: 15px;
+}
+
+.css-1uvydh2{
+  padding: 9.5px 0px 9.5px 14px !important;
 }

@@ -27,7 +27,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
 //dialog box
@@ -92,6 +92,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
 
 import {
   vehicaleinfos
@@ -324,6 +327,134 @@ const TripSheet = ({ stationName, logoImage }) => {
           <div className="Tripsheet-header">
 
             <div>
+              <div className='tripsheet-top-division'>
+
+                <span className="d-grid">
+                  <label>Booking ID</label>
+                  <input type="text"
+                    id="bookingno"
+                    name="bookingno"
+                    value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
+                    onChange={handleChange}
+                  />
+                </span>
+
+                <span className="d-grid">
+                  <label>Billing No</label>
+                  <input type="text"
+                    id="billingno"
+                    name="billingno"
+                    value={formData.billingno || selectedCustomerData.billingno || book.billingno || ''}
+                    onChange={handleChange}
+                  />
+                </span>
+
+                <div className=''>
+                  <FormControlLabel
+                    value="smsguest"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={smsguest}
+                        onChange={(event) => setSmsGuest(event.target.checked)}
+                      />
+                    }
+                    label="Guest SMS"
+                  />
+                  <FormControlLabel
+                    value="email"
+                    id="email"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={sendEmail}
+                        onChange={(event) => setSendEmail(event.target.checked)}
+                      />
+                    }
+                    label="Email"
+                  />
+                </div>
+
+                <div className="">
+                  <FormControlLabel
+                    value="DriverSMS"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={DriverSMS}
+                        onChange={(event) => setDriverSMS(event.target.checked)}
+                      />
+                    }
+                    label="Driver SMS"
+                  />
+                </div>
+
+                <span className="d-grid">
+                  <div className="tripsheet-top-division-date">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        id="tripsheetdate"
+                        value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                        format="DD/MM/YYYY"
+                        label='Tripsheet Date'
+                        onChange={(date) => handleDateChange(date, 'tripsheetdate')}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
+                        )}
+                      </DatePicker>
+
+                    </LocalizationProvider>
+                  </div>
+                </span>
+
+                <div className="tripsheet-top-division-dropdown">
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-Status"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
+                    value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
+                    options={Status.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+
+                <div className="tripsheet-top-division-dropdown">
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-apps"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
+                    value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
+                    options={Apps.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+
+
+
+              </div>
               <div className='tripsheet-division1'>
                 <div className="input">
                   <div className="icone">
@@ -344,7 +475,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -358,9 +489,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     autoComplete="password"
                   />
-                </div>
+                </div> */}
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -378,9 +509,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </DatePicker>
 
                   </LocalizationProvider>
-                </div>
+                </div> */}
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <QuizOutlinedIcon color="action" />
                   </div>
@@ -403,9 +534,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     }
                   />
-                </div>
+                </div> */}
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
                   </div>
@@ -420,9 +551,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                     required
                   />
-                </div>
+                </div> */}
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <AppsOutageOutlinedIcon color="action" />
                   </div>
@@ -445,18 +576,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     }
                   />
-                </div>
+                </div> */}
                 <div className="input">
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
                   <TextField
                     name="customer"
+                    size='small'
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
                     onChange={handleChange}
                     label="Customer"
                     id="standard-size-customer"
-                    variant="standard"
+                    // variant="standard"
                     required
                     autoComplete="password"
                   />
@@ -467,17 +599,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="orderedby"
+                    size="small"
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
                     label="Ordered By"
                     id="standard-size-orderedby"
-                    variant="standard"
+                    // variant="standard"
                     autoComplete="password"
                     required
                   />
                 </div>
-                <div className='input'>
-
+                {/* <div className='input'>
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -489,7 +621,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Guest SMS"
                   />
-
                   <FormControlLabel
                     value="email"
                     id="email"
@@ -502,7 +633,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Email"
                   />
-                </div>
+                </div> */}
 
                 <div className="input">
                   <div className="icone">
@@ -573,10 +704,28 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="orderbyemail"
                     value={formData.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                     onChange={handleChange}
-                    label="orderbyemail"
+                    label="Order by email"
                     id="orderbyemail"
                     size="small"
                     autoComplete="password"
+                  />
+                </div>
+
+                <div className="input tripsheet-remarks-division">
+                  <div className="icone">
+                    <AddHomeWorkIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    id="address1"
+                    label="Address"
+                    name="address1"
+                    multiline
+                    rows={2}
+                    sx={{ width: "100%" }}
+                    autoComplete="new-password"
+                    value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -587,7 +736,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <div>
 
 
-                  <div className="input">
+                  {/* <div className="input">
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
@@ -603,11 +752,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
                       onChange={handleChange}
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>
-                  <div>
+                  {/* <div>
                     <div className="Scroll-Style tripsheet-table1">
                       <thead>
                         <tr>
@@ -642,7 +791,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         )}
                       </tbody>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -690,7 +839,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={handleChange}
                         label="Travels Name"
                         id="travelsname"
-                        variant="standard"
+                        // variant="standard"
+                        size='small'
                       />
                     </div>
 
@@ -801,7 +951,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         label="Driver Name"
                         id="driverName"
-                        variant="standard"
+                        // variant="standard"
+                        size='small'
                         autoComplete="password"
                         onKeyDown={handleKeyEnterDriverDetails}
                       />
@@ -819,7 +970,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={handleChange}
                         label="Cell"
                         id="mobileNo"
-                        variant="standard"
+                        // variant="standard"
+                        size='small'
                         autoComplete="password"
                       />
                     </div>
@@ -842,8 +994,49 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={handleChange}
                         label="Travels Email"
                         id="travelsemail"
-                        variant="standard"
+                        // variant="standard"
+                        size='small'
                       />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="Scroll-Style tripsheet-table1">
+                      <table>
+
+                        <thead>
+                          <tr>
+                            <th className="table-head-booking table-heading-1"> Driver name</th>
+                            {/* <th className="table-head-booking">Driver phone</th> */}
+                            <th className="table-head-booking">Vehicle Name</th>
+                            {/* <th className="table-head-booking">Vehicle Type</th> */}
+                            <th className="table-head-booking">Vehicle Reg No</th>
+                            {/* <th className="table-head-booking">HireTypes</th> */}
+                            {/* <th className="table-head-booking">Grouphs</th> */}
+                            {/* <th className="table-head-booking">Active</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {driverdetails.length === 0 ? (
+                            <tr>
+                              <td colSpan={7}>No data available.</td>
+                            </tr>
+                          ) : (
+                            driverdetails.map((row) => (
+                              <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                <td>{row.driverName}</td>
+                                {/* <td>{row.mobileNo}</td> */}
+                                <td>{row.vehicleName}</td>
+                                {/* <td>{row.vechtype}</td> */}
+                                <td>{row.vehRegNo}</td>
+                                {/* <td>{row.hiretypes}</td> */}
+                                {/* <td>{row.Groups}</td> */}
+                                {/* <td>{row.active}</td> */}
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+
                     </div>
                   </div>
                 </div>
@@ -893,7 +1086,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div className="input radio">
+                {/* <div className="input radio">
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -905,7 +1098,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Driver SMS"
                   />
-                </div>
+                </div> */}
 
                 <div className="input">
                   <div className="icone">
@@ -1185,7 +1378,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       size="small"
                       type="number"
                       id="totaldays"
-                      variant="standard"
+                      // variant="standard"
                       autoComplete="password"
                     />
                   </DemoItem>
@@ -1482,7 +1675,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Additional Time"
                     id="additionaltime"
-                    variant="standard"
+                    // variant="standard"
+                    size='small'
                     autoComplete="password"
                   />
                 </div>
@@ -1496,7 +1690,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Total Time"
                     id="totaltime"
-                    variant="standard"
+                    // variant="standard"
+                    size='small'
                     autoComplete="password"
                   />
                 </div>
@@ -1510,7 +1705,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Permit"
                     id="permit"
-                    variant="standard"
+                    // variant="standard"
+                    size='small'
                     autoComplete="password"
                   />
                 </div>
@@ -1524,7 +1720,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Parking"
                     id="parking"
-                    variant="standard"
+                    // variant="standard"
+                    size='small'
                     autoComplete="password"
                   />
                 </div>
@@ -1538,12 +1735,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Toll"
                     id="toll"
-                    variant="standard"
+                    // variant="standard"
+                    size='small'
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
-
+                <div className="input tripsheet-calculate-input">
                   <Button variant="contained"
                     onClick={() => {
                       handleCalc();
@@ -1861,13 +2058,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
+                <div className="input tripsheet-e-tripsheet-input">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                     E-Tripsheet
                   </Button>
                 </div>
 
-                <div className="input">
+                <div className="input tripsheet-remarks-division">
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
                   </div>
@@ -1879,14 +2076,31 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Remark"
                     id="remark"
                     multiline
-                    rows={5}
-                    sx={{ m: 2, width: "100%" }}
+                    rows={3}
+                    sx={{ width: "100%" }}
                     autoComplete="password"
                   />
                 </div>
 
                 <div className='input d-grid'>
-                  <label>Escort</label>
+
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Escort</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        // value={bookingStatus}
+                        label="Status"
+                        onChange={handleEscortChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  {/* <label>Escort</label>
                   <span>
                     <label>
                       <input
@@ -1908,11 +2122,28 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                       No
                     </label>
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className='input d-grid'>
-                  <label>Airport Transfer</label>
+
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        // value={bookingStatus}
+                        label="Status"
+                        onChange={handleTransferChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  {/* <label>Airport Transfer</label>
                   <span>
                     <label>
                       <input
@@ -1934,7 +2165,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                       No
                     </label>
-                  </span>
+                  </span> */}
                 </div>
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">

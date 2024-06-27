@@ -123,6 +123,7 @@
 .Tipsheet-content-table-main {
   background: var(--glass);
   padding: 15px;
+  margin-top: 15px;
 }
 
 .Tipsheet-content-table-main .Tipsheet-content-table {
@@ -219,10 +220,10 @@
   background: transparent;
   text-align: inherit;
   border: 1px solid #457cdc;
-  padding: 15px 8px 15px 10px;
+  padding: 9px 8px 9px 10px;
   border-radius: 4px;
   font-size: 17px;
-  width: 100%;
+  width: 91%;
   height: 23px;
 }
 
@@ -271,10 +272,10 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   justify-content: left;
-  padding: 30px 0px 30px 20px;
-  width: 79vw;
+  padding: 5px 15px 0px 15px;
+  /* width: 79vw; */
 }
 
 .tripsheet-division2 {
@@ -282,9 +283,9 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   justify-content: center;
-  padding: 30px 0px 30px 20px;
+  /* padding: 30px 0px 30px 20px; */
   width: 79vw;
 }
 
@@ -393,6 +394,8 @@
 
 .vehicle-confirm {
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .input-feild-vehicle-confirm {
@@ -445,3 +448,72 @@
   padding-bottom: 5px;
   margin-top: -23px;
 }
+
+.tripsheet-top-division {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 10px;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.tripsheet-top-division input {
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 5px;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 11.5px 14px !important;
+}
+
+.tripsheet-Download-btn {
+  margin-top: 20px;
+}
+
+.tripsheet-top-division-date input {
+  border: none !important;
+  padding: 5px 0px 2px 5px !important;
+  width: 84px;
+  font-size: 13px;
+  border-radius: 0px;
+}
+
+.tripsheet-top-division-date button {
+  padding: 0px !important;
+}
+
+.tripsheet-top-division-date svg {
+  height: 16px !important;
+}
+
+.tripsheet-top-division-date p {
+  margin-bottom: -9px;
+  font-size: 13px;
+}
+
+.tripsheet-top-division label {
+  font-weight: 500;
+}
+
+.tripsheet-top-division-dropdown {
+  width: 115px;
+}
+
+.tripsheet-top-division-dropdown input {
+  border: none;
+}
+
+.tripsheet-remarks-division{
+  width: 535px !important;
+}
+
+.tripsheet-calculate-input button, .tripsheet-e-tripsheet-input button{
+  width: 100%;
+  margin-left: 28px;
+}
+
+
+

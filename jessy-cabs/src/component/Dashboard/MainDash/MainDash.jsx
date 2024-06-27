@@ -18,6 +18,7 @@ const MainDash = ({stationName}) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
+    
   }, []);
   return (
     <>

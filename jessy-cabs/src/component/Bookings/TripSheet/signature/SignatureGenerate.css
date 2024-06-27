@@ -1,0 +1,30 @@
+.top-div {
+    padding-bottom: 20px;
+}
+
+
+
+
+input {
+    color: rgb(15, 15, 58);
+    padding: 5px;
+    width: 100%;
+    padding: 6px;
+}
+
+p {
+    margin-bottom: 0px;
+}
+
+
+.Accept-btn {
+    margin-top: 15px;
+    width: 102.5%;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: large;
+    font-weight: 500;
+    background-color: rgb(24, 24, 153);
+    color: white;
+}

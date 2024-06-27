@@ -145,6 +145,12 @@
   color: navy;
 }
 
+@media screen and (min-width: 769px) {
+  .side-bar-menu-close .template-selection-main {
+    width: 96vw;
+  }
+}
+
 .template-selection-main {
   width: 100%;
 }

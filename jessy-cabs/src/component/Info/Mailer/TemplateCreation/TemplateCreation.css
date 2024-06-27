@@ -185,6 +185,10 @@
 }
 
 @media screen and (min-width: 769px) {
+    .side-bar-menu-close .mail-template-division {
+        width: 96vw;
+    }
+
     .mail-template-division {
         width: 98%;
     }

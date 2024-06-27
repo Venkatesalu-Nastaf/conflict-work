@@ -3,6 +3,7 @@ import axios from 'axios';
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
+import { PdfData } from '../../Transfer/TransferReport/PdfContext.js';
 
 const useBilling = () => {
     const apiUrl = APIURL;
@@ -27,6 +28,7 @@ const useBilling = () => {
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
+    const { setParticularPdf, setParticularRefNo, individualBilled} = PdfData();
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -53,8 +55,9 @@ const useBilling = () => {
             setError(true);
             setErrorMessage("Please enter TripID");
         } else {
+            setParticularRefNo(tripid)
             localStorage.setItem('selectedcustomerid', customer);
-            setPopupOpen(true);
+            setParticularPdf(true);
         }
     };
 
@@ -590,6 +593,11 @@ const useBilling = () => {
         fetchData();
     }, [apiUrl]);
 
+    // Empty the book
+    useEffect(() => {
+        setBook(emptyBookvalues)
+    }, [individualBilled])
+
     return {
 
         total_GrossAmount, total_DriverBEta_Amount, netAmountCalc, gst_taxAmountCalc,
@@ -638,6 +646,10 @@ const useBilling = () => {
         organizationcity,
         organizationgstnumber,
         GmapimageUrl,
+        customerData,
+        resetBook,
+        setBook,
+        emptyBookvalues,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,
     };
 };

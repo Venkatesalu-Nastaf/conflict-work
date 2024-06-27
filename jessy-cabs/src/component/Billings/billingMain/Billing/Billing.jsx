@@ -51,6 +51,10 @@ import { RiPinDistanceLine } from "react-icons/ri";
 import { IoIosTime } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import InvoicePdf from '../Pdf/InvoicePdf';
+import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
+import { PdfData } from '../../Transfer/TransferReport/PdfContext';
+import Modal from '@mui/material/Modal';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -130,7 +134,9 @@ const Billing = () => {
     const Billing_new = permissions[5]?.new;
     const Billing_modify = permissions[5]?.modify;
     const Billing_delete = permissions[5]?.delete;
-
+    //   organisation logo
+    const { logo } = useData()
+    const { particularPdf, organizationDetail } = PdfData()
     return (
         <div className="form-container form-container-billing">
             <div className="Billing-form">
@@ -1045,7 +1051,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing">
                                     <div className="icone">
@@ -1078,7 +1084,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing">
                                     <div className="icone">
@@ -1109,7 +1115,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
@@ -1141,7 +1147,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
@@ -1173,7 +1179,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
@@ -1205,7 +1211,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field inputfeild-billing-right inputfeild-billing-right-margin-bottom"> */}
                                 <div className="input input-billing" >
                                     <div className="icone">
@@ -1248,7 +1254,7 @@ const Billing = () => {
                             </div>
                         </div>
                     </div>
-                    <Dialog open={popupOpen} onClose={handlePopupClose}>
+                    {/* <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
                             <Paymentinvoice
 
@@ -1285,7 +1291,64 @@ const Billing = () => {
                                 Cancel
                             </Button>
                         </DialogActions>
-                    </Dialog>
+                    </Dialog> */}
+
+                    <Modal open={particularPdf} onClose={handlePopupClose} aria-labelledby="modal-title"
+                        aria-describedby="modal-description">
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: '834px',
+                                height: '700px',
+                                bgcolor: 'background.paper',
+                                border: '2px solid #000',
+                                boxShadow: 24,
+                                p: 4,
+                                overflowY: 'auto'
+                            }}
+                        >
+                            <InvoicePdf
+                                book={book}
+                                logo={logo}
+                                organizationaddress={organizationaddress1}
+                                organizationdata={organizationDetail}
+                                customerData={customerData}
+                            />
+                        </Box>
+                        {/* <Paymentinvoice
+
+                                triprequest={triprequest}
+                                tripcode={tripcode}
+                                selectedImage={selectedImage}
+                                organizationdata={organizationdata}
+                                tripdepartment={tripdepartment}
+                                routeData={routeData}
+                                book={book}
+                                tripShedkm={tripShedkm}
+                                tripshedin={tripshedin}
+                                tripshedout={tripshedout}
+                                tripreporttime={tripreporttime}
+                                tripshedintime={tripshedintime}
+                                tripadditionaltime={tripadditionaltime}
+                                tripstartkm={tripstartkm}
+                                tripclosekm={tripclosekm}
+                                tripstarttime={tripstarttime}
+                                tripclosetime={tripclosetime}
+                                tripstartdate={tripstartdate}
+                                tripclosedate={tripclosedate}
+                                selectedCustomerDatas={book}
+                                organizationaddress1={organizationaddress1}
+                                organizationaddress2={organizationaddress2}
+                                organizationcity={organizationcity}
+                                organizationgstnumber={organizationgstnumber}
+                                GmapimageUrl={GmapimageUrl}
+                                mapimageUrl={mapimageUrl}
+                            /> */}
+
+                    </Modal>
                 </form>
                 <div className='alert-popup-main'>
                     {error &&

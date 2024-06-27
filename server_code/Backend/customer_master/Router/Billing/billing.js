@@ -201,7 +201,7 @@ router.get('/routedata/:tripid', (req, res) => {
 
   db.query('SELECT * FROM gmapdata WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' })
     }
 
     if (result.length === 0) {
@@ -259,12 +259,12 @@ router.delete('/deleteGroup/:groupid', (req, res) => {
 
 //cover billing
 router.get('/Transfer-Billing', (req, res) => {
-  const { customer, fromDate, toDate,servicestation } = req.query;
+  const { customer, fromDate, toDate, servicestation } = req.query;
 
   let query = 'SELECT * FROM tripsheet WHERE  apps="Closed" and status="Transfer_Closed" and customer=? AND department=? AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
 
 
-  db.query(query, [customer, servicestation,fromDate, toDate], (err, result) => {
+  db.query(query, [customer, servicestation, fromDate, toDate], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }

@@ -72,7 +72,7 @@ const DashboardRouter = require('./customer_master/Router/Dashboard/Dashboard');
 const User_Permission = require('./customer_master/Router/userpermission/userermissionpage');
 const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
-
+const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -151,6 +151,7 @@ app.use('/', User_Permission);// image delete
 //------------------------------------------------------------------------------------------------------------
 app.use('/', Templatemailer);// Customer Page Database
 // -------------------------------------------------------------------------------------------
+app.use('/', IndividualBill);//Individual bill
 //theme update in user creation
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;

@@ -53,9 +53,9 @@ const columns = [
 const useDispatched = () => {
   const apiUrl = APIURL;
   const [rows, setRows] = useState([]);
-  const [department, setdepartment] = useState("");
+  const [department, setdepartment] = useState([]);
   const [VehNo, setVehNo] = useState('')
-  const [cutomerName, setCutomerName] = useState('')
+  const [cutomerName, setCutomerName] = useState([])
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
@@ -285,9 +285,10 @@ const useDispatched = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'pending Reports.pdf');
   };
-
+   
   const handleInputChange = (event, newValue) => {
-    setdepartment(newValue ? newValue.label : '');
+  setdepartment(newValue);
+  
   }
   const handlestatusChange = (event, newValue) => {
     setStatusValue(newValue ? newValue.label : "");
@@ -296,12 +297,13 @@ const useDispatched = () => {
     setVehNo(newValue ? newValue?.label : "")
   }
   const handleCustomerChange = (event, newValue) => {
-    setCutomerName(newValue ? newValue?.label : "")
+    setCutomerName(newValue)
   }
 
-
+ console.log(department,"sttstststst",department.map(dep => dep.label))
   const reversedRows = [...rows].reverse();  // to reverse 
 
+ 
   const handleShow = useCallback(async () => {
 
     if (!statusvalue) {
@@ -310,13 +312,12 @@ const useDispatched = () => {
       return
     }
 
+
     try {
       const response = await axios.get(
-        `${apiUrl}/pending_tripsheet-show?department=${encodeURIComponent(
-          department
-        )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
-        )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${encodeURIComponent(cutomerName)}`
+        )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
       );
       const data = response.data;
 

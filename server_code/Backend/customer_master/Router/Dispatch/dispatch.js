@@ -4,12 +4,13 @@ const db = require('../../../db');
 const moment = require('moment');
 
 
+
 router.get('/pending_tripsheet-show', (req, res) => {
   const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-
-  console.log("VehNo", VehNo, "cutomerName", cutomerName)
+  const datadepartment= department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
+ const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
 
 
   let sqlQuery = '';
@@ -26,9 +27,11 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
     queryParams = [formattedFromDate, formattedToDate, status];
 
-    if (department && department !== "All") {
-      sqlQuery += ' AND servicestation = ?';
-      queryParams.push(department);
+    if (datadepartment.length>=1 && !datadepartment.includes('All')) {
+      console.log(department,"hhhhh")
+      // sqlQuery += ' AND servicestation = ?';
+      sqlQuery += ' AND servicestation  IN  (?)';
+      queryParams.push(datadepartment);
     }
 
     if (VehNo) {
@@ -36,9 +39,9 @@ router.get('/pending_tripsheet-show', (req, res) => {
       queryParams.push(VehNo)
     }
 
-    if (cutomerName) {
-      sqlQuery += 'AND customer=?';
-      queryParams.push(cutomerName)
+    if ( datacustomer.length >=1) {
+      sqlQuery += 'AND customer IN (?)';
+      queryParams.push(datacustomer)
     }
 
 
@@ -73,9 +76,9 @@ router.get('/pending_tripsheet-show', (req, res) => {
     }
 
 
-    if (department && department !== 'All') {
-      sqlQuery += ' AND tripsheet.department = ?';
-      queryParams.push(department);
+    if (datadepartment.length>=1 && !datadepartment.includes('All')) {
+      sqlQuery += ' AND tripsheet.department IN (?)';
+      queryParams.push(datadepartment);
     }
 
     if (VehNo) {
@@ -83,21 +86,21 @@ router.get('/pending_tripsheet-show', (req, res) => {
       queryParams.push(VehNo)
     }
 
-    if (cutomerName) {
-      sqlQuery += 'AND tripsheet.customer=?';
-      queryParams.push(cutomerName)
+    if (datacustomer.length >=1) {
+      sqlQuery += 'AND tripsheet.customer iN (?)';
+      queryParams.push(datacustomer)
     }
 
   }
 
-  // console.log(sqlQuery, queryParams)
+  console.log(sqlQuery, queryParams)
 
   db.query(sqlQuery, queryParams, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
-
+    
     return res.status(200).json(result);
   });
 });

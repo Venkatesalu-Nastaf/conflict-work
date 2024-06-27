@@ -130,7 +130,6 @@ const useTripsheet = () => {
 
     const handleRemoveMapLogPoint = async (params) => {
         try {
-            // const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             const id = params.id
             const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
@@ -171,24 +170,11 @@ const useTripsheet = () => {
             const data = response.data.link
             setLink(data);
             getSignatureImage()
+            // copyToClipboardf(data)
         } catch {
         }
     };
 
-
-    // const SignPage = async (event) => {
-    //     event.preventDefault();
-    //     if (link) {
-    //         await navigator.clipboard.writeText(link);
-    //         setSign(true)
-    //         setTimeout(() => {
-    //             setSign(false)
-    //             setLink("")
-    //         }, 2000)
-    //     } else {
-    //         alert("no link data ", link)
-    //     }
-    // }
 
     const SignPage = async (event) => {
         event.preventDefault();
@@ -211,7 +197,7 @@ const useTripsheet = () => {
 
 
 
-    //----------------------------------------------
+    //---------------------------to copy the link-------------------
 
     const hiddenInputRef = useRef(null);
 
@@ -244,6 +230,36 @@ const useTripsheet = () => {
             alert("No link data available.");
         }
     };
+
+
+    const copyToClipboardf = (data) => {
+        // e.preventDefault()
+        if (data) {
+            // Create a hidden textarea and append it to the body
+            const textArea = document.createElement("textarea");
+            textArea.value = data;
+            document.body.appendChild(textArea);
+
+            // Select the text in the textarea
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
+
+            // Execute the copy command
+            document.execCommand('copy');
+
+            // Remove the textarea from the document
+            document.body.removeChild(textArea);
+
+            // Set the confirmation message
+            setSign(true);
+            setTimeout(() => {
+                setSign(false);
+            }, 2000);
+        } else {
+            alert("No link data available.");
+        }
+    };
+
 
     //----------------------------------------------
 
@@ -2342,11 +2358,28 @@ const useTripsheet = () => {
         }
     }
 
+    const [signaturePopUpOpen, setSignaturePopUp] = useState(false)
+
+    const handlesignaturePopUpClose = () => {
+        setSignaturePopUp(false)
+    }
+
+    const handleSignaturePopUpOpen = () => {
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please Check TripId")
+        }
+        else {
+            setSignaturePopUp(true)
+        }
+    }
+
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount, escort, setEscort, driverdetails,
         night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount, totalcalcAmount, driverBeta,
-        selectedCustomerId, nightBta, nightCount, driverbeta_Count, vehileNames, handleEscortChange, handleClickOpen, open, handleClose,
+        selectedCustomerId, nightBta, nightCount, driverbeta_Count, vehileNames, handleEscortChange, handleClickOpen, open, handleClose, signaturePopUpOpen, handleSignaturePopUpOpen,
         rows,
         error,
         success,
@@ -2431,7 +2464,7 @@ const useTripsheet = () => {
         isSignatureSubmitted,
         isEditMode,
         handleEdit, setFormValues, copyToClipboard,
-        SignPage,
+        SignPage, handlesignaturePopUpClose, signaturePopUpOpen,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,

@@ -581,6 +581,7 @@ app.post('/generate-link/:tripid', (req, res) => {
   const checkIfExistsQuery = `SELECT * FROM signatures WHERE tripid = ?`;
   db.query(checkIfExistsQuery, [tripid], (err, rows) => {
     if (err) {
+      console.log("error ", err)
       return res.status(500).json({ message: "Error checking profile existence", error: err });
     }
     if (rows.length > 0) {
@@ -627,35 +628,6 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 })
 
 
-
-// Permission 
-// const authenticateJWT = (req, res, next) => {
-//   const token = req.header('x-auth-token');
-//   // console.log(token,"kk")
-//   if (!token) return res.status(401).json({ message: 'Authentication failed' });
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
-//     req.user = decoded;
-//     // console.log(decoded,"dee")
-//     next();
-//   } catch (error) {
-//     // console.log(error,"gggggggg")
-//     res.status(400).json({ message: 'expired token' });
-//   }
-// const authenticateJWT = (req, res, next) => {
-//   const token = req.header('x-auth-token');
-//   if (!token) return res.status(401).json({ message: 'Authentication failed' });
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JSON_SECERETKEY);
-//     req.user = decoded;
-//     next();
-//   } catch (error) {
-//     res.status(400).json({ message: 'expired token' });
-//   }
-
-// };
 
 
 app.get('/use-permissions/:userid', (req, res) => {

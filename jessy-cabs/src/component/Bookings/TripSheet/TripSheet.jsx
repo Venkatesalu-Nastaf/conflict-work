@@ -2,14 +2,11 @@ import React, { useEffect, useContext, useState, useRef } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
-  // VehicleRate,
   Status,
   HireTypes,
   DocumentType,
   Duty,
-  // Pickup,
   Email,
-  // Select,
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
@@ -103,6 +100,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 
 
 import useTripsheet from './useTripsheet';
+import SignatureGenerate from './signature/SignatureGenerate';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -150,7 +148,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     formData,
     handleKeyDown,
     handleDateChange,
-    handleAutocompleteChange, copyToClipboard, setFormValues,
+    handleAutocompleteChange, copyToClipboard, setFormValues, handlesignaturePopUpClose,
     packageData,
     smsguest,
     sendEmail,
@@ -170,9 +168,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     popupOpen,
     setSmsGuest,
     setSelectedCustomerDatas,
-    setreporttime,
+    setreporttime, signaturePopUpOpen,
     setshedintime,
-    shedKilometers,
+    shedKilometers, handleSignaturePopUpOpen,
     calculateTotalKilometers,
     additionalTime,
     handleETripsheetClick,
@@ -202,7 +200,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     isSignatureSubmitted,
     isEditMode,
     handleEdit,
-    // SignPage, 
     driverdetails,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
@@ -282,7 +279,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const SignPage = async (event) => {
     event.preventDefault();
-    // console.log("link", link)
     if (link) {
       const textElement = textRef.current;
       navigator.clipboard.writeText(textElement.textContent).then(() => {
@@ -301,39 +297,23 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }
 
-  // { kmValue?.shedOutDate && (kmValue?.shedInDate ? (kmValue?.shedout_totalDays > 0 ? "" : <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>) }
 
+  /// siganture propsss details 
 
-  const shedOutLabelShowFun = () => {
-    if (kmValue?.shedOutDate) {
-
-      if (kmValue?.shedInDate) {
-        if (kmValue?.shedout_totalDays > 0) {
-          return '';
-        } else {
-          return <lable className='invalid-km'>Invalid Date</lable>
-        }
-
-      } else {
-        return <lable className='invalid-km'>Give Date</lable>
-      }
-    }
-
-    // if (kmValue?.shedOutDate && kmValue?.closeDate) {
-    //   if (!kmValue?.close_totalDays > 0) return <lable className='invalid-km'>invalid Date</lable>
-    // }
-
-    if (kmValue.shedout_totalDays && kmValue.start_totalDays) {
-      if (!kmValue.shedout_totalDays > kmValue.start_totalDays) {
-        return <lable className='invalid-km'>invalid Date</lable>
-      } else {
-        return '';
-      }
-    }
-
-  }
-
-
+  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+  const GuestName = formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname;
+  const guestMobileNo = formData.mobile || selectedCustomerData.mobile || book.mobile;
+  const vehicleName = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+  const vehicleType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+  const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+  const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
+  const startKM = formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm;
+  const closeDate = formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate;
+  const closeTime = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
+  const closeKM = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
+  const toll = formData.toll || selectedCustomerData.toll || book.toll;
+  const parking = formData.parking || selectedCustomerData.parking || book.parking;
+  const permit = formData.permit || selectedCustomerData.permit || book.permit;
 
 
   return (
@@ -806,17 +786,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
-                      {/* <TextField
-                        name="driverName"
-                        className='full-width'
-                        value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
-                        onChange={handleChange}
-                        label="Driver Name"
-                        id="driverName"
-                        variant="standard"
-                        autoComplete="password"
-                        onKeyDown={handleKeyEnterDriverDetails}
-                      /> */}
                       <TextField
                         name="driverName"
                         className='full-width'
@@ -992,25 +961,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-pickup"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
-                    value={Pickup.find((option) => option.optionvalue)?.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
-                    options={Pickup.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  /> */}
+
                   <TextField
                     margin="normal"
                     size="small"
@@ -1181,14 +1132,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 <div className="input">
 
-                  {/* {shedOutLabelShowFun()} */}
-                  {/* {kmValue?.shedOutDate && (kmValue?.shedInDate ? (kmValue?.shedout_totalDays > 0 ? "" : <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)} */}
-
-                  {/* {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.close_shedOut_totalDays) <= 0 ? <lable className='invalid-km'>invalid Date</lable> : (Number(kmValue.close_totalDays) <= 0 && <lable className='invalid-km'>invalid Date</lable>))) : <lable className='invalid-km'>Give Date</lable>)} */}
-
-
-                  {/* {kmValue?.shedOutDate && (kmValue.shedInDate ? ((Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)} */}
-                  {console.log("check", Number(kmValue.close_shedOut_totalDays))}
                   {kmValue?.shedOutDate && (kmValue.shedInDate ? (kmValue.closeDate ? (Number(kmValue.close_shedOut_totalDays) < 1 && <lable className='invalid-km'>Invalid Date</lable>) : (Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)}
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -1202,17 +1145,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={(date) => {
                         handleDateChange(date, 'shedInDate')
                         setKmValue(prev => ({ ...prev, shedInDate: date }))
-
-                        // const closedate = formData.closeDate || selectedCustomerData.closeDate || book?.closeDate;
-                        // const startdate = formData.startDate || selectedCustomerData.startDate || book?.startDate;
-                        // const shedoutdate = formData.shedOutDate || formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-                        // const shedindate = date
-
                         const closedate = kmValue.closeDate;
                         const shedoutdate = kmValue.shedOutDate;
                         const shedindate = date
-
-                        // console.log("1", closedate, "2", shedoutdate, "3", shedindate)
 
                         if (shedoutdate && shedindate) {
                           const shedOutDateObj = dayjs(shedoutdate);
@@ -1341,7 +1276,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
-                    {/* {(Number(kmValue.totalDays) === 1) ? ((shedInTimeVar && ((shedInTimeVar < closeTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!shedInTimeVar && <label>ShedIn Time</label>)) : (<label>ShedIn Time</label>)} */}
                     {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
 
                     <input
@@ -1351,7 +1285,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        // if ((Number(kmValue.totalDays) === 1) && (shedInTimeVar && rTime <= shedInTimeVar)) {
                         if (calculateTotalDays() === 1 && (startTimeVar && rTime <= startTimeVar)) {
                           return;
                         } else {
@@ -1372,7 +1305,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {/* {(Number(kmValue.totalDays) === 1) ? ((reportTimeVar && ((reportTimeVar < shedInTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Close Time</label>)) : (<label>Close Time</label>)} */}
                     {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> ShedIn Time</label>)}
 
                     <input
@@ -1381,7 +1313,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        // if ((Number(kmValue.totalDays) === 1) && (reportTimeVar && rTime <= reportTimeVar)) {
                         if ((closeTimeVar && rTime <= closeTimeVar)) {
                           return;
                         } else {
@@ -2452,6 +2383,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                       </div>
+                      <div className='input'>
+                        <Button variant='contained' onClick={handleSignaturePopUpOpen}  >Generate Signature</Button>
+                      </div>
 
                     </div>
                     <div className="input-field">
@@ -2474,6 +2408,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
 
 
+
+
                       <input
                         ref={fileInputRefdata}
                         type="file"
@@ -2481,6 +2417,33 @@ const TripSheet = ({ stationName, logoImage }) => {
                         style={{ display: 'none' }}
                         onChange={handleFileChangesignature}
                       />
+
+                      <Dialog maxWidth="md" open={signaturePopUpOpen} onClose={handlesignaturePopUpClose}>
+                        <DialogContent style={{ width: '150mm', maxWidth: 'none' }}  >
+                          <h2>Jessy Cabs E-tripsheet</h2>
+                          <SignatureGenerate
+                            tripid={tripid}
+                            GuestName={GuestName}
+                            guestMobileNo={guestMobileNo}
+                            vehicleName={vehicleName}
+                            vehicleType={vehicleType}
+                            startDate={startDate}
+                            startTime={startTime}
+                            startKM={startKM}
+                            closeDate={closeDate}
+                            closeTime={closeTime}
+                            closeKM={closeKM}
+                            toll={toll}
+                            parking={parking}
+                            permit={permit} />
+                        </DialogContent>
+                        {/* <DialogActions>
+                          <Button >
+                            Cancel
+                          </Button>
+                        </DialogActions> */}
+                      </Dialog>
+
                       <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
                         <DialogContent>
                           <div

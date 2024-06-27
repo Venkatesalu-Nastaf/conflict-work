@@ -130,6 +130,7 @@
 @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .form-container-customer .customer-form {
     width: 96vw;
+    margin: 0px 3px;
   }
 
   .form-container .customer-form {

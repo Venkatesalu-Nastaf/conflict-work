@@ -308,7 +308,7 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
 
     if (data && data.toLowerCase() === "all") {
       // its for fetch by All
-      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Transfer_Closed"`, tripid, (err, result) => {
+      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Closed"`, tripid, (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }

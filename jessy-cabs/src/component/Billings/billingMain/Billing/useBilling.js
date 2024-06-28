@@ -444,7 +444,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,book.tripid]);
 
 
     // data fetching from the customer  
@@ -490,7 +490,7 @@ const useBilling = () => {
 
         fetchData();
         return () => { };
-    }, [apiUrl]);
+    }, [apiUrl,book.tripid]);
 
     // get map image 
     useEffect(() => {
@@ -513,7 +513,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,book.tripid]);
 
 
     const organizationaddress1 = customerData.address1;
@@ -647,7 +647,6 @@ const useBilling = () => {
         organizationgstnumber,
         GmapimageUrl,
         customerData,
-        resetBook,
         setBook,
         emptyBookvalues,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,

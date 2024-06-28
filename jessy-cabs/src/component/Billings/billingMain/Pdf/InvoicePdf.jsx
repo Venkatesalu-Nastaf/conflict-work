@@ -8,16 +8,14 @@ import dayjs from "dayjs";
 import numWords from 'num-words'
 import Invoice from "./Invoice";
 import { APIURL } from "../../../url";
-import useBilling from "../Billing/useBilling";
 
 
 const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, customerData }) => {
-    const { setParticularPdf, particularRefNo,individualBilled,setIndividualBilled } = PdfData();
-    const [billingDate, setBillingDate] = useState(dayjs());
+    const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
+    const [billingDate] = useState(dayjs());
     const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
     const apiUrl = APIURL;
     const targetRef = useRef();
-    const {setBook,emptyBookvalues} = useBilling()
 
     const handlePopupClose = () => {
         setParticularPdf(false);
@@ -53,14 +51,20 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
             Bill_Date,
             Customer
         });
-    }, [particularRefNo, book, customerData]);
+    }, [particularRefNo, book, customerData, setIndividualBillData]);
 
     const handlePrint = async () => {
-        generatePDF(targetRef, { filename: 'page.pdf' });
-        const response = await axios.post(`${apiUrl}/IndividualBill`,IndividualBillData);
-        setParticularPdf(false)
-        setIndividualBilled(false)
+        try {
+            generatePDF(targetRef, { filename: 'page.pdf' });
+            await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
+            setIndividualBilled(!individualBilled);
+        } catch (error) {
+            console.log('An error occurred:', error);
+        } finally {
+            setParticularPdf(false);
+        }
     };
+
     return (
         <>
             <div className="refdiv">

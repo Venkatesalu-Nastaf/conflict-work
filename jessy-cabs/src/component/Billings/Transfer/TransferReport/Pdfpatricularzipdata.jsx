@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
-import { Page, Text, View, Document as PDFDocument, StyleSheet, Image,} from '@react-pdf/renderer';
+import { Page, Text, View, Document as PDFDocument, StyleSheet, Image, } from '@react-pdf/renderer';
 
 
 const styles = StyleSheet.create({
@@ -82,12 +82,14 @@ const styles = StyleSheet.create({
 
   },
   labeltag: {
-    fontSize: '13px',
+    fontSize: '11px',
+    fontWeight: 'extrabold',
     // width: '90px',
 
   },
   clientName: {
-    fontSize: '11px'
+    fontSize: '11px',
+    color: '#818181'
 
   },
   // labeltag1: {
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
   },
   tablediv: {
     width: '60%',
-    border: '1px solid #000000',
+    // border: '1px solid green',
     // flexDirection:'row',
 
   },
@@ -146,6 +148,7 @@ const styles = StyleSheet.create({
   },
   labeltagremark: {
     textAlign: 'center',
+    fontSize: '11px'
 
   },
   labeltag2: {
@@ -294,10 +297,14 @@ const styles = StyleSheet.create({
     margin: 'auto',
 
   },
-  topmap: {
+  mapdiv: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    // alignItems:'center',
     padding: '3px'
+  },
+  topmap: {
+    marginTop: "40px"
   },
   atimg: {
     textAlign: 'center'
@@ -364,8 +371,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
   const [addresscustomer, setAddresscustomer] = useState('')
-  const [bookimage,setBookingimage]=useState([])
- 
+  const [bookimage, setBookingimage] = useState([])
+
 
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
@@ -427,8 +434,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let routemapdata = []
     let attachedimagedata = []
     let customeraddress1 = ""
-   
-    let bookingimagedata=[]
+
+    let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
@@ -448,7 +455,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         mapimage = JSON.parse(li.map_data)
         routemapdata = JSON.parse(li.gmapdata)
         attachedimagedata = JSON.parse(li.Attachedimage)
-        bookingimagedata=JSON.parse(li.bookattachedimage)
+        bookingimagedata = JSON.parse(li.bookattachedimage)
         packages = li.calcPackage
         Dropaddress = li.useage
         Report = li.transferreport
@@ -470,7 +477,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         CustomerCode = li.customercode
         Categorygroups = li.Groups
         customeraddress1 = li.Customeraddress1
-    
+
 
 
 
@@ -478,8 +485,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
       })
     }
 
-    
-    
+
+
     const uniqueArray = Array.from(new Set(attachedimagedata?.filter(item => item.attachedimageurl !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
     const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
@@ -490,7 +497,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     // Convert the unique array back to a JSON string
     const uniqueJsonString = JSON.stringify(uniqueArray);
     const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-   
+
 
     const { signature_path } = signatureimage
     const { map_path } = mapimage
@@ -533,11 +540,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
- 
+
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
-  
+
 
   return (
     <>
@@ -573,7 +580,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-                 <View style={styles.maintabble}>
+                <View style={styles.maintabble}>
 
                   <View style={{ flexDirection: "column", margin: "5px" }}>
 
@@ -690,13 +697,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-               <View style={styles.remarksection}>
+                <View style={styles.remarksection}>
                   <Text style={styles.labeltagremark}>Remarks :</Text>
                   <Text style={styles.clientName1}>{remark}</Text>
 
                 </View>
 
-                 <View style={styles.tablesigndiv}>
+                <View style={styles.tablesigndiv}>
                   <View style={styles.tablediv}>
                     {/* <View>
     
@@ -757,7 +764,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-                        <View style={styles.labeltag10}>
+                      <View style={styles.labeltag10}>
                         <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
 
                       </View>
@@ -827,7 +834,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-                        <View style={styles.labeltag22}>
+                      <View style={styles.labeltag22}>
                         <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
 
                       </View>
@@ -841,7 +848,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   </View>
 
-                    <View style={styles.signdiv}>
+                  <View style={styles.signdiv}>
                     <View style={styles.signimg}>
                       <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} />
 
@@ -852,97 +859,101 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
 
 
+                  </View>
+                  {/* </View> */}</View>
+
+
+                <View style={styles.mapdiv}>
+
+                  <View style={{ height: 210, border: '1px solid #000000', width: '70%' }} >
+                    <Image src={`${apiUrl}/public/map_images/${map_image}`} />
 
                   </View>
-  {/* </View> */}</View>
+
                   <View style={styles.topmap}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Parking:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalparking ? totalparking : 0}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Permit:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalpermit ? totalpermit : 0}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '13px' }}>Total Parking:</Text>
+                      <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalparking ? totalparking : 0}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '13px' }}>Total Permit:</Text>
+                      <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalpermit ? totalpermit : 0}</Text>
+
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '13px' }}>Total Fastag/Toll:</Text>
+                      <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totaltoll ? totaltoll : 0}</Text>
+                    </View>
 
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Fastag/Toll:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totaltoll ? totaltoll : 0}</Text>
-                  </View>
+
 
                 </View>
 
 
 
 
-                <View style={{ width: '100%', height: 210, border: '2px solid #000000' }} >
-                  <Image src={`${apiUrl}/public/map_images/${map_image}`} />
-
-                </View>
-
-
-
-                <View>
+                <View style={{ marginTop: "30px" }}>
                   <Text> Route summary</Text>
 
                   {routemap.map((item, index) => (
-                <View key={index}>  <Text style={{ fontSize: 10 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
-                    ))
+                    <View key={index}>  <Text style={{ fontSize: 12 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
+                  ))
                   }
                 </View>
 
 
 
-<View style={{ flexDirection: 'column', width: '100%' }}>
-  {attachedImage && attachedImage.length > 0 ? (
-    <>
-      <View style={{ width: "100%" }}>
-        <Text style={styles.atimg}>Attached image</Text>
-      </View>
-      <View style={[styles.addimg, { width: '100%' }]}>
-        {attachedImage.map((item, index) => (
-          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
-            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
-          </View>
-        ))}
-      </View>
-    </>
-  ) : (
-    
-    <View style={{ width: "100%" ,margin:'auto',marginTop:'100px'}}>
-        <Text style={styles.atimg}>  No Attached image</Text>
-      </View>
-  )}
-</View>
+                <View style={{ flexDirection: 'column', width: '100%' }}>
+                  {attachedImage && attachedImage.length > 0 ? (
+                    <>
+                      <View style={{ width: "100%" }}>
+                        <Text style={styles.atimg}>Attached image</Text>
+                      </View>
+                      <View style={[styles.addimg, { width: '100%' }]}>
+                        {attachedImage.map((item, index) => (
+                          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+                            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
+                          </View>
+                        ))}
+                      </View>
+                    </>
+                  ) : (
+
+                    <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
+                      <Text style={styles.atimg}>  No Attached image</Text>
+                    </View>
+                  )}
+                </View>
 
 
-<View style={{ flexDirection: 'column', width: '100%' }}>
-  {bookimage&&bookimage.length > 0 && (
-    <>
-      <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'column', width: '100%' }}>
+                  {bookimage && bookimage.length > 0 && (
+                    <>
+                      <View style={{ width: '100%' }}>
 
-            {bookimage.map((item, index) => {
-      const dataimgetype = item.imagees.split('.').pop();
-      // URL.createObjectURL(img)
-      if (dataimgetype !== "pdf") {
-        return (
-          <View key={index} style={{width:'100%'}}>
-            <Image src={`${apiUrl}/images/${item.imagees}`} style={{height:'500px'}}  />
-          </View>
-        );
-      } else {
-        return null;
-      }
-    })}
+                        {bookimage.map((item, index) => {
+                          const dataimgetype = item.imagees.split('.').pop();
+                          // URL.createObjectURL(img)
+                          if (dataimgetype !== "pdf") {
+                            return (
+                              <View key={index} style={{ width: '100%' }}>
+                                <Image src={`${apiUrl}/images/${item.imagees}`} style={{ height: '500px' }} />
+                              </View>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
 
-      </View>
-    </>
-  ) 
-}
-    
-  
-</View>
-</View>
+                      </View>
+                    </>
+                  )
+                  }
+
+
+                </View>
+              </View>
 
             </View>
 

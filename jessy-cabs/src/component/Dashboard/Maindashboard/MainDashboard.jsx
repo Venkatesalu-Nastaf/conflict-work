@@ -66,7 +66,7 @@ const sendTrueValue =(datavaule)=>{
   setSendTrue(datavaule);
 }
 
-console.log(expanded,"expandedd");
+
 
 // ------------
   // useEffect(() => {
@@ -150,57 +150,6 @@ console.log(expanded,"expandedd");
   //     };
   //   }
   // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
-//   const IDLE_TIMEOUT_DURATION = 40 * 60 * 1000;
-//   //  const INACTIVITY_CHECK_INTERVAL = 1000;
-//   //  console.log(IDLE_TIMEOUT_DURATION ,"min")
-//   const checkinactivity=()=>{
-//     const expiretime=localStorage.getItem("expiretime")
-//     // console.log(expiretime,"dd",Date.now())
-
-//     if(expiretime < Date.now()){
-//         console.log("logout")
-//         // setLogged(false)
-//         handleLogoutdialog()
-
-//     }
-//     console.log("timouit")
-// }
-// const Upadteexpiretime=()=>{
-
-//     const expiretime=Date.now() + 1000 ;
-//     // console.log(expiretime,"kkkkkkkkk")
-//     localStorage.setItem("expiretime",expiretime)
-
-//     // console.log("troll")
-// }
-
-// useEffect(()=>{
-//     Upadteexpiretime()
-
-//     window.addEventListener("mousemove",Upadteexpiretime);
-//     window.addEventListener("keypress",Upadteexpiretime);
-//     window.addEventListener("click",Upadteexpiretime);
-//     window.addEventListener("scroll",Upadteexpiretime);
-//     window.addEventListener("keydown", Upadteexpiretime);
-    
-    
-//     return ()=>{
-//         window.removeEventListener("mousemove",Upadteexpiretime);
-//         window.removeEventListener("keypress",Upadteexpiretime);
-//         window.removeEventListener("click",Upadteexpiretime);
-//         window.removeEventListener("scroll",Upadteexpiretime);
-//         window.removeEventListener("keydown", Upadteexpiretime);
-       
-//     }
-// },[]);
-// useEffect(()=>{
-//     const checkintrvval=setInterval(()=>{
-//         checkinactivity();
-//     },IDLE_TIMEOUT_DURATION)
-    
-//     return ()=>clearInterval(checkintrvval)
-// },[IDLE_TIMEOUT_DURATION])
-
 const IDLE_TIMEOUT_DURATION = 30*60 * 1000;
 
 const useIdleTimeout = (handleLogoutdialog) => {

@@ -48,6 +48,33 @@ const useCustomer = () => {
         setIsInputVisible(!isInputVisible);
     };
 
+    const [customerfieldSets, setCustomerFieldSets] = useState([{
+        // dinamic data
+        orderedBy: '',
+        orderByEmail: '',
+    orderByMobileNo: '',
+
+    }]);
+  
+     
+
+    const handleChangecustomer = (event,index)=>{
+        const { name, value } = event.target;
+
+        const newFieldSets = [...customerfieldSets];
+        newFieldSets[index][name] = value;
+        setCustomerFieldSets(newFieldSets);
+
+    }
+    const handleAddExtra = () => {
+        setCustomerFieldSets([...customerfieldSets, {
+            orderedBy: '',
+            orderByEmail: '',
+            orderByMobileNo: '',
+        }]);
+    };
+
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
@@ -236,10 +263,10 @@ const useCustomer = () => {
         servicestation: '',
         date: '',
         address1: '',
-        customeremail: '',
+        // customeremail: '',
         rateType: '',
         opBalance: '',
-        phoneno: '',
+        // phoneno: '',
         underGroup: '',
         gstTax: '',
         acType: '',
@@ -318,10 +345,10 @@ const useCustomer = () => {
             servicestation: '',
             date: '',
             address1: '',
-            customeremail: '',
+            // customeremail: '',
             rateType: '',
             opBalance: '',
-            phoneno: '',
+            // phoneno: '',
             underGroup: '',
             gstTax: '',
             acType: '',
@@ -339,38 +366,91 @@ const useCustomer = () => {
             salesPercentage: '',
             billingGroup: '',
         }));
+        setCustomerFieldSets([{
+            // dinamic data
+            orderedBy: '',
+            orderByEmail: '',
+        orderByMobileNo: '',
+    
+        }])
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
-
+    const getcustomerdata=async(customerdata)=>{
+        console.log(customerdata,"gggg")
+        const datacustomer=customerdata
+        console.log(datacustomer,"cust")
+        try{
+         const response=await axios.get(`${apiUrl}/getcustomerorderdata/${datacustomer}`)
+         console.log(response.data,"hdhdjdjd")
+         const data=response.data
+         setCustomerFieldSets(data)
+        }
+        catch(err){
+           console.log(err)
+        }
+    }
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        getcustomerdata(customerData.customer)
         setIsEditMode(true);
     }, []);
 
+   
+
+
+    const addCustomerToObjects = (arr, customerProp) => {
+        return arr.map(obj => ({
+            ...obj,
+            customer: customerProp
+        }));
+    };
+    
+    // Call the function to add customer property to each object
+    
     const handleAdd = async () => {
+
+        const hasEmptyFields = customerfieldSets.some(fieldSet => 
+            !fieldSet.orderedBy || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+          );
+          console.log(hasEmptyFields,"data")
+      
+         
+
+    
         const name = book.name;
+        const customer=book.customer
         if (!name) {
             setError(true);
             setErrorMessage("fill mantatory fields");
             return;
         }
-        if (!book.customeremail) {
+        if (!customer) {
             setError(true);
-            setErrorMessage("Enter The Mail");
+            setErrorMessage("fill mantatory fields");
             return;
         }
-        if (!book.phoneno) {
+        // if (!book.customeremail) {
+        //     setError(true);
+        //     setErrorMessage("Enter The Mail");
+        //     return;
+        // }
+        if (hasEmptyFields) {
             setError(true);
-            setErrorMessage("Enter The Phoneno");
+            setErrorMessage('Please fill out all fields before adding a new set.');
             return;
-        }
+          }
 
         try {
+            // const datasets={...customerfieldSets,customer:book.customer}
+            const datasets = addCustomerToObjects(customerfieldSets, book.customer);
+            console.log(datasets,"custo")
+           
             await axios.post(`${apiUrl}/customers`, book);
+            await axios.post(`${apiUrl}/customerorderdbydata`,datasets)
             handleCancel();
             setRows([]);
             setSuccess(true);
@@ -382,14 +462,20 @@ const useCustomer = () => {
     };
 
     const handleEdit = async (customerId) => {
-        const selectedCustomer = rows.find((row) => row.customerId === customerId);
+        // console.log(customerId,"datta")
+        // const selectedCustomer = rows.find((row) => row.customerId === customerId);
+        
+        // console.log(data,"ggggg")
         const updatedCustomer = {
-            ...selectedCustomer,
+            // ...selectedCustomer,
             ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-
-        await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+        console.log(selectedCustomerData?.customer ,"lll",book.customer)
+        const datasets = addCustomerToObjects(customerfieldSets,selectedCustomerData?.customer );
+        console.log(datasets,"vvvvvvvv")
+ console.log(updatedCustomer,"cust")
+        // await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         handleCancel();
         setRows([]);
     };
@@ -403,6 +489,7 @@ const useCustomer = () => {
                     ...row,
                     id: index + 1,
                 }));
+               
                 setRows(rowsWithUniqueId);
             } catch {
             }
@@ -499,6 +586,8 @@ const useCustomer = () => {
         columns,
         isEditMode,
         handleEdit,
+        customerfieldSets,
+        handleChangecustomer,handleAddExtra,
     };
 };
 

@@ -88,6 +88,9 @@ const Customer = ({ stationName }) => {
     columns,
     isEditMode,
     handleEdit,
+    customerfieldSets,
+    handleChangecustomer,
+    handleAddExtra,
   } = useCustomer();
 
   useEffect(() => {
@@ -202,7 +205,7 @@ const Customer = ({ stationName }) => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -218,7 +221,7 @@ const Customer = ({ stationName }) => {
                   id="customeremail"
                 // variant="standard"
                 />
-              </div>
+              </div> */}
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
@@ -253,7 +256,7 @@ const Customer = ({ stationName }) => {
                 // variant="standard"
                 />
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <div className="icone">
                   <LocalPhoneIcon color="action" />
                 </div>
@@ -269,7 +272,7 @@ const Customer = ({ stationName }) => {
                   id="phoneno"
                 // variant="standard"
                 />
-              </div>
+              </div> */}
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -297,6 +300,65 @@ const Customer = ({ stationName }) => {
                   </RadioGroup>
                 </FormControl>
               </div>
+              <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
+              {customerfieldSets.map((datafield,index)=>(
+                <>
+                <div key={index} className="input-field feild-inputs">
+                <div className="input">
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
+                    <TextField
+                      size="small"
+                      id="orderedbycutomer"
+                      className='full-width'
+                      sx={{ width: "300px" }}
+                      label="OrderedBy"
+                      name="orderedBy"
+                      value={datafield.orderedBy || ""}
+                     
+                      // value={fieldSet.orderdby || ""}
+                      onChange={(e) => handleChangecustomer(e, index)}
+                      // variant="standard"
+                    />
+                  </div>
+                  <div className="input">
+                  <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                    <TextField
+                      size="small"
+                      id="orderebyemail"
+                      className='full-width'
+                      label="OrderedByemail"
+                      name="orderByEmail"
+                      autoComplete="new-password"
+                      value={datafield.orderByEmail || ""}
+                      // value={fieldSet.Hours || ""}
+                      onChange={(e) => handleChangecustomer(e, index)}
+                    />
+                  </div>
+                  <div className="input">
+                  <div className="icone">
+                  <LocalPhoneIcon color="action" />
+                </div>
+                    <TextField
+                      // type='number'
+                      size="small"
+                      id="mobliecustomer"
+                      className='full-width'
+                      label="MobileNo"
+                      name="orderByMobileNo"
+                      autoComplete="new-password"
+                      value={datafield.orderByMobileNo || ""}
+                      onChange={(e) => handleChangecustomer(e, index)}
+                    />
+                  </div>
+
+                </div>
+                </>
+                   ))}
+                    
             </div>
           </div>
           <div className="Customer-page-secend-containers">

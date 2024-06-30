@@ -59,7 +59,7 @@ router.get('/customers', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
-    return res.status(200).json(results);
+     return res.status(200).json(results);
   });
 });
 
@@ -74,6 +74,52 @@ router.get('/gstdetails/:customer',(req,res)=>{
     return res.status(200).json(result);
 
   })
+})
+
+router.post('/customerorderdbydata',(req,res)=>{
+  const customerdata= req.body; 
+  console.log(customerdata)// Assuming req.body is an array of objects
+
+    // Check if req.body is an array
+    if (!Array.isArray(customerdata)) {
+        return res.status(400).json({ error: "Request body must be an array" });
+    }
+
+    // Insert each object in the array as a separate row in the database
+    const insertQueries = customerdata.map(bookData => {
+        return new Promise((resolve, reject) => {
+            db.query('INSERT INTO  customerOrderdata SET ?', bookData, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    });
+
+    // Execute all insert queries concurrently
+    Promise.all(insertQueries)
+        .then(() => {
+            return res.status(200).json({ message: "Data inserted successfully" });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        });
+})
+
+router.get('/getcustomerorderdata/:customerdata',(req,res)=>{
+
+  const customer=req.params.customerdata
+  db.query("select * from  customerOrderdata where customer= ?",[customer],(err,result)=>{
+    if(err){
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    console.log(result)
+    return res.status(200).json(result)
+  })
+
 })
 
 

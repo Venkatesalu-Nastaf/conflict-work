@@ -1,0 +1,131 @@
+.outline-div{
+    display: flex;
+    flex-direction: column;
+     border: 1px solid black;
+     padding: 5px;
+}
+.header-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.org-name{
+    font-size: 20px;
+    font-weight: 700;
+}
+.org-address{
+    font-size: 15px;
+    font-weight: 500;
+}
+.org-mobile{
+    font-size: 18px;
+    font-weight: 600;
+}
+.org-gst{
+    font-size: 18px;
+    font-weight: 600;
+}
+.image-div{
+    justify-content: center;
+    align-items: center;
+}
+.image {
+    height: 100px;
+    width: 110px;
+    margin-left: 50px;
+  }
+  .receiver-details{
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .invno-div{
+    text-align: center;
+    margin-top: 10%;
+}
+.taxinvoice{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    background-color: lightgrey;
+    font-size: 15px;
+    height: 50px;
+}
+.invoiceno{
+    font-weight: 700;
+    font-size: 16px;
+}
+.receiver-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.details-receiver{
+    font-size: 18px;
+    font-weight: 600;
+}
+.table-div{
+    padding-top: 30px;
+}
+.tabledata{
+    font-size: 15px;
+    font-weight: 500; 
+}
+.total-div{
+    display: flex;
+    justify-content: end;
+    gap: 30px;
+    /* margin-right: 40px; */
+}
+
+.btns-last{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+.sign-div{
+    border-top: 0.5px solid lightgray;
+    border-bottom: 0.5px solid lightgray;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.google-map{
+    padding-top: 100px;
+    margin-top: 1px solid black;
+}
+.map-text{
+    text-align: center;
+}
+.rupees{
+    font-size: 18px;
+    font-weight: 700;
+}
+.amount-div{
+    text-align: center;
+    width: 175px;
+}
+.amounttext{
+    font-size: 15px;
+    font-weight: 500; 
+}
+.sign-text{
+    font-size: 18px;
+    font-weight: 600;
+}
+.attach-text{
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+.dialogboximg {
+    height: 100px;
+    width: 100px;
+  
+  }
+  .tripsheet-RouteSummary p {
+    font-weight: 600;
+  }

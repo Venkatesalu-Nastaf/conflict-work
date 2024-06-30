@@ -35,6 +35,9 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import Checkbox from '@mui/material/Checkbox';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -48,10 +51,14 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 
 
 
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
+  console.log(stationName,"sta")
 
   const {
     statusvalue, handlestatusChange, VehNo, cutomerName,
@@ -186,20 +193,35 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                   </div>
                   <Autocomplete
                     fullWidth
+                    multiple
                     id="Department"
-                    freeSolo
                     size="small"
                     value={department}
-                    options={allStationName?.map((option) => ({
+                    options={allStationName.map((option) => ({
                       label: option.Stationname,
                     }))}
+                    isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleInputChange(event, value)}
+                    disableCloseOnSelect
+
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                          <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              style={{ marginRight: 8 }}
+                              checked={selected}
+                          />
+                          {option.label}
+                      </li>
+                  )}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Department" inputRef={params.inputRef} />
                       );
                     }}
                   />
+
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -207,6 +229,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                   </div>
                   <Autocomplete
                     fullWidth
+                    multiple
                     id="Customer"
                     freeSolo
                     size="small"
@@ -214,7 +237,21 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     options={customer?.map((option) => ({
                       label: option.customer,
                     }))}
+                    disableCloseOnSelect
+                    
+                    isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleCustomerChange(event, value)}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                          <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              style={{ marginRight: 8 }}
+                              checked={selected}
+                          />
+                          {option.label}
+                      </li>
+                    )}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Customer" inputRef={params.inputRef} />

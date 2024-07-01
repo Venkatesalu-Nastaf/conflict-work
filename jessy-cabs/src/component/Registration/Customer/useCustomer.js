@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
+import { Organization } from './Customerdata';
 
 
 // TABLE START
@@ -13,13 +14,16 @@ const columns = [
     { field: "id", headerName: "S.No", width: 60 },
     { field: "customerId", headerName: "Customer ID", width: 130 },
     { field: "customer", headerName: "Name", width: 160 },
-    { field: "customeremail", headerName: "E-mail", width: 160 },
+    // { field: "customeremail", headerName: "E-mail", width: 160 },
     { field: "address1", headerName: "Address", width: 130 },
-    { field: "phoneno", headerName: "Phone", width: 160 },
+    // { field: "phoneno", headerName: "Phone", width: 160 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
     { field: "gstnumber", headerName: "GST_NO", width: 160 },
     { field: "state", headerName: "State", width: 160 },
-    { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
+    { field: "orderedBy", headerName: "OrderedBy", width: 260 },
+    { field: "orderByEmail", headerName: "Email", width: 260 },
+    { field: "orderByMobileNo", headerName: "MobileNo", width: 260 },
+    // { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
 
 
@@ -40,6 +44,8 @@ const useCustomer = () => {
     const [warningMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [BillingGroup, setBillingGroup] = useState([]);
+  
 
     //---------------------------------------
 
@@ -55,6 +61,14 @@ const useCustomer = () => {
     orderByMobileNo: '',
 
     }]);
+    useEffect(() => {
+        Organization()
+            .then((data) => {
+                if (data) {
+                    setBillingGroup(data);
+                }
+            })
+    }, []);
   
      
 
@@ -271,18 +285,18 @@ const useCustomer = () => {
         gstTax: '',
         acType: '',
         entity: '',
-        printBill: '',
-        userName: '',
-        bookName: '',
-        division: '',
-        hourRoundedOff: '',
+        // printBill: '',
+        // userName: '',
+        // bookName: '',
+        // division: '',
+        // hourRoundedOff: '',
         selectOption: '',
-        active: '',
+        // active: '',
         state: '',
         gstnumber: '',
         SalesPerson: '',
         salesPercentage: '',
-        billingGroup: '',
+        billingGroup: [],
     });
 
     const handleChange = (event) => {
@@ -311,6 +325,7 @@ const useCustomer = () => {
 
     const handleAutocompleteChange = (event, newValue, name) => {
         const selectedOption = newValue ? newValue.label : '';
+        
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -321,6 +336,20 @@ const useCustomer = () => {
             [name]: selectedOption,
         }));
     };
+    const handleAutocompleteChangebilling = (event, newValue, name) => {
+        
+        console.log(newValue,"bill")
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: newValue,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: newValue,
+        }));
+    };
+
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
@@ -352,19 +381,19 @@ const useCustomer = () => {
             underGroup: '',
             gstTax: '',
             acType: '',
-            printBill: '',
-            userName: '',
-            bookName: '',
-            division: '',
-            hourRoundedOff: '',
+            // printBill: '',
+            // userName: '',
+            // bookName: '',
+            // division: '',
+            // hourRoundedOff: '',
             selectOption: '',
-            active: '',
+            // active: '',
             entity: '',
             state: '',
             gstnumber: '',
             SalesPerson: '',
             salesPercentage: '',
-            billingGroup: '',
+            billingGroup:[],
         }));
         setCustomerFieldSets([{
             // dinamic data
@@ -373,16 +402,14 @@ const useCustomer = () => {
         orderByMobileNo: '',
     
         }])
+        setIsInputVisible(!isInputVisible)
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
     const getcustomerdata=async(customerdata)=>{
-        console.log(customerdata,"gggg")
         const datacustomer=customerdata
-        console.log(datacustomer,"cust")
         try{
          const response=await axios.get(`${apiUrl}/getcustomerorderdata/${datacustomer}`)
-         console.log(response.data,"hdhdjdjd")
          const data=response.data
          setCustomerFieldSets(data)
         }
@@ -391,13 +418,20 @@ const useCustomer = () => {
         }
     }
 
-    const handleRowClick = useCallback((params) => {
+
+    const handleRowClick = (params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
+        const datta=customerData.billingGroup.split(',')
+        console.log(customerData,"bb")
+        if(datta.length >=2){
+            setIsInputVisible(!isInputVisible);
+        }
+        
         setSelectedCustomerId(params.row.customerId);
         getcustomerdata(customerData.customer)
         setIsEditMode(true);
-    }, []);
+    }
 
    
 
@@ -416,12 +450,7 @@ const useCustomer = () => {
         const hasEmptyFields = customerfieldSets.some(fieldSet => 
             !fieldSet.orderedBy || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
           );
-          console.log(hasEmptyFields,"data")
-      
-         
-
-    
-        const name = book.name;
+       const name = book.name;
         const customer=book.customer
         if (!name) {
             setError(true);
@@ -433,21 +462,17 @@ const useCustomer = () => {
             setErrorMessage("fill mantatory fields");
             return;
         }
-        // if (!book.customeremail) {
-        //     setError(true);
-        //     setErrorMessage("Enter The Mail");
-        //     return;
-        // }
         if (hasEmptyFields) {
             setError(true);
-            setErrorMessage('Please fill out all fields before adding a new set.');
+            setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
             return;
           }
 
         try {
             // const datasets={...customerfieldSets,customer:book.customer}
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
-            console.log(datasets,"custo")
+            console.log(datasets)
+            console.log(book,"hhh")
            
             await axios.post(`${apiUrl}/customers`, book);
             await axios.post(`${apiUrl}/customerorderdbydata`,datasets)
@@ -461,23 +486,26 @@ const useCustomer = () => {
         }
     };
 
-    const handleEdit = async (customerId) => {
+    const handleEdit = async () => {
         // console.log(customerId,"datta")
         // const selectedCustomer = rows.find((row) => row.customerId === customerId);
         
         // console.log(data,"ggggg")
+        const {id,orderByEmail,orderedBy,orderByMobileNo,...restselectedcustomerdata}=selectedCustomerData
         const updatedCustomer = {
             // ...selectedCustomer,
-            ...selectedCustomerData,
+            ...restselectedcustomerdata,
+            // ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-        console.log(selectedCustomerData?.customer ,"lll",book.customer)
-        const datasets = addCustomerToObjects(customerfieldSets,selectedCustomerData?.customer );
-        console.log(datasets,"vvvvvvvv")
- console.log(updatedCustomer,"cust")
-        // await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+        
+        const datasets = addCustomerToObjects(customerfieldSets,selectedCustomerData?.customer||book.customer );
+        await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+        await axios.put(`${apiUrl}/updatecustomerorderdata`,datasets);
+        setIsInputVisible(!isInputVisible);
         handleCancel();
         setRows([]);
+        // setDataTrigger(!datatrigger)
     };
 
     useEffect(() => {
@@ -495,7 +523,7 @@ const useCustomer = () => {
             }
         }
         handleList();
-    }, [apiUrl]);
+    }, [apiUrl,rows]);
 
 
     const handleClick = async (event, actionName, customerId) => {
@@ -527,21 +555,14 @@ const useCustomer = () => {
 
             else if (actionName === 'Delete') {
                 await axios.delete(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`);
+                 await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer||book.customer}`);
                 setSelectedCustomerData(null);
                 handleCancel();
                 setRows([]);
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.customerId === customerId);
-                const updatedCustomer = {
-                    ...selectedCustomer,
-                    ...selectedCustomerData,
-                    date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
-                };
-                await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
-                handleCancel();
-                setRows([]);
+                handleEdit()
             }
 
             else if (actionName === 'Add') {
@@ -587,7 +608,7 @@ const useCustomer = () => {
         isEditMode,
         handleEdit,
         customerfieldSets,
-        handleChangecustomer,handleAddExtra,
+        handleChangecustomer,handleAddExtra,BillingGroup,handleAutocompleteChangebilling
     };
 };
 

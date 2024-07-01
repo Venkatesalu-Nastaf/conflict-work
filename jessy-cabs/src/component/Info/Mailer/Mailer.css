@@ -29,11 +29,11 @@
   border-radius: 10px;
 }
 
-.form-container-Mailer .container-main::-webkit-scrollbar {
+/* .form-container-Mailer .container-main::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   overflow-x: hidden;
-}
+} */
 
 .table-bookingCopy {
   border: 2px solid #ccc;
@@ -41,7 +41,7 @@
   margin-top: 30px;
 }
 
-.form-container-Mailer .container-main::-webkit-scrollbar-thumb {
+/* .form-container-Mailer .container-main::-webkit-scrollbar-thumb {
   background-color: transparent;
   outline: 1px solid transparent;
 }
@@ -56,7 +56,7 @@
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
-}
+} */
 
 .Mailer-form .Title-Name {
   position: relative;
@@ -85,10 +85,10 @@
   overflow: auto !important;
 }
 
-.head-tab-mailer {
+/* .head-tab-mailer {
   position: sticky;
   top: 0px;
   z-index: 5;
   background-color: #ffffff;
   padding: 30px 10px 0px 0px;
-}
+} */

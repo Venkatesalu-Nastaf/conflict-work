@@ -19,10 +19,10 @@ const RateTypes = ({ stationName, organizationNames }) => {
 
   return (
     <div className="form-container-ratetype">
-      <div className="container-main">
+      <div className="main-content-container">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-ratetype">
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="RateType" value="ratetype" />
                 <Tab label="Ratevalidity" value="ratevalidity" />

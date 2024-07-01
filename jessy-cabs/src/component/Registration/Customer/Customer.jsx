@@ -116,9 +116,9 @@ const Customer = ({ stationName }) => {
 
   return (
     <div className="form-container form-container-customer">
-      <div className="customer-form">
+      <div className="customer-form main-content-container">
         <form onSubmit={handleClick}>
-          <p className="head-tab-customer">
+          <p className="head-tab-type-2-all">
             <span className="Title-Name">Customer</span>
           </p>
           <div className="Customer-page-header">

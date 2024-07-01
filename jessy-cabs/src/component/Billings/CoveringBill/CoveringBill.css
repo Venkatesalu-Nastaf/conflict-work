@@ -64,13 +64,13 @@
     }
 }
 
-.head-tab-coveringbill {
+/* .head-tab-coveringbill {
     position: sticky;
     top: 0px;
     padding: 30px 10px 0px 0px;
     background-color: #ffffff;
     z-index: 5;
-}
+} */
 
 @media screen and (max-width:1164px) {
     .input-feild-coveringbill {

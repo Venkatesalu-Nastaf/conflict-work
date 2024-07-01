@@ -10,7 +10,7 @@
 .DriverCreation-main .DriverCreation-form-container {
   overflow: scroll;
   height: 75vh;
-  width: 81vw;
+  /* width: 81vw; */
   display: flex;
   flex-direction: column;
   color: #000;

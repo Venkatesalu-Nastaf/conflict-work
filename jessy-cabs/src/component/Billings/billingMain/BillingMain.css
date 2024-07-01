@@ -25,10 +25,10 @@
     background-color: var(--glass);
 }
 
-.head-tab-billing {
+/* .head-tab-billing {
     position: sticky;
     top: 0px;
     padding: 30px 10px 0px 0px;
     background-color: #ffffff;
     z-index: 5;
-}
+} */

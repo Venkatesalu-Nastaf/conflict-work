@@ -22,9 +22,9 @@
 }
 
 @media only screen and (min-width: 768px) and (max-width:836px) {
-  .side-bar-menu-close .form-container-UserSettings .container-main {
+  /* .side-bar-menu-close .form-container-UserSettings .container-main {
     width: 96vw;
-  }
+  } */
 
   .user-inputs-feilds {
     width: 96%;
@@ -33,23 +33,22 @@
 
 @media only screen and (min-width: 836.99px) and (max-width:1130px) {
 
-  .side-bar-menu-close .form-container-UserSettings .container-main {
+  /* .side-bar-menu-close .form-container-UserSettings .container-main {
     width: 96vw;
-  }
+  } */
 
   .user-inputs-feilds {
     width: 97%;
   }
 }
 
-.head-tab-usersetting {
+/* .head-tab-usersetting {
   position: sticky;
   top: 0px;
   z-index: 5;
   background-color: #ffffff;
   padding: 30px 10px 0px 0px;
-
-}
+} */
 
 .form-container-UserSettings .user-inputs-feilds {
   background-color: #f0ece2 !important;

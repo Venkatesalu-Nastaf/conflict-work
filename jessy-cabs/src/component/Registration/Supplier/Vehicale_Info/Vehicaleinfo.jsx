@@ -523,7 +523,22 @@ const Vehicaleinfo = ({ stationName }) => {
                 label="Insurance No"
                 id="insuranceno"
               />
+              <div className='insurance-copy-tooltip'>
+                <Button size="md" className='vehicle-info-upload-btn' component="label">
+                  <span class="button-29 vehicle-info-upload-btn-width">
+                    <FiUpload />
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setInsurance(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="insurance-copy-tooltiptext">Upload Insurance Copy</span>
+              </div>
             </div>
+
+
             <div className="input">
               <div className='icone'>
                 <CalendarMonthIcon />
@@ -542,7 +557,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input">
+            {/* <div className="input">
               <Button size="md" className='vehicle-info-upload-btn' component="label">
 
                 <span class="button-29 vehicle-info-upload-btn-width">
@@ -557,7 +572,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   />
                 </span>
               </Button>
-            </div>
+            </div> */}
             <div className="input">
               <div className="icone">
                 <AirlineSeatReclineExtraIcon color="action" />
@@ -619,6 +634,20 @@ const Vehicaleinfo = ({ stationName }) => {
                 label="National Permit No"
                 id="nationalpermito"
               />
+              <div className='national-permit-copy-tooltip'>
+                <Button size="md" className='vehicle-info-upload-btn' component="label">
+                  <span class="button-29 vehicle-info-upload-btn-width">
+                    <FiUpload />
+                    <input
+                      id="National_permit"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setNationalPermit(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="national-permit-copy-tooltiptext">Upload National Permit Copy</span>
+              </div>
             </div>
             <div className="input">
               <div className='icone'>
@@ -643,7 +672,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input">
+            {/* <div className="input">
               <Button size="md" className='vehicle-info-upload-btn' component="label">
                 <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
@@ -656,7 +685,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   />
                 </span>
               </Button>
-            </div>
+            </div> */}
             <div className="input">
               <div className="icone">
                 <SpeedIcon color="action" />
@@ -685,6 +714,20 @@ const Vehicaleinfo = ({ stationName }) => {
                 label="State Permit No"
                 id="statepermito"
               />
+              <div className='state-permit-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class="button-29 vehicle-info-upload-btn-width">
+                    <FiUpload />
+                    <input
+                      type="file"
+                      id=" State_Permit "
+                      style={{ display: "none" }}
+                      onChange={(e) => setStatePermit(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="state-permit-copy-tooltiptext">Upload State Permit Copy</span>
+              </div>
             </div>
             <div className="input">
               <div className='icone'>
@@ -710,7 +753,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input">
+            {/* <div className="input">
 
               <Button size="md" component="label" className='vehicle-info-upload-btn'>
                 <span class="button-29 vehicle-info-upload-btn-width">
@@ -726,7 +769,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   />
                 </span>
               </Button>
-            </div>
+            </div> */}
             <div className="input">
               <div className="icone">
                 <AccountBalanceWalletIcon color="action" />
@@ -755,6 +798,20 @@ const Vehicaleinfo = ({ stationName }) => {
                 label="RC Book No"
                 id="rcbookno"
               />
+              <div className='rc-book-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class="button-29 vehicle-info-upload-btn-width">
+                    <FiUpload />
+                    <input
+                      id="rc_book"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setRcbook(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
+              </div>
             </div>
             <div className="input">
               <div className='icone'>
@@ -779,8 +836,22 @@ const Vehicaleinfo = ({ stationName }) => {
                   )}
                 </DatePicker>
               </LocalizationProvider>
+              <div className='fc-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class="button-29 vehicle-info-upload-btn-width">
+                    <FiUpload />
+                    <input
+                      id="fc_copy"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFcCopy(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="fc-copy-tooltiptext">Upload FC Copy</span>
+              </div>
             </div>
-            <div className="input">
+            {/* <div className="input">
               <Button size="md" component="label" className='vehicle-info-upload-btn'>
                 <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
@@ -795,8 +866,8 @@ const Vehicaleinfo = ({ stationName }) => {
                   />
                 </span>
               </Button>
-            </div>
-            <div className="input">
+            </div> */}
+            {/* <div className="input">
               <Button size="md" component="label" className='vehicle-info-upload-btn'>
                 <span class="button-29 vehicle-info-upload-btn-width">
                   <FiUpload />
@@ -811,7 +882,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   />
                 </span>
               </Button>
-            </div>
+            </div> */}
             <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />

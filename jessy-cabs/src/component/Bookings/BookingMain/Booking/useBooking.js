@@ -1006,7 +1006,7 @@ const useBooking = () => {
           requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
           duty: formData.duty || selectedCustomerData.duty || book.duty || "",
           bookingno: lastBookingno || '',
-          customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
+          customeremail: formData.orderByEmail || selectedCustomerData.formData.orderByEmail || selectedCustomerDatas.formData.orderByEmail || book.formData.orderByEmail || "",
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
           status: datamode,

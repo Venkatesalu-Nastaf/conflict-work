@@ -321,9 +321,9 @@ const Customer = ({ stationName }) => {
                       id="orderedbycutomer"
                       className='full-width'
                       sx={{ width: "300px" }}
-                      label="OrderedBy"
-                      name="orderedBy"
-                      value={datafield.orderedBy || ""}
+                      label="Orderedby"
+                      name="orderedby"
+                      value={datafield.orderedby || ""}
                      
                       // value={fieldSet.orderdby || ""}
                       onChange={(e) => handleChangecustomer(e, index)}

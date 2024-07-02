@@ -58,7 +58,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
-  console.log(stationName,"sta")
+  // console.log(stationName,"sta")
 
   const {
     statusvalue, handlestatusChange, VehNo, cutomerName,

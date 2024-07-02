@@ -19,7 +19,7 @@ const BillingMain = ({ organizationNames }) => {
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-billing">
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-billing head-tab-all">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Billing" value="billing" />
                 <Tab label="Payment" value="payment" />

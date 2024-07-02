@@ -347,3 +347,26 @@
 .sidebar-update-img {
   width: 100%;
 }
+
+.menu-side-bar-closed{
+  width: 45px;
+}
+
+.menu-side-bar-closed .logo>img {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.menu-side-bar-closed .menuItem{
+  margin-left: 10px;
+}
+
+.menu-side-bar-closed .active{
+  margin-left: -21px;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-side-bar-closed{
+    display: none;
+  }
+}

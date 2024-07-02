@@ -29,11 +29,11 @@
     border-radius: 10px;
 }
 
-.form-container-ratetype .container-main::-webkit-scrollbar {
+/* .form-container-ratetype .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
-}
+} */
 
 .table-bookingCopy-RateType {
     border: 2px solid #ccc;
@@ -42,12 +42,12 @@
     margin-top: 30px;
 }
 
-.form-container-ratetype .container-main::-webkit-scrollbar-thumb {
+/* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
-}
+} */
 
-.form-container-ratetype .container-main {
+/* .form-container-ratetype .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 80vh;
@@ -57,9 +57,9 @@
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
-}
+} */
 
-@media screen and (min-width:970px) and (max-width:1240px) {
+/* @media screen and (min-width:970px) and (max-width:1240px) {
 
     .side-bar-menu-close .form-container-ratetype .container-main {
         width: 96vw;
@@ -68,9 +68,9 @@
     .form-container-ratetype .container-main {
         width: 76vw;
     }
-}
+} */
 
-@media screen and (min-width:769px) and (max-width:969.99px) {
+/* @media screen and (min-width:769px) and (max-width:969.99px) {
 
     .side-bar-menu-close .form-container-ratetype .container-main {
         width: 96vw;
@@ -79,7 +79,7 @@
     .form-container-ratetype .container-main {
         width: 70vw;
     }
-}
+} */
 
 .ratetype-form .Title-Name {
     position: relative;

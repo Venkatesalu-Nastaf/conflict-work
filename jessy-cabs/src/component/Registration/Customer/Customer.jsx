@@ -39,12 +39,15 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import CustomInput from './CustomInput';
+// import CustomInput from './CustomInput';
 import useCustomer from './useCustomer';
 import { PermissionContext } from '../../context/permissionContext';
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -90,7 +93,7 @@ const Customer = ({ stationName }) => {
     handleEdit,
     customerfieldSets,
     handleChangecustomer,
-    handleAddExtra,
+    handleAddExtra,BillingGroup,handleAutocompleteChangebilling
   } = useCustomer();
 
   useEffect(() => {
@@ -105,12 +108,17 @@ const Customer = ({ stationName }) => {
   const Customer_new = permissions[9]?.new;
   const Customer_modify = permissions[9]?.modify;
   const Customer_delete = permissions[19]?.delete;
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+    const checkedIcon = <CheckBoxIcon fontSize="small" />;
+   
+    
+
 
   return (
     <div className="form-container form-container-customer">
-      <div className="customer-form">
+      <div className="customer-form main-content-container">
         <form onSubmit={handleClick}>
-          <p className="head-tab-customer">
+          <p className="head-tab-type-2-all">
             <span className="Title-Name">Customer</span>
           </p>
           <div className="Customer-page-header">
@@ -390,7 +398,7 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                 /> */}
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 name="printBill"
                 id="printBill"
                 value="Printbill"
@@ -440,7 +448,7 @@ const Customer = ({ stationName }) => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
-              />
+              /> */}
               <div className="input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
@@ -556,8 +564,8 @@ const Customer = ({ stationName }) => {
                 <label htmlFor="gstTax">GST</label>
                 <select id="gstTax" className='full-width' name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange}>
                   <option value="" >None</option>
-                  <option value="5%">5%</option>
-                  <option value="12%">12%</option>
+                  <option value="5">5%</option>
+                  <option value="12">12%</option>
                 </select>
               </div>
             </div>
@@ -567,10 +575,43 @@ const Customer = ({ stationName }) => {
               <div className="input customer-billing-group-input">
                 <div className='customer-billing-group-input-division'>
                   <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
-                  <Switch label='label' id="billinggrouph" onClick={handleButtonClick} />
+                  <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                 </div>
-                {isInputVisible && (
+                {/* {isInputVisible && (
                   <CustomInput />
+                )} */}
+                {isInputVisible && (
+                   <Autocomplete
+                   size='small'
+                   multiple
+                   id="checkboxes-tags-demo"
+                   options={BillingGroup}
+                   onChange={(event, value) =>handleAutocompleteChangebilling(event, value, "billingGroup")}
+                   value={selectedCustomerData?.billingGroup
+                    ? (typeof selectedCustomerData.billingGroup === 'string' 
+                      ? selectedCustomerData.billingGroup.split(',').map(item => item.trim()) // Trim extra spaces
+                      : selectedCustomerData.billingGroup)
+                    : []
+                  }
+                   isOptionEqualToValue={(option, value) =>  option === value}
+                   disableCloseOnSelect
+                   getOptionLabel={(option) => option}
+                   renderOption={(props, option, { selected }) => (
+                       <li {...props}>
+                           <Checkbox
+                               icon={icon}
+                               checkedIcon={checkedIcon}
+                               style={{ marginRight: 8 }}
+                               checked={selected}
+                           />
+                           {option}
+                       </li>
+                   )}
+                   style={{ width: 170 }}
+                   renderInput={(params) => (
+                       <TextField {...params} label="BillingGroup" placeholder="Organization" />
+                   )}
+               />
                 )}
               </div>
               <div className="input">
@@ -660,7 +701,9 @@ const Customer = ({ stationName }) => {
                       onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                     />
                   )}
-                  {Customer_modify === 1 && (
+
+                  {Customer_modify === 1 && isEditMode &&(
+                    
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
@@ -676,7 +719,7 @@ const Customer = ({ stationName }) => {
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
                   )}
-                  {Customer_new === 1 && (
+                  {Customer_new === 1 &&!isEditMode && (
                     <SpeedDialAction
                       key="Add"
                       icon={<BookmarkAddedIcon />}

@@ -36,6 +36,13 @@
     overflow: auto;
 }
 
+.first-div::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    cursor: pointer;
+    position: absolute;
+}
+
 @media screen and (min-width: 1219px) {
     .first-div {
         display: flex;

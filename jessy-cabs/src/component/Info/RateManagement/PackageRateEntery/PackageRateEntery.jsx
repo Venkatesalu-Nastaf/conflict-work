@@ -194,7 +194,7 @@ const PackageRateEntery = ({ organizationNames }) => {
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">
-              <div>
+              {/* <div>
                 <div className="input">
                   <div className="icone">
                     <EngineeringIcon color="action" />
@@ -204,7 +204,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     size="small"
                     id="free-solo-demo-duty"
                     freeSolo
-                    sx={{ width: "20ch" }}
+                    sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "duty", index)}
                     value={Duty.find((option) => option.optionvalue)?.label || fieldSet?.duty || ''}
                     options={Duty.map((option) => ({
@@ -219,9 +219,33 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-              </div>
+              </div> */}
               <div>
                 <div className='first'>
+                  <div className="input">
+                    {/* <div className="icone">
+                      <EngineeringIcon color="action" />
+                    </div> */}
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      id="free-solo-demo-duty"
+                      freeSolo
+                      sx={{ width: "100%" }}
+                      onChange={(event, value) => handleAutocompleteChange(event, value, "duty", index)}
+                      value={Duty.find((option) => option.optionvalue)?.label || fieldSet?.duty || ''}
+                      options={Duty.map((option) => ({
+                        label: option.option,
+                      }))}
+                      getOptionLabel={(option) => option.label || fieldSet?.duty || ''}
+                      renderInput={(params) => {
+                        return (
+                          <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
+                        )
+                      }
+                      }
+                    />
+                  </div>
                   <div className="input">
                     <TextField
                       size="small"
@@ -233,7 +257,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                       autoComplete="new-password"
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
-                      // variant="standard"
+                    // variant="standard"
                     />
                   </div>
                   <div className="input">

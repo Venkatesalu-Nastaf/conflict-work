@@ -30,6 +30,7 @@ router.post('/booking', async (req, res) => {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
     });
+
     // try {
     //     const response = await db.query('INSERT INTO booking SET ?', [bookData])
     //     console.log("res-------------", response)

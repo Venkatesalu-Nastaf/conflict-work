@@ -672,6 +672,25 @@ app.get(`/get-customer`, (req, res) => {
 
 
 
+app.get(`/name-orderby/:custmorName`, (req, res) => {
+  const customer = req.params.custmorName
+  const sql = `select * from customerOrderdata where customer=?`
+  db.query(sql, [customer], (err, result) => {
+    if (err) {
+      console.log("error fetching CUSTOMER ", err)
+      return
+    }
+    if (result) {
+      return res.json({ data: result, success: true })
+    }
+    return res.json({ success: false })
+  })
+})
+
+
+
+
+
 
 
 // const port = 8081;

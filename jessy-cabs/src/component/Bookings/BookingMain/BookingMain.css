@@ -1,10 +1,10 @@
-.head-tab-booking {
+/* .head-tab-booking {
     position: sticky;
     top: 0px;
     z-index: 5;
     padding: 0px 10px 0px 0px;
     background-color: #ffffff;
-}
+} */
 
 .BokkingChart-render {
     background-color: var(--glass);

@@ -103,7 +103,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Booking = ({ stationName }) => {
+const Booking = ({ stationName, customerData }) => {
 
   const apiUrl = APIURL;
   const {
@@ -111,7 +111,7 @@ const Booking = ({ stationName }) => {
     selectedCustomerId,
     // rows,
     actionName,
-    error,
+    error, orderByDropDown,
     success,
     info,
     // warning,
@@ -134,7 +134,7 @@ const Booking = ({ stationName }) => {
     setSelectedCustomerData,
     setBookingTime,
     selectedCustomerDatas,
-    handleKeyEnter,
+    // handleKeyEnter,
     formValues,
     // handleenterSearch,
     handleAutocompleteChange,
@@ -144,7 +144,7 @@ const Booking = ({ stationName }) => {
     sendEmail,
     setSendEmail,
     lastBookingNo,
-    currentYear,
+    currentYear, bookingStatus, setBookingStatus,
     // handleClickHide,
     // searchText,
     // setSearchText,
@@ -163,16 +163,16 @@ const Booking = ({ stationName }) => {
     // columns,
     // handletableClick,
     // setFile,
-    // dialogOpen,
-    // handleCloseDialog,
-    // allFile,
+    dialogOpen,
+    handleCloseDialog,
+    allFile,
     handleButtonClick,
     isEditMode,
     handleEdit,
-    // handleContextMenu,
-    // handleimagedelete,
-    // handleClosedeleteDialog,
-    // dialogdeleteOpen,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
     // handleprevent,
     rowdriver,
     handleRowClickdriver,
@@ -182,7 +182,7 @@ const Booking = ({ stationName }) => {
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
-    // handleSelectAll, handlecheckbox, selectAll, deletefile, 
+    handleSelectAll, handlecheckbox, selectAll, deletefile,
     imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   } = useBooking();
 
@@ -204,7 +204,6 @@ const Booking = ({ stationName }) => {
   const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
 
- 
 
   // const [selectedDate, setSelectedDate] = useState(getCurrentDate());
   // const selectedDate = formData.bookingdate
@@ -221,12 +220,11 @@ const Booking = ({ stationName }) => {
   //   setSelectedDate(event.target.value);
   // };
 
-  const [bookingStatus, setBookingStatus] = React.useState('');
+
 
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
   };
-
 
 
   return (
@@ -265,9 +263,13 @@ const Booking = ({ stationName }) => {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={bookingStatus}
+                    value={
+                      bookingStatus ||
+                      ""
+                    }
                     label="Status"
                     onChange={handleStatusChange}
+                  // onChange={handleChange}
                   >
                     <MenuItem value={'Pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
@@ -1023,7 +1025,7 @@ const Booking = ({ stationName }) => {
               <div className="icone">
                 <PermIdentityIcon color="action" />
               </div>
-              <TextField
+              {/* <TextField
                 margin="normal"
                 size="small"
                 id="customer"
@@ -1040,13 +1042,52 @@ const Booking = ({ stationName }) => {
                 onChange={handleChange}
                 onKeyDown={handleKeyEnter}
                 autoComplete="new-password"
+              /> */}
+
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="customer"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => {
+                  handleAutocompleteChange(event, value, "customer")
+                  // handleCustomerEnter2(event)
+                }}
+                // value={book.customer || ''}
+                value={
+                  formData.customer ||
+                  selectedCustomerData.customer ||
+                  selectedCustomerDatas.customer ||
+                  book.customer ||
+                  ""}
+
+                options={customerData?.map((option) => ({
+                  label: option.customer,
+                }))}
+                getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer ||
+                  book.customer || ''}
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Customer"
+                      name="customer"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
               />
+
+
             </div>
             <div className="input">
               <div className="icone">
                 <HomeRepairServiceTwoToneIcon color="action" />
               </div>
-              <TextField
+
+
+              {/* <TextField
                 name="orderedby"
                 autoComplete="new-password"
                 className="full-width"
@@ -1063,7 +1104,46 @@ const Booking = ({ stationName }) => {
                 // variant="standard"
                 margin="normal"
                 size="small"
+              /> */}
+              {/* {console.log("orderByDropDown", orderByDropDown)} */}
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="orderedby"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "orderedby")
+
+
+                }
+                // value={book.orderedBy || ''}
+                value={
+                  formData.orderedby ||
+                  selectedCustomerData.orderedby ||
+                  selectedCustomerDatas.orderedby ||
+                  book.orderedby ||
+                  ""
+                }
+                options={orderByDropDown?.map((option) => ({
+
+                  label: option?.orderedby,
+                }))}
+                getOptionLabel={(option) => option?.label || formData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || book.orderedby || ""}
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="orderedby"
+                      name="orderedby"
+                      inputRef={params.inputRef}
+                    />
+
+                  );
+                }}
               />
+
+
             </div>
 
             {/* <div className="input">
@@ -1094,19 +1174,19 @@ const Booking = ({ stationName }) => {
                 <AddIcCallTwoToneIcon color="action" />
               </div>
               <TextField
-                name="mobile"
+                name="orderByMobileNo"
                 autoComplete="new-password"
                 className="full-width"
                 value={
-                  formData.mobile ||
-                  selectedCustomerData.mobile ||
-                  selectedCustomerDatas.phoneno ||
-                  book.mobile ||
+                  formData.orderByMobileNo ||
+                  selectedCustomerData.orderByMobileNo ||
+                  selectedCustomerDatas.orderByMobileNo ||
+                  book.orderByMobileNo ||
                   ""
                 }
                 onChange={handleChange}
                 label="Order by Mobile No"
-                id="mobile_no"
+                id="orderByMobileNo"
                 // variant="standard"
                 margin="normal"
                 size="small"
@@ -1117,19 +1197,19 @@ const Booking = ({ stationName }) => {
                 <ForwardToInboxIcon color="action" />
               </div>
               <TextField
-                name="orderbyemail"
+                name="orderByEmail"
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.orderbyemail ||
-                  selectedCustomerData.orderbyemail ||
-                  selectedCustomerDatas.customeremail ||
-                  book.orderbyemail ||
+                  formData.orderByEmail ||
+                  selectedCustomerData.orderByEmail ||
+                  selectedCustomerDatas.orderByEmail ||
+                  book.orderByEmail ||
                   ""
                 }
                 onChange={handleChange}
                 label="Order By Email"
-                id="orederbyemail"
+                id="orderByEmail"
                 // variant="standard"
                 margin="normal"
                 size="small"
@@ -1621,7 +1701,7 @@ const Booking = ({ stationName }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  {reportTimeVar && ((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || !reportTimeVar && <label> Start Time</label>}
+                  {reportTimeVar && (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>))}
 
                   <input
                     type="time"
@@ -2526,68 +2606,142 @@ const Booking = ({ stationName }) => {
             /> */}
 
 
+        {/* 
+        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogContent>
+            <div className="booking-main-table-div1">
+              {Array.isArray(allFile) &&
+                allFile.map((img, index) => (
+                  <div key={index} className="booking-main-table-div2">
+                    <embed
+                      src={`${apiUrl}/images/${img.path}`}
+                      width="100%"
+                      height="600px"
+                      style={{ width: '800px', maxWidth: '100%' }}
+                    />
+                    <button
+                      className="booking-main-table-btn"
+                      onClick={() => handleimagedelete(img.path)}
+                    />
+                  </div>
+                ))}
+            </div>
+          </DialogContent>
+        </Dialog> */}
+
         {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-              <DialogContent>
-                <div className="booking-main-table-div1">
-                  {Array.isArray(allFile) &&
-                    allFile.map((img, index) => (
-                      <div key={index} className="booking-main-table-div2">
-                        <embed
-                          src={`${apiUrl}/images/${img.path}`}
-                          width="100%"
-                          height="600px"
-                          style={{ width: '800px', maxWidth: '100%' }}
-                        />
-                        <button
-                          className="booking-main-table-btn"
-                          onClick={() => handleimagedelete(img.path)}
-                        />
-                      </div>
-                    ))}
+          <DialogContent>
+            <div className='vehicle-info-dailog-box-div1' style={{ width: "600px" }}>
+              <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
+                {selectAll ? 'Deselect All' : 'Select All'}
+              </Button>
+              {Array.isArray(allFile) && allFile.map((img, index) => (
+                <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "20px" }}>
+                  {img.mimetype.startsWith("image/")
+                    ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "auto", maxHeight: "400px", objectFit: "contain" }} />
+                    : <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", height: "400px" }} />}
+                  <Checkbox
+                    checked={deletefile.includes(img.path)}
+                    onClick={() => handlecheckbox(img.path)}
+                  />
                 </div>
-              </DialogContent>
-            </Dialog> */}
+              ))}
+            </div>
+            <div className='vehicle-info-dailog-box-delete-print-division'>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog> */}
+
+        {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogContent>
+            <div className='vehicle-info-dailog-box-div1' style={{ width: "600px", overflowY: "auto", maxHeight: "80vh" }}>
+              <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
+                {selectAll ? 'Deselect All' : 'Select All'}
+              </Button>
+              {Array.isArray(allFile) && allFile.map((img, index) => (
+                <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "20px" }}>
+                  {img.mimetype.startsWith("image/")
+                    ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", maxHeight: "400px", objectFit: "contain" }} />
+                    : <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", height: "400px" }} />}
+                  <Checkbox
+                    checked={deletefile.includes(img.path)}
+                    onClick={() => handlecheckbox(img.path)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className='vehicle-info-dailog-box-delete-print-division'>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog> */}
+
+        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogContent>
+            <div className='vehicle-info-dailog-box-div1' style={{ width: "600px" }}>
+              <Button variant='contained' style={{ margin: "5px" }} onClick={handleSelectAll}>
+                {selectAll ? 'Deselect All' : 'Select All'}
+              </Button>
+              {Array.isArray(allFile) && allFile.map((img, index) => (
+                <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "10px" }}>
+                  {img.mimetype.startsWith("image/")
+                    ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "400px", objectFit: "contain" }} />
+                    : <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", height: "400px" }} />}
+                  <Checkbox
+                    checked={deletefile.includes(img.path)}
+                    onClick={() => handlecheckbox(img.path)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className=''>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+
 
         {/* <Dialog open={dialogOpen} onClose={handleCloseDialog} >
-              <DialogContent>
-                <div className='vehicle-info-dailog-box-div1'>
-                  <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
-                    {selectAll ? 'Deselect All' : 'Select All'}
-                  </Button>
-                  {Array.isArray(allFile) && allFile.map((img, index) => (
-                    <div key={index} className='vehicle-info-dailog-box-btn-division'>
-                      {img.mimetype === "image/jpg" || img.mimetype === "image/jpeg" || img.mimetype === "image/png" || img.mimetype === "image/gif" || img.mimetype === "image/svg"
-                        ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
-                        <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" width="100%" height="400px" />}
+          <DialogContent>
+            <div className='vehicle-info-dailog-box-div1'>
+              <Button variant='contained' className='vehicle-info-dailog-box-btn' onClick={handleSelectAll}>
+                {selectAll ? 'Deselect All' : 'Select All'}
+              </Button>
+              {Array.isArray(allFile) && allFile.map((img, index) => (
+                <div key={index} className='vehicle-info-dailog-box-btn-division'>
+                  {img.mimetype === "image/jpg" || img.mimetype === "image/jpeg" || img.mimetype === "image/png" || img.mimetype === "image/gif" || img.mimetype === "image/svg"
+                    ? <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                    <embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" width="100%" height="400px" />}
 
-                      <Checkbox typeof='checked'
-                        checked={deletefile.includes(img.path)}
-                        onClick={(event) => {
-                          handlecheckbox(img.path)
+                  <Checkbox typeof='checked'
+                    checked={deletefile.includes(img.path)}
+                    onClick={(event) => {
+                      handlecheckbox(img.path)
 
-                        }} />
-                    </div>
-                  ))}
+                    }} />
                 </div>
-                <div className='vehicle-info-dailog-box-delete-print-division'>
-                  <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
-                </div>
-              </DialogContent>
-            </Dialog> */}
+              ))}
+            </div>
+            <div className='vehicle-info-dailog-box-delete-print-division'>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog> */}
 
-        {/* <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
-              <DialogContent>
-                <div>
-                  <h3>are you sure you want to delete</h3>
-                  <div>
-                    <Button onClick={handleContextMenu}>yes</Button>
-                    <Button onClick={handleClosedeleteDialog}>No</Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog> */}
-        {/* </div>
-        </div> */}
+        <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+          <DialogContent>
+            <div>
+              <h3>are you sure you want to delete</h3>
+              <div>
+                <Button onClick={handleContextMenu}>yes</Button>
+                <Button onClick={handleClosedeleteDialog}>No</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
       </form >
     </div >
   );

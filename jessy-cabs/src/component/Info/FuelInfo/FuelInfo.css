@@ -29,7 +29,7 @@
   font-weight: 500;
 }
 
-@media screen and (min-width: 769px) {
+/* @media screen and (min-width: 769px) {
   .side-bar-menu-close .FuelInfo-main .FuelInfo-form-container {
     width: 96vw;
   }
@@ -45,13 +45,13 @@
   border-radius: 20px;
   color: #000;
   background-color: #f0ece2;
-}
+} */
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .FuelInfo-main .FuelInfo-form-container {
     width: 93vw;
   }
-}
+} */
 
 .stationcreation-header {
   border-top: solid 1px #ccc;
@@ -62,7 +62,7 @@
 }
 
 
-.FuelInfo-main .FuelInfo-form-container::-webkit-scrollbar {
+/* .FuelInfo-main .FuelInfo-form-container::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   overflow-x: hidden;
@@ -75,7 +75,7 @@
 .FuelInfo-main .FuelInfo-form-container::-webkit-scrollbar-thumb {
   background-color: rgb(217, 212, 212);
   outline: 1px solid slategrey;
-}
+} */
 
 /* TABLE */
 .usercreation-table-container {
@@ -93,10 +93,10 @@
   overflow: scroll;
 }
 
-.head-tab-fuel {
+/* .head-tab-fuel {
   position: sticky;
   top: 0px;
   z-index: 5;
   background-color: #ffffff;
   padding: 30px 10px 0px 0px;
-}
+} */

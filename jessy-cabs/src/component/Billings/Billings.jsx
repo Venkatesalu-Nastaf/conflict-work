@@ -75,31 +75,33 @@ const Billings = () => {
   return (
 
     <div className="billings-conatiner" id="menu">
-      <div className="menu-bar">
-        <MenuItem
-          label="Billing"
-          to={Billing && ("/home/billing/billing")}
-          alt="/home/billing/billing"
-          menuItemKey="Billing"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Transfer"
-          to={Transfer && ("/home/billing/transfer")}
-          alt="/home/billing/transfer"
-          menuItemKey="Transfer"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Covering Bill"
-          to={Covering_Bill && ("/home/billing/coveringbill")}
-          alt="/home/billing/coveringbill"
-          menuItemKey="Covering Bill"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+      <div className="menu-bar-main">
+        <div className="menu-bar">
+          <MenuItem
+            label="Billing"
+            to={Billing && ("/home/billing/billing")}
+            alt="/home/billing/billing"
+            menuItemKey="Billing"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Transfer"
+            to={Transfer && ("/home/billing/transfer")}
+            alt="/home/billing/transfer"
+            menuItemKey="Transfer"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Covering Bill"
+            to={Covering_Bill && ("/home/billing/coveringbill")}
+            alt="/home/billing/coveringbill"
+            menuItemKey="Covering Bill"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+        </div>
       </div>
       <div className='alert-popup-main'>
         {warning &&

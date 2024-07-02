@@ -15,7 +15,7 @@ const CoveringBill = ({ stationName, organizationNames }) => {
   };
   return (
     <div className="form-container-CoveringBill">
-      <div className="container-main">
+      <div className="main-content-container">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>

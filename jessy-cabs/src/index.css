@@ -662,7 +662,7 @@ body {
 
 @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .main-content-container {
-    width: 96vw;
+    width: 90vw;
     margin: 0px 3px;
   }
 
@@ -673,16 +673,13 @@ body {
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
   .side-bar-menu-close .main-content-container {
-    width: 96vw;
+    width: 90vw;
   }
 
   .main-content-container {
     width: 70vw;
   }
 }
-
-
-
 
 .head-tab-all {
   position: sticky;

@@ -976,7 +976,6 @@ const useBooking = () => {
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
-
       const datamode = isEditMode ? selectedCustomerData.status : book.status
       try {
         const user = localStorage.getItem("username")
@@ -1006,7 +1005,7 @@ const useBooking = () => {
           requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
           duty: formData.duty || selectedCustomerData.duty || book.duty || "",
           bookingno: lastBookingno || '',
-          customeremail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || "",
+          customeremail: formData.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || book.orderByEmail || "",
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
           status: datamode,
@@ -1016,10 +1015,12 @@ const useBooking = () => {
 
 
         };
+        console.log(dataToSend,"datta")
         await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
+        console.log(error)
         setError(true);
         setErrorMessage("An error occured while sending mail", error);
       }

@@ -321,9 +321,9 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   return (
     <div className="form-container form-container-tripsheet">
-      <div className="Tripsheet-form">
-        <form action="main-content-container">
-          <p className="Title-Name head-tab-tripsheet">Trip Sheet</p>
+      <div className="Tripsheet-form main-content-container">
+        <form action="">
+          <p className="Title-Name head-tab-type-2-all">Trip Sheet</p>
           <div className="Tripsheet-header">
 
             <div>

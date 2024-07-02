@@ -116,7 +116,7 @@ const Customer = ({ stationName }) => {
 
   return (
     <div className="form-container form-container-customer">
-      <div className="customer-form main-content-container">
+      <div className="main-content-container">
         <form onSubmit={handleClick}>
           <p className="head-tab-type-2-all">
             <span className="Title-Name">Customer</span>
@@ -321,9 +321,9 @@ const Customer = ({ stationName }) => {
                       id="orderedbycutomer"
                       className='full-width'
                       sx={{ width: "300px" }}
-                      label="OrderedBy"
-                      name="orderedBy"
-                      value={datafield.orderedBy || ""}
+                      label="Orderedby"
+                      name="orderedby"
+                      value={datafield.orderedby || ""}
                      
                       // value={fieldSet.orderdby || ""}
                       onChange={(e) => handleChangecustomer(e, index)}

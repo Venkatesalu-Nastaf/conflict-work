@@ -271,7 +271,7 @@ const Booking = ({ stationName, customerData }) => {
                     onChange={handleStatusChange}
                   // onChange={handleChange}
                   >
-                    <MenuItem value={'Pending'}>Pending</MenuItem>
+                    <MenuItem value={'pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
                   </Select>
                 </FormControl>

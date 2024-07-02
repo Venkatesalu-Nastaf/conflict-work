@@ -528,6 +528,10 @@ body {
 /* dashboard.css or a separate CSS file */
 
 /* MENUBAR FOR ALL PAGES */
+.menu-bar-main {
+  display: flex;
+  justify-content: center;
+}
 
 .menu-bar {
   border-radius: 25px;
@@ -540,6 +544,7 @@ body {
   justify-content: center;
   padding: 0 10px;
   gap: 1rem;
+  width: fit-content;
 }
 
 .menu-link {
@@ -636,7 +641,7 @@ body {
   outline: 1px solid slategrey;
 }
 
-.main-content-container{
+.main-content-container {
   border: 2px solid #ccc;
   overflow: scroll;
   height: 80vh;

@@ -20,7 +20,7 @@ const columns = [
     { field: "rateType", headerName: "Rate_Type", width: 130 },
     { field: "gstnumber", headerName: "GST_NO", width: 160 },
     { field: "state", headerName: "State", width: 160 },
-    { field: "orderedBy", headerName: "OrderedBy", width: 260 },
+    { field: "orderedby", headerName: "OrderedBy", width: 260 },
     { field: "orderByEmail", headerName: "Email", width: 260 },
     { field: "orderByMobileNo", headerName: "MobileNo", width: 260 },
     // { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
@@ -56,7 +56,7 @@ const useCustomer = () => {
 
     const [customerfieldSets, setCustomerFieldSets] = useState([{
         // dinamic data
-        orderedBy: '',
+        orderedby: '',
         orderByEmail: '',
     orderByMobileNo: '',
 
@@ -82,7 +82,7 @@ const useCustomer = () => {
     }
     const handleAddExtra = () => {
         setCustomerFieldSets([...customerfieldSets, {
-            orderedBy: '',
+            orderedby: '',
             orderByEmail: '',
             orderByMobileNo: '',
         }]);
@@ -397,7 +397,7 @@ const useCustomer = () => {
         }));
         setCustomerFieldSets([{
             // dinamic data
-            orderedBy: '',
+            orderedby: '',
             orderByEmail: '',
         orderByMobileNo: '',
     
@@ -448,7 +448,7 @@ const useCustomer = () => {
     const handleAdd = async () => {
 
         const hasEmptyFields = customerfieldSets.some(fieldSet => 
-            !fieldSet.orderedBy || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+            !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
           );
        const name = book.name;
         const customer=book.customer
@@ -491,7 +491,7 @@ const useCustomer = () => {
         // const selectedCustomer = rows.find((row) => row.customerId === customerId);
         
         // console.log(data,"ggggg")
-        const {id,orderByEmail,orderedBy,orderByMobileNo,...restselectedcustomerdata}=selectedCustomerData
+        const {id,orderByEmail,orderedby,orderByMobileNo,...restselectedcustomerdata}=selectedCustomerData
         const updatedCustomer = {
             // ...selectedCustomer,
             ...restselectedcustomerdata,

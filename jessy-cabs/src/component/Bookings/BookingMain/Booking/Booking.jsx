@@ -2677,7 +2677,7 @@ const Booking = ({ stationName, customerData }) => {
           </DialogContent>
         </Dialog> */}
 
-        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
             <div className='vehicle-info-dailog-box-div1' style={{ width: "600px" }}>
               <Button variant='contained' style={{ margin: "5px" }} onClick={handleSelectAll}>
@@ -2699,7 +2699,33 @@ const Booking = ({ stationName, customerData }) => {
               <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
             </div>
           </DialogContent>
+        </Dialog> */}
+
+
+        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogContent>
+            <div className='vehicle-info-dailog-box-div1' style={{ width: "600px" }}>
+              <Button variant='contained' style={{ margin: "5px" }} onClick={handleSelectAll}>
+                {selectAll ? 'Deselect All' : 'Select All'}
+              </Button>
+              {Array.isArray(allFile) && allFile.map((img, index) => (
+                <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "10px" }}>
+                  {(img.mimetype === "jpg" || "png") && <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "400px", objectFit: "contain" }} />}
+                  {(img.mimetype === "pdf") && <>< embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", display: "block", height: "600px" }} /> <button>Show</button></>}
+
+                  <Checkbox
+                    checked={deletefile.includes(img.path)}
+                    onClick={() => handlecheckbox(img.path)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className=''>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            </div>
+          </DialogContent>
         </Dialog>
+
 
 
 

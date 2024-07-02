@@ -1360,6 +1360,7 @@ const useBooking = () => {
         const bookingDetails = response.data;
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
+        console.log("bookingDetails.status", bookingDetails.status)
         setBookingStatus(bookingDetails.status)
         setIsEditMode(true);
         setEdit(true)

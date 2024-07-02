@@ -322,7 +322,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form">
-        <form action="">
+        <form action="main-content-container">
           <p className="Title-Name head-tab-tripsheet">Trip Sheet</p>
           <div className="Tripsheet-header">
 
@@ -653,6 +653,21 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 <div className="input">
                   <div className="icone">
+                    <AttachEmailIcon color="action" />
+                  </div>
+                  <TextField
+                    name="orderbyemail"
+                    value={formData.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
+                    onChange={handleChange}
+                    label="Order by email"
+                    id="orderbyemail"
+                    size="small"
+                    autoComplete="password"
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
                     <AssignmentIndIcon color="action" />
                   </div>
                   <TextField
@@ -696,20 +711,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
-                  </div>
-                  <TextField
-                    name="orderbyemail"
-                    value={formData.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
-                    onChange={handleChange}
-                    label="Order by email"
-                    id="orderbyemail"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div>
+
 
                 <div className="input tripsheet-remarks-division">
                   <div className="icone">

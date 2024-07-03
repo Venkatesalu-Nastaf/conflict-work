@@ -30,6 +30,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
 //dialog box
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -325,6 +328,18 @@ const TripSheet = ({ stationName, logoImage }) => {
   const toggleVehicleDetails = () => {
     setShowVehicleDetails(!showVehicleDetails);
   }
+
+
+  // for vechicle type vendor info
+  const [type, setType] = React.useState('');
+
+  const handlevehiecleChange = (event) => {
+    setType(event.target.value);
+  };
+
+  // for check box vendor info
+  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 
 
   return (
@@ -2319,6 +2334,551 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <Tab>GPS Att</Tab>
                   <Tab>Message</Tab>
                 </TabList>
+
+                <TabPanel value={1} sx={{ p: 2 }}>
+                  <div className="Customer-Customer-Bill-Slider">
+                    <div className="input-field">
+
+                      <div className="input">
+                      
+
+                        <TextField
+                          name="pack"
+                          // value={}
+                          label="V Trip No"
+                          id=""
+                          size="small"
+                          // variant="standard"
+                          autoComplete=""
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+                      <div className="input">
+                      <Box sx={{ minWidth: 200 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Rate For - F3</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={type}
+                            label="Rate For - F3"
+                            onChange={handlevehiecleChange}
+                          >
+                            <MenuItem value="sedan">sedan</MenuItem>
+                            <MenuItem value="Xuv">Xuv</MenuItem>
+                            <MenuItem value="Hatch back">Hatch back</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      </div>
+                      <div className="input" style={{alignItems:"center", gap:"5px", display:"flex"}}> 
+                        <p style={{margin:"0px"}}>Duty</p>
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      id="free-solo-duty"
+                      freeSolo
+                      sx={{ width: "100%" }}
+                      onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
+                      value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                      options={Duty.map((option) => ({
+                        label: option.option,
+                      }))}
+                      getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                      renderInput={(params) => {
+                        return (
+                          <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
+                        )
+                      }
+                      }
+                    />
+                
+                      </div>
+                    </div>
+                    <div className="input-field">
+                    <div className="input" >
+                  
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="start date"
+                        format="DD/MM/YYYY"
+                        // value={fromDate}
+                        // onChange={(date) => setFromDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="input">
+                  
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="Closing Date"
+                        format="DD/MM/YYYY"
+                        // value={toDate}
+                        // onChange={(date) => setToDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+
+
+
+                      <div className="input">
+                        {/* <div className="icone">
+                          <Inventory2Icon color="action" />
+                        </div> */}
+
+                        <TextField
+                          name="Total days"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="Total days"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+                      <div className="" style={{alignItems:"center", gap:"5px", display:"flex"}}> 
+                      <Checkbox {...label} />
+                      <p style={{margin:"0px"}}>Lock</p>
+                      </div>
+                    </div>
+                    <div className="input-field">
+
+
+
+                      
+
+
+                    <div className="input">
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer
+                        components={[
+                          'TimePicker',
+                        ]}
+                      >
+                       
+                        
+                        <DemoItem label="Start Time">
+                          <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
+                        </DemoItem>
+                       
+                      </DemoContainer>
+                    </LocalizationProvider>
+                    </div>
+
+                    <div className="input">
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer
+                        components={[
+                          'TimePicker',
+                        ]}
+                      >
+                      
+                        
+                        <DemoItem label="Closing Time">
+                          <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
+                        </DemoItem>
+                      
+                      </DemoContainer>
+                    </LocalizationProvider>
+                    </div>
+
+
+                    <div className="input" style={{marginTop:'45px'}}>
+                        <TextField
+                          name="Total Time"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="Total Time"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+
+
+                      <Button
+                          variant='contained'
+                          style={{marginTop:'45px'}}
+                        >
+                          Billing
+                        </Button>
+
+
+
+
+
+
+                      {/* <span>Ex.Km</span>
+                      <div className="input">
+                        <TextField
+                          name="exkm1"
+                          value={extraKM || formData.calcPackage || 0}
+                          // label="Ex.Km"
+                          id="ex-km"
+                          autoComplete="password"
+                          size="small"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <span>@</span>
+                        <TextField size="small"
+                          name='exkmTkm2'
+                          value={extrakm_amount || formData.calcPackage || ''}
+                          id="exkmTkm"
+                          // variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount6"
+                          value={ex_kmAmount || formData.calcPackage || 0}
+                          size="small"
+                          label="Amount"
+                          autoComplete="password"
+                          id="amount"
+                        // variant="standard"
+                        />
+                      </div> */}
+                    </div>
+
+                    <div className="input-field">
+
+
+                    <div className="input" >
+                        <TextField
+                          name="starting Kilometers"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="starting Kilometers"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+
+                      
+                    <div className="input" >
+                        <TextField
+                          name="closing Kilometers"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="closing Kilometers"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+
+
+                      
+                    <div className="input" >
+                        <TextField
+                          name="Total kilometers"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="Total kilometers"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                        />
+                      </div>
+
+
+
+
+
+
+
+
+
+
+                      {/* <span>Ex.Hr</span>
+                      <div className="input">
+                        <TextField
+                          name="exHrs1"
+                          value={extraHR || formData.calcPackage || ''}
+                          label="Ex.Hrs"
+                          id="ex-Hrs"
+                          size="small"
+                          autoComplete="password"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <span>@</span>
+                        <TextField
+                          size="small"
+                          name='exHrsTHrs2'
+                          value={extrahr_amount || formData.calcPackage || ''}
+                        // variant="standard"
+                        />
+
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount7"
+                          value={ex_hrAmount || formData.calcPackage || 0}
+                          size="small"
+                          label="Amount"
+                          autoComplete="password"
+                          id="amount"
+                        // variant="standard"
+                        />
+                      </div> */}
+                    </div>
+                    <div className="input-field">
+
+
+                      
+                    <div className="input">
+                    <TextField
+                          name="Remarks"
+                          // value={calcPackage || formData.calcPackage || ''}
+                          label="Remarks"
+                          id="pack"
+                          size="small"
+                          // variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "100%" }}
+                          />
+
+                    </div>
+
+
+
+                    <div className="input">
+                    <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Car Total Amount"
+                          id="amount"
+                        // variant="standard"
+                        />
+
+                    </div>
+
+                    <div className="input">
+                        <Button
+                          variant='contained'
+                        >
+                          Update
+                        </Button>
+                      </div>
+
+                      <div className="input">
+                        <Button
+                          variant='contained'
+                        >
+                          Update vendor Adv
+                        </Button>
+                      </div>
+
+
+
+
+
+
+
+
+                      {/* <span>Night</span>
+                      <div className="input">
+                        <TextField
+                          name="night1"
+                          value={nightBta || ''}
+                          onChange={(e) => setNightBeta(e.target.value)}
+                          // label="Night"
+                          id="night"
+                          autoComplete="password"
+                          size="small"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <span>@</span>
+                        <TextField
+                          size="small"
+                          name='nightThrs2'
+                          value={nightCount || ''}
+                          onChange={(e) => setNightCount(e.target.value)}
+                          // variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Amount"
+                          id="amount"
+                        // variant="standard"
+                        />
+                      </div> */}
+                    </div>
+                    <div className="input-field">
+
+                      <p style={{textDecoration:'underline', color:"#5356FF"}}>Click Here to load orginals </p>
+                    
+                        <Button
+                          variant='contained'
+                        >
+                          CBILLED
+                        </Button>
+
+
+                      {/* <span>Bata</span>
+                      <div className="input">
+                        <TextField
+                          name="night1"
+                          value={nightBta || ''}
+                          onChange={(e) => setNightBeta(e.target.value)}
+                          // label="Night"
+                          id="night"
+                          autoComplete="password"
+                          size="small"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <span>@</span>
+                        <TextField
+                          size="small"
+                          name='nightThrs2'
+                          value={nightCount || ''}
+                          onChange={(e) => setNightCount(e.target.value)}
+                          // variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Amount"
+                          id="amount"
+                        // variant="standard"
+                        />
+                      </div> */}
+                    </div>
+                    {/* <div className="input-field">
+                      <div className="input">
+                        <Button
+                          variant='contained'
+                        >
+                          Unlock
+                        </Button>
+                      </div>
+                      <div className="input">
+                        <Button
+                          variant='contained'
+                        >
+                          Update
+                        </Button>
+                      </div>
+                      <div className="input">
+                      
+                        <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Net Amount"
+                          id="amount"
+                        />
+                      </div>
+                    </div> */}
+
+                    {/* <div className="input-field">
+                      <div className="input">
+                        <span>Vendor Comm %</span>
+                        <TextField
+                          name="night1"
+                          value={nightBta || ''}
+                          onChange={(e) => setNightBeta(e.target.value)}
+                          // label="Night"
+                          id="night"
+                          autoComplete="password"
+                          size="small"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <span>Car Amt</span>
+                        <TextField
+                          name="night1"
+                          value={nightBta || ''}
+                          onChange={(e) => setNightBeta(e.target.value)}
+                          // label="Night"
+                          id="night"
+                          autoComplete="password"
+                          size="small"
+                        // variant="standard"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          // label="Net Amount"
+                          id="amount"
+                        // variant="standard"
+                        />
+                      </div>
+
+
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <FormControlLabel
+                          value="smsguest"
+                          control={
+                            <Checkbox
+                              size="small"
+                              checked={smsguest}
+                              onChange={(event) => setSmsGuest(event.target.checked)}
+                            />
+                          }
+                          label="Manual Bills"
+                        />
+                      </div>
+                    </div> */}
+                  </div>
+                </TabPanel>
 
                 <TabPanel value={2} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">

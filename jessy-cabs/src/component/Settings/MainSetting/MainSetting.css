@@ -29,7 +29,7 @@
   font-weight: 500;
 }
 
-@media screen and (min-width: 769px) {
+/* @media screen and (min-width: 769px) {
   .side-bar-menu-close .main-setting-main .main-setting-form-container {
     width: 96vw;
   }
@@ -51,9 +51,9 @@
   .main-setting-main .main-setting-form-container {
     width: 93vw !important;
   }
-}
+} */
 
-@media screen and (min-width:970px) and (max-width:1240px) {
+/* @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .main-setting-main .main-setting-form-container {
     width: 96vw;
   }
@@ -72,7 +72,7 @@
   .main-setting-main .main-setting-form-container {
     width: 70vw;
   }
-}
+} */
 
 @media screen and (min-width:320px) and (max-width:769.99px) {
   .main-setting-main {
@@ -88,7 +88,7 @@
   margin-bottom: -10px;
 }
 
-.main-setting-main .main-setting-form-container::-webkit-scrollbar {
+/* .main-setting-main .main-setting-form-container::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   overflow-x: hidden;
@@ -101,7 +101,7 @@
 .main-setting-main .main-setting-form-container::-webkit-scrollbar-thumb {
   background-color: rgb(217, 212, 212);
   outline: 1px solid slategrey;
-}
+} */
 
 /* TABLE */
 .usercreation-table-container {
@@ -123,10 +123,10 @@
   display: flex;
   justify-content: center;
 }
-
+/* 
 .head-tab {
   position: sticky;
   top: 0px;
   background-color: #ffffff;
   padding: 30px 10x 0px 0px;
-}
+} */

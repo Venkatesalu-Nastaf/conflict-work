@@ -8,7 +8,7 @@
   border-radius: 10px;
 }
 
-.form-container-Transfer .container-main::-webkit-scrollbar {
+/* .form-container-Transfer .container-main::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   overflow-x: hidden;
@@ -23,9 +23,9 @@
   .side-bar-menu-close .form-container-Transfer .container-main {
     width: 96vw;
   }
-}
+} */
 
-.form-container-Transfer .container-main {
+/* .form-container-Transfer .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
   height: 80vh;
@@ -35,15 +35,15 @@
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
-}
+} */
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .form-container-Transfer .container-main {
     width: 93vw;
   }
-}
+} */
 
-@media screen and (min-width:970px) and (max-width:1240px) {
+/* @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .form-container-Transfer .container-main {
     width: 96vw;
   }
@@ -51,9 +51,9 @@
   .form-container-Transfer .container-main-transfer {
     width: 76vw;
   }
-}
+} */
 
-@media screen and (min-width:769px) and (max-width:969.99px) {
+/* @media screen and (min-width:769px) and (max-width:969.99px) {
 
   .side-bar-menu-close .form-container-Transfer .container-main {
     width: 96vw;
@@ -62,12 +62,12 @@
   .form-container-Transfer .container-main-transfer {
     width: 70vw;
   }
-}
+} */
 
-.head-tab-transfer {
+/* .head-tab-transfer {
   position: sticky;
   top: 0px;
   padding: 30px 10px 0px 0px;
   background-color: #ffffff;
   z-index: 5;
-}
+} */

@@ -17,10 +17,10 @@ const UserSettings = () => {
   return (
     <div className="UserSettings-main">
       <div className="form-container-UserSettings">
-        <div className="container-main user-inputs-feilds">
+        <div className="main-content-container user-inputs-feilds">
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-usersetting">
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all">
                 <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"

@@ -17,10 +17,10 @@ const UserCreation = ({ stationName }) => {
     };
     return (
         <div className="main-setting-main">
-            <div className="main-setting-form-container">
+            <div className="main-content-container">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-userpermission">
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all">
                             <TabList onChange={handleChange}>
                                 <Tab label="User" value="Employee" />
                                 {/* <Tab label="Driver" value="Driver" /> */}

@@ -98,7 +98,7 @@ const StationCreation = () => {
 
   return (
     <div className="stationcreation-main">
-      <div className="stationcreation-form-container">
+      <div className="main-content-container">
         <form action="">
           <p className="station-creation-heading">
             <span className="Title-Name ">Station Creation</span>

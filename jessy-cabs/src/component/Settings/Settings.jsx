@@ -91,38 +91,40 @@ const Settings = () => {
 
   return (
     <div className="Settings-main">
-      <div className="menu-bar">
-        <MenuItem
-          label="User Creation"
-          to={User_Creation && ("/home/settings/usercreation")}
-          alt="/home/settings/usercreation"
-          menuItemKey="User Creation"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        {/* <MenuItem
+      <div className="menu-bar-main">
+        <div className="menu-bar">
+          <MenuItem
+            label="User Creation"
+            to={User_Creation && ("/home/settings/usercreation")}
+            alt="/home/settings/usercreation"
+            menuItemKey="User Creation"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          {/* <MenuItem
           label="Permission"
           to="/home/settings/permission"
           menuItemKey="Permission"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         /> */}
-        <MenuItem
-          label="Station Creation"
-          to={Station_Creation && ("/home/settings/stationcreation")}
-          alt="/home/settings/stationcreation"
-          menuItemKey="Station Creation"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Main setting"
-          to={Main_Setting && ("/home/settings/mainsetting")}
-          alt="/home/settings/mainsetting"
-          menuItemKey="Main setting"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+          <MenuItem
+            label="Station Creation"
+            to={Station_Creation && ("/home/settings/stationcreation")}
+            alt="/home/settings/stationcreation"
+            menuItemKey="Station Creation"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Main setting"
+            to={Main_Setting && ("/home/settings/mainsetting")}
+            alt="/home/settings/mainsetting"
+            menuItemKey="Main setting"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+        </div>
       </div>
       <div className='alert-popup-main'>
         {warning &&

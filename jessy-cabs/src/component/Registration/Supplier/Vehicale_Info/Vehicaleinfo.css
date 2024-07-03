@@ -294,3 +294,31 @@
   padding: 10px;
   gap: 15px;
 }
+
+.insurance-copy-tooltip .insurance-copy-tooltiptext,
+.national-permit-copy-tooltip .national-permit-copy-tooltiptext,
+.state-permit-copy-tooltip .state-permit-copy-tooltiptext,
+.rc-book-copy-tooltip .rc-book-copy-tooltiptext,
+.fc-copy-tooltip .fc-copy-tooltiptext {
+  visibility: hidden;
+  width: fit-content;
+  background-color: rgb(128, 128, 128);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 95%;
+  left: 52%;
+  margin-left: -60px;
+  font-size: 14px;
+}
+
+.insurance-copy-tooltip:hover .insurance-copy-tooltiptext,
+.national-permit-copy-tooltip:hover .national-permit-copy-tooltiptext,
+.state-permit-copy-tooltip:hover .state-permit-copy-tooltiptext,
+.rc-book-copy-tooltip:hover .rc-book-copy-tooltiptext,
+.fc-copy-tooltip:hover .fc-copy-tooltiptext {
+  visibility: visible;
+}

@@ -14,7 +14,7 @@
 }
 
 .form-container-PackageRateEntery .ratetype-form {
-    height: 100vh;
+    height: 74vh;
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
@@ -29,11 +29,11 @@
     border-radius: 10px;
 }
 
-.form-container-PackageRateEntery .container-main::-webkit-scrollbar {
+/* .form-container-PackageRateEntery .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
-}
+} */
 
 .table-bookingCopy-DriverBataRate {
     border: 2px solid #ccc;
@@ -42,12 +42,12 @@
     margin-top: 30px;
 }
 
-.form-container-PackageRateEntery .container-main::-webkit-scrollbar-thumb {
+/* .form-container-PackageRateEntery .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
-}
+} */
 
-.form-container-PackageRateEntery .container-main {
+/* .form-container-PackageRateEntery .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 77vh;
@@ -57,7 +57,7 @@
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
-}
+} */
 
 .ratetype-form .Title-Name {
     position: relative;
@@ -83,7 +83,7 @@
     background-color: #457cdc;
 }
 
-@media screen and (min-width:970px) and (max-width:1240px) {
+/* @media screen and (min-width:970px) and (max-width:1240px) {
     .side-bar-menu-close .form-container-PackageRateEntery .container-main {
         width: 96vw;
     }
@@ -91,9 +91,9 @@
     .form-container-PackageRateEntery .container-main {
         width: 76vw;
     }
-}
+} */
 
-@media screen and (min-width:769px) and (max-width:969.99px) {
+/* @media screen and (min-width:769px) and (max-width:969.99px) {
     .side-bar-menu-close .form-container-PackageRateEntery .container-main {
         width: 96vw;
     }
@@ -101,7 +101,7 @@
     .form-container-PackageRateEntery .container-main {
         width: 70vw;
     }
-}
+} */
 
 .DriverBataRate-inputfeild {
     flex-wrap: wrap !important;

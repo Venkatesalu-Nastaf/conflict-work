@@ -148,7 +148,7 @@ const useGroupbilling = () => {
             })
             .catch(() => {
             });
-    }, [])
+    }, [referenceNo])
 
 
     useEffect(() => {

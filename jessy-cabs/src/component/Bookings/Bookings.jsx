@@ -76,31 +76,33 @@ const Bookings = () => {
   return (
 
     <div className="Bookings-main">
-      <div className="menu-bar">
-        <MenuItem
-          label="Booking"
-          to={Booking && ("/home/bookings/booking")}
-          alt="/home/bookings/booking"
-          menuItemKey="Booking"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Trip Status"
-          to={Trip_Status && ("/home/bookings/tripstatus")}
-          alt="/home/bookings/tripstatus"
-          menuItemKey="TripStatus"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Trip Sheet"
-          to={Trip_sheet && ("/home/bookings/tripsheet")}
-          alt="/home/bookings/tripsheet"
-          menuItemKey="Trip Sheet"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+      <div className="menu-bar-main">
+        <div className="menu-bar">
+          <MenuItem
+            label="Booking"
+            to={Booking && ("/home/bookings/booking")}
+            alt="/home/bookings/booking"
+            menuItemKey="Booking"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Trip Status"
+            to={Trip_Status && ("/home/bookings/tripstatus")}
+            alt="/home/bookings/tripstatus"
+            menuItemKey="TripStatus"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Trip Sheet"
+            to={Trip_sheet && ("/home/bookings/tripsheet")}
+            alt="/home/bookings/tripsheet"
+            menuItemKey="Trip Sheet"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+        </div>
       </div>
       <div className='alert-popup-main'>
         {warning &&

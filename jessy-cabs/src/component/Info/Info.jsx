@@ -98,39 +98,41 @@ const Info = () => {
 
   return (
     <div className="Info-conatiner" id="menu">
-      <div className="menu-bar">
-        <MenuItem
-          label="Rate Type"
-          to={INFO && ("/home/info/ratetype")}
-          alt="/home/info/ratetype"
-          menuItemKey="Rate Type"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Rate Management"
-          to={Rate_Management && ("/home/info/ratemanagement")}
-          alt="/home/info/ratemanagement"
-          menuItemKey="Rate Management"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Mailers"
-          to={Mailers && myTo}
-          alt={myTo}
-          menuItemKey="Mailers"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Fuel Info"
-          to={Fuel_Info && ("/home/info/fuelinfo")}
-          alt={"/home/info/fuelinfo"}
-          menuItemKey="FuelInfo"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+      <div className="menu-bar-main">
+        <div className="menu-bar">
+          <MenuItem
+            label="Rate Type"
+            to={INFO && ("/home/info/ratetype")}
+            alt="/home/info/ratetype"
+            menuItemKey="Rate Type"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Rate Management"
+            to={Rate_Management && ("/home/info/ratemanagement")}
+            alt="/home/info/ratemanagement"
+            menuItemKey="Rate Management"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Mailers"
+            to={Mailers && myTo}
+            alt={myTo}
+            menuItemKey="Mailers"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Fuel Info"
+            to={Fuel_Info && ("/home/info/fuelinfo")}
+            alt={"/home/info/fuelinfo"}
+            menuItemKey="FuelInfo"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+        </div>
       </div>
       <div className='alert-popup-main'>
         {warning &&
@@ -143,7 +145,7 @@ const Info = () => {
       </div>
 
       <Outlet />
-      
+
     </div>
   );
 };

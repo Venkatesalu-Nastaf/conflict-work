@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
+import { Organization } from './Customerdata';
 
 
 // TABLE START
@@ -13,13 +14,16 @@ const columns = [
     { field: "id", headerName: "S.No", width: 60 },
     { field: "customerId", headerName: "Customer ID", width: 130 },
     { field: "customer", headerName: "Name", width: 160 },
-    { field: "customeremail", headerName: "E-mail", width: 160 },
+    // { field: "customeremail", headerName: "E-mail", width: 160 },
     { field: "address1", headerName: "Address", width: 130 },
-    { field: "phoneno", headerName: "Phone", width: 160 },
+    // { field: "phoneno", headerName: "Phone", width: 160 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
     { field: "gstnumber", headerName: "GST_NO", width: 160 },
     { field: "state", headerName: "State", width: 160 },
-    { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
+    { field: "orderedby", headerName: "OrderedBy", width: 260 },
+    { field: "orderByEmail", headerName: "Email", width: 260 },
+    { field: "orderByMobileNo", headerName: "MobileNo", width: 260 },
+    // { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
 
 
@@ -40,6 +44,8 @@ const useCustomer = () => {
     const [warningMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [BillingGroup, setBillingGroup] = useState([]);
+  
 
     //---------------------------------------
 
@@ -47,6 +53,41 @@ const useCustomer = () => {
     const handleButtonClick = () => {
         setIsInputVisible(!isInputVisible);
     };
+
+    const [customerfieldSets, setCustomerFieldSets] = useState([{
+        // dinamic data
+        orderedby: '',
+        orderByEmail: '',
+    orderByMobileNo: '',
+
+    }]);
+    useEffect(() => {
+        Organization()
+            .then((data) => {
+                if (data) {
+                    setBillingGroup(data);
+                }
+            })
+    }, []);
+  
+     
+
+    const handleChangecustomer = (event,index)=>{
+        const { name, value } = event.target;
+
+        const newFieldSets = [...customerfieldSets];
+        newFieldSets[index][name] = value;
+        setCustomerFieldSets(newFieldSets);
+
+    }
+    const handleAddExtra = () => {
+        setCustomerFieldSets([...customerfieldSets, {
+            orderedby: '',
+            orderByEmail: '',
+            orderByMobileNo: '',
+        }]);
+    };
+
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -236,26 +277,26 @@ const useCustomer = () => {
         servicestation: '',
         date: '',
         address1: '',
-        customeremail: '',
+        // customeremail: '',
         rateType: '',
         opBalance: '',
-        phoneno: '',
+        // phoneno: '',
         underGroup: '',
         gstTax: '',
         acType: '',
         entity: '',
-        printBill: '',
-        userName: '',
-        bookName: '',
-        division: '',
-        hourRoundedOff: '',
+        // printBill: '',
+        // userName: '',
+        // bookName: '',
+        // division: '',
+        // hourRoundedOff: '',
         selectOption: '',
-        active: '',
+        // active: '',
         state: '',
         gstnumber: '',
         SalesPerson: '',
         salesPercentage: '',
-        billingGroup: '',
+        billingGroup: [],
     });
 
     const handleChange = (event) => {
@@ -284,6 +325,7 @@ const useCustomer = () => {
 
     const handleAutocompleteChange = (event, newValue, name) => {
         const selectedOption = newValue ? newValue.label : '';
+        
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -294,6 +336,20 @@ const useCustomer = () => {
             [name]: selectedOption,
         }));
     };
+    const handleAutocompleteChangebilling = (event, newValue, name) => {
+        
+        console.log(newValue,"bill")
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: newValue,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: newValue,
+        }));
+    };
+
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
@@ -318,59 +374,108 @@ const useCustomer = () => {
             servicestation: '',
             date: '',
             address1: '',
-            customeremail: '',
+            // customeremail: '',
             rateType: '',
             opBalance: '',
-            phoneno: '',
+            // phoneno: '',
             underGroup: '',
             gstTax: '',
             acType: '',
-            printBill: '',
-            userName: '',
-            bookName: '',
-            division: '',
-            hourRoundedOff: '',
+            // printBill: '',
+            // userName: '',
+            // bookName: '',
+            // division: '',
+            // hourRoundedOff: '',
             selectOption: '',
-            active: '',
+            // active: '',
             entity: '',
             state: '',
             gstnumber: '',
             SalesPerson: '',
             salesPercentage: '',
-            billingGroup: '',
+            billingGroup:[],
         }));
+        setCustomerFieldSets([{
+            // dinamic data
+            orderedby: '',
+            orderByEmail: '',
+        orderByMobileNo: '',
+    
+        }])
+        setIsInputVisible(!isInputVisible)
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
+    const getcustomerdata=async(customerdata)=>{
+        const datacustomer=customerdata
+        try{
+         const response=await axios.get(`${apiUrl}/getcustomerorderdata/${datacustomer}`)
+         const data=response.data
+         setCustomerFieldSets(data)
+        }
+        catch(err){
+           console.log(err)
+        }
+    }
 
 
-    const handleRowClick = useCallback((params) => {
+    const handleRowClick = (params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
+        const datta=customerData.billingGroup.split(',')
+        console.log(customerData,"bb")
+        if(datta.length >=2){
+            setIsInputVisible(!isInputVisible);
+        }
+        
         setSelectedCustomerId(params.row.customerId);
+        getcustomerdata(customerData.customer)
         setIsEditMode(true);
-    }, []);
+    }
 
+   
+
+
+    const addCustomerToObjects = (arr, customerProp) => {
+        return arr.map(obj => ({
+            ...obj,
+            customer: customerProp
+        }));
+    };
+    
+    // Call the function to add customer property to each object
+    
     const handleAdd = async () => {
-        const name = book.name;
+
+        const hasEmptyFields = customerfieldSets.some(fieldSet => 
+            !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+          );
+       const name = book.name;
+        const customer=book.customer
         if (!name) {
             setError(true);
             setErrorMessage("fill mantatory fields");
             return;
         }
-        if (!book.customeremail) {
+        if (!customer) {
             setError(true);
-            setErrorMessage("Enter The Mail");
+            setErrorMessage("fill mantatory fields");
             return;
         }
-        if (!book.phoneno) {
+        if (hasEmptyFields) {
             setError(true);
-            setErrorMessage("Enter The Phoneno");
+            setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
             return;
-        }
+          }
 
         try {
+            // const datasets={...customerfieldSets,customer:book.customer}
+            const datasets = addCustomerToObjects(customerfieldSets, book.customer);
+            console.log(datasets)
+            console.log(book,"hhh")
+           
             await axios.post(`${apiUrl}/customers`, book);
+            await axios.post(`${apiUrl}/customerorderdbydata`,datasets)
             handleCancel();
             setRows([]);
             setSuccess(true);
@@ -381,17 +486,26 @@ const useCustomer = () => {
         }
     };
 
-    const handleEdit = async (customerId) => {
-        const selectedCustomer = rows.find((row) => row.customerId === customerId);
+    const handleEdit = async () => {
+        // console.log(customerId,"datta")
+        // const selectedCustomer = rows.find((row) => row.customerId === customerId);
+        
+        // console.log(data,"ggggg")
+        const {id,orderByEmail,orderedby,orderByMobileNo,...restselectedcustomerdata}=selectedCustomerData
         const updatedCustomer = {
-            ...selectedCustomer,
-            ...selectedCustomerData,
+            // ...selectedCustomer,
+            ...restselectedcustomerdata,
+            // ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-
+        
+        const datasets = addCustomerToObjects(customerfieldSets,selectedCustomerData?.customer||book.customer );
         await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+        await axios.put(`${apiUrl}/updatecustomerorderdata`,datasets);
+        setIsInputVisible(!isInputVisible);
         handleCancel();
         setRows([]);
+        // setDataTrigger(!datatrigger)
     };
 
     useEffect(() => {
@@ -403,12 +517,13 @@ const useCustomer = () => {
                     ...row,
                     id: index + 1,
                 }));
+               
                 setRows(rowsWithUniqueId);
             } catch {
             }
         }
         handleList();
-    }, [apiUrl]);
+    }, [apiUrl,rows]);
 
 
     const handleClick = async (event, actionName, customerId) => {
@@ -440,21 +555,14 @@ const useCustomer = () => {
 
             else if (actionName === 'Delete') {
                 await axios.delete(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`);
+                 await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer||book.customer}`);
                 setSelectedCustomerData(null);
                 handleCancel();
                 setRows([]);
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.customerId === customerId);
-                const updatedCustomer = {
-                    ...selectedCustomer,
-                    ...selectedCustomerData,
-                    date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
-                };
-                await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
-                handleCancel();
-                setRows([]);
+                handleEdit()
             }
 
             else if (actionName === 'Add') {
@@ -499,6 +607,8 @@ const useCustomer = () => {
         columns,
         isEditMode,
         handleEdit,
+        customerfieldSets,
+        handleChangecustomer,handleAddExtra,BillingGroup,handleAutocompleteChangebilling
     };
 };
 

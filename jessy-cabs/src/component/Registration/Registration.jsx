@@ -37,17 +37,17 @@ const Registration = () => {
   const [warning, setWarning] = useState(false);
 
   const hidePopup = () => {
-      setWarning(false);
+    setWarning(false);
   };
 
   useEffect(() => {
     if (warning) {
-        const timer = setTimeout(() => {
-            hidePopup();
-        }, 3000);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-    }, [warning]);
+  }, [warning]);
 
 
 
@@ -95,41 +95,42 @@ const Registration = () => {
 
   return (
     <div className="Registration-conatiner" id="menu">
-      <div className="menu-bar">
-        <MenuItem
-          label="Customer"
-          to={Customer && ("/home/registration/customer")}
-          alt="/home/registration/customer"
-          menuItemKey="Customer"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Supplier"
-          to={Supllier && ("/home/registration/supplier")}
-          alt="/home/registration/supplier"
-          menuItemKey="Supplier"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
-        <MenuItem
-          label="Employees"
-          to={Employee && ("/home/registration/employes")}
-          alt="/home/registration/employes"
-          menuItemKey="Employees"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+      <div className='menu-bar-main'>
+        <div className="menu-bar">
+          <MenuItem
+            label="Customer"
+            to={Customer && ("/home/registration/customer")}
+            alt="/home/registration/customer"
+            menuItemKey="Customer"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Supplier"
+            to={Supllier && ("/home/registration/supplier")}
+            alt="/home/registration/supplier"
+            menuItemKey="Supplier"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Employees"
+            to={Employee && ("/home/registration/employes")}
+            alt="/home/registration/employes"
+            menuItemKey="Employees"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+        </div>
       </div>
-
       <div className='alert-popup-main'>
-          {warning &&
-              <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                  <p>You do not have Permission ..!</p>
-              </div>
-          }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+            <p>You do not have Permission ..!</p>
+          </div>
+        }
       </div>
 
       <Outlet />

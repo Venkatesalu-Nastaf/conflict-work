@@ -15,10 +15,10 @@ const CoveringBill = ({ stationName, organizationNames }) => {
   };
   return (
     <div className="form-container-CoveringBill">
-      <div className="container-main">
+      <div className="main-content-container">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box className='head-tab-coveringbill' sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Group Billing" value="groupbilling" />
                 <Tab label="Covering Submit" value="coveringsubmit" />

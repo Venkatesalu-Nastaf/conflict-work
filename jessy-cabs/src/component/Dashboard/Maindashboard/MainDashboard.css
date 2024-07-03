@@ -106,6 +106,10 @@
   justify-content: center;
 }
 
+.side-bar-menu-close {
+  grid-template-columns: 0rem auto 95% !important;
+}
+
 .glass {
   display: grid;
   height: 95%;

@@ -4,7 +4,7 @@
   flex-direction: column;
   grid-gap: 1rem;
   gap: 1rem;
-  align-items: center;
+  /* align-items: center; */
   margin-top: 30px;
 }
 

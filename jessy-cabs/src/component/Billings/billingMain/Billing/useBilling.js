@@ -3,6 +3,7 @@ import axios from 'axios';
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
+import { PdfData } from '../../Transfer/TransferReport/PdfContext.js';
 
 const useBilling = () => {
     const apiUrl = APIURL;
@@ -27,6 +28,7 @@ const useBilling = () => {
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
+    const { setParticularPdf, setParticularRefNo, individualBilled} = PdfData();
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -53,8 +55,9 @@ const useBilling = () => {
             setError(true);
             setErrorMessage("Please enter TripID");
         } else {
+            setParticularRefNo(tripid)
             localStorage.setItem('selectedcustomerid', customer);
-            setPopupOpen(true);
+            setParticularPdf(true);
         }
     };
 
@@ -421,27 +424,27 @@ const useBilling = () => {
     //for invoice page
 
     // for fetching map route data 
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = book.tripid;
-            try {
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const tripid = book.tripid;
+    //         try {
 
-                if (tripid !== null && tripid !== 'undefined' && tripid) {
-                    const response = await fetch(`${apiUrl}/routedata-map/${encodeURIComponent(tripid)}`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const routeData = await response.json();
-                    setRouteData(routeData);
+    //             if (tripid !== null && tripid !== 'undefined' && tripid) {
+    //                 const response = await fetch(`${apiUrl}/routedata-map/${encodeURIComponent(tripid)}`);
+    //                 if (!response.ok) {
+    //                     throw new Error(`HTTP error! Status: ${response.status}`);
+    //                 }
+    //                 const routeData = await response.json();
+    //                 setRouteData(routeData);
 
-                }
+    //             }
 
 
-            } catch (error) {
-            }
-        };
-        fetchData();
-    }, [apiUrl]);
+    //         } catch (error) {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl,book.tripid]);
 
 
     // data fetching from the customer  
@@ -467,50 +470,50 @@ const useBilling = () => {
     }, [apiUrl]);
 
     // fetching signature image
-    useEffect(() => {
-        const fetchData = async () => {
-            // const tripid = localStorage.getItem('selectedTripid');
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         // const tripid = localStorage.getItem('selectedTripid');
 
-            const tripid = book.tripid;
-            try {
-                if (tripid !== null && tripid !== 'undefined' && tripid) {
-                    const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const imageUrl = URL.createObjectURL(await response.blob());
-                    setMapImageUrl(imageUrl);
-                }
-            } catch {
-            }
-        };
+    //         const tripid = book.tripid;
+    //         try {
+    //             if (tripid !== null && tripid !== 'undefined' && tripid) {
+    //                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+    //                 if (!response.ok) {
+    //                     throw new Error(`HTTP error! Status: ${response.status}`);
+    //                 }
+    //                 const imageUrl = URL.createObjectURL(await response.blob());
+    //                 setMapImageUrl(imageUrl);
+    //             }
+    //         } catch {
+    //         }
+    //     };
 
-        fetchData();
-        return () => { };
-    }, [apiUrl]);
+    //     fetchData();
+    //     return () => { };
+    // }, [apiUrl,book.tripid]);
 
     // get map image 
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = book.tripid;
-            try {
-                // const tripid = localStorage.getItem('selectedTripid');
-                if (tripid !== null && tripid !== 'undefined' && tripid) {
-                    const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-                    if (response.status === 200) {
-                        const responseData = await response.blob();
-                        const imageUrl = URL.createObjectURL(responseData);
-                        setGMapImageUrl(imageUrl);
-                    } else {
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
-                    }
-                }
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const tripid = book.tripid;
+    //         try {
+    //             // const tripid = localStorage.getItem('selectedTripid');
+    //             if (tripid !== null && tripid !== 'undefined' && tripid) {
+    //                 const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+    //                 if (response.status === 200) {
+    //                     const responseData = await response.blob();
+    //                     const imageUrl = URL.createObjectURL(responseData);
+    //                     setGMapImageUrl(imageUrl);
+    //                 } else {
+    //                     const timer = setTimeout(fetchData, 2000);
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //             }
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl,book.tripid]);
 
 
     const organizationaddress1 = customerData.address1;
@@ -590,6 +593,12 @@ const useBilling = () => {
         fetchData();
     }, [apiUrl]);
 
+    // Empty the book
+    useEffect(() => {
+        setBook(emptyBookvalues);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [individualBilled]);
+
     return {
 
         total_GrossAmount, total_DriverBEta_Amount, netAmountCalc, gst_taxAmountCalc,
@@ -638,6 +647,12 @@ const useBilling = () => {
         organizationcity,
         organizationgstnumber,
         GmapimageUrl,
+        customerData,
+        setBook,
+        emptyBookvalues,
+        setRouteData,
+        setMapImageUrl,
+        setGMapImageUrl,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,
     };
 };

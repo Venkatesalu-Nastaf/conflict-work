@@ -30,6 +30,7 @@ router.post('/booking', async (req, res) => {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
     });
+
     // try {
     //     const response = await db.query('INSERT INTO booking SET ?', [bookData])
     //     console.log("res-------------", response)
@@ -315,6 +316,7 @@ router.get('/drivername-details/:driver', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
+        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass,"mailto")
 
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({

@@ -14,7 +14,7 @@
 }
 
 .form-container-ratetype .division-form {
-    height: 100vh;
+    height: 74vh;
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
@@ -29,11 +29,11 @@
     border-radius: 10px;
 }
 
-.form-container-ratetype .container-main::-webkit-scrollbar {
+/* .form-container-ratetype .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
-}
+} */
 
 .table-bookingCopy-Division {
     border: 2px solid #ccc;
@@ -42,7 +42,7 @@
     margin-top: 30px;
 }
 
-.form-container-ratetype .container-main::-webkit-scrollbar-thumb {
+/* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
 }
@@ -57,7 +57,7 @@
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
-}
+} */
 
 .division-form .Title-Name {
     position: relative;

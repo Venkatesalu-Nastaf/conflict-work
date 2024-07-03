@@ -17,16 +17,16 @@ const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
 
     return (
         <div className="form-container-TripStatus">
-            <div className="container-main">
+            <div className="main-content-container">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box className='head-tab-tripstatus' sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Trip Status" value="tripstatus" />
                                 <Tab label="VehicleStatement" value="vehicleStatement" />
                             </TabList>
                         </Box>
-                        <TabPanel value="tripstatus"><TripStatus stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> /></TabPanel>
+                        <TabPanel value="tripstatus"><TripStatus stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> </TabPanel>
                         <TabPanel value="vehicleStatement"><VehicleStatement /></TabPanel>
                     </TabContext>
                 </Box>

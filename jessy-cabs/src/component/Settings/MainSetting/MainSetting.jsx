@@ -16,10 +16,10 @@ const MainSetting = ({ logoImage }) => {
   };
   return (
     <div className="main-setting-main">
-      <div className="main-setting-form-container">
+      <div className="main-content-container">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box className='head-tab' sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"

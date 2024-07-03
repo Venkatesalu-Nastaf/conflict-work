@@ -88,7 +88,7 @@ function App() {
   const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
   const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
   const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
-  const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+  // const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
 
   //   let landingPAge ;
 
@@ -172,24 +172,74 @@ function App() {
   // vehicle No 
   const [vehicleNo, setVehicleNo] = useState([])
 
-  const getVehicleNo = async () => {
-    const response = await axios.get(`${apiUrl}/get-vehicleNo`)
-    setVehicleNo(response.data.data)
-  }
-
+  useEffect(() => {
+    const getVehicleNo = async () => {
+      const response = await axios.get(`${apiUrl}/get-vehicleNo`)
+      setVehicleNo(response.data.data)
+    }
+    getVehicleNo()
+  }, [apiUrl])
 
   //-------------------------------------------
   const [customer, setCustomer] = useState()
 
-  const getCustomer = async () => {
-    const response = await axios.get(`${apiUrl}/get-customer`)
-    setCustomer(response.data)
-  }
-
   useEffect(() => {
-    getVehicleNo()
+    const getCustomer = async () => {
+      const response = await axios.get(`${apiUrl}/get-customer`)
+      setCustomer(response.data)
+    }
+
     getCustomer()
-  }, [])
+  }, [apiUrl])
+
+
+  //---------------------------------------------------------
+
+  // const [orgData, setOrgData] = useState([])
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const organizationname = localStorage.getItem('usercompany');
+
+  //     try {
+  //       if (!organizationname) return
+  //       const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+  //       if (response.status === 200) {
+
+  //         const userDataArray = await response.json();
+  //         console.log("userDataArray", userDataArray)
+
+  //         if (userDataArray.length > 0) {
+  //           setOrgData(userDataArray[0])
+  //           // setBook(prev => ({ ...prev, travelsName: userDataArray[0]?.organizationname, travelseEmail: userDataArray[0]?.contactEmail }))
+  //           // setOrganisationSendEmail(userDataArray[0])
+  //         }
+  //       }
+  //     }
+  //     catch {
+  //     }
+  //   };
+  //   fetchData();
+  // }, [apiUrl]);
+
+  const [customerData, setCustomerData] = useState([])
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await axios.get(
+          `${apiUrl}/get-customer`
+        );
+        const customerDetails = response.data;
+        setCustomerData(customerDetails)
+        // console.log("customerDetails.customer", customerDetails)
+      } catch (err) {
+        console.log("Error", err)
+      }
+    }
+    fetchCustomer()
+  })
+
+
 
   //-------------------------------------------------------------------------------------------------------------
 
@@ -223,7 +273,7 @@ function App() {
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={BOOKING !== 0 ? <BookingMain stationName={stationName} /> : <NoPermission />}
+                  element={BOOKING !== 0 ? <BookingMain stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/bookings/tripsheet"

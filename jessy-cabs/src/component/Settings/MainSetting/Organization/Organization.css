@@ -10,7 +10,7 @@
 }
 
 .main-setting-main .organisation-form {
-    height: 70vh;
+    height: 74vh;
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
@@ -79,7 +79,7 @@
 }
 
 /* TIMER END */
-.form-container-UserSettings .container-main::-webkit-scrollbar-thumb {
+/* .form-container-UserSettings .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
 }
@@ -100,13 +100,13 @@
     border-radius: 20px;
     color: #000;
     background-color: var(--glass) !important;
-}
+} */
 
-@media screen and (max-width:768px) {
+/* @media screen and (max-width:768px) {
     .form-container-UserSettings .container-main {
         width: 93vw;
     }
-}
+} */
 
 .organisation-form .Title-Name {
     position: relative;

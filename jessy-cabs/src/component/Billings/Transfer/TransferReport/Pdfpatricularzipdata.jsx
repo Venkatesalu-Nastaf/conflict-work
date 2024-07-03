@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
-import { Page, Text, View, Document as PDFDocument, StyleSheet, Image,} from '@react-pdf/renderer';
+import { Page, Text, View, Document as PDFDocument, StyleSheet, Image, } from '@react-pdf/renderer';
 
 
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    padding: 10,
+    // padding: 10,
   },
   heading: {
     border: '2px solid #000000',
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 
   section: {
-    marginTop: 10
+    marginTop: 5
 
   },
 
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: '130px',
+    padding: '0px'
 
   },
 
@@ -44,17 +45,17 @@ const styles = StyleSheet.create({
 
 
   logo: {
-    height: 80,
-    width: 80
+    height: 70,
+    width: 70
   },
 
   headingsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 75
   },
   logodiv: {
-    marginBottom: 10
+    // marginBottom: 10
+    padding: '0px'
   },
   maintabble: {
     border: '2px solid #000000',
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: 'center',
     gap: '10px',
-    height: '280px',
   },
   deatilssection: {
 
@@ -76,18 +76,25 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     // marginTop:"20px",
-    marginTop: "8px",
     marginBottom: "8px",
+    alignItems: "center"
 
 
   },
   labeltag: {
-    fontSize: '13px',
-    // width: '90px',
+    fontSize: '11px',
+    fontWeight: 'extrabold',
+    width: '70px',
 
   },
+  labelMidContainer: {
+    fontSize: '11px',
+    fontWeight: 'extrabold',
+    width: '80px',
+  },
   clientName: {
-    fontSize: '11px'
+    fontSize: '11px',
+    color: '#545151'
 
   },
   // labeltag1: {
@@ -96,8 +103,8 @@ const styles = StyleSheet.create({
 
   // },
   clientName1: {
-    marginTop: '2px',
-    fontSize: '11px',
+    fontSize: '10px',
+    color: '#545151',
     textAlign: 'center'
 
   },
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
   },
   tablediv: {
     width: '60%',
-    border: '1px solid #000000',
+    // border: '1px solid green',
     // flexDirection:'row',
 
   },
@@ -127,7 +134,7 @@ const styles = StyleSheet.create({
 
   },
   signatureimage: {
-    height: '100px'
+    height: '70px'
 
   },
 
@@ -141,117 +148,124 @@ const styles = StyleSheet.create({
 
     width: '25%',
     // textAlign: 'center',
-    padding: '3px',
     borderRight: '1px solid #000000',
   },
   labeltagremark: {
     textAlign: 'center',
+    fontSize: '10px',
+    paddingLeft: '5px'
 
   },
   labeltag2: {
     width: '25%',
-    // textAlign: 'center',
-    fontSize: '13px',
-    padding: '3px',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '10px',
+    padding: '1px',
 
     borderRight: '1px solid #000000'
   },
 
   labeltag3: {
     width: '25%',
-    // textAlign: 'center',
-    fontSize: '13px',
-    padding: '3px',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '10px',
+    padding: '1px',
 
     borderRight: '1px solid #000000'
   },
   labeltag4: {
     width: '25%',
     textAlign: 'center',
-    fontSize: '13px',
-    padding: '3px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '10px',
+    padding: '1px',
     borderRight: '1px solid #000000',
 
   },
 
   labeltag5: {
-    fontSize: '12px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
   labeltag6: {
     width: '25%',
     textAlign: 'center',
-    fontSize: '11px',
+    fontSize: '10px',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
 
   labeltag9: {
-    fontSize: '12px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
 
   labeltag10: {
     width: '25%',
     textAlign: 'center',
-    fontSize: '11px',
+    fontSize: '10px',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
 
   labeltag13: {
-    fontSize: '12px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
   labeltag14: {
-    fontSize: '11px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
 
   labeltag17: {
-    fontSize: '12px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
 
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
   labeltag18: {
     width: '25%',
     textAlign: 'center',
-    fontSize: '11px',
+    fontSize: '10px',
 
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
 
   labeltag21: {
-    fontSize: '12px',
+    fontSize: '10px',
     width: '25%',
     textAlign: 'center',
 
 
     borderRight: '1px solid #000000',
-    padding: '5px'
+    padding: '2px'
   },
   labeltag22: {
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
     fontSize: '11px',
-    padding: '5px'
+    padding: '2px'
   },
 
 
@@ -284,7 +298,8 @@ const styles = StyleSheet.create({
   }, signimg: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: '15px',
+    // marginTop: '15px',
+    // height:"40px"
 
 
   },
@@ -292,12 +307,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     margin: 'auto',
+    // height:"40px"
+
 
   },
-  topmap: {
+  mapdiv: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: "flex-start",
+    // alignItems:'center',
+    gap: "30px",
     padding: '3px'
+  },
+  topmap: {
+    marginTop: "40px"
   },
   atimg: {
     textAlign: 'center'
@@ -364,8 +386,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
   const [addresscustomer, setAddresscustomer] = useState('')
-  const [bookimage,setBookingimage]=useState([])
- 
+  const [bookimage, setBookingimage] = useState([])
+
 
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
@@ -427,8 +449,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let routemapdata = []
     let attachedimagedata = []
     let customeraddress1 = ""
-   
-    let bookingimagedata=[]
+
+    let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
@@ -448,7 +470,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         mapimage = JSON.parse(li.map_data)
         routemapdata = JSON.parse(li.gmapdata)
         attachedimagedata = JSON.parse(li.Attachedimage)
-        bookingimagedata=JSON.parse(li.bookattachedimage)
+        bookingimagedata = JSON.parse(li.bookattachedimage)
         packages = li.calcPackage
         Dropaddress = li.useage
         Report = li.transferreport
@@ -470,7 +492,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         CustomerCode = li.customercode
         Categorygroups = li.Groups
         customeraddress1 = li.Customeraddress1
-    
+
 
 
 
@@ -478,8 +500,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
       })
     }
 
-    
-    
+
+
     const uniqueArray = Array.from(new Set(attachedimagedata?.filter(item => item.attachedimageurl !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
     const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
@@ -490,7 +512,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     // Convert the unique array back to a JSON string
     const uniqueJsonString = JSON.stringify(uniqueArray);
     const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-   
+    const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
+
 
     const { signature_path } = signatureimage
     const { map_path } = mapimage
@@ -508,7 +531,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setDrivermobile(driverMobNo)
     setMapimage(map_path)
     setSignatureimage(signature_path)
-    setRoutemapdata(routemapdata)
+    setRoutemapdata(mapdata)
     setRequest(request)
     setReport(Report)
     setDropAddress(Dropaddress)
@@ -533,12 +556,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
- 
+
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
-  
-
+  const firstSet = routemap.slice(0, 7);
+  const nextSet = routemap.slice(7, 13);
+  const remainingItems = routemap.slice(13);
   return (
     <>
       <PDFDocument>
@@ -553,7 +577,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <Text style={styles.text2}>{orgaddress3} </Text>
                   </View>
                   <View>
-                    <Text>LOG SHEET</Text>
+                    <Text style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
                   </View>
                   <View style={styles.logodiv}>
 
@@ -573,45 +597,55 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-                 <View style={styles.maintabble}>
+                <View style={styles.maintabble}>
 
-                  <View style={{ flexDirection: "column", margin: "5px" }}>
+                  <View style={{ flexDirection: "column", margin: "3px" }}>
 
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Client Name  :</Text>
-                      <Text style={styles.clientName}> {customer}</Text>
+                      <Text style={styles.labeltag}>Client Name </Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={styles.clientName}>{customer}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Address        :</Text>
+                      <Text style={styles.labeltag}>Address</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {addresscustomer}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Category      :</Text>
+                      <Text style={styles.labeltag}>Category</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {category}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Fuel Type      :</Text>
+                      <Text style={styles.labeltag}>Fuel Type</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {fuel}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Emp.No         :</Text>
+                      <Text style={styles.labeltag}>Emp No</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {empno}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Emp.Name    :</Text>
+                      <Text style={styles.labeltag}>Guest Name</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {guestname}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Report Add    :</Text>
-                      <Text style={styles.clientName}> {address1}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Client Mobile :</Text>
+                      <Text style={styles.labeltag}>Guest Mobile</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {customermobile}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Drop Address :</Text>
+                      <Text style={styles.labeltag}>Report Add</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={styles.clientName}> {address1}</Text>
+                    </View>
+
+                    <View style={styles.deatilssection1}>
+                      <Text style={styles.labeltag}>Drop Address</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {dropaddress}</Text>
                     </View>
 
@@ -621,15 +655,18 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Escort Route   :</Text>
+                      <Text style={styles.labelMidContainer}>Escort Route</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {escort}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Airport Transfer:</Text>
+                      <Text style={styles.labelMidContainer}>Airport Transfer</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Ccode              :</Text>
+                      <Text style={styles.labelMidContainer}>Ccode</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
                     </View>
 
@@ -638,51 +675,62 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Log No         :</Text>
+                      <Text style={styles.labeltag}>Log No</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {Tripidno}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Date            :</Text>
+                      <Text style={styles.labeltag}>Date</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Duty Type     :</Text>
+                      <Text style={styles.labeltag}>Duty Type</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {duty}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Vehicle Type  :</Text>
+                      <Text style={styles.labeltag}>Vehicle Type</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {vehicletype}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Vehicle No    :</Text>
+                      <Text style={styles.labeltag}>Vehicle No</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {vehicleno}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Driver Name :</Text>
+                      <Text style={styles.labeltag}>Driver Name</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {drivername}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Driver Mobile:</Text>
+                      <Text style={styles.labeltag}>Driver Mobile</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {drivermobile}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Request No  :</Text>
+                      <Text style={styles.labeltag}>Request No</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {request}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Service City  :</Text>
+                      <Text style={styles.labeltag}>Service City</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {department}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Package       :</Text>
+                      <Text style={styles.labeltag}>Package</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {calcpackage}</Text>
                     </View>
                     <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Segment       :</Text>
+                      <Text style={styles.labeltag}>Segment</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                       <Text style={styles.clientName}> {segment}</Text>
                     </View>
 
@@ -690,13 +738,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
 
                 </View>
-               <View style={styles.remarksection}>
-                  <Text style={styles.labeltagremark}>Remarks :</Text>
+                <View style={styles.remarksection}>
+                  <Text style={styles.labeltagremark}>Remarks</Text>
+                  <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
                   <Text style={styles.clientName1}>{remark}</Text>
 
                 </View>
 
-                 <View style={styles.tablesigndiv}>
+                <View style={styles.tablesigndiv}>
                   <View style={styles.tablediv}>
                     {/* <View>
     
@@ -757,7 +806,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-                        <View style={styles.labeltag10}>
+                      <View style={styles.labeltag10}>
                         <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
 
                       </View>
@@ -827,7 +876,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
 
-                        <View style={styles.labeltag22}>
+                      <View style={styles.labeltag22}>
                         <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
 
                       </View>
@@ -841,7 +890,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   </View>
 
-                    <View style={styles.signdiv}>
+                  <View style={styles.signdiv}>
                     <View style={styles.signimg}>
                       <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} />
 
@@ -852,97 +901,140 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
 
 
+                  </View>
+                  {/* </View> */}</View>
+
+
+                <View style={styles.mapdiv}>
+
+                  <View style={{ height: 170, border: '1px solid #000000', width: '60%' }} >
+                    <Image src={`${apiUrl}/public/map_images/${map_image}`} />
 
                   </View>
-  {/* </View> */}</View>
+
                   <View style={styles.topmap}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Parking:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalparking ? totalparking : 0}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Permit:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalpermit ? totalpermit : 0}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Parking</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totalparking ? totalparking : 0}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Permit</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totalpermit ? totalpermit : 0}</Text>
+
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
+                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Fastag/Toll</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totaltoll ? totaltoll : 0}</Text>
+                    </View>
 
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: '13px' }}>Total Fastag/Toll:</Text>
-                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totaltoll ? totaltoll : 0}</Text>
-                  </View>
+
 
                 </View>
 
 
-
-
-                <View style={{ width: '100%', height: 210, border: '2px solid #000000' }} >
-                  <Image src={`${apiUrl}/public/map_images/${map_image}`} />
-
-                </View>
-
-
-
-                <View>
-                  <Text> Route summary</Text>
-
+                {/* <View style={{ flexDirection: 'row', gap: "10px" }}>
                   {routemap.map((item, index) => (
-                <View key={index}>  <Text style={{ fontSize: 10 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
-                    ))
+                    <View key={index}>  <Text style={{ fontSize: 9 }}>{index + 1} {"."} {item.trip_type}{","}{item.place_name}</Text></View>
+                  ))
                   }
+
+                </View> */}
+                <View style={{ flexDirection: 'row', gap: '10px', marginTop: '3px' }}>
+                  <View style={{ width: "48%" }}>
+                    {firstSet.map((item, index) => (
+                      <View key={index} style={{flexDirection: 'row'}}>
+                        <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          {index + 1} .
+                        </Text>
+                        <Text style={{marginLeft:'2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          {item.trip_type}, {item.place_name}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  <View style={{ width: "48%" }}>
+                    {nextSet.map((item, index) => (
+                      <View key={index + 7} style={{flexDirection: 'row'}}>
+                         <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          {index + 8} .
+                        </Text>
+                        <Text style={{ marginLeft:'2px',fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                           {item.trip_type}, {item.place_name}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+
+                </View>
+                <View style={{ marginTop: '10px' }}>
+                  <Text style={{ opacity: 0 }}>empty Line</Text>
+                  <Text style={{ opacity: 0 }}>empty Line</Text>
+                  {remainingItems.map((item, index) => (
+                    <View key={index + 13} style={{ marginTop: '10px' }}>
+                      <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
+                        {index + 14}. {item.trip_type}, {item.place_name}
+                      </Text>
+                    </View>
+                  ))}
                 </View>
 
 
+                <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}>
+                  {attachedImage && attachedImage.length > 0 ? (
+                    <>
+                      {/* <View style={{ width: "100%" }}> */}
+                      {/* <Text style={styles.atimg}>Attached image</Text> */}
+                      {/* </View> */}
+                      <View style={[styles.addimg, { width: '100%' }]}>
+                        {attachedImage.map((item, index) => (
+                          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+                            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
+                          </View>
+                        ))}
+                      </View>
+                    </>
+                  ) : (
 
-<View style={{ flexDirection: 'column', width: '100%' }}>
-  {attachedImage && attachedImage.length > 0 ? (
-    <>
-      <View style={{ width: "100%" }}>
-        <Text style={styles.atimg}>Attached image</Text>
-      </View>
-      <View style={[styles.addimg, { width: '100%' }]}>
-        {attachedImage.map((item, index) => (
-          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
-            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
-          </View>
-        ))}
-      </View>
-    </>
-  ) : (
-    
-    <View style={{ width: "100%" ,margin:'auto',marginTop:'100px'}}>
-        <Text style={styles.atimg}>  No Attached image</Text>
-      </View>
-  )}
-</View>
+                    <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
+                      <Text style={styles.atimg}>  No Attached image</Text>
+                    </View>
+                  )}
+                </View>
 
 
-<View style={{ flexDirection: 'column', width: '100%' }}>
-  {bookimage&&bookimage.length > 0 && (
-    <>
-      <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'column', width: '100%' }}>
+                  {bookimage && bookimage.length > 0 && (
+                    <>
+                      <View style={{ width: '100%' }}>
 
-            {bookimage.map((item, index) => {
-      const dataimgetype = item.imagees.split('.').pop();
-      // URL.createObjectURL(img)
-      if (dataimgetype !== "pdf") {
-        return (
-          <View key={index} style={{width:'100%'}}>
-            <Image src={`${apiUrl}/images/${item.imagees}`} style={{height:'500px'}}  />
-          </View>
-        );
-      } else {
-        return null;
-      }
-    })}
+                        {bookimage.map((item, index) => {
+                          const dataimgetype = item.imagees.split('.').pop();
+                          // URL.createObjectURL(img)
+                          if (dataimgetype !== "pdf") {
+                            return (
+                              <View key={index} style={{ width: '100%' }}>
+                                <Image src={`${apiUrl}/images/${item.imagees}`} style={{ height: '500px' }} />
+                              </View>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
 
-      </View>
-    </>
-  ) 
-}
-    
-  
-</View>
-</View>
+                      </View>
+                    </>
+                  )
+                  }
+
+
+                </View>
+              </View>
 
             </View>
 

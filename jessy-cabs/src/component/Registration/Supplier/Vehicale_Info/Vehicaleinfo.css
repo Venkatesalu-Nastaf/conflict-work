@@ -128,7 +128,9 @@
 }
 
 .vehicaleinfo-container-left {
-  width: 99%;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .vehicaleinfo-container-right {
@@ -174,9 +176,7 @@
   flex-wrap: wrap;
 }
 
-.vehicaleinfo-container-left {
-  display: flex;
-}
+
 
 @media screen and (max-width:701px) {
   .copy-title-btn-Booking {
@@ -270,6 +270,7 @@
 .vehicle-info-search-input-field {
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 25px;
 }
 
 .vehicle-info-main-table {

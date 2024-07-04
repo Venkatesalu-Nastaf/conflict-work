@@ -9,6 +9,10 @@
   width: -webkit-fill-available;
 }
 
+.side-bar-menu-close .sidebar{
+  padding-left: 10px;
+}
+
 .sidebar-main-menu {
   display: flex;
   align-items: center;
@@ -189,6 +193,10 @@
   border-radius: 10px;
   z-index: 9;
   height: fit-content;
+}
+
+.side-bar-menu-open .bars{
+  left: 16vw;
 }
 
 @media screen and (min-width: 579px) and (max-width: 768px) {

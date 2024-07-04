@@ -126,7 +126,7 @@ function App() {
   useEffect(() => {
     const organizationName = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/customers`);
+        const response = await axios.get(`${apiUrl}/allCustomers`);
         const organisationData = response?.data;
         const names = organisationData.map(res => res.customer);
         setOrganizationName(names);
@@ -237,7 +237,7 @@ function App() {
       }
     }
     fetchCustomer()
-  })
+  },[apiUrl])
 
 
 

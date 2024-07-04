@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 
   section: {
-    marginTop: 5
+    marginTop: 1
 
   },
 
@@ -30,23 +30,23 @@ const styles = StyleSheet.create({
   },
 
   text1: {
-    fontSize: '18px',
+    fontSize: '15px',
     fontWeight: 'bold'
   },
   text2: {
-    fontSize: '12px',
+    fontSize: '11px',
 
   },
 
   gstno: {
-    fontSize: '13px',
+    fontSize: '11px',
     fontWeight: 'bold'
   },
 
 
   logo: {
-    height: 70,
-    width: 70
+    height: 50,
+    width: 50
   },
 
   headingsection: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     padding: '0px'
   },
   maintabble: {
-    border: '2px solid #000000',
+    border: '1px solid #000000',
     // display:"flex",
     flexDirection: 'row',
     justifyContent: "space-between",
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   deatilssection: {
 
     flexDirection: 'row',
-    marginTop: "10px",
+    marginTop: "5px",
 
 
   },
@@ -76,25 +76,25 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     // marginTop:"20px",
-    marginBottom: "8px",
-    alignItems: "center"
-
+    marginBottom: "4px",
+    alignItems: "center",
 
   },
   labeltag: {
-    fontSize: '11px',
+    fontSize: '10px',
     fontWeight: 'extrabold',
     width: '70px',
 
   },
   labelMidContainer: {
-    fontSize: '11px',
+    fontSize: '10px',
     fontWeight: 'extrabold',
     width: '80px',
   },
   clientName: {
-    fontSize: '11px',
-    color: '#545151'
+    fontSize: '10px',
+    color: '#000000',
+    fontWeight: 'extrabold'
 
   },
   // labeltag1: {
@@ -108,12 +108,20 @@ const styles = StyleSheet.create({
     textAlign: 'center'
 
   },
+  clientAddress: {
+    fontSize: '10px',
+    color: '#000000',
+    fontWeight: 'extrabold',
+    textAlign: 'left',
+    lineHeight: '1.3px',
+
+  },
   remarksection: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: '10px',
-    borderLeft: '2px solid #000000',
-    borderRight: '2px solid #000000',
+    borderLeft: '1px solid #000000',
+    borderRight: '1px solid #000000',
 
     height: 30,
 
@@ -293,7 +301,7 @@ const styles = StyleSheet.create({
   },
   tablehead5: {
     flexDirection: 'row',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
 
   }, signimg: {
     flexDirection: 'row',
@@ -387,6 +395,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [category, setCategory] = useState('')
   const [addresscustomer, setAddresscustomer] = useState('')
   const [bookimage, setBookingimage] = useState([])
+  const [starttime,setStarttime] = useState('0')
+  const [shedintime,setShedintime] = useState('0')
+  const [startkm,setStartkm] = useState('0')
+  const [closekm,setClosekm] = useState('0')
+  const [releasingKM,setReleasingKM] = useState('0')
+  const [reportKM,setReportKM] = useState('0')
 
 
   const [remark, setRemark] = useState('')
@@ -395,6 +409,20 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
   const organisationdetails = organisationdetail
 
+  const convertTimeFormat = (time) => {
+    const regex = /(\d+)h\s*(\d+)m/;
+    const match = time.match(regex);
+    if (match) {
+      const hours = match[1].padStart(2, '0');
+      const minutes = match[2].padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+    return time; // Return original if it doesn't match the pattern
+  };
+
+  const trimSeconds = (time) => {
+    return time.slice(0, 5);
+  };
 
   useEffect(() => {
     let addressone = ''
@@ -449,6 +477,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let routemapdata = []
     let attachedimagedata = []
     let customeraddress1 = ""
+    let startTime = ''
+    let shedInTime = ''
+    let startkm = ''
+    let closekm = ''
+    let reportkm = ''
+    let releasekm = ''
 
     let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
@@ -481,10 +515,16 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
-        Reporttime = li.reporttime
-        CloseTime = li.closetime
+        Reporttime = trimSeconds(li.reporttime)
+        startTime = trimSeconds(li.starttime)
+        shedInTime = trimSeconds(li.shedintime)
+        CloseTime = trimSeconds(li.closetime);
+        startkm = li.shedout;
+        closekm = li.shedin;
+        reportkm = li.startkm;
+        releasekm = li.closekm;
         Totaldays = li.totaldays
-        Totaltime = li.totaltime
+        Totaltime = convertTimeFormat(li.totaltime);
         Totalkms = li.totalkm1
         TotalParking = li.parking
         TotalToll = li.toll
@@ -553,16 +593,20 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
     setAddresscustomer(customeraddress1)
-
+    setStarttime(startTime)
+    setShedintime(shedInTime)
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
-
+    setStartkm(startkm)
+    setClosekm(closekm)
+    setReleasingKM(releasekm)
+    setReportKM(reportkm)
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
-  const firstSet = routemap.slice(0, 7);
-  const nextSet = routemap.slice(7, 13);
-  const remainingItems = routemap.slice(13);
+  const firstSet = routemap.slice(0, 12);
+  const nextSet = routemap.slice(12, 24);
+  const remainingItems = routemap.slice(24);
   return (
     <>
       <PDFDocument>
@@ -577,7 +621,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <Text style={styles.text2}>{orgaddress3} </Text>
                   </View>
                   <View>
-                    <Text style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
+                    <Text style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
                   </View>
                   <View style={styles.logodiv}>
 
@@ -610,12 +654,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {addresscustomer}</Text>
+                      <Text style={styles.clientAddress}> {addresscustomer}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {category}</Text>
+                      <Text style={styles.clientName}> {category}  </Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Fuel Type</Text>
@@ -656,17 +700,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Escort Route</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {escort}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Airport Transfer</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Ccode</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
                     </View>
 
@@ -676,61 +720,61 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Log No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {Tripidno}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
                       <Text style={styles.labeltag}>Date</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Duty Type</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {duty}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Vehicle Type</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {vehicletype}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Vehicle No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {vehicleno}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
                       <Text style={styles.labeltag}>Driver Name</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {drivername}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
                       <Text style={styles.labeltag}>Driver Mobile</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {drivermobile}</Text>
                     </View>
                     <View style={styles.deatilssection}>
 
                       <Text style={styles.labeltag}>Request No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {request}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Service City</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {department}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Package</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {calcpackage}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Segment</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                       <Text style={styles.clientName}> {segment}</Text>
                     </View>
 
@@ -740,7 +784,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 </View>
                 <View style={styles.remarksection}>
                   <Text style={styles.labeltagremark}>Remarks</Text>
-                  <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
+                  <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
                   <Text style={styles.clientName1}>{remark}</Text>
 
                 </View>
@@ -785,11 +829,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{'-'}</Text>
+                        <Text>{starttime}</Text>
 
                       </View>
                       <View style={styles.labeltag6}>
-                        <Text>{'-'}</Text>
+                        <Text>{startkm}</Text>
 
                       </View>
 
@@ -811,7 +855,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
                       <View style={styles.labeltag10}>
-                        <Text>{'-'}</Text>
+                        <Text>{reportKM}</Text>
 
                       </View>
 
@@ -836,7 +880,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
                       <View style={styles.labeltag14}>
-                        <Text>{triptotalkms}</Text>
+                        <Text>{releasingKM}</Text>
 
                       </View>
 
@@ -855,11 +899,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{'-'}</Text>
+                        <Text>{shedintime}</Text>
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{'-'}</Text>
+                        <Text>{reportKM}</Text>
 
                       </View>
 
@@ -946,11 +990,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 <View style={{ flexDirection: 'row', gap: '10px', marginTop: '3px' }}>
                   <View style={{ width: "48%" }}>
                     {firstSet.map((item, index) => (
-                      <View key={index} style={{flexDirection: 'row'}}>
+                      <View key={index} style={{ flexDirection: 'row' }}>
                         <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
                           {index + 1} .
                         </Text>
-                        <Text style={{marginLeft:'2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                        <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
                           {item.trip_type}, {item.place_name}
                         </Text>
                       </View>
@@ -959,12 +1003,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                   <View style={{ width: "48%" }}>
                     {nextSet.map((item, index) => (
-                      <View key={index + 7} style={{flexDirection: 'row'}}>
-                         <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                          {index + 8} .
+                      <View key={index + 12} style={{ flexDirection: 'row' }}>
+                        <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          {index + 13} .
                         </Text>
-                        <Text style={{ marginLeft:'2px',fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                           {item.trip_type}, {item.place_name}
+                        <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          {item.trip_type}, {item.place_name}
                         </Text>
                       </View>
                     ))}
@@ -976,9 +1020,9 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   <Text style={{ opacity: 0 }}>empty Line</Text>
                   <Text style={{ opacity: 0 }}>empty Line</Text>
                   {remainingItems.map((item, index) => (
-                    <View key={index + 13} style={{ marginTop: '10px' }}>
+                    <View key={index + 24} style={{ marginTop: '10px' }}>
                       <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
-                        {index + 14}. {item.trip_type}, {item.place_name}
+                        {index + 25}. {item.trip_type}, {item.place_name}
                       </Text>
                     </View>
                   ))}

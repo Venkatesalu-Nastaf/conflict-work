@@ -25,7 +25,6 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
 const TransferList = ({ stationName, organizationNames }) => {
-
     const {
         rows,
         actionName,

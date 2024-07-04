@@ -47,6 +47,7 @@ import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
+import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
 // import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -102,10 +103,13 @@ const Employe = () => {
     handleEdit,
     handleContextMenu,
     handleimagedelete,
+    handleDocumentDownload,
     handleClosedeleteDialog,
     dialogdeleteOpen,
     setError,
     setErrorMessage,
+    deletefile,
+    handlecheckbox
   } = useEmployee();
 
   useEffect(() => {
@@ -573,11 +577,20 @@ const Employe = () => {
               <div className="employee-dialogbox-div1">
                 {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} className="employee-dialogbox-div2">
+                    <Checkbox typeof='checked'
+                      checked={deletefile.includes(img.fileName)}
+                      onClick={(event) => {
+                        handlecheckbox(img.fileName)
+                      }} />
+                    <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
 
-                    <embed src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                    <button onClick={() => handleimagedelete(img.fileName)} className="employee-dialogbox-btn" />
                   </div>
                 ))}
+              </div>
+              <div style={{height:1,backgroundColor:'black',marginTop:5,marginBottom:10}}></div>
+              <div style={{ display: 'flex'}}>
+                <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button variant='contained' onClick={() => handleDocumentDownload()} style={{ marginLeft: '20px' }}>Print</Button>
               </div>
             </DialogContent>
           </Dialog>

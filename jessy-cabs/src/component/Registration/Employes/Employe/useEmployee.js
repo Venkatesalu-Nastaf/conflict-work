@@ -122,7 +122,7 @@ const useEmployee = () => {
     //     saveAs(pdfBlob, 'Customer_Details.pdf');
     // };
 
-    const handleExcelDownload=async()=>{
+    const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
 
@@ -132,9 +132,8 @@ const useEmployee = () => {
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-            //         console.log(headers,"hed")
             const columnsExcel = headers.map(key => ({ key, header: key }));
-            
+
             worksheet.columns = columnsExcel;
 
             // updated the font for first row.
@@ -158,7 +157,7 @@ const useEmployee = () => {
             });
 
             rows.forEach((singleData, index) => {
-             
+
 
                 worksheet.addRow(singleData);
 
@@ -215,12 +214,11 @@ const useEmployee = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
-         const header = Object.keys(rows[0]);
-      
+        const header = Object.keys(rows[0]);
+
         // Extracting body
         const body = rows.map(row => Object.values(row));
-        console.log(header.length,"len")
-      
+
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -229,8 +227,8 @@ const useEmployee = () => {
             fontdata = 11;
         }
         else if (header.length >= 18 && header.length <= 20) {
-          fontdata = 10;
-      } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 10;
+        } else if (header.length >= 21 && header.length <= 23) {
             fontdata = 9;
         }
         else if (header.length >= 24 && header.length <= 26) {
@@ -248,48 +246,46 @@ const useEmployee = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata,"data")
-        
+
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-      
+
             headStyles: {
                 // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-      
+
                 minCellHeigh: 8,
                 valign: 'middle',
-      
+
                 font: 'helvetica', // Set font type for body
-      
+
                 cellWidth: 'wrap',
                 // cellWidth: 'auto'
             },
-      
+
             bodyStyles: {
                 // fontSize:4,
                 // fontSize: fontdata-1
-                fontSize: fontdata-1,
+                fontSize: fontdata - 1,
                 valign: 'middle',
                 //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-      
+
             },
             columnWidth: 'auto'
-      
-      });
+
+        });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE")
-      
+
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'EmployeeReports.pdf');
-      };
+    };
 
 
     const hidePopup = () => {
@@ -440,8 +436,8 @@ const useEmployee = () => {
 
     //----------------------------------------------
     const handleAdd = async () => {
-        const empname = book.empname;
-        if (!empname) {
+        const empid = book.empid || selectedCustomerData.empid;
+        if (!empid) {
             setError(true);
             setErrorMessage("Check your Employee ID");
             return;
@@ -459,8 +455,9 @@ const useEmployee = () => {
 
     const handleEdit = async (userid) => {
         const selectedCustomer = rows.find((row) => row.empid === empid);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+        const { id, ...rest } = selectedCustomerData;
+        const updatedCustomer = { ...rest };
+        await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -563,6 +560,64 @@ const useEmployee = () => {
         setDialogdeleteOpen(true);
     };
 
+    const handleDocumentDownload = async () => {
+        try {
+            // Filter selected files
+            const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+            // Download each file
+            for (const file of selectedFiles) {
+                const response = await axios.get(`${apiUrl}/public/employee_doc/` + file.fileName, {
+                    responseType: 'blob', // Important to get a binary response
+                });
+
+                // Convert image blob to base64 data URL
+                const reader = new FileReader();
+                reader.readAsDataURL(response.data);
+                reader.onloadend = () => {
+                    const imageDataUrl = reader.result;
+
+                    // Create PDF document
+                    const pdf = new jsPDF();
+
+                    // Manually set image width and height
+                    const imgWidth = 150; // Set your desired width
+                    const imgHeight = 150; // Set your desired height
+
+                    // Get the PDF page dimensions
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+
+                    // Calculate x and y positions to center the image
+                    const x = (pageWidth - imgWidth) / 2;
+                    const y = (pageHeight - imgHeight) / 2;
+
+                    // Add the image with calculated x and y positions
+                    pdf.addImage(imageDataUrl, 'JPEG', x, y, imgWidth, imgHeight);
+
+                    // Save PDF file
+                    pdf.save(file.fileName + '.pdf');
+                    setDialogOpen(false);
+                    setDeleteFile([]);
+                };
+            }
+        } catch (error) {
+            console.error('Error downloading files:', error);
+            // Handle error if needed
+        }
+    };
+
+
+    const [deletefile, setDeleteFile] = useState([])
+
+    const handlecheckbox = (fileName) => {
+        if (deletefile.includes(fileName)) {
+            setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+        } else {
+            setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+        }
+    };
+
     const handleContextMenu = () => {
         axios.delete(`${apiUrl}/image-delete/` + imagedata)
             .then(res => {
@@ -609,10 +664,13 @@ const useEmployee = () => {
         handleEdit,
         handleContextMenu,
         handleimagedelete,
+        handlecheckbox,
+        handleDocumentDownload,
         handleClosedeleteDialog,
         dialogdeleteOpen,
         setError,
         setErrorMessage,
+        deletefile
     };
 };
 

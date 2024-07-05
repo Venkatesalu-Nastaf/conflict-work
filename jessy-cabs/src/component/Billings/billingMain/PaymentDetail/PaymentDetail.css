@@ -165,11 +165,12 @@
 .input-field-payment {
     flex-wrap: wrap;
     align-items: baseline;
+    margin-bottom: 20px;
 }
 
-.input-field-payment .input {
+/* .input-field-payment .input {
     width: 255px !important;
-}
+} */
 
 @media screen and (max-width:1313.99px) {
     .input-field-payment {
@@ -177,11 +178,11 @@
     }
 }
 
-@media screen and (min-width:1200.99px) {
+/* @media screen and (min-width:1200.99px) {
     .input-field-payment .input-payment {
         width: 200px !important;
     }
-}
+} */
 
 .detail-container-main-payment {
     margin: 20px;

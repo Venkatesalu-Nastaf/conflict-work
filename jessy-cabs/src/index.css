@@ -346,15 +346,20 @@ body {
 .input-field {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 10px;
 }
 
 .input-field .input {
-  width: 200px;
+  width: 244px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
+}
+
+.css-1tl47u6,
+.css-3igl15 {
+  margin: 0px 0px 8px !important;
 }
 
 .input-field .radio {
@@ -379,7 +384,7 @@ body {
 }
 
 .input-field .input .icone {
-  padding: 15px 10px 0px;
+  padding: 10px 8px 0 0 !important;
   color: #6c6868;
 }
 

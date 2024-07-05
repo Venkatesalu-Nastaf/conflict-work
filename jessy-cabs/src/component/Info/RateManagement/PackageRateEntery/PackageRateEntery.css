@@ -150,8 +150,8 @@
 .feild-inputs {
     display: flex;
     align-items: center;
-    margin-top: 40px;
-    gap: 30px;
+    /* margin-top: 40px; */
+    /* gap: 30px; */
 }
 
 @media screen and (max-width:1122px) {

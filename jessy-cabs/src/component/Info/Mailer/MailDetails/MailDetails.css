@@ -228,11 +228,11 @@
     margin-top: 10px;
 }
 
-@media screen and (min-width: 970px) {
+/* @media screen and (min-width: 970px) {
     .table-bookingCopy-TransferDataEntry {
         width: 71vw;
     }
-}
+} */
 
 @media screen and (max-width: 969.99px) {
     .table-bookingCopy-TransferDataEntry {

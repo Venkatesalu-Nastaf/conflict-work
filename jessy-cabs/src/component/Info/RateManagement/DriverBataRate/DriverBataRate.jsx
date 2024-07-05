@@ -152,8 +152,8 @@ const DriverBataRate = () => {
                 <div className="input">
                   <Button variant="contained">Show</Button>
                 </div>
-              </div>
-              <div className="input-field DriverBataRate-inputfeild">
+              {/* </div>
+              <div className="input-field DriverBataRate-inputfeild"> */}
                 <div className="input">
                   <Autocomplete
                     fullWidth

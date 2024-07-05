@@ -11,7 +11,6 @@ import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/Pd
 import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
 import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
 import { PermissionProvider } from "./component/context/permissionContext";
-// import { ToastContainer } from 'react-toastify';
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -28,22 +27,7 @@ root.render(
             <DataProvider>
               <UserProvider>
                 <PermissionProvider>
-
                   <App />
-                  {/* <ToastContainer
-                    position="top-right"
-                    autoClose={2000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss={false}
-                    draggable
-                    pauseOnHover={false}
-                    theme="light"
-                    transition:Bounce
-                  /> */}
-                  {/* <ToastContainer /> */}
                 </PermissionProvider>
 
               </UserProvider>

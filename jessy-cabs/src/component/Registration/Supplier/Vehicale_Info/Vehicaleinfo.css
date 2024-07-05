@@ -270,7 +270,7 @@
 .vehicle-info-search-input-field {
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 25px;
+  margin: 15px 0px 25px 0px;
 }
 
 .vehicle-info-main-table {

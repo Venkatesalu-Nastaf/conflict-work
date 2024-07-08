@@ -281,7 +281,7 @@ const Customer = ({ stationName }) => {
                 // variant="standard"
                 />
               </div> */}
-              <div className="input radio">
+              <div className="inut radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     A/C Type
@@ -311,8 +311,8 @@ const Customer = ({ stationName }) => {
               <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
               {customerfieldSets.map((datafield,index)=>(
                 <>
-                <div key={index} className="input-field feild-inputs">
-                <div className="input">
+                {/* <div key={index} className=""> */}
+                <div className="input" key={index}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -330,7 +330,7 @@ const Customer = ({ stationName }) => {
                       // variant="standard"
                     />
                   </div>
-                  <div className="input">
+                  <div className="input" key={index}>
                   <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -346,7 +346,7 @@ const Customer = ({ stationName }) => {
                       onChange={(e) => handleChangecustomer(e, index)}
                     />
                   </div>
-                  <div className="input">
+                  <div className="input" key={index}>
                   <div className="icone">
                   <LocalPhoneIcon color="action" />
                 </div>
@@ -363,7 +363,7 @@ const Customer = ({ stationName }) => {
                     />
                   </div>
 
-                </div>
+                {/* </div> */}
                 </>
                    ))}
                     
@@ -570,7 +570,7 @@ const Customer = ({ stationName }) => {
               </div>
             </div>
           </div>
-          <div className="detail-container-main-customer">
+          <div className="detail-container-main-customer-spdail">
             <div className="input-field customer-input-feild-add">
               <div className="input customer-billing-group-input">
                 <div className='customer-billing-group-input-division'>
@@ -648,7 +648,7 @@ const Customer = ({ stationName }) => {
                   size='small'
                 />
               </div>
-              <div className="input">
+              <div className="">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -739,7 +739,7 @@ const Customer = ({ stationName }) => {
             </div>
           </div>
           <div className="customer-list-table-container">
-            <div className="Download-btn">
+            <div className="Download-btn-customer">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>

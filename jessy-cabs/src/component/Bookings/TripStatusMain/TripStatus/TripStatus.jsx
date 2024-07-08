@@ -154,16 +154,16 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className='show-all-button'>
+                {/* <div className='show-all-button'>
                   <div className="input" >
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
                     <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
-                </div>
-              </div>
-              <div className="input-field TripStatus-input-feilds">
+                </div> */}
+              {/* </div>
+              <div className="input-field TripStatus-input-feilds"> */}
                 <div className="input">
                   <div className="icone">
                     <SiStatuspal color="action" />
@@ -280,6 +280,15 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                       );
                     }}
                   />
+                </div>
+
+                <div className='show-all-button'>
+                  <div className="input" >
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
+                  </div>
+                  <div className="input">
+                    <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                  </div>
                 </div>
 
 

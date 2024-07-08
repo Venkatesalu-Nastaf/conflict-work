@@ -66,9 +66,9 @@
 }
 
 .SearchContainer-VehicleStatement {
-  width: 61vw;
+  width: 80vw;
   background-color: var(--glass);
-  padding: 0px 20px;
+  padding: 10px 20px;
   padding-bottom: 15px;
   border: 2px solid #ccc;
   border-radius: 15px;
@@ -155,6 +155,7 @@
 
 .paid-amount-input-field {
   justify-content: end;
+  height: 30px;
 }
 
 .SpeedDial-division {

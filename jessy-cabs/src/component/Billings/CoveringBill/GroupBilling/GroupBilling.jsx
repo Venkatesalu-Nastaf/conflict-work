@@ -270,16 +270,19 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field">
                                 <div className="input">
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >View Bill</Button>
                                 </div>
                             </div>
+                            {/* <div className="input-field">
+                                <div className="input">
+                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >View Bill</Button>
+                                </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
-                <div className="download-container">
+                <div className="download-container-groupbilling">
                     <div className="Download-btn">
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (

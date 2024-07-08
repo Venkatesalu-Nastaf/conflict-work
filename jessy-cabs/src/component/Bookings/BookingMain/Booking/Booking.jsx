@@ -91,6 +91,9 @@ import { MdDataUsage } from "react-icons/md";
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 
+// import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -394,25 +397,11 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
             </span>
-            <span className="d-grid">
+            {/* <span className="d-grid">
               <label>Fin Years</label>
               <input type="text" value={currentYear} />
-              {/* <div className="">
-                <div className="icone">
-                  <CalendarMonthIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="fine_years"
-                  value={currentYear}
-                  options={[currentYear]}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Fin Years" />
-                  )}
-                />
-              </div> */}
-            </span>
+              
+            </span> */}
             <span>
               <div className="">
                 <FormControlLabel
@@ -1955,7 +1944,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
             ) : (
 
-              <div className="booking-image-attach-input-division">
+              <div className="booking-image-attach-input-division input">
 
                 {/* <input
                 style={{
@@ -1985,8 +1974,11 @@ const Booking = ({ stationName, customerData }) => {
                   </Button>
                 </div>
                 <div className="booking-image-attach-view-division">
-                  <span>{selectetImg.length} images selected</span>
-                  <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
+                  <Tooltip title={`${selectetImg.length} images selected`} arrow>
+                    <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
+                  </Tooltip>
+                  {/* <span>{selectetImg.length} images selected</span>
+                  <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button> */}
                 </div>
               </div>
             )}

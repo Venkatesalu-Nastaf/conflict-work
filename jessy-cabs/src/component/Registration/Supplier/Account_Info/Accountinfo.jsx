@@ -326,8 +326,8 @@ const Accuntinfo = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="input-field account-info-label">
+        {/* </div>
+        <div className="input-field account-info-label"> */}
           <div className="input radio">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">

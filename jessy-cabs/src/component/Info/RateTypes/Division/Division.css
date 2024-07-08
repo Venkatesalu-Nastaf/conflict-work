@@ -110,7 +110,12 @@
     }
 }
 
-.booking-copy-division-table{
+.booking-copy-division-table {
     height: 400px;
     width: 100%;
+}
+
+.division-radio-input,
+.division-add-input {
+    width: fit-content !important;
 }

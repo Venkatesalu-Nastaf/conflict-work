@@ -151,7 +151,7 @@
     display: flex;
     align-items: center;
     /* gap: 30px; */
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 @media screen and (max-width:1122px) {

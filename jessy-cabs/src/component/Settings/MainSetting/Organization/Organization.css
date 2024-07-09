@@ -5,7 +5,7 @@
 
 .detail-container-main-organisation {
     display: flex;
-    padding: 20px;
+    padding: 10px 20px 10px 20px;
     width: 70%;
 }
 
@@ -55,7 +55,7 @@
     margin: 0px 20px 20px 20px;
     border: 2px solid #ccc;
     border-radius: 15px;
-    padding: 20px 0px;
+    padding: 0px 0px  20px 0px;
     background-color: var(--glass);
 }
 
@@ -118,9 +118,9 @@
     flex-wrap: wrap;
     align-items: center;
     /* justify-content: center; */
-    width: 70vw;
+    width: 80vw;
     /* width: 100%; */
-    margin: 30px auto;
+    margin: 10px auto;
     background-color: var(--glass);
     padding: 20px 35px 20px 0px;
     border: 2px solid #ccc;
@@ -199,7 +199,7 @@
 
 .organisation-details-input-feilds {
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 @media only screen and (min-width:964px) and (max-width:1241px) {
@@ -338,7 +338,7 @@ border-right: 1px solid transparent !important;
 
 .organisation-details-input .organization-input {
     width: 300px !important;
-    gap: 10px;
+    gap: 5px;
     display: grid !important;
 }
 
@@ -349,9 +349,9 @@ border-right: 1px solid transparent !important;
 .organisation-details-input-sub-division {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-evenly;
-    width: 68vw;
+    /* align-items: flex-start;
+    justify-content: space-evenly; */
+    /* width: 68vw; */
     gap: 10px;
 }
 
@@ -362,3 +362,5 @@ border-right: 1px solid transparent !important;
 .organisation-avatar-icon {
     font-size: 55px;
 }
+
+.organisation-details-input .organization-input {}

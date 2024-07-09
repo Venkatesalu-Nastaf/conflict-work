@@ -324,10 +324,54 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
+
+              <div className="input radio">
+            <FormControl>
+              <FormLabel id="demo-row-radio-buttons-group-label">
+                A/C Type
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="acType"
+                id="acType"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.acType || book.acType}
+              >
+                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
+                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <div className="input">
+            <div className="icone">
+              <RateReviewIcon color="action" />
+            </div>
+            <TextField
+              margin='normal'
+              size='small'
+              name="rateType"
+              autoComplete="new-password"
+              className='full-width'
+              value={selectedCustomerData?.rateType || book.rateType}
+              onChange={handleChange}
+              label="Rate Type"
+              id="rateType"
+              // variant="standard"
+            />
+          </div>
+          <div className="input">
+            {isEditMode ? (
+              <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+            ) : (
+              <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+            )}
+          </div>
             </div>
           </div>
-        {/* </div>
-        <div className="input-field account-info-label"> */}
+        </div>
+        {/* <div className="input-field account-info-label">
           <div className="input radio">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">
@@ -371,7 +415,7 @@ const Accuntinfo = () => {
               <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
             )}
           </div>
-        </div>
+        </div> */}
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -450,7 +494,7 @@ const Accuntinfo = () => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn">
+        <div className="Download-btn-account-info">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>

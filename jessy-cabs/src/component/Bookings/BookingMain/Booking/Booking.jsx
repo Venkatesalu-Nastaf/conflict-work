@@ -1565,6 +1565,43 @@ const Booking = ({ stationName, customerData }) => {
 
               />
             </div> */}
+
+
+
+            <div className="input booking-report-date-input">
+              <div className="icone">
+                <CalendarMonthIcon color="action" />
+              </div>
+              <div className="full-width">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="shedOut Date"
+                    id="shedOutDate"
+                    value={
+                      formData.shedOutDate || selectedCustomerData.shedOutDate
+                        ? dayjs(selectedCustomerData.shedOutDate)
+                        : dayjs() || book.shedOutDate
+                          ? dayjs(book.shedOutDate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "shedOutDate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.shedOutDate}
+                      />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider>
+              </div>
+            </div>
+
+
+
+
             <div className="input booking-report-date-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />

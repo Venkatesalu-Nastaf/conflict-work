@@ -316,8 +316,8 @@ router.get('/drivername-details/:driver', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
-        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass,"mailto")
-
+        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
+        const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -370,7 +370,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Date:</strong></td>
-                            <td style="padding: 8px;color: #000"">${startdate}</td>
+                            <td style="padding: 8px;color: #000"">${formattedFromDate}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Time (24):</strong></td>
@@ -431,7 +431,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
-                            <td style="padding: 8px;">${startdate}</td>
+                            <td style="padding: 8px;">${formattedFromDate}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>

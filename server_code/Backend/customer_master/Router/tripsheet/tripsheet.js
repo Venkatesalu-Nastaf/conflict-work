@@ -109,6 +109,7 @@ router.post('/tripsheet-add', (req, res) => {
         travelsemail,
         vehicleName,
         orderbyemail,
+        vehicleName2,
         vendor_vehicle,
         vendor_duty,
         vendorshedOutDate,
@@ -136,8 +137,8 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-    
-     } = req.body
+
+    } = req.body
 
 
     const addCustomerData = {
@@ -239,6 +240,7 @@ router.post('/tripsheet-add', (req, res) => {
         vehicleName,
         orderbyemail,
         vendor_vehicle,
+        vehicleName2,
         vendor_duty,
         vendorshedOutDate,
         vendorshedInDate,
@@ -363,6 +365,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         additionaltime,
         advancepaidtovendor,
         customercode,
+        vehicleName2,
         startkm,
         closekm,
         shedkm,
@@ -420,7 +423,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         travelsname,
         travelsemail,
         vehicleName,
-        orderbyemail, 
+        orderbyemail,
         vendor_vehicle,
         vendor_duty,
         vendorshedOutDate,
@@ -447,7 +450,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,} = req.body
+        Vendor_FULLTotalAmount, } = req.body
 
 
     const updatedCustomerData = {
@@ -485,6 +488,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         totaldays,
         employeeno,
         reporttime,
+        vehicleName2,
         starttime,
         closetime,
         additionaltime,
@@ -548,7 +552,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         travelsemail,
         vehicleName,
         orderbyemail,
-         vendor_vehicle,
+        vendor_vehicle,
         vendor_duty,
         vendorshedOutDate,
         vendorshedInDate,
@@ -576,13 +580,13 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
     }
- 
+
 
 
 
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
-            console.log(err,"edit")
+            console.log(err, "edit")
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
@@ -677,7 +681,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
+        remark1, escort, minHour, minKM, vehicleName2,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -788,7 +792,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort, minHour, minKM,
+        remark1, escort, minHour, minKM, vehicleName2,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -1267,17 +1271,17 @@ router.get(`/t4hr-pack`, (req, res) => {
 router.get(`/totalhrsuppiler-pack`, (req, res) => {
     // Extract dynamic inputs from query parameters
     const totalHours = req.query.totalHours;
-    const ratetype=req.query.ratetype;
+    const ratetype = req.query.ratetype;
     // const vehicletype = req.query.vehicletype;
     const VehicleName = req.query.vehicleName;
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
 
-    console.log(totalHours,"tt",ratetype,"rate",VehicleName,"name",duty,"duty",totkm,"totkmm",OrganizationName,"organnan")
+    console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan")
 
 
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName|| !ratetype) {
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1293,7 +1297,7 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, ratetype,totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
+    db.query(sql, [duty, VehicleName, OrganizationName, ratetype, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });

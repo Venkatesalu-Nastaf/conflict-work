@@ -1423,32 +1423,28 @@ const useBooking = () => {
     [handleChange, rows, enterPressCount, apiUrl]
   );
 
-  const handleKeyEnterdriver = useCallback(
-    async (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
+  const handleKeyEnterdriver = async (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
 
-        try {
-          const response = await axios.get(
-            `${apiUrl}/drivername-details/${event.target.value}`
-          );
-          const vehicleData = response.data;
-          const transformedRows = vehicleData.map(transformRow);
+      try {
+        const response = await axios.get(
+          `${apiUrl}/drivername-details/${event.target.value}`
+        );
+        const vehicleData = response.data;
+        const transformedRows = vehicleData.map(transformRow);
 
+        setRowsdriver(transformedRows)
+        setSuccess(true);
+        setSuccessMessage("successfully listed");
 
-          setRowsdriver(transformedRows)
-          setSuccess(true);
-          setSuccessMessage("successfully listed");
-
-        } catch (error) {
-          setError(true);
-          setErrorMessage("Error retrieving vehicle details.");
-        }
+      } catch (error) {
+        setError(true);
+        setErrorMessage("Error retrieving vehicle details.");
       }
+    }
 
-    },
-    [apiUrl]
-  );
+  }
 
   const handleRowClick = useCallback(
     (params) => {

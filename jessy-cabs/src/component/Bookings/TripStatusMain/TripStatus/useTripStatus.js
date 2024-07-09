@@ -300,7 +300,6 @@ const useDispatched = () => {
     setCutomerName(newValue)
   }
 
-  // console.log(department, "sttstststst", department.map(dep => dep.label))
   const reversedRows = [...rows].reverse();  // to reverse 
 
 
@@ -311,7 +310,6 @@ const useDispatched = () => {
       setErrorMessage("ENTER THE STATUS")
       return
     }
-
 
     try {
       const response = await axios.get(
@@ -386,18 +384,19 @@ const useDispatched = () => {
     }
   };
 
+
   const handleButtonClick = (row) => {
 
     if (row.status === "Cancelled") {
       setError(true);
       setErrorMessage("booking cancelled")
       return
-
-    }
-
+    } 
     setSelectedRow(row);
     setPopupOpen(true);
   };
+
+
   const handlePopupClose = () => {
     setSelectedRow(null);
     setPopupOpen(false);
@@ -405,7 +404,6 @@ const useDispatched = () => {
 
 
   const handleTripsheetClick = async () => {
-    // console.log("selcted row", selectedRow)
     const dispatchcheck = "true";
     const calcPackageString = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
     const vendorcalcPackageString = selectedRow.Vendor_Calcpackage ? encodeURIComponent(selectedRow.Vendor_Calcpackage.toString()) : '';

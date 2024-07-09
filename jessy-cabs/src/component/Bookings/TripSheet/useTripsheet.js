@@ -3013,8 +3013,6 @@ const useTripsheet = () => {
                 );
                 const vehicleData = response.data;
                 setDriverDetails(vehicleData)
-
-
                 setSuccess(true);
                 setSuccessMessage("successfully listed");
 
@@ -3023,7 +3021,6 @@ const useTripsheet = () => {
                 setErrorMessage("Error retrieving vehicle details.");
             }
         }
-
     }
 
     const handleimagedelete = async (imagepath) => {

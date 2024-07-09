@@ -527,8 +527,8 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
 });
 // -------------------------------------------------------------------------------------------------------------------------------
 
-//get image for organization
 
+//get image for organization
 const companyattachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(companyattachedDirectory));
@@ -552,8 +552,8 @@ app.get('/get-companyimage/:organizationname', (req, res) => {
   });
 });
 
-//get image for user profile
 
+//get image for user profile
 const userattachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(userattachedDirectory));
@@ -576,6 +576,7 @@ app.get('/get-profileimage/:tripid', (req, res) => {
     res.json({ imagePaths });
   });
 });
+
 
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
@@ -612,7 +613,6 @@ function generateUniqueNumber() {
   return Math.floor(1000 + Math.random() * 9000);
 }
 
-// ///------
 
 //company logo-------------------
 
@@ -629,8 +629,6 @@ app.get('/log-imageview/:sharedData', (req, res) => {
 })
 
 
-
-
 app.get('/use-permissions/:userid', (req, res) => {
   const userid = req.params.userid;
 
@@ -640,6 +638,7 @@ app.get('/use-permissions/:userid', (req, res) => {
     return res.json(result);
   })
 })
+
 
 app.get('/get-vehicleNo', (req, res) => {
   const sql = `select vehRegNo from vehicleinfo`
@@ -655,8 +654,10 @@ app.get('/get-vehicleNo', (req, res) => {
   })
 })
 
+
 app.get(`/get-customer`, (req, res) => {
-  const sql = `select customer from customers`
+  // const sql = `select customer from customers`
+  const sql = `select * from customers`
   db.query(sql, (err, result) => {
     if (err) {
       console.log("error fetching CUSTOMER ", err)
@@ -668,8 +669,6 @@ app.get(`/get-customer`, (req, res) => {
     return
   })
 })
-
-
 
 
 app.get(`/name-orderby/:custmorName`, (req, res) => {
@@ -686,11 +685,6 @@ app.get(`/name-orderby/:custmorName`, (req, res) => {
     return res.json({ success: false })
   })
 })
-
-
-
-
-
 
 
 // const port = 8081;

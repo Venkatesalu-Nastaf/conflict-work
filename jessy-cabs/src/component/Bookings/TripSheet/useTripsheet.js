@@ -2573,7 +2573,7 @@ const useTripsheet = () => {
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
-    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll])
 
 
     // extra Amount calculation--------------------------

@@ -100,6 +100,7 @@ const useBooking = () => {
   // const [sendguestsms, setSendGuestsms] = useState(false);
   const [sendmailguestsms, setSendmailGuestsms] = useState(false);
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
+  const [datatrigger, setDatatrigger] = useState(false)
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -780,8 +781,7 @@ const useBooking = () => {
           const userDataArray = await response.json();
           if (userDataArray.length > 0) {
             setOrganisationSendEmail(userDataArray[0])
-
-
+            setDatatrigger(!datatrigger)
 
           } else {
             setErrorMessage('User data not found.');
@@ -793,7 +793,7 @@ const useBooking = () => {
       }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, datatrigger]);
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -1016,7 +1016,7 @@ const useBooking = () => {
 
 
         };
-        console.log(dataToSend,"datta")
+        console.log(dataToSend, "datta")
         await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
@@ -1104,6 +1104,7 @@ const useBooking = () => {
     }
 
     try {
+      setDatatrigger(!datatrigger)
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
@@ -1364,12 +1365,12 @@ const useBooking = () => {
         const bookingDetails = response.data;
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
-        console.log("bookingDetails.status", bookingDetails.status)
-        setBookingStatus(bookingDetails.status)
+        console.log("bookingDetails.status", bookingDetails.status);
+        setBookingStatus(bookingDetails.status);
         setIsEditMode(true);
-        setEdit(true)
+        setEdit(true);
         setSendEmail(false);
-
+        setDatatrigger(!datatrigger);
       } catch {
         setError(true);
         setErrorMessage("Error retrieving booking details");

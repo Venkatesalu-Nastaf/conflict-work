@@ -24,9 +24,9 @@
 }
 
 /* TABLE */
-.customer-list-table-container {
+.customer-list-table-container-download {
   border: 1px solid #ccc;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   background-color: var(--glass);
 }
 

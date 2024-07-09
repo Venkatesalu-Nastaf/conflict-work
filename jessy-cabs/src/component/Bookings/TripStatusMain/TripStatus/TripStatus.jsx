@@ -350,8 +350,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="table-bookingCopy-TripStatus">
-          <div className="Download-btn">
+        <div className="Download-btn-tripstatus">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
@@ -366,6 +365,22 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
               )}
             </PopupState>
           </div>
+        <div className="table-bookingCopy-TripStatus">
+          {/* <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div> */}
           <div className='trip-status-table'>
             <DataGrid
               rows={reversedRows}

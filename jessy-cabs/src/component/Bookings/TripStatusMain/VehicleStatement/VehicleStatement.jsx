@@ -94,6 +94,173 @@ const VehicleStatement = () => {
   return (
     <div className="VehicleStatement-form Scroll-Style-hide">
       <form action="">
+      <div className="input-field vehiclestatement-inputfeild-top">
+                <div className="input-top-vehicle">
+                  <div className="icone">
+                    <IoBusinessSharp color="action" style={{fontSize:"15px"}}/>
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="vendor_name_from"
+                    freeSolo
+                    size="small"
+                    value={servicestation}
+                    options={Stations.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    onChange={handleInputChange}
+                    renderInput={(params) =>
+                      <TextField {...params} label="Vendor Name From"
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          padding: '2px', // Reduce padding
+                          fontSize: '0.8rem', // Adjust font size
+                          height: '30px', // Adjust height
+                          width: '150px', // Adjust width
+                        },
+                        '& .MuiInputLabel-root': {
+                          fontSize: '0.8rem', // Adjust label font size
+                          transform: 'translate(14px, 8px) scale(1)', // Adjust label position
+                        },
+                        '& .MuiInputLabel-shrink': {
+                          transform: 'translate(14px, -6px) scale(0.75)', // Adjust label position when focused
+                        },
+                        '& .MuiSvgIcon-root': {
+                          fontSize: '1.2rem', // Adjust icon size
+                        },
+                      }} />
+                    }
+                  />
+                </div>
+                <div className="input-top-vehicle">
+                  <div className="icone">
+                    <IoBusinessSharp color="action" style={{fontSize:"15px"}}/>
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="vendorNameTo"
+                    freeSolo
+                    size="small"
+                    value={servicestation}
+                    options={Stations.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    onChange={handleInputChange}
+                    renderInput={(params) =>
+                      <TextField {...params} label="Vendor Name To"
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          padding: '2px', // Reduce padding
+                          fontSize: '0.8rem', // Adjust font size
+                          height: '30px', // Adjust height
+                          width: '150px', // Adjust width
+                        },
+                        '& .MuiInputLabel-root': {
+                          fontSize: '0.8rem', // Adjust label font size
+                          transform: 'translate(14px, 8px) scale(1)', // Adjust label position
+                        },
+                        '& .MuiInputLabel-shrink': {
+                          transform: 'translate(14px, -6px) scale(0.75)', // Adjust label position when focused
+                        },
+                        '& .MuiSvgIcon-root': {
+                          fontSize: '1.2rem', // Adjust icon size
+                        },
+                      }}
+                      />
+                    }
+                  />
+                </div>
+                <div className="input-top-vehicle vehiecle-date">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action"  style={{fontSize:"15px"}}/>
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        id="fromDate"
+                        label="From Date"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                        sx={{
+                          '.MuiInputBase-root': {
+                            padding: '10px', // Reduce padding
+                            fontSize: '0.8rem', // Adjust font size
+                            height: '30px', // Adjust height
+                            width: '150px', // Adjust width
+                            overflow: 'hidden', // Hide overflow
+                          },
+                          '.MuiInputLabel-root': {
+                            fontSize: '0.8rem', // Adjust label font size
+                            transform: 'translate(14px, 10px) scale(1)', // Adjust label position
+                          },
+                          '.MuiInputLabel-shrink': {
+                            transform: 'translate(14px, -6px) scale(0.75)', // Adjust label position when focused
+                          },
+                          '.MuiSvgIcon-root': {
+                            fontSize: '1.2rem', // Adjust calendar icon size
+                          },
+                          '.MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#ccc', // Optional: Adjust border color
+                          },
+                        }}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="input-top-vehicle vehiecle-date">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action"  style={{fontSize:"15px"}}/>
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        id="dateTo"
+                        label="To Date"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                        sx={{
+                          '.MuiInputBase-root': {
+                            padding: '10px', // Reduce padding
+                            fontSize: '0.8rem', // Adjust font size
+                            height: '30px', // Adjust height
+                            width: '150px', // Adjust width
+                            overflow: 'hidden', // Hide overflow
+                          },
+                          '.MuiInputLabel-root': {
+                            fontSize: '0.8rem', // Adjust label font size
+                            transform: 'translate(14px, 10px) scale(1)', // Adjust label position
+                          },
+                          '.MuiInputLabel-shrink': {
+                            transform: 'translate(14px, -6px) scale(0.75)', // Adjust label position when focused
+                          },
+                          '.MuiSvgIcon-root': {
+                            fontSize: '1.2rem', // Adjust calendar icon size
+                          },
+                          '.MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#ccc', // Optional: Adjust border color
+                          },
+                        }}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <button className='top-buttons-vehicle'>List</button>
+                <button className='top-buttons-vehicle'>print</button>
+                <button className='top-buttons-vehicle'>Excel</button>
+                <div style={{display:"flex", alignItems:"center"}}>
+                  <input type="checkbox" name="" id="" />
+                  Preview
+                </div>
+              </div>
+
+
+
+
+
+
+
         <div className=" VehicleStatement-container-main ">
           <div className="container-left">
             <div className="SearchContainer-VehicleStatement">
@@ -216,6 +383,21 @@ const VehicleStatement = () => {
             </StyledSpeedDial>
           </Box>
         </div>
+        <div className="Download-btn-vehiecle">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -247,7 +429,7 @@ const VehicleStatement = () => {
           }
         </div>
         <div className="table-bookingCopy-VehicleStatement">
-          <div className="Download-btn">
+          {/* <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
@@ -261,7 +443,7 @@ const VehicleStatement = () => {
                 </React.Fragment>
               )}
             </PopupState>
-          </div>
+          </div> */}
           <div className='vehicle-statement-table'>
             <DataGrid
               rows={rows}

@@ -551,9 +551,9 @@ const DriverCreation = ({ stationName }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="Download-btn">
-                            <PopupState variant="popover" popupId="demo-popup-menu">
-                                {(popupState) => (
+                        {/* <div className="Download-btn">
+                           <PopupState variant="popover" popupId="demo-popup-menu">
+                                 {(popupState) => (
                                     <React.Fragment>
                                         <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                             Download
@@ -565,7 +565,7 @@ const DriverCreation = ({ stationName }) => {
                                     </React.Fragment>
                                 )}
                             </PopupState>
-                        </div>
+                        </div> */}
                     </div>
                     <div className='alert-popup-main'>
                         {error &&
@@ -645,7 +645,23 @@ const DriverCreation = ({ stationName }) => {
                             />
                         </StyledSpeedDial>
                     </Box>
+
                     <div className="DriverCreation-table-container">
+                        <div className="Download-btn-drivercreation">
+                            <PopupState variant="popover" popupId="demo-popup-menu">
+                                {(popupState) => (
+                                    <React.Fragment>
+                                        <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                            Download
+                                        </Button>
+                                        <Menu {...bindMenu(popupState)}>
+                                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                        </Menu>
+                                    </React.Fragment>
+                                )}
+                            </PopupState>
+                        </div>
                         <div className="table-DriverCreations">
                             <DataGrid
                                 rows={rows}

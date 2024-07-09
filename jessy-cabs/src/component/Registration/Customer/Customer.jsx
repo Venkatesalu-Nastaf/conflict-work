@@ -738,7 +738,7 @@ const Customer = ({ stationName }) => {
               </Box>
             </div>
           </div>
-          <div className="customer-list-table-container">
+          <div className="customer-list-table-container-download">
             <div className="Download-btn-customer">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (

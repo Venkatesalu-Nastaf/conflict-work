@@ -50,6 +50,7 @@ import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
+
 // import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -109,7 +110,8 @@ const Employe = () => {
     setError,
     setErrorMessage,
     deletefile,
-    handlecheckbox
+    handlecheckbox,
+   
   } = useEmployee();
 
   useEffect(() => {
@@ -379,7 +381,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="employee-licence-no-input-division">
+              <div className="input">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
@@ -393,7 +395,28 @@ const Employe = () => {
                   onChange={handleChange}
                 />
 
-                <div className="employee-file-upload-division">
+                {/* <div className="employee-file-upload-division">
+                  {selectedCustomerData?.empid || book.empid ? (
+                    <Button component="label">
+                      <UploadFileIcon />
+                      <input
+                        id="empid_file"
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button color="primary" variant="contained" onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}>
+                      <UploadFileIcon />
+                    </Button>
+                  )}
+                </div> */}
+              </div>
+              <div className="employee-file-upload-division">
                   {selectedCustomerData?.empid || book.empid ? (
                     <Button component="label">
                       <UploadFileIcon />
@@ -413,10 +436,8 @@ const Employe = () => {
                     </Button>
                   )}
                 </div>
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input">
+
+                <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -424,6 +445,16 @@ const Employe = () => {
                 )}
               </div>
             </div>
+
+            {/* <div className="input-field" >
+              <div className="input">
+                {isEditMode ? (
+                  <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" disabled={!Employee_modify} onClick={handleAdd} >Add</Button>
+                )}
+              </div>
+            </div> */}
           </div>
         </div>
         <div className='alert-popup-main'>
@@ -521,7 +552,57 @@ const Employe = () => {
             />
           </StyledSpeedDial>
         </Box>
-        <div className="Employe-search-container">
+        {/* <div className="Employe-search-container">
+          <div className="input-field Employe-search-input">
+            <div className="input">
+              <div className="icone">
+                <AiOutlineFileSearch
+                  color="action"
+                />
+              </div>
+              <TextField
+                size="small"
+                id="searchText"
+                label="Search"
+                name="searchText"
+                value={searchText || ''}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <Button variant="contained" onClick={handleShowAll}>Search</Button>
+            </div>
+          </div>
+        </div> */}
+
+
+
+
+        <div>
+          <div className="download-search">
+
+          <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button
+                  variant="contained"
+                  endIcon={<ExpandCircleDownOutlinedIcon />}
+                  {...bindTrigger(popupState)}
+                >
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
+
+
+          <div className="Employe-search-container">
           <div className="input-field Employe-search-input">
             <div className="input">
               <div className="icone">
@@ -543,25 +624,12 @@ const Employe = () => {
             </div>
           </div>
         </div>
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  endIcon={<ExpandCircleDownOutlinedIcon />}
-                  {...bindTrigger(popupState)}
-                >
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
+
+   
+
+          </div>
+
+
         <div className="table-bookingCopy-Employe ">
           <div className="registration-employee-table">
             <DataGrid
@@ -606,6 +674,9 @@ const Employe = () => {
             </DialogContent>
           </Dialog>
         </div>
+
+        </div>
+
       </form>
     </div>
   );

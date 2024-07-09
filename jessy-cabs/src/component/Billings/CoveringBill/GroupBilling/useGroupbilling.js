@@ -135,7 +135,7 @@ const useGroupbilling = () => {
             }
         }
         fetchData()
-    }, [apiUrl, groupBillId])
+    }, [apiUrl, groupBillId,groupInvoice,groupInvoiceDate,groupInvoiceNumber])
 
     useEffect(() => {
         ReferenceNo()
@@ -213,7 +213,7 @@ const useGroupbilling = () => {
             try {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
-                setRows(GroupReference)
+                // setRows(GroupReference)
                 // const RefId = GroupReference.map((li) => li.Trip_id)
                 // setParticularId(RefId)
                 const RefId = GroupReference.map((li) => li.Trip_id.split(','));
@@ -228,7 +228,7 @@ const useGroupbilling = () => {
                 setRefFromDate(fromdate)
                 const todate = GroupReference.map((li) => li.ToDate)
                 setRefToDate(todate)
-                const Tripsid = GroupReference.map((li) => li.Trip_id)
+                // const Tripsid = GroupReference.map((li) => li.Trip_id)
             }
             catch (err) {
                 console.log("error", err)
@@ -264,7 +264,7 @@ const useGroupbilling = () => {
         fetchData();
 
         // No cleanup function needed in this case
-    }, [particularId]);
+    }, [particularId,apiUrl,groupInvoice,refInvDate,refInvNo]);
 
 
     const handleShow = useCallback(async () => {
@@ -485,7 +485,6 @@ const useGroupbilling = () => {
         const fetchData = async () => {
             try {
                 if (!invoiceno) return
-                console.log("invoiceno", invoiceno)
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
                 const Amount = GroupReference.map((li) => li.Amount)
@@ -562,7 +561,7 @@ const useGroupbilling = () => {
     const handlegroupData = async () => {
         const TripsCount = rowSelectionModel.length;
         let TotalAmount = 0; // Change from const to let
-        rowSelectedValues?.map((li) => {
+        rowSelectedValues?.forEach((li) => {
             TotalAmount += li;
         });
         const FromDate = dayjs(fromDate).format('YYYY-MM-DD')

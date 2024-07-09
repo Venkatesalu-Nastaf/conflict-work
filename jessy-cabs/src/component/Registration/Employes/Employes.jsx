@@ -21,7 +21,7 @@ const Employes = () => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all" >
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Employes" value="employes" />
+                                <Tab label="Employees" value="employes" />
                             </TabList>
                         </Box>
                         <TabPanel value="employes"><Employe /></TabPanel>

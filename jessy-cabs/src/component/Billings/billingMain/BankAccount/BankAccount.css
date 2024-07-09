@@ -11,7 +11,9 @@
 
 .BankAccount-main-container {
     padding: 20px;
-    width: 90%;
+    width: 95%;
+    overflow: hidden !important;
+    height: 500px;
 }
 
 .BankAccount-detail-container-main {
@@ -119,23 +121,38 @@
 
 .AddBankContainer-BankAccount {
     width: 100%;
-    margin-top: 80px;
+    margin-top: 10px;
     background-color: var(--glass);
-    padding: 10px 20px 35px;
+    padding: 10px 20px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .BankDetails-mainContainer {
-    margin-top: 80px;
+    margin-top: 10px;
+    height:350px;
+    overflow-y: scroll;
+    /* overflow-x:hidden; */
 }
+
+.BankDetails-mainContainer::-webkit-scrollbar {
+    width: 3px; /* Width of the scrollbar */
+    /* height: 7px; */
+  }
+
+
+  .BankDetails-mainContainer::-webkit-scrollbar-track {
+    background: #1565c0; /* Color of the track */
+    border-radius: 10px; /* Rounded corners of the track */
+  }
+
 
 .addedbanks-Details-BankAccount {
     display: flex;
     width: auto;
-    margin-top: 30px;
+    margin-top: 10px;
     background-color: var(--glass);
-    padding: 10px 20px 35px;
+    padding: 10px 20px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }

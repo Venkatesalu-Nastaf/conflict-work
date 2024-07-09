@@ -492,7 +492,7 @@ const DriverCreation = ({ stationName }) => {
                         </div>
                         <div className="detail-container-main detail-container-main-crivercreation">
                             <div className="container-left">
-                                <div className="copy-title-btn-Booking">
+                                <div className="">
                                     <div className="input-field driver-creation-input-field">
                                         <div className="input">
                                             <div className="icone">

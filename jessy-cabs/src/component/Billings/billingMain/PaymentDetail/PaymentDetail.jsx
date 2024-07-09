@@ -65,6 +65,7 @@ const PaymentDetail = ({ organizationNames }) => {
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
+      
       <form >
         <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
@@ -135,12 +136,16 @@ const PaymentDetail = ({ organizationNames }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field payment-search-field">
-                <div className="input">
+
+                <div className="inut">
                   <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>
+              {/* <div className="input-field payment-search-field">
+                <div className="input">
+                  <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
+                </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -175,7 +180,7 @@ const PaymentDetail = ({ organizationNames }) => {
             </div>
           }
         </div>
-        <div className='total-container'>
+        <div className='total-container' style={{justifyContent: "flex-start"}}>
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (

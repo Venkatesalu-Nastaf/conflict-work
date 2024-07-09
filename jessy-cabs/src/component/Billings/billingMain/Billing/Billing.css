@@ -12,9 +12,9 @@
 }
 
 /* Button */
-.Download-btn {
+/* .Download-btn {
   padding: 20px 10px;
-}
+} */
 
 /* TABLE */
 .customer-list-table-container {
@@ -113,14 +113,16 @@
   border: 2px solid #ccc;
   border-radius: 30px;
   background-color: var(--glass);
-  padding: 0px 15px 0px 12px;
+  padding: 20px 15px 0px 12px;
   margin-left: 13px;
-  width: 50%;
+  width: 39vw;
   margin-top: 30px;
 }
 
 .input-feild-booking {
   flex-wrap: wrap;
+  margin-bottom: 20px;
+  /* gap: 0px; */
 }
 
 .Billing-secend-left {
@@ -246,6 +248,7 @@
 @media screen and (min-width:501px) {
   .desktop-division-one {
     display: block !important;
+    margin: 10px 0px;
   }
 
   .mobile-division-two {
@@ -254,13 +257,13 @@
   }
 }
 
-.min-charge-value-input {
+/* .min-charge-value-input {
   padding-top: 20px;
-}
+} */
 
-.biling-amount-input {
-  padding-top: 20PX;
-}
+/* .biling-amount-input {
+  padding-top: 20px;
+} */
 
 .biling-amount-input-total {
   padding-top: 10px;

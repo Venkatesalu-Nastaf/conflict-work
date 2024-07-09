@@ -385,7 +385,7 @@ const Billing = () => {
                                         label="Vehicle Type"
                                         id="vehType"
                                         size="small"
-                                        sx={{ m: 1, width: "60ch" }}
+                                        sx={{ width: "100%" }}
                                     />
                                 </div>
                                 <div className="input">
@@ -416,11 +416,11 @@ const Billing = () => {
                                         label="Min.Charges"
                                         id="MinCharges"
                                         size="small"
-                                        variant="standard"
-                                        sx={{ m: 1, width: "60ch" }}
+                                        // variant="standard"
+                                        sx={{ width: "100%" }}
                                     />
                                 </div>
-                                <div className="input min-charge-value-input">
+                                <div className="input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -431,7 +431,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -451,7 +451,7 @@ const Billing = () => {
                                             label="Charges For Extra"
                                             id="extraKM"
                                             size="small"
-                                            variant="standard"
+                                            // variant="standard"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">KMS</InputAdornment>
@@ -470,7 +470,7 @@ const Billing = () => {
                                             autoComplete="new-password"
                                             value={book.extrakm_amount || ''}
                                             onChange={handleChange}
-                                            variant="standard"
+                                            // variant="standard"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -491,7 +491,7 @@ const Billing = () => {
                                             size="small"
                                             label="Amount1"
                                             id="ex_kmAmountEX"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                 </div>
@@ -511,7 +511,7 @@ const Billing = () => {
                                         label="Charges For Extra"
                                         id="extraKM098"
                                         size="small"
-                                        variant="standard"
+                                        // variant="standard"
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">KMS</InputAdornment>
@@ -533,7 +533,7 @@ const Billing = () => {
                                         autoComplete="new-password"
                                         value={book.extrakm_amount || ''}
                                         onChange={handleChange}
-                                        variant="standard"
+                                        // variant="standard"
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -554,7 +554,7 @@ const Billing = () => {
                                         size="small"
                                         label="Amount1"
                                         id="ex_kmAmount78"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -573,7 +573,7 @@ const Billing = () => {
                                             label="Charges For Extra"
                                             id="extraHR"
                                             size="small"
-                                            variant="standard"
+                                            // variant="standard"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">HRS</InputAdornment>
@@ -592,7 +592,7 @@ const Billing = () => {
                                             autoComplete="new-password"
                                             value={book.extrahr_amount || ''}
                                             onChange={handleChange}
-                                            variant="standard"
+                                            // variant="standard"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -613,7 +613,7 @@ const Billing = () => {
                                             size="small"
                                             label="Amount2"
                                             id="ex_hrAmount_Amount2"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                 </div>
@@ -632,7 +632,7 @@ const Billing = () => {
                                         label="Charges For Extra"
                                         id="extraHR_chargeForExtra"
                                         size="small"
-                                        variant="standard"
+                                        // variant="standard"
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">HRS</InputAdornment>
@@ -654,7 +654,7 @@ const Billing = () => {
                                         autoComplete="new-password"
                                         value={book.extrahr_amount || ''}
                                         onChange={handleChange}
-                                        variant="standard"
+                                        // variant="standard"
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -675,7 +675,7 @@ const Billing = () => {
                                         size="small"
                                         label="Amount2"
                                         id="ex_hrAmount_A2"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -695,14 +695,16 @@ const Billing = () => {
                                             label="Night Halt"
                                             id="nightBta_NB"
                                             size="small"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                     <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
-                                        <TextField size="small" variant="standard"
+                                        <TextField
+                                            size="small"
+                                            // variant="standard"
                                             type='number'
                                             name='nightCount'
                                             id='nightCount_NC'
@@ -729,7 +731,7 @@ const Billing = () => {
                                             size="small"
                                             label="Amount1"
                                             id="nhamountNA1"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                 </div>
@@ -749,7 +751,7 @@ const Billing = () => {
                                         label="Night Halt"
                                         id="nightBta"
                                         size="small"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                                 <div className='billing-calculation-icon'>
@@ -759,7 +761,9 @@ const Billing = () => {
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
-                                    <TextField size="small" variant="standard"
+                                    <TextField
+                                        size="small"
+                                        // variant="standard"
                                         type='number'
                                         name='nightCount'
                                         id='nightCount'
@@ -786,7 +790,7 @@ const Billing = () => {
                                         size="small"
                                         label="Amount"
                                         id="nhamount"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -802,19 +806,20 @@ const Billing = () => {
                                             label="Driver Bata"
                                             name='driverBeta'
                                             autoComplete="new-password"
-
                                             value={book.driverBeta || ''}
                                             onChange={handleChange}
                                             id="driverbataamount1"
                                             size="small"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                     <div className="input biling-amount-input">
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
-                                        <TextField size="small" variant="standard"
+                                        <TextField
+                                            size="small"
+                                            // variant="standard"
                                             type='number'
                                             name='driverbeta_Count'
                                             id='driverbeta_count67'
@@ -841,7 +846,7 @@ const Billing = () => {
                                             size="small"
                                             label="Amount"
                                             id="driverBeta_amount12"
-                                            variant="standard"
+                                        // variant="standard"
                                         />
                                     </div>
                                 </div>
@@ -857,12 +862,11 @@ const Billing = () => {
                                         label="Driver Bata"
                                         name='driverBeta'
                                         autoComplete="new-password"
-
                                         value={book.driverBeta || ''}
                                         onChange={handleChange}
                                         id="driverbata"
                                         size="small"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                                 <div className='billing-calculation-icon'>
@@ -872,7 +876,9 @@ const Billing = () => {
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
-                                    <TextField size="small" variant="standard"
+                                    <TextField
+                                        size="small"
+                                        // variant="standard"
                                         type='number'
                                         name='driverbeta_Count'
                                         id='driverbeta_Count'
@@ -899,7 +905,7 @@ const Billing = () => {
                                         size="small"
                                         label="Amount"
                                         id="driverBeta_amount"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -916,8 +922,8 @@ const Billing = () => {
                                         label="Other Charges"
                                         id="OtherCharges"
                                         size="small"
-                                        variant="standard"
-                                        sx={{ m: 1, width: "60ch" }}
+                                        // variant="standard"
+                                        sx={{ width: "100%" }}
                                     />
                                 </div>
                                 <div className="input biling-amount-input">
@@ -932,7 +938,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                         size="small"
                                         id="OtherChargesamount"
-                                        variant="standard"
+                                    // variant="standard"
                                     />
                                 </div>
                             </div>
@@ -1380,53 +1386,58 @@ const Billing = () => {
                         </div>
                     }
                 </div>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                    <StyledSpeedDial
-                        ariaLabel="SpeedDial playground example"
-                        icon={<SpeedDialIcon />}
-                        direction="left"
-                    >
 
-                        {Billing_new === 1 && (
+                <div style={{position: 'relative', right: '86px'}}>
+                    <Box className='' sx={{ position: "relative", mt: 3, height: 320 }}>
+                        <StyledSpeedDial
+                            ariaLabel="SpeedDial playground example"
+                            icon={<SpeedDialIcon />}
+                            direction="left"
+                        >
+
+                            {Billing_new === 1 && (
+                                <SpeedDialAction
+                                    key="Add"
+                                    icon={<BookmarkAddedIcon />}
+                                    tooltipTitle="Add"
+                                    onClick={(event) => handleClick(event, "Add")}
+                                />
+                            )}
+                            {Billing_modify === 1 && (
+                                <SpeedDialAction
+                                    key="edit"
+                                    icon={<ModeEditIcon />}
+                                    tooltipTitle="Edit"
+                                    onClick={(event) => handleClick(event, "Edit")}
+                                />
+                            )}
+                            {Billing_delete === 1 && (
+                                <SpeedDialAction
+                                    key="delete"
+                                    icon={<DeleteIcon />}
+                                    tooltipTitle="Delete"
+                                    onClick={(event) => handleClick(event, "Delete")}
+                                />
+                            )}
                             <SpeedDialAction
-                                key="Add"
-                                icon={<BookmarkAddedIcon />}
-                                tooltipTitle="Add"
-                                onClick={(event) => handleClick(event, "Add")}
+                                key="Cancel"
+                                icon={<CancelPresentationIcon />}
+                                tooltipTitle="Cancel"
+                                onClick={(event) => handleClick(event, "Cancel")}
                             />
-                        )}
-                        {Billing_modify === 1 && (
-                            <SpeedDialAction
-                                key="edit"
-                                icon={<ModeEditIcon />}
-                                tooltipTitle="Edit"
-                                onClick={(event) => handleClick(event, "Edit")}
-                            />
-                        )}
-                        {Billing_delete === 1 && (
-                            <SpeedDialAction
-                                key="delete"
-                                icon={<DeleteIcon />}
-                                tooltipTitle="Delete"
-                                onClick={(event) => handleClick(event, "Delete")}
-                            />
-                        )}
-                        <SpeedDialAction
-                            key="Cancel"
-                            icon={<CancelPresentationIcon />}
-                            tooltipTitle="Cancel"
-                            onClick={(event) => handleClick(event, "Cancel")}
-                        />
-                        {Billing_read === 1 && (
-                            <SpeedDialAction
-                                key="Print"
-                                icon={<PrintIcon />}
-                                tooltipTitle="Print"
-                                onClick={(event) => handleClick(event, "Print")}
-                            />
-                        )}
-                    </StyledSpeedDial>
-                </Box>
+                            {Billing_read === 1 && (
+                                <SpeedDialAction
+                                    key="Print"
+                                    icon={<PrintIcon />}
+                                    tooltipTitle="Print"
+                                    onClick={(event) => handleClick(event, "Print")}
+                                />
+                            )}
+                        </StyledSpeedDial>
+                    </Box>
+                </div>
+
+
             </div>
         </div>
     )

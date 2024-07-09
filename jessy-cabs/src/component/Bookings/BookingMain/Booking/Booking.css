@@ -353,7 +353,7 @@
 
 .input-feild-vehicle-confirm {
   flex-wrap: wrap;
-  gap: 0px;
+  /* gap: 0px; */
   width: 100%;
 }
 
@@ -597,7 +597,7 @@
 }
 
 .pick-up-address-input{
-  width: 535px !important;
+  width: 513px !important;
 }
 
 .icone-with-margin-top{

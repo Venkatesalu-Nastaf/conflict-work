@@ -423,7 +423,6 @@ const useCustomer = () => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         const datta=customerData.billingGroup.split(',')
-        console.log(customerData,"bb")
         if(datta.length >=2){
             setIsInputVisible(!isInputVisible);
         }
@@ -471,8 +470,7 @@ const useCustomer = () => {
         try {
             // const datasets={...customerfieldSets,customer:book.customer}
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
-            console.log(datasets)
-            console.log(book,"hhh")
+
            
             await axios.post(`${apiUrl}/customers`, book);
             await axios.post(`${apiUrl}/customerorderdbydata`,datasets)
@@ -487,10 +485,8 @@ const useCustomer = () => {
     };
 
     const handleEdit = async () => {
-        // console.log(customerId,"datta")
         // const selectedCustomer = rows.find((row) => row.customerId === customerId);
         
-        // console.log(data,"ggggg")
         const {id,orderByEmail,orderedby,orderByMobileNo,...restselectedcustomerdata}=selectedCustomerData
         const updatedCustomer = {
             // ...selectedCustomer,
@@ -511,7 +507,7 @@ const useCustomer = () => {
     useEffect(() => {
         const handleList = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/customers`);
+                const response = await axios.get(`${apiUrl}/customersgroup`);
                 const data = response.data;
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,

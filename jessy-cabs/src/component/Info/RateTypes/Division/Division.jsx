@@ -146,7 +146,7 @@ const Division = () => {
                     }
                   />
                 </div>
-                <div className="input radio">
+                <div className="input radio division-radio-input">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       Active
@@ -173,7 +173,7 @@ const Division = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input">
+                <div className="input division-add-input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
                   ) : (

@@ -976,8 +976,6 @@ const useTripsheet = () => {
 
     const handleAdd = async () => {
 
-        console.log()
-
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
@@ -1079,8 +1077,6 @@ const useTripsheet = () => {
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
                 escort, minHour, minKM, transferreport,
             };
-
-            console.log("updatedBook", updatedBook)
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -2375,12 +2371,55 @@ const useTripsheet = () => {
         }
     }
 
+    const vehicleRegisterNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+
+    const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
+
+    const transformFun = (data) => {
+        return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+    }
+
+    // to fetch closed tripdata for valiation
+    const [ClosedTripData, setClosedTripData] = useState([])
+    useEffect(() => {
+
+        const fetchData = async () => {
+            if (!vehicleRegisterNo) return
+            const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
+
+            const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
+            setClosedTripData(mapdata)
+            //to get KM
+            let maxShedInkm = -Infinity;
+            let maxTripId = null;
+            mapdata && Array.isArray(mapdata) && mapdata.forEach((el) => {
+                let shedInKm = el.shedInKm
+                if (shedInKm > maxShedInkm) {
+                    maxShedInkm = shedInKm;
+                    maxTripId = el.tripid;
+                }
+            })
+            setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
+
+            //TO get Date and Time
+            console.log("mapdata", mapdata)
+
+            
+        }
+
+        fetchData()
+    }, [vehicleRegisterNo])
+
 
     return {
-        selectedCustomerData, ex_kmAmount, ex_hrAmount, escort, setEscort, driverdetails,
-        night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount, totalcalcAmount, driverBeta,
-        selectedCustomerId, nightBta, nightCount, driverbeta_Count, vehileNames, handleEscortChange, handleClickOpen, open, handleClose, signaturePopUpOpen, handleSignaturePopUpOpen,
-        rows,
+        selectedCustomerData, ex_kmAmount, ex_hrAmount,
+        escort, setEscort, driverdetails,
+        night_totalAmount, driverBeta_calc, driverbeta_Count_calc,
+        driverBeta_amount, totalcalcAmount, driverBeta,
+        selectedCustomerId, nightBta, nightCount, driverbeta_Count,
+        vehileNames, handleEscortChange, handleClickOpen, open,
+        handleClose, signaturePopUpOpen, handleSignaturePopUpOpen,
+        rows, ClosedTripData,
         error,
         success,
         info,
@@ -2461,7 +2500,7 @@ const useTripsheet = () => {
         selectedRow,
         imageUrl,
         link,
-        isSignatureSubmitted,
+        isSignatureSubmitted, checkCloseKM,
         isEditMode,
         handleEdit, setFormValues, copyToClipboard,
         SignPage, handlesignaturePopUpClose, signaturePopUpOpen,

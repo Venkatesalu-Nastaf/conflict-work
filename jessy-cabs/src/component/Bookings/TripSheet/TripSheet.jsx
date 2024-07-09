@@ -206,13 +206,18 @@ const TripSheet = ({ stationName, logoImage }) => {
     link,
     isSignatureSubmitted,
     isEditMode,
-    handleEdit,
-    driverdetails,
-    sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
-    ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
+    handleEdit, checkCloseKM,
+    driverdetails, ClosedTripData,
+    sign, handleCalc, calcPackage, extraHR, extraKM, package_amount,
+    extrakm_amount, extrahr_amount,
+    ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
+    driverbeta_Count_calc, driverBeta_amount,
     totalcalcAmount, escort, handleEscortChange, setSign, setLink, setError,
     setErrorMessage,
-    open, handleClose, handleTransferChange, transferreport, signaturepopup, setSignaturepopup, siganturediaglogclose, handlesignaturemageDownload, setSignatureupload, handleFileChangesignature, getSignatureImage, handlesignaturemageDelete
+    open, handleClose, handleTransferChange, transferreport,
+    signaturepopup, setSignaturepopup, siganturediaglogclose,
+    handlesignaturemageDownload, setSignatureupload,
+    handleFileChangesignature, getSignatureImage, handlesignaturemageDelete
 
   } = useTripsheet();
 
@@ -323,10 +328,10 @@ const TripSheet = ({ stationName, logoImage }) => {
   const permit = formData.permit || selectedCustomerData.permit || book.permit;
 
 
-  const [showVehicleDetails, setShowVehicleDetails] = useState(false);
+  const [showVehicleDetails, setShowVehicleDetails] = useState(true);
 
   const toggleVehicleDetails = () => {
-    setShowVehicleDetails(!showVehicleDetails);
+    // setShowVehicleDetails(!showVehicleDetails);
   }
 
 
@@ -340,6 +345,103 @@ const TripSheet = ({ stationName, logoImage }) => {
   // for check box vendor info
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
+  // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
+
+  const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate)
+  const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate)
+  const closeDateObj = new Date(formData?.closedate || selectedCustomerDatas?.closedate || selectedCustomerData?.closedate || book?.closedate)
+  const shedInDateObj = new Date(formData?.shedInDate || selectedCustomerDatas?.shedInDate || selectedCustomerData?.shedInDate || book?.shedInDate)
+
+  const parcedShedOutDate = new Date(shedOutDateObj.getFullYear(), shedOutDateObj.getMonth(), shedOutDateObj.getDate())
+  const parcedSatrtDate = new Date(SatrtDateObj.getFullYear(), SatrtDateObj.getMonth(), SatrtDateObj.getDate())
+  const parcedcloseDate = new Date(closeDateObj.getFullYear(), closeDateObj.getMonth(), closeDateObj.getDate())
+  const parcedshedInDate = new Date(shedInDateObj.getFullYear(), shedInDateObj.getMonth(), shedInDateObj.getDate())
+
+  const startDateCheckFun = () => {
+
+    if (parcedSatrtDate !== "Invalid Date" && !isNaN(new Date(parcedSatrtDate).getTime())) {
+      if (parcedShedOutDate !== "Invalid Date" && !isNaN(new Date(parcedShedOutDate.getTime()))) {
+        if (parcedSatrtDate >= parcedShedOutDate) {
+          return
+        } else {
+          return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+        }
+      } else {
+      }
+    } else {
+      return
+    }
+  }
+
+
+  const closeDateCheckFun = () => {
+    if ((parcedSatrtDate !== "Invalid Date" && !isNaN(new Date(parcedSatrtDate).getTime())) && (parcedcloseDate !== "Invalid Date" && !isNaN(new Date(parcedcloseDate).getTime()))) {
+      if (parcedSatrtDate <= parcedcloseDate) {
+        return
+      } else {
+        return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+      }
+    }
+    return
+  }
+
+  const shedInDateCheck = () => {
+    if ((parcedShedOutDate !== "Invalid Date" && !isNaN(new Date(parcedShedOutDate).getTime()))) {
+      if ((parcedShedOutDate !== "Invalid Date" && !isNaN(new Date(parcedShedOutDate).getTime())) && (parcedshedInDate !== "Invalid Date" && !isNaN(new Date(parcedshedInDate).getTime()))) {
+        if (parcedcloseDate !== "Invalid Date" && !isNaN(new Date().getTime(parcedcloseDate))) {
+          if (parcedshedInDate < parcedcloseDate) {
+            return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+          }
+          else {
+            if (parcedshedInDate < parcedShedOutDate) {
+              return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+            }
+          }
+        } else {
+          if (!(parcedshedInDate >= parcedShedOutDate)) {
+            return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+          }
+        }
+      } else {
+        return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Fill Date</label>
+      }
+    }
+  }
+
+
+  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+
+  const checkTimeandDateConflict = () => {
+    if (ClosedTripData.length < 1 || !ClosedTripData) return
+
+    let time = "00:00", tripid = null;
+    for (const trip of ClosedTripData) {
+      const shedInDate = new Date(trip.shedInDate);
+      const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
+      console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
+
+      if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
+        if (time < trip.shedintime) {
+          time = trip.shedintime;
+          tripid = trip.tripid;
+        }
+      }
+    }
+    if (shedOuttime && time) {
+      if (shedOuttime <= time) {
+        return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
+      }
+      return
+    } else {
+      return
+    }
+  }
+
+  // useEffect(() => {
+  //   checkTimeandDateConflict()
+  // }, [parcedShedOutDate])
+
+  // console.log("shedOuttime", typeof (shedOuttime))
 
 
   return (
@@ -830,250 +932,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
               {showVehicleDetails && (
                 <div className='tripsheet-division3'>
-                  <div className="vehicle-confirm">
-                    <div className="input-field input-feild-vehicle-confirm">
-                      <div className="input">
-                        <div className="icone">
-                          <HowToRegIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-hireTypes"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                          value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                          options={HireTypes.map((option) => ({
-                            label: option.option,
-                          }))}
-                          getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
-                            )
-                          }
-                          }
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <AltRouteIcon color="action" />
-                        </div>
-                        <TextField
-                          name="travelsname"
-                          autoComplete="new-password"
-                          value={
-                            selectedCustomerDatas.travelsname ||
-                            formData.travelsname ||
-                            selectedCustomerData.travelsname ||
-                            book.travelsname ||
-                            ""
-                          }
-                          onChange={handleChange}
-                          label="Travels Name"
-                          id="travelsname"
-                          // variant="standard"
-                          size='small'
-                        />
-                      </div>
 
-                      <div className="input">
-                        <div className="icone">
-                          <CarCrashIcon color="action" />
-                        </div>
-                        <TextField
-                          margin="normal"
-                          size="small"
-                          id="vehRegNo"
-                          label="Vehicle Rigster No"
-                          name="vehRegNo"
-                          value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
-                          onChange={handleChange}
-                          autoComplete="password"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <PiCarSimpleFill color="action" />
-                        </div>
-
-                        <Autocomplete
-                          fullWidth
-                          id="free-solo-vehType"
-                          freeSolo
-                          size="small"
-                          value={
-                            selectedCustomerDatas.vehType || formData.vehType ||
-                            selectedCustomerData.vehType ||
-                            book.vehType || ""
-                          }
-                          options={vehicaleinfos?.map((option) => ({
-                            label: option?.Option,
-                          }))}
-                          onChange={(event, value) =>
-                            handleAutocompleteChange(event, value, "vehType")
-                          }
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
-                            );
-                          }}
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <NoCrashIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-vehileName"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
-                          value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
-                          options={vehileNames?.map((option) => ({
-                            label: option,
-                          }))}
-                          renderInput={(params) => (
-                            <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
-                          )}
-                        />
-
-
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <EmailIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          id="free-solo-Groups"
-                          freeSolo
-                          size="small"
-                          value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
-                          options={GroupTypes?.map((option) => ({
-                            label: option?.Option,
-                          }))}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                            );
-                          }}
-                        />
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <SensorOccupiedIcon color="action" />
-                        </div>
-                        <TextField
-                          name="driverName"
-                          className='full-width'
-                          value={selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName || ''}
-                          onChange={(e) => {
-                            handleChange(e)
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value })
-                            setFormData({ ...formData, driverName: e.target.value })
-                            setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
-                            setFormValues({ ...formValues, driverName: e.target.value })
-                            setBook({ ...book, driverName: e.target.value })
-                          }}
-
-                          label="Driver Name"
-                          id="driverName"
-                          // variant="standard"
-                          size='small'
-                          autoComplete="password"
-                          onKeyDown={handleKeyEnterDriverDetails}
-                        />
-
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <PhoneIphoneIcon color="action" />
-                        </div>
-                        <TextField
-                          name="mobileNo"
-                          className='full-width'
-                          value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
-                          onChange={handleChange}
-                          label="Cell"
-                          id="mobileNo"
-                          // variant="standard"
-                          size='small'
-                          autoComplete="password"
-                        />
-                      </div>
-
-
-
-                      <div className="input">
-                        <div className="icone">
-                          <AttachEmailIcon color="action" />
-                        </div>
-                        <TextField
-                          name="travelsemail"
-                          autoComplete="new-password"
-                          value={
-                            formData.travelsemail ||
-                            selectedCustomerData.travelsemail ||
-                            book.travelsemail ||
-                            ""
-                          }
-                          onChange={handleChange}
-                          label="Travels Email"
-                          id="travelsemail"
-                          // variant="standard"
-                          size='small'
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="Scroll-Style tripsheet-table1">
-                        <table>
-
-                          <thead>
-                            <tr>
-                              <th className="table-head-booking table-heading-1"> Driver name</th>
-                              {/* <th className="table-head-booking">Driver phone</th> */}
-                              <th className="table-head-booking">Vehicle Name</th>
-                              {/* <th className="table-head-booking">Vehicle Type</th> */}
-                              <th className="table-head-booking">Vehicle Reg No</th>
-                              {/* <th className="table-head-booking">HireTypes</th> */}
-                              {/* <th className="table-head-booking">Grouphs</th> */}
-                              {/* <th className="table-head-booking">Active</th> */}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {driverdetails.length === 0 ? (
-                              <tr>
-                                <td colSpan={7}>No data available.</td>
-                              </tr>
-                            ) : (
-                              driverdetails.map((row) => (
-                                <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.driverName}</td>
-                                  {/* <td>{row.mobileNo}</td> */}
-                                  <td>{row.vehicleName}</td>
-                                  {/* <td>{row.vechtype}</td> */}
-                                  <td>{row.vehRegNo}</td>
-                                  {/* <td>{row.hiretypes}</td> */}
-                                  {/* <td>{row.Groups}</td> */}
-                                  {/* <td>{row.active}</td> */}
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
-
-                      </div>
-                    </div>
-                  </div>
                   <div className="input">
                     <div className="icone">
                       <StoreIcon color="action" />
@@ -1092,7 +951,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
+                          <TextField {...params} label="Service Station" autoComplete="password" name="department" inputRef={params.inputRef} />
                         )
                       }
                       }
@@ -1184,7 +1043,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }
                     />
                   </div>
-                  <div className="input">
+                  {/* <div className="input">
                     <div className="icone">
                       <AirlineStopsIcon color="action" />
                     </div>
@@ -1205,7 +1064,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }
                       onChange={handleChange}
                     />
-                  </div>
+                  </div> */}
                   <div className="input">
                     <div className="icone">
                       <DataUsageIcon color="action" />
@@ -1221,21 +1080,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <StreamIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="request"
-                      value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
-                      onChange={handleChange}
-                      label="Request"
-                      id="request"
-                      autoComplete="password"
-                    />
 
-                  </div>
                   <div className="input">
                     <div className="icone">
                       <BadgeIcon color="action" />
@@ -1245,11 +1090,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       name="customercode"
                       value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                       onChange={handleChange}
-                      label="Customer Code"
+                      label="Cost Code"
                       id="customer-customercode"
                       autoComplete="password"
                     />
                   </div>
+
 
 
                   <div className="input">
@@ -1275,128 +1121,135 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
 
 
-                  <div className="input">
+                  <div style={{ display: "grid" }} className="input">
 
-                    {kmValue?.shedOutDate && ((kmValue.startDate && ((Number(kmValue?.start_totalDays)) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>)))}
-
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Start Date"
-                        id="startdate"
-                        value={
-                          formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
-                        }
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, startDate: date }));
-                          handleDateChange(date, 'startdate');
-
-                          const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-                          const startdate = date;
-
-                          if (shedoutdate && startdate) {
-                            const shedoutdateObj = dayjs(shedoutdate);
-                            const startdateObj = dayjs(startdate);
-                            const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
-                            setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
+                    {startDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Start Date"
+                          id="startdate"
+                          value={
+                            formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
                           }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            setKmValue((prev) => ({ ...prev, startDate: date }));
+                            handleDateChange(date, 'startdate');
+
+                            // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                            // const startdate = date;
+
+                            // if (shedoutdate && startdate) {
+                            //   const shedoutdateObj = dayjs(shedoutdate);
+                            //   const startdateObj = dayjs(startdate);
+                            //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
                   </div>
 
 
-                  <div className="input">
-                    {kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>))}
+                  <div className="input" style={{ display: "grid" }}>
+                    {closeDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Close Date"
+                          id="closedate"
+                          value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
 
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
+                            handleDateChange(date, 'closedate')
+                            setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                            // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                            // const closeDate = date
+                            // const shedindate = kmValue.shedInDate
+
+                            // if (startDate && closeDate) {
+                            //   const startDateObj = dayjs(startDate);
+                            //   const closeDateObj = dayjs(closeDate);
+                            //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                            // }
+
+                            // if (shedindate && closeDate) {
+                            //   const closedateObj = dayjs(closeDate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Close Date"
-                        id="closedate"
-                        value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-
-                          handleDateChange(date, 'closedate')
-                          setKmValue(prev => ({ ...prev, closeDate: date }))
-
-                          const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-                          const closeDate = date
-                          const shedindate = kmValue.shedInDate
-
-                          if (startDate && closeDate) {
-                            const startDateObj = dayjs(startDate);
-                            const closeDateObj = dayjs(closeDate);
-                            const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                            setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
-                          }
-
-                          if (shedindate && closeDate) {
-                            const closedateObj = dayjs(closeDate);
-                            const shedindateObj = dayjs(shedindate);
-                            const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                            setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
                   </div>
 
 
-                  <div className="input">
+                  <div className="input" style={{ display: "grid" }}>
 
-                    {kmValue?.shedOutDate && (kmValue.shedInDate ? (kmValue.closeDate ? (Number(kmValue.close_shedOut_totalDays) < 1 && <lable className='invalid-km'>Invalid Date</lable>) : (Number(kmValue.shedIn_TotalDays) <= 0) && <lable className='invalid-km'>Invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)}
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
+                    {shedInDateCheck()}
+
+                    <div style={{ display: "flex" }}>
+
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="ShedIn Date"
+                          id="shedInDate"
+                          value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, 'shedInDate')
+                            // setKmValue(prev => ({ ...prev, shedInDate: date }))
+                            // const closedate = kmValue.closeDate;
+                            // const shedoutdate = kmValue.shedOutDate;
+                            // const shedindate = date
+
+                            // if (shedoutdate && shedindate) {
+                            //   const shedOutDateObj = dayjs(shedoutdate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
+                            // }
+
+                            // if (shedindate && closedate) {
+                            //   const closedateObj = dayjs(closedate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            // }
+
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="ShedIn Date"
-                        id="shedInDate"
-                        value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          handleDateChange(date, 'shedInDate')
-                          setKmValue(prev => ({ ...prev, shedInDate: date }))
-                          const closedate = kmValue.closeDate;
-                          const shedoutdate = kmValue.shedOutDate;
-                          const shedindate = date
 
-                          if (shedoutdate && shedindate) {
-                            const shedOutDateObj = dayjs(shedoutdate);
-                            const shedindateObj = dayjs(shedindate);
-                            const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
-                            setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
-                          }
-
-                          if (shedindate && closedate) {
-                            const closedateObj = dayjs(closedate);
-                            const shedindateObj = dayjs(shedindate);
-                            const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                            setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          }
-
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
                   </div>
 
 
@@ -1417,56 +1270,35 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </DemoItem>
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <RecentActorsIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
-                      onChange={handleChange}
-                      name="employeeno"
-                      label="Employee No"
-                      id="employeeno"
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <CurrencyRupeeTwoToneIcon color="action" />
-                    </div>
-                    <TextField
-                      margin="normal"
-                      size="small"
-                      name="advancepaidtovendor"
-                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
-                      onChange={handleChange}
-                      label="advancepaidtovendor"
-                      id="advance-paid-to-vendor"
-                      autoComplete="password"
-                    />
-                  </div>
 
-                  <div className="input time">
-                    <div className='icone'>
-                      <MdOutlineAccessTimeFilled />
-                    </div>
-                    <div className='input-type-grid'>
-                      <label>ShedOut Time</label>
-                      <input
-                        type="time"
-                        name="reporttime"
-                        value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
-                        onChange={(event) => {
 
-                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                          setBook({ ...book, reporttime: event.target.value });
-                          setreporttime(event.target.value);
 
-                        }}
-                      />
+                  <div className="input time" style={{ display: "grid" }}>
+                    {checkTimeandDateConflict()}
+
+                    <div style={{ display: "flex" }}>
+                      <div className='icone'>
+                        <MdOutlineAccessTimeFilled />
+                      </div>
+
+                      <div className='input-type-grid'>
+                        <label>ShedOut Time</label>
+                        <input
+                          type="time"
+                          name="reporttime"
+                          value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                          onChange={(event) => {
+
+                            setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                            setBook({ ...book, reporttime: event.target.value });
+                            setreporttime(event.target.value);
+
+                          }}
+                        />
+                      </div>
                     </div>
+
                   </div>
 
                   <div className="input time">
@@ -1554,29 +1386,48 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
 
-
-
                   <div className="input">
                     <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
                     </div>
                     <TextField
-                      name="shedout"
-                      value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (value >= 0) {
-                          handleChange(e)
-                          setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                        }
-                      }}
-
-                      label="Shed Out"
-                      id="shedout"
+                      name="totaltime"
+                      value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
+                      onChange={handleChange}
+                      label="Total Time"
+                      id="totaltime"
+                      // variant="standard"
                       size='small'
-                      type="number"
                       autoComplete="password"
                     />
+                  </div>
+
+
+
+                  <div className="input" style={{ display: "grid" }} >
+                    {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="shedout"
+                        value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            handleChange(e)
+                            setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                          }
+                        }}
+
+                        label="Shed Out"
+                        id="shedout"
+                        size='small'
+                        type="number"
+                        autoComplete="password"
+                      />
+                    </div>
                   </div>
 
 
@@ -1660,6 +1511,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
 
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+                    <TextField
+
+
+                      name="totalkm1"
+                      value={calculateTotalKilometers() || ''}
+                      onChange={handleChange}
+                      label="Total KM"
+                      id="totalkm1"
+                      type="number"
+                      size='small'
+                      autoComplete="password"
+                    />
+                  </div>
 
                   <div className="input">
                     <div className="icone">
@@ -1681,23 +1549,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-
-
-                      name="totalkm1"
-                      value={calculateTotalKilometers() || ''}
-                      onChange={handleChange}
-                      label="Total KM"
-                      id="totalkm1"
-                      type="number"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
+                  
 
                   <div className="input">
                     <div className="icone">
@@ -1714,21 +1566,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                    </div>
-                    <TextField
-                      name="totaltime"
-                      value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
-                      onChange={handleChange}
-                      label="Total Time"
-                      id="totaltime"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
+
                   <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faStamp} />
@@ -2225,7 +2063,302 @@ const TripSheet = ({ stationName, logoImage }) => {
                     )}
                   </div>
 
+
+                  
+
+                  <div className="input">
+                    <div className="icone">
+                      <StreamIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="request"
+                      value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
+                      onChange={handleChange}
+                      label="Request"
+                      id="request"
+                      autoComplete="password"
+                    />
+
+                  </div>
+
+                  <div className="input">
+                    <div className="icone">
+                      <RecentActorsIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
+                      onChange={handleChange}
+                      name="employeeno"
+                      label="Employee No"
+                      id="employeeno"
+                      autoComplete="password"
+                    />
+                  </div>
+                  <div className="input">
+                    <div className="icone">
+                      <CurrencyRupeeTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      size="small"
+                      name="advancepaidtovendor"
+                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
+                      onChange={handleChange}
+                      label="advancepaidtovendor"
+                      id="advance-paid-to-vendor"
+                      autoComplete="password"
+                    />
+                  </div>
+
+                  <div className="vehicle-confirm">
+                    <div className="input-field input-feild-vehicle-confirm">
+                      <div className="input">
+                        <div className="icone">
+                          <HowToRegIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-hireTypes"
+                          freeSolo
+                          sx={{ width: "100%" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
+                          value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                          options={HireTypes.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <AltRouteIcon color="action" />
+                        </div>
+                        <TextField
+                          name="travelsname"
+                          autoComplete="new-password"
+                          value={
+                            selectedCustomerDatas.travelsname ||
+                            formData.travelsname ||
+                            selectedCustomerData.travelsname ||
+                            book.travelsname ||
+                            ""
+                          }
+                          onChange={handleChange}
+                          label="Travels Name"
+                          id="travelsname"
+                          // variant="standard"
+                          size='small'
+                        />
+                      </div>
+
+                      <div className="input">
+                        <div className="icone">
+                          <CarCrashIcon color="action" />
+                        </div>
+                        <TextField
+                          margin="normal"
+                          size="small"
+                          id="vehRegNo"
+                          label="Vehicle Rigster No"
+                          name="vehRegNo"
+                          value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                          onChange={handleChange}
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <PiCarSimpleFill color="action" />
+                        </div>
+
+                        <Autocomplete
+                          fullWidth
+                          id="free-solo-vehType"
+                          freeSolo
+                          size="small"
+                          value={
+                            selectedCustomerDatas.vehType || formData.vehType ||
+                            selectedCustomerData.vehType ||
+                            book.vehType || ""
+                          }
+                          options={vehicaleinfos?.map((option) => ({
+                            label: option?.Option,
+                          }))}
+                          onChange={(event, value) =>
+                            handleAutocompleteChange(event, value, "vehType")
+                          }
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
+                            );
+                          }}
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <NoCrashIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-vehileName"
+                          freeSolo
+                          sx={{ width: "100%" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
+                          value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
+                          options={vehileNames?.map((option) => ({
+                            label: option,
+                          }))}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
+                          )}
+                        />
+
+
+                      </div>
+
+                      <div className="input">
+                        <div className="icone">
+                          <EmailIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          id="free-solo-Groups"
+                          freeSolo
+                          size="small"
+                          value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                          options={GroupTypes?.map((option) => ({
+                            label: option?.Option,
+                          }))}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                            );
+                          }}
+                        />
+                      </div>
+
+                      <div className="input">
+                        <div className="icone">
+                          <SensorOccupiedIcon color="action" />
+                        </div>
+                        <TextField
+                          name="driverName"
+                          className='full-width'
+                          value={selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName || ''}
+                          onChange={(e) => {
+                            handleChange(e)
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value })
+                            setFormData({ ...formData, driverName: e.target.value })
+                            setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
+                            setFormValues({ ...formValues, driverName: e.target.value })
+                            setBook({ ...book, driverName: e.target.value })
+                          }}
+
+                          label="Driver Name"
+                          id="driverName"
+                          // variant="standard"
+                          size='small'
+                          autoComplete="password"
+                          onKeyDown={handleKeyEnterDriverDetails}
+                        />
+
+                      </div>
+
+                      <div className="input">
+                        <div className="icone">
+                          <PhoneIphoneIcon color="action" />
+                        </div>
+                        <TextField
+                          name="mobileNo"
+                          className='full-width'
+                          value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                          onChange={handleChange}
+                          label="Cell"
+                          id="mobileNo"
+                          // variant="standard"
+                          size='small'
+                          autoComplete="password"
+                        />
+                      </div>
+
+
+
+                      <div className="input">
+                        <div className="icone">
+                          <AttachEmailIcon color="action" />
+                        </div>
+                        <TextField
+                          name="travelsemail"
+                          autoComplete="new-password"
+                          value={
+                            formData.travelsemail ||
+                            selectedCustomerData.travelsemail ||
+                            book.travelsemail ||
+                            ""
+                          }
+                          onChange={handleChange}
+                          label="Travels Email"
+                          id="travelsemail"
+                          // variant="standard"
+                          size='small'
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="Scroll-Style tripsheet-table1">
+                        <table>
+
+                          <thead>
+                            <tr>
+                              <th className="table-head-booking table-heading-1"> Driver name</th>
+                              {/* <th className="table-head-booking">Driver phone</th> */}
+                              <th className="table-head-booking">Vehicle Name</th>
+                              {/* <th className="table-head-booking">Vehicle Type</th> */}
+                              <th className="table-head-booking">Vehicle Reg No</th>
+                              {/* <th className="table-head-booking">HireTypes</th> */}
+                              {/* <th className="table-head-booking">Grouphs</th> */}
+                              {/* <th className="table-head-booking">Active</th> */}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {driverdetails.length === 0 ? (
+                              <tr>
+                                <td colSpan={7}>No data available.</td>
+                              </tr>
+                            ) : (
+                              driverdetails.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.driverName}</td>
+                                  {/* <td>{row.mobileNo}</td> */}
+                                  <td>{row.vehicleName}</td>
+                                  {/* <td>{row.vechtype}</td> */}
+                                  <td>{row.vehRegNo}</td>
+                                  {/* <td>{row.hiretypes}</td> */}
+                                  {/* <td>{row.Groups}</td> */}
+                                  {/* <td>{row.active}</td> */}
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+
               )}
 
 
@@ -2340,7 +2473,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <div className="input-field">
 
                       <div className="input">
-                      
+
 
                         <TextField
                           name="pack"
@@ -2354,74 +2487,74 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                       <div className="input">
-                      <Box sx={{ minWidth: 200 }}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Rate For - F3</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={type}
-                            label="Rate For - F3"
-                            onChange={handlevehiecleChange}
-                          >
-                            <MenuItem value="sedan">sedan</MenuItem>
-                            <MenuItem value="Xuv">Xuv</MenuItem>
-                            <MenuItem value="Hatch back">Hatch back</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
+                        <Box sx={{ minWidth: 200 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Rate For - F3</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={type}
+                              label="Rate For - F3"
+                              onChange={handlevehiecleChange}
+                            >
+                              <MenuItem value="sedan">sedan</MenuItem>
+                              <MenuItem value="Xuv">Xuv</MenuItem>
+                              <MenuItem value="Hatch back">Hatch back</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </div>
-                      <div className="input" style={{alignItems:"center", gap:"5px", display:"flex"}}> 
-                        <p style={{margin:"0px"}}>Duty</p>
-                    <Autocomplete
-                      fullWidth
-                      size="small"
-                      id="free-solo-duty"
-                      freeSolo
-                      sx={{ width: "100%" }}
-                      onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                      value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                      options={Duty.map((option) => ({
-                        label: option.option,
-                      }))}
-                      getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
-                        )
-                      }
-                      }
-                    />
-                
+                      <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                        <p style={{ margin: "0px" }}>Duty</p>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-duty"
+                          freeSolo
+                          sx={{ width: "100%" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
+                          value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                          options={Duty.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+
                       </div>
                     </div>
                     <div className="input-field">
-                    <div className="input" >
-                  
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="start date"
-                        format="DD/MM/YYYY"
-                        // value={fromDate}
-                        // onChange={(date) => setFromDate(date)}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="Closing Date"
-                        format="DD/MM/YYYY"
-                        // value={toDate}
-                        // onChange={(date) => setToDate(date)}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </div>
+                      <div className="input" >
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={["DatePicker", "DatePicker"]}>
+                            <DatePicker
+                              label="start date"
+                              format="DD/MM/YYYY"
+                            // value={fromDate}
+                            // onChange={(date) => setFromDate(date)}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={["DatePicker", "DatePicker"]}>
+                            <DatePicker
+                              label="Closing Date"
+                              format="DD/MM/YYYY"
+                            // value={toDate}
+                            // onChange={(date) => setToDate(date)}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
 
 
 
@@ -2441,56 +2574,56 @@ const TripSheet = ({ stationName, logoImage }) => {
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
-                      <div className="" style={{alignItems:"center", gap:"5px", display:"flex"}}> 
-                      <Checkbox {...label} />
-                      <p style={{margin:"0px"}}>Lock</p>
+                      <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                        <Checkbox {...label} />
+                        <p style={{ margin: "0px" }}>Lock</p>
                       </div>
                     </div>
                     <div className="input-field">
 
 
 
-                      
 
 
-                    <div className="input">
 
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer
-                        components={[
-                          'TimePicker',
-                        ]}
-                      >
-                       
-                        
-                        <DemoItem label="Start Time">
-                          <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
-                        </DemoItem>
-                       
-                      </DemoContainer>
-                    </LocalizationProvider>
-                    </div>
+                      <div className="input">
 
-                    <div className="input">
-
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer
-                        components={[
-                          'TimePicker',
-                        ]}
-                      >
-                      
-                        
-                        <DemoItem label="Closing Time">
-                          <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
-                        </DemoItem>
-                      
-                      </DemoContainer>
-                    </LocalizationProvider>
-                    </div>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={[
+                              'TimePicker',
+                            ]}
+                          >
 
 
-                    <div className="input" style={{marginTop:'45px'}}>
+                            <DemoItem label="Start Time">
+                              <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
+                            </DemoItem>
+
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
+
+                      <div className="input">
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={[
+                              'TimePicker',
+                            ]}
+                          >
+
+
+                            <DemoItem label="Closing Time">
+                              <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
+                            </DemoItem>
+
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
+
+
+                      <div className="input" style={{ marginTop: '45px' }}>
                         <TextField
                           name="Total Time"
                           // value={calcPackage || formData.calcPackage || ''}
@@ -2505,11 +2638,11 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                       <Button
-                          variant='contained'
-                          style={{marginTop:'45px'}}
-                        >
-                          Billing
-                        </Button>
+                        variant='contained'
+                        style={{ marginTop: '45px' }}
+                      >
+                        Billing
+                      </Button>
 
 
 
@@ -2557,7 +2690,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <div className="input-field">
 
 
-                    <div className="input" >
+                      <div className="input" >
                         <TextField
                           name="starting Kilometers"
                           // value={calcPackage || formData.calcPackage || ''}
@@ -2570,8 +2703,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
 
-                      
-                    <div className="input" >
+
+                      <div className="input" >
                         <TextField
                           name="closing Kilometers"
                           // value={calcPackage || formData.calcPackage || ''}
@@ -2585,8 +2718,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
 
 
-                      
-                    <div className="input" >
+
+                      <div className="input" >
                         <TextField
                           name="Total kilometers"
                           // value={calcPackage || formData.calcPackage || ''}
@@ -2648,9 +2781,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <div className="input-field">
 
 
-                      
-                    <div className="input">
-                    <TextField
+
+                      <div className="input">
+                        <TextField
                           name="Remarks"
                           // value={calcPackage || formData.calcPackage || ''}
                           label="Remarks"
@@ -2659,14 +2792,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                           // variant="standard"
                           autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
-                          />
+                        />
 
-                    </div>
+                      </div>
 
 
 
-                    <div className="input">
-                    <TextField
+                      <div className="input">
+                        <TextField
                           name="amount8"
                           value={night_totalAmount || 0}
                           size="small"
@@ -2676,9 +2809,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         // variant="standard"
                         />
 
-                    </div>
+                      </div>
 
-                    <div className="input">
+                      <div className="input">
                         <Button
                           variant='contained'
                         >
@@ -2742,13 +2875,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                     <div className="input-field">
 
-                      <p style={{textDecoration:'underline', color:"#5356FF"}}>Click Here to load orginals </p>
-                    
-                        <Button
-                          variant='contained'
-                        >
-                          CBILLED
-                        </Button>
+                      <p style={{ textDecoration: 'underline', color: "#5356FF" }}>Click Here to load orginals </p>
+
+                      <Button
+                        variant='contained'
+                      >
+                        CBILLED
+                      </Button>
 
 
                       {/* <span>Bata</span>

@@ -393,18 +393,19 @@ const PackageRateEntery = ({ organizationNames }) => {
                   {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
                     <MdCancelPresentation className='icon-cancel' />
                   </div>}
+                  <div className="input package-rate-entry-edit-division">
+                    {isEditMode ? (
+                      <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                    ) : (
+                      <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
 
-          <div className="input package-rate-entry-edit-division">
-            {isEditMode ? (
-              <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
-            ) : (
-              <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
-            )}
-          </div>
+
         </div>
 
         <div className='alert-popup-main'>

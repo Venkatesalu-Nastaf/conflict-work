@@ -29,6 +29,10 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import { MdOutlineAccessTimeFilled } from "react-icons/md";
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -152,9 +156,12 @@ const DriverBataRate = () => {
                 <div className="input">
                   <Button variant="contained">Show</Button>
                 </div>
-              </div>
-              <div className="input-field DriverBataRate-inputfeild">
+                {/* </div>
+              <div className="input-field DriverBataRate-inputfeild"> */}
                 <div className="input">
+                  <div className="icone">
+                    <EngineeringIcon />
+                  </div>
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -175,6 +182,9 @@ const DriverBataRate = () => {
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <MdOutlineAccessTimeFilled />
+                  </div>
                   <TextField
                     type='number'
                     size="small"
@@ -188,6 +198,9 @@ const DriverBataRate = () => {
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <TextField
                     type='number'
                     size="small"
@@ -201,6 +214,9 @@ const DriverBataRate = () => {
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CurrencyRupeeRoundedIcon color="action" />
+                  </div>
                   <TextField
                     type='number'
                     size="small"
@@ -210,15 +226,18 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraPerHoursPrice || book.ExtraPerHoursPrice}
                     onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
+                  // InputProps={{
+                  //   startAdornment: (
+                  //     <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                  //     </InputAdornment>
+                  //   ),
+                  // }}
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CurrencyRupeeRoundedIcon color="action" />
+                  </div>
                   <TextField
                     type='number'
                     size="small"
@@ -228,15 +247,18 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraPerDayPrice || book.ExtraPerDayPrice}
                     onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                        </InputAdornment>
-                      ),
-                    }}
+                  // InputProps={{
+                  //   startAdornment: (
+                  //     <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                  //     </InputAdornment>
+                  //   ),
+                  // }}
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <CurrencyRupeeRoundedIcon color="action" />
+                  </div>
                   <TextField
                     type='number'
                     size="small"

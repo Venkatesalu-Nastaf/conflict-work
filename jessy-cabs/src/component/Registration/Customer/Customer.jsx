@@ -739,7 +739,7 @@ const Customer = ({ stationName }) => {
             </div>
           </div>
           <div className="customer-list-table-container-download">
-            <div className="Download-btn-customer">
+            <div className="Download-btn">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>

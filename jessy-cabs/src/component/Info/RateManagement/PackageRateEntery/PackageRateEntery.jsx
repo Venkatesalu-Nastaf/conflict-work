@@ -190,7 +190,7 @@ const PackageRateEntery = ({ organizationNames }) => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
+          {!isEditMode && <div className='add-packages-btn'><Button variant="contained" onClick={handleAddExtra} >Add Packages</Button></div>}
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">

@@ -14,14 +14,14 @@
 }
 
 .form-container-UserSettings .userinfo-form {
-    height: 70vh;
+    /* height: 70vh; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-UserSettings {
@@ -42,9 +42,9 @@
     margin: 0px 20px;
 }
 
-.Download-btn {
+/* .Download-btn {
     padding: 20px;
-}
+} */
 
 /* .form-container-UserSettings .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;

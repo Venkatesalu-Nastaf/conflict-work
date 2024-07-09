@@ -121,6 +121,7 @@
   grid-template-columns: 0rem auto 84%;
   grid-auto-flow: row;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 1219px) {

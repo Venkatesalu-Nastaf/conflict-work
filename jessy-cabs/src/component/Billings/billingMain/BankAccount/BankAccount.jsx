@@ -74,7 +74,7 @@ const BankAccount = () => {
         <div className="total-account">
           <div className='amount-calculate'>
             <div className='total-inputs' >
-              <label htmlFor="totalCapital">Total Capital:</label>
+              <label htmlFor="totalCapital"  style={{display:"flex"}}><span style={{marginRight:"2px"}}>Total</span><span>Capital:</span> </label>
               <input type="number" id="totalCapital" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
@@ -87,7 +87,7 @@ const BankAccount = () => {
             </div>
           </div>
         </div>
-        <div className="BankAccount-detail-container-main">
+        {/* <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">
               <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
@@ -166,10 +166,88 @@ const BankAccount = () => {
               </div>
             </div>
           )}
+        </div> */}
+        <div className="BankDetails-mainContainer" >
+        <div className="BankAccount-detail-container-main">
+          <div className="BankAccount-first-container">
+            <div className="input bankaddbtn">
+              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
+                Add bank
+              </Button>
+            </div>
+          </div>
+          {showAddBankForm && (
+            <div className="AddBankContainer-BankAccount">
+              <div className="input-field input-field-bankaccount">
+                <div className="input input-bankaccount">
+                  <div className="icone">
+                    <AiFillBank color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    label="Bank Name"
+                    name="bankname"
+                    id="banknameHDFC"
+                    autoFocus
+                    value={book.bankname || ''}
+                    onChange={handleChange}
+                  />                 
+                </div>
+                <div className="input input-bankaccount">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faSackDollar} size="xl" />
+                  </div>
+                  <TextField
+                    type="number"
+                    size="small"
+                    label="Capital Amount"
+                    name="capital"
+                    id="capital"
+                    value={book.capital || ''}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="input input-bankaccount">
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo-AccountType"
+                    freeSolo
+                    sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
+                    value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
+                    options={AccountType.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || book.AccountType || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+                <div className="inpu">
+                  <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
+                    Add
+                  </Button>
+                </div>
+                <div className="inpu">
+                  <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
+                    <CancelIcon />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="BankDetails-mainContainer">
           {bankDetails.map((bankDetail, index) => (
-            <div className="addedbanks-Details-BankAccount" key={index}>
+            
+ <div className="addedbanks-Details-BankAccount" key={index}>
               <div className="input-field input-field-bankaccount input-Field-bank-account">
 
                 <div className="input input-bankname">
@@ -260,6 +338,8 @@ const BankAccount = () => {
                 </div>
               </div>
             </div>
+           
+           
           ))}
         </div>
         <div className='alert-popup-main'>

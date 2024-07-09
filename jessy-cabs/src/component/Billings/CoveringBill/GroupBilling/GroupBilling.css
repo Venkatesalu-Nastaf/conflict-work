@@ -33,14 +33,14 @@
 }
 
 .Download-btn {
-    padding: 20px;
+    padding-bottom: 20px;
 }
 
 .copy-title-btn-GroupBilling {
     width: 100%;
     margin-top: 30px;
     background-color: var(--glass);
-    padding: 10px 20px 35px;
+    padding: 10px 20px 10px;
     border: 2px solid #ccc;
     border-radius: 15px;
     margin-left: 20px;
@@ -77,7 +77,7 @@
 
 .inputfeild-group-billing {
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 @keyframes spin {
@@ -133,4 +133,12 @@
 .group-billing-table {
     height: 400px;
     width: 100%;
+}
+
+.download-container-groupbilling{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* padding: 15px; */
+
 }

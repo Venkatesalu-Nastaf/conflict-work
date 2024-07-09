@@ -106,7 +106,7 @@
 .DriverBataRate-inputfeild {
     flex-wrap: wrap !important;
     margin-top: 30px;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 

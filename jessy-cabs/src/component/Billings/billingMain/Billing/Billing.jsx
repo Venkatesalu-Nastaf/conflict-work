@@ -1386,53 +1386,58 @@ const Billing = () => {
                         </div>
                     }
                 </div>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                    <StyledSpeedDial
-                        ariaLabel="SpeedDial playground example"
-                        icon={<SpeedDialIcon />}
-                        direction="left"
-                    >
 
-                        {Billing_new === 1 && (
+                <div style={{position: 'relative', right: '86px'}}>
+                    <Box className='' sx={{ position: "relative", mt: 3, height: 320 }}>
+                        <StyledSpeedDial
+                            ariaLabel="SpeedDial playground example"
+                            icon={<SpeedDialIcon />}
+                            direction="left"
+                        >
+
+                            {Billing_new === 1 && (
+                                <SpeedDialAction
+                                    key="Add"
+                                    icon={<BookmarkAddedIcon />}
+                                    tooltipTitle="Add"
+                                    onClick={(event) => handleClick(event, "Add")}
+                                />
+                            )}
+                            {Billing_modify === 1 && (
+                                <SpeedDialAction
+                                    key="edit"
+                                    icon={<ModeEditIcon />}
+                                    tooltipTitle="Edit"
+                                    onClick={(event) => handleClick(event, "Edit")}
+                                />
+                            )}
+                            {Billing_delete === 1 && (
+                                <SpeedDialAction
+                                    key="delete"
+                                    icon={<DeleteIcon />}
+                                    tooltipTitle="Delete"
+                                    onClick={(event) => handleClick(event, "Delete")}
+                                />
+                            )}
                             <SpeedDialAction
-                                key="Add"
-                                icon={<BookmarkAddedIcon />}
-                                tooltipTitle="Add"
-                                onClick={(event) => handleClick(event, "Add")}
+                                key="Cancel"
+                                icon={<CancelPresentationIcon />}
+                                tooltipTitle="Cancel"
+                                onClick={(event) => handleClick(event, "Cancel")}
                             />
-                        )}
-                        {Billing_modify === 1 && (
-                            <SpeedDialAction
-                                key="edit"
-                                icon={<ModeEditIcon />}
-                                tooltipTitle="Edit"
-                                onClick={(event) => handleClick(event, "Edit")}
-                            />
-                        )}
-                        {Billing_delete === 1 && (
-                            <SpeedDialAction
-                                key="delete"
-                                icon={<DeleteIcon />}
-                                tooltipTitle="Delete"
-                                onClick={(event) => handleClick(event, "Delete")}
-                            />
-                        )}
-                        <SpeedDialAction
-                            key="Cancel"
-                            icon={<CancelPresentationIcon />}
-                            tooltipTitle="Cancel"
-                            onClick={(event) => handleClick(event, "Cancel")}
-                        />
-                        {Billing_read === 1 && (
-                            <SpeedDialAction
-                                key="Print"
-                                icon={<PrintIcon />}
-                                tooltipTitle="Print"
-                                onClick={(event) => handleClick(event, "Print")}
-                            />
-                        )}
-                    </StyledSpeedDial>
-                </Box>
+                            {Billing_read === 1 && (
+                                <SpeedDialAction
+                                    key="Print"
+                                    icon={<PrintIcon />}
+                                    tooltipTitle="Print"
+                                    onClick={(event) => handleClick(event, "Print")}
+                                />
+                            )}
+                        </StyledSpeedDial>
+                    </Box>
+                </div>
+
+
             </div>
         </div>
     )

@@ -320,9 +320,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
-  const vpermit = parseInt(vpermettovendor)
-  const vendorToll = parseInt(vendortoll)
-  const parkpermit = park + permitcharge + tollAmount + vpermit + vendorToll
+
+  const parkpermit = park + permitcharge + tollAmount 
   const FullAmount = fullAmount + cgst + sgst + parkpermit
   const formattedFullAmount = FullAmount;
 
@@ -420,7 +419,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
                             <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
-                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{parseInt(item.permit) + parseInt(item.parking) + parseInt(item.toll) + parseInt(item.vpermettovendor) + parseInt(item.vendortoll)}</Text></View>
+                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{parseInt(item.permit) + parseInt(item.parking) + parseInt(item.toll) }</Text></View>
                             <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
                           </React.Fragment>
                         </View>

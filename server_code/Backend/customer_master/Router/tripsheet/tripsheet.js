@@ -1166,6 +1166,27 @@ router.get(`/ge-tVehicleName`, (req, res) => {
 })
 
 
+// to fetch cancel tripsheet data
+router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
+    const vehicleNo = req.params.VehicleNo
+    const status = 'Transfer_Closed';
+    // sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
+
+    sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
+    db.query(sql, [vehicleNo, status], (err, result) => {
+        if (err) {
+            console.log("err", err)
+            res.json({ message: "error fetching data", success: false })
+        }
+
+        if (result) {
+            res.status(200).json(result)
+        }
+    })
+
+})
+
+
 
 
 module.exports = router; 

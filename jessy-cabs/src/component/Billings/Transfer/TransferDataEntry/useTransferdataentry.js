@@ -386,6 +386,7 @@ const useTransferdataentry = () => {
     //calculate total amount in column
     useEffect(() => {
         const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.totalcalcAmount || 0), 0);
+        const cal = rows.map(li=>li.total)
         if (!isNaN(calculatedTotalAmount)) {
             setTotalAmount(calculatedTotalAmount.toFixed(2));
         } else {

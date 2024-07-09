@@ -60,13 +60,13 @@ const useCoversubmit = () => {
             row['InvoiceNo'],
             row['InvoiceDate'],
             row['Customer'],
-            row['fromdate'],
-            row['todate'],
-            row['trips'],
-            row['Totalamount']
+            row['FromDate'],
+            row['ToDate'],
+            row['Trips'],
+            row['Amount']
         ]);
         pdf.autoTable({
-            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'From Date', 'To Date', 'Trips', 'Amount']],
+            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
             body: tableData,
             startY: 20,
         });

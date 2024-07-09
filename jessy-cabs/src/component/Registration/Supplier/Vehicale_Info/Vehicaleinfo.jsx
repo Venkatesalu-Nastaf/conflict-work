@@ -964,7 +964,7 @@ const Vehicaleinfo = ({ stationName }) => {
         </div>
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn-Booking">
+            <div className="">
               <div className="input-field vehicle-info-search-input-field">
                 <div className="input">
                   <div className="icone">

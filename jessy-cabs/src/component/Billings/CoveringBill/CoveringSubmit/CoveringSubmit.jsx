@@ -163,9 +163,9 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="input">
+                                {/* <div className="input"> */}
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
-                                </div>
+                                {/* </div> */}
                             </div>
                         </div>
                     </div>

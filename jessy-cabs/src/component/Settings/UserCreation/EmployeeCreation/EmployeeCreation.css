@@ -132,6 +132,7 @@
 
 .search-profile {
   display: flex;
+  height: 360px;
 }
 
 .user-name-text {

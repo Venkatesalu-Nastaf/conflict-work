@@ -436,11 +436,11 @@ const EmployeeCreation = ({ stationName }) => {
                 deleteState={deleteState}
               />}
             </div>
-            {!isEditMode &&
+            {/* {isEditMode == true && */}
               <div style={{ display: "flex", justifyContent: "end" }}>
                 <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
               </div>
-            }
+            {/* } */}
           </div>
         </form>
       </div>

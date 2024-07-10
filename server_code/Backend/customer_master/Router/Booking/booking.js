@@ -229,6 +229,7 @@ router.get('/name-customers/:customer', (req, res) => {
 
 router.get('/drivername-details/:driver', (req, res) => {
     const customer = req.params.driver;
+    console.log("customer", customer)
     // Modify the query to use the LIKE operator for partial matching
     // db.query('SELECT * FROM  vehicleinfo WHERE driverName OR  vehRegNo LIKE ? ', [`${customer}%`], (err, result) => {
     db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`%${customer}%`, `%${customer}%`], (err, result) => {

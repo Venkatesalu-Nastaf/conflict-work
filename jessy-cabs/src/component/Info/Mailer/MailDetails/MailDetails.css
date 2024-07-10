@@ -83,8 +83,8 @@
 
 .detail-container-main-mailDetails {
     border-top: 1px solid #ccc;
-    display: flex;
-    justify-content: center;
+    /* display: flex;
+    justify-content: center; */
     padding: 30px;
     flex-wrap: wrap;
 }
@@ -205,11 +205,11 @@
 }
 
 .input-mailer {
-    width: 400px !important;
+    width: 100% !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 @media screen and (min-width:769px) and (max-width:820px) {
@@ -242,6 +242,8 @@
 
 .mail-details-input-field {
     justify-content: center;
+     /* position: relative;
+     left:200px ; */
 }
 
 .mail-message-division {
@@ -265,3 +267,11 @@
 
 
 /* .container-left-mailDetails{} */
+
+.mail-textarea1-btn{
+    /* gap: 173px !important; */
+    justify-content: space-between;
+}
+.input-feild-mailer{
+    width: 60%;
+}

@@ -77,4 +77,36 @@ router.get('/ratemanagement', (req, res) => {
     });
 });
 
+router.get('/ratemanagement-show', (req, res) => {
+    const { rateType, orgName, vehicleType } = req.query
+    console.log("data", rateType, orgName, vehicleType)
+    let sql = 'SELECT * FROM ratemanagement where 1=1'
+    let params = []
+
+    if (rateType) {
+        sql += ' and ratetype=?'
+        params.push(rateType)
+    }
+
+    if (orgName) {
+        sql += ' and OrganizationName=?'
+        params.push(orgName)
+    }
+
+    if (vehicleType) {
+        sql += ' and vehicleName=?'
+        params.push(vehicleType)
+    }
+
+
+    db.query(sql, params, (err, results) => {
+        if (err) {
+            console.log("error", err)
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log("results", results)
+        return res.status(200).json(results);
+    });
+});
+
 module.exports = router;

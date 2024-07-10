@@ -747,11 +747,6 @@ const useBooking = () => {
   };
 
   const [vehileName, setVehicleName] = useState([])
-
-
-
-
-
   useEffect(() => {
     const fetchgetvehicleName = async () => {
       try {
@@ -769,6 +764,8 @@ const useBooking = () => {
     };
     fetchgetvehicleName()
   }, [apiUrl])
+
+
   useEffect(() => {
     const fetchData = async () => {
       const organizationname = localStorage.getItem('usercompany');

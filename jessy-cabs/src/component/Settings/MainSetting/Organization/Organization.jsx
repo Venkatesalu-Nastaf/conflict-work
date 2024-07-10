@@ -127,8 +127,8 @@ const Organization = ({ logoImage }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                </div>
-                                <div className="input-field organisation-details-input-feilds">
+                                {/* </div>
+                                <div className="input-field organisation-details-input-feilds"> */}
                                     <div className="input input-buttons-small">
                                         <div className="icone">
                                             <SettingsPhoneIcon color="action" />
@@ -247,7 +247,7 @@ const Organization = ({ logoImage }) => {
                                     label="Address"
                                     id="remark"
                                     multiline
-                                    rows={5}
+                                    rows={3}
                                     autoComplete="password"
                                 />
                             </div>

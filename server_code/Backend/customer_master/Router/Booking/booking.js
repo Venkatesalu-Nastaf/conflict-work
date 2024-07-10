@@ -112,6 +112,7 @@ router.delete('/booking/:bookingno', async (req, res) => {
     //     }
     //     return res.status(200).json({ message: "Data deleted successfully" });
     // });
+
 });
 
 
@@ -137,6 +138,8 @@ router.put('/booking/:bookingno', async (req, res) => {
             success: false
         })
     }
+
+
     //--------------------------------------------------------------------------------------------------
     // db.query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno], (err, result) => {
     //     // if (err) return res.status(500).json({ message: "Failed to update data in MySQL", error: true, success: false });
@@ -168,6 +171,7 @@ router.put('/booking/:bookingno', async (req, res) => {
     //-------------------------------------------------------------------------------------------------
 }
 );
+
 
 //booking number change
 router.get('booking', async (req, res) => {
@@ -205,6 +209,7 @@ router.get('booking', async (req, res) => {
 //         return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
 //     });
 // });
+
 // collect data from vehicleInfo database
 router.get('/name-customers/:customer', (req, res) => {
     const customer = req.params.customer; // Access the parameter using req.params
@@ -224,10 +229,11 @@ router.get('/name-customers/:customer', (req, res) => {
 
 router.get('/drivername-details/:driver', (req, res) => {
     const customer = req.params.driver;
+    console.log("customer", customer)
     // Modify the query to use the LIKE operator for partial matching
     // db.query('SELECT * FROM  vehicleinfo WHERE driverName OR  vehRegNo LIKE ? ', [`${customer}%`], (err, result) => {
-    db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`${customer}%`, `${customer}%`], (err, result) => {
-
+    db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`%${customer}%`, `%${customer}%`], (err, result) => {
+        console.log("result", result)
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
         }
@@ -316,8 +322,8 @@ router.get('/drivername-details/:driver', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
-        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass,"mailto")
-
+        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
+        const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -370,7 +376,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Date:</strong></td>
-                            <td style="padding: 8px;color: #000"">${startdate}</td>
+                            <td style="padding: 8px;color: #000"">${formattedFromDate}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Time (24):</strong></td>
@@ -431,7 +437,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
-                            <td style="padding: 8px;">${startdate}</td>
+                            <td style="padding: 8px;">${formattedFromDate}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>

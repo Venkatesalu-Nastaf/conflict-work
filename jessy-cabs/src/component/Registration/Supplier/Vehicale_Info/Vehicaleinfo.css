@@ -270,7 +270,7 @@
 .vehicle-info-search-input-field {
   flex-wrap: wrap;
   justify-content: center;
-  margin: 15px 0px 25px 0px;
+  margin: 15px 0px 5px 0px;
 }
 
 .vehicle-info-main-table {
@@ -322,4 +322,7 @@
 .rc-book-copy-tooltip:hover .rc-book-copy-tooltiptext,
 .fc-copy-tooltip:hover .fc-copy-tooltiptext {
   visibility: visible;
+}
+.Download-btn-vehiecleinfo{
+  padding: 10px 20px 20px 20px;
 }

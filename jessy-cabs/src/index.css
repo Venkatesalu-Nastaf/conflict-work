@@ -655,16 +655,19 @@ body {
   overflow: scroll;
   height: 80vh;
   width: 81vw;
+  margin: 0px 3px;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
+  transition: all 0.3s ease;
 }
 
 @media screen and (min-width: 769px) {
   .side-bar-menu-close .main-content-container {
-    width: 91vw;
+    width: 92vw;
+    margin: 0px 4px;
   }
 }
 

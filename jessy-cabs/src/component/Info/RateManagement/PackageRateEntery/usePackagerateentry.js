@@ -54,6 +54,8 @@ const usePackagerateentry = () => {
         Validity: '',
     });
 
+    const [ratename,setRatename]=useState([])
+
     //------------------------------
 
     const apiUrl = APIURL;
@@ -91,6 +93,24 @@ const usePackagerateentry = () => {
         };
         fetchOrganizationnames()
     }, [apiUrl])
+
+    useEffect(() => {
+        const fetchOrganizationnames = async () => {
+            // if()
+            try {
+                const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);
+                const data = response.data
+                console.log(data,"rdddd")
+                setRatename(data.map(row=>row.ratename))
+                
+                
+            }
+            catch (error) {
+                console.log(error, "error");
+            }
+        };
+        fetchOrganizationnames()
+    }, [apiUrl,commonData.ratetype])
 
 
     //// popup-----------------------------------------
@@ -390,7 +410,7 @@ const usePackagerateentry = () => {
         isEditMode,
         handleEdit,
         datevalidity,
-        handleAddExtra, fieldSets, commonData, handleCancelUI,
+        handleAddExtra, fieldSets, commonData, handleCancelUI,ratename
 
     };
 };

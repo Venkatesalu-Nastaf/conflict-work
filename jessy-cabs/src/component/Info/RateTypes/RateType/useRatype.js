@@ -12,7 +12,9 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "driverid", headerName: "Driver ID", width: 130 },
-    { field: "ratename", headerName: "Rate Type", width: 130 },
+    { field: "stations", headerName: "Station", width: 130 },
+    { field: "ratetype", headerName: "Rate Type", width: 130 },
+    { field: "ratename", headerName: "Ratename", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
     { field: "starttime", headerName: "Start Date", width: 230 },
     { field: "closetime", headerName: "Close Date", width: 230 },
@@ -73,19 +75,7 @@ const useRatype = () => {
     }, [error, success, warning, info]);
 
 
-    //---------------------------------------------------
 
-    // const convertToCSV = (data) => {
-    //     const header = columns.map((column) => column.headerName).join(",");
-    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //     return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //     const csvData = convertToCSV(rows);
-    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //     saveAs(blob, "customer_details.csv");
-    // };
-    // console.log(rows,"rate")
 
 
     const handleExcelDownload = async () => {
@@ -305,11 +295,12 @@ const useRatype = () => {
     const [book, setBook] = useState({
         driverid: '',
         stations: '',
+        ratetype:'',
         ratename: '',
         validity: '',
         active: '',
-        starttime: '',
-        closetime: '',
+        starttime:dayjs(),
+        closetime:dayjs(),
     });
 
     const handleChange = (event) => {
@@ -354,6 +345,7 @@ const useRatype = () => {
         setBook((prevBook) => ({
             ...prevBook,
             driverid: '',
+            ratetype:'',
             stations: '',
             ratename: '',
             validity: '',
@@ -384,6 +376,7 @@ const useRatype = () => {
         try {
             const updatedBook = {
                 stations: book.stations || selectedCustomerData.stations,
+                ratetype:book.ratetype || selectedCustomerData.ratetype,
                 ratename: book.ratename || selectedCustomerData.ratename,
                 validity: book.validity || selectedCustomerData.validity,
                 active: book.active || selectedCustomerData.active,
@@ -425,6 +418,7 @@ const useRatype = () => {
         const updatedCustomer = {
             driverid: selectedCustomer,
             stations: selectedCustomerData.stations,
+            ratetype:selectedCustomerData.ratetype,
             ratename: selectedCustomerData.ratename,
             validity: selectedCustomerData.validity,
             active: selectedCustomerData.active,

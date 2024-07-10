@@ -231,13 +231,12 @@ function App() {
         );
         const customerDetails = response.data;
         setCustomerData(customerDetails)
-        // console.log("customerDetails.customer", customerDetails)
       } catch (err) {
         console.log("Error", err)
       }
     }
     fetchCustomer()
-  },[apiUrl])
+  }, [apiUrl])
 
 
 

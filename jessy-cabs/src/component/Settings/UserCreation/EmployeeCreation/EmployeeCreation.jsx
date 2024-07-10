@@ -404,7 +404,7 @@ const EmployeeCreation = ({ stationName }) => {
                   }}
                   style={{ marginLeft: '15px' }}
                 />
-                <div className='Scroll-Style-hide' style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+                <div className='Scroll-Style-hide user-table-permission-main-div'>
                   {filteruser.map((row, index) => (
                     <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                       togglePermission(row);

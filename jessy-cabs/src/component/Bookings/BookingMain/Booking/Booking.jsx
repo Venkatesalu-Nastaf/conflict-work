@@ -108,6 +108,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = ({ stationName, customerData }) => {
 
+  const CustomerNames = customerData.map((el) => ({ customer: el.customer }))
+
   const apiUrl = APIURL;
   const {
     selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
@@ -229,6 +231,13 @@ const Booking = ({ stationName, customerData }) => {
     setBookingStatus(event.target.value);
   };
 
+  const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
+
+  const serviceStationFilterFun = () => {
+    const filterData = customerData.filter(item => item.customer === customerName)
+    return filterData.length > 0 ? filterData[0].servicestation : "";
+  }
+
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -267,7 +276,7 @@ const Booking = ({ stationName, customerData }) => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={
-                      bookingStatus ||
+                      bookingStatus || "pending" ||
                       ""
                     }
                     label="Status"
@@ -1051,7 +1060,7 @@ const Booking = ({ stationName, customerData }) => {
                   book.customer ||
                   ""}
 
-                options={customerData?.map((option) => ({
+                options={CustomerNames?.map((option) => ({
                   label: option.customer,
                 }))}
                 getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer ||
@@ -1213,7 +1222,7 @@ const Booking = ({ stationName, customerData }) => {
                 id="servicestation"
                 freeSolo
                 size="small"
-                value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
                 options={stationName?.map((option) => ({
                   label: option?.Stationname,
                 }))}
@@ -1565,6 +1574,42 @@ const Booking = ({ stationName, customerData }) => {
 
               />
             </div> */}
+
+
+
+            <div className="input booking-report-date-input">
+              <div className="icone">
+                <CalendarMonthIcon color="action" />
+              </div>
+              <div className="full-width">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="shedOut Date"
+                    id="shedOutDate"
+                    value={
+                      formData.shedOutDate || selectedCustomerData.shedOutDate
+                        ? dayjs(selectedCustomerData.shedOutDate)
+                        : dayjs() || book.shedOutDate
+                          ? dayjs(book.shedOutDate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "shedOutDate")}>
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.shedOutDate}
+                      />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider>
+              </div>
+            </div>
+
+
+
+
             <div className="input booking-report-date-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />

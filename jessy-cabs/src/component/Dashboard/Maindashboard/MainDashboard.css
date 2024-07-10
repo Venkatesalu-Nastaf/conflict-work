@@ -107,7 +107,7 @@
 }
 
 .side-bar-menu-close {
-  grid-template-columns: 0rem auto 95% !important;
+  grid-template-columns: 0rem auto 96% !important;
 }
 
 .glass {
@@ -195,6 +195,7 @@
   cursor: pointer;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: 0.2s;
+  margin-top: 0px;
 }
 
 .user-name-item p:hover {

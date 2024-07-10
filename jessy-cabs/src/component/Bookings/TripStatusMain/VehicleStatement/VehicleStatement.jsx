@@ -94,7 +94,7 @@ const VehicleStatement = () => {
   return (
     <div className="VehicleStatement-form Scroll-Style-hide">
       <form action="">
-      <div className="input-field vehiclestatement-inputfeild-top">
+      {/* <div className="input-field vehiclestatement-inputfeild-top">
                 <div className="input-top-vehicle">
                   <div className="icone">
                     <IoBusinessSharp color="action" style={{fontSize:"15px"}}/>
@@ -253,7 +253,7 @@ const VehicleStatement = () => {
                   <input type="checkbox" name="" id="" />
                   Preview
                 </div>
-              </div>
+              </div> */}
 
 
 
@@ -343,7 +343,7 @@ const VehicleStatement = () => {
                 </div>
               </div>
 
-              <div className="input-field paid-amount-input-field">
+              {/* <div className="input-field paid-amount-input-field">
                 <div className="input">
                   <TextField
                     margin="normal"
@@ -354,7 +354,7 @@ const VehicleStatement = () => {
                     autoComplete="off"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -383,6 +383,8 @@ const VehicleStatement = () => {
             </StyledSpeedDial>
           </Box>
         </div>
+
+        <div style={{display:"flex"}}>
         <div className="Download-btn-vehiecle">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -398,6 +400,67 @@ const VehicleStatement = () => {
               )}
             </PopupState>
           </div>
+        <div className="input-field paid-amount-input-field">
+                <div className="input">
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="paidamount"
+                    label="Paid Amount"
+                    name="paidamount"
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="input">
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id=""
+                    label="opening balance"
+                    name=""
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="input">
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id=""
+                    label="Total purchase"
+                    name=""
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="input">
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id=""
+                    label="Payable"
+                    name=""
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+        </div>
+        {/* <div className="Download-btn-vehiecle">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div> */}
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >

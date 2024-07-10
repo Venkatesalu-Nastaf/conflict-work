@@ -110,9 +110,9 @@
 .copy-title-btn-PaymentDetail {
     width: 100%;
     margin-top: 30px;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
     padding: 10px 10px 10px;
-    border: 2px solid #ccc;
+    /* border: 2px solid #ccc; */
     border-radius: 15px;
 }
 

@@ -240,7 +240,23 @@ function App() {
 
 
 
-  //-------------------------------------------------------------------------------------------------------------
+  //------------fetch vehicle name-------------------------------------------------------------------------------------------------
+
+  const [vehileName, setVehicleName] = useState([])
+  useEffect(() => {
+    const fetchgetvehicleName = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+        const data = response.data
+        const name = data?.map((res) => res.vehicleName)
+        setVehicleName(name)
+      }
+      catch (error) {
+        console.log(error, "error");
+      }
+    };
+    fetchgetvehicleName()
+  }, [apiUrl])
 
   return (
     <>
@@ -301,7 +317,7 @@ function App() {
 
               <Route path="/home/info" element={<Info />}>
                 <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} />
-                <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} />} />
+                  <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} />
                 <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />

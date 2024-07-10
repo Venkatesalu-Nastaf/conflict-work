@@ -514,17 +514,14 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
       // No record found for the given tripid
       return res.status(404).send('Images not found');
     }
-
-
     const files = results.map(result => ({
       path: result.path,
       mimetype: result.path.split('.').pop()// assuming 'type' indicates whether it's an image or PDF
     }));
-
-
     res.json({ files });
   });
 });
+
 // -------------------------------------------------------------------------------------------------------------------------------
 
 

@@ -169,7 +169,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input">
+                <div className=" PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>

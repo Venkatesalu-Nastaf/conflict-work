@@ -10,11 +10,12 @@
     display: flex;
     flex-direction: column;
     color: #000;
-    height: 74vh;
+    /* height: 74vh; */
+    height: fit-content;
 }
 
 .mailDetails-header {
-    margin: 15px;
+    /* margin: 15px; */
     border: 2px solid #ccc;
     border-radius: 10px;
     background: var(--glass);
@@ -85,7 +86,7 @@
     border-top: 1px solid #ccc;
     /* display: flex;
     justify-content: center; */
-    padding: 30px;
+    padding:  20px 30px 30px 30px;
     flex-wrap: wrap;
 }
 
@@ -256,7 +257,7 @@
 .mailer-search-input-field {
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 25px;
+    /* margin-bottom: 5px; */
 }
 
 .mail-details-table {

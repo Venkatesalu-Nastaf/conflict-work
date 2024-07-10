@@ -131,7 +131,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 25px;
+    padding: 0px 25px;
     flex-wrap: wrap;
     gap: 10px;
 }
@@ -153,6 +153,8 @@
 .total-container .total-inputs label {
     padding: 0px 10px;
     font-weight: 500;
+    white-space: nowrap;
+    font-size: 14px;
 }
 
 .total-container .total-inputs input {

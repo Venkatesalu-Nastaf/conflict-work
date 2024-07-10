@@ -24,9 +24,9 @@
     background-color: var(--glass);
 }
 
-.Download-btn {
+/* .Download-btn {
     padding: 20px;
-}
+} */
 
 .billing-tables-TransferReport {
     display: flex;

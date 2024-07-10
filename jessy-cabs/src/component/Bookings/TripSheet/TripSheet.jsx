@@ -6,7 +6,7 @@ import {
   HireTypes,
   DocumentType,
   Duty,
-  Email,
+  // Email,
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
@@ -27,11 +27,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel,FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 //dialog box
 import Dialog from '@mui/material/Dialog';
@@ -63,10 +63,10 @@ import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
+// import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+// import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -75,8 +75,8 @@ import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+// import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
+// import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
 // FontAwesomeIcon Link
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
@@ -186,7 +186,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     attachedImage,
     routeData,
     signimageUrl,
-    selectedImage,
+    // selectedImage,
     GmapimageUrl,
     handleTripmapClick,
     mapimgpopupOpen,
@@ -217,7 +217,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
     handlesignaturemageDownload, setSignatureupload,
-    handleFileChangesignature, getSignatureImage, handlesignaturemageDelete
+    handleFileChangesignature, getSignatureImage, handlesignaturemageDelete,
+    handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
+    calcvendordata, vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue
 
   } = useTripsheet();
 
@@ -418,7 +420,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     for (const trip of ClosedTripData) {
       const shedInDate = new Date(trip.shedInDate);
       const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
-      console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
+      // console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
 
       if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
         if (time < trip.shedintime) {
@@ -441,8 +443,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   //   checkTimeandDateConflict()
   // }, [parcedShedOutDate])
 
-  // console.log("shedOuttime", typeof (shedOuttime))
-
+  // console.log(vendorbilldata,"billdataty")
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -782,7 +783,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="orderbyemail"
-                    value={formData.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
+                    value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                     onChange={handleChange}
                     label="Order by email"
                     id="orderbyemail"
@@ -1029,7 +1030,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       id="free-solo-duty"
                       freeSolo
                       sx={{ width: "100%" }}
-                      onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
+                      onChange={(event, value) =>{
+                         handleAutocompleteChange(event, value, "duty")
+                         if (!lockdata) {
+                          setVendorinfodata({ ...vendorinfo,vendor_duty: value.label })
+                        }}}
                       value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                       options={Duty.map((option) => ({
                         label: option.option,
@@ -1111,6 +1116,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={(date) => {
                           setKmValue((prev) => ({ ...prev, shedOutDate: date }));
                           handleDateChange(date, 'shedOutDate')
+                          // if(!lockdata){
+                          // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
+                          // }
                         }}
                       >
                         {({ inputProps, inputRef }) => (
@@ -1222,6 +1230,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'shedInDate')
+              
                             // setKmValue(prev => ({ ...prev, shedInDate: date }))
                             // const closedate = kmValue.closeDate;
                             // const shedoutdate = kmValue.shedOutDate;
@@ -1293,6 +1302,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                             setBook({ ...book, reporttime: event.target.value });
                             setreporttime(event.target.value);
+                            if (!lockdata) {
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            }
 
                           }}
                         />
@@ -1379,6 +1391,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
                             setBook({ ...book, shedintime: event.target.value });
                             setshedintime(event.target.value);
+                            if (!lockdata) {
+                              setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
+                            }
                           }
 
                         }}
@@ -1418,6 +1433,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                            if(!lockdata){
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
                           }
                         }}
 
@@ -1447,6 +1465,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                            
                           }
                         }}
                         size="small"
@@ -1500,6 +1519,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
+                            if(!lockdata){
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+
                           }
                         }}
                         label="Shed In"
@@ -1549,7 +1572,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                  
+
 
                   <div className="input">
                     <div className="icone">
@@ -1960,10 +1983,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Escort</InputLabel>
                         <Select
-                          labelId="demo-simple-select-label"
+                          labelId="demo-simple-select-labelescort"
                           id="demo-simple-select"
                           // value={bookingStatus}
-                          label="Status"
+                          value={escort}
+                          // label="Status"
                           onChange={handleEscortChange}
                         >
                           <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -2003,10 +2027,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
                         <Select
-                          labelId="demo-simple-select-label"
+                          labelId="demo-simple-select-labelescort"
                           id="demo-simple-select"
-                          // value={bookingStatus}
-                          label="Status"
+                          value={transferreport}
+                          // label="Status"
                           onChange={handleTransferChange}
                         >
                           <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -2064,7 +2088,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
 
 
-                  
+
 
                   <div className="input">
                     <div className="icone">
@@ -2203,6 +2227,30 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }}
                         />
                       </div>
+
+
+                      <div className="input">
+                        <div className="icone">
+                          <NoCrashIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-vehileName2"
+                          freeSolo
+                          sx={{ width: "100%" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
+                          value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
+                          options={vehileNames?.map((option) => ({
+                            label: option,
+                          }))}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName2" inputRef={params.inputRef} />
+                          )}
+                        />
+                      </div>
+
+
                       <div className="input">
                         <div className="icone">
                           <NoCrashIcon color="action" />
@@ -2263,6 +2311,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
                             setFormValues({ ...formValues, driverName: e.target.value })
                             setBook({ ...book, driverName: e.target.value })
+                            if (!lockdata) {
+                              setVendorinfodata({ ...vendorinfo, driverName: e.target.value })
+                            }
                           }}
 
                           label="Driver Name"
@@ -2471,38 +2522,30 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <TabPanel value={1} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
-
                       <div className="input">
+                        
 
-
-                        <TextField
-                          name="pack"
-                          // value={}
-                          label="V Trip No"
-                          id=""
+                        <div className="icone">
+                          <NoCrashIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
                           size="small"
-                          // variant="standard"
-                          autoComplete=""
-                          sx={{ m: 1, width: "100%" }}
+                          id="free-solo-vendor_vehicle"
+                          freeSolo
+                          sx={{ minWidth: 200 }}
+                          onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_vehicle")}
+                          // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
+                          // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
+                          value={vendorinfo?.vendor_vehicle}
+                          // value={vendorinfo?.vehicleName||vendorinfo?.vendor_vehicle}
+                          options={vehileNames?.map((option) => ({
+                            label: option,
+                          }))}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
+                          )}
                         />
-                      </div>
-                      <div className="input">
-                        <Box sx={{ minWidth: 200 }}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Rate For - F3</InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={type}
-                              label="Rate For - F3"
-                              onChange={handlevehiecleChange}
-                            >
-                              <MenuItem value="sedan">sedan</MenuItem>
-                              <MenuItem value="Xuv">Xuv</MenuItem>
-                              <MenuItem value="Hatch back">Hatch back</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
                       </div>
                       <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
                         <p style={{ margin: "0px" }}>Duty</p>
@@ -2512,15 +2555,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-duty"
                           freeSolo
                           sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                          value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                          onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_duty")}
+                  
+                          // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
+                          value={vendorinfo?.vendor_duty}
                           options={Duty.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                           renderInput={(params) => {
                             return (
-                              <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
+                              <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
                             )
                           }
                           }
@@ -2530,82 +2574,102 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                     <div className="input-field">
                       <div className="input" >
-
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer components={["DatePicker", "DatePicker"]}>
-                            <DatePicker
-                              label="start date"
-                              format="DD/MM/YYYY"
-                            // value={fromDate}
-                            // onChange={(date) => setFromDate(date)}
-                            />
-                          </DemoContainer>
+
+                          <DatePicker
+                            label="StartDate"
+                            id="vendorshedOutDate"
+                           
+                            // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                            value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                            format="DD/MM/YYYY"
+                            onChange={(date) => {
+
+                              handleDatevendorChange(date, 'vendorshedOutDate')
+                            }}
+                          >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} />
+                            )}
+                          </DatePicker>
                         </LocalizationProvider>
+
                       </div>
                       <div className="input">
-
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer components={["DatePicker", "DatePicker"]}>
-                            <DatePicker
-                              label="Closing Date"
-                              format="DD/MM/YYYY"
-                            // value={toDate}
-                            // onChange={(date) => setToDate(date)}
-                            />
-                          </DemoContainer>
+
+                          <DatePicker
+                            label="CloseDate"
+                            id="vendorshedInDate"
+                           
+                  
+                            // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                            value={ vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                            format="DD/MM/YYYY"
+                            onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                          >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} />
+                            )}
+                          </DatePicker>
                         </LocalizationProvider>
+
+
                       </div>
 
 
 
                       <div className="input">
-                        {/* <div className="icone">
-                          <Inventory2Icon color="action" />
-                        </div> */}
-
                         <TextField
-                          name="Total days"
-                          // value={calcPackage || formData.calcPackage || ''}
-                          label="Total days"
-                          id="pack"
+                          name="vendortotaldays"
+                          value={calculatevendorTotalDays()}
+                          label="Total Days"
                           size="small"
+                          type="number"
+                          id="totaldays"
                           // variant="standard"
-                          autoComplete="password"
+
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
                       <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                        <Checkbox {...label} />
+                        <Checkbox
+                          size="small"
+                          checked={lockdata}
+                          onChange={(event) => setLockData(event.target.checked)}
+                        />
                         <p style={{ margin: "0px" }}>Lock</p>
                       </div>
                     </div>
                     <div className="input-field">
 
-
-
-
-
-
                       <div className="input">
+                        <div className='icone'>
+                          <MdOutlineAccessTimeFilled />
+                        </div>
+                        <div className='input-type-grid'>
+                          <label>Start Time</label>
+                          <input
+                            type="time"
+                            name="venodrreporttime"
+                           
+                            // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                            value={vendorinfo?.vendorreporttime}
+                            onChange={(event) => {
+                              if (lockdata) {
+                                setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                              }
 
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer
-                            components={[
-                              'TimePicker',
-                            ]}
-                          >
+
+                            }}
+                          />
+                        </div>
 
 
-                            <DemoItem label="Start Time">
-                              <TimePicker defaultValue={dayjs('2022-04-17T15:30')} />
-                            </DemoItem>
-
-                          </DemoContainer>
-                        </LocalizationProvider>
                       </div>
 
                       <div className="input">
-
+                        {/* 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer
                             components={[
@@ -2619,72 +2683,45 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </DemoItem>
 
                           </DemoContainer>
-                        </LocalizationProvider>
+                        </LocalizationProvider> */}
+                        <div className='icone'>
+                          <MdOutlineAccessTimeFilled />
+                        </div>
+                        <div className='closetime tripsheet-shed-in-time'>
+                          <label>Close Time</label>
+
+                          <input
+                            type="time"
+                            name="vendorshedintime"
+                           
+                            // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
+                            value={vendorinfo?.vendorshedintime}
+                            onChange={(event) => {
+                              if (lockdata) {
+
+                                setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                              }
+                            }
+                            }
+
+
+                          />
+                        </div>
                       </div>
 
 
                       <div className="input" style={{ marginTop: '45px' }}>
                         <TextField
-                          name="Total Time"
-                          // value={calcPackage || formData.calcPackage || ''}
+                          name="vendorTotaltime"
+                          value={calculatevendorTotalTime() || ""}
                           label="Total Time"
-                          id="pack"
+                          id="pack5"
                           size="small"
                           // variant="standard"
-                          autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
 
-
-                      <Button
-                        variant='contained'
-                        style={{ marginTop: '45px' }}
-                      >
-                        Billing
-                      </Button>
-
-
-
-
-
-
-                      {/* <span>Ex.Km</span>
-                      <div className="input">
-                        <TextField
-                          name="exkm1"
-                          value={extraKM || formData.calcPackage || 0}
-                          // label="Ex.Km"
-                          id="ex-km"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>@</span>
-                        <TextField size="small"
-                          name='exkmTkm2'
-                          value={extrakm_amount || formData.calcPackage || ''}
-                          id="exkmTkm"
-                          // variant="standard"
-                          autoComplete="password"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount6"
-                          value={ex_kmAmount || formData.calcPackage || 0}
-                          size="small"
-                          label="Amount"
-                          autoComplete="password"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div> */}
                     </div>
 
                     <div className="input-field">
@@ -2692,13 +2729,15 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                       <div className="input" >
                         <TextField
-                          name="starting Kilometers"
-                          // value={calcPackage || formData.calcPackage || ''}
+                          name="vendorshedoutkm"
+                          
+                          // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
+                          value={vendorinfo?.vendorshedoutkm  || ""}
+                        
+                          onChange={handlevendorinfofata}
                           label="starting Kilometers"
-                          id="pack"
+                          id="vendorshedoutkm"
                           size="small"
-                          // variant="standard"
-                          autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
@@ -2706,13 +2745,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                       <div className="input" >
                         <TextField
-                          name="closing Kilometers"
-                          // value={calcPackage || formData.calcPackage || ''}
+                          name="vendorshedinkm"
+                         
+                          // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
+                          value={vendorinfo?.vendorshedinkm || ""}
+
+                        
+
                           label="closing Kilometers"
-                          id="pack"
+
+                          // onChange={(e)=>{
+
+                          //   setVendorinfodata({...vendorinfo,vendorshedin:e.target.value})
+                          // }}
+                          onChange={handlevendorinfofata}
+                          id="vendorshedinkm"
                           size="small"
-                          // variant="standard"
-                          autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
@@ -2721,62 +2769,14 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                       <div className="input" >
                         <TextField
-                          name="Total kilometers"
-                          // value={calcPackage || formData.calcPackage || ''}
+                          name="vendortotalkm"
+                          value={calculatevendorTotalKilometers() || ''}
                           label="Total kilometers"
-                          id="pack"
+                          id="vendortotalkm"
                           size="small"
-                          // variant="standard"
-                          autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
-
-
-
-
-
-
-
-
-
-
-                      {/* <span>Ex.Hr</span>
-                      <div className="input">
-                        <TextField
-                          name="exHrs1"
-                          value={extraHR || formData.calcPackage || ''}
-                          label="Ex.Hrs"
-                          id="ex-Hrs"
-                          size="small"
-                          autoComplete="password"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>@</span>
-                        <TextField
-                          size="small"
-                          name='exHrsTHrs2'
-                          value={extrahr_amount || formData.calcPackage || ''}
-                        // variant="standard"
-                        />
-
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount7"
-                          value={ex_hrAmount || formData.calcPackage || 0}
-                          size="small"
-                          label="Amount"
-                          autoComplete="password"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div> */}
                     </div>
                     <div className="input-field">
 
@@ -2784,232 +2784,32 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                       <div className="input">
                         <TextField
-                          name="Remarks"
+                          name="vendorRemarks"
                           // value={calcPackage || formData.calcPackage || ''}
+                          value={vendorinfo?.vendorRemarks || ""}
+                          // value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
+                          onChange={handlevendorinfofata}
                           label="Remarks"
-                          id="pack"
+                          id="vendorRemarks"
                           size="small"
                           // variant="standard"
-                          autoComplete="password"
+
                           sx={{ m: 1, width: "100%" }}
                         />
 
                       </div>
 
 
-
-                      <div className="input">
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          label="Car Total Amount"
-                          id="amount"
-                        // variant="standard"
-                        />
-
-                      </div>
-
                       <div className="input">
                         <Button
                           variant='contained'
+                          onClick={handleVendorcalc}
                         >
                           Update
                         </Button>
                       </div>
-
-                      <div className="input">
-                        <Button
-                          variant='contained'
-                        >
-                          Update vendor Adv
-                        </Button>
-                      </div>
-
-
-
-
-
-
-
-
-                      {/* <span>Night</span>
-                      <div className="input">
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>@</span>
-                        <TextField
-                          size="small"
-                          name='nightThrs2'
-                          value={nightCount || ''}
-                          onChange={(e) => setNightCount(e.target.value)}
-                          // variant="standard"
-                          autoComplete="password"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          label="Amount"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div> */}
                     </div>
-                    <div className="input-field">
 
-                      <p style={{ textDecoration: 'underline', color: "#5356FF" }}>Click Here to load orginals </p>
-
-                      <Button
-                        variant='contained'
-                      >
-                        CBILLED
-                      </Button>
-
-
-                      {/* <span>Bata</span>
-                      <div className="input">
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>@</span>
-                        <TextField
-                          size="small"
-                          name='nightThrs2'
-                          value={nightCount || ''}
-                          onChange={(e) => setNightCount(e.target.value)}
-                          // variant="standard"
-                          autoComplete="password"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          label="Amount"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div> */}
-                    </div>
-                    {/* <div className="input-field">
-                      <div className="input">
-                        <Button
-                          variant='contained'
-                        >
-                          Unlock
-                        </Button>
-                      </div>
-                      <div className="input">
-                        <Button
-                          variant='contained'
-                        >
-                          Update
-                        </Button>
-                      </div>
-                      <div className="input">
-                      
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          label="Net Amount"
-                          id="amount"
-                        />
-                      </div>
-                    </div> */}
-
-                    {/* <div className="input-field">
-                      <div className="input">
-                        <span>Vendor Comm %</span>
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>Car Amt</span>
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          // label="Net Amount"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div>
-
-
-                    </div>
-                    <div className="input-field">
-                      <div className="input">
-                        <FormControlLabel
-                          value="smsguest"
-                          control={
-                            <Checkbox
-                              size="small"
-                              checked={smsguest}
-                              onChange={(event) => setSmsGuest(event.target.checked)}
-                            />
-                          }
-                          label="Manual Bills"
-                        />
-                      </div>
-                    </div> */}
                   </div>
                 </TabPanel>
 
@@ -3017,77 +2817,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
-                        {/* <div className="icone">
-                          <Inventory2Icon color="action" />
-                        </div> */}
-
                         <TextField
-                          name="pack"
-                          value={calcPackage || formData.calcPackage || ''}
-                          label="Min.km"
-                          id="pack"
-                          size="small"
-                          // variant="standard"
-                          autoComplete="password"
-                          sx={{ m: 1, width: "100%" }}
-                        />
-                      </div>
-                      <div className="input">
-                        {/* <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div> */}
-                        <TextField
-                          name="amount5"
-                          value={package_amount || formData.calcPackage || ''}
-                          size="small"
-                          label="Min.Hr"
-                          autoComplete="password"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div>
-                    </div>
-                    <div className="input-field">
-                      <div className="input">
-                        {/* <div className="icone">
-                          <Inventory2Icon color="action" />
-                        </div> */}
-
-                        <TextField
-                          name="pack"
-                          value={calcPackage || formData.calcPackage || ''}
+                          name="Vendor_Calcpackage"
+                          value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                           label="Package"
-                          id="pack"
+                          id="Vendor_Calcpackage"
                           size="small"
                           // variant="standard"
-                          autoComplete="password"
                           sx={{ m: 1, width: "100%" }}
                         />
                       </div>
                       <div className="input">
-                        {/* <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div> */}
                         <TextField
-                          name="amount5"
-                          value={package_amount || formData.calcPackage || ''}
+                          name="Vendor_rateAmount"
+                          value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
                           size="small"
                           label="Amount"
                           autoComplete="password"
-                          id="amount"
+                          id="Vendor_rateAmount"
                         // variant="standard"
                         />
                       </div>
                     </div>
+
                     <div className="input-field">
                       <span>Ex.Km</span>
                       <div className="input">
                         <TextField
-                          name="exkm1"
-                          value={extraKM || formData.calcPackage || 0}
-                          // label="Ex.Km"
-                          id="ex-km"
-                          autoComplete="password"
+                          name="Vendor_ExtraKms"
+                          value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
+                          label="Ex.Km"
+                          id="Vendor_ExtraKms"
+                          onChange={handlevendor_billdata}
+
                           size="small"
                         // variant="standard"
                         />
@@ -3095,11 +2857,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <span>@</span>
                         <TextField size="small"
-                          name='exkmTkm2'
-                          value={extrakm_amount || formData.calcPackage || ''}
-                          id="exkmTkm"
-                          // variant="standard"
-                          autoComplete="password"
+                          name='Vendor_ExtraAmountKms'
+                          value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
+                          onChange={handlevendor_billdata}
+                          id="Vendor_ExtraAmountKms"
+                        // variant="standard"
                         />
                       </div>
                       <div className="input">
@@ -3107,12 +2869,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
                         <TextField
-                          name="amount6"
-                          value={ex_kmAmount || formData.calcPackage || 0}
+                          name="Vendor_totalAmountKms"
+                          value={vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
                           size="small"
                           label="Amount"
-                          autoComplete="password"
-                          id="amount"
+                          id="Vendor_totalAmountKms"
                         // variant="standard"
                         />
                       </div>
@@ -3122,12 +2883,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <span>Ex.Hr</span>
                       <div className="input">
                         <TextField
-                          name="exHrs1"
-                          value={extraHR || formData.calcPackage || ''}
+                          name="Vendor_ExtraHours"
+                          value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
                           label="Ex.Hrs"
-                          id="ex-Hrs"
+                          onChange={handlevendor_billdata}
+                          id="Vendor_ExtraHours"
                           size="small"
-                          autoComplete="password"
                         // variant="standard"
                         />
                       </div>
@@ -3135,9 +2896,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <span>@</span>
                         <TextField
                           size="small"
-                          name='exHrsTHrs2'
-                          value={extrahr_amount || formData.calcPackage || ''}
-                        // variant="standard"
+                          name='Vendor_ExtraAmountHours'
+                          value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
+                          onChange={handlevendor_billdata}
+                          // variant="standard
+                          id="Vendor_ExtraAmountHours"
                         />
 
                       </div>
@@ -3146,12 +2909,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
                         <TextField
-                          name="amount7"
-                          value={ex_hrAmount || formData.calcPackage || 0}
+                          name="Vendor_totalAmountHours"
+                          value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
                           size="small"
                           label="Amount"
-                          autoComplete="password"
-                          id="amount"
+                          id="Vendor_totalAmountHours"
                         // variant="standard"
                         />
                       </div>
@@ -3160,12 +2922,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <span>Night</span>
                       <div className="input">
                         <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
+                          name="Vendor_NightHALT"
+                          value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                          onChange={handlevendor_billdata}
                           // label="Night"
-                          id="night"
-                          autoComplete="password"
+                          id="Vendor_NightHALT"
                           size="small"
                         // variant="standard"
                         />
@@ -3174,9 +2935,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <span>@</span>
                         <TextField
                           size="small"
-                          name='nightThrs2'
-                          value={nightCount || ''}
-                          onChange={(e) => setNightCount(e.target.value)}
+                          name='Vendor_NightBataAmount'
+                          value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
+                          onChange={handlevendor_billdata}
+                          id="Vendor_NightBataAmount"
                           // variant="standard"
                           autoComplete="password"
                         />
@@ -3186,12 +2948,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
                         <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
+                          name="Vendor_NightbataTotalAmount"
+                          value={vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount}
                           size="small"
-                          autoComplete="password"
                           label="Amount"
-                          id="amount"
+                          id="Vendor_NightbataTotalAmount"
                         // variant="standard"
                         />
                       </div>
@@ -3200,11 +2961,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <span>Bata</span>
                       <div className="input">
                         <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
+                          name="Vendor_Bata"
+                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                          onChange={handlevendor_billdata}
                           // label="Night"
-                          id="night"
+                          id="Vendor_Bata"
                           autoComplete="password"
                           size="small"
                         // variant="standard"
@@ -3214,11 +2975,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <span>@</span>
                         <TextField
                           size="small"
-                          name='nightThrs2'
-                          value={nightCount || ''}
-                          onChange={(e) => setNightCount(e.target.value)}
+                          name='Vendor_BataAmount'
+                          value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
+                          onChange={handlevendor_billdata}
                           // variant="standard"
-                          autoComplete="password"
+                          id="Vendor_BataAmount"
                         />
                       </div>
                       <div className="input">
@@ -3226,106 +2987,30 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
                         <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
+                          name="Vendor_BataTotalAmount"
+                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                           size="small"
-                          autoComplete="password"
                           label="Amount"
-                          id="amount"
+                          id="Vendor_BataTotalAmount"
                         // variant="standard"
                         />
                       </div>
                     </div>
                     <div className="input-field">
                       <div className="input">
-                        <Button
-                          variant='contained'
-                        >
-                          Unlock
-                        </Button>
-                      </div>
-                      <div className="input">
-                        <Button
-                          variant='contained'
-                        >
-                          Update
-                        </Button>
-                      </div>
-                      <div className="input">
-                        {/* <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div> */}
                         <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
+                          name="Vendor_FULLTotalAmount"
+                          value={vendorbilldata.Vendor_FULLTotalAmount || 0}
                           size="small"
-                          autoComplete="password"
+
                           label="Net Amount"
-                          id="amount"
+                          id="Vendor_FULLTotalAmount"
                         // variant="standard"
                         />
+
                       </div>
                     </div>
 
-                    <div className="input-field">
-                      <div className="input">
-                        <span>Vendor Comm %</span>
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <span>Car Amt</span>
-                        <TextField
-                          name="night1"
-                          value={nightBta || ''}
-                          onChange={(e) => setNightBeta(e.target.value)}
-                          // label="Night"
-                          id="night"
-                          autoComplete="password"
-                          size="small"
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <FontAwesomeIcon icon={faEquals} />
-                        </div>
-                        <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          // label="Net Amount"
-                          id="amount"
-                        // variant="standard"
-                        />
-                      </div>
-
-
-                    </div>
-                    <div className="input-field">
-                      <div className="input">
-                        <FormControlLabel
-                          value="smsguest"
-                          control={
-                            <Checkbox
-                              size="small"
-                              checked={smsguest}
-                              onChange={(event) => setSmsGuest(event.target.checked)}
-                            />
-                          }
-                          label="Manual Bills"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </TabPanel>
 

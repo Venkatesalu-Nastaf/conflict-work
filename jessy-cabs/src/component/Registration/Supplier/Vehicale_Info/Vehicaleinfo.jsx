@@ -962,6 +962,7 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           }
         </div>
+        
         <div className="detail-container-main">
           <div className="container-left">
             <div className="">
@@ -1063,7 +1064,7 @@ const Vehicaleinfo = ({ stationName }) => {
             />
           </StyledSpeedDial>
         </Box>
-        <div className="Download-btn">
+        <div className="Download-btn-vehiecleinfo">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>

@@ -67,7 +67,7 @@ const PackageRateEntery = ({ organizationNames }) => {
     isEditMode,
     handleEdit,
     datevalidity,
-    fieldSets, commonData, handleCancelUI, handleAddExtra,
+    fieldSets, commonData, handleCancelUI, handleAddExtra,ratename
 
   } = usePackagerateentry();
 
@@ -123,15 +123,19 @@ const PackageRateEntery = ({ organizationNames }) => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-                  <Autocomplete
+                
+
+                    <Autocomplete
                     fullWidth
                     size="small"
                     id="OrganizationName"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
+                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-                    options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                    options={ratename.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
                       return (
@@ -190,7 +194,7 @@ const PackageRateEntery = ({ organizationNames }) => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
+          {!isEditMode && <div className='add-packages-btn'><Button variant="contained" onClick={handleAddExtra} >Add Packages</Button></div>}
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">

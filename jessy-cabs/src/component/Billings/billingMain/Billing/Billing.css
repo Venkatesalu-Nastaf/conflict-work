@@ -40,7 +40,7 @@
   width: 100% !important;
   overflow-x: hidden;
   display: flex;
-  border-radius: 10px;
+  border-radius: 0px;
   flex-direction: column;
   color: #000;
 }
@@ -94,6 +94,7 @@
   flex-direction: column;
   color: #000;
   background-color: var(--glass);
+  transition: all 0.3s ease;
 }
 
 @media screen and (max-width: 768px) {
@@ -113,10 +114,10 @@
   border: 2px solid #ccc;
   border-radius: 30px;
   background-color: var(--glass);
-  padding: 20px 15px 0px 12px;
+  padding: 5px 15px 0px 12px;
   margin-left: 13px;
-  width: 39vw;
-  margin-top: 30px;
+  width: 35vw;
+  /* margin-top: 30px; */
 }
 
 .input-feild-booking {
@@ -126,7 +127,7 @@
 }
 
 .Billing-secend-left {
-  width: 50%;
+  width: 56%;
 }
 
 .input-billing {

@@ -37,6 +37,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import {RateTypevendor} from '../RateType/RateTypeData.js';
+import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -139,10 +141,32 @@ const RateType = ({ stationName, organizationNames }) => {
                                     />
                                 </div>
                                 <div className="input">
+
+                                <div className="icone">
+                    <TypeSpecimenOutlinedIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo-ratetype"
+                    freeSolo
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
+                    value={RateTypevendor?.find((option) => option.optionvalue)?.label || selectedCustomerData?.ratetype || book.ratetype||''}
+                    options={RateTypevendor?.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label ||  selectedCustomerData?.ratetype || book.ratetype||""}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    <Autocomplete
+                                    {/* <Autocomplete
                                         fullWidth
                                         size="small"
                                         id="ratename"
@@ -158,6 +182,16 @@ const RateType = ({ stationName, organizationNames }) => {
                                             )
                                         }
                                         }
+                                    /> */}
+
+                                     <TextField
+                                        size="small"
+                                        id="ratename"
+                                        className='full-width'
+                                        label="Ratename"
+                                        name="ratename"
+                                        value={selectedCustomerData?.ratename || book.ratename }
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 <div className="input">
@@ -235,7 +269,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="startDate">
+                                        <DemoItem label="closeDate">
                                             <DatePicker
                                                 id="startDate2"
                                                 value={
@@ -261,9 +295,13 @@ const RateType = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
                                     {isEditMode ? (
-                                        <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
+                                        <Button variant="contained" 
+                                        // disabled={INFO_modify} 
+                                        onClick={handleEdit}>Edit</Button>
                                     ) : (
-                                        <Button variant="contained" disabled={!INFO_new} onClick={handleAdd} >Add</Button>
+                                        <Button variant="contained" 
+                                        // disabled={!INFO_new}
+                                         onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
                             </div>

@@ -39,7 +39,11 @@
     border: 2px solid #ccc;
     border-radius: 15px;
     background-color: var(--glass);
-    margin-top: 30px;
+    /* margin-top: 30px; */
+}
+
+.detail-container-main{
+    margin-bottom: 20px;
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {

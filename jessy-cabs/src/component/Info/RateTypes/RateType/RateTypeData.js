@@ -74,3 +74,14 @@ export const Stations = [
       optionvalue: "Vijayawada",
     },
   ];
+
+  export const RateTypevendor = [
+    {
+      Option: "Customer",
+      optionvalue: "Customer",
+    },
+    {
+      Option: "Supplier",
+      optionvalue: "Supplier",
+    },
+  ];

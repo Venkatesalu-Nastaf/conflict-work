@@ -6,7 +6,7 @@ import {
   HireTypes,
   DocumentType,
   Duty,
-  Email,
+  // Email,
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
@@ -27,11 +27,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel,FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 //dialog box
 import Dialog from '@mui/material/Dialog';
@@ -63,10 +63,10 @@ import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
+// import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+// import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -75,8 +75,8 @@ import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+// import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
+// import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
 // FontAwesomeIcon Link
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
@@ -186,7 +186,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     attachedImage,
     routeData,
     signimageUrl,
-    selectedImage,
+    // selectedImage,
     GmapimageUrl,
     handleTripmapClick,
     mapimgpopupOpen,
@@ -1030,7 +1030,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       id="free-solo-duty"
                       freeSolo
                       sx={{ width: "100%" }}
-                      onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
+                      onChange={(event, value) =>{
+                         handleAutocompleteChange(event, value, "duty")
+                         if (!lockdata) {
+                          setVendorinfodata({ ...vendorinfo,vendor_duty: value.label })
+                        }}}
                       value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                       options={Duty.map((option) => ({
                         label: option.option,
@@ -1112,6 +1116,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={(date) => {
                           setKmValue((prev) => ({ ...prev, shedOutDate: date }));
                           handleDateChange(date, 'shedOutDate')
+                          // if(!lockdata){
+                          // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
+                          // }
                         }}
                       >
                         {({ inputProps, inputRef }) => (
@@ -1223,6 +1230,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'shedInDate')
+              
                             // setKmValue(prev => ({ ...prev, shedInDate: date }))
                             // const closedate = kmValue.closeDate;
                             // const shedoutdate = kmValue.shedOutDate;
@@ -1295,7 +1303,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setBook({ ...book, reporttime: event.target.value });
                             setreporttime(event.target.value);
                             if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, reporttime: event.target.value })
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
 
                           }}
@@ -1327,9 +1335,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setStartTime(event.target.value);
                             setFormData({ ...formData, starttime: event.target.value });
                             setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, starttime: event.target.value })
-                            }
                           }
                         }}
                       />
@@ -1358,9 +1363,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
                             setBook({ ...book, closetime: event.target.value });
                             setCloseTime(event.target.value);
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, closetime: event.target.value })
-                            }
                           }
 
                         }}
@@ -1390,7 +1392,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setBook({ ...book, shedintime: event.target.value });
                             setshedintime(event.target.value);
                             if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, shedintime: event.target.value })
+                              setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
                             }
                           }
 
@@ -1431,6 +1433,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                            if(!lockdata){
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
                           }
                         }}
 
@@ -1460,6 +1465,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                            
                           }
                         }}
                         size="small"
@@ -1513,6 +1519,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
+                            if(!lockdata){
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+
                           }
                         }}
                         label="Shed In"
@@ -1969,21 +1979,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   <div className='input d-grid'>
 
-                    {/* <Box sx={{ minWidth: '100%' }}>
+                    <Box sx={{ minWidth: '100%' }}>
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Escort</InputLabel>
                         <Select
-                          labelId="demo-simple-select-label"
+                          labelId="demo-simple-select-labelescort"
                           id="demo-simple-select"
                           // value={bookingStatus}
-                          label="Status"
+                          value={escort}
+                          // label="Status"
                           onChange={handleEscortChange}
                         >
                           <MenuItem value={'Yes'}>Yes</MenuItem>
                           <MenuItem value={'No'}>No</MenuItem>
                         </Select>
                       </FormControl>
-                    </Box> */}
+                    </Box>
 
                     {/* <label>Escort</label>
                   <span>
@@ -2012,21 +2023,21 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   <div className='input d-grid'>
 
-                    {/* <Box sx={{ minWidth: '100%' }}>
+                    <Box sx={{ minWidth: '100%' }}>
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
                         <Select
-                          labelId="demo-simple-select-label"
+                          labelId="demo-simple-select-labelescort"
                           id="demo-simple-select"
-                          // value={bookingStatus}
-                          label="Status"
+                          value={transferreport}
+                          // label="Status"
                           onChange={handleTransferChange}
                         >
                           <MenuItem value={'Yes'}>Yes</MenuItem>
                           <MenuItem value={'No'}>No</MenuItem>
                         </Select>
                       </FormControl>
-                    </Box> */}
+                    </Box>
 
                     {/* <label>Airport Transfer</label>
                   <span>
@@ -2512,22 +2523,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
-                        {/* <Box sx={{ minWidth: 200 }}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Rate For - F3</InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={type}
-                              label="Rate For - F3"
-                              onChange={handlevehiecleChange}
-                            >
-                              <MenuItem value="sedan">sedan</MenuItem>
-                              <MenuItem value="Xuv">Xuv</MenuItem>
-                              <MenuItem value="Hatch back">Hatch back</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box> */}
+                        
 
                         <div className="icone">
                           <NoCrashIcon color="action" />
@@ -2540,7 +2536,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           sx={{ minWidth: 200 }}
                           onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_vehicle")}
                           // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
-                          value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
+                          // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
+                          value={vendorinfo?.vendor_vehicle}
                           // value={vendorinfo?.vehicleName||vendorinfo?.vendor_vehicle}
                           options={vehileNames?.map((option) => ({
                             label: option,
@@ -2558,15 +2555,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-duty"
                           freeSolo
                           sx={{ width: "100%" }}
-                          // onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
                           onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_duty")}
-                          // value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                          value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
+                  
+                          // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
+                          value={vendorinfo?.vendor_duty}
                           options={Duty.map((option) => ({
                             label: option.option,
                           }))}
-                          // getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                          // getOptionLabel={(option) => option.label||vendorinfo.vendor_duty|| vendorinfo.duty||''}
                           renderInput={(params) => {
                             return (
                               <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
@@ -2584,8 +2579,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <DatePicker
                             label="StartDate"
                             id="vendorshedOutDate"
-                            // value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null||vendorinfo.shedOutDate}
-                            value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                           
+                            // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                            value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             format="DD/MM/YYYY"
                             onChange={(date) => {
 
@@ -2605,9 +2601,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <DatePicker
                             label="CloseDate"
                             id="vendorshedInDate"
-                            // value={selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null||vendorinfo.shedInDate}
-                            // value={selectedCustomerData.shedInDate vendorinfo.shedInDate}
-                            value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                           
+                  
+                            // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                            value={ vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                             format="DD/MM/YYYY"
                             onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
                           >
@@ -2655,8 +2652,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <input
                             type="time"
                             name="venodrreporttime"
-                            // value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime||vendorinfo.vendorreporttime||''}
-                            value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                           
+                            // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                            value={vendorinfo?.vendorreporttime}
                             onChange={(event) => {
                               if (lockdata) {
                                 setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -2695,8 +2693,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <input
                             type="time"
                             name="vendorshedintime"
-                            // value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''||vendorinfo.vendorshedintime}
-                            value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
+                           
+                            // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
+                            value={vendorinfo?.vendorshedintime}
                             onChange={(event) => {
                               if (lockdata) {
 
@@ -2731,15 +2730,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input" >
                         <TextField
                           name="vendorshedoutkm"
-                          // value={calcPackage || formData.calcPackage || ''}
-                          value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
-                          // value={vendorinfo?.shedout||vendorinfo?.vendorshedoutkm||""}
-                          // value={lockdata?vendorinfo.vendorshedoutkm||""||vendorinfo.shedout:vendorinfo.shedout}
-
-                          // onChange={(e)=>{
-                          //   vendorinfo.shedout=""
-                          //   setVendorinfodata({...vendorinfo,vendorshedout:e.target.value})
-                          // }}
+                          
+                          // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
+                          value={vendorinfo?.vendorshedoutkm  || ""}
+                        
                           onChange={handlevendorinfofata}
                           label="starting Kilometers"
                           id="vendorshedoutkm"
@@ -2752,10 +2746,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input" >
                         <TextField
                           name="vendorshedinkm"
-                          // value={vendorinfo.vendorshedinkm||vendorinfo.shedin||""}
-                          value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
+                         
+                          // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
+                          value={vendorinfo?.vendorshedinkm || ""}
 
-                          // value={lockdata?vendorinfo.vendorshedinkm||vendorinfo.shedin:vendorinfo.shedin}
+                        
 
                           label="closing Kilometers"
 
@@ -2791,7 +2786,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="vendorRemarks"
                           // value={calcPackage || formData.calcPackage || ''}
-                          value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
+                          value={vendorinfo?.vendorRemarks || ""}
+                          // value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
                           onChange={handlevendorinfofata}
                           label="Remarks"
                           id="vendorRemarks"

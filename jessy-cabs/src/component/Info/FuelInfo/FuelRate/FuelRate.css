@@ -9,10 +9,11 @@
   display: flex;
   flex-direction: column;
   color: #000;
+  height: fit-content;
 }
 
 .FuelRate-header {
-  background: var(--glass);
+  /* background: var(--glass); */
   padding: 10px;
   margin-bottom: -10px;
 }
@@ -28,7 +29,7 @@
   margin-top: 10px;
   border: 1px solid #ccc;
   padding: 20px;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .table-FuelRate {

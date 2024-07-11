@@ -5,13 +5,13 @@
 }
 
 .mailDetails-form-container {
-    background: var(--glass);
+    /* background: var(--glass); */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     color: #000;
     /* height: 74vh; */
-    height: fit-content;
+    /* height: fit-content; */
 }
 
 .mailDetails-header {

@@ -19,7 +19,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: var(--glass);
+    /* background: var(--glass); */
     padding-bottom: 30px;
 }
 

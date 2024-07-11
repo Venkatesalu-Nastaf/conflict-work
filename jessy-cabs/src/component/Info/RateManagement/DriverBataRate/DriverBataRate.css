@@ -15,14 +15,14 @@
 
 .form-container-PackageRateEntery .ratetype-form {
     /* height: 74vh; */
-    height: fit-content;
+    /* height: fit-content; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-PackageRateEntery {

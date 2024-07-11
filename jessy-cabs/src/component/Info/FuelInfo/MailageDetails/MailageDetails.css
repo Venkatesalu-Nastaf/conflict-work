@@ -1,7 +1,7 @@
 /* HEADER CONTAINER */
 .MailageDetails-page-header {
-    background: var(--glass);
-    padding: 20px;
+    /* background: var(--glass); */
+    padding: 10px 20px 20px 20px !important;
     padding-top: 40px;
 }
 
@@ -45,6 +45,7 @@
     display: flex;
     flex-direction: column;
     color: #000;
+    height: fit-content;
 }
 
 .detail-container-main-customer {
@@ -145,4 +146,9 @@
 .milage-details-table {
     height: 400px;
     width: 100%;
+}
+
+.mileage-tab{
+    margin-top: 2px;
+    margin-bottom: 2px;
 }

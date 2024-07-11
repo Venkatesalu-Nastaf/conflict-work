@@ -24,7 +24,7 @@
 
 .EmployeeCreation-header {
   border-top: solid 1px #ccc;
-  background: var(--glass);
+  /* background: var(--glass); */
   padding: 10px;
   /* margin-bottom: -10px; */
 }
@@ -48,7 +48,7 @@
 .EmployeeCreation-table-container {
   border: 1px solid #ccc;
   padding: 20px;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .table-EmployeeCreations {

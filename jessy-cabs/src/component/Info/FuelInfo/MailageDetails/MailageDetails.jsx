@@ -282,7 +282,7 @@ const MailageDetails = () => {
               </div>
             </div>
             <div>
-              <h2>Mileage: </h2>
+              <h2 className='mileage-tab'>Mileage: </h2>
               <p>
                 <span className="mailage-icone">
                   <FontAwesomeIcon icon={faGaugeHigh} size="lg" />

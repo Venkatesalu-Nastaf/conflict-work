@@ -114,9 +114,10 @@
   border: 2px solid #ccc;
   border-radius: 30px;
   background-color: var(--glass);
-  padding: 5px 15px 0px 12px;
+  padding: 10px 15px 10px 12px;
   margin-left: 13px;
   width: 35vw;
+  height: fit-content;
   /* margin-top: 30px; */
 }
 

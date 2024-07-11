@@ -619,7 +619,7 @@ const TransferReport = ({ stationName }) => {
               />
             </div>
           </div>
-          <div className="tripsheet-table-transferReport">
+          {/* <div className="tripsheet-table-transferReport"> */}
             {/* <div className="TransferReport-Box">
               <div className="booking-update">
                 <div className="Scroll-Style" style={{ overflow: 'scroll', height: 300, width: "100%" }}>
@@ -646,7 +646,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
               </div>
             </div> */}
-          </div>
+          {/* </div> */}
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error'>

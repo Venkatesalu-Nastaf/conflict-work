@@ -32,13 +32,13 @@
     margin: 0px 20px;
 }
 
-/* .Download-btn {
-    padding-bottom: 20px;
-} */
+.Download-btn-group-billing {
+    padding-left: 30px;
+}
 
 .copy-title-btn-GroupBilling {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 15px;
     background-color: var(--glass);
     padding: 10px 20px 10px;
     border: 2px solid #ccc;
@@ -139,6 +139,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    /* padding: 15px; */
+    padding-bottom: 5px;
 
 }

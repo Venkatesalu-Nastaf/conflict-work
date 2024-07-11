@@ -32,17 +32,18 @@
     margin: 0px 20px;
 }
 
-/* .Download-btn {
-    padding: 0px 0px 20px 0px;
-} */
+.Download-btn-Covering-submit {
+    padding-left: 30px;
+    padding-bottom: 10px;
+}
 
 .copy-title-btn-CoveringSubmit {
     width: 100%;
-    margin-top: 30px;
-    background-color: var(--glass);
+    margin-top: 15px;
+    /* background-color: var(--glass); */
     padding: 10px 20px 10px;
-    border: 2px solid #ccc;
-    border-radius: 15px;
+    /* border: 2px solid #ccc;
+    border-radius: 15px; */
     margin-left: 20px;
 }
 

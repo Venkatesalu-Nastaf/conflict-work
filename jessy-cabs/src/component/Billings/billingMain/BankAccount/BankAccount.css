@@ -136,8 +136,8 @@
 }
 
 .BankDetails-mainContainer::-webkit-scrollbar {
-    width: 3px; /* Width of the scrollbar */
-    /* height: 7px; */
+    width: 5px; /* Width of the scrollbar */
+    height: 5px;
   }
 
 

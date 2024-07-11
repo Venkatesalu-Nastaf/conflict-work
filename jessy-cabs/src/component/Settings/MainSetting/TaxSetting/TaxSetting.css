@@ -25,10 +25,12 @@
 
 /* TABLE */
 .TaxSetting-table-container {
-    margin-top: 10px;
-    padding-bottom: 40px;
+    /* margin-top: 10px; */
+    padding-bottom: 10px;
     border: 1px solid #ccc;
-    padding: 20px;
+    padding-left: 20px;
+    padding-Right: 20px;
+    padding-top: 0px;
     /* background-color: var(--glass); */
 }
 
@@ -58,9 +60,9 @@
 }
 
 .tax-setting-btn-main-div {
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 
 .tax-setting-btn-main-div .tax-setting-btn {
-    margin-top: 40px;
+    margin-top: 10px;
 }

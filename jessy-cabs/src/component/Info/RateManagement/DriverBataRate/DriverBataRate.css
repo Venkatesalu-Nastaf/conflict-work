@@ -14,7 +14,8 @@
 }
 
 .form-container-PackageRateEntery .ratetype-form {
-    height: 74vh;
+    /* height: 74vh; */
+    height: fit-content;
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
@@ -65,7 +66,7 @@
 
 .copy-title-btn-DriverBataRate {
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     padding: 10px;
     border: 2px solid #ccc;
     border-radius: 15px;
@@ -105,7 +106,7 @@
 
 .DriverBataRate-inputfeild {
     flex-wrap: wrap !important;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     /* justify-content: center; */
 }
 

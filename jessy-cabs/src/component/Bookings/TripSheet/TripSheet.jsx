@@ -27,7 +27,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { TextField, FormControlLabel,FormControl, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
 // import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -1030,11 +1030,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       id="free-solo-duty"
                       freeSolo
                       sx={{ width: "100%" }}
-                      onChange={(event, value) =>{
-                         handleAutocompleteChange(event, value, "duty")
-                         if (!lockdata) {
-                          setVendorinfodata({ ...vendorinfo,vendor_duty: value.label })
-                        }}}
+                      onChange={(event, value) => {
+                        handleAutocompleteChange(event, value, "duty")
+                        if (!lockdata) {
+                          setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
+                        }
+                      }}
                       value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                       options={Duty.map((option) => ({
                         label: option.option,
@@ -1230,7 +1231,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'shedInDate')
-              
+
                             // setKmValue(prev => ({ ...prev, shedInDate: date }))
                             // const closedate = kmValue.closeDate;
                             // const shedoutdate = kmValue.shedOutDate;
@@ -1433,8 +1434,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                            if(!lockdata){
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            if (!lockdata) {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             }
                           }
                         }}
@@ -1465,7 +1466,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                            
+
                           }
                         }}
                         size="small"
@@ -1519,7 +1520,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
-                            if(!lockdata){
+                            if (!lockdata) {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
 
@@ -2197,6 +2198,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
                           onChange={handleChange}
                           autoComplete="password"
+                          onKeyDown={handleKeyEnterDriverDetails}
                         />
                       </div>
                       <div className="input">
@@ -2523,7 +2525,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
-                        
+
 
                         <div className="icone">
                           <NoCrashIcon color="action" />
@@ -2556,7 +2558,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           freeSolo
                           sx={{ width: "100%" }}
                           onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_duty")}
-                  
+
                           // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
                           value={vendorinfo?.vendor_duty}
                           options={Duty.map((option) => ({
@@ -2579,7 +2581,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <DatePicker
                             label="StartDate"
                             id="vendorshedOutDate"
-                           
+
                             // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             format="DD/MM/YYYY"
@@ -2601,10 +2603,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <DatePicker
                             label="CloseDate"
                             id="vendorshedInDate"
-                           
-                  
+
+
                             // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                            value={ vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                            value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                             format="DD/MM/YYYY"
                             onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
                           >
@@ -2652,7 +2654,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <input
                             type="time"
                             name="venodrreporttime"
-                           
+
                             // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
                             value={vendorinfo?.vendorreporttime}
                             onChange={(event) => {
@@ -2693,7 +2695,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <input
                             type="time"
                             name="vendorshedintime"
-                           
+
                             // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
                             value={vendorinfo?.vendorshedintime}
                             onChange={(event) => {
@@ -2730,10 +2732,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input" >
                         <TextField
                           name="vendorshedoutkm"
-                          
+
                           // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
-                          value={vendorinfo?.vendorshedoutkm  || ""}
-                        
+                          value={vendorinfo?.vendorshedoutkm || ""}
+
                           onChange={handlevendorinfofata}
                           label="starting Kilometers"
                           id="vendorshedoutkm"
@@ -2746,11 +2748,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input" >
                         <TextField
                           name="vendorshedinkm"
-                         
+
                           // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
                           value={vendorinfo?.vendorshedinkm || ""}
 
-                        
+
 
                           label="closing Kilometers"
 

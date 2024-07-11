@@ -14,7 +14,8 @@
 }
 
 .form-container-ratetype .ratetype-form {
-    height: 100vh;
+    /* height: 100vh; */
+    height: fit-content;
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
@@ -27,6 +28,7 @@
 .form-container-ratetype {
     display: flex;
     border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar {
@@ -91,7 +93,7 @@
 
 .copy-title-btn-RateType {
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     background-color: var(--glass);
     padding: 20px 20px;
     border: 2px solid #ccc;
@@ -152,4 +154,9 @@
 .ratetype-table {
     height: 400px;
     width: 100%;
+}
+
+
+.add-edit-ratetype{
+    margin-top: 20px;
 }

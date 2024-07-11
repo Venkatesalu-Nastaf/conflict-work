@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import './UserPermission.css'
 import Switch from '@mui/material/Switch';
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+
 
 export const UserPermission = ({ userid, permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState }) => {
 
@@ -11,9 +13,10 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
   const [INFO, setINFO] = useState(false);
 
 
+
   const togglerow = (headdername) => {
     if (headdername === "BOOKING") {
-      setBOOKING((prev) => !prev)
+      setBOOKING((prev) => !prev);
     } else if (headdername === "BILLING") {
       setBILLING((prev) => !prev)
 
@@ -44,20 +47,19 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
           </thead>
           <tbody className='table-body'>
-            <tr>
-              <td className='td-content user-permission-table-title'>Full Permission</td>
-              <td className='td-content'>
+            <tr className='user-permission-even-no-rows'>
+              <td className='td-content user-permission-table-title user-permission-table-first-row'>Full Permission</td>
+              <td className='td-content user-permission-table-first-row'>
                 <Switch checked={readState} onChange={handleSwitchChange('read')} />
               </td>
-              <td className='td-content'>
+              <td className='td-content user-permission-table-first-row'>
                 <Switch checked={newState} onChange={handleSwitchChange('new')} />
               </td>
-              <td className='td-content'>
+              <td className='td-content user-permission-table-first-row'>
                 <Switch checked={modifyState} onChange={handleSwitchChange('modify')} />
               </td>
-              <td className='td-content'>
+              <td className='td-content user-permission-table-first-row'>
                 <Switch checked={deleteState} onChange={handleSwitchChange('delete')} />
-
               </td>
             </tr>
 
@@ -67,9 +69,9 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
 
 
-            <tr >
+            <tr className='user-permission-even-no-rows'>
               {/* <td className='td-content Booking-table' onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)} */}
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BOOKING")}>BOOKING </td>
+              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BOOKING")}>BOOKING {BOOKING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}</td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.read} onChange={handleCheckboxChange(0, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.new} onChange={handleCheckboxChange(0, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.modify} onChange={handleCheckboxChange(0, 'modify')} /></td>
@@ -77,7 +79,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
 
             {BOOKING && <>
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Booking</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[1]?.read} onChange={handleCheckboxChange(1, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[1]?.new} onChange={handleCheckboxChange(1, 'new')} /></td>
@@ -85,7 +87,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[1]?.delete} onChange={handleCheckboxChange(1, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Trip Status</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[2]?.read} onChange={handleCheckboxChange(2, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[2]?.new} onChange={handleCheckboxChange(2, 'new')} /></td>
@@ -93,7 +95,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[2]?.delete} onChange={handleCheckboxChange(2, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Trip sheet</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[3]?.read} onChange={handleCheckboxChange(3, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[3]?.new} onChange={handleCheckboxChange(3, 'new')} /></td>
@@ -104,7 +106,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
             <tr >
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BILLING")}>BILLING </td>
+              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BILLING")}>BILLING {BILLING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}</td>
               {/* <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
               <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.read} onChange={handleCheckboxChange(4, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.new} onChange={handleCheckboxChange(4, 'new')} /></td>
@@ -139,9 +141,9 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             </>}
 
-            <tr >
+            <tr className='user-permission-even-no-rows'>
               {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("REGISTER")}>REGISTER </td>
+              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("REGISTER")}>REGISTER {REGISTER ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}</td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.read} onChange={handleCheckboxChange(8, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.new} onChange={handleCheckboxChange(8, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.modify} onChange={handleCheckboxChange(8, 'modify')} /></td>
@@ -149,7 +151,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
 
             {REGISTER && <>
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Customer</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[9]?.read} onChange={handleCheckboxChange(9, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[9]?.new} onChange={handleCheckboxChange(9, 'new')} /></td>
@@ -157,7 +159,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[9]?.delete} onChange={handleCheckboxChange(9, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Supllier</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[10]?.read} onChange={handleCheckboxChange(10, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[10]?.new} onChange={handleCheckboxChange(10, 'new')} /></td>
@@ -165,7 +167,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[10]?.delete} onChange={handleCheckboxChange(10, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Employee</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[11]?.read} onChange={handleCheckboxChange(11, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[11]?.new} onChange={handleCheckboxChange(11, 'new')} /></td>
@@ -178,7 +180,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             <tr >
               {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content user-permission-table-title' onClick={() => togglerow("SETTING")}>SETTING</td>
+              <td className='td-content user-permission-table-title' onClick={() => togglerow("SETTING")}>SETTING {SETTING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}</td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.read} onChange={handleCheckboxChange(12, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.new} onChange={handleCheckboxChange(12, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.modify} onChange={handleCheckboxChange(12, 'modify')} /></td>
@@ -214,9 +216,9 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
 
-            <tr >
+            <tr className='user-permission-even-no-rows'>
               {/* <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content user-permission-table-title' onClick={() => togglerow("INFO")}>INFO</td>
+              <td className='td-content user-permission-table-title' onClick={() => togglerow("INFO")}>INFO {INFO ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}</td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.read} onChange={handleCheckboxChange(16, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.new} onChange={handleCheckboxChange(16, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.modify} onChange={handleCheckboxChange(16, 'modify')} /></td>
@@ -224,7 +226,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
 
             {INFO && <>
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Rate Type</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.read} onChange={handleCheckboxChange(17, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.new} onChange={handleCheckboxChange(17, 'new')} /></td>
@@ -232,7 +234,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.delete} onChange={handleCheckboxChange(17, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Mailers</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[18]?.read} onChange={handleCheckboxChange(18, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[18]?.new} onChange={handleCheckboxChange(18, 'new')} /></td>
@@ -240,7 +242,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[18]?.delete} onChange={handleCheckboxChange(18, 'delete')} /></td>
               </tr>
 
-              <tr>
+              <tr className='user-permission-even-no-rows'>
                 <td className='td-content'>Fuel Info</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.read} onChange={handleCheckboxChange(19, 'read')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.new} onChange={handleCheckboxChange(19, 'new')} /></td>

@@ -2245,7 +2245,7 @@ const Booking = ({ stationName, customerData }) => {
                 value={
                   formData.vehRegNo ||
                   selectedCustomerData.vehRegNo ||
-                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||
+                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||  
                   ""
                 }
                 onChange={handleChange}

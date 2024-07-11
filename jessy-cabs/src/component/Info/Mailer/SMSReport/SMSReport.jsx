@@ -191,7 +191,7 @@ const SMSReport = () => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input">
+                <div className="">
                   <Button
                     variant="outlined"
                     component="label"
@@ -203,10 +203,10 @@ const SMSReport = () => {
                   </Button>
                 </div>
 
-                <div className="input">
+                <div className="">
                   <Button variant="contained" onClick={filterData}>Show</Button>
                 </div>
-                <div className="input">
+                <div className="">
                   <Button variant="outlined" onClick={dataall}>Show All</Button>
                 </div>
               </div>

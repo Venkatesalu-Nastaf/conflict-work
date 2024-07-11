@@ -10,7 +10,7 @@
   flex-direction: column;
   padding: 20px;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .form-container .Title-Name {

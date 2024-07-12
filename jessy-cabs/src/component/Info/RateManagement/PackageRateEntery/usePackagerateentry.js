@@ -96,6 +96,10 @@ const usePackagerateentry = () => {
 
     useEffect(() => {
         const fetchOrganizationnames = async () => {
+            const data=commonData.ratetype
+            if(!data){
+                return
+            }
             // if()
             try {
                 const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);

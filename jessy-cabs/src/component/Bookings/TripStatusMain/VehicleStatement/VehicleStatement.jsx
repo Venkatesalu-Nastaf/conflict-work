@@ -63,7 +63,6 @@ const VehicleStatement = () => {
     warningMessage,
     infoMessage,
     hidePopup,
-    servicestation,
     handleInputChange,
     fromDate,
     setFromDate,
@@ -78,10 +77,12 @@ const VehicleStatement = () => {
     selectedRow,
     handleBookingClick,
     handleTripsheetClick,
-    setToDate,
+    setToDate,accountinfodata,travelsname,fullamountdata,
     columns
   } = useVehiclestatement();
 
+
+ 
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -274,34 +275,14 @@ const VehicleStatement = () => {
                     id="vendor_name_from"
                     freeSolo
                     size="small"
-                    value={servicestation}
-                    options={Stations.map((option) => ({
-                      label: option.optionvalue,
+                    value={travelsname}
+                    options={accountinfodata.map((option) => ({
+                      label: option?.travelsname,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
+                    getOptionLabel={(option) => option.label ||travelsname|| ""}
                     onChange={handleInputChange}
                     renderInput={(params) =>
                       <TextField {...params} label="Vendor Name From" />
-                    }
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <IoBusinessSharp color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    id="vendorNameTo"
-                    freeSolo
-                    size="small"
-                    value={servicestation}
-                    options={Stations.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Vendor Name To" />
                     }
                   />
                 </div>
@@ -339,7 +320,10 @@ const VehicleStatement = () => {
                   <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                 </div>
                 <div className="input">
-                  <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
+                  <Button variant="contained" disabled={!TripStatus_read}
+                   onClick={handleShowAll} 
+                  
+                  >Show All</Button>
                 </div>
               </div>
 
@@ -408,7 +392,8 @@ const VehicleStatement = () => {
                     id="paidamount"
                     label="Paid Amount"
                     name="paidamount"
-                    autoComplete="off"
+                    value={fullamountdata}
+                
                   />
                 </div>
 

@@ -7,7 +7,7 @@ const moment = require('moment');
 const path = require('path');
 
 //its for to use aysn/await 
-const util = require('util')
+const util = require('util');
 const query = util.promisify(db.query).bind(db)
 
 const attachedmailDirectory = path.join(__dirname, 'uploads');
@@ -270,6 +270,69 @@ router.get('/drivername-details/:driver', (req, res) => {
 
     });
 });
+
+
+router.get('/drivername-detailsaccount/:driver', (req, res) => {
+    const customer = req.params.driver;
+    console.log("customer", customer);
+
+    // Query to perform left joins
+    const query = `
+        SELECT 
+            ai.*,
+            vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
+            dc.Mobileno As mobileNo
+        FROM accountinfo ai
+        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+        WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+    `;
+
+    db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        console.log(result,"rr")
+        return res.status(200).json(result);
+    });
+});
+
+
+router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
+    const travelname = req.params.travelname;
+    console.log("customer", travelname);
+
+    // Query to perform left joins
+    const query = `
+        SELECT 
+            ai.*,
+            vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
+            dc.Mobileno As mobileNo
+        FROM accountinfo ai
+        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+        WHERE ai.travelsname=?
+    `;
+
+    db.query(query, [travelname], (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        console.log(result,"travelanemadata")
+        return res.status(200).json(result);
+    });
+});
+  
 
 
 //send email from booking page

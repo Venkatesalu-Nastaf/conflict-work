@@ -86,7 +86,7 @@ const Accuntinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit,
+    handleEdit,suppilerrate,vechiledata
   } = useAccountinfo();
 
   useEffect(() => {
@@ -114,14 +114,18 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   name="accountNo"
-                  label="Account No"
+                  label="Account Id"
                   margin="normal"
                   size="small"
                   id="accountNo"
                   className='full-width'
                   autoComplete="new-password"
-                  value={selectedCustomerData?.accountNo || book.accountNo}
-                  onChange={handleChange}
+                  value={selectedCustomerData?.accountNo||""}
+                  
+                  // disabled
+                 
+            
+                  
                 // variant="standard"
                 />
               </div>
@@ -148,12 +152,12 @@ const Accuntinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
-                  // margin='normal'
+                  margin='normal'
                   size='small'
-                  name="vehicleTravels"
+                  name="travelsname"
                   autoComplete="new-password"
                   className='full-width'
-                  value={selectedCustomerData?.vehicleTravels || book.vehicleTravels}
+                  value={selectedCustomerData?.travelsname || book.travelsname}
                   onChange={handleChange}
                   label="Vehicle/Travels"
                   id="vehicleTravels"
@@ -250,15 +254,15 @@ const Accuntinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  // margin='normal'
+                  margin='normal'
                   size='small'
-                  name="email"
+                  name="travelsemail"
                   autoComplete="new-password"
                   className='full-width'
-                  value={selectedCustomerData?.email || book.email}
+                  value={selectedCustomerData?.travelsemail || book.travelsemail}
                   onChange={handleChange}
                   label="Email"
-                  id="email"
+                  id="travelsemail"
                 // variant="standard"
                 />
               </div>
@@ -348,19 +352,69 @@ const Accuntinfo = () => {
             <div className="icone">
               <RateReviewIcon color="action" />
             </div>
-            <TextField
-              // margin='normal'
-              size='small'
-              name="rateType"
-              autoComplete="new-password"
-              className='full-width'
-              value={selectedCustomerData?.rateType || book.rateType}
-              onChange={handleChange}
-              label="Rate Type"
-              id="rateType"
-              // variant="standard"
-            />
+            <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="Rate Type"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
+                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                    value={selectedCustomerData?.rateType || book.rateType || ''}
+                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                    options={suppilerrate.map((option) => ({ label: option }))}
+                    getOptionLabel={(option) => option.label ||selectedCustomerData?.rateType || book.rateType|| ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params}   label="Rate Type"   name="rateType" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
           </div>
+          <div className="input">
+                  <div className="icone">
+              <RateReviewIcon color="action" />
+            </div>
+                   <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="vehicleRegno"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehRegNo")}
+                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                    value={selectedCustomerData?.vehRegNo || book.vehRegNo|| ''}
+                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                    options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
+                   
+                    getOptionLabel={(option) => option.label ||selectedCustomerData?.vehRegNo || book.vehRegNo|| ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params}   label="vehRegNo"   name="vehRegNo" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                  </div>
+                  <div className="input">
+                  <div className="icone">
+              <RateReviewIcon color="action" />
+            </div>
+                  <TextField
+                  margin='normal'
+                  size='small'
+                  name="driverName"
+                  autoComplete="new-password"
+                  className='full-width'
+                  value={selectedCustomerData?.driverName || book.driverName}
+                  // onChange={handleChange}
+                  label="Driver Name"
+                  id="Drivername"
+                // variant="standard"
+                />
+                </div>
+
           <div className="input">
             {isEditMode ? (
               <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
@@ -447,8 +501,8 @@ const Accuntinfo = () => {
           }
         </div>
         <div className="SpeedDial account-info-speed-dail">
-          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-            <StyledSpeedDial
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex:"3" }}>
+              <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"

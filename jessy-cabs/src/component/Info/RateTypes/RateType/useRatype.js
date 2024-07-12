@@ -10,14 +10,14 @@ import Excel from 'exceljs';
 // TABLE
 
 const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "driverid", headerName: "Driver ID", width: 130 },
-    { field: "stations", headerName: "Station", width: 130 },
-    { field: "ratetype", headerName: "Rate Type", width: 130 },
-    { field: "ratename", headerName: "Ratename", width: 130 },
-    { field: "active", headerName: "Active", width: 130 },
-    { field: "starttime", headerName: "Start Date", width: 230 },
-    { field: "closetime", headerName: "Close Date", width: 230 },
+    { field: "id", headerName: "Sno", width: 70 ,headerAlign: 'center' },
+    { field: "driverid", headerName: "Driver ID", width: 130 ,headerAlign: 'center'},
+    { field: "stations", headerName: "Station", width: 130 ,headerAlign: 'center'},
+    { field: "ratetype", headerName: "Rate Type", width: 130 ,headerAlign: 'center'},
+    { field: "ratename", headerName: "Ratename", width: 130 ,headerAlign: 'center'},
+    { field: "active", headerName: "Active", width: 130 ,headerAlign: 'center'},
+    { field: "starttime", headerName: "Start Date", width: 230 ,headerAlign: 'center'},
+    { field: "closetime", headerName: "Close Date", width: 230,headerAlign: 'center' },
 ];
 
 const useRatype = () => {

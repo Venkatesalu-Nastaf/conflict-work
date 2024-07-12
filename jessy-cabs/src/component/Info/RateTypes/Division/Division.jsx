@@ -41,10 +41,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 // TABLE
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "DivisionName", headerName: "Division Name", width: 130 },
-  { field: "customername", headerName: "Customer Name", width: 130 },
-  { field: "active", headerName: "Active", width: 130 },
+  { field: "id", headerName: "Sno", width: 100 },
+  { field: "DivisionName", headerName: "Division Name", width: 150 },
+  { field: "customername", headerName: "Customer Name", width: 350 },
+  { field: "active", headerName: "Active", width: 150 },
 ];
 
 const Division = () => {
@@ -214,7 +214,7 @@ const Division = () => {
             </div>
           }
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px" }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -261,6 +261,7 @@ const Division = () => {
             />
           </StyledSpeedDial>
         </Box>
+        <div className='division-table'>
         <div className="table-bookingCopy-Division">
           <div className='booking-copy-division-table'>
             <DataGrid
@@ -272,6 +273,8 @@ const Division = () => {
             />
           </div>
         </div>
+        </div>
+
       </form>
     </div>
   )

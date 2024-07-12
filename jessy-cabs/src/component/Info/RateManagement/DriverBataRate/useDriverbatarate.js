@@ -5,15 +5,15 @@ import { APIURL } from "../../../url";
 
 // TABLE START
 const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "VehicleType", headerName: "Vehicle Type", width: 130 },
-    { field: "Duty", headerName: "Duty", width: 130 },
-    { field: "ExtraPerDayPrice", headerName: "ExtraPerDayPrice", width: 130 },
-    { field: "ExtraHours", headerName: "ExtraHours", width: 130 },
-    { field: "ExtraDays", headerName: "ExtraDays", width: 130 },
-    { field: "fromdate", headerName: "From_Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "todate", headerName: "To_Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "Bata", headerName: "Bata", width: 130 },
+    { field: "id", headerName: "Sno", width: 100 },
+    { field: "VehicleType", headerName: "Vehicle Type", width: 160 },
+    { field: "Duty", headerName: "Duty", width: 160 },
+    { field: "ExtraPerDayPrice", headerName: "ExtraPerDayPrice", width: 160 },
+    { field: "ExtraHours", headerName: "ExtraHours", width: 160 },
+    { field: "ExtraDays", headerName: "ExtraDays", width: 160 },
+    { field: "fromdate", headerName: "From_Date", width: 160, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To_Date", width: 160, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "Bata", headerName: "Bata", width: 160 },
 ];
 // TABLE END
 

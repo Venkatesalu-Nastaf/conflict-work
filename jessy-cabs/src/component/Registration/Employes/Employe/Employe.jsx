@@ -505,7 +505,7 @@ const Employe = () => {
             </div>
           )}
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"1"}}>
           <StyledSpeedDial
 
             ariaLabel="SpeedDial playground example"
@@ -581,7 +581,7 @@ const Employe = () => {
         <div>
           <div className="download-search">
 
-          <div className="Download-btn">
+          <div className="Download-btn-employees">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
@@ -619,7 +619,7 @@ const Employe = () => {
                 onChange={(e) => setSearchText(e.target.value)}
               />
             </div>
-            <div className="input">
+            <div className="">
               <Button variant="contained" onClick={handleShowAll}>Search</Button>
             </div>
           </div>

@@ -6,12 +6,12 @@ import { APIURL } from "../../../url";
 // TABLE
 
 const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "ratename", headerName: "Rate Validity", width: 130 },
-    { field: "Remarks", headerName: "Remarks", width: 130 },
-    { field: "active", headerName: "Active", width: 130 },
-    { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "todate", headerName: "To Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "id", headerName: "Sno", width: 100 },
+    { field: "ratename", headerName: "Rate Validity", width: 150 },
+    { field: "Remarks", headerName: "Remarks", width: 150 },
+    { field: "active", headerName: "Active", width: 150 },
+    { field: "fromdate", headerName: "From Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
 ];
 
 const useRatevalidity = () => {

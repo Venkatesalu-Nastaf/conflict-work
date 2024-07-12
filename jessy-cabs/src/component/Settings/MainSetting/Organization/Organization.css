@@ -10,13 +10,13 @@
 }
 
 .main-setting-main .organisation-form {
-    height: 74vh;
+    /* height: 74vh; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 
@@ -55,7 +55,7 @@
     margin: 0px 20px 20px 20px;
     border: 2px solid #ccc;
     border-radius: 15px;
-    padding: 0px 0px  20px 0px;
+    padding: 0px;
     background-color: var(--glass);
 }
 

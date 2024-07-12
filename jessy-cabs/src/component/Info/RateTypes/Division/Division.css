@@ -14,7 +14,7 @@
 }
 
 .form-container-ratetype .division-form {
-    height: 69vh;
+    /* height: 69vh; */
     /* height: fit-content; */
     width: 100vw;
     overflow-x: hidden;
@@ -22,7 +22,7 @@
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-ratetype {

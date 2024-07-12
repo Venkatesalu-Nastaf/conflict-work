@@ -260,7 +260,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
           </div>
         </div>
         <div className="total-container-TransferDataEntry">
-          <div className="Download-btn">
+          <div className="Download-btn-transferdata">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <>

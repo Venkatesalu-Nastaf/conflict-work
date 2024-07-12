@@ -15,13 +15,13 @@
 }
 
 .TransferReport-form {
-    height: 100vh;
+    /* height: 100vh; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 /* .Download-btn {
@@ -48,7 +48,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin: 0px 20px;
-    width: 92%;
+    width: 100%;
 }
 
 .tripsheet-table-transferReport {
@@ -59,7 +59,7 @@
 
 .copy-title-btn-TransferReport {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 15px;
     background-color: var(--glass);
     padding: 10px 13px 30px;
     border: 2px solid #ccc;

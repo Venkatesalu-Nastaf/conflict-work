@@ -148,7 +148,7 @@ const Accuntinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="vehicleTravels"
                   autoComplete="new-password"
@@ -165,7 +165,7 @@ const Accuntinfo = () => {
                   <ContactPhoneIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="phone"
                   autoComplete="new-password"
@@ -209,7 +209,7 @@ const Accuntinfo = () => {
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="cperson"
                   autoComplete="new-password"
@@ -250,7 +250,7 @@ const Accuntinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="email"
                   autoComplete="new-password"
@@ -288,7 +288,7 @@ const Accuntinfo = () => {
                   <StoreIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="entity"
                   autoComplete="new-password"
@@ -349,7 +349,7 @@ const Accuntinfo = () => {
               <RateReviewIcon color="action" />
             </div>
             <TextField
-              margin='normal'
+              // margin='normal'
               size='small'
               name="rateType"
               autoComplete="new-password"
@@ -494,7 +494,7 @@ const Accuntinfo = () => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn-account-info">
+        <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>

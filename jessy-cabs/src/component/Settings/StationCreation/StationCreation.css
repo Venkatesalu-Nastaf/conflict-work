@@ -84,9 +84,9 @@
   }
 }
 
-.stationcreation-header {
+.stationcreation-header-top {
   border-top: solid 1px #ccc;
-  background: var(--glass);
+  /* background: var(--glass); */
   padding: 10px;
   margin-top: 0px !important;
   margin-bottom: -10px;
@@ -130,7 +130,7 @@
   margin-top: 10px;
   border: 1px solid #ccc;
   padding: 20px;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .table-stationcreation {

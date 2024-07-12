@@ -244,7 +244,22 @@ const Booking = ({ stationName, customerData }) => {
       <form onSubmit={handleClick}>
         <div>
           <div className="booking-top-division">
-            <div className="input">
+            <span className="d-grid">
+              <label>Booking</label>
+              <input
+                type="text"
+                id="standard-size-bookingno"
+                value={
+                  formData.bookingno ||
+                  selectedCustomerData.bookingno ||
+                  book.bookingno ||
+                  ""
+                }
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+              />
+            </span>
+            {/* <div className="input">
               <div className="icone">
                 <SwitchAccountIcon color="action" />
               </div>
@@ -267,14 +282,15 @@ const Booking = ({ stationName, customerData }) => {
                 // variant="standard"
                 autoFocus
               />
-            </div>
-            <div className="input radio">
-              <Box sx={{ minWidth: '100%' }}>
+            </div> */}
+            <div className="radio">
+              <Box sx={{ width: '100%' }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Status</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    size="small"
                     value={
                       bookingStatus || "pending" ||
                       ""
@@ -2245,7 +2261,7 @@ const Booking = ({ stationName, customerData }) => {
                 value={
                   formData.vehRegNo ||
                   selectedCustomerData.vehRegNo ||
-                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||  
+                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||
                   ""
                 }
                 onChange={handleChange}

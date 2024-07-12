@@ -14,14 +14,14 @@
 }
 
 .form-container-TripStatus .TripStatus-form {
-  height: 100vh;
+  /* height: 100vh; */
   /* width: 100vw; */
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 20px;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .form-container-TripStatus {

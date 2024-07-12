@@ -85,6 +85,7 @@ body {
 .alert-popup p {
   text-transform: capitalize;
   padding-left: 5px;
+  margin-top: 0px;
 }
 
 .alert-popup-main {

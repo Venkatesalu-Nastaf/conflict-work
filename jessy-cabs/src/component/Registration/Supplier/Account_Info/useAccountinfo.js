@@ -282,16 +282,16 @@ const handlePdfDownload = () => {
 
   // TABLE START
   const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "cperson", headerName: "Supplier_Name", width: 130 },
-    { field: "accountNo", headerName: "Vehicle_No", width: 130 },
-    { field: "address1", headerName: "Address", width: 130 },
-    { field: "phone", headerName: "Phone", width: 130 },
-    { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
-    { field: "vehCommission", headerName: "Percentage", width: 130 },
-    { field: "rateType", headerName: "Rate_Type", width: 130 },
-    { field: "acType", headerName: "Driver", width: 130 },
-  ];
+    { field: "id", headerName: "Sno", width: 100 },
+    { field: "cperson", headerName: "Supplier_Name", width: 160 },
+    { field: "accountNo", headerName: "Vehicle_No", width: 160 },
+    { field: "address1", headerName: "Address", width: 160 },
+    { field: "phone", headerName: "Phone", width: 160 },
+    { field: "vehicleInfo", headerName: "Owner_Type", width: 160 },
+    { field: "vehCommission", headerName: "Percentage", width: 160 },
+    { field: "rateType", headerName: "Rate_Type", width: 160 },
+    { field: "acType", headerName: "Driver", width:160},
+  ];
   // TABLE END
   const [book, setBook] = useState({
     Accdate: '',

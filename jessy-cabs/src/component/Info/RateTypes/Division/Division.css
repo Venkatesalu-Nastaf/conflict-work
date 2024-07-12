@@ -41,6 +41,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin-top: 30px;
+    width: fit-content;
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
@@ -119,4 +120,10 @@
 .division-radio-input,
 .division-add-input {
     width: fit-content !important;
+}
+
+.division-table{
+    display: flex;
+    justify-content: center;
+    width: 85%;
 }

@@ -84,7 +84,7 @@ const SMSFormat = () => {
                             />
                         </div>
                     </div>
-                    <div className="input-field">
+                    <div className="input-field" style={{marginTop:"20px"}}>
                         <div className="input">
                             <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
                                 Update
@@ -100,7 +100,7 @@ const SMSFormat = () => {
                                 fullWidth
                                 id="outlined-7"
                                 multiline
-                                sx={{ mt: 5, width: "100%" }}
+                                sx={{ mt: 1, width: "100%" }}
                                 rows={4}
                                 defaultValue="<VR>-VEHICLE REGNO, <VN>-VEHICLE NO, <DC>-DRIVER CELL, <CN>-COMPANY NAME, <CL>-COMAPNY CELL, <GN>-GUEST NAME,<VT>-VEHICLE, <DM>-DRIVER MOBILE, <DN>-DRIVER NAME, <GN>-GUST NAME, <CM>-COMPANY MOBILE,<BN>-BOOKING NO, <RD>-REPORT DATE, <RT>-REPORT TIME, <RP>-REPORTING PLACE"
                             />

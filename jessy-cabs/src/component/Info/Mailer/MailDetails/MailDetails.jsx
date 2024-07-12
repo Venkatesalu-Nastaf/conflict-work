@@ -68,10 +68,10 @@ const MailDetails = () => {
   const fileInputRef = useRef(null);
 
   const columns = [
-    { field: "idno", headerName: "Sno", width: 70 },
-    { field: "Templateid", headerName: "Templateid", width: 130 },
-    { field: "TemplateName", headerName: "Template Name", width: 130 },
-    { field: "TemplateSubject", headerName: "Template Subject", width: 130 },
+    { field: "idno", headerName: "Sno", width: 100 },
+    { field: "Templateid", headerName: "Templateid", width: 200 },
+    { field: "TemplateName", headerName: "Template Name", width: 200 },
+    { field: "TemplateSubject", headerName: "Template Subject", width: 200 },
     {
       field: 'TemplateMessageData',
       headerName: 'Template Message',
@@ -466,7 +466,7 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex:"1" }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}

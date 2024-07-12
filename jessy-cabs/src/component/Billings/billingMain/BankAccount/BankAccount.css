@@ -75,11 +75,11 @@
 
 .bankaddbtn {
     display: flex;
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
 }
 
 .bankaddbtn Button {
-    border-radius: 20px;
+    border-radius: 5px;
     padding: 10px 20px;
 }
 
@@ -170,7 +170,7 @@
 
 .total-account {
     display: flex;
-    padding: 10px;
+    padding-bottom: 10px;
 }
 
 .total-account .amount-calculate {

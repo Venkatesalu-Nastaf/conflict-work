@@ -255,6 +255,7 @@ const Booking = ({ stationName, customerData }) => {
                   book.bookingno ||
                   ""
                 }
+                name="bookingno"
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />

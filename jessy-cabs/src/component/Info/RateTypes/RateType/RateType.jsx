@@ -357,7 +357,7 @@ const RateType = ({ stationName, organizationNames }) => {
                 </div>
                 <Box
                     className="click-menu-icon"
-                    sx={{ position: "relative", mt: 3, height: 320 }}>
+                    sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px" }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}
@@ -415,6 +415,15 @@ const RateType = ({ stationName, organizationNames }) => {
                             sx={{
                                 '& .MuiDataGrid-root': {
                                   height: '100px',
+                                },
+                                '& .MuiDataGrid-cell': {
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  textAlign: 'center',
+                                },
+                                '& .MuiDataGrid-columnHeader': {
+                                  textAlign: 'center',
                                 },
                               }}
                         />

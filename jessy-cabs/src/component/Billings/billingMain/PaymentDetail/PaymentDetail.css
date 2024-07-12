@@ -148,6 +148,7 @@
 
 .total-container .total-inputs {
     display: flex;
+    align-items: center;
 }
 
 .total-container .total-inputs label {

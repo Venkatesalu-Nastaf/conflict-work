@@ -85,7 +85,7 @@ const Ratevalidity = () => {
     return (
         <div className="RateValidity-form Scroll-Style-hide">
             <form action="">
-                <div className="detail-container-main">
+                <div className="detail-container-main-ratevalidity">
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
                             <div className="input-field RateValidity-input-feilds">
@@ -237,7 +237,7 @@ const Ratevalidity = () => {
                         </div>
                     }
                 </div>
-                <Box className="box-mui-icons" sx={{ position: "relative", mt: 3, height: 320 }}>
+                <Box className="box-mui-icons" sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px" }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}
@@ -284,16 +284,20 @@ const Ratevalidity = () => {
                         />
                     </StyledSpeedDial>
                 </Box>
+                <div className='RateValidity-table'>
                 <div className="table-bookingCopy-RateValidity">
-                    <div className='rate-validity-table' style={{ height: 400, width: "100%" }}>
+                    <div className='rate-validity-table'>
                         <DataGrid
                             rows={rows}
                             columns={columns}
                             onRowClick={handleRowClick}
                             pageSize={5}
+                            
                         />
                     </div>
                 </div>
+                </div>
+
             </form >
         </div >
     )

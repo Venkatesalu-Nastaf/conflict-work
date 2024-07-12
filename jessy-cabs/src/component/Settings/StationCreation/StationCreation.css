@@ -130,6 +130,8 @@
   margin-top: 10px;
   border: 1px solid #ccc;
   padding: 20px;
+  display: flex;
+  justify-content: center;
   /* background-color: var(--glass); */
 }
 
@@ -138,7 +140,7 @@
   border: 2px solid #ccc;
   border-radius: 10px;
   height: 400px;
-  width: 100%;
+  width: fit-content;
   overflow: hidden;
 }
 

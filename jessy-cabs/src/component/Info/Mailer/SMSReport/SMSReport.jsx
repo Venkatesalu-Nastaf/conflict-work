@@ -15,12 +15,12 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "MobileNumber", headerName: "MobileNO", width: 130 },
-  { field: "Message", headerName: "Message", width: 350 },
-  { field: "SubmitDate", headerName: "Submit Date", width: 130 },
-  { field: "DoneDate", headerName: "Done Date", width: 130 },
-  { field: "Status", headerName: "Status", width: 130 },
+  { field: "id", headerName: "Sno", width: 100 },
+  { field: "MobileNumber", headerName: "MobileNO", width: 200 },
+  { field: "Message", headerName: "Message", width: 450 },
+  { field: "SubmitDate", headerName: "Submit Date", width: 200 },
+  { field: "DoneDate", headerName: "Done Date", width: 200 },
+  { field: "Status", headerName: "Status", width: 200 },
 ];
 
 
@@ -223,6 +223,8 @@ const SMSReport = () => {
             />
           </div>
         </div>
+        
+        
       </form>
     </div>
   )

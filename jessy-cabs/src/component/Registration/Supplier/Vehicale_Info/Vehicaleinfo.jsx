@@ -58,6 +58,8 @@ import DialogContent from '@mui/material/DialogContent';
 import { APIURL } from "../../../url";
 import { FaCar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { RiFileUploadLine } from "react-icons/ri";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -525,8 +527,11 @@ const Vehicaleinfo = ({ stationName }) => {
               />
               <div className='insurance-copy-tooltip'>
                 <Button size="md" className='vehicle-info-upload-btn' component="label">
-                  <span class="button-29 vehicle-info-upload-btn-width">
-                    <FiUpload />
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>
                     <input
                       type="file"
                       style={{ display: "none" }}
@@ -636,9 +641,11 @@ const Vehicaleinfo = ({ stationName }) => {
               />
               <div className='national-permit-copy-tooltip'>
                 <Button size="md" className='vehicle-info-upload-btn' component="label">
-                  <span class="button-29 vehicle-info-upload-btn-width">
-                    <FiUpload />
-                    <input
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>                  <input
                       id="National_permit"
                       type="file"
                       style={{ display: "none" }}
@@ -716,9 +723,11 @@ const Vehicaleinfo = ({ stationName }) => {
               />
               <div className='state-permit-copy-tooltip'>
                 <Button size="md" component="label" className='vehicle-info-upload-btn'>
-                  <span class="button-29 vehicle-info-upload-btn-width">
-                    <FiUpload />
-                    <input
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>                  <input
                       type="file"
                       id=" State_Permit "
                       style={{ display: "none" }}
@@ -800,9 +809,11 @@ const Vehicaleinfo = ({ stationName }) => {
               />
               <div className='rc-book-copy-tooltip'>
                 <Button size="md" component="label" className='vehicle-info-upload-btn'>
-                  <span class="button-29 vehicle-info-upload-btn-width">
-                    <FiUpload />
-                    <input
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>                  <input
                       id="rc_book"
                       type="file"
                       style={{ display: "none" }}
@@ -838,9 +849,12 @@ const Vehicaleinfo = ({ stationName }) => {
               </LocalizationProvider>
               <div className='fc-copy-tooltip'>
                 <Button size="md" component="label" className='vehicle-info-upload-btn'>
-                  <span class="button-29 vehicle-info-upload-btn-width">
-                    <FiUpload />
-                    <input
+                  <span class="vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>                 
+                     <input
                       id="fc_copy"
                       type="file"
                       style={{ display: "none" }}
@@ -962,7 +976,7 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           }
         </div>
-        
+
         <div className="detail-container-main">
           <div className="container-left">
             <div className="">
@@ -1018,7 +1032,7 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           </div>
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"1"}}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}

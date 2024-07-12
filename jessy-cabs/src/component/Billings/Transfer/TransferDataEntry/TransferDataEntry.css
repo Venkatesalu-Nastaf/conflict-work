@@ -36,7 +36,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin: 0px 20px;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .Download-btn-transferdata {
@@ -72,15 +72,17 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 0px;
     padding: 10px;
     border-radius: 10px;
 }
 
 .total-container-TransferDataEntry .total-inputs {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    white-space: nowrap;
     padding: 0px 10px;
+    align-items: center;
 }
 
 .total-container-TransferDataEntry .total-inputs label {

@@ -3,9 +3,9 @@
     padding: 0px !important;
 }
 
-.detail-container-main {
+.detail-container-main-ratevalidity {
     display: flex;
-    width: 70%;
+    width: 100% ;
 }
 
 .form-container-ratetype .Title-Name {
@@ -40,6 +40,8 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin-top: 30px;
+    width: 60%;
+ 
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
@@ -79,13 +81,13 @@
     /* margin-top: 30px; */
     height: fit-content;
     background-color: var(--glass);
-    padding: 20px 20px;
+    padding: 20px 0px 20px 20px;
     border: 2px solid #ccc;
     border-radius: 15px;
 }
 
 @media screen and (max-width: 375px) {
-    .detail-container-main .container-left {
+    .detail-container-main-ratevalidity .container-left {
         position: relative;
         left: 14px !important;
     }
@@ -126,11 +128,17 @@
     }
 }
 
-.box-mui-icons {
+/* .box-mui-icons {
     top: 30px;
-}
+} */
 
 .rate-validity-table {
     height: 400px;
     width: 100%;
+
+}
+
+.RateValidity-table{
+    display: flex;
+    justify-content: center;
 }

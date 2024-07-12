@@ -104,7 +104,7 @@ const StationCreation = () => {
             <span className="Title-Name ">Station Creation</span>
 
           </p>
-          <div className="stationcreation-header">
+          <div className="stationcreation-header-top">
             <div className="input-field station-creation-inputfeilds" style={{ padding: '10px' }}>
               <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">

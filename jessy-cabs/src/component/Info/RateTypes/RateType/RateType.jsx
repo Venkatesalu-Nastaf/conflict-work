@@ -37,7 +37,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import {RateTypevendor} from '../RateType/RateTypeData.js';
+import { RateTypevendor } from '../RateType/RateTypeData.js';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -142,27 +142,29 @@ const RateType = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
 
-                                <div className="icone">
-                    <TypeSpecimenOutlinedIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo-ratetype"
-                    freeSolo
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
-                    value={RateTypevendor?.find((option) => option.optionvalue)?.label || selectedCustomerData?.ratetype || book.ratetype||''}
-                    options={RateTypevendor?.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label ||  selectedCustomerData?.ratetype || book.ratetype||""}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
+                                    <div className="icone">
+                                        <TypeSpecimenOutlinedIcon color="action"  />
+                                    </div>
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="free-solo-demo-ratetype"
+                                        freeSolo
+                                        onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
+                                        value={RateTypevendor?.find((option) => option.optionvalue)?.label || selectedCustomerData?.ratetype || book.ratetype || ''}
+                                        options={RateTypevendor?.map((option) => ({
+                                            label: option.Option,
+                                        }))}
+                                        getOptionLabel={(option) => option.label || selectedCustomerData?.ratetype || book.ratetype || ""}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
+                                            )
+                                        }
+                                        }
+                                    />
+                                </div>
+                                <div className="input">
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -184,13 +186,13 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     /> */}
 
-                                     <TextField
+                                    <TextField
                                         size="small"
                                         id="ratename"
                                         className='full-width'
                                         label="Ratename"
                                         name="ratename"
-                                        value={selectedCustomerData?.ratename || book.ratename }
+                                        value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -293,15 +295,15 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input">
+                                <div className="add-edit-ratetype">
                                     {isEditMode ? (
-                                        <Button variant="contained" 
-                                        // disabled={INFO_modify} 
-                                        onClick={handleEdit}>Edit</Button>
+                                        <Button variant="contained"
+                                            // disabled={INFO_modify} 
+                                            onClick={handleEdit}>Edit</Button>
                                     ) : (
-                                        <Button variant="contained" 
-                                        // disabled={!INFO_new}
-                                         onClick={handleAdd} >Add</Button>
+                                        <Button variant="contained"
+                                            // disabled={!INFO_new}
+                                            onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
                             </div>
@@ -361,7 +363,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                  
+
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -410,6 +412,11 @@ const RateType = ({ stationName, organizationNames }) => {
                             onRowClick={handleRowClick}
                             pageSize={5}
                             checkboxSelection
+                            sx={{
+                                '& .MuiDataGrid-root': {
+                                  height: '100px',
+                                },
+                              }}
                         />
                     </div>
                 </div>

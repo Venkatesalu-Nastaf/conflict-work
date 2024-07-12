@@ -50,11 +50,11 @@ const usePackagerateentry = () => {
         ratetype: '',
         OrganizationName: "",
         // vehicleType: '',
-        vehicleName:'',
+        vehicleName: '',
         Validity: '',
     });
 
-    const [ratename,setRatename]=useState([])
+    const [ratename, setRatename] = useState([])
 
     //------------------------------
 
@@ -71,7 +71,7 @@ const usePackagerateentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
     //-------editmode------------------
     const [isEditMode, setIsEditMode] = useState(false);
@@ -96,21 +96,25 @@ const usePackagerateentry = () => {
 
     useEffect(() => {
         const fetchOrganizationnames = async () => {
+            const data=commonData.ratetype
+            if(!data){
+                return
+            }
             // if()
             try {
                 const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);
                 const data = response.data
-                console.log(data,"rdddd")
-                setRatename(data.map(row=>row.ratename))
-                
-                
+                console.log(data, "rdddd")
+                setRatename(data.map(row => row.ratename))
+
+
             }
             catch (error) {
                 console.log(error, "error");
             }
         };
         fetchOrganizationnames()
-    }, [apiUrl,commonData.ratetype])
+    }, [apiUrl, commonData.ratetype])
 
 
     //// popup-----------------------------------------
@@ -298,17 +302,43 @@ const usePackagerateentry = () => {
     };
 
 
-    useEffect(() => {
-        const handleList = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/ratemanagement`);
-                const data = response.data;
+    // useEffect(() => {
+    //     const handleList = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/ratemanagement`);
+    //             const data = response.data;
+    //             setRows(data);
+    //         } catch {
+    //         }
+    //     }
+    //     handleList();
+    // }, [apiUrl]);
+
+
+    const handleShow = async () => {
+        try {
+            const rateType = commonData?.ratetype;
+            const orgName = commonData?.OrganizationName || '';
+            const vehicleType = commonData?.vehicleName || '';
+            const payload = { rateType, orgName, vehicleType }
+            const response = await axios.get(`${apiUrl}/ratemanagement-show`, { params: payload });
+            const data = response.data;
+            console.log("data", data)
+            if (data.length > 0) {
                 setRows(data);
-            } catch {
+            } else {
+                setRows([]);
+                // setError(true);
+                // setErrorMessage("No Data Found..!");
+                setInfo(true)
+                setInfoMessage("No Data Found..!")
+
             }
+
+        } catch (err) {
+            console.log("err", err)
         }
-        handleList();
-    }, [apiUrl]);
+    }
 
 
     //Edit
@@ -409,8 +439,8 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
-        datevalidity,
-        handleAddExtra, fieldSets, commonData, handleCancelUI,ratename
+        datevalidity, handleShow,
+        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage
 
     };
 };

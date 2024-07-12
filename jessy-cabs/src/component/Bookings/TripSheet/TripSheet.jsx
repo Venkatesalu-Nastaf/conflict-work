@@ -219,7 +219,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handlesignaturemageDownload, setSignatureupload,
     handleFileChangesignature, getSignatureImage, handlesignaturemageDelete,
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
-    calcvendordata, vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue
+    vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue,accountinfodata,handletravelsAutocompleteChange
 
   } = useTripsheet();
 
@@ -338,14 +338,14 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   // for vechicle type vendor info
-  const [type, setType] = React.useState('');
+  // const [type, setType] = React.useState('');
 
-  const handlevehiecleChange = (event) => {
-    setType(event.target.value);
-  };
+  // const handlevehiecleChange = (event) => {
+  //   setType(event.target.value);
+  // };
 
   // for check box vendor info
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+  // const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
   // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
 
@@ -1918,8 +1918,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       margin="normal"
                       size="small"
                       name="vpermettovendor"
-                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                      onChange={handleChange}
+                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0}
+                      // onChange={handleChange}
+                      onChange={(e)=>{
+                        handleChange(e)
+                        setVendorinfodata({...vendorinfo,vendor_vpermettovendor:e.target.value})
+                      }}
                       label="v-permet-To-Vendor"
                       id="vpermettovendor"
                       autoComplete="password"
@@ -1933,8 +1937,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       margin="normal"
                       size="small"
                       name="vendortoll"
-                      value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ''}
-                      onChange={handleChange}
+                      value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0}
+                      // onChange={handleChange}
+                      onChange={(e)=>{
+                        handleChange(e)
+                        setVendorinfodata({...vendorinfo,vendor_toll:e.target.value})
+                        }}
                       label="Vendor-Toll"
                       id="vendor-vendortoll"
                       autoComplete="password"
@@ -2129,8 +2137,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       margin="normal"
                       size="small"
                       name="advancepaidtovendor"
-                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
-                      onChange={handleChange}
+                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || 0}
+                      // onChange={handleChange}
+                      onChange={(e)=>{
+                        handleChange(e)
+                        setVendorinfodata({...vendorinfo,vendor_advancepaidtovendor:e.target.value})
+                      }}
                       label="advancepaidtovendor"
                       id="advance-paid-to-vendor"
                       autoComplete="password"
@@ -2167,7 +2179,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <div className="icone">
                           <AltRouteIcon color="action" />
                         </div>
-                        <TextField
+                        {/* <TextField
                           name="travelsname"
                           autoComplete="new-password"
                           value={
@@ -2182,6 +2194,37 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="travelsname"
                           // variant="standard"
                           size='small'
+                        /> */}
+
+
+                          <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-travelmail"
+                          freeSolo
+                          sx={{ width: "100%" }}
+                          onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                          value={
+                            selectedCustomerDatas.travelsname ||
+                            formData.travelsname ||
+                            selectedCustomerData.travelsname ||
+                            book.travelsname ||
+                            ""
+                          }
+                          options={accountinfodata.map((option) => ({
+                            label: option?.travelsname,
+                          }))}
+                          getOptionLabel={(option) => option.label || selectedCustomerDatas.travelsname ||
+                            formData.travelsname ||
+                            selectedCustomerData.travelsname ||
+                            book.travelsname ||
+                            ""}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params}  label="Travels Name" name="travelsname" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
                         />
                       </div>
 
@@ -2195,7 +2238,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="vehRegNo"
                           label="Vehicle Rigster No"
                           name="vehRegNo"
-                          value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                          // value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                          value={selectedCustomerDatas.vehRegNo||formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo  || book.vehRegNo || ''}
                           onChange={handleChange}
                           autoComplete="password"
                           onKeyDown={handleKeyEnterDriverDetails}
@@ -2263,13 +2307,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-vehileName"
                           freeSolo
                           sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
+                          onChange={(event, value) =>{
+                            handleAutocompleteChange(event, value, "vehicleName")
+                            if(!lockdata){
+                              setVendorinfodata({...vendorinfo,vendor_vehicle:value.label})
+
+                            }
+                          }}
                           value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
                           options={vehileNames?.map((option) => ({
                             label: option,
                           }))}
                           renderInput={(params) => (
-                            <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
+                            <TextField {...params} label="Rate for" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
                           )}
                         />
 
@@ -2335,7 +2385,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="mobileNo"
                           className='full-width'
-                          value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                          // value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                          value={selectedCustomerDatas.mobileNo||formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo ||book.mobileNo || ''}
                           onChange={handleChange}
                           label="Cell"
                           id="mobileNo"
@@ -2355,6 +2406,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           name="travelsemail"
                           autoComplete="new-password"
                           value={
+                            selectedCustomerDatas.travelsemail||
                             formData.travelsemail ||
                             selectedCustomerData.travelsemail ||
                             book.travelsemail ||
@@ -2872,7 +2924,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_totalAmountKms"
-                          value={vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
+                          // value={ vendorExtarkmTotalAmount||vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
+                          value={ vendorExtarkmTotalAmount||vendorbilldata.Vendor_totalAmountKms|| vendorpassvalue.Vendor_totalAmountKms || 0}
                           size="small"
                           label="Amount"
                           id="Vendor_totalAmountKms"
@@ -2912,7 +2965,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_totalAmountHours"
-                          value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
+                          // value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
+                          value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours ||vendorpassvalue.Vendor_totalAmountHours || 0}
                           size="small"
                           label="Amount"
                           id="Vendor_totalAmountHours"
@@ -2951,7 +3005,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_NightbataTotalAmount"
-                          value={vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount}
+                          value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount||0}
                           size="small"
                           label="Amount"
                           id="Vendor_NightbataTotalAmount"

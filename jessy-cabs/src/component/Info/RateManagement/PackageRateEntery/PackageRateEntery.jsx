@@ -43,7 +43,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const PackageRateEntery = ({ organizationNames }) => {
+const PackageRateEntery = ({ organizationNames, vehileName }) => {
 
   const {
     selectedCustomerId,
@@ -66,8 +66,8 @@ const PackageRateEntery = ({ organizationNames }) => {
     columns,
     isEditMode,
     handleEdit,
-    datevalidity,
-    fieldSets, commonData, handleCancelUI, handleAddExtra,ratename
+    datevalidity, handleShow,
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename
 
   } = usePackagerateentry();
 
@@ -123,9 +123,9 @@ const PackageRateEntery = ({ organizationNames }) => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-                
 
-                    <Autocomplete
+
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="OrganizationName"
@@ -139,7 +139,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Organization Name" name="OrganizationName" inputRef={params.inputRef} />
+                        <TextField {...params} label="Rate Name" name="OrganizationName" inputRef={params.inputRef} />
                       )
                     }
                     }
@@ -156,9 +156,9 @@ const PackageRateEntery = ({ organizationNames }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleName || ''}
-                    options={VehicleType.map((option) => ({
-                      label: option.option,
+                    value={vehileName.find((option) => option.optionvalue)?.label || commonData?.vehicleName || ''}
+                    options={vehileName.map((option) => ({
+                      label: option,
                     }))}
                     getOptionLabel={(option) => option.label || commonData?.vehicleName || ''}
                     renderInput={(params) => {
@@ -169,7 +169,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input">
+                <div className=" PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -184,6 +184,10 @@ const PackageRateEntery = ({ organizationNames }) => {
                     onChange={handleChange}
                     variant="standard"
                   />
+                </div>
+                <div style={{ marginLeft: "10px" }}>
+                  <Button variant="contained" disabled={!RateManagement_new} onClick={handleShow} >Show</Button>
+
                 </div>
               </div>
             </div>
@@ -403,7 +407,9 @@ const PackageRateEntery = ({ organizationNames }) => {
                     ) : (
                       <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
                     )}
+
                   </div>
+
                 </div>
               </div>
             </div>

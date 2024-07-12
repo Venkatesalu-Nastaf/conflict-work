@@ -359,10 +359,10 @@ const MailDetails = () => {
             <div className="container-left-mailDetails">
               <div className="mailDetails-header">
                 <div className="input-field mail-details-input-field">
-                  <div className="input">
+                  <div className="">
                     <a href={xlsx} download><Button variant="outlined">Excel Format</Button></a>
                   </div>
-                  <div className="input" onClick={handleIconClick}>
+                  <div className="" onClick={handleIconClick}>
                     <Button variant="contained">Upload</Button>
                   </div>
                   <input
@@ -374,7 +374,7 @@ const MailDetails = () => {
                   />
                 </div>
                 <div className="mail-message-division">{file}</div>
-                <div className="input-field ">
+                <div className="input-field input-feild-mailer">
                   <div className=" input-mailer">
                     <div className="icone">
                       <SmsIcon color="action" />
@@ -391,7 +391,7 @@ const MailDetails = () => {
                     />
                   </div>
                 </div>
-                <div className="input-field mail-textarea1-btn">
+                <div className="input-field  input-feild-mailer mail-textarea1-btn">
                   <div className="input" >
                     <Button variant="contained" onClick={handlesendbulkemail} endIcon={<SendIcon />}>
                       Send

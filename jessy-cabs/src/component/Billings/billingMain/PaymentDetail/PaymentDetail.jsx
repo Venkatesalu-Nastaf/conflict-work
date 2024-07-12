@@ -200,7 +200,7 @@ const PaymentDetail = ({ organizationNames }) => {
             <div className='total-inputs' >
               <label htmlFor="toatlAmount">Total Amount:</label>
               <input type="number" id="toatlAmount" value={totalAmount} readOnly />
-            </div>
+            </div> 
             <div className='total-inputs' >
               <label htmlFor="paindAmounts">Paid Amount:</label>
               <input type="number" id="paindAmounts" value={paidAmount} readOnly />

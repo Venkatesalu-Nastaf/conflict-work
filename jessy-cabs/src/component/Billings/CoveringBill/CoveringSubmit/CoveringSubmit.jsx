@@ -170,7 +170,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                         </div>
                     </div>
                 </div>
-                <div className="Download-btn">
+                <div className="Download-btn-Covering-submit">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>

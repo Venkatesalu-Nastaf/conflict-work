@@ -14,14 +14,14 @@
 }
 
 .form-container-ratetype .RateValidity-form {
-    height: 74vh;
+    /* height: 74vh; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-ratetype {
@@ -76,7 +76,8 @@
 }
 
 .copy-title-btn-RateValidity {
-    margin-top: 30px;
+    /* margin-top: 30px; */
+    height: fit-content;
     background-color: var(--glass);
     padding: 20px 20px;
     border: 2px solid #ccc;

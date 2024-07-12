@@ -167,15 +167,24 @@ const BankAccount = () => {
             </div>
           )}
         </div> */}
-        <div className="BankDetails-mainContainer" >
-        <div className="BankAccount-detail-container-main">
-          <div className="BankAccount-first-container">
+
+<div className="BankAccount-first-container">
             <div className="input bankaddbtn">
               <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
                 Add bank
               </Button>
             </div>
           </div>
+
+        <div className="BankDetails-mainContainer" >
+        <div className="BankAccount-detail-container-main">
+          {/* <div className="BankAccount-first-container">
+            <div className="input bankaddbtn">
+              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
+                Add bank
+              </Button>
+            </div>
+          </div> */}
           {showAddBankForm && (
             <div className="AddBankContainer-BankAccount">
               <div className="input-field input-field-bankaccount">

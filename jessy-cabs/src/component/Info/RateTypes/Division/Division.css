@@ -14,14 +14,15 @@
 }
 
 .form-container-ratetype .division-form {
-    height: 74vh;
+    /* height: 69vh; */
+    /* height: fit-content; */
     width: 100vw;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-ratetype {
@@ -65,10 +66,10 @@
 
 .copy-title-btn-Division {
     width: 100%;
-    margin-top: 30px;
-    background-color: var(--glass);
-    padding: 20px 20px;
-    border: 2px solid #ccc;
+    /* margin-top: 30px; */
+    /* background-color: var(--glass); */
+    padding: 10px 20px;
+    /* border: 2px solid #ccc; */
     border-radius: 15px;
 }
 

@@ -15,14 +15,15 @@
 }
 
 .form-container-PackageRateEntery .PackageRateEntery-form {
-    height: 100vh;
+    /* height: 100vh; */
+    /* height: fit-scontent; */
     /* width: 100vw; */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
 }
 
 .form-container-PackageRateEntery {
@@ -78,11 +79,11 @@
 
 .copy-title-btn-PackageRateEntery {
     width: 110%;
-    margin-top: 30px;
-    background-color: var(--glass);
-    padding: 20px 20px;
-    border: 2px solid #ccc;
-    border-radius: 15px;
+    /* margin-top: 30px; */
+    /* background-color: var(--glass); */
+    padding: 10px 20px;
+    /* border: 2px solid #ccc; */
+    /* border-radius: 15px; */
 }
 
 .PackageRateEntery-container-bottom {
@@ -194,4 +195,10 @@
 
 .add-packages-btn{
     margin-bottom: 20px;
+}
+
+.PackageRateEntery-input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -8,8 +8,10 @@ const db = require('../../../db');
 // Add account_info database
 router.post('/accountinfo', (req, res) => {
     const bookData = req.body;
+    console.log(bookData,"kk")
     db.query('INSERT INTO accountinfo SET ?', bookData, (err, result) => {
         if (err) {
+            console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         return res.status(200).json({ message: "Data inserted successfully" });
@@ -32,9 +34,11 @@ router.delete('/accountinfo/:accountNo', (req, res) => {
 router.put('/accountinfo/:accountNo', (req, res) => {
     const accountNo = req.params.accountNo;
     const updatedCustomerData = req.body;
+    console.log(accountNo,updatedCustomerData)
     // Update the customer data in the database
     db.query('UPDATE accountinfo SET ? WHERE accountNo = ?', [updatedCustomerData, accountNo], (err, result) => {
         if (err) {
+            console.log(err)
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
@@ -52,6 +56,27 @@ router.get('/accountinfo', (req, res) => {
         return res.status(200).json(results);
     });
 });
+
+
+router.get('/ratemanagmentSupplierdata',(req,res)=>{
+    db.query(`SELECT ratename from ratetype where ratetype="Supplier"`, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log(results,"hhh")
+        return res.status(200).json(results);
+    });
+
+})
 // End account_info database
+router.get('/accountinfodatavehcile',(req,res)=>{
+    db.query("select * from vehicleinfo",(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log(results,"hhh")
+        return res.status(200).json(results);
+    })
+})
 
 module.exports = router;

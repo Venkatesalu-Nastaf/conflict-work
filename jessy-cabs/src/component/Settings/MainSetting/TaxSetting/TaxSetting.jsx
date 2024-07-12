@@ -143,7 +143,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.STax || book.STax}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -160,7 +160,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.SBCess || book.SBCess}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -177,7 +177,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.KKCess || book.KKCess}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -194,7 +194,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.STax_Des || book.STax_Des}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -211,7 +211,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.SBCess_Des || book.SBCess_Des}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -228,7 +228,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.KKCess_Des || book.KKCess_Des}
                                 onChange={handleChange}
-                                variant="standard"
+                                // variant="standard"
                             />
                         </div>
                         <div className="input">

@@ -88,12 +88,12 @@
 
 .form-container .Billing-form {
   overflow: scroll;
-  height: 75vh;
+  /* height: 75vh; */
   width: 81vw;
   display: flex;
   flex-direction: column;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
   transition: all 0.3s ease;
 }
 
@@ -114,9 +114,10 @@
   border: 2px solid #ccc;
   border-radius: 30px;
   background-color: var(--glass);
-  padding: 5px 15px 0px 12px;
+  padding: 10px 15px 10px 12px;
   margin-left: 13px;
   width: 35vw;
+  height: fit-content;
   /* margin-top: 30px; */
 }
 

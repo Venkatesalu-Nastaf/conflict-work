@@ -155,6 +155,47 @@ router.get('/tripsheet-showall', (req, res) => {
   });
 });
 
+router.get('/VehicleStatement-bookings',(req,res)=>{
+  const { Travelsname,fromDate,toDate} = req.query;
+  console.log(Travelsname,fromDate,toDate,"hhh")
+  const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+  const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+  console.log(formattedFromDate,"f",formattedToDate)
+
+
+  db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)",
+    [Travelsname,fromDate,toDate],(err,results)=>{
+      if(err){
+        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" }); 
+      }
+      console.log(results,'ff')
+      return res.status(200).json(results)
+    }
+  )
+
+})
+
+router.get('/tripsheetvendordata',(req,res)=>{
+
+
+
+  db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet",(err,results)=>{
+      if(err){
+        console.log(err)
+        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" }); 
+      }
+
+      if(results.length === 0){
+        return res.status(400).json({ error: "Data not Found" });
+      }
+      console.log(results,'ff')
+      return res.status(200).json(results)
+    }
+  )
+
+})
+
+
 
 
 

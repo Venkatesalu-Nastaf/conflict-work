@@ -112,6 +112,7 @@ router.post('/tripsheet-add', (req, res) => {
         vehicleName2,
         vendor_vehicle,
         vendor_duty,
+        vendor_ratename,
         vendorshedOutDate,
         vendorshedInDate,
         vendortotaldays,
@@ -242,6 +243,7 @@ router.post('/tripsheet-add', (req, res) => {
         vendor_vehicle,
         vehicleName2,
         vendor_duty,
+        vendor_ratename,
         vendorshedOutDate,
         vendorshedInDate,
         vendortotaldays,
@@ -426,6 +428,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         orderbyemail,
         vendor_vehicle,
         vendor_duty,
+        vendor_ratename,
         vendorshedOutDate,
         vendorshedInDate,
         vendortotaldays,
@@ -554,6 +557,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         orderbyemail,
         vendor_vehicle,
         vendor_duty,
+        vendor_ratename,
         vendorshedOutDate,
         vendorshedInDate,
         vendortotaldays,
@@ -1240,6 +1244,7 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
+    
 
 
     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
@@ -1304,6 +1309,7 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
         }
 
         // Send the fetched row in the response
+        console.log(results[0])
         res.json(results[0]);
     });
 });
@@ -1342,6 +1348,17 @@ router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
     })
 
 })
+
+router.get('/tripaccounttravelname',(req,res)=>{
+    db.query("select * from accountinfo",(err,results)=>{
+        if(err){
+            return res.status(500).json({ error: "Internal Server Error" })
+        }
+        return res.status(200).json(results)
+    })
+})
+
+
 
 
 

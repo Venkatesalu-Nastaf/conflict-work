@@ -139,7 +139,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Organization Name" name="OrganizationName" inputRef={params.inputRef} />
+                        <TextField {...params} label="Rate Name" name="OrganizationName" inputRef={params.inputRef} />
                       )
                     }
                     }
@@ -448,8 +448,8 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
             </div>
           }
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"3"}}>
+           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
           >

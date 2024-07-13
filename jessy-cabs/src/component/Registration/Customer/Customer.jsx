@@ -93,7 +93,7 @@ const Customer = ({ stationName }) => {
     handleEdit,
     customerfieldSets,
     handleChangecustomer,
-    handleAddExtra,BillingGroup,handleAutocompleteChangebilling
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling
   } = useCustomer();
 
   useEffect(() => {
@@ -109,9 +109,9 @@ const Customer = ({ stationName }) => {
   const Customer_modify = permissions[9]?.modify;
   const Customer_delete = permissions[19]?.delete;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;
-   
-    
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+
 
 
   return (
@@ -128,7 +128,7 @@ const Customer = ({ stationName }) => {
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
+                  // margin="normal"
                   size="small"
                   name="customerId"
                   label="Customer ID"
@@ -145,7 +145,7 @@ const Customer = ({ stationName }) => {
                   <BadgeIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
+                  // margin="normal"
                   size="small"
                   id="customer"
                   className='full-width'
@@ -162,7 +162,7 @@ const Customer = ({ stationName }) => {
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
+                  // margin="normal"
                   size="small"
                   id="name"
                   label="Organizer Name"
@@ -281,7 +281,7 @@ const Customer = ({ stationName }) => {
                 // variant="standard"
                 />
               </div> */}
-              <div className="inut radio">
+              <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     A/C Type
@@ -307,15 +307,16 @@ const Customer = ({ stationName }) => {
                     />
                   </RadioGroup>
                 </FormControl>
+                <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
               </div>
-              <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
-              {customerfieldSets.map((datafield,index)=>(
+
+              {customerfieldSets.map((datafield, index) => (
                 <>
-                {/* <div key={index} className=""> */}
-                <div className="input" key={index}>
-                <div className="icone">
-                  <PermIdentityIcon color="action" />
-                </div>
+                  {/* <div key={index} className=""> */}
+                  <div className="input" key={index}>
+                    <div className="icone">
+                      <PermIdentityIcon color="action" />
+                    </div>
                     <TextField
                       size="small"
                       id="orderedbycutomer"
@@ -324,16 +325,16 @@ const Customer = ({ stationName }) => {
                       label="Orderedby"
                       name="orderedby"
                       value={datafield.orderedby || ""}
-                     
+
                       // value={fieldSet.orderdby || ""}
                       onChange={(e) => handleChangecustomer(e, index)}
-                      // variant="standard"
+                    // variant="standard"
                     />
                   </div>
                   <div className="input" key={index}>
-                  <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
+                    <div className="icone">
+                      <AttachEmailIcon color="action" />
+                    </div>
                     <TextField
                       size="small"
                       id="orderebyemail"
@@ -347,15 +348,15 @@ const Customer = ({ stationName }) => {
                     />
                   </div>
                   <div className="input" key={index}>
-                  <div className="icone">
-                  <LocalPhoneIcon color="action" />
-                </div>
+                    <div className="icone">
+                      <LocalPhoneIcon color="action" />
+                    </div>
                     <TextField
                       // type='number'
                       size="small"
                       id="mobliecustomer"
                       className='full-width'
-                      label="MobileNo"
+                      label="Mobile No"
                       name="orderByMobileNo"
                       autoComplete="new-password"
                       value={datafield.orderByMobileNo || ""}
@@ -363,14 +364,14 @@ const Customer = ({ stationName }) => {
                     />
                   </div>
 
-                {/* </div> */}
+                  {/* </div> */}
                 </>
-                   ))}
-                    
-            </div>
+              ))}
+
+            {/* </div>
           </div>
           <div className="Customer-page-secend-containers">
-            <div className="input-field  checkbox customer-input-feild">
+            <div className="input-field  checkbox customer-input-feild"> */}
               <div className="input input-address">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
@@ -581,37 +582,37 @@ const Customer = ({ stationName }) => {
                   <CustomInput />
                 )} */}
                 {isInputVisible && (
-                   <Autocomplete
-                   size='small'
-                   multiple
-                   id="checkboxes-tags-demo"
-                   options={BillingGroup}
-                   onChange={(event, value) =>handleAutocompleteChangebilling(event, value, "billingGroup")}
-                   value={selectedCustomerData?.billingGroup
-                    ? (typeof selectedCustomerData.billingGroup === 'string' 
-                      ? selectedCustomerData.billingGroup.split(',').map(item => item.trim()) // Trim extra spaces
-                      : selectedCustomerData.billingGroup)
-                    : []
-                  }
-                   isOptionEqualToValue={(option, value) =>  option === value}
-                   disableCloseOnSelect
-                   getOptionLabel={(option) => option}
-                   renderOption={(props, option, { selected }) => (
-                       <li {...props}>
-                           <Checkbox
-                               icon={icon}
-                               checkedIcon={checkedIcon}
-                               style={{ marginRight: 8 }}
-                               checked={selected}
-                           />
-                           {option}
-                       </li>
-                   )}
-                   style={{ width: 170 }}
-                   renderInput={(params) => (
-                       <TextField {...params} label="BillingGroup" placeholder="Organization" />
-                   )}
-               />
+                  <Autocomplete
+                    size='small'
+                    multiple
+                    id="checkboxes-tags-demo"
+                    options={BillingGroup}
+                    onChange={(event, value) => handleAutocompleteChangebilling(event, value, "billingGroup")}
+                    value={selectedCustomerData?.billingGroup
+                      ? (typeof selectedCustomerData.billingGroup === 'string'
+                        ? selectedCustomerData.billingGroup.split(',').map(item => item.trim()) // Trim extra spaces
+                        : selectedCustomerData.billingGroup)
+                      : []
+                    }
+                    isOptionEqualToValue={(option, value) => option === value}
+                    disableCloseOnSelect
+                    getOptionLabel={(option) => option}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option}
+                      </li>
+                    )}
+                    style={{ width: 170 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="BillingGroup" placeholder="Organization" />
+                    )}
+                  />
                 )}
               </div>
               <div className="input">
@@ -686,8 +687,8 @@ const Customer = ({ stationName }) => {
                 </div>
               }
             </div>
-            <div className="SpeedDial customer-speeddail">
-              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+            <div className="customer-speeddail">
+              <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}
@@ -702,8 +703,8 @@ const Customer = ({ stationName }) => {
                     />
                   )}
 
-                  {Customer_modify === 1 && isEditMode &&(
-                    
+                  {Customer_modify === 1 && isEditMode && (
+
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
@@ -719,7 +720,7 @@ const Customer = ({ stationName }) => {
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
                   )}
-                  {Customer_new === 1 &&!isEditMode && (
+                  {Customer_new === 1 && !isEditMode && (
                     <SpeedDialAction
                       key="Add"
                       icon={<BookmarkAddedIcon />}
@@ -739,7 +740,7 @@ const Customer = ({ stationName }) => {
             </div>
           </div>
           <div className="customer-list-table-container-download">
-            <div className="Download-btn">
+            <div className="Download-btn-customer">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>

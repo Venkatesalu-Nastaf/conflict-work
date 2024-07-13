@@ -42,6 +42,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     /* margin-top: 30px; */
+    width: 93%;
 }
 
 .detail-container-main{
@@ -154,6 +155,7 @@
 .ratetype-table {
     height: 400px;
     width: 100%;
+    /* width: fit-content; */
 }
 
 

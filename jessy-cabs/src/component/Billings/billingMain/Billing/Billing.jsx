@@ -148,7 +148,7 @@ const Billing = () => {
                                     <ListAltIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="tripid"
                                     label="Trip Sheet No"
@@ -165,7 +165,7 @@ const Billing = () => {
                                     <BadgeIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="Billingno"
                                     label="Billing No"
@@ -181,7 +181,7 @@ const Billing = () => {
                                     <BadgeIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="department"
                                     label="Station"
@@ -215,7 +215,7 @@ const Billing = () => {
                                 </div>
                                 <TextField
                                     type='number'
-                                    margin="normal"
+                                    // margin="normal"
                                     id="totalkm1"
                                     size="small"
                                     label="Total Kms"
@@ -230,7 +230,7 @@ const Billing = () => {
                                     <IoIosTime color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="totaltime"
                                     label="Total Hours"
@@ -245,7 +245,7 @@ const Billing = () => {
                                     <HailOutlinedIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
                                     id="Customer"
@@ -261,7 +261,7 @@ const Billing = () => {
                                     <FontAwesomeIcon icon={faBoxesPacking} size="lg" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
                                     id="Supplier"
@@ -296,7 +296,7 @@ const Billing = () => {
                                 </div>
                                 <TextField
                                     type='number'
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="totaldays"
                                     label="Total Days"
@@ -311,7 +311,7 @@ const Billing = () => {
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
                                     id="guestname"
@@ -327,7 +327,7 @@ const Billing = () => {
                                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
                                     id="rateType"
@@ -343,7 +343,7 @@ const Billing = () => {
                                     <DirectionsCarFilledIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="vehRegNo"
                                     label="Vehicle No"
@@ -358,7 +358,7 @@ const Billing = () => {
                                     <DirectionsCarFilledIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="Trips"
                                     label="Trips"
@@ -372,7 +372,7 @@ const Billing = () => {
                     </div>
                     <div className="Billing-page-secend-container">
                         <div className="Billing-secend-left">
-                            <div className="input-field input-feild-booking ">
+                            <div className="input-field vehicle-type-input-field">
                                 <div className="input">
                                     <div className="icone">
                                         <CarCrashIcon color="action" />
@@ -958,7 +958,7 @@ const Billing = () => {
                                         id="permit"
                                     />
                                 </div>
-                                <div className="input c">
+                                <div className="input billing-permit-input">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>
@@ -1032,7 +1032,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faRoad} />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="minKM"
                                         label="Min Kilometers"
@@ -1047,7 +1047,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faStopwatch} />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="minHour"
                                         label="Min Hours"
@@ -1065,7 +1065,7 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="GrossAmount"
                                         label="Gross Amount"
@@ -1080,7 +1080,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faShapes} size="lg" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="AfterTaxAmount"
                                         label="After Tax Amount"
@@ -1097,7 +1097,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faTags} size="lg" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="DiscountAmount"
                                         label="Discount Amount"
@@ -1112,7 +1112,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faPercent} />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         name='DiscountAmount2'
                                         id='DiscountAmount2'
                                         size="small"
@@ -1128,7 +1128,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faArrowRightArrowLeft} size="lg" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="AdvanceReceived"
                                         label="Advance Received"
@@ -1143,7 +1143,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faCoins} size="lg" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="BalanceReceivable"
                                         label="Balance Receivable"
@@ -1160,7 +1160,7 @@ const Billing = () => {
                                         <ChangeCircleIcon color="active" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="RoundedOff"
                                         label="Rounded Off"
@@ -1175,7 +1175,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faSackDollar} size="xl" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="NetAmount"
                                         label="Net Amount"
@@ -1192,7 +1192,7 @@ const Billing = () => {
                                         <GiMoneyStack />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="Totalamount"
                                         label="Total Amount"
@@ -1207,7 +1207,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="paidamount"
                                         label="Paid Amount"
@@ -1224,7 +1224,7 @@ const Billing = () => {
                                         <PendingActionsIcon />
                                     </div>
                                     <TextField
-                                        margin="normal"
+                                        // margin="normal"
                                         size="small"
                                         id="pendingamount"
                                         label="Pending Amount"
@@ -1388,7 +1388,7 @@ const Billing = () => {
                 </div>
 
                 <div style={{position: 'relative', right: '86px'}}>
-                    <Box className='' sx={{ position: "relative", mt: 3, height: 320 }}>
+                    <Box className='' sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: "1" }}>
                         <StyledSpeedDial
                             ariaLabel="SpeedDial playground example"
                             icon={<SpeedDialIcon />}

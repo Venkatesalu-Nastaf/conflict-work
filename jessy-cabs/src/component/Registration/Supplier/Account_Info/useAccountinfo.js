@@ -22,6 +22,8 @@ const useAccountinfo = () => {
   const [warningMessage] = useState({});
   // const [infoMessage, setInfoMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
+  const [suppilerrate,setSupplierRatetpe]=useState([])
+  const [vechiledata,setVehicleData]=useState([])
 
   //----------popup----------------------
 
@@ -280,35 +282,32 @@ const handlePdfDownload = () => {
 
   // TABLE START
   const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "cperson", headerName: "Supplier_Name", width: 130 },
-    { field: "accountNo", headerName: "Vehicle_No", width: 130 },
-    { field: "address1", headerName: "Address", width: 130 },
-    { field: "phone", headerName: "Phone", width: 130 },
-    { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
-    { field: "vehCommission", headerName: "Percentage", width: 130 },
-    { field: "rateType", headerName: "Rate_Type", width: 130 },
-    { field: "acType", headerName: "Driver", width: 130 },
-  ];
+    { field: "id", headerName: "Sno", width: 100 },
+    { field: "cperson", headerName: "Supplier_Name", width: 160 },
+    { field: "accountNo", headerName: "Vehicle_No", width: 160 },
+    { field: "address1", headerName: "Address", width: 160 },
+    { field: "phone", headerName: "Phone", width: 160 },
+    { field: "vehicleInfo", headerName: "Owner_Type", width: 160 },
+    { field: "vehCommission", headerName: "Percentage", width: 160 },
+    { field: "rateType", headerName: "Rate_Type", width: 160 },
+    { field: "acType", headerName: "Driver", width:160},
+  ];
   // TABLE END
   const [book, setBook] = useState({
-    accountNo: '',
     Accdate: '',
-    vehicleTravels: '',
+    travelsname: '',
     address1: '',
     cperson: '',
-  
-    email: '',
-  
+    travelsemail: '',
     phone: '',
     vehCommission: '',
     rateType: '',
-  
     underGroup: '',
-  
-    entity: '',
+     entity: '',
     acType: '',
     vehicleInfo: '',
+    driverName:"",
+    vehRegNo:""
    
   });
 
@@ -338,6 +337,27 @@ const handlePdfDownload = () => {
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
+    if (name === "vehRegNo") {
+
+      const selectedOrder = vechiledata?.find(option => option?.vehRegNo === value?.label);
+      if (selectedOrder) {
+
+        setBook(prevState => ({
+          ...prevState,
+          vehRegNo: value?.label,
+          driverName: selectedOrder.driverName
+        }));
+
+        setSelectedCustomerData(prevState => ({
+          ...prevState,
+          vehRegNo: value?.label,
+          driverName: selectedOrder.driverName
+        }));
+      }
+    }
+        else{
+
+        
     setBook((prevBook) => ({
       ...prevBook,
       [name]: selectedOption,
@@ -346,6 +366,7 @@ const handlePdfDownload = () => {
       ...prevData,
       [name]: selectedOption,
     }));
+  }
   };
 
   const handleDateChange = (date, name) => {
@@ -361,25 +382,39 @@ const handlePdfDownload = () => {
     }));
   };
 
+  useEffect(()=>{
+    const fetchratedata=async()=>{
+      try{
+     const response= await axios.get(`${apiUrl}/ratemanagmentSupplierdata`)
+      const data=response.data
+      setSupplierRatetpe(data.map(row=>row.ratename))
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+    fetchratedata()
+  },[apiUrl])
+
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
-      accountNo: '',
+
       Accdate: '',
-      vehicleTravels: '',
+      travelsname: '',
       address1: '',
-    
-      email: '',
-     
-      phone: '',
+       travelsemail: '',
+       phone: '',
       vehCommission: '',
       rateType: '',
-     
-      underGroup: '',
-      isRunning: '',
+     underGroup: '',
       entity: '',
       acType: '',
       vehicleInfo: '',
+      cperson:'',
+       driverName:"",
+    vehRegNo:""
+
       
     }));
     setSelectedCustomerData({});
@@ -394,14 +429,46 @@ const handlePdfDownload = () => {
   }, []);
 
   const handleAdd = async () => {
-    const accountNo = book.accountNo;
-    if (!accountNo) {
+    const ratetype =book.rateType;
+    const travelsname=book.travelsname;
+    const vehiclinfo=book.vehicleInfo;
+    const datefiled=book.Accdate;
+    const travelsemail=book.travelsemail;
+    const vehRegNo=book.vehRegNo;
+    if (!datefiled) {
       setError(true);
-      setErrorMessage("Fill mandatory fields");
+      setErrorMessage("Fill Date fields");
       return;
     }
+    if (!travelsname) {
+      setError(true);
+      setErrorMessage("Fill Vehicle Travels fields");
+      return;
+    }
+    if (!travelsemail) {
+      setError(true);
+      setErrorMessage("Fill Travel Mail fields");
+      return;
+    }
+    if (!vehiclinfo) {
+      setError(true);
+      setErrorMessage("Fill Vehicle info fields");
+      return;
+    }
+    if (!ratetype) {
+      setError(true);
+      setErrorMessage("Fill Rate Type fields");
+      return;
+    }
+    if (!vehRegNo) {
+      setError(true);
+      setErrorMessage("Fill VehRegno fields");
+      return;
+    }
+    
     try {
-      await axios.post(`ttp://${apiUrl}/accountinfo`, book);
+      console.log(book,"datata")
+      await axios.post(`${apiUrl}/accountinfo`, book);
       handleCancel();
       setRows([]);
       setSuccess(true);
@@ -412,16 +479,20 @@ const handlePdfDownload = () => {
     }
   };
 
-  const handleEdit = async (accountNo) => {
+  const handleEdit = async () => {
     try {
-      const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-      await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+      // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+      const {id,...restselectedcustomer}=selectedCustomerData
+      // console.log(selectedCustomer,"cust")
+      // console.log(selectedCustomerData,"datata")
+      const updatedCustomer = { ...restselectedcustomer };
+      await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
       setSuccess(true);
       setSuccessMessage("Successfully updated");
       handleCancel();
       setRows([]);
-    } catch {
+    } catch(err) {
+      console.log(err)
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -441,7 +512,22 @@ const handlePdfDownload = () => {
       }
     }
     handleList();
-  }, [apiUrl]);
+  }, [apiUrl,rows]);
+
+  useEffect(()=>{
+    const fetchdatafromvehcileinfo=async()=>{
+    try{
+        const response=await axios.get(`${apiUrl}/accountinfodatavehcile`)
+        const data=response.data
+        setVehicleData(data)
+
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+fetchdatafromvehcileinfo()
+},[apiUrl])
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
@@ -471,7 +557,7 @@ const handlePdfDownload = () => {
       }
 
       else if (actionName === 'Delete') {
-        await axios.delete(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
+        await axios.delete(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`);
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
@@ -480,13 +566,14 @@ const handlePdfDownload = () => {
       }
 
       else if (actionName === 'Edit') {
-        const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
-        setRows([]);
+        // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        // await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
+        // setSuccess(true);
+        // setSuccessMessage("Successfully updated");
+        // handleCancel();
+        // setRows([]);
+        handleEdit()
       }
 
       else if (actionName === 'Add') {
@@ -528,7 +615,7 @@ const handlePdfDownload = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit,
+    handleEdit,suppilerrate,vechiledata
   };
 };
 

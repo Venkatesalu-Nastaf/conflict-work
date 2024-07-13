@@ -8,11 +8,11 @@
 }
 
 .container-Employe {
-  margin: 5px;
+  /* margin: 5px; */
   /* background-color: var(--glass); */
   /* border-radius: 15px; */
   /* border: solid 2px #ccc; */
-  padding: 15px 0px;
+  /* padding: 15px 0px; */
   margin-bottom: 10px;
   padding-bottom: 25px;
 }
@@ -145,10 +145,10 @@
 
 .Employe-search-input {
   /* margin-top: 30px; */
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
   padding: 10px ;
-  border: 2px solid #ccc;
-  border-radius: 15px;
+  /* border: 2px solid #ccc; */
+  /* border-radius: 15px; */
 }
 
 @media screen and (max-width:500px) {
@@ -213,4 +213,9 @@
   display: flex;
   align-items: center;
   gap:40px;
+}
+
+.Download-btn-employees{
+  /* padding-bottom: 20px; */
+  padding-left: 20px;
 }

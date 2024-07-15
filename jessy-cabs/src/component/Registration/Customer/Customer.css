@@ -9,7 +9,7 @@
 
 /*SECEND-CONTAINER  */
 .Customer-page-secend-containers {
-  border-top: solid 1px #ccc;
+  /* border-top: solid 1px #ccc; */
   /* background-color: var(--glass); */
   padding-left: 20px;
   padding-right: 20px;
@@ -54,7 +54,7 @@
 }
 
 .detail-container-main-customer-spdail {
-  border-top: 1px solid #ccc;
+  /* border-top: 1px solid #ccc; */
   /* background-color: var(--glass); */
   padding: 20px 20px 0px 20px;
 }
@@ -158,6 +158,12 @@
 
 .Customer-page-input-field {
   flex-wrap: wrap;
+}
+.Customer-page-input-field-addbtn{
+  flex-wrap: wrap;
+  /* padding-left: 30px; */
+  margin-top: 5px;
+
 }
 
 .customer-input-feild-add {

@@ -143,7 +143,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.STax || book.STax}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -160,7 +160,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.SBCess || book.SBCess}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -177,7 +177,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.KKCess || book.KKCess}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -194,7 +194,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.STax_Des || book.STax_Des}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -211,7 +211,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.SBCess_Des || book.SBCess_Des}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -228,7 +228,7 @@ const TaxSetting = () => {
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.KKCess_Des || book.KKCess_Des}
                                 onChange={handleChange}
-                                // variant="standard"
+                            // variant="standard"
                             />
                         </div>
                         <div className="input">
@@ -294,73 +294,75 @@ const TaxSetting = () => {
                         </div>
                     }
                 </div>
-                <div className="TaxSetting-table-container">
-                    <div className="SpeedDial">
-                        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                            <StyledSpeedDial
-                                ariaLabel="SpeedDial playground example"
-                                icon={<SpeedDialIcon />}
-                                direction="left"
-                            >
+                <div className="TaxSetting-table-container-main">
+                    <div className="TaxSetting-table-container">
+                        <div className="SpeedDial">
+                            <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
+                                <StyledSpeedDial
+                                    ariaLabel="SpeedDial playground example"
+                                    icon={<SpeedDialIcon />}
+                                    direction="left"
+                                >
 
-                                {MainSetting_read === 1 && (
+                                    {MainSetting_read === 1 && (
+                                        <SpeedDialAction
+                                            key="list"
+                                            icon={<ChecklistIcon />}
+                                            tooltipTitle="List"
+                                            onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                                        />
+                                    )}
+                                    {MainSetting_modify === 1 && (
+                                        <SpeedDialAction
+                                            key="edit"
+                                            icon={<ModeEditIcon />}
+                                            tooltipTitle="Edit"
+                                            onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                                        />
+                                    )}
+                                    {MainSetting_delete === 1 && (
+                                        <SpeedDialAction
+                                            key="delete"
+                                            icon={<DeleteIcon />}
+                                            tooltipTitle="Delete"
+                                            onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                        />
+                                    )}
+                                    {MainSetting_new === 1 && (
+                                        <SpeedDialAction
+                                            key="Add"
+                                            icon={<BookmarkAddedIcon />}
+                                            tooltipTitle="Add"
+                                            onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                                        />
+                                    )}
                                     <SpeedDialAction
-                                        key="list"
-                                        icon={<ChecklistIcon />}
-                                        tooltipTitle="List"
-                                        onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                                        key="Cancel"
+                                        icon={<CancelPresentationIcon />}
+                                        tooltipTitle="Cancel"
+                                        onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                                     />
-                                )}
-                                {MainSetting_modify === 1 && (
-                                    <SpeedDialAction
-                                        key="edit"
-                                        icon={<ModeEditIcon />}
-                                        tooltipTitle="Edit"
-                                        onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
-                                    />
-                                )}
-                                {MainSetting_delete === 1 && (
-                                    <SpeedDialAction
-                                        key="delete"
-                                        icon={<DeleteIcon />}
-                                        tooltipTitle="Delete"
-                                        onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                                    />
-                                )}
-                                {MainSetting_new === 1 && (
-                                    <SpeedDialAction
-                                        key="Add"
-                                        icon={<BookmarkAddedIcon />}
-                                        tooltipTitle="Add"
-                                        onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
-                                    />
-                                )}
-                                <SpeedDialAction
-                                    key="Cancel"
-                                    icon={<CancelPresentationIcon />}
-                                    tooltipTitle="Cancel"
-                                    onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
-                                />
-                            </StyledSpeedDial>
-                        </Box>
-                    </div>
-                    <div className="table-TaxSetting">
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            onRowClick={handleRowClick}
-                        />
-                    </div>
-                    <div className="input-field tax-setting-btn-main-div">
-                        <div className="input tax-setting-btn">
-                            <Button>
-                                Refresh
-                            </Button>
+                                </StyledSpeedDial>
+                            </Box>
                         </div>
-                        <div className="input tax-setting-btn">
-                            <Button startIcon={<FontAwesomeIcon icon={faSave} size="lg" />} variant="contained">
-                                Update
-                            </Button>
+                        <div className="table-TaxSetting">
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                onRowClick={handleRowClick}
+                            />
+                        </div>
+                        <div className="input-field tax-setting-btn-main-div">
+                            <div className="input tax-setting-btn">
+                                <Button>
+                                    Refresh
+                                </Button>
+                            </div>
+                            <div className="input tax-setting-btn">
+                                <Button startIcon={<FontAwesomeIcon icon={faSave} size="lg" />} variant="contained">
+                                    Update
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>

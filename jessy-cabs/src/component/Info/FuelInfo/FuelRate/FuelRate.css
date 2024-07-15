@@ -30,7 +30,7 @@
   /* border: 1px solid #ccc; */
   padding: 20px;
   width: fit-content;
-  /* background-color: var(--glass); */
+  background-color: transparent !important;
 }
 
 .table-FuelRate {

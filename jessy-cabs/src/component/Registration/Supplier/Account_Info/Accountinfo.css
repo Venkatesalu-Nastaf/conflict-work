@@ -52,6 +52,7 @@
 
 .detail-container-main-account {
   display: flex;
+  margin-bottom: 20px;
 }
 
 .detail-container-main-account .container-right-account {

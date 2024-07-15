@@ -672,7 +672,7 @@ app.get(`/name-orderby/:custmorName`, (req, res) => {
   const customer = req.params.custmorName
 
   // const sql = `select * from customerOrderdata where customer=?`
-const sql1=  `SELECT 
+  const sql1 = `SELECT 
   co.*, 
   c.servicestation
 FROM 
@@ -686,14 +686,14 @@ WHERE
   `
   db.query(sql1, [customer], (err, result) => {
     if (err) {
-     
+
       console.log("error fetching CUSTOMER ", err)
       return
     }
     if (result) {
       return res.json({ data: result, success: true })
     }
- 
+
     return res.json({ success: false })
   })
 })

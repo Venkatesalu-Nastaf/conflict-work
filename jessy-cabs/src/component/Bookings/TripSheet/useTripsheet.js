@@ -151,7 +151,7 @@ const useTripsheet = () => {
     const [escort, setEscort] = useState('No');
     const [transferreport, setTransferreport] = useState('No')
     const [accountinfodata, setAccountInfoData] = useState([])
-    const [ratename,setRate_name]=useState("")
+    const [ratename, setRate_name] = useState("")
 
 
 
@@ -473,7 +473,6 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-
         //calc---------------
         const calcPackage = params.get('calcPackage');
         const extraHR = params.get('extraHR');
@@ -989,7 +988,7 @@ const useTripsheet = () => {
                     calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
-                    vendor_duty: vendorinfo.vendor_duty ||ratename||"",
+                    vendor_duty: vendorinfo.vendor_duty || ratename || "",
                     vendor_ratename: vendorinfo.vendor_ratename || "",
                     vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                     vendorshedInDate: vendorinfo.vendorshedInDate || "",
@@ -1245,7 +1244,7 @@ const useTripsheet = () => {
                 // -------vendordata-------------------------------------------------
                 vendor_vehicle: vendorinfo.vendor_vehicle || "",
                 vendor_duty: vendorinfo.vendor_duty || "",
-                vendor_ratename: vendorinfo.vendor_ratename || ratename||"",
+                vendor_ratename: vendorinfo.vendor_ratename || ratename || "",
                 vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                 vendorshedInDate: vendorinfo.vendorshedInDate || "",
                 vendortotaldays: calculatevendorTotalDays() || 0,
@@ -2755,7 +2754,7 @@ const useTripsheet = () => {
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullAmount })
         // return totalAmount;
     }
-    console.log(ratename,vendorinfo.vendor_ratename,"ratetttettett")
+    console.log(ratename, vendorinfo.vendor_ratename, "ratetttettett")
 
     useEffect(() => {
         calculatevendorTotalAmount()
@@ -2770,7 +2769,7 @@ const useTripsheet = () => {
             // vendorduty = vendorinfo.vendor_duty || vendorinfo.duty;
             // vendorvehicleNames = vendorinfo.vendor_vehicle || vendorinfo.vehicleName;
             vendorduty = vendorinfo.vendor_duty || ""
-            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename||"";
+            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename || "";
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
@@ -3020,6 +3019,100 @@ const useTripsheet = () => {
     }
 
 
+    // // check night beta
+    // const checkNightBetaEligible = () => {
+    //     // const totalTime = formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime()
+    //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    //     const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+
+    //     // const timeNumber = parseInt(totalTime?.split('h')[0])
+    //     const totalDays = calculateTotalDays();
+    //     if (totalDays < 2) {
+    //         // console.log("totalDays", totalDays)
+    //         let start = shedOutTime?.split(':').map(Number);
+    //         let end = shedInTime?.split(':').map(Number);
+
+    //         if (start && end) {
+    //             // console.log("start && end", start, end)
+    //             let startMinutes = start[0] * 60 + start[1];
+    //             let endMinutes = end[0] * 60 + end[1];
+
+    //             let nightStart = 22 * 60; // 22:00 in minutes
+    //             let nightEnd = 6 * 60; // 06:00 in minutes
+
+    //             if (startMinutes < nightEnd) startMinutes += 24 * 60;
+    //             if (endMinutes < nightEnd) endMinutes += 24 * 60;
+    //             console.log("!(endMinutes <= night", !(endMinutes <= nightStart || startMinutes >= nightEnd + 24 * 60))
+    //             return !(endMinutes <= nightStart || startMinutes >= nightEnd + 24 * 60);
+    //         }
+    //         return
+    //     }
+    //     return true
+    // }
+
+    // const checkNightBetaEligible = () => {
+    //     // const totalTime = formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime()
+    //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    //     const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+
+    //     const totalDays = calculateTotalDays();
+    //     if (totalDays < 2) {
+    //         let start = shedOutTime?.split(':').map(Number);
+    //         let end = shedInTime?.split(':').map(Number);
+
+    //         if (start && end) {
+    //             let startMinutes = start[0] * 60 + start[1];
+    //             let endMinutes = end[0] * 60 + end[1];
+
+    //             let nightStart = 22 * 60; // 22:00 in minutes
+    //             let nightEnd = 6 * 60; // 06:00 in minutes
+
+    //             // Adjust for times before 06:00 by adding 24 hours in minutes
+    //             if (startMinutes < nightEnd) startMinutes += 24 * 60;
+    //             if (endMinutes < nightEnd) endMinutes += 24 * 60;
+
+    //             // Adjust for start times after 22:00
+    //             if (startMinutes >= nightStart) startMinutes += 24 * 60;
+
+    //             console.log("Night Time Check:", (endMinutes <= nightStart || startMinutes >= nightEnd + 24 * 60));
+    //             return (endMinutes <= nightStart || startMinutes >= nightEnd + 24 * 60);
+    //         }
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+
+    const checkNightBetaEligible = () => {
+        const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+        const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+
+        const totalDays = calculateTotalDays();
+        if (totalDays < 2) {
+            let start = shedOutTime?.split(':').map(Number);
+            let end = shedInTime?.split(':').map(Number);
+
+            if (start && end) {
+                let startMinutes = start[0] * 60 + start[1];
+                let endMinutes = end[0] * 60 + end[1];
+
+                let nightStart = 22 * 60;
+                let nightEnd = 6 * 60;
+                if (startMinutes < nightEnd) startMinutes += 24 * 60;
+                if (endMinutes < nightEnd) endMinutes += 24 * 60;
+                if (startMinutes >= nightStart) startMinutes += 24 * 60;
+
+                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+
+                // console.log("Night Time Check:", isStartInNight || isEndInNight);
+                return isStartInNight || isEndInNight;
+            }
+            return false;
+        }
+        return true;
+    };
+
 
     const [vehileNames, setVehicleNames] = useState([])
 
@@ -3179,7 +3272,7 @@ const useTripsheet = () => {
         //  signaturePopUpOpen,
         handleSignaturePopUpOpen,
         rows, ClosedTripData,
-        error,
+        error, checkNightBetaEligible,
         success,
         info,
         warning,

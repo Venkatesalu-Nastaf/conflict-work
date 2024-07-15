@@ -80,7 +80,7 @@
     width: 110%;
     /* margin-top: 30px; */
     /* background-color: var(--glass); */
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     /* border: 2px solid #ccc; */
     /* border-radius: 15px; */
 }
@@ -168,6 +168,7 @@
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
+        margin-top: 10px;
     }
 }
 
@@ -175,6 +176,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 10px;
+
 }
 
 @media screen and (max-width:1122px) {

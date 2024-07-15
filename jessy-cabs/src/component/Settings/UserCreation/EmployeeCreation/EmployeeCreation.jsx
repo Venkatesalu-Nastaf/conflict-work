@@ -343,7 +343,7 @@ const EmployeeCreation = ({ stationName }) => {
               </div>
             }
           </div>
-          <Box sx={{ mt: 3, }}
+          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"100px" ,right:"30px" }}
             className="add-icon">
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

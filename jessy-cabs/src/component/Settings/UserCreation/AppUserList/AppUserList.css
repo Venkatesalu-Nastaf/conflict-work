@@ -35,11 +35,17 @@
   overflow-x: hidden;
 }
 
+.table-bookingCopys-main{
+  display: flex;
+  justify-content: center;
+}
+
 .table-bookingCopys {
   background: var(--glass);
   border: 2px solid #ccc;
   border-radius: 15px;
-  margin-top: 30px;
+  margin-top: 20px;
+  width: fit-content;
 }
 
 .main-setting-main .container-main::-webkit-scrollbar-thumb {

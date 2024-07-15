@@ -670,15 +670,30 @@ app.get(`/get-customer`, (req, res) => {
 
 app.get(`/name-orderby/:custmorName`, (req, res) => {
   const customer = req.params.custmorName
-  const sql = `select * from customerOrderdata where customer=?`
-  db.query(sql, [customer], (err, result) => {
+
+  // const sql = `select * from customerOrderdata where customer=?`
+  const sql1 = `SELECT 
+  co.*, 
+  c.servicestation
+FROM 
+  customerOrderdata co
+LEFT JOIN 
+  customers c 
+ON 
+  co.customer = c.customer 
+WHERE 
+  co.customer = ?
+  `
+  db.query(sql1, [customer], (err, result) => {
     if (err) {
+
       console.log("error fetching CUSTOMER ", err)
       return
     }
     if (result) {
       return res.json({ data: result, success: true })
     }
+
     return res.json({ success: false })
   })
 })

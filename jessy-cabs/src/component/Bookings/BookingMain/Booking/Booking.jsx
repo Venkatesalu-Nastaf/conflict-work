@@ -231,12 +231,13 @@ const Booking = ({ stationName, customerData }) => {
     setBookingStatus(event.target.value);
   };
 
-  const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
+  // const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
 
-  const serviceStationFilterFun = () => {
-    const filterData = customerData.filter(item => item.customer === customerName)
-    return filterData.length > 0 ? filterData[0].servicestation : "";
-  }
+  // const serviceStationFilterFun = () => {
+  //   const filterData = customerData.filter(item => item.customer === customerName)
+  //   return filterData.length > 0 ? filterData[0].servicestation : "";
+  
+  // }
 
 
   return (
@@ -292,10 +293,15 @@ const Booking = ({ stationName, customerData }) => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     size="small"
-                    value={
-                      bookingStatus || "pending" ||
-                      ""
-                    }
+                    // value={
+                    //   bookingStatus || "pending" ||
+                    //   ""
+                    // }
+                    // value={
+                    //   bookingStatus || 
+                    //   ""
+                    // }
+                    value={['pending', 'Cancelled'].includes(bookingStatus) ? bookingStatus : ''}
                     label="Status"
                     onChange={handleStatusChange}
                   // onChange={handleChange}
@@ -1239,7 +1245,9 @@ const Booking = ({ stationName, customerData }) => {
                 id="servicestation"
                 freeSolo
                 size="small"
-                value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                // value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+
                 options={stationName?.map((option) => ({
                   label: option?.Stationname,
                 }))}

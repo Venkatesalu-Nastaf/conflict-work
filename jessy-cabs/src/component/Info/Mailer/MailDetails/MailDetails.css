@@ -225,20 +225,28 @@
     }
 }
 
-.table-bookingCopy-TransferDataEntry {
+.table-bookingCopy-mailer {
     margin-top: 10px;
 }
 
 /* @media screen and (min-width: 970px) {
-    .table-bookingCopy-TransferDataEntry {
+    .table-bookingCopy-mailer {
         width: 71vw;
     }
 } */
 
 @media screen and (max-width: 969.99px) {
-    .table-bookingCopy-TransferDataEntry {
+    .table-bookingCopy-mailer {
         width: 94%;
     }
+}
+
+.table-bookingCopy-mailer {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: var(--glass);
+    margin: 0px 20px;
+    width: 100%;
 }
 
 .mail-details-input-field {

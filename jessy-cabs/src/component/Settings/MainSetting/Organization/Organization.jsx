@@ -237,9 +237,10 @@ const Organization = ({ logoImage }) => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input organization-text-area">
+                            <div className="input organization-input">
                                 <TextField
                                     size="small"
+                                    sx={{ width: "225px" }}
                                     name="remark"
                                     className='address-field organisation-address-field'
                                     value={selectedCustomerData?.addressLine1 || book.addressLine1}

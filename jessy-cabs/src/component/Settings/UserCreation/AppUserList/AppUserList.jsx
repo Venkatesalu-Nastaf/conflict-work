@@ -126,16 +126,19 @@ const AppUserList = () => {
             </div>
           }
         </div>
-        <div className="table-bookingCopys">
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={5}
-              checkboxSelection
-            />
+        <div className="table-bookingCopys-main">
+          <div className="table-bookingCopys">
+            <div style={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                checkboxSelection
+              />
+            </div>
           </div>
         </div>
+
       </form>
     </div>
   )

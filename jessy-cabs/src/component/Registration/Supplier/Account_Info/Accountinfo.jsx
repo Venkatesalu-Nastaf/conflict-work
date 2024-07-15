@@ -152,7 +152,7 @@ const Accuntinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="travelsname"
                   autoComplete="new-password"
@@ -254,7 +254,7 @@ const Accuntinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="travelsemail"
                   autoComplete="new-password"
@@ -402,7 +402,7 @@ const Accuntinfo = () => {
               <RateReviewIcon color="action" />
             </div>
                   <TextField
-                  margin='normal'
+                  // margin='normal'
                   size='small'
                   name="driverName"
                   autoComplete="new-password"
@@ -548,7 +548,7 @@ const Accuntinfo = () => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn">
+        <div className="Download-btn-account-info">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>

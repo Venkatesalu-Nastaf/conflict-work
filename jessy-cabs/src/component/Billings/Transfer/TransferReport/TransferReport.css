@@ -48,7 +48,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin: 0px 20px;
-    width: 100%;
+    width: fit-content;
 }
 
 .tripsheet-table-transferReport {

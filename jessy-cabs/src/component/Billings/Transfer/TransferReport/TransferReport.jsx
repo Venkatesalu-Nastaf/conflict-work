@@ -240,16 +240,16 @@ const TransferReport = ({ stationName }) => {
   }
 
   const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "vcode", headerName: "VCode", width: 130 },
-    { field: "guestname", headerName: "Guest Name", width: 130 },
-    { field: "tripid", headerName: "Trip No", width: 130 },
-    { field: "status", headerName: "Status", width: 130 },
-    // { field: "view", headerName: "View", width: 130 },
+    { field: "id", headerName: "Sno", width: 100 },
+    { field: "vcode", headerName: "VCode", width: 200 },
+    { field: "guestname", headerName: "Guest Name", width: 200 },
+    { field: "tripid", headerName: "Trip No", width: 200 },
+    { field: "status", headerName: "Status", width: 200 },
+    // { field: "view", headerName: "View", width: 200 },
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 130,
+      width: 200,
       renderCell: (params) => (
         <Button
           onClick={() => handleButtonClick(params)}

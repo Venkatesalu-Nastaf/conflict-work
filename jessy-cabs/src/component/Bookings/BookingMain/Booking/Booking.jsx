@@ -236,7 +236,7 @@ const Booking = ({ stationName, customerData }) => {
   // const serviceStationFilterFun = () => {
   //   const filterData = customerData.filter(item => item.customer === customerName)
   //   return filterData.length > 0 ? filterData[0].servicestation : "";
-  
+
   // }
 
 
@@ -1760,7 +1760,7 @@ const Booking = ({ stationName, customerData }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  {reportTimeVar && (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>))}
+                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>)) : <label> Start Time</label>}
 
                   <input
                     type="time"

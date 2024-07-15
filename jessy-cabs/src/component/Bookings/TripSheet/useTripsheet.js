@@ -151,6 +151,7 @@ const useTripsheet = () => {
     const [escort, setEscort] = useState('No');
     const [transferreport, setTransferreport] = useState('No')
     const [accountinfodata, setAccountInfoData] = useState([])
+    const [ratename,setRate_name]=useState("")
 
 
 
@@ -988,7 +989,7 @@ const useTripsheet = () => {
                     calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
-                    vendor_duty: vendorinfo.vendor_duty || "",
+                    vendor_duty: vendorinfo.vendor_duty ||ratename||"",
                     vendor_ratename: vendorinfo.vendor_ratename || "",
                     vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                     vendorshedInDate: vendorinfo.vendorshedInDate || "",
@@ -1244,7 +1245,7 @@ const useTripsheet = () => {
                 // -------vendordata-------------------------------------------------
                 vendor_vehicle: vendorinfo.vendor_vehicle || "",
                 vendor_duty: vendorinfo.vendor_duty || "",
-                vendor_ratename: vendorinfo.vendor_ratename || "",
+                vendor_ratename: vendorinfo.vendor_ratename || ratename||"",
                 vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                 vendorshedInDate: vendorinfo.vendorshedInDate || "",
                 vendortotaldays: calculatevendorTotalDays() || 0,
@@ -2224,6 +2225,8 @@ const useTripsheet = () => {
         if (!lockdata) {
             // setVendorinfodata(params.vechicleName)
             setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType, vendor_vehicle: params.vehicleName2 })
+            setRate_name(params.rateType)
+
             // setVendorinfodata({ ...vendorinfo, vendor_vehicle: params.vehicleName })
         }
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
@@ -2752,6 +2755,7 @@ const useTripsheet = () => {
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullAmount })
         // return totalAmount;
     }
+    console.log(ratename,vendorinfo.vendor_ratename,"ratetttettett")
 
     useEffect(() => {
         calculatevendorTotalAmount()
@@ -2766,7 +2770,7 @@ const useTripsheet = () => {
             // vendorduty = vendorinfo.vendor_duty || vendorinfo.duty;
             // vendorvehicleNames = vendorinfo.vendor_vehicle || vendorinfo.vehicleName;
             vendorduty = vendorinfo.vendor_duty || ""
-            vendorvehicleNames = vendorinfo.vendor_vehicle || "";
+            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename||"";
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''

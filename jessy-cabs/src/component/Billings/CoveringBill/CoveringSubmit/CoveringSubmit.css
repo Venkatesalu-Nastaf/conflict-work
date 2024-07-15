@@ -30,6 +30,7 @@
     border-radius: 15px;
     background-color: var(--glass);
     margin: 0px 20px;
+    width: fit-content;
 }
 
 .Download-btn-Covering-submit {

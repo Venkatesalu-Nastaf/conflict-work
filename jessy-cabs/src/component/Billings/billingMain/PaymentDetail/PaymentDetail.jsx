@@ -65,7 +65,6 @@ const PaymentDetail = ({ organizationNames }) => {
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
-      
       <form >
         <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">

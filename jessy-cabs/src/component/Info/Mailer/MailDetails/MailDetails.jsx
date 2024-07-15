@@ -452,7 +452,7 @@ const MailDetails = () => {
                     </div>
               
 
-                    <div className="table-bookingCopy-TransferDataEntry">
+                    <div className="table-bookingCopy-mailer">
                       <div className="mail-details-table">
                         <DataGrid
                           rows={templatedata}

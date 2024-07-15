@@ -24,13 +24,21 @@
 }
 
 /* TABLE */
+.TaxSetting-table-container-main {
+    /* display: flex;
+    justify-content: center; */
+    margin-top: 15px;
+    padding-left: 25px;
+}
+
 .TaxSetting-table-container {
     /* margin-top: 10px; */
     padding-bottom: 10px;
-    border: 1px solid #ccc;
-    padding-left: 20px;
-    padding-Right: 20px;
+    /* border: 1px solid #ccc; */
+    /* padding-left: 20px;
+    padding-Right: 20px; */
     padding-top: 0px;
+    width: fit-content;
     /* background-color: var(--glass); */
 }
 

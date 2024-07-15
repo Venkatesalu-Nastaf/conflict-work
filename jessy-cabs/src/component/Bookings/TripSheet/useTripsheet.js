@@ -3082,6 +3082,40 @@ const useTripsheet = () => {
     //     return true;
     // };
 
+// // its for the single day
+//     const checkNightBetaEligible = () => {
+//         const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+//         const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+
+//         const totalDays = calculateTotalDays();
+
+//         // If totalDays is 2 or more, automatically return true
+//         if (totalDays >= 2) {
+//             return true;
+//         }
+
+//         // Convert times to minutes since midnight
+//         let start = shedOutTime?.split(':').map(Number);
+//         let end = shedInTime?.split(':').map(Number);
+
+//         if (start && end) {
+//             let startMinutes = start[0] * 60 + start[1];
+//             let endMinutes = end[0] * 60 + end[1];
+
+//             let nightStart = 22 * 60; // 22:00 in minutes
+//             let nightEnd = 6 * 60; // 06:00 in minutes
+
+//             // Check if either time falls within the night period
+//             const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+//             const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+
+//             // If either start or end time overlaps with the night period, return true
+//             return isStartInNight || isEndInNight;
+//         }
+
+//         return false;
+//     };
+
 
     const checkNightBetaEligible = () => {
         const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;

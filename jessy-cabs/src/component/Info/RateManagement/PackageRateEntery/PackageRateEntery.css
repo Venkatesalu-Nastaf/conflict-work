@@ -168,6 +168,7 @@
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
+        margin-top: 10px;
     }
 }
 
@@ -175,6 +176,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 10px;
+
 }
 
 @media screen and (max-width:1122px) {

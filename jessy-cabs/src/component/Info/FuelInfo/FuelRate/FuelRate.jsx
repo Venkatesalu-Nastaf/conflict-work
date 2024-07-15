@@ -50,11 +50,11 @@ const FuelRate = () => {
     // API END
     // Table Start
     const columns = [
-        { field: "id", headerName: "Sno", width: 70 },
-        { field: "Fuel_Type", headerName: "Fuel_Type", width: 130 },
-        { field: "Date", headerName: "Date", width: 130 },
-        { field: "State_Name", headerName: "State_Name", width: 160 },
-        { field: "Price", headerName: "Price (INR)", width: 130 },
+        { field: "id", headerName: "Sno", width: 100 },
+        { field: "Fuel_Type", headerName: "Fuel_Type", width: 200 },
+        { field: "Date", headerName: "Date", width: 200 },
+        { field: "State_Name", headerName: "State_Name", width: 200 },
+        { field: "Price", headerName: "Price (INR)", width: 200 },
     ];
 
     const rows = Object.keys(fuelData).map((fuelType, index) => ({
@@ -104,7 +104,7 @@ const FuelRate = () => {
                         </div>
                     </div>
                 </div>
-                <div className="FuelRate-table-container">
+                <div className="FuelRate-table-container-info">
                     <div className="table-FuelRate">
                         <DataGrid
                             rows={rows}

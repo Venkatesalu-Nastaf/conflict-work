@@ -329,25 +329,7 @@ const Accuntinfo = () => {
                 />
               </div>
 
-              <div className="input radio">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                A/C Type
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="acType"
-                id="acType"
-                autoComplete="new-password"
-                onChange={handleChange}
-                value={selectedCustomerData?.acType || book.acType}
-              >
-                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
-                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
-              </RadioGroup>
-            </FormControl>
-          </div>
+
           <div className="input">
             <div className="icone">
               <RateReviewIcon color="action" />
@@ -413,9 +395,31 @@ const Accuntinfo = () => {
                   id="Drivername"
                 // variant="standard"
                 />
-                </div>
+                </div>      
+                
+          <div className=" radio">
+            <FormControl>
+              <FormLabel id="demo-row-radio-buttons-group-label">
+                A/C Type
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="acType"
+                id="acType"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.acType || book.acType}
+              >
+                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
+                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
+              </RadioGroup>
+            </FormControl>
+          </div>
 
-          <div className="input">
+
+
+          <div className="">
             {isEditMode ? (
               <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
             ) : (

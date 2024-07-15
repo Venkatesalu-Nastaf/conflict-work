@@ -307,12 +307,19 @@ const Customer = ({ stationName }) => {
                     />
                   </RadioGroup>
                 </FormControl>
-                <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
               </div>
 
-              {customerfieldSets.map((datafield, index) => (
+            
+
+            </div>
+            <div className="input-field Customer-page-input-field-addbtn">
+            {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
+
+
+            {customerfieldSets.map((datafield, index) => (
                 <>
-                  {/* <div key={index} className=""> */}
+
+                  <div  className="input-field" style={{flexWrap:'wrap'}}>
                   <div className="input" key={index}>
                     <div className="icone">
                       <PermIdentityIcon color="action" />
@@ -364,14 +371,20 @@ const Customer = ({ stationName }) => {
                     />
                   </div>
 
-                  {/* </div> */}
-                </>
-              ))}
+                  </div>
 
-            {/* </div>
+                </>
+                
+              ))}
+            <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
+
+
+            </div>
+
           </div>
+         
           <div className="Customer-page-secend-containers">
-            <div className="input-field  checkbox customer-input-feild"> */}
+            <div className="input-field  checkbox customer-input-feild">
               <div className="input input-address">
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
@@ -569,10 +582,10 @@ const Customer = ({ stationName }) => {
                   <option value="12">12%</option>
                 </select>
               </div>
-            </div>
+            {/* </div>
           </div>
           <div className="detail-container-main-customer-spdail">
-            <div className="input-field customer-input-feild-add">
+            <div className="input-field customer-input-feild-add"> */}
               <div className="input customer-billing-group-input">
                 <div className='customer-billing-group-input-division'>
                   <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>

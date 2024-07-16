@@ -20,6 +20,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import usePaymentdetails from './usePaymentdetails';
 import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Box } from '@mui/material';
 
 const PaymentDetail = ({ organizationNames }) => {
 
@@ -179,7 +180,7 @@ const PaymentDetail = ({ organizationNames }) => {
             </div>
           }
         </div>
-        <div className='total-container' style={{justifyContent: "flex-start"}}>
+        <div className='total-container' style={{ justifyContent: "flex-start" }}>
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -199,7 +200,7 @@ const PaymentDetail = ({ organizationNames }) => {
             <div className='total-inputs' >
               <label htmlFor="toatlAmount">Total Amount:</label>
               <input type="number" id="toatlAmount" value={totalAmount} readOnly />
-            </div> 
+            </div>
             <div className='total-inputs' >
               <label htmlFor="paindAmounts">Paid Amount:</label>
               <input type="number" id="paindAmounts" value={paidAmount} readOnly />
@@ -212,14 +213,36 @@ const PaymentDetail = ({ organizationNames }) => {
         </div>
         <div className="table-bookingCopy-PaymentDetail">
           <div className='payment-table'>
-            <DataGrid
-              rows={reversedRows}
-              columns={columns}
-              onRowClick={(event) => handleButtonClickTripsheet(event.row)}
-              pageSize={5}
-              checkboxSelection
-              disableRowSelectionOnClick
-            />
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              <DataGrid
+                rows={reversedRows}
+                columns={columns}
+                onRowClick={(event) => handleButtonClickTripsheet(event.row)}
+                pageSize={5}
+                checkboxSelection
+                disableRowSelectionOnClick
+              />
+            </Box>
+
           </div>
         </div>
       </form>

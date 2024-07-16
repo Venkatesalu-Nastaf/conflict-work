@@ -24,6 +24,7 @@ import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Box } from '@mui/material';
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
 
@@ -181,8 +182,8 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                        label="From Date"
-                        id="fromDate"
+                          label="From Date"
+                          id="fromDate"
                           value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -206,8 +207,8 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                        label="To Date"
-                        id="toDate"
+                          label="To Date"
+                          id="toDate"
                           value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -298,7 +299,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
         </div>
         <div className="table-bookingCopy-TransferDataEntry">
           <div className='transfer-data-entry-table'>
-            <DataGrid
+            {/* <DataGrid
               rows={rows}
               columns={columns}
               onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -307,7 +308,38 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               }}
               checkboxSelection
               disableRowSelectionOnClick
-            />
+            /> */}
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  handleRowSelection(newRowSelectionModel);
+                }}
+                checkboxSelection
+                disableRowSelectionOnClick
+              />
+            </Box>
           </div>
           <div className='alert-popup-main'>
             {error &&

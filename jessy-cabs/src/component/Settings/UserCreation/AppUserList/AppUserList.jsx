@@ -9,6 +9,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import useAppuserlist from './useAppuserlist';
+import { Box } from '@mui/material';
 
 
 const AppUserList = () => {
@@ -129,12 +130,40 @@ const AppUserList = () => {
         <div className="table-bookingCopys-main">
           <div className="table-bookingCopys">
             <div style={{ height: 400, width: "100%" }}>
-              <DataGrid
+              {/* <DataGrid
                 rows={rows}
                 columns={columns}
                 pageSize={5}
                 checkboxSelection
-              />
+              /> */}
+
+              <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={5}
+                  checkboxSelection
+                />
+              </Box>
             </div>
           </div>
         </div>

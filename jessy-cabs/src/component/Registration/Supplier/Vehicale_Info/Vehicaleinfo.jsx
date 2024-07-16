@@ -1095,12 +1095,41 @@ const Vehicaleinfo = ({ stationName }) => {
         </div>
         <div className="table-bookingCopy-Booking">
           <div className='vehicle-info-main-table'>
+            {/* <DataGrid
+              rows={rows}
+              columns={columns}
+              onRowClick={handleRowClick1}
+              pageSize={5}
+            /> */}
+
+<Box
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
+              },
+            }}
+          >
             <DataGrid
               rows={rows}
               columns={columns}
               onRowClick={handleRowClick1}
               pageSize={5}
             />
+          </Box>
+
           </div>
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>

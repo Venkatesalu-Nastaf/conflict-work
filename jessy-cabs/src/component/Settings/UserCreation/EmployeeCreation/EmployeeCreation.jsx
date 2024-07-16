@@ -136,7 +136,7 @@ const EmployeeCreation = ({ stationName }) => {
   const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
 
   return (
-    <div className="EmployeeCreation-main main-content-form">
+    <div className="EmployeeCreation-main">
       <div className="EmployeeCreation-form-container">
         <form onSubmit={handleClick}>
           <div className="EmployeeCreation-header">

@@ -2568,16 +2568,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                     },
                   }}
                 >
-                  <Tab>Booking</Tab>
                   <Tab>Vendor Info</Tab>
                   <Tab>Vendor Bill</Tab>
                   <Tab>Customer Bill</Tab>
-                  <Tab>Alert</Tab>
                   <Tab>GPS Att</Tab>
                   <Tab>Message</Tab>
                 </TabList>
 
-                <TabPanel value={1} sx={{ p: 2 }}>
+                <TabPanel value={0} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
@@ -2870,7 +2868,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                 </TabPanel>
 
-                <TabPanel value={2} sx={{ p: 2 }}>
+                <TabPanel value={1} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
@@ -3076,7 +3074,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </TabPanel>
 
 
-                <TabPanel value={3} sx={{ p: 2 }}>
+                <TabPanel value={2} sx={{ p: 2 }}>
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
@@ -3306,9 +3304,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                 </TabPanel>
 
-
-
-                <TabPanel value={5} sx={{ p: 2 }}>
+                <TabPanel value={3} sx={{ p: 2 }}>
                   <div className="Customer-Gps-att-Slider">
                     <div className="input-field">
                       <div className="input">
@@ -3517,7 +3513,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   </div>
                 </TabPanel>
-                <TabPanel value={6} sx={{ p: 2 }}>
+                <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
                       <div>
@@ -3546,6 +3542,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                           )}
                         </div>
                       )}
+                    </div>
+
+                    <div className="table-TripSheet">
+                      <div className='tripsheet-booking-table'>
+                        
+                        <DataGrid
+                          rows={rows}
+                          columns={columns}
+                          onRowClick={handleTripRowClick}
+                          pageSize={5}
+                          checkboxSelection
+                        />
+                      </div>
                     </div>
                   </div>
                 </TabPanel>

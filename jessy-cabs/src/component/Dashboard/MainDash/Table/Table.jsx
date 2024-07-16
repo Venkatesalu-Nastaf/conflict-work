@@ -129,7 +129,7 @@ export default function BasicTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={popupOpen} className="dialog-box-TripDetails" >
+      {/* <Dialog open={popupOpen} className="dialog-box-TripDetails" >
         <div className="dialog-close-btn">
           <DialogActions>
             <IconButton onClick={handlePopupClose} aria-label="delete">
@@ -138,10 +138,38 @@ export default function BasicTable() {
           </DialogActions>
         </div>
         <DialogContent className="Scroll-Style-Slim">
-          {/* {selectedTrip && <Tripdetails tripData={selectedTrip} />} */}
           {selectedTrip && <Tripdetails tripData={selectedTrip} />}
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+
+
+
+      <Dialog
+      open={popupOpen}
+      onClose={handlePopupClose}
+      fullWidth={true}
+      maxWidth="md" // This can be set to 'xs', 'sm', 'md', 'lg', or 'xl'
+      sx={{
+        '& .MuiDialog-paper': {
+          width: '800px', // Adjust this value to increase the width
+          maxWidth: '800px', // Ensure the width is strictly set to 800px
+        },
+      }}
+      className="dialog-box-TripDetails"
+    >
+      <div className="dialog-close-btn">
+        <DialogActions>
+          <IconButton onClick={handlePopupClose} aria-label="close">
+            <HighlightOffIcon />
+          </IconButton>
+        </DialogActions>
+      </div>
+      <DialogContent className="Scroll-Style-Slim">
+        {selectedTrip && <Tripdetails tripData={selectedTrip} />}
+      </DialogContent>
+    </Dialog>
+
+      
     </div>
   );
 } 

@@ -552,7 +552,7 @@ const Accuntinfo = () => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn-account-info">
+        <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>

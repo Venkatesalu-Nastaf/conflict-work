@@ -113,8 +113,8 @@
 
 .glass {
   display: grid;
-  height: 95%;
-  width: 97%;
+  height: 98%;
+  width: 99%;
   backdrop-filter: blur(5px);
   border-radius: 2rem;
   border: 2px solid var(--glass);

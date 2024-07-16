@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
 import { APIURL } from "../url";
+import axios from 'axios';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
@@ -10,6 +11,7 @@ const DigitalSignature = () => {
   const uniqueno = new URLSearchParams(window.location.search).get(
     "uniqueNumber"
   );
+  const [successMessage,setSuccessMessage]=useState('')
   const [expired, setExpired] = useState(() => {
     const expiredInSessionStorage =
       sessionStorage.getItem("expired") && localStorage.getItem("expired");
@@ -24,6 +26,7 @@ const DigitalSignature = () => {
 
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
+    const status="finished"
 
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
@@ -37,6 +40,8 @@ const DigitalSignature = () => {
           uniqueno: uniqueno,
         }),
       });
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+        setSuccessMessage("upload successfully")
       clearSignature();
       setTimeout(() => {
         setExpired(true);
@@ -60,6 +65,18 @@ const DigitalSignature = () => {
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
   }
+  const Startsignature= async()=>{
+    console.log("startsignature")
+    const status="onSign"
+    try{
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+  
+
 
   return (
     <div>
@@ -71,8 +88,10 @@ const DigitalSignature = () => {
           height: 500,
           className: "signature-canvas signature-pad ",
         }}
+        onBegin={Startsignature}
       />
       <div>
+        <p style={{textAlign:'center',color:"green"}}>{successMessage}...</p>
         <button className="clear-button" onClick={clearSignature}>
           Clear Signature
         </button>

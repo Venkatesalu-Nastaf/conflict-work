@@ -43,6 +43,7 @@ import axios from "axios";
 import { APIURL } from "../src/component/url";
 import NoPermission from "./component/permissionContext/NoPermission/NoPermission";
 import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
+import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 
 
 
@@ -370,6 +371,10 @@ function App() {
             <Route
               path="/onlinedigital/digitalsignature"
               element={<DigitalSignature />}
+            />
+              <Route
+              path="/SignatureGenerate"
+              element={<SignatureGenerate/>}
             />
             <Route
               path="*"

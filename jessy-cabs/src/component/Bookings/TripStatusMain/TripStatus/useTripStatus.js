@@ -9,28 +9,23 @@ import Excel from 'exceljs';
 
 const columns = [
   { field: "id5", headerName: "Sno", width: 50 },
+  { field: "bookingno", headerName: "Booking No", width: 110 },
+  { field: "tripid", headerName: "Tripsheet No", width: 110 },
   { field: "status", headerName: "Status", width: 110 },
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "servicestation", headerName: "Service Station", width: 130 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
-
-  { field: "bookingno", headerName: "Booking No", width: 110 },
-  { field: "tripid", headerName: "Tripsheet No", width: 110 },
-
-
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "guestname", headerName: "Guest Name", width: 140 },
   { field: "address1", headerName: "Address", width: 130 },
-
   { field: "email", headerName: "Email", width: 130 },
   { field: "employeeno", headerName: "Employee No", width: 110 },
   { field: "report", headerName: "Report", width: 130 },
   { field: "driverName", headerName: "Driver Name", width: 130 },
   { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
   { field: "vehType", headerName: "Rate For", width: 130 },
-
   { field: "reporttime", headerName: "ShedOut Time", width: 110 },
   { field: "starttime", headerName: "Start Time", width: 100 },
   { field: "duty", headerName: "Duty", width: 100 },

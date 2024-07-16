@@ -1359,6 +1359,18 @@ router.get('/tripaccounttravelname',(req,res)=>{
 })
 
 
+router.get('/signaturetimedatadetails/:tripid',(req,res)=>{
+    const tripid=req.params.tripid;
+    db.query("select * from Signaturetimedetails where tripid = ?",[tripid],(err,results)=>{
+        if(err){
+            return res.status(400).json(err)
+        }
+        console.log(results)
+        return res.status(200).json(results)
+
+    })
+})
+
 
 
 

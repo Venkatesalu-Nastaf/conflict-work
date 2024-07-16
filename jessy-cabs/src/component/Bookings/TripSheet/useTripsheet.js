@@ -152,7 +152,8 @@ const useTripsheet = () => {
     const [transferreport, setTransferreport] = useState('No')
     const [accountinfodata, setAccountInfoData] = useState([])
     const [ratename, setRate_name] = useState("")
-    const [signaturelinkcopy,setSignaturtCopied]=useState(false)
+    const [signaturelinkcopy, setSignaturtCopied] = useState(false)
+    const [rowsignature, setRowsSignature] = useState([])
 
 
 
@@ -178,6 +179,16 @@ const useTripsheet = () => {
         { field: "time", headerName: "Trip Time", width: 130 },
         { field: "trip_type", headerName: "Trip Type", width: 160 },
         { field: "place_name", headerName: "Place Name", width: 600 },
+
+    ];
+
+    const columnssignature = [
+        { field: "id5", headerName: "Sno", width: 70 },
+        { field: "sign_logId", headerName: "LogID", width: 160 },
+        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
+        { field: "startsigntime", headerName: "CTime", width: 130 },
+        { field: "Signstatus", headerName: "SignStatus", width: 160 },
+
 
     ];
 
@@ -253,7 +264,7 @@ const useTripsheet = () => {
             try {
                 const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
                 const data = response.data
-                console.log(data, "accccccccc")
+                // console.log(data, "accccccccc")
                 setAccountInfoData(data)
 
             }
@@ -263,6 +274,8 @@ const useTripsheet = () => {
         }
         fetchdataccountinfodata()
     }, [apiUrl])
+    
+   
 
 
 
@@ -2755,7 +2768,7 @@ const useTripsheet = () => {
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullAmount })
         // return totalAmount;
     }
-    
+
 
     useEffect(() => {
         calculatevendorTotalAmount()
@@ -2774,7 +2787,7 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            vendorratetype = vendorinfo.vendor_ratename ||ratename|| ""
+            vendorratetype = vendorinfo.vendor_ratename || ratename || ""
 
             console.log(vendortotkm, "kkkcc", vendorratetype, vendortothr, "hrr", vendorduty, "duty", vendorvehicleNames, "namorg")
 
@@ -3083,39 +3096,39 @@ const useTripsheet = () => {
     //     return true;
     // };
 
-// // its for the single day
-//     const checkNightBetaEligible = () => {
-//         const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-//         const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+    // // its for the single day
+    //     const checkNightBetaEligible = () => {
+    //         const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    //         const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
 
-//         const totalDays = calculateTotalDays();
+    //         const totalDays = calculateTotalDays();
 
-//         // If totalDays is 2 or more, automatically return true
-//         if (totalDays >= 2) {
-//             return true;
-//         }
+    //         // If totalDays is 2 or more, automatically return true
+    //         if (totalDays >= 2) {
+    //             return true;
+    //         }
 
-//         // Convert times to minutes since midnight
-//         let start = shedOutTime?.split(':').map(Number);
-//         let end = shedInTime?.split(':').map(Number);
+    //         // Convert times to minutes since midnight
+    //         let start = shedOutTime?.split(':').map(Number);
+    //         let end = shedInTime?.split(':').map(Number);
 
-//         if (start && end) {
-//             let startMinutes = start[0] * 60 + start[1];
-//             let endMinutes = end[0] * 60 + end[1];
+    //         if (start && end) {
+    //             let startMinutes = start[0] * 60 + start[1];
+    //             let endMinutes = end[0] * 60 + end[1];
 
-//             let nightStart = 22 * 60; // 22:00 in minutes
-//             let nightEnd = 6 * 60; // 06:00 in minutes
+    //             let nightStart = 22 * 60; // 22:00 in minutes
+    //             let nightEnd = 6 * 60; // 06:00 in minutes
 
-//             // Check if either time falls within the night period
-//             const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-//             const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+    //             // Check if either time falls within the night period
+    //             const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+    //             const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
 
-//             // If either start or end time overlaps with the night period, return true
-//             return isStartInNight || isEndInNight;
-//         }
+    //             // If either start or end time overlaps with the night period, return true
+    //             return isStartInNight || isEndInNight;
+    //         }
 
-//         return false;
-//     };
+    //         return false;
+    //     };
 
 
     const checkNightBetaEligible = () => {
@@ -3153,9 +3166,9 @@ const useTripsheet = () => {
         const shedInTime = vendorinfo?.vendorshedintime || ""
 
         const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
-       
 
-    
+
+
         if (totalDays < 2) {
             let start = shedOutTime?.split(':').map(Number);
             let end = shedInTime?.split(':').map(Number);
@@ -3326,47 +3339,47 @@ const useTripsheet = () => {
     }, [vehicleRegisterNo])
 
     // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
-    const  generateAndCopyLinkdata=()=>{
-        const appsstatus=formData.apps || selectedCustomerData.apps || book.apps ;
-        console.log(appsstatus,"sttt")
+    const generateAndCopyLinkdata = () => {
+        const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
+        console.log(appsstatus, "sttt")
 
-       const tripid= formData.tripid || selectedCustomerData.tripid || book.tripid;
-          if(!tripid){
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        if (!tripid) {
             setError(true)
             setErrorMessage("Enter the tripid")
             return
-          }
-          if(appsstatus === "Closed"){
+        }
+        if (appsstatus === "Closed") {
             setError(true)
             setErrorMessage("Apps are closed")
             return
-          }
-        
+        }
+
         const params = {
-     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-      GuestName :formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestnametripid,
-      guestMobileNo :formData.mobile || selectedCustomerData.mobile || book.mobiletripid,
-   vehicleName :selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleNametripid,
-   vehicleType : selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehTypetripid,
-   startDate : formData.startdate || selectedCustomerData.startdate || book.startdatetripid,
-   startTime : formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttimetripid,
-   startKM : formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkmtripid,
-   closeDate : formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedatetripid,
-   closeTime : formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetimetripid,
-   closeKM : formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekmtripid,
-   toll : formData.toll || selectedCustomerData.toll || book.tolltripid,
-   parking : formData.parking || selectedCustomerData.parking || book.parkingtripid,
-   permit :formData.permit || selectedCustomerData.permit || book.permittripid,
+            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
+            GuestName: formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestnametripid,
+            guestMobileNo: formData.mobile || selectedCustomerData.mobile || book.mobiletripid,
+            vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleNametripid,
+            vehicleType: selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehTypetripid,
+            startDate: formData.startdate || selectedCustomerData.startdate || book.startdatetripid,
+            startTime: formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttimetripid,
+            startKM: formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkmtripid,
+            closeDate: formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedatetripid,
+            closeTime: formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetimetripid,
+            closeKM: formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekmtripid,
+            toll: formData.toll || selectedCustomerData.toll || book.tolltripid,
+            parking: formData.parking || selectedCustomerData.parking || book.parkingtripid,
+            permit: formData.permit || selectedCustomerData.permit || book.permittripid,
         };
-     
-        
+
+
 
         const url = new URL(`http://localhost:3000/SignatureGenerate`);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-        
+
         const generatedLink = url.toString();
-       
-        
+
+
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
         const tempTextarea = document.createElement('textarea');
@@ -3375,17 +3388,49 @@ const useTripsheet = () => {
         tempTextarea.select();
         document.execCommand('copy');
         document.body.removeChild(tempTextarea);
-       
-      
-        setTimeout(()=>{
-            setSignaturtCopied(false)   
-        },2000)
-        
+
+
+        setTimeout(() => {
+            setSignaturtCopied(false)
+        }, 2000)
+
         // Show notification
         // const notification = document.getElementById('notification');
         // notification.style.display = 'block';
         // setTimeout(() => { notification.style.display = 'none'; }, 2000);
     }
+   
+    useEffect(() => {
+        const signatruretimedetails = async () => {
+            const tripidsign = book.tripid ||formData.tripid || selectedCustomerData.tripid ;
+         
+            if(tripidsign){
+              
+            try {
+                
+                const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
+                const data2 = response.data
+
+                const rowsWithUniqueId = data2.map((row, index) => ({
+                    ...row,
+                    id5: index + 1,
+                }));
+
+                setRowsSignature(rowsWithUniqueId)
+            }
+            catch (err) {
+                setRowsSignature([])
+                console.log(err)
+
+            }
+        }
+        else{
+           
+            setRowsSignature([])
+        }
+        }
+        signatruretimedetails()
+    }, [apiUrl, formData.tripid,selectedCustomerData.tripid,book.tripid])
 
 
     return {
@@ -3492,7 +3537,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy
+        signaturelinkcopy, columnssignature, rowsignature
 
 
     };

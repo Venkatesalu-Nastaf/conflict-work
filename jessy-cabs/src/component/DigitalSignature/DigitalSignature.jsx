@@ -26,7 +26,7 @@ const DigitalSignature = () => {
 
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
-    const status="finished"
+    const status="Updated"
 
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {

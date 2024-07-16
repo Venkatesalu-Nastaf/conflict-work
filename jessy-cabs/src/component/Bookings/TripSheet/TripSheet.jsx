@@ -222,7 +222,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible,signaturelinkcopy
+    checkvendorNightBetaEligible,signaturelinkcopy,columnssignature,rowsignature,handleTripsignaturedata
 
   } = useTripsheet();
 
@@ -3548,11 +3548,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className='tripsheet-booking-table'>
                         
                         <DataGrid
-                          rows={rows}
-                          columns={columns}
-                          onRowClick={handleTripRowClick}
+                          rows={rowsignature}
+                          columns={columnssignature}
+                          onRowClick={handleTripsignaturedata}
                           pageSize={5}
-                          checkboxSelection
+              
                         />
                       </div>
                     </div>

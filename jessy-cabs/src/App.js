@@ -44,6 +44,7 @@ import { APIURL } from "../src/component/url";
 import NoPermission from "./component/permissionContext/NoPermission/NoPermission";
 import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
+import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
 
 
 
@@ -58,6 +59,8 @@ function App() {
     }, 1000);
   }, []);
 
+
+  const { triggerCustomerAdd } = useData1()
 
   // Permission ----------------------------------------
 
@@ -237,7 +240,7 @@ function App() {
       }
     }
     fetchCustomer()
-  }, [apiUrl])
+  }, [apiUrl, triggerCustomerAdd])
 
 
 
@@ -318,7 +321,7 @@ function App() {
 
               <Route path="/home/info" element={<Info />}>
                 <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} />
-                  <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} />
+                <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} />
                 <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
@@ -372,9 +375,9 @@ function App() {
               path="/onlinedigital/digitalsignature"
               element={<DigitalSignature />}
             />
-              <Route
+            <Route
               path="/SignatureGenerate"
-              element={<SignatureGenerate/>}
+              element={<SignatureGenerate />}
             />
             <Route
               path="*"

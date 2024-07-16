@@ -22,6 +22,7 @@
     display: flex;
     flex-direction: column;
     color: #000;
+    padding: 20px;
     /* background-color: var(--glass); */
 }
 
@@ -29,7 +30,7 @@
     border: 2px solid #ccc;
     border-radius: 15px;
     background-color: var(--glass);
-    margin: 0px 20px;
+    /* margin: 0px 20px; */
 }
 
 .Download-btn-group-billing {
@@ -38,12 +39,12 @@
 
 .copy-title-btn-GroupBilling {
     width: 100%;
-    margin-top: 15px;
+    /* margin-top: 15px; */
     background-color: var(--glass);
     padding: 10px 20px 10px;
     border: 2px solid #ccc;
     border-radius: 15px;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .GroupBilling-form .Title-Name::after {

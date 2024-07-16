@@ -297,7 +297,7 @@ const TaxSetting = () => {
                 <div className="TaxSetting-table-container-main">
                     <div className="TaxSetting-table-container">
                         <div className="SpeedDial">
-                            <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
+                            <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
                                 <StyledSpeedDial
                                     ariaLabel="SpeedDial playground example"
                                     icon={<SpeedDialIcon />}
@@ -346,11 +346,39 @@ const TaxSetting = () => {
                             </Box>
                         </div>
                         <div className="table-TaxSetting">
-                            <DataGrid
+                            {/* <DataGrid
                                 rows={rows}
                                 columns={columns}
                                 onRowClick={handleRowClick}
-                            />
+                            /> */}
+
+
+                            <Box
+                                sx={{
+                                    height: 400, // Adjust this value to fit your needs
+                                    '& .MuiDataGrid-virtualScroller': {
+                                        '&::-webkit-scrollbar': {
+                                            width: '8px', // Adjust the scrollbar width here
+                                        },
+                                        '&::-webkit-scrollbar-track': {
+                                            backgroundColor: '#f1f1f1',
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            backgroundColor: '#457cdc',
+                                            borderRadius: '20px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb:hover': {
+                                            backgroundColor: '#3367d6',
+                                        },
+                                    },
+                                }}
+                            >
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    onRowClick={handleRowClick}
+                                />
+                            </Box>
                         </div>
                         <div className="input-field tax-setting-btn-main-div">
                             <div className="input tax-setting-btn">

@@ -118,7 +118,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
 
   return (
-    <div className="TripStatus-form Scroll-Style-hide">
+    <div className="TripStatus-form main-content-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main detail-container-main-tripstatus">
           <div className="container-left-tripstatus">
@@ -350,7 +350,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn-tripstatus">
+        <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>

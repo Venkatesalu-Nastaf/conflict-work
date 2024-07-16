@@ -239,9 +239,34 @@ const Booking = ({ stationName, customerData }) => {
 
   // }
 
+  // validation for date
+
+  const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || dayjs())
+  const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate || dayjs())
+
+
+  const parcedShedOutDate = new Date(shedOutDateObj.getFullYear(), shedOutDateObj.getMonth(), shedOutDateObj.getDate())
+  const parcedSatrtDate = new Date(SatrtDateObj.getFullYear(), SatrtDateObj.getMonth(), SatrtDateObj.getDate())
+
+  const startDateCheckFun = () => {
+
+    if (parcedSatrtDate !== "Invalid Date" && !isNaN(new Date(parcedSatrtDate).getTime())) {
+      if (parcedShedOutDate !== "Invalid Date" && !isNaN(new Date(parcedShedOutDate.getTime()))) {
+        if (parcedSatrtDate >= parcedShedOutDate) {
+          return
+        } else {
+          return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Invalid Date</label>
+        }
+      } else {
+      }
+    } else {
+      return
+    }
+  }
+
 
   return (
-    <div className="booking-form Scroll-Style-hide">
+    <div className="booking-form main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div>
           <div className="booking-top-division">
@@ -1635,35 +1660,41 @@ const Booking = ({ stationName, customerData }) => {
 
 
 
-            <div className="input booking-report-date-input">
-              <div className="icone">
-                <CalendarMonthIcon color="action" />
+            <div className="input booking-report-date-input" style={{ display: "grid" }}>
+              {startDateCheckFun()}
+              <div style={{ display: "flex" }}>
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
+
+                <div className="full-width">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Start Date"
+                      id="report_date"
+                      value={
+                        formData.startdate || selectedCustomerData.startdate
+                          ? dayjs(selectedCustomerData.startdate)
+                          : dayjs() || book.startdate
+                            ? dayjs(book.startdate)
+                            : dayjs()
+                      }
+                      format="DD/MM/YYYY"
+                      onChange={(date) => handleDateChange(date, "startdate")}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField
+                          {...inputProps}
+                          inputRef={inputRef}
+                          value={selectedCustomerData?.startdate}
+                        />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider>
+                </div>
+
               </div>
-              <div className="full-width">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Start Date"
-                    id="report_date"
-                    value={
-                      formData.startdate || selectedCustomerData.startdate
-                        ? dayjs(selectedCustomerData.startdate)
-                        : dayjs() || book.startdate
-                          ? dayjs(book.startdate)
-                          : dayjs()
-                    }
-                    format="DD/MM/YYYY"
-                    onChange={(date) => handleDateChange(date, "startdate")}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField
-                        {...inputProps}
-                        inputRef={inputRef}
-                        value={selectedCustomerData?.startdate}
-                      />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
+
             </div>
 
 

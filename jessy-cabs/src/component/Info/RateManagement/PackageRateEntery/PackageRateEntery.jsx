@@ -90,7 +90,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
   //--------------------------------------------------------------------
 
   return (
-    <div className="PackageRateEntery-form Scroll-Style-hide">
+    <div className="PackageRateEntery-form main-content-form Scroll-Style-hide">
       <form action="">
         <div className="PackageRateEntery-container-main">
           <div className="container-left">

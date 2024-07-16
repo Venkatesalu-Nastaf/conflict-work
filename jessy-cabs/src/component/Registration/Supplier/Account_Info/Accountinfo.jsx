@@ -86,7 +86,7 @@ const Accuntinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit,suppilerrate,vechiledata
+    handleEdit, suppilerrate, vechiledata
   } = useAccountinfo();
 
   useEffect(() => {
@@ -120,12 +120,12 @@ const Accuntinfo = () => {
                   id="accountNo"
                   className='full-width'
                   autoComplete="new-password"
-                  value={selectedCustomerData?.accountNo||""}
-                  
-                  // disabled
-                 
-            
-                  
+                  value={selectedCustomerData?.accountNo || ""}
+
+                // disabled
+
+
+
                 // variant="standard"
                 />
               </div>
@@ -330,60 +330,60 @@ const Accuntinfo = () => {
               </div>
 
 
-          <div className="input">
-            <div className="icone">
-              <RateReviewIcon color="action" />
-            </div>
-            <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="Rate Type"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
-                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-                    value={selectedCustomerData?.rateType || book.rateType || ''}
-                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
-                    options={suppilerrate.map((option) => ({ label: option }))}
-                    getOptionLabel={(option) => option.label ||selectedCustomerData?.rateType || book.rateType|| ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params}   label="Rate Type"   name="rateType" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
-          </div>
-          <div className="input">
-                  <div className="icone">
-              <RateReviewIcon color="action" />
-            </div>
-                   <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="vehicleRegno"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehRegNo")}
-                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-                    value={selectedCustomerData?.vehRegNo || book.vehRegNo|| ''}
-                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
-                    options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
-                   
-                    getOptionLabel={(option) => option.label ||selectedCustomerData?.vehRegNo || book.vehRegNo|| ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params}   label="vehRegNo"   name="vehRegNo" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
-                  </div>
-                  <div className="input">
-                  <div className="icone">
-              <RateReviewIcon color="action" />
-            </div>
-                  <TextField
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="Rate Type"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
+                  // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                  value={selectedCustomerData?.rateType || book.rateType || ''}
+                  // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                  options={suppilerrate.map((option) => ({ label: option }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.rateType || book.rateType || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Rate Type" name="rateType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="vehicleRegno"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehRegNo")}
+                  // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                  value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                  // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                  options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
+
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="vehRegNo" name="vehRegNo" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <TextField
                   // margin='normal'
                   size='small'
                   name="driverName"
@@ -395,37 +395,37 @@ const Accuntinfo = () => {
                   id="Drivername"
                 // variant="standard"
                 />
-                </div>      
-                
-          <div className=" radio">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                A/C Type
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="acType"
-                id="acType"
-                autoComplete="new-password"
-                onChange={handleChange}
-                value={selectedCustomerData?.acType || book.acType}
-              >
-                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
-                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
-              </RadioGroup>
-            </FormControl>
-          </div>
+              </div>
+
+              <div className=" radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    A/C Type
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="acType"
+                    id="acType"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    value={selectedCustomerData?.acType || book.acType}
+                  >
+                    <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
+                    <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
 
 
 
-          <div className="">
-            {isEditMode ? (
-              <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
-            ) : (
-              <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
-            )}
-          </div>
+              <div className="">
+                {isEditMode ? (
+                  <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -505,8 +505,8 @@ const Accuntinfo = () => {
           }
         </div>
         <div className="SpeedDial account-info-speed-dail">
-        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex:"3" }}>
-              <StyledSpeedDial
+          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "3" }}>
+            <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
@@ -552,7 +552,7 @@ const Accuntinfo = () => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn-account-info">
+        <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
@@ -568,7 +568,7 @@ const Accuntinfo = () => {
           </PopupState>
         </div>
         <div className="table-customer-lists">
-          <DataGrid
+          {/* <DataGrid
             rows={rows}
             columns={columns}
             onRowClick={handleRowClick}
@@ -578,7 +578,39 @@ const Accuntinfo = () => {
               },
             }}
             pageSizeOptions={[5, 10]}
-          />
+          /> */}
+          <Box
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
+              },
+            }}
+          >
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              onRowClick={handleRowClick}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+            />
+          </Box>
         </div>
       </form>
     </div>

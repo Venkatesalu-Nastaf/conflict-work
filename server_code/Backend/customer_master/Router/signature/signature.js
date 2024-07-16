@@ -110,12 +110,22 @@ router.post('/api/saveSignaturewtid', (req, res) => {
         } else {
           const uniqueNumber = generateUniqueNumbers();
           const sql2 = 'UPDATE signatures SET unique_number = ? WHERE tripid = ? ';
+          const sql3='update tripsheet set apps="Closed" where tripid = ? ';
           db.query(sql2, [uniqueNumber, tripId], (dbError, results) => {
             if (dbError) {
               console.error('Error updating unique number:', dbError);
               res.status(500).json({ error: 'Failed to update unique number' });
             } else {
+              db.query(sql3,[tripId],(err,results2)=>{
+                if(err){
+                  res.status(500).json({ error: 'Failed to update app status in tripsheet' });
+                }
+                if(results2.affectedRows>=1){
+
+            
               res.json({ message: 'Signature and unique number saved successfully' });
+                }
+            })
             }
           });
         }

@@ -292,7 +292,7 @@ const StationCreation = () => {
               </div>
             }
           </div>
-          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
+          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
@@ -341,7 +341,7 @@ const StationCreation = () => {
           </Box>
           <div className="stationcreation-table-container">
             <div className="table-stationcreation">
-              <DataGrid
+              {/* <DataGrid
                 rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick}
@@ -351,7 +351,40 @@ const StationCreation = () => {
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-              />
+              /> */}
+
+              <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  onRowClick={handleRowClick}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                />
+              </Box>
             </div>
           </div>
         </form>

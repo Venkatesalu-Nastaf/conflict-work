@@ -11,6 +11,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Box } from '@mui/material';
 
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
@@ -179,7 +180,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                 </div>
                 <div className="table-bookingCopy-TransferList">
                     <div className='transfer-list-table'>
-                        <DataGrid
+                        {/* <DataGrid
                             rows={rows}
                             columns={columns}
                             onRowClick={handleButtonClickTripsheet}
@@ -187,9 +188,75 @@ const TransferList = ({ stationName, organizationNames }) => {
                             checkboxSelection
                             getRowId={(row) => row.id}
                             disableRowSelectionOnClick
-                        />
+                            
+                        /> */}
+
+                        {/* <Box
+      sx={{
+        height: 400, // Adjust this value to fit your needs
+        '& .MuiDataGrid-virtualScroller': {
+          '&::-webkit-scrollbar': {
+            width: '2px', 
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#457cdc',
+            borderRadius: '20px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#3367d6',
+          },
+        },
+        scrollbarWidth: '30px',
+        scrollbarColor: '#457cdc #fff',
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        onRowClick={handleButtonClickTripsheet}
+        pageSize={5}
+        checkboxSelection
+        getRowId={(row) => row.id}
+        disableRowSelectionOnClick
+      />
+    </Box>  */}
+
+                        <Box
+                            sx={{
+                                height: 400, // Adjust this value to fit your needs
+                                '& .MuiDataGrid-virtualScroller': {
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px', // Adjust the scrollbar width here
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        backgroundColor: '#f1f1f1',
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#457cdc',
+                                        borderRadius: '20px',
+                                    },
+                                    '&::-webkit-scrollbar-thumb:hover': {
+                                        backgroundColor: '#3367d6',
+                                    },
+                                },
+                            }}
+                        >
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                onRowClick={handleButtonClickTripsheet}
+                                pageSize={5}
+                                checkboxSelection
+                                getRowId={(row) => row.id}
+                                disableRowSelectionOnClick
+                            />
+                        </Box>
                     </div>
                 </div>
+
             </form>
             <div className='alert-popup-main'>
                 {error &&

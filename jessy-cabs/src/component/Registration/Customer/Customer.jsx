@@ -20,6 +20,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
 
+
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -309,80 +310,80 @@ const Customer = ({ stationName }) => {
                 </FormControl>
               </div>
 
-            
+
 
             </div>
             <div className="input-field Customer-page-input-field-addbtn">
-            {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
+              {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
 
 
-            {customerfieldSets.map((datafield, index) => (
+              {customerfieldSets.map((datafield, index) => (
                 <>
 
-                  <div  className="input-field" style={{flexWrap:'wrap'}}>
-                  <div className="input" key={index}>
-                    <div className="icone">
-                      <PermIdentityIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="orderedbycutomer"
-                      className='full-width'
-                      sx={{ width: "300px" }}
-                      label="Orderedby"
-                      name="orderedby"
-                      value={datafield.orderedby || ""}
+                  <div className="input-field" style={{ flexWrap: 'wrap' }}>
+                    <div className="input" key={index}>
+                      <div className="icone">
+                        <PermIdentityIcon color="action" />
+                      </div>
+                      <TextField
+                        size="small"
+                        id="orderedbycutomer"
+                        className='full-width'
+                        sx={{ width: "300px" }}
+                        label="Orderedby"
+                        name="orderedby"
+                        value={datafield.orderedby || ""}
 
-                      // value={fieldSet.orderdby || ""}
-                      onChange={(e) => handleChangecustomer(e, index)}
-                    // variant="standard"
-                    />
-                  </div>
-                  <div className="input" key={index}>
-                    <div className="icone">
-                      <AttachEmailIcon color="action" />
+                        // value={fieldSet.orderdby || ""}
+                        onChange={(e) => handleChangecustomer(e, index)}
+                      // variant="standard"
+                      />
                     </div>
-                    <TextField
-                      size="small"
-                      id="orderebyemail"
-                      className='full-width'
-                      label="OrderedByemail"
-                      name="orderByEmail"
-                      autoComplete="new-password"
-                      value={datafield.orderByEmail || ""}
-                      // value={fieldSet.Hours || ""}
-                      onChange={(e) => handleChangecustomer(e, index)}
-                    />
-                  </div>
-                  <div className="input" key={index}>
-                    <div className="icone">
-                      <LocalPhoneIcon color="action" />
+                    <div className="input" key={index}>
+                      <div className="icone">
+                        <AttachEmailIcon color="action" />
+                      </div>
+                      <TextField
+                        size="small"
+                        id="orderebyemail"
+                        className='full-width'
+                        label="OrderedByemail"
+                        name="orderByEmail"
+                        autoComplete="new-password"
+                        value={datafield.orderByEmail || ""}
+                        // value={fieldSet.Hours || ""}
+                        onChange={(e) => handleChangecustomer(e, index)}
+                      />
                     </div>
-                    <TextField
-                      // type='number'
-                      size="small"
-                      id="mobliecustomer"
-                      className='full-width'
-                      label="Mobile No"
-                      name="orderByMobileNo"
-                      autoComplete="new-password"
-                      value={datafield.orderByMobileNo || ""}
-                      onChange={(e) => handleChangecustomer(e, index)}
-                    />
-                  </div>
+                    <div className="input" key={index}>
+                      <div className="icone">
+                        <LocalPhoneIcon color="action" />
+                      </div>
+                      <TextField
+                        // type='number'
+                        size="small"
+                        id="mobliecustomer"
+                        className='full-width'
+                        label="Mobile No"
+                        name="orderByMobileNo"
+                        autoComplete="new-password"
+                        value={datafield.orderByMobileNo || ""}
+                        onChange={(e) => handleChangecustomer(e, index)}
+                      />
+                    </div>
 
                   </div>
 
                 </>
-                
+
               ))}
-            <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
+              <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
 
 
             </div>
 
           </div>
-         
+
           <div className="Customer-page-secend-containers">
             <div className="input-field  checkbox customer-input-feild">
               <div className="input input-address">
@@ -582,7 +583,7 @@ const Customer = ({ stationName }) => {
                   <option value="12">12%</option>
                 </select>
               </div>
-            {/* </div>
+              {/* </div>
           </div>
           <div className="detail-container-main-customer-spdail">
             <div className="input-field customer-input-feild-add"> */}
@@ -769,7 +770,7 @@ const Customer = ({ stationName }) => {
               </PopupState>
             </div>
             <div className="table-customer-lists">
-              <DataGrid
+              {/* <DataGrid
                 rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick}
@@ -779,7 +780,42 @@ const Customer = ({ stationName }) => {
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-              />
+              /> */}
+
+
+
+              <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  onRowClick={handleRowClick}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                />
+              </Box>
             </div>
           </div>
         </form>

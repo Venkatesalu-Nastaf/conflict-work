@@ -36,6 +36,8 @@ import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { RiFileUploadLine } from "react-icons/ri";
+
 // import { faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -60,6 +62,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Tooltip from '@mui/material/Tooltip';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -355,8 +358,29 @@ const DriverCreation = ({ stationName }) => {
                                     label="Aadhar-card No"
                                     id="aadharno"
                                 />
+
+
+
+
+
+                                <Tooltip title="upload Aadhar Card" arrow>
+
+                                    <Button component="label">
+                                        <span className='upload-icon'>
+                                            <RiFileUploadLine />
+
+                                        </span>
+                                        <input
+                                            type="file"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => setFile(e.target.files[0])}
+                                        />
+                                    </Button>
+                                </Tooltip>
+
+
                             </div>
-                            <div className="input driver-input">
+                            {/* <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     aadhar card
                                     <input
@@ -365,7 +389,7 @@ const DriverCreation = ({ stationName }) => {
                                         onChange={(e) => setFile(e.target.files[0])}
                                     />
                                 </Button>
-                            </div>
+                            </div> */}
                             <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     PROFILE IMAGE
@@ -418,6 +442,21 @@ const DriverCreation = ({ stationName }) => {
                                     label="License No"
                                     id="licenseno"
                                 />
+
+                                <Tooltip title="upload License" arrow>
+
+                                    <Button component="label">
+                                        <span className='upload-icon'>
+                                            <RiFileUploadLine />
+
+                                        </span>
+                                        <input
+                                            type="file"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => setLicencepdf(e.target.files[0])}
+                                        />
+                                    </Button>
+                                </Tooltip>
                             </div>
                             <div className="input driver-input">
                                 <div className='icone'>
@@ -447,7 +486,7 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input">
+                            {/* <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     License
                                     <input
@@ -456,7 +495,7 @@ const DriverCreation = ({ stationName }) => {
                                         onChange={(e) => setLicencepdf(e.target.files[0])}
                                     />
                                 </Button>
-                            </div>
+                            </div> */}
                             <div className="input radio driver-input">
                                 <FormControl>
                                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -597,7 +636,7 @@ const DriverCreation = ({ stationName }) => {
                             </div>
                         }
                     </div>
-                    <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"1"}}>
+                    <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "99" }}>
                         <StyledSpeedDial
                             ariaLabel="SpeedDial playground example"
                             icon={<SpeedDialIcon />}
@@ -663,7 +702,7 @@ const DriverCreation = ({ stationName }) => {
                             </PopupState>
                         </div>
                         <div className="table-DriverCreations">
-                            <DataGrid
+                            {/* <DataGrid
                                 rows={rows}
                                 columns={columns}
                                 onRowClick={handleRowClick}
@@ -673,7 +712,40 @@ const DriverCreation = ({ stationName }) => {
                                     },
                                 }}
                                 pageSizeOptions={[5, 10]}
-                            />
+                            /> */}
+
+                            <Box
+                                sx={{
+                                    height: 400, // Adjust this value to fit your needs
+                                    '& .MuiDataGrid-virtualScroller': {
+                                        '&::-webkit-scrollbar': {
+                                            width: '8px', // Adjust the scrollbar width here
+                                        },
+                                        '&::-webkit-scrollbar-track': {
+                                            backgroundColor: '#f1f1f1',
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            backgroundColor: '#457cdc',
+                                            borderRadius: '20px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb:hover': {
+                                            backgroundColor: '#3367d6',
+                                        },
+                                    },
+                                }}
+                            >
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    onRowClick={handleRowClick}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10]}
+                                />
+                            </Box>
                         </div>
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>

@@ -283,7 +283,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                     </div>
                 </div>
                 <div className="download-container-groupbilling">
-                    <div className="Download-btn-group-billing">
+                    <div className="Download-btn">
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (
                                 <React.Fragment>
@@ -309,7 +309,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                 </div>
                 <div className="table-bookingCopy-GroupBilling">
                     <div className='group-billing-table'>
-                        <DataGrid
+                        {/* <DataGrid
                             rows={rows}
                             columns={columns}
                             pageSize={5}
@@ -322,7 +322,43 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                             getRowId={(row) => row.id}
                             checkboxSelection
                             disableRowSelectionOnClick
-                        />
+                        /> */}
+
+                        <Box
+                            sx={{
+                                height: 400, // Adjust this value to fit your needs
+                                '& .MuiDataGrid-virtualScroller': {
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px', // Adjust the scrollbar width here
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        backgroundColor: '#f1f1f1',
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#457cdc',
+                                        borderRadius: '20px',
+                                    },
+                                    '&::-webkit-scrollbar-thumb:hover': {
+                                        backgroundColor: '#3367d6',
+                                    },
+                                },
+                            }}
+                        >
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={5}
+                                onRowClick={handleButtonClickTripsheet}
+                                onRowSelectionModelChange={(newRowSelectionModel) => {
+                                    setRowSelectionModel(newRowSelectionModel);
+                                    handleRowSelection(newRowSelectionModel);
+                                }}
+                                selectionModel={rowSelectionModel}
+                                getRowId={(row) => row.id}
+                                checkboxSelection
+                                disableRowSelectionOnClick
+                            />
+                        </Box>
                     </div>
                     <div className='alert-popup-main'>
                         {error &&

@@ -12,13 +12,32 @@ router.post('/customers', (req, res) => {
     customerData.billingGroup = customerData.billingGroup.join(', ');
   }
 
-  db.query('INSERT INTO customers SET ?', customerData, (err, result) => {
+  console.log("customerData.customer", customerData.customer)
+
+  db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Failed to insert data into MySQL' });
+      console.log("err", err);
+      return res.status(404).json({ message: "there is issu checking customer " })
     }
-    return res.status(200).json({ message: 'Data inserted successfully' });
-  });
+
+    console.log("result", result)
+
+    if (result.length > 0) {
+      return res.status(200).json({ message: "Customer Name Exist..", success: false })
+    } else {
+      db.query('INSERT INTO customers SET ?', customerData, (err, result) => {
+        if (err) {
+          console.log(err)
+          return res.status(500).json({ error: 'Failed to insert data into MySQL' });
+        }
+        return res.status(201).json({ message: 'Data inserted successfully', success: true });
+      });
+    }
+
+  })
+
+
+
 });
 
 // Delete Customer Master data

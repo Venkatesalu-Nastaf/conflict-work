@@ -17,11 +17,11 @@
     /* height: 69vh; */
     /* height: fit-content; */
     width: 100vw;
-    overflow-x: hidden;
+    /* overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    color: #000;
+    color: #000; */
     /* background-color: var(--glass); */
 }
 
@@ -61,9 +61,9 @@
     background-color: var(--glass);
 } */
 
-.division-form .Title-Name {
+/* .division-form .Title-Name {
     position: relative;
-}
+} */
 
 .copy-title-btn-Division {
     width: 100%;
@@ -74,7 +74,7 @@
     border-radius: 15px;
 }
 
-.division-form .Title-Name::after {
+/* .division-form .Title-Name::after {
     content: "";
     position: absolute;
     bottom: -10px;
@@ -83,7 +83,7 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-}
+} */
 
 .divisionform-inputfeilds {
     flex-wrap: wrap !important;
@@ -125,5 +125,5 @@
 .division-table{
     display: flex;
     justify-content: center;
-    width: 85%;
+    /* width: 85%; */
 }

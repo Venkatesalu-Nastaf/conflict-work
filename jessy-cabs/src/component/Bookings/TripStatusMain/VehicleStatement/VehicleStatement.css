@@ -16,11 +16,11 @@
 .form-container-TripStatus .VehicleStatement-form {
   /* height: 100vh; */
   /* width: 100vw; */
-  overflow-x: hidden;
+  /* overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  color: #000;
+  color: #000; */
   /* background-color: var(--glass); */
 }
 
@@ -159,17 +159,17 @@
 }
 
 .SpeedDial-division {
-  padding: 26px;
-  margin: 15px 10px 0px 0px;
+  padding: 14px;
+  /* margin: 15px 10px 0px 0px; */
 }
 
 .vehicle-statement-table {
   height: 400px;
   width: 100%;
 }
-.Download-btn-vehiecle{
+/* .Download-btn-vehiecle{
   padding: 0px 20px 20px 20px;
-}
+} */
 
 
 /* .custom-datepicker .MuiInputBase-root {

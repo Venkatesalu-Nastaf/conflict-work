@@ -111,7 +111,7 @@ const Employe = () => {
     setErrorMessage,
     deletefile,
     handlecheckbox,
-   
+
   } = useEmployee();
 
   useEffect(() => {
@@ -417,27 +417,27 @@ const Employe = () => {
                 </div> */}
               </div>
               <div className="employee-file-upload-division">
-                  {selectedCustomerData?.empid || book.empid ? (
-                    <Button component="label">
-                      <UploadFileIcon />
-                      <input
-                        id="empid_file"
-                        type="file"
-                        style={{ display: "none" }}
-                        onChange={(e) => setFile(e.target.files[0])}
-                      />
-                    </Button>
-                  ) : (
-                    <Button color="primary" variant="contained" onClick={() => {
-                      setError(true);
-                      setErrorMessage("Please Enter Booking No");
-                    }}>
-                      <UploadFileIcon />
-                    </Button>
-                  )}
-                </div>
+                {selectedCustomerData?.empid || book.empid ? (
+                  <Button component="label">
+                    <UploadFileIcon />
+                    <input
+                      id="empid_file"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    <UploadFileIcon />
+                  </Button>
+                )}
+              </div>
 
-                <div className="input">
+              <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
                 ) : (
@@ -505,7 +505,7 @@ const Employe = () => {
             </div>
           )}
         </div>
-        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"1"}}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
           <StyledSpeedDial
 
             ariaLabel="SpeedDial playground example"
@@ -580,100 +580,128 @@ const Employe = () => {
 
         <div>
           <div className="download-search">
-
-          <div className="Download-btn-employees">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  endIcon={<ExpandCircleDownOutlinedIcon />}
-                  {...bindTrigger(popupState)}
-                >
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
-
-
-          <div className="Employe-search-container">
-          <div className="input-field Employe-search-input">
-            <div className="input">
-              <div className="icone">
-                <AiOutlineFileSearch
-                  color="action"
-                />
-              </div>
-              <TextField
-                size="small"
-                id="searchText"
-                label="Search"
-                name="searchText"
-                value={searchText || ''}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
+            <div className="Download-btn">
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <Button
+                      variant="contained"
+                      endIcon={<ExpandCircleDownOutlinedIcon />}
+                      {...bindTrigger(popupState)}
+                    >
+                      Download
+                    </Button>
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                      <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
             </div>
-            <div className="">
-              <Button variant="contained" onClick={handleShowAll}>Search</Button>
-            </div>
-          </div>
-        </div>
-
-   
-
-          </div>
 
 
-        <div className="table-bookingCopy-Employe ">
-          <div className="registration-employee-table">
-            <DataGrid
-              className="Scroll-Style"
-              rows={rows}
-              columns={columns}
-              onRowClick={handleRowClick}
-              pageSize={5}
-            />
-          </div>
-          <Dialog open={dialogOpen} onClose={handleCloseDialog} >
-            <DialogContent>
-              <div className="employee-dialogbox-div1">
-                {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index} className="employee-dialogbox-div2">
-                    <Checkbox typeof='checked'
-                      checked={deletefile.includes(img.fileName)}
-                      onClick={(event) => {
-                        handlecheckbox(img.fileName)
-                      }} />
-                    <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
-
+            <div className="Employe-search-container">
+              <div className="input-field Employe-search-input">
+                <div className="input">
+                  <div className="icone">
+                    <AiOutlineFileSearch
+                      color="action"
+                    />
                   </div>
-                ))}
-              </div>
-              <div style={{height:1,backgroundColor:'black',marginTop:5,marginBottom:10}}></div>
-              <div style={{ display: 'flex'}}>
-                <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
-                <Button variant='contained' onClick={() => handleDocumentDownload()} style={{ marginLeft: '20px' }}>Print</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-          <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
-            <DialogContent>
-              <div>
-                <h3>are you sure you want to delete</h3>
-                <div>
-                  <Button onClick={handleContextMenu}>yes</Button>
-                  <Button onClick={handleClosedeleteDialog}>No</Button>
+                  <TextField
+                    size="small"
+                    id="searchText"
+                    label="Search"
+                    name="searchText"
+                    value={searchText || ''}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                </div>
+                <div className="">
+                  <Button variant="contained" onClick={handleShowAll}>Search</Button>
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+            </div>
+
+
+
+          </div>
+
+
+          <div className="table-bookingCopy-Employe ">
+            <div className="registration-employee-table">
+              {/* <DataGrid
+                className="Scroll-Style"
+                rows={rows}
+                columns={columns}
+                onRowClick={handleRowClick}
+                pageSize={5}
+              /> */}
+
+<Box
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
+              },
+            }}
+          >
+              <DataGrid
+                className="Scroll-Style"
+                rows={rows}
+                columns={columns}
+                onRowClick={handleRowClick}
+                pageSize={5}
+              />
+          </Box>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+              <DialogContent>
+                <div className="employee-dialogbox-div1">
+                  {Array.isArray(allFile) && allFile.map((img, index) => (
+                    <div key={index} className="employee-dialogbox-div2">
+                      <Checkbox typeof='checked'
+                        checked={deletefile.includes(img.fileName)}
+                        onClick={(event) => {
+                          handlecheckbox(img.fileName)
+                        }} />
+                      <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
+
+                    </div>
+                  ))}
+                </div>
+                <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
+                <div style={{ display: 'flex' }}>
+                  <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                  <Button variant='contained' onClick={() => handleDocumentDownload()} style={{ marginLeft: '20px' }}>Print</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+              <DialogContent>
+                <div>
+                  <h3>are you sure you want to delete</h3>
+                  <div>
+                    <Button onClick={handleContextMenu}>yes</Button>
+                    <Button onClick={handleClosedeleteDialog}>No</Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
 
         </div>
 

@@ -128,7 +128,7 @@ const TransferReport = ({ stationName }) => {
   const [addressDetails, setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
-  const {logo } = useData();
+  const { logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
@@ -136,7 +136,7 @@ const TransferReport = ({ stationName }) => {
   // useEffect(() => {
   //   setSelectedImageorganisation(sharedData)
   // }, [sharedData])
-  
+
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -195,7 +195,7 @@ const TransferReport = ({ stationName }) => {
         const customer = decodeURIComponent(storedCustomer);
 
         if (!customer || !tripid) return
-     
+
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
@@ -605,7 +605,7 @@ const TransferReport = ({ stationName }) => {
         <div className="billing-tables-TransferReport">
           <div className="table-bookingCopy-TransferReport">
             <div className='transfer-report-table'>
-              <DataGrid
+              {/* <DataGrid
                 rows={rows}
                 columns={columns}
                 pageSize={5}
@@ -616,11 +616,45 @@ const TransferReport = ({ stationName }) => {
                 checkboxSelection
                 disableRowSelectionOnClick
                 selectionModel={rowSelectionModel}
-              />
+              /> */}
+
+              <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={5}
+                  onRowSelectionModelChange={(newRowSelectionModel) => {
+                    setRowSelectionModel(newRowSelectionModel);
+                    handleRowSelection(newRowSelectionModel);
+                  }}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                  selectionModel={rowSelectionModel}
+                />
+              </Box>
             </div>
           </div>
           {/* <div className="tripsheet-table-transferReport"> */}
-            {/* <div className="TransferReport-Box">
+          {/* <div className="TransferReport-Box">
               <div className="booking-update">
                 <div className="Scroll-Style" style={{ overflow: 'scroll', height: 300, width: "100%" }}>
                   <table>

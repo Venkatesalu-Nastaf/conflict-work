@@ -106,7 +106,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 
 
 import useTripsheet from './useTripsheet';
-import SignatureGenerate from './signature/SignatureGenerate';
+
 import { FaChevronDown } from "react-icons/fa";
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -130,6 +130,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
 
 
 const TripSheet = ({ stationName, logoImage }) => {
@@ -219,7 +220,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     handlesignaturemageDownload, setSignatureupload,
     handleFileChangesignature, getSignatureImage, handlesignaturemageDelete,
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
-    vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange
+    vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
+    generateAndCopyLinkdata,
+    checkvendorNightBetaEligible,signaturelinkcopy
 
   } = useTripsheet();
 
@@ -314,20 +317,20 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   /// siganture propsss details 
 
-  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-  const GuestName = formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname;
-  const guestMobileNo = formData.mobile || selectedCustomerData.mobile || book.mobile;
-  const vehicleName = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-  const vehicleType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
-  const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
-  const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
-  const startKM = formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm;
-  const closeDate = formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate;
-  const closeTime = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
-  const closeKM = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
-  const toll = formData.toll || selectedCustomerData.toll || book.toll;
-  const parking = formData.parking || selectedCustomerData.parking || book.parking;
-  const permit = formData.permit || selectedCustomerData.permit || book.permit;
+  // const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+  // const GuestName = formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname;
+  // const guestMobileNo = formData.mobile || selectedCustomerData.mobile || book.mobile;
+  // const vehicleName = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+  // const vehicleType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+  // const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+  // const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
+  // const startKM = formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm;
+  // const closeDate = formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate;
+  // const closeTime = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
+  // const closeKM = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
+  // const toll = formData.toll || selectedCustomerData.toll || book.toll;
+  // const parking = formData.parking || selectedCustomerData.parking || book.parking;
+  // const permit = formData.permit || selectedCustomerData.permit || book.permit;
 
 
   const [showVehicleDetails, setShowVehicleDetails] = useState(true);
@@ -2974,12 +2977,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
+                    {/* {console.log(checkvendorNightBetaEligible(),"kkktrrrr")} */}
                     <div className="input-field">
                       <span>Night</span>
                       <div className="input">
                         <TextField
                           name="Vendor_NightHALT"
-                          value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                          // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                          value={(checkvendorNightBetaEligible() ? "0" :vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT ) || ''}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3387,9 +3392,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                       </div>
-                      <div className='input'>
-                        <Button variant='contained' onClick={handleSignaturePopUpOpen}  >Generate Signature</Button>
-                      </div>
+                  
 
                     </div>
                     <div className="input-field">
@@ -3422,31 +3425,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={handleFileChangesignature}
                       />
 
-                      <Dialog maxWidth="md" open={signaturePopUpOpen} onClose={handlesignaturePopUpClose}>
-                        <DialogContent style={{ width: '150mm', maxWidth: 'none' }}  >
-                          <h2>Jessy Cabs E-tripsheet</h2>
-                          <SignatureGenerate
-                            tripid={tripid}
-                            GuestName={GuestName}
-                            guestMobileNo={guestMobileNo}
-                            vehicleName={vehicleName}
-                            vehicleType={vehicleType}
-                            startDate={startDate}
-                            startTime={startTime}
-                            startKM={startKM}
-                            closeDate={closeDate}
-                            closeTime={closeTime}
-                            closeKM={closeKM}
-                            toll={toll}
-                            parking={parking}
-                            permit={permit} />
-                        </DialogContent>
-                        {/* <DialogActions>
-                          <Button >
-                            Cancel
-                          </Button>
-                        </DialogActions> */}
-                      </Dialog>
 
                       <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
                         <DialogContent>
@@ -3543,8 +3521,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
                       <div>
-                        <Button onClick={generateLink}>Generate Link</Button>
+                        {/* <Button onClick={generateLink}>Generate Link</Button> */}
+                        <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                        {signaturelinkcopy? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
+                      
                       {link && (
                         <div>
                           {isSignatureSubmitted ? (

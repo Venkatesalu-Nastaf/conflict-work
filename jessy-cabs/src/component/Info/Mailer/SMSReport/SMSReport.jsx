@@ -164,7 +164,7 @@ const SMSReport = () => {
 
 
   return (
-    <div className="smsreport-form Scroll-Style-hide">
+    <div className="smsreport-form main-content-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

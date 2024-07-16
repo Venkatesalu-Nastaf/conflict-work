@@ -87,7 +87,7 @@ const Division = () => {
   const INFO_delete = permissions[16]?.delete;
 
   return (
-    <div className="division-form Scroll-Style-hide">
+    <div className="division-form main-content-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

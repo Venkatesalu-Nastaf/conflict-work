@@ -96,7 +96,7 @@ const RateType = ({ stationName, organizationNames }) => {
     const INFO_delete = permissions[16]?.delete;
 
     return (
-        <div className="ratetype-form Scroll-Style-hide">
+        <div className="main-content-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
                 <div className="detail-container-main">
                     <div className="container-left">

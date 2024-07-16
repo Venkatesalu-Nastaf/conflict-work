@@ -13,6 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Box } from '@mui/material';
 
 // ICONS
 import { faBuilding } from '@fortawesome/free-solid-svg-icons';
@@ -99,7 +100,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
-                                            id="formdate"
+                                                id="formdate"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
                                                 label="From Date"
@@ -124,7 +125,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
-                                            id="toDate"
+                                                id="toDate"
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
                                                 label="To Date"
@@ -164,7 +165,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     />
                                 </div>
                                 {/* <div className="input"> */}
-                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
+                                <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
                                 {/* </div> */}
                             </div>
                         </div>
@@ -187,13 +188,43 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                 </div>
                 <div className="table-bookingCopy-CoveringSubmit">
                     <div className='covering-submit-table'>
-                        <DataGrid
+                        {/* <DataGrid
                             rows={rows}
                             columns={columns}
                             pageSize={5}
                             checkboxSelection
                             onRowClick={handleButtonClickTripsheet}
-                        />
+                        /> */}
+
+
+                        <Box
+                            sx={{
+                                height: 400, // Adjust this value to fit your needs
+                                '& .MuiDataGrid-virtualScroller': {
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px', // Adjust the scrollbar width here
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        backgroundColor: '#f1f1f1',
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#457cdc',
+                                        borderRadius: '20px',
+                                    },
+                                    '&::-webkit-scrollbar-thumb:hover': {
+                                        backgroundColor: '#3367d6',
+                                    },
+                                },
+                            }}
+                        >
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={5}
+                                checkboxSelection
+                                onRowClick={handleButtonClickTripsheet}
+                            />
+                        </Box>
                     </div>
                 </div>
             </form>

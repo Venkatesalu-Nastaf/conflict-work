@@ -14,7 +14,7 @@
 
 .FuelRate-header {
   /* background: var(--glass); */
-  padding: 10px;
+  /* padding: 10px; */
   margin-bottom: -10px;
 }
 
@@ -26,9 +26,9 @@
 
 /* TABLE */
 .FuelRate-table-container-info{
-  margin-top: 10px;
+  margin-top: 20px;
   /* border: 1px solid #ccc; */
-  padding: 20px;
+  /* padding: 20px; */
   width: fit-content;
   background-color: transparent !important;
 }

@@ -83,7 +83,7 @@ const Ratevalidity = () => {
     const INFO_delete = permissions[16]?.delete;
 
     return (
-        <div className="RateValidity-form Scroll-Style-hide">
+        <div className="main-content-form Scroll-Style-hide">
             <form action="">
                 <div className="detail-container-main-ratevalidity">
                     <div className="container-left">

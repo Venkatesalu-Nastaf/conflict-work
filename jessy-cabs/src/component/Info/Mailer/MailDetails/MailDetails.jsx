@@ -353,7 +353,7 @@ const MailDetails = () => {
 
   return (
     <div className="mailDetails-form-container">
-      <div className="mailDetails-form Scroll-Style-hide">
+      <div className="mailDetails-form main-content-form Scroll-Style-hide">
         <form action="">
           <div className="detail-container-main-mailDetails">
             <div className="container-left-mailDetails">

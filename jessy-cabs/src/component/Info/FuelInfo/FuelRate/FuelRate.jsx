@@ -67,7 +67,7 @@ const FuelRate = () => {
 
     // Table End
     return (
-        <div className="FuelRate-form">
+        <div className="FuelRate-form main-content-form">
             <form action="">
                 <div className="FuelRate-header">
                     <div className="input-field">

@@ -108,7 +108,7 @@ const MailageDetails = () => {
     <div className="form-container-FuelInfo">
       <div className="MailageDetails-Main">
         <form >
-          <div className="MailageDetails-page-header">
+          <div className="MailageDetails-page-header main-content-form">
             <div className="detailsFuel">
               <div className="input-field detailsFuel-inputs">
                 <div className="input">

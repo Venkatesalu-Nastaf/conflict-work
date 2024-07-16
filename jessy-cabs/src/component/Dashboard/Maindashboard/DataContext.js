@@ -18,29 +18,11 @@ export const DataProvider = ({ children }) => {
     const [datatriguserinfo,SetDataTrigUser]=useState('')
     const [expanded,setExpanded]=useState(false)
 
+const [triggerCustomerAdd,setTriggerCustomerAdd]=useState(false)
 
-    // useEffect(() => {
-    //     const handleImageView = () => {
-    //         const userid = localStorage.getItem('useridno');
-    //         axios.get(`${apiUrl}/userprofileview/${userid}`)
-    //             .then(res => {
-    //                 if (res.status === 200) {
-
-    //                     setSharedData(res.data[0]?.filename)
-    //                     const data = res.data[0]?.filename
-    //                     localStorage.getItem("profileimages", data)
-
-    //                 } else {
-    //                     const timer = setTimeout(handleImageView, 100);
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //             })
-    //     };
-    //     handleImageView();
-    // }, [sharedData, setSharedData]);
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData, filteredData, setFilteredData,datatriguserinfo,SetDataTrigUser,expanded,setExpanded }}>
+        <DataContext.Provider value={{ triggerCustomerAdd, setTriggerCustomerAdd, sharedData, setSharedData, filteredData, setFilteredData,datatriguserinfo,SetDataTrigUser,expanded,setExpanded }}>
             {children}
         </DataContext.Provider>
     );

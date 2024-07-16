@@ -578,7 +578,7 @@ app.get('/get-profileimage/:tripid', (req, res) => {
 
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
-  console.log("tripid",tripid)
+  console.log("tripid", tripid)
   const checkIfExistsQuery = `SELECT * FROM signatures WHERE tripid = ?`;
   db.query(checkIfExistsQuery, [tripid], (err, rows) => {
     if (err) {
@@ -663,7 +663,7 @@ app.get(`/get-customer`, (req, res) => {
       return
     }
     if (result) {
-   
+
       return res.json(result)
     }
     return
@@ -708,22 +708,22 @@ const getCurrentDateTimeFormatted = () => {
   const formattedDateTime = format(now, 'yyyy-MM-dd HH:mm:ss');
   const formattedTime = format(now, 'HH:mm:ss');
   return {
-      dateTime: formattedDateTime,
-      time: formattedTime
+    dateTime: formattedDateTime,
+    time: formattedTime
   };
 };
 
 
 
 
-app.post("/signaturedatatimes/:tripid/:signstatus",(req,res)=>{
-  const tripid=req.params.tripid;
-  const signstatus=req.params.signstatus;
-  console.log(tripid,signstatus,"jjjjjjj")
+app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
+  const tripid = req.params.tripid;
+  const signstatus = req.params.signstatus;
+  console.log(tripid, signstatus, "jjjjjjj")
   const { dateTime, time } = getCurrentDateTimeFormatted();
-console.log('Formatted DateTime:', dateTime);
-console.log('Current Time:', time);
-  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)",[tripid,dateTime,time,signstatus],(err,results)=>{
+  console.log('Formatted DateTime:', dateTime);
+  console.log('Current Time:', time);
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, dateTime, time, signstatus], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }

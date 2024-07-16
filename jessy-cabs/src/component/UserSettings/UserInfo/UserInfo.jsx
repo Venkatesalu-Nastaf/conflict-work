@@ -139,7 +139,7 @@ const UserSetting = () => {
   
 
   return (
-    <div className="userinfo-form Scroll-Style-hide">
+    <div className="userinfo-form main-content-form Scroll-Style-hide">
       <form>
         <div className="detail-container-main-userinfo">
           <div className="container-userinfo">

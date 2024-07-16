@@ -727,6 +727,14 @@ body {
   background-color: #457cdc;
 }
 
+.main-content-form {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #000;
+}
+
 /* @media screen and (min-width: 769px) {
   .side-bar-menu-close .form-container-booking .container-main,
   .side-bar-menu-close .form-container-TripStatus .container-main,

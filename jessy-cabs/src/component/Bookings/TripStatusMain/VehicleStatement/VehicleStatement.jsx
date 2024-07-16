@@ -93,7 +93,7 @@ const VehicleStatement = () => {
   const TripStatus_read = permissions[2]?.read;
 
   return (
-    <div className="VehicleStatement-form Scroll-Style-hide">
+    <div className="VehicleStatement-form main-content-form Scroll-Style-hide">
       <form action="">
       {/* <div className="input-field vehiclestatement-inputfeild-top">
                 <div className="input-top-vehicle">
@@ -343,7 +343,7 @@ const VehicleStatement = () => {
           </div>
         </div>
         <div className="SpeedDial SpeedDial-division">
-          <Box sx={{ position: "relative", mt: 2, }}>
+          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
@@ -369,7 +369,7 @@ const VehicleStatement = () => {
         </div>
 
         <div style={{display:"flex"}}>
-        <div className="Download-btn-vehiecle">
+        <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>

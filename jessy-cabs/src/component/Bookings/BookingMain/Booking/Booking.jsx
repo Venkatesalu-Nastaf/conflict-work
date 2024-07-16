@@ -266,7 +266,7 @@ const Booking = ({ stationName, customerData }) => {
 
 
   return (
-    <div className="booking-form Scroll-Style-hide">
+    <div className="booking-form main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div>
           <div className="booking-top-division">

@@ -283,7 +283,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                     </div>
                 </div>
                 <div className="download-container-groupbilling">
-                    <div className="Download-btn-group-billing">
+                    <div className="Download-btn">
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (
                                 <React.Fragment>

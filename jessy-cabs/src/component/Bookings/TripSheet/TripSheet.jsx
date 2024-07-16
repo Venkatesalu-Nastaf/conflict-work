@@ -222,7 +222,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible,signaturelinkcopy,columnssignature,rowsignature,handleTripsignaturedata
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata
 
   } = useTripsheet();
 
@@ -1796,7 +1796,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="night1"
                                   className='customer-bill-input'
+                                  // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
                                   value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+
                                   onChange={(e) => setNightBeta(e.target.value)}
                                   label="Night"
                                   id="night1"
@@ -1827,7 +1829,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="amount8"
                                   className='customer-bill-input'
-                                  value={night_totalAmount || 0}
+                                  // value={night_totalAmount || 0}
+                                  value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
+
                                   size="small"
                                   autoComplete="password"
                                   label="Amount"
@@ -1863,7 +1867,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='dtc2'
                                   id='dtc2'
                                   className='customer-bill-input'
-                                  value={driverbeta_Count || formData.driverbeta_Count || ''}
+                                  // value={driverbeta_Count || formData.driverbeta_Count || ''}
+                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
+
                                   onChange={driverbeta_Count_calc}
                                   variant="standard"
                                   autoComplete="password"
@@ -1876,7 +1882,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="amount9"
                                   className='customer-bill-input'
-                                  value={driverBeta_amount || 0}
+                                  // value={driverBeta_amount || 0}
+                                  value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                                   size="small"
                                   label="Amount"
                                   id="amount9"
@@ -2982,7 +2989,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ? "0" :vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT ) || ''}
+                          value={(checkvendorNightBetaEligible() ? "0" : vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) || ''}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3115,7 +3122,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="exkm1"
-                          value={extraKM || formData.calcPackage || 0}
+                          value={extraKM || formData.calcPackage || ''}
                           label="Ex.Km"
                           id="ex-km"
                           autoComplete="password"
@@ -3228,9 +3235,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <div className="icone">
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
-                        <TextField
+                        {/* <TextField
                           name="amount8"
                           value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                        /> */}
+                        <TextField
+                          name="amount8"
+                          value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
                           size="small"
                           autoComplete="password"
                           label="Amount"
@@ -3244,9 +3260,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <div className="icone">
                           <FontAwesomeIcon icon={faMoneyBill1Wave} />
                         </div>
-                        <TextField
+                        {/* <TextField
                           name="driverconvenience1"
                           value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
+                          onChange={driverBeta_calc}
+                          label="Driver Convenience"
+                          autoComplete="password"
+                          id="driver-convenience"
+                          size="small"
+                          variant="standard"
+                        /> */}
+                        <TextField
+                          name="driverconvenience1"
+                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverBeta || formData.driverBeta || '') : ''}
                           onChange={driverBeta_calc}
                           label="Driver Convenience"
                           autoComplete="password"
@@ -3259,10 +3285,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <div className="icone">
                           <TollTwoToneIcon color="action" />
                         </div>
-                        <TextField
+                        {/* <TextField
                           size="small"
                           name='dtc2'
                           value={driverbeta_Count || formData.driverbeta_Count || ''}
+                          onChange={driverbeta_Count_calc}
+                          variant="standard"
+                          autoComplete="password"
+                        /> */}
+                        <TextField
+                          size="small"
+                          name='dtc2'
+                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
                           onChange={driverbeta_Count_calc}
                           variant="standard"
                           autoComplete="password"
@@ -3272,9 +3306,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <div className="icone">
                           <FontAwesomeIcon icon={faEquals} />
                         </div>
-                        <TextField
+                        {/* <TextField
                           name="amount9"
                           value={driverBeta_amount || 0}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          autoComplete="password"
+                          variant="standard"
+                        /> */}
+                        <TextField
+                          name="amount9"
+                          value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                           size="small"
                           label="Amount"
                           id="amount"
@@ -3388,7 +3431,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                       </div>
-                  
+
 
                     </div>
                     <div className="input-field">
@@ -3519,9 +3562,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div>
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                        {signaturelinkcopy? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
+                        {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
-                      
+
                       {link && (
                         <div>
                           {isSignatureSubmitted ? (
@@ -3546,13 +3589,13 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                     <div className="table-TripSheet">
                       <div className='tripsheet-booking-table'>
-                        
+
                         <DataGrid
                           rows={rowsignature}
                           columns={columnssignature}
                           onRowClick={handleTripsignaturedata}
                           pageSize={5}
-              
+
                         />
                       </div>
                     </div>

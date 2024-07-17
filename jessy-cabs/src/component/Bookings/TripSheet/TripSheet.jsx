@@ -108,6 +108,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 
 import { FaChevronDown } from "react-icons/fa";
+import {WhatsappShareButton} from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -446,7 +447,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   //   checkTimeandDateConflict()
   // }, [parcedShedOutDate])
 
-  // console.log(vendorbilldata,"billdataty")
+  
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -1987,7 +1988,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       size="small"
                       name="remark"
                       value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                      onChange={handleChange}
+                      onChange={(e)=>{
+                        handleChange(e)
+                        if(!lockdata){
+                          setVendorinfodata({...vendorinfo,vendorRemarks:e.target.value})
+                        }
+                      }}
                       label="Remark"
                       id="remark"
                       multiline
@@ -2989,7 +2995,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ? "0" : vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) || ''}
+                          value={(checkvendorNightBetaEligible() ?  vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0 : 0)}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3015,7 +3021,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_NightbataTotalAmount"
-                          value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
+                          // value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
+
+                          value={checkvendorNightBetaEligible() ?  vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0 : 0 }
                           size="small"
                           label="Amount"
                           id="Vendor_NightbataTotalAmount"
@@ -3028,7 +3036,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                          // value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0 }
+                        
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_Bata"
@@ -3054,7 +3064,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
+                          value={vendorinfo?.vendor_duty === "Outstation"? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -3562,6 +3572,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div>
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                        <WhatsappShareButton url={"http://loclhost:4000/data?tripp=11&hh=eee"}>
+      <button>Share on WhatsApp</button>
+    </WhatsappShareButton>
+
+    
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

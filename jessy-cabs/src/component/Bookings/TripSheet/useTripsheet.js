@@ -953,6 +953,7 @@ const useTripsheet = () => {
                 console.log(selectedCustomerDatas.travelsname, selectedCustomerData.travelsname, formData.travelsname, book.travelsname, "trvales")
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+
                 const updatedCustomer = {
                     ...book,
                     ...selectedCustomer,
@@ -1022,12 +1023,14 @@ const useTripsheet = () => {
                     Vendor_ExtraHours: vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0,
                     Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0,
                     Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0,
-                    Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
-                    Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0,
-                    Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
-                    Vendor_Bata: vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0,
-                    Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0,
-                    Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
+                    // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
+                    Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0 : 0,
+                    Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0 : 0,
+                    // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
+                    Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
+                    Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0,
+                    Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0 : 0,
+                    Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
 
                 };
@@ -1268,7 +1271,7 @@ const useTripsheet = () => {
                 vendorshedoutkm: vendorinfo.vendorshedoutkm || 0,
                 vendorshedinkm: vendorinfo.vendorshedinkm || 0,
                 vendortotalkm: calculatevendorTotalKilometers() || 0,
-                vendorRemarks: vendorinfo.vendorRemarks || 0,
+                vendorRemarks: vendorinfo.vendorRemarks || "",
                 Vendor_Calcpackage: vendorbilldata.Vendor_Calcpackage,
                 Vendor_rateAmount: vendorbilldata.Vendor_rateAmount,
                 Vendor_ExtraKms: vendorbilldata.Vendor_ExtraKms || 0,
@@ -1277,13 +1280,20 @@ const useTripsheet = () => {
                 Vendor_ExtraHours: vendorbilldata.Vendor_ExtraHours || 0,
                 Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || 0,
                 Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || 0,
-                Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
-                Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
-                Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
-                Vendor_Bata: vendorbilldata.Vendor_Bata || 0,
-                Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
-                Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
-                Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
+                Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || 0 : 0,
+                Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || 0 : 0,
+
+                Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
+                Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || 0 : 0,
+                Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || 0 : 0,
+                Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
+                // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
+                // Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
+                // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
+                // Vendor_Bata: vendorbilldata.Vendor_Bata || 0,
+                // Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
+                // Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
+                // Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
 
 
             };
@@ -1842,6 +1852,41 @@ const useTripsheet = () => {
 
         return "";
     };
+    const checkvendorNightBetaEligible = () => {
+        const shedOutTime = vendorinfo?.vendorreporttime || ""
+
+        const shedInTime = vendorinfo?.vendorshedintime || ""
+
+        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
+
+        // console.log(totalDays,"vvvvvv",typeof(totalDays),totalDays<2)
+
+
+
+        if (totalDays < 2) {
+            let start = shedOutTime?.split(':').map(Number);
+            let end = shedInTime?.split(':').map(Number);
+
+            if (start && end) {
+                let startMinutes = start[0] * 60 + start[1];
+                let endMinutes = end[0] * 60 + end[1];
+
+                let nightStart = 22 * 60;
+                let nightEnd = 6 * 60;
+                if (startMinutes < nightEnd) startMinutes += 24 * 60;
+                if (endMinutes < nightEnd) endMinutes += 24 * 60;
+                if (startMinutes >= nightStart) startMinutes += 24 * 60;
+
+                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+
+                // console.log("Night Time Check:", isStartInNight || isEndInNight);
+                return isStartInNight || isEndInNight;
+            }
+            return false;
+        }
+        return true;
+    };
 
 
 
@@ -2164,6 +2209,7 @@ const useTripsheet = () => {
                         else {
                             const { duty, shedInDate, reporttime, shedintime, shedout, shedin, remark, vehicleName, ...restdatavendor } = bookingDetails
                             setSelectedCustomerData(bookingDetails);
+                            console.log(bookingDetails, "hhhhh")
                             setSelectedCustomerId(bookingDetails.tripid);
                             if (!lockdata) {
 
@@ -2237,7 +2283,7 @@ const useTripsheet = () => {
         console.log(params, "dataseleleelel")
         if (!lockdata) {
             // setVendorinfodata(params.vechicleName)
-            setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType, vendor_vehicle: params.vehicleName2 })
+            setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType })
             setRate_name(params.rateType)
 
             // setVendorinfodata({ ...vendorinfo, vendor_vehicle: params.vehicleName })
@@ -2680,6 +2726,7 @@ const useTripsheet = () => {
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + (checkNightBetaEligible() ? Number(night_totalAmount) : 0) + ((vendorinfo?.vendor_duty === "Outstation") ? Number(driverBeta_amount) : 0) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
+
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
@@ -2792,8 +2839,9 @@ const useTripsheet = () => {
         const amount = parseFloat(vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount) || 0;
         const amount1 = parseFloat(vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours) || 0;
         const amount2 = parseFloat(vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms) || 0;
-        const amount3 = parseFloat(vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount) || 0;
-        const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
+        const amount3 = parseFloat(vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount : 0) || 0;
+        // const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
+        const amount4 = parseFloat(checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount : 0) || 0;
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
@@ -2801,19 +2849,21 @@ const useTripsheet = () => {
         console.log(vendorinfo.vendor_vpermettovendor, "callaveb", vendorinfo?.vpermettovendor)
         console.log(amount7, "ammmmmmm", vendorinfo.vendor_advancepaidtovendor, "adavs", vendorinfo?.advancepaidtovendor)
 
-        // console.log(amount,"a",amount1,"a1",amount2,"a2",amount3,"a3",amount4,"abcd",amount5,"vprmit",amount6)
+        console.log(amount, "a", amount1, "a1", amount2, "a2", amount3, "a3", amount4, "abcd", amount5, "vprmit", amount6, "aaa", checkvendorNightBetaEligible())
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
         const fullAmount = totalAmount - amount7;
-        // console.log(totalAmount,"fulltotalamount")
-        setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullAmount })
+        const fullamountdata = Math.ceil(fullAmount);
+        console.log(Math.ceil(fullAmount), "mathhhW32222hh")
+        console.log(totalAmount, "fulltotalamount", typeof (fullAmount), Number(fullAmount), typeof (Number(fullAmount)))
+        setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
     }
 
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor, checkvendorNightBetaEligible()])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype;
@@ -3220,39 +3270,7 @@ const useTripsheet = () => {
     // };
 
 
-    const checkvendorNightBetaEligible = () => {
-        const shedOutTime = vendorinfo?.vendorreporttime || ""
 
-        const shedInTime = vendorinfo?.vendorshedintime || ""
-
-        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
-
-
-
-        if (totalDays < 2) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
-
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
-
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
-
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
-
-                // console.log("Night Time Check:", isStartInNight || isEndInNight);
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const [vehileNames, setVehicleNames] = useState([])
 

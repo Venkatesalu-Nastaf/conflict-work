@@ -325,11 +325,12 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         /> */}
 
                         <Box
-                            sx={{
+                              sx={{
                                 height: 400, // Adjust this value to fit your needs
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {
                                         width: '8px', // Adjust the scrollbar width here
+                                        height: '8px', // Adjust the scrollbar width here
                                     },
                                     '&::-webkit-scrollbar-track': {
                                         backgroundColor: '#f1f1f1',
@@ -337,6 +338,8 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     '&::-webkit-scrollbar-thumb': {
                                         backgroundColor: '#457cdc',
                                         borderRadius: '20px',
+                                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
                                     },
                                     '&::-webkit-scrollbar-thumb:hover': {
                                         backgroundColor: '#3367d6',

@@ -71,6 +71,9 @@ const Registration = () => {
       case "Employees":
         hasPermission = Employee;
         break;
+      case "Report":
+        hasPermission = Employee;
+        break;
       default:
         break;
     }
@@ -118,6 +121,17 @@ const Registration = () => {
             to={Employee && ("/home/registration/employes")}
             alt="/home/registration/employes"
             menuItemKey="Employees"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Reports"
+            to={Employee && ("/home/registration/reports")}
+            // to="/home/registration/reports"
+            alt="/home/registration/reports"
+            menuItemKey="Report"
+
+
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />

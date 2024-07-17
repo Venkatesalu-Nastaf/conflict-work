@@ -45,6 +45,7 @@ import NoPermission from "./component/permissionContext/NoPermission/NoPermissio
 import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
+import { Reports } from "./component/Registration/Report/Reports";
 
 
 
@@ -317,6 +318,16 @@ function App() {
                   path="/home/registration/employes"
                   element={R_Employee !== 0 ? <Employes stationName={stationName} /> : <NoPermission />}
                 />
+
+<Route
+                  path="/home/registration/reports"
+                  element={R_Employee !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
+                />
+
+                {/* <Route
+                  path="/home/registration/reports"
+                  element={<Reports stationName={stationName} /> }
+                /> */}
               </Route>
 
               <Route path="/home/info" element={<Info />}>

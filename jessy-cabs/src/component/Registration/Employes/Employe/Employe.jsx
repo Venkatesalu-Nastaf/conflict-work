@@ -631,6 +631,34 @@ const Employe = () => {
 
           <div className="table-bookingCopy-Employe ">
             <div className="registration-employee-table">
+              {/* <DataGrid
+                className="Scroll-Style"
+                rows={rows}
+                columns={columns}
+                onRowClick={handleRowClick}
+                pageSize={5}
+              /> */}
+
+<Box
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
+              },
+            }}
+          >
               <DataGrid
                 className="Scroll-Style"
                 rows={rows}
@@ -638,6 +666,7 @@ const Employe = () => {
                 onRowClick={handleRowClick}
                 pageSize={5}
               />
+          </Box>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog} >
               <DialogContent>

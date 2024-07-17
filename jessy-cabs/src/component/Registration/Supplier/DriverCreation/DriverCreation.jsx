@@ -369,8 +369,8 @@ const DriverCreation = ({ stationName }) => {
                                         <span className='upload-icon'>
                                             <RiFileUploadLine />
 
-                                        </span>                                                  
-                                            <input
+                                        </span>
+                                        <input
                                             type="file"
                                             style={{ display: "none" }}
                                             onChange={(e) => setFile(e.target.files[0])}
@@ -449,8 +449,8 @@ const DriverCreation = ({ stationName }) => {
                                         <span className='upload-icon'>
                                             <RiFileUploadLine />
 
-                                        </span>                                                    
-                                          <input
+                                        </span>
+                                        <input
                                             type="file"
                                             style={{ display: "none" }}
                                             onChange={(e) => setLicencepdf(e.target.files[0])}
@@ -702,7 +702,7 @@ const DriverCreation = ({ stationName }) => {
                             </PopupState>
                         </div>
                         <div className="table-DriverCreations">
-                            <DataGrid
+                            {/* <DataGrid
                                 rows={rows}
                                 columns={columns}
                                 onRowClick={handleRowClick}
@@ -712,7 +712,40 @@ const DriverCreation = ({ stationName }) => {
                                     },
                                 }}
                                 pageSizeOptions={[5, 10]}
-                            />
+                            /> */}
+
+                            <Box
+                                sx={{
+                                    height: 400, // Adjust this value to fit your needs
+                                    '& .MuiDataGrid-virtualScroller': {
+                                        '&::-webkit-scrollbar': {
+                                            width: '8px', // Adjust the scrollbar width here
+                                        },
+                                        '&::-webkit-scrollbar-track': {
+                                            backgroundColor: '#f1f1f1',
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            backgroundColor: '#457cdc',
+                                            borderRadius: '20px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb:hover': {
+                                            backgroundColor: '#3367d6',
+                                        },
+                                    },
+                                }}
+                            >
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    onRowClick={handleRowClick}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10]}
+                                />
+                            </Box>
                         </div>
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>

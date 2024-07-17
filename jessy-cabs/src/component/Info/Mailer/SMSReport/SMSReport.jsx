@@ -12,6 +12,8 @@ import axios from 'axios'
 import Excel from 'exceljs';
 import { saveAs } from "file-saver";
 import isBetween from 'dayjs/plugin/isBetween';
+import Box from "@mui/material/Box";
+
 dayjs.extend(isBetween);
 
 const columns = [
@@ -215,16 +217,48 @@ const SMSReport = () => {
         </div>
         <div className="table-bookingCopy-SMSReport">
           <div className='sms-report-table'>
-            <DataGrid
+            {/* <DataGrid
               rows={datafilter ? smsreport : filteredReport}
               columns={columns}
               pageSize={5}
             // checkboxSelection
-            />
+            /> */}
+
+
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              <DataGrid
+                rows={datafilter ? smsreport : filteredReport}
+                columns={columns}
+                pageSize={5}
+              // checkboxSelection
+              />
+            </Box>
           </div>
         </div>
-        
-        
+
+
       </form>
     </div>
   )

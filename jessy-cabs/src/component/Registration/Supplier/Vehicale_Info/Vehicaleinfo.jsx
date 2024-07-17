@@ -853,8 +853,8 @@ const Vehicaleinfo = ({ stationName }) => {
                     <span className='upload-icon'>
                       <RiFileUploadLine />
 
-                    </span>                 
-                     <input
+                    </span>
+                    <input
                       id="fc_copy"
                       type="file"
                       style={{ display: "none" }}
@@ -1032,7 +1032,7 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           </div>
         </div>
-        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px",zIndex:"1"}}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -1078,7 +1078,7 @@ const Vehicaleinfo = ({ stationName }) => {
             />
           </StyledSpeedDial>
         </Box>
-        <div className="Download-btn-vehiecleinfo">
+        <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
@@ -1102,33 +1102,36 @@ const Vehicaleinfo = ({ stationName }) => {
               pageSize={5}
             /> */}
 
-<Box
-            sx={{
-              height: 400, // Adjust this value to fit your needs
-              '& .MuiDataGrid-virtualScroller': {
-                '&::-webkit-scrollbar': {
-                  width: '8px', // Adjust the scrollbar width here
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
                 },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#457cdc',
-                  borderRadius: '20px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  backgroundColor: '#3367d6',
-                },
-              },
-            }}
-          >
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              onRowClick={handleRowClick1}
-              pageSize={5}
-            />
-          </Box>
+              }}
+            >
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowClick={handleRowClick1}
+                pageSize={5}
+              />
+            </Box>
 
           </div>
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >

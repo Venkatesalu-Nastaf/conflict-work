@@ -274,8 +274,8 @@ const useTripsheet = () => {
         }
         fetchdataccountinfodata()
     }, [apiUrl])
-    
-   
+
+
 
 
 
@@ -2612,6 +2612,37 @@ const useTripsheet = () => {
         setdriverbeta_Count(e.target.value)
     }
 
+    const checkNightBetaEligible = () => {
+        const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+        const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+
+        const totalDays = calculateTotalDays();
+        if (totalDays < 2) {
+            let start = shedOutTime?.split(':').map(Number);
+            let end = shedInTime?.split(':').map(Number);
+
+            if (start && end) {
+                let startMinutes = start[0] * 60 + start[1];
+                let endMinutes = end[0] * 60 + end[1];
+
+                let nightStart = 22 * 60;
+                let nightEnd = 6 * 60;
+                if (startMinutes < nightEnd) startMinutes += 24 * 60;
+                if (endMinutes < nightEnd) endMinutes += 24 * 60;
+                if (startMinutes >= nightStart) startMinutes += 24 * 60;
+
+                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+
+                // console.log("Night Time Check:", isStartInNight || isEndInNight);
+                return isStartInNight || isEndInNight;
+            }
+            return false;
+        }
+        return true;
+    };
+
+
     useEffect(() => {
         const calcdata = () => {
             if (driverBeta && driverbeta_Count > 1) {
@@ -2632,17 +2663,27 @@ const useTripsheet = () => {
 
     let [totalcalcAmount, setTotalcalcAmount] = useState(0)
 
+    // useEffect(() => {
+    //     const totalAmountCalc = () => {
+    //         // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
+    //         const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
+    //         const total = totalcalc - Number(customer_advance)
+    //         const convetTotal = Math.ceil(total)
+    //         setTotalcalcAmount(Number(convetTotal));
+    //     }
+    //     totalAmountCalc()
+    // }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll])
+
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
-            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
+            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + (checkNightBetaEligible() ? Number(night_totalAmount) : 0) + ((vendorinfo?.vendor_duty === "Outstation") ? Number(driverBeta_amount) : 0) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
-    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll])
-
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, checkNightBetaEligible])
 
     // extra Amount calculation--------------------------
     useEffect(() => {
@@ -2957,7 +2998,8 @@ const useTripsheet = () => {
 
             duty = formData.duty || selectedCustomerData.duty || book.duty;
             vehicleNames = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-            totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
+            // totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
+            totkm = await (calculateTotalKilometers() || formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
             organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
 
@@ -2991,17 +3033,33 @@ const useTripsheet = () => {
             const NHalt = Number(data.NHalt);
             const Bata = Number(data.Bata);
 
-            if (consvertedTotalHour > Hours) {
+            // if (consvertedTotalHour > Hours) {
 
+            //     let time = consvertedTotalHour - Hours;
+            //     const convertedTime = Number(time.toFixed(2))
+            //     setExtraHR(convertedTime);
+            // }
+
+            // if (totkm > KMS) {
+            //     let KM = (Number(totkm) - Number(KMS))
+            //     setExtraKM(KM);
+            // }
+
+            if (consvertedTotalHour > Hours) {
                 let time = consvertedTotalHour - Hours;
                 const convertedTime = Number(time.toFixed(2))
                 setExtraHR(convertedTime);
+            } else {
+                setExtraHR('')
             }
-
+            console.log("total km", totkm)
             if (totkm > KMS) {
                 let KM = (Number(totkm) - Number(KMS))
                 setExtraKM(KM);
+            } else {
+                setExtraKM("")
             }
+
 
             handleClickOpen() // for calc pop up
 
@@ -3131,35 +3189,37 @@ const useTripsheet = () => {
     //     };
 
 
-    const checkNightBetaEligible = () => {
-        const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-        const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+    // const checkNightBetaEligible = () => {
+    //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    //     const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
 
-        const totalDays = calculateTotalDays();
-        if (totalDays < 2) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
+    //     const totalDays = calculateTotalDays();
+    //     if (totalDays < 2) {
+    //         let start = shedOutTime?.split(':').map(Number);
+    //         let end = shedInTime?.split(':').map(Number);
 
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
+    //         if (start && end) {
+    //             let startMinutes = start[0] * 60 + start[1];
+    //             let endMinutes = end[0] * 60 + end[1];
 
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
+    //             let nightStart = 22 * 60;
+    //             let nightEnd = 6 * 60;
+    //             if (startMinutes < nightEnd) startMinutes += 24 * 60;
+    //             if (endMinutes < nightEnd) endMinutes += 24 * 60;
+    //             if (startMinutes >= nightStart) startMinutes += 24 * 60;
 
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+    //             const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+    //             const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
 
-                // console.log("Night Time Check:", isStartInNight || isEndInNight);
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
+    //             // console.log("Night Time Check:", isStartInNight || isEndInNight);
+    //             return isStartInNight || isEndInNight;
+    //         }
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+
     const checkvendorNightBetaEligible = () => {
         const shedOutTime = vendorinfo?.vendorreporttime || ""
 
@@ -3399,38 +3459,38 @@ const useTripsheet = () => {
         // notification.style.display = 'block';
         // setTimeout(() => { notification.style.display = 'none'; }, 2000);
     }
-   
+
     useEffect(() => {
         const signatruretimedetails = async () => {
-            const tripidsign = book.tripid ||formData.tripid || selectedCustomerData.tripid ;
-         
-            if(tripidsign){
-              
-            try {
-                
-                const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
-                const data2 = response.data
+            const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
 
-                const rowsWithUniqueId = data2.map((row, index) => ({
-                    ...row,
-                    id5: index + 1,
-                }));
+            if (tripidsign) {
 
-                setRowsSignature(rowsWithUniqueId)
+                try {
+
+                    const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
+                    const data2 = response.data
+
+                    const rowsWithUniqueId = data2.map((row, index) => ({
+                        ...row,
+                        id5: index + 1,
+                    }));
+
+                    setRowsSignature(rowsWithUniqueId)
+                }
+                catch (err) {
+                    setRowsSignature([])
+                    console.log(err)
+
+                }
             }
-            catch (err) {
+            else {
+
                 setRowsSignature([])
-                console.log(err)
-
             }
-        }
-        else{
-           
-            setRowsSignature([])
-        }
         }
         signatruretimedetails()
-    }, [apiUrl, formData.tripid,selectedCustomerData.tripid,book.tripid])
+    }, [apiUrl, formData.tripid, selectedCustomerData.tripid, book.tripid])
 
 
     return {

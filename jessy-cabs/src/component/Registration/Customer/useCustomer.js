@@ -474,13 +474,21 @@ const useCustomer = () => {
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
 
 
-            await axios.post(`${apiUrl}/customers`, book);
-            await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
-            handleCancel();
-            setTriggerCustomerAdd(prev => !prev)
-            setRows([]);
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
+            const response = await axios.post(`${apiUrl}/customers`, book);
+
+            if (response.data.success) {
+                console.log("customer response", response)
+                await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
+                handleCancel();
+                setTriggerCustomerAdd(prev => !prev)
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage(response.data.message);
+            } else {
+                setError(true);
+                setErrorMessage(response.data.message);
+            }
+
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");

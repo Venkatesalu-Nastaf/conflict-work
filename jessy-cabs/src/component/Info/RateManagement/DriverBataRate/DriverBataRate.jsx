@@ -88,7 +88,7 @@ const DriverBataRate = () => {
   const RateManagement_delete = permissions[17]?.delete;
 
   return (
-    <div className="ratetype-form Scroll-Style-hide">
+    <div className="ratetype-form main-content-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

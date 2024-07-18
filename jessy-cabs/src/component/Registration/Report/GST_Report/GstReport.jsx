@@ -9,7 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 
 const columns = [
@@ -276,7 +276,7 @@ export const GstReport = () => {
           </div>
         </div>
 
-        <div style={{ height: 400, width: '100%' }}>
+        <div className='gst-report-table'>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -286,7 +286,7 @@ export const GstReport = () => {
               },
             }}
             pageSizeOptions={[5, 10]}
-            checkboxSelection
+            // checkboxSelection
           />
         </div>
 

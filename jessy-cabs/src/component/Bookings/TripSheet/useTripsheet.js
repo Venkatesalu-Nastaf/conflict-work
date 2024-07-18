@@ -3381,20 +3381,33 @@ const useTripsheet = () => {
 
     const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
 
+
+
+    const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+    const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+
     const transformFun = (data) => {
+
+        if (/hcl/i.test(data.customer)) {
+            return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+        }
         return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
     }
 
     // to fetch closed tripdata for valiation
     const [ClosedTripData, setClosedTripData] = useState([])
+
     useEffect(() => {
 
         const fetchData = async () => {
             if (!vehicleRegisterNo) return
             const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
 
+            console.log("data--", data)
+
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
-            setClosedTripData(mapdata)
+            setClosedTripData(mapdata);
+
             //to get KM
             let maxShedInkm = -Infinity;
             let maxTripId = null;
@@ -3409,12 +3422,48 @@ const useTripsheet = () => {
 
             //TO get Date and Time
             console.log("mapdata", mapdata)
-
-
         }
 
         fetchData()
     }, [vehicleRegisterNo])
+
+
+
+
+    // const transformFun = (data) => {
+    //     return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+    // }
+
+    // to fetch closed tripdata for valiation
+    // const [ClosedTripData, setClosedTripData] = useState([])
+    // useEffect(() => {
+
+    //     const fetchData = async () => {
+    //         if (!vehicleRegisterNo) return
+    //         const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
+
+    //         const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
+    //         setClosedTripData(mapdata)
+    //         //to get KM
+    //         let maxShedInkm = -Infinity;
+    //         let maxTripId = null;
+    //         mapdata && Array.isArray(mapdata) && mapdata.forEach((el) => {
+    //             let shedInKm = el.shedInKm
+    //             if (shedInKm > maxShedInkm) {
+    //                 maxShedInkm = shedInKm;
+    //                 maxTripId = el.tripid;
+    //             }
+    //         })
+    //         setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
+
+    //         //TO get Date and Time
+    //         console.log("mapdata", mapdata)
+
+
+    //     }
+
+    //     fetchData()
+    // }, [vehicleRegisterNo])
 
     // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
     const generateAndCopyLinkdata = () => {

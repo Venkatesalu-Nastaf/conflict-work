@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import "./TripSheet.css";
 import {
@@ -98,6 +100,7 @@ import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
+import InvoiceHCL from '../Invoice/InvoiceHCL';
 
 import {
   vehicaleinfos
@@ -108,7 +111,6 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 
 import { FaChevronDown } from "react-icons/fa";
-import {WhatsappShareButton} from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -415,7 +417,39 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+  // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+
+  // const checkTimeandDateConflict2 = () => {
+  //   if (ClosedTripData.length < 1 || !ClosedTripData) return
+
+  //   let time = "00:00", tripid = null;
+  //   for (const trip of ClosedTripData) {
+  //     const shedInDate = new Date(trip.shedInDate);
+  //     const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
+  //     // console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
+
+  //     if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
+  //       if (time < trip.shedintime) {
+  //         time = trip.shedintime;
+  //         tripid = trip.tripid;
+  //       }
+  //     }
+  //   }
+  //   if (shedOuttime && time) {
+  //     if (shedOuttime <= time) {
+  //       return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
+  //     }
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // }
+
+
+
+  const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
 
   const checkTimeandDateConflict = () => {
     if (ClosedTripData.length < 1 || !ClosedTripData) return
@@ -435,7 +469,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     if (shedOuttime && time) {
       if (shedOuttime <= time) {
-        return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
+
+        const sendLabel = (tripID !== tripid) ? <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p> : null
+
+        return sendLabel;
       }
       return
     } else {
@@ -443,11 +480,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }
 
+
+
+
+
   // useEffect(() => {
   //   checkTimeandDateConflict()
   // }, [parcedShedOutDate])
 
-  
+  // console.log(vendorbilldata,"billdataty")
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -1425,7 +1466,9 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                   <div className="input" style={{ display: "grid" }} >
-                    {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+                    {/* {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                    {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+
                     <div style={{ display: "flex" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1455,7 +1498,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                   <div style={{ display: "grid" }} className="input">
-                    {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    {/* {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>} */}
+                    {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
 
                     <div style={{ display: "flex" }}>
                       <div className="icone">
@@ -1988,12 +2032,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       size="small"
                       name="remark"
                       value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                      onChange={(e)=>{
-                        handleChange(e)
-                        if(!lockdata){
-                          setVendorinfodata({...vendorinfo,vendorRemarks:e.target.value})
-                        }
-                      }}
+                      onChange={handleChange}
                       label="Remark"
                       id="remark"
                       multiline
@@ -2090,9 +2129,21 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </span> */}
                   </div>
 
-                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                  {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                       <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog> */}
+
+                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                      {(/hcl/i.test(customer)) ? (<InvoiceHCL pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -2995,7 +3046,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ?  vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0 : 0)}
+                          value={(checkvendorNightBetaEligible() ? "0" : vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) || ''}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3021,9 +3072,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_NightbataTotalAmount"
-                          // value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
-
-                          value={checkvendorNightBetaEligible() ?  vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0 : 0 }
+                          value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
                           size="small"
                           label="Amount"
                           id="Vendor_NightbataTotalAmount"
@@ -3036,9 +3085,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          // value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
-                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0 }
-                        
+                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_Bata"
@@ -3064,7 +3111,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={vendorinfo?.vendor_duty === "Outstation"? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
+                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -3572,11 +3619,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div>
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                        <WhatsappShareButton url={"http://loclhost:4000/data?tripp=11&hh=eee"}>
-      <button>Share on WhatsApp</button>
-    </WhatsappShareButton>
-
-    
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

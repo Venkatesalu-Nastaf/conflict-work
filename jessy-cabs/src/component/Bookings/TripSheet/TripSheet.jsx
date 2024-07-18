@@ -111,6 +111,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 
 import { FaChevronDown } from "react-icons/fa";
+import {WhatsappShareButton} from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -225,7 +226,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata,signaturelinkwhatsapp
 
   } = useTripsheet();
 
@@ -318,22 +319,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  /// siganture propsss details 
-
-  // const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-  // const GuestName = formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname;
-  // const guestMobileNo = formData.mobile || selectedCustomerData.mobile || book.mobile;
-  // const vehicleName = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-  // const vehicleType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
-  // const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
-  // const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
-  // const startKM = formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm;
-  // const closeDate = formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate;
-  // const closeTime = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
-  // const closeKM = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
-  // const toll = formData.toll || selectedCustomerData.toll || book.toll;
-  // const parking = formData.parking || selectedCustomerData.parking || book.parking;
-  // const permit = formData.permit || selectedCustomerData.permit || book.permit;
+ ;
 
 
   const [showVehicleDetails, setShowVehicleDetails] = useState(true);
@@ -3619,6 +3605,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div>
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+
+                        {/* <WhatsappShareButton url={signaturelinkwhatsapp}>
+      <button>Share on WhatsApp</button>
+    </WhatsappShareButton> */}
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

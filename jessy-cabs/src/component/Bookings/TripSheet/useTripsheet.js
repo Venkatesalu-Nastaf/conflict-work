@@ -154,6 +154,7 @@ const useTripsheet = () => {
     const [ratename, setRate_name] = useState("")
     const [signaturelinkcopy, setSignaturtCopied] = useState(false)
     const [rowsignature, setRowsSignature] = useState([])
+    const [signaturelinkwhatsapp,setSignatureWhattsapplink]=useState()
 
 
 
@@ -182,15 +183,6 @@ const useTripsheet = () => {
 
     ];
 
-    const columnssignature = [
-        { field: "id5", headerName: "Sno", width: 70 },
-        { field: "sign_logId", headerName: "LogID", width: 160 },
-        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
-        { field: "startsigntime", headerName: "CTime", width: 130 },
-        { field: "Signstatus", headerName: "SignStatus", width: 160 },
-
-
-    ];
 
 
     const handleRemoveMapLogPoint = async (params) => {
@@ -3478,31 +3470,19 @@ const useTripsheet = () => {
         }
         if (appsstatus === "Closed") {
             setError(true)
-            setErrorMessage("Apps are closed")
+            setErrorMessage("Signature already uploaded")
             return
         }
 
         const params = {
-            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-            GuestName: formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestnametripid,
-            guestMobileNo: formData.mobile || selectedCustomerData.mobile || book.mobiletripid,
-            vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleNametripid,
-            vehicleType: selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehTypetripid,
-            startDate: formData.startdate || selectedCustomerData.startdate || book.startdatetripid,
-            startTime: formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttimetripid,
-            startKM: formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkmtripid,
-            closeDate: formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedatetripid,
-            closeTime: formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetimetripid,
-            closeKM: formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekmtripid,
-            toll: formData.toll || selectedCustomerData.toll || book.tolltripid,
-            parking: formData.parking || selectedCustomerData.parking || book.parkingtripid,
-            permit: formData.permit || selectedCustomerData.permit || book.permittripid,
+            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         };
-
-
-
+         
+        // Create the URL with the JSON string as a single query parameter
         const url = new URL(`http://localhost:3000/SignatureGenerate`);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        console.log(url,"uuuuusign")
+        setSignatureWhattsapplink(url)
 
         const generatedLink = url.toString();
 
@@ -3521,43 +3501,63 @@ const useTripsheet = () => {
             setSignaturtCopied(false)
         }, 2000)
 
-        // Show notification
-        // const notification = document.getElementById('notification');
-        // notification.style.display = 'block';
-        // setTimeout(() => { notification.style.display = 'none'; }, 2000);
     }
 
-    useEffect(() => {
-        const signatruretimedetails = async () => {
-            const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
 
-            if (tripidsign) {
+    const signatruretimedetails = async () => {
+        const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
+       
+        if (tripidsign) {
 
-                try {
+            try {
 
-                    const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
-                    const data2 = response.data
+                const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
+                const data2 = response.data
 
-                    const rowsWithUniqueId = data2.map((row, index) => ({
-                        ...row,
-                        id5: index + 1,
-                    }));
+                const rowsWithUniqueId = data2.map((row, index) => ({
+                    ...row,
+                    id5: index + 1,
+                }));
 
-                    setRowsSignature(rowsWithUniqueId)
-                }
-                catch (err) {
-                    setRowsSignature([])
-                    console.log(err)
-
-                }
+                setRowsSignature(rowsWithUniqueId)
             }
-            else {
-
+            catch (err) {
                 setRowsSignature([])
+                console.log(err)
+
             }
         }
+        else {
+
+            setRowsSignature([])
+        }
+    }
+    useEffect(() => {
         signatruretimedetails()
-    }, [apiUrl, formData.tripid, selectedCustomerData.tripid, book.tripid])
+           
+    }, [])
+
+    const handleRefreshsign = () => {
+        signatruretimedetails()
+       
+    };
+
+    const columnssignature = [
+        { field: "id5", headerName: "Sno", width: 70 },
+        { field: "sign_logId", headerName: "LogID", width: 160 },
+        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
+        { field: "startsigntime", headerName: "CTime", width: 130 },
+        { field: "Signstatus", headerName: "SignStatus", width: 160 },
+        {
+           
+            width: 300,
+            renderHeader: () => (
+                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+                    Refresh
+                </Button>
+            )
+        }
+    ]
 
 
     return {
@@ -3664,7 +3664,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature
+        signaturelinkcopy, columnssignature, rowsignature,signaturelinkwhatsapp
 
 
     };

@@ -9,7 +9,7 @@ const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
 const { format } = require('date-fns');
-const crypto = require('crypto');
+
 var CryptoJS = require("crypto-js");
 
 // const jwt = require('jsonwebtoken')

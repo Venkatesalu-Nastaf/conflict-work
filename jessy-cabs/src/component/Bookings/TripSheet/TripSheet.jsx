@@ -3607,10 +3607,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-       <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+       {/* <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
         
         <button>Share on WhatsApp</button>
-      </WhatsappShareButton>
+      </WhatsappShareButton> */}
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

@@ -1,5 +1,5 @@
 import React from 'react'
-
+import "./BillWiseReceipt.css";
 import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DataGrid } from "@mui/x-data-grid";
+import Button from "@mui/material/Button";
 
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -54,6 +55,33 @@ const rows = [
 
 ];
 
+
+const columnsPendingBill = [
+  { field: 'id', headerName: 'Sno', width: 70 },
+  {
+    field: 'billNo',
+    headerName: 'Bill No',
+    type: 'number',
+    width: 90,
+  },
+  { field: 'billDate', headerName: 'Bill Date', width: 130 },
+  { field: 'amount', headerName: 'Amount', width: 130 },
+];
+
+const rowsPendingBill = [
+  { id: 1, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 2, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 3, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 4, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 5, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 6, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 7, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 8, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 9, billNo: 35, billDate: '17-07-2024', amount: '50' },
+  { id: 10, billNo: 35, billDate: '17-07-2024', amount: '50' },
+
+];
+
 export const BillWiseReceipt = () => {
 
   const [age, setAge] = React.useState('');
@@ -83,9 +111,6 @@ export const BillWiseReceipt = () => {
 
                   />
                 </div>
-
-
-
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
@@ -95,13 +120,10 @@ export const BillWiseReceipt = () => {
                       id="Date"
                       label=" Date"
                       format="DD/MM/YYYY"
-
                     >
-
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <WorkOutlineRoundedIcon color="action" />
@@ -113,11 +135,8 @@ export const BillWiseReceipt = () => {
                     label="cover Note"
                     name="cover Note"
                     autoComplete="new-password"
-
                   />
                 </div>
-
-
                 <div className="input">
                   <div className="icone">
                     <WorkOutlineRoundedIcon color="action" />
@@ -129,10 +148,8 @@ export const BillWiseReceipt = () => {
                     label="cheque No"
                     name="cheque No"
                     autoComplete="new-password"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <WorkOutlineRoundedIcon color="action" />
@@ -144,10 +161,8 @@ export const BillWiseReceipt = () => {
                     label="Narration"
                     name="Narration"
                     autoComplete="new-password"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -170,7 +185,6 @@ export const BillWiseReceipt = () => {
                     </Select>
                   </FormControl>
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -193,12 +207,8 @@ export const BillWiseReceipt = () => {
                     </Select>
                   </FormControl>
                 </div>
-
-
               </div>
-
               <div className="input-field " style={{ marginTop: "30px" }}>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -210,12 +220,8 @@ export const BillWiseReceipt = () => {
                     label="voucher ID"
                     name="voucher ID"
                     autoComplete="new-password"
-
                   />
                 </div>
-
-
-
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
@@ -225,14 +231,10 @@ export const BillWiseReceipt = () => {
                       id="Date"
                       label=" Date"
                       format="DD/MM/YYYY"
-
                     >
-
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -243,10 +245,8 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Bill Amount"
                     name="Bill Amount"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -260,7 +260,6 @@ export const BillWiseReceipt = () => {
 
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -271,10 +270,8 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Paid"
                     name="Paid"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -285,10 +282,8 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Received"
                     name="Received"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -299,10 +294,8 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Discount"
                     name="Discount"
-
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -313,7 +306,6 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Balance"
                     name="Balance"
-
                   />
                 </div>
                 <div className="input">
@@ -326,13 +318,34 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="unique id"
                     name="unique id"
-
                   />
                 </div>
               </div>
-              <div style={{display: 'flex'}}>
-                <div>
-                  <div className='gst-report-table'>
+              <div className='bill-wise-reciept-table-main' style={{ display: 'flex' }}>
+                <div className='bill-wise-reciept-table-first'>
+                  <div className='amount-calculator'>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Amount:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Recieved:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Discount:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Balance:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Tot Amt Recieved:</label>
+                      <input type="text" />
+                    </div>
+                  </div>
+                  <div className='bill-wise-reciept-table'>
                     <DataGrid
                       rows={rows}
                       columns={columns}
@@ -346,19 +359,33 @@ export const BillWiseReceipt = () => {
                     />
                   </div>
                 </div>
-                <div>
-                  <div className='gst-report-table'>
+                <div className='bill-wise-reciept-table-second'>
+                  <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
+                    <Button variant='contained'>Show Pending Bills</Button>
+                    <Button variant='contained'>Apply to list</Button>
+                  </div>
+                  <div className='bill-wise-reciept-table'>
                     <DataGrid
-                      rows={rows}
-                      columns={columns}
+                      rows={rowsPendingBill}
+                      columns={columnsPendingBill}
                       initialState={{
                         pagination: {
                           paginationModel: { page: 0, pageSize: 5 },
                         },
                       }}
                       pageSizeOptions={[5, 10]}
-                    // checkboxSelection
+                      checkboxSelection
                     />
+                  </div>
+                  <div style={{display: 'flex', paddingTop: '15px'}}>
+                    <div className='total-inputs' style={{display: 'flex'}}>
+                      <label htmlFor="">Amount:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' style={{display: 'flex'}}>
+                      <label htmlFor="">Recieved:</label>
+                      <input type="text" />
+                    </div>
                   </div>
                 </div>
               </div>

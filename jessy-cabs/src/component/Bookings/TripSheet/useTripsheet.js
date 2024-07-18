@@ -3474,23 +3474,26 @@ const useTripsheet = () => {
             return
         }
 
-        const params = {
+        const paramsdata = {
             tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         };
          
         // Create the URL with the JSON string as a single query parameter
-        const url = new URL(`http://localhost:3000/SignatureGenerate`);
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-        console.log(url,"uuuuusign")
-        setSignatureWhattsapplink(url)
+        const url = new URL(`${apiUrl}/SignatureGenerate`);
+        Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
+       
 
-        const generatedLink = url.toString();
+
+// 
+        const generatedLinkdata = url.toString();
+        console.log(generatedLinkdata,"data",url)
+        setSignatureWhattsapplink(generatedLinkdata)
 
 
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
         const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = generatedLink;
+        tempTextarea.value = generatedLinkdata;
         document.body.appendChild(tempTextarea);
         tempTextarea.select();
         document.execCommand('copy');

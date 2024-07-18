@@ -467,7 +467,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-
+  
 
 
   // useEffect(() => {
@@ -3599,6 +3599,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   </div>
                 </TabPanel>
+                {console.log(signaturelinkwhatsapp)}
                 <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
@@ -3606,13 +3607,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                        {/* <WhatsappShareButton url={signaturelinkwhatsapp}>
-      <button>Share on WhatsApp</button>
-    </WhatsappShareButton> */}
+       <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+        
+        <button>Share on WhatsApp</button>
+      </WhatsappShareButton>
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 
-                      {link && (
+                      {/* {link && (
                         <div>
                           {isSignatureSubmitted ? (
                             <p>Signature already submitted. Cannot access this link.</p>
@@ -3631,7 +3633,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           )}
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="table-TripSheet">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./MailDetails.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -63,8 +63,8 @@ const MailDetails = () => {
   const [success, setSuccess] = useState(false);
   const [searchname, setSearchname] = useState('')
   const navigate = useNavigate();
-  const [organistaionsendmail,setOrganisationSendEmail]=useState([])
-  const [datatrigger,setDataTrigger]=useState(false)
+  const [organistaionsendmail, setOrganisationSendEmail] = useState([])
+  const [datatrigger, setDataTrigger] = useState(false)
   const fileInputRef = useRef(null);
 
   const columns = [
@@ -215,7 +215,7 @@ const MailDetails = () => {
 
   const handleIconClick = () => {
     // document.getElementById('fileInput_upload').click();
-  
+
     fileInputRef.current.click();
   };
 
@@ -261,11 +261,11 @@ const MailDetails = () => {
         templatemessage: selecteddata,
         emaildata: data,
         templateimagedata: templateimage,
-        Sendmailauth:organistaionsendmail.Sender_Mail,
-        Mailauthpass:organistaionsendmail.EmailApp_Password
-        
+        Sendmailauth: organistaionsendmail.Sender_Mail,
+        Mailauthpass: organistaionsendmail.EmailApp_Password
+
       }
-      
+
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
       setData({})
@@ -292,37 +292,37 @@ const MailDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-        const organizationname = localStorage.getItem('usercompany');
-       
+      const organizationname = localStorage.getItem('usercompany');
 
-        try {
-            // if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
-            //   {
-            //     return
-            //   }
-          // else{
-            const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
-            if (response.status === 200) {
 
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                  setOrganisationSendEmail(userDataArray[0])
-                  setDataTrigger(!datatrigger)
-                 
-                   
-                  
-                } else {
-                    setErrorMessage('User data not found.');
-                    setError(true);
-                }
-            } 
-          // }
+      try {
+        // if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
+        //   {
+        //     return
+        //   }
+        // else{
+        const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
+        if (response.status === 200) {
+
+          const userDataArray = await response.json();
+          if (userDataArray.length > 0) {
+            setOrganisationSendEmail(userDataArray[0])
+            setDataTrigger(!datatrigger)
+
+
+
+          } else {
+            setErrorMessage('User data not found.');
+            setError(true);
+          }
         }
-        catch {
-        }
+        // }
+      }
+      catch {
+      }
     };
     fetchData();
-}, [apiurl,selecteddata,file,datatrigger]);
+  }, [apiurl, selecteddata, file, datatrigger]);
   const handleShowdata = async () => {
 
     try {
@@ -450,15 +450,47 @@ const MailDetails = () => {
                         </div>
                       </div>
                     </div>
-              
+
 
                     <div className="table-bookingCopy-mailer">
                       <div className="mail-details-table">
-                        <DataGrid
+                        {/* <DataGrid
                           rows={templatedata}
                           columns={columns}
                           onRowClick={handletableClick}
-                        />
+                        /> */}
+
+
+
+                        <Box
+                            sx={{
+                              height: 400, // Adjust this value to fit your needs
+                              '& .MuiDataGrid-virtualScroller': {
+                                  '&::-webkit-scrollbar': {
+                                      width: '8px', // Adjust the scrollbar width here
+                                      height: '8px', // Adjust the scrollbar width here
+                                  },
+                                  '&::-webkit-scrollbar-track': {
+                                      backgroundColor: '#f1f1f1',
+                                  },
+                                  '&::-webkit-scrollbar-thumb': {
+                                      backgroundColor: '#457cdc',
+                                      borderRadius: '20px',
+                                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                                  },
+                                  '&::-webkit-scrollbar-thumb:hover': {
+                                      backgroundColor: '#3367d6',
+                                  },
+                              },
+                          }}
+                        >
+                          <DataGrid
+                            rows={templatedata}
+                            columns={columns}
+                            onRowClick={handletableClick}
+                          />
+                        </Box>
                       </div>
                     </div>
                   </div>
@@ -466,7 +498,7 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex:"1" }}>
+          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}

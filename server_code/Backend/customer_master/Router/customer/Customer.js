@@ -12,7 +12,6 @@ router.post('/customers', (req, res) => {
     customerData.billingGroup = customerData.billingGroup.join(', ');
   }
 
-  console.log("customerData.customer", customerData.customer)
 
   db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {

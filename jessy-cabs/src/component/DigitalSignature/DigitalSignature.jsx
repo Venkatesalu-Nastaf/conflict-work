@@ -3,15 +3,16 @@ import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
 import { APIURL } from "../url";
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
   const sigCanvasRef = useRef(null);
-  const tripId = new URLSearchParams(window.location.search).get("tripid");
-  const uniqueno = new URLSearchParams(window.location.search).get(
-    "uniqueNumber"
-  );
-  const [successMessage,setSuccessMessage]=useState('')
+
+  const tripIddata = new URLSearchParams(window.location.search).get("trip");
+
+  const uniqueno = new URLSearchParams(window.location.search).get("uniqueNumber");
+  const [successMessage, setSuccessMessage] = useState('')
   const [expired, setExpired] = useState(() => {
     const expiredInSessionStorage =
       sessionStorage.getItem("expired") && localStorage.getItem("expired");
@@ -20,13 +21,53 @@ const DigitalSignature = () => {
       : false;
   });
 
+  const decryptdata = (cipherText) => {
+
+    try {
+      if (cipherText) {
+        const bytes = CryptoJS.AES.decrypt(cipherText, 'my-secret-key@123');
+        const plainText = bytes.toString(CryptoJS.enc.Utf8);
+
+        const parsedNumber = JSON.parse(plainText);
+
+        return parsedNumber;
+      }
+
+    } catch (error) {
+      console.error("Error during decryption:", error.message);
+
+    }
+  };
+
+  const decryptunique = (cipherText) => {
+
+    try {
+      if (cipherText) {
+        const bytes = CryptoJS.AES.decrypt(cipherText, 'my-secret-key@123');
+        const plainText = bytes.toString(CryptoJS.enc.Utf8);
+
+        const parsedNumber = JSON.parse(plainText);
+
+        return parsedNumber;
+      }
+
+    } catch (error) {
+      console.error("Error during decryption:", error.message);
+
+    }
+  };
+
+
+
   const clearSignature = () => {
     sigCanvasRef.current.clear();
   };
 
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
-    const status="Updated"
+    const status = "Updated"
+    const tripId = decryptdata(tripIddata)
+    const uniquenodata = decryptunique(uniqueno)
 
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
@@ -37,11 +78,11 @@ const DigitalSignature = () => {
         body: JSON.stringify({
           signatureData: dataUrl,
           tripId: tripId,
-          uniqueno: uniqueno,
+          uniqueno: uniquenodata,
         }),
       });
       await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-        setSuccessMessage("upload successfully")
+      setSuccessMessage("upload successfully")
       clearSignature();
       setTimeout(() => {
         setExpired(true);
@@ -65,17 +106,18 @@ const DigitalSignature = () => {
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
   }
-  const Startsignature= async()=>{
-    console.log("startsignature")
-    const status="onSign"
-    try{
+  const Startsignature = async () => {
+    const status = "onSign"
+    const tripId = decryptdata(tripIddata)
+
+    try {
       await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
-  
+
 
 
   return (
@@ -91,7 +133,7 @@ const DigitalSignature = () => {
         onBegin={Startsignature}
       />
       <div>
-        <p style={{textAlign:'center',color:"green"}}>{successMessage}...</p>
+        <p style={{ textAlign: 'center', color: "green" }}>{successMessage}...</p>
         <button className="clear-button" onClick={clearSignature}>
           Clear Signature
         </button>

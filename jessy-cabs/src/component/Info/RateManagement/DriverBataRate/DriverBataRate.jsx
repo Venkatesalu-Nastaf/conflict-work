@@ -312,7 +312,7 @@ const DriverBataRate = () => {
             </div>
           }
         </div>
-        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex:"1" }}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -361,12 +361,45 @@ const DriverBataRate = () => {
         </Box>
         <div className="table-bookingCopy-DriverBataRate">
           <div className='driver-bata-rate-table'>
-            <DataGrid
+            {/* <DataGrid
               rows={rows}
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-            />
+            /> */}
+
+
+
+            <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                      '&::-webkit-scrollbar': {
+                          width: '8px', // Adjust the scrollbar width here
+                          height: '8px', // Adjust the scrollbar width here
+                      },
+                      '&::-webkit-scrollbar-track': {
+                          backgroundColor: '#f1f1f1',
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                          backgroundColor: '#457cdc',
+                          borderRadius: '20px',
+                          minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                      },
+                      '&::-webkit-scrollbar-thumb:hover': {
+                          backgroundColor: '#3367d6',
+                      },
+                  },
+              }}
+            >
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowClick={handleRowClick}
+                pageSize={5}
+              />
+            </Box>
           </div>
         </div>
       </form>

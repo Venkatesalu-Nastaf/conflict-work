@@ -9,6 +9,9 @@ const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
 const { format } = require('date-fns');
+
+var CryptoJS = require("crypto-js");
+
 // const jwt = require('jsonwebtoken')
 require('dotenv').config()
 app.use(bodyParser.json());
@@ -576,6 +579,10 @@ app.get('/get-profileimage/:tripid', (req, res) => {
 });
 
 
+
+
+
+
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   console.log("tripid", tripid)
@@ -592,7 +599,13 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (err) {
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
-        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid),'my-secret-key@123').toString();
+        var cipherunique=CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber),'my-secret-key@123').toString();
+       
+        // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+      
+        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext1)}&uniqueNumber=${encodeURIComponent(cipherunique)}`;
+
         res.status(200).json({ message: 'Status updated successfully', link });
       });
     } else {
@@ -601,7 +614,14 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (insertErr) {
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
-        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        // const dataencryt=encrypt(tripid)
+        // console.log(dataencryt,"ll")
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(tripid),'my-secret-key@123').toString();
+        var cipherunique2=CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber),'my-secret-key@123').toString();
+       
+        // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext)}&uniqueNumber=${encodeURIComponent(cipherunique2)}`;
+
         res.status(200).json({ link });
       });
     }
@@ -731,6 +751,9 @@ app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
     return res.status(200).json("data insert successfully")
   })
 })
+
+
+
 
 
 // const port = 8081;

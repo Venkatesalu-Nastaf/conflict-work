@@ -154,6 +154,7 @@ const useTripsheet = () => {
     const [ratename, setRate_name] = useState("")
     const [signaturelinkcopy, setSignaturtCopied] = useState(false)
     const [rowsignature, setRowsSignature] = useState([])
+    const [signaturelinkwhatsapp,setSignatureWhattsapplink]=useState()
 
 
 
@@ -182,15 +183,6 @@ const useTripsheet = () => {
 
     ];
 
-    const columnssignature = [
-        { field: "id5", headerName: "Sno", width: 70 },
-        { field: "sign_logId", headerName: "LogID", width: 160 },
-        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
-        { field: "startsigntime", headerName: "CTime", width: 130 },
-        { field: "Signstatus", headerName: "SignStatus", width: 160 },
-
-
-    ];
 
 
     const handleRemoveMapLogPoint = async (params) => {
@@ -953,6 +945,7 @@ const useTripsheet = () => {
                 console.log(selectedCustomerDatas.travelsname, selectedCustomerData.travelsname, formData.travelsname, book.travelsname, "trvales")
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+
                 const updatedCustomer = {
                     ...book,
                     ...selectedCustomer,
@@ -1022,12 +1015,14 @@ const useTripsheet = () => {
                     Vendor_ExtraHours: vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0,
                     Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0,
                     Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0,
-                    Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
-                    Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0,
-                    Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
-                    Vendor_Bata: vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0,
-                    Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0,
-                    Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
+                    // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
+                    Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0 : 0,
+                    Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0 : 0,
+                    // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
+                    Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
+                    Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0,
+                    Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0 : 0,
+                    Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
 
                 };
@@ -1268,7 +1263,7 @@ const useTripsheet = () => {
                 vendorshedoutkm: vendorinfo.vendorshedoutkm || 0,
                 vendorshedinkm: vendorinfo.vendorshedinkm || 0,
                 vendortotalkm: calculatevendorTotalKilometers() || 0,
-                vendorRemarks: vendorinfo.vendorRemarks || 0,
+                vendorRemarks: vendorinfo.vendorRemarks || "",
                 Vendor_Calcpackage: vendorbilldata.Vendor_Calcpackage,
                 Vendor_rateAmount: vendorbilldata.Vendor_rateAmount,
                 Vendor_ExtraKms: vendorbilldata.Vendor_ExtraKms || 0,
@@ -1277,13 +1272,20 @@ const useTripsheet = () => {
                 Vendor_ExtraHours: vendorbilldata.Vendor_ExtraHours || 0,
                 Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || 0,
                 Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || 0,
-                Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
-                Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
-                Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
-                Vendor_Bata: vendorbilldata.Vendor_Bata || 0,
-                Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
-                Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
-                Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
+                Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || 0 : 0,
+                Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || 0 : 0,
+
+                Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
+                Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || 0 : 0,
+                Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || 0 : 0,
+                Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
+                // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
+                // Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
+                // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
+                // Vendor_Bata: vendorbilldata.Vendor_Bata || 0,
+                // Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
+                // Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
+                // Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
 
 
             };
@@ -1842,6 +1844,41 @@ const useTripsheet = () => {
 
         return "";
     };
+    const checkvendorNightBetaEligible = () => {
+        const shedOutTime = vendorinfo?.vendorreporttime || ""
+
+        const shedInTime = vendorinfo?.vendorshedintime || ""
+
+        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
+
+        // console.log(totalDays,"vvvvvv",typeof(totalDays),totalDays<2)
+
+
+
+        if (totalDays < 2) {
+            let start = shedOutTime?.split(':').map(Number);
+            let end = shedInTime?.split(':').map(Number);
+
+            if (start && end) {
+                let startMinutes = start[0] * 60 + start[1];
+                let endMinutes = end[0] * 60 + end[1];
+
+                let nightStart = 22 * 60;
+                let nightEnd = 6 * 60;
+                if (startMinutes < nightEnd) startMinutes += 24 * 60;
+                if (endMinutes < nightEnd) endMinutes += 24 * 60;
+                if (startMinutes >= nightStart) startMinutes += 24 * 60;
+
+                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
+                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
+
+                // console.log("Night Time Check:", isStartInNight || isEndInNight);
+                return isStartInNight || isEndInNight;
+            }
+            return false;
+        }
+        return true;
+    };
 
 
 
@@ -2164,6 +2201,7 @@ const useTripsheet = () => {
                         else {
                             const { duty, shedInDate, reporttime, shedintime, shedout, shedin, remark, vehicleName, ...restdatavendor } = bookingDetails
                             setSelectedCustomerData(bookingDetails);
+                            console.log(bookingDetails, "hhhhh")
                             setSelectedCustomerId(bookingDetails.tripid);
                             if (!lockdata) {
 
@@ -2237,7 +2275,7 @@ const useTripsheet = () => {
         console.log(params, "dataseleleelel")
         if (!lockdata) {
             // setVendorinfodata(params.vechicleName)
-            setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType, vendor_vehicle: params.vehicleName2 })
+            setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType })
             setRate_name(params.rateType)
 
             // setVendorinfodata({ ...vendorinfo, vendor_vehicle: params.vehicleName })
@@ -2680,6 +2718,7 @@ const useTripsheet = () => {
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + (checkNightBetaEligible() ? Number(night_totalAmount) : 0) + ((vendorinfo?.vendor_duty === "Outstation") ? Number(driverBeta_amount) : 0) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
+
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
@@ -2792,8 +2831,9 @@ const useTripsheet = () => {
         const amount = parseFloat(vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount) || 0;
         const amount1 = parseFloat(vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours) || 0;
         const amount2 = parseFloat(vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms) || 0;
-        const amount3 = parseFloat(vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount) || 0;
-        const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
+        const amount3 = parseFloat(vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount : 0) || 0;
+        // const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
+        const amount4 = parseFloat(checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount : 0) || 0;
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
@@ -2801,19 +2841,21 @@ const useTripsheet = () => {
         console.log(vendorinfo.vendor_vpermettovendor, "callaveb", vendorinfo?.vpermettovendor)
         console.log(amount7, "ammmmmmm", vendorinfo.vendor_advancepaidtovendor, "adavs", vendorinfo?.advancepaidtovendor)
 
-        // console.log(amount,"a",amount1,"a1",amount2,"a2",amount3,"a3",amount4,"abcd",amount5,"vprmit",amount6)
+        console.log(amount, "a", amount1, "a1", amount2, "a2", amount3, "a3", amount4, "abcd", amount5, "vprmit", amount6, "aaa", checkvendorNightBetaEligible())
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
         const fullAmount = totalAmount - amount7;
-        // console.log(totalAmount,"fulltotalamount")
-        setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullAmount })
+        const fullamountdata = Math.ceil(fullAmount);
+        console.log(Math.ceil(fullAmount), "mathhhW32222hh")
+        console.log(totalAmount, "fulltotalamount", typeof (fullAmount), Number(fullAmount), typeof (Number(fullAmount)))
+        setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
     }
 
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor, checkvendorNightBetaEligible()])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype;
@@ -3220,39 +3262,7 @@ const useTripsheet = () => {
     // };
 
 
-    const checkvendorNightBetaEligible = () => {
-        const shedOutTime = vendorinfo?.vendorreporttime || ""
 
-        const shedInTime = vendorinfo?.vendorshedintime || ""
-
-        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
-
-
-
-        if (totalDays < 2) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
-
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
-
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
-
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
-
-                // console.log("Night Time Check:", isStartInNight || isEndInNight);
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const [vehileNames, setVehicleNames] = useState([])
 
@@ -3363,20 +3373,33 @@ const useTripsheet = () => {
 
     const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
 
+
+
+    const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+    const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+
     const transformFun = (data) => {
+
+        if (/hcl/i.test(data.customer)) {
+            return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+        }
         return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
     }
 
     // to fetch closed tripdata for valiation
     const [ClosedTripData, setClosedTripData] = useState([])
+
     useEffect(() => {
 
         const fetchData = async () => {
             if (!vehicleRegisterNo) return
             const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
 
+            console.log("data--", data)
+
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
-            setClosedTripData(mapdata)
+            setClosedTripData(mapdata);
+
             //to get KM
             let maxShedInkm = -Infinity;
             let maxTripId = null;
@@ -3391,12 +3414,48 @@ const useTripsheet = () => {
 
             //TO get Date and Time
             console.log("mapdata", mapdata)
-
-
         }
 
         fetchData()
     }, [vehicleRegisterNo])
+
+
+
+
+    // const transformFun = (data) => {
+    //     return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+    // }
+
+    // to fetch closed tripdata for valiation
+    // const [ClosedTripData, setClosedTripData] = useState([])
+    // useEffect(() => {
+
+    //     const fetchData = async () => {
+    //         if (!vehicleRegisterNo) return
+    //         const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
+
+    //         const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
+    //         setClosedTripData(mapdata)
+    //         //to get KM
+    //         let maxShedInkm = -Infinity;
+    //         let maxTripId = null;
+    //         mapdata && Array.isArray(mapdata) && mapdata.forEach((el) => {
+    //             let shedInKm = el.shedInKm
+    //             if (shedInKm > maxShedInkm) {
+    //                 maxShedInkm = shedInKm;
+    //                 maxTripId = el.tripid;
+    //             }
+    //         })
+    //         setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
+
+    //         //TO get Date and Time
+    //         console.log("mapdata", mapdata)
+
+
+    //     }
+
+    //     fetchData()
+    // }, [vehicleRegisterNo])
 
     // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
     const generateAndCopyLinkdata = () => {
@@ -3411,39 +3470,30 @@ const useTripsheet = () => {
         }
         if (appsstatus === "Closed") {
             setError(true)
-            setErrorMessage("Apps are closed")
+            setErrorMessage("Signature already uploaded")
             return
         }
 
-        const params = {
-            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-            GuestName: formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestnametripid,
-            guestMobileNo: formData.mobile || selectedCustomerData.mobile || book.mobiletripid,
-            vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleNametripid,
-            vehicleType: selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehTypetripid,
-            startDate: formData.startdate || selectedCustomerData.startdate || book.startdatetripid,
-            startTime: formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttimetripid,
-            startKM: formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkmtripid,
-            closeDate: formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedatetripid,
-            closeTime: formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetimetripid,
-            closeKM: formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekmtripid,
-            toll: formData.toll || selectedCustomerData.toll || book.tolltripid,
-            parking: formData.parking || selectedCustomerData.parking || book.parkingtripid,
-            permit: formData.permit || selectedCustomerData.permit || book.permittripid,
+        const paramsdata = {
+            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         };
+         
+        // Create the URL with the JSON string as a single query parameter
+        const url = new URL(`${apiUrl}/SignatureGenerate`);
+        Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
+       
 
 
-
-        const url = new URL(`http://localhost:3000/SignatureGenerate`);
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-        const generatedLink = url.toString();
+// 
+        const generatedLinkdata = url.toString();
+        console.log(generatedLinkdata,"data",url)
+        setSignatureWhattsapplink(generatedLinkdata)
 
 
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
         const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = generatedLink;
+        tempTextarea.value = generatedLinkdata;
         document.body.appendChild(tempTextarea);
         tempTextarea.select();
         document.execCommand('copy');
@@ -3454,43 +3504,63 @@ const useTripsheet = () => {
             setSignaturtCopied(false)
         }, 2000)
 
-        // Show notification
-        // const notification = document.getElementById('notification');
-        // notification.style.display = 'block';
-        // setTimeout(() => { notification.style.display = 'none'; }, 2000);
     }
 
-    useEffect(() => {
-        const signatruretimedetails = async () => {
-            const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
 
-            if (tripidsign) {
+    const signatruretimedetails = async () => {
+        const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
+       
+        if (tripidsign) {
 
-                try {
+            try {
 
-                    const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
-                    const data2 = response.data
+                const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
+                const data2 = response.data
 
-                    const rowsWithUniqueId = data2.map((row, index) => ({
-                        ...row,
-                        id5: index + 1,
-                    }));
+                const rowsWithUniqueId = data2.map((row, index) => ({
+                    ...row,
+                    id5: index + 1,
+                }));
 
-                    setRowsSignature(rowsWithUniqueId)
-                }
-                catch (err) {
-                    setRowsSignature([])
-                    console.log(err)
-
-                }
+                setRowsSignature(rowsWithUniqueId)
             }
-            else {
-
+            catch (err) {
                 setRowsSignature([])
+                console.log(err)
+
             }
         }
+        else {
+
+            setRowsSignature([])
+        }
+    }
+    useEffect(() => {
         signatruretimedetails()
-    }, [apiUrl, formData.tripid, selectedCustomerData.tripid, book.tripid])
+           
+    }, [])
+
+    const handleRefreshsign = () => {
+        signatruretimedetails()
+       
+    };
+
+    const columnssignature = [
+        { field: "id5", headerName: "Sno", width: 70 },
+        { field: "sign_logId", headerName: "LogID", width: 160 },
+        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
+        { field: "startsigntime", headerName: "CTime", width: 130 },
+        { field: "Signstatus", headerName: "SignStatus", width: 160 },
+        {
+           
+            width: 300,
+            renderHeader: () => (
+                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+                    Refresh
+                </Button>
+            )
+        }
+    ]
 
 
     return {
@@ -3597,7 +3667,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature
+        signaturelinkcopy, columnssignature, rowsignature,signaturelinkwhatsapp
 
 
     };

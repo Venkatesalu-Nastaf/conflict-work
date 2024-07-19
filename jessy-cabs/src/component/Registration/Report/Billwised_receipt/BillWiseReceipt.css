@@ -1,0 +1,49 @@
+.bill-wise-reciept-table {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    height: 400px;
+    width: 100%;
+}
+
+.bill-wise-reciept-table-main {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 20px;
+}
+
+.bill-wise-reciept-table-main .bill-wise-reciept-table-first {
+    width: 70%;
+    padding-right: 10px;
+}
+
+.bill-wise-reciept-table-main .bill-wise-reciept-table-second {
+    width: 30%;
+}
+
+.amount-calculator {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.total-inputs {
+    display: grid;
+    white-space: nowrap;
+    padding: 0px 10px;
+    align-items: center;
+}
+
+.total-inputs label {
+    padding: 0px 10px;
+    font-weight: 500;
+}
+
+.total-inputs input {
+    background-color: transparent;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}

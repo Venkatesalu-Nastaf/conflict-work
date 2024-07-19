@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import "./TripSheet.css";
 import {
@@ -98,6 +100,7 @@ import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
+import InvoiceHCL from '../Invoice/InvoiceHCL';
 
 import {
   vehicaleinfos
@@ -108,6 +111,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 
 import { FaChevronDown } from "react-icons/fa";
+import {WhatsappShareButton} from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -222,7 +226,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata,signaturelinkwhatsapp
 
   } = useTripsheet();
 
@@ -315,22 +319,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  /// siganture propsss details 
-
-  // const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-  // const GuestName = formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname;
-  // const guestMobileNo = formData.mobile || selectedCustomerData.mobile || book.mobile;
-  // const vehicleName = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-  // const vehicleType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
-  // const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
-  // const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
-  // const startKM = formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm;
-  // const closeDate = formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate;
-  // const closeTime = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
-  // const closeKM = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
-  // const toll = formData.toll || selectedCustomerData.toll || book.toll;
-  // const parking = formData.parking || selectedCustomerData.parking || book.parking;
-  // const permit = formData.permit || selectedCustomerData.permit || book.permit;
+ ;
 
 
   const [showVehicleDetails, setShowVehicleDetails] = useState(true);
@@ -414,7 +403,39 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+  // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+
+  // const checkTimeandDateConflict2 = () => {
+  //   if (ClosedTripData.length < 1 || !ClosedTripData) return
+
+  //   let time = "00:00", tripid = null;
+  //   for (const trip of ClosedTripData) {
+  //     const shedInDate = new Date(trip.shedInDate);
+  //     const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
+  //     // console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
+
+  //     if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
+  //       if (time < trip.shedintime) {
+  //         time = trip.shedintime;
+  //         tripid = trip.tripid;
+  //       }
+  //     }
+  //   }
+  //   if (shedOuttime && time) {
+  //     if (shedOuttime <= time) {
+  //       return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
+  //     }
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // }
+
+
+
+  const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
 
   const checkTimeandDateConflict = () => {
     if (ClosedTripData.length < 1 || !ClosedTripData) return
@@ -434,13 +455,20 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     if (shedOuttime && time) {
       if (shedOuttime <= time) {
-        return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
+
+        const sendLabel = (tripID !== tripid) ? <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p> : null
+
+        return sendLabel;
       }
       return
     } else {
       return
     }
   }
+
+
+  
+
 
   // useEffect(() => {
   //   checkTimeandDateConflict()
@@ -1424,7 +1452,9 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                   <div className="input" style={{ display: "grid" }} >
-                    {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+                    {/* {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                    {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+
                     <div style={{ display: "flex" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1454,7 +1484,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                   <div style={{ display: "grid" }} className="input">
-                    {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    {/* {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>} */}
+                    {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
 
                     <div style={{ display: "flex" }}>
                       <div className="icone">
@@ -2084,9 +2115,21 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </span> */}
                   </div>
 
-                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                  {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                       <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog> */}
+
+                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                      {(/hcl/i.test(customer)) ? (<InvoiceHCL pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -3556,16 +3599,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   </div>
                 </TabPanel>
+                {console.log(signaturelinkwhatsapp)}
                 <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
                       <div>
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+
+       {/* <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+        
+        <button>Share on WhatsApp</button>
+      </WhatsappShareButton> */}
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 
-                      {link && (
+                      {/* {link && (
                         <div>
                           {isSignatureSubmitted ? (
                             <p>Signature already submitted. Cannot access this link.</p>
@@ -3584,7 +3633,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           )}
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="table-TripSheet">

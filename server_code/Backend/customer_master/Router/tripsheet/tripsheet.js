@@ -1365,10 +1365,24 @@ router.get('/signaturetimedatadetails/:tripid',(req,res)=>{
         if(err){
             return res.status(400).json(err)
         }
-        console.log(results)
+        // console.log(results)
         return res.status(200).json(results)
 
     })
+})
+
+router.get('/signaturedataurltrip/:tripid',(req,res)=>{
+    const tripid=req.params.tripid;
+    console.log(tripid)
+    db.query("select * from tripsheet where tripid = ?",[tripid],(err,results)=>{
+        if(err){
+            return res.status(400).json(err)
+        }
+        // console.log(results)
+        return res.status(200).json(results)
+
+    })
+
 })
 
 

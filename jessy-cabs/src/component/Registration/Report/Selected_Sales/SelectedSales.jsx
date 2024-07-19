@@ -25,6 +25,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import ClearIcon from '@mui/icons-material/Clear';
 import DialogContent from '@mui/material/DialogContent';
+import { MdOutlineEventNote } from "react-icons/md";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 
 const columns = [
@@ -138,9 +140,11 @@ const SelectedSales = () => {
                             </div>
                         </div>
                     </div>
-
                     <div className='input-field'>
                         <div className="input">
+                            <div className="icone">
+                                <MdOutlineEventNote color="action" />
+                            </div>
                             <TextField
                                 name="totalbill"
                                 autoComplete="new-password"
@@ -152,6 +156,9 @@ const SelectedSales = () => {
                             />
                         </div>
                         <div className="input">
+                            <div className="icone">
+                                <FaIndianRupeeSign color="action" />
+                            </div>
                             <TextField
                                 name="totalamount"
                                 autoComplete="new-password"
@@ -164,7 +171,7 @@ const SelectedSales = () => {
                         </div>
                     </div>
                     <div className="SelectedSales-table-container">
-                        <div className="Download-btn-SelectedSales">
+                        <div className="Download-btn">
                             <PopupState variant="popover" popupId="demo-popup-menu">
                                 {(popupState) => (
                                     <React.Fragment>

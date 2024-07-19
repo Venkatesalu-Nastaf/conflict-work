@@ -59,6 +59,7 @@ import { APIURL } from "../../../url";
 import { FaCar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RiFileUploadLine } from "react-icons/ri";
+import { FaBuilding } from "react-icons/fa";
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -366,7 +367,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <FontAwesomeIcon icon={faBuildingFlag} />
+                    <FaBuilding />
                   </div>
                   <Autocomplete
                     fullWidth

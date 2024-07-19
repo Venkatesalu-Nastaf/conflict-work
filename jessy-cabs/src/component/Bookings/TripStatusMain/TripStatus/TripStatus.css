@@ -37,7 +37,7 @@
 
 .table-bookingCopy-TripStatus {
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--glass);
   margin-top: 0px;
 }
@@ -75,7 +75,7 @@
   background-color: var(--glass);
   padding: 20px 20px;
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .TripStatus-form .Title-Name::after {

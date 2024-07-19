@@ -85,7 +85,7 @@ const Organization = ({ logoImage }) => {
                                 <div className="input-field">
                                     <div className="input-field">
                                         <div className='input'>
-                                            <div className='input-field'>
+                                            <div className='input-field' style={{marginTop: '10px'}}>
                                                 <Button color="primary" size='small' variant="contained" disabled={!MainSetting_modify} onClick={handleUpload} component="label" > update</Button>
                                             </div>
                                         </div>

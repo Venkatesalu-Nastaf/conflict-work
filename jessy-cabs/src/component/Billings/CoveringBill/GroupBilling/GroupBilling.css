@@ -28,7 +28,7 @@
 
 .table-bookingCopy-GroupBilling {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     /* margin: 0px 20px; */
 }
@@ -43,7 +43,7 @@
     background-color: var(--glass);
     padding: 10px 20px 10px;
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     /* margin-left: 20px; */
 }
 

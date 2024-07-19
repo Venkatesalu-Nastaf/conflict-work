@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -12,6 +12,7 @@ import { Button } from '@mui/material';
 const useTripsheet = () => {
     const signatureurlinkurl="http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
+    //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -47,7 +48,8 @@ const useTripsheet = () => {
     const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
+    const [infoMessage, setINFOMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -215,42 +217,42 @@ const useTripsheet = () => {
 
     //generate link
 
-    const generateLink = async () => {
-        try {
-            const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            if (!tripidNO) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-                return;
-            }
-            const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            const data = response.data.link
-            setLink(data);
-            getSignatureImage()
-            // copyToClipboardf(data)
-        } catch {
-        }
-    };
+    // const generateLink = async () => {
+    //     try {
+    //         const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    //         if (!tripidNO) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //             return;
+    //         }
+    //         const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
+    //         const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
+    //         const data = response.data.link
+    //         setLink(data);
+    //         getSignatureImage()
+    //         // copyToClipboardf(data)
+    //     } catch {
+    //     }
+    // };
 
 
-    const SignPage = async (event) => {
-        event.preventDefault();
-        if (link) {
-            try {
-                await navigator.clipboard.writeText(link);
-                setSign(true);
-                setTimeout(() => {
-                    setSign(false);
-                }, 2000);
-            } catch (error) {
-                console.error("Failed to copy text:", error);
-                alert("Failed to copy text to clipboard. Please try again.");
-            }
-        } else {
-            alert("No link data available.");
-        }
-    }
+    // const SignPage = async (event) => {
+    //     event.preventDefault();
+    //     if (link) {
+    //         try {
+    //             await navigator.clipboard.writeText(link);
+    //             setSign(true);
+    //             setTimeout(() => {
+    //                 setSign(false);
+    //             }, 2000);
+    //         } catch (error) {
+    //             console.error("Failed to copy text:", error);
+    //             alert("Failed to copy text to clipboard. Please try again.");
+    //         }
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // }
     // -----------------accountinfo--------------------------------
     useEffect(() => {
         const fetchdataccountinfodata = async () => {
@@ -274,66 +276,66 @@ const useTripsheet = () => {
 
     //---------------------------to copy the link-------------------
 
-    const hiddenInputRef = useRef(null);
+    // const hiddenInputRef = useRef(null);
 
-    const hiddenTextAreaRef = useRef(null);
+    // const hiddenTextAreaRef = useRef(null);
 
-    const copyToClipboard = (e) => {
-        e.preventDefault()
-        if (link) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = link;
-            document.body.appendChild(textArea);
+    // const copyToClipboard = (e) => {
+    //     e.preventDefault()
+    //     if (link) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = link;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
-    const copyToClipboardf = (data) => {
-        // e.preventDefault()
-        if (data) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = data;
-            document.body.appendChild(textArea);
+    // const copyToClipboardf = (data) => {
+    //     // e.preventDefault()
+    //     if (data) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = data;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
     //----------------------------------------------
@@ -3418,7 +3420,7 @@ const useTripsheet = () => {
         }
 
         fetchData()
-    }, [vehicleRegisterNo])
+    }, [apiUrl,vehicleRegisterNo])
 
 
 
@@ -3465,15 +3467,15 @@ const useTripsheet = () => {
 
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         if (!tripid) {
-            setError(true)
-            setErrorMessage("Enter the tripid")
+            setWarning(true)
+            setWarningMessage("Enter the tripid")
             return
         }
-        if (appsstatus === "Closed") {
-            setError(true)
-            setErrorMessage("Signature already uploaded")
-            return
-        }
+        // if (appsstatus === "Closed") {
+        //     setInfo(true)
+        //     setINFOMessage("Signature already uploaded")
+        //     return
+        // }
 
         const paramsdata = {
             tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
@@ -3536,10 +3538,10 @@ const useTripsheet = () => {
             setRowsSignature([])
         }
     }
-    useEffect(() => {
-        signatruretimedetails()
+    // useEffect(() => {
+    //     signatruretimedetails()
            
-    }, [])
+    // }, [])
 
     const handleRefreshsign = () => {
         signatruretimedetails()
@@ -3583,7 +3585,7 @@ const useTripsheet = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
+        infoMessage,
         book,
         handleClick,
         handleChange,
@@ -3651,14 +3653,16 @@ const useTripsheet = () => {
         handleButtonClick,
         handleTripRowClick,
         imgpopupOpen,
-        generateLink,
+        // generateLink,
         selectedRow,
         imageUrl,
         link,
         isSignatureSubmitted, checkCloseKM,
         isEditMode,
-        handleEdit, setFormValues, copyToClipboard,
-        SignPage, handlesignaturePopUpClose, signaturePopUpOpen,
+        handleEdit, setFormValues,
+        //  copyToClipboard,
+        // SignPage,
+         handlesignaturePopUpClose, signaturePopUpOpen,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,
@@ -3668,7 +3672,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature,signaturelinkwhatsapp
+        signaturelinkcopy, columnssignature, rowsignature,setWarning,setWarningMessage,setSignImageUrl,signaturelinkwhatsapp
 
 
     };

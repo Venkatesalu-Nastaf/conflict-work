@@ -113,7 +113,7 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 
 import useTripsheet from './useTripsheet';
 
-import { FaChevronDown } from "react-icons/fa";
+// import { FaChevronDown } from "react-icons/fa";
 import { WhatsappShareButton } from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -163,7 +163,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     formData,
     handleKeyDown,
     handleDateChange,
-    handleAutocompleteChange, copyToClipboard, setFormValues, handlesignaturePopUpClose,
+    handleAutocompleteChange,
+    //  copyToClipboard, 
+    setFormValues,
+    //  handlesignaturePopUpClose,
     packageData,
     smsguest,
     sendEmail,
@@ -183,9 +186,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     popupOpen,
     setSmsGuest,
     setSelectedCustomerDatas,
-    setreporttime, signaturePopUpOpen,
+    setreporttime, 
+    // signaturePopUpOpen,
     setshedintime,
-    shedKilometers, handleSignaturePopUpOpen,
+    shedKilometers,
+    //  handleSignaturePopUpOpen,
     calculateTotalKilometers,
     additionalTime,
     handleETripsheetClick,
@@ -208,20 +213,20 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleButtonClick,
     handleTripRowClick,
     imgpopupOpen,
-    generateLink,
+    // generateLink,
     selectedRow,
     imageUrl,
-    link,
-    isSignatureSubmitted,
+    // link,
+    // isSignatureSubmitted,
     isEditMode,
     handleEdit, checkCloseKM, checkNightBetaEligible,
     driverdetails, ClosedTripData,
-    sign, handleCalc, calcPackage, extraHR, extraKM, package_amount,
+    // sign, 
+    handleCalc, calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
     driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, setSign, setLink, setError,
-    setErrorMessage,
+    totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
     handlesignaturemageDownload, setSignatureupload,
@@ -229,7 +234,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp,setWarning,setWarningMessage,setSignImageUrl
 
   } = useTripsheet();
 
@@ -274,17 +279,28 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
-  const handlesignatureimages = () => {
-
-    getSignatureImage()
+  const handlesignatureimages = async() => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
+    await getSignatureImage()
     if (!tripid) {
 
-      setError(true);
-      setErrorMessage("Enter The Tripid")
+      setWarning(true);
+      setWarningMessage("Enter The Tripid")
       return
     }
+    const response = await fetch(`${APIURL}/get-signimage/${tripid}`);   /// prob004
+    if (response.status === 200) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+    }
+    // const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+    // if (!tripid) {
+
+    //   setWarning(true);
+    //   setWarningMessage("Enter The Tripid")
+    //   return
+    // }
     else if (signimageUrl === "") {
       if (fileInputRefdata.current) {
         fileInputRefdata.current.click();
@@ -298,7 +314,7 @@ const TripSheet = ({ stationName, logoImage }) => {
       getSignatureImage()
     }
   }
-  const textRef = useRef();
+  // const textRef = useRef();
 
 
   //   const SignPage = async (event) => {
@@ -3622,7 +3638,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   </div>
                 </TabPanel>
-                {console.log(signaturelinkwhatsapp)}
                 <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
@@ -3630,10 +3645,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                        <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                       {signaturelinkwhatsapp &&<WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
                           <button>Share on WhatsApp</button>
                         </WhatsappShareButton>
+                       }
+
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

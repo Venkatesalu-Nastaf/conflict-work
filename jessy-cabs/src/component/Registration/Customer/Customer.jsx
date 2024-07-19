@@ -19,6 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
+import { FaPercent } from "react-icons/fa";
 
 
 // ICONS
@@ -48,6 +49,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { FaHashtag } from "react-icons/fa";
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -630,6 +632,9 @@ const Customer = ({ stationName }) => {
                 )}
               </div>
               <div className="input">
+                <div className='icone'>
+                  <FaHashtag />
+                </div>
                 <TextField
                   name="gstnumber"
                   label="GST-Number"
@@ -641,6 +646,9 @@ const Customer = ({ stationName }) => {
                 />
               </div>
               <div className="input">
+                <div className='icone'>
+                  <PermIdentityIcon />
+                </div>
                 <TextField
                   name="SalesPerson"
                   value={selectedCustomerData?.SalesPerson || book.SalesPerson}
@@ -652,6 +660,9 @@ const Customer = ({ stationName }) => {
                 />
               </div>
               <div className="input">
+                <div className='icone'>
+                  <FaPercent />
+                </div>
                 <TextField
                   type='number'
                   name="salesPercentage"
@@ -785,26 +796,26 @@ const Customer = ({ stationName }) => {
 
 
               <Box
-                  sx={{
-                    height: 400, // Adjust this value to fit your needs
-                    '& .MuiDataGrid-virtualScroller': {
-                        '&::-webkit-scrollbar': {
-                            width: '8px', // Adjust the scrollbar width here
-                            height: '8px', // Adjust the scrollbar width here
-                        },
-                        '&::-webkit-scrollbar-track': {
-                            backgroundColor: '#f1f1f1',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#457cdc',
-                            borderRadius: '20px',
-                            minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                            backgroundColor: '#3367d6',
-                        },
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                      height: '8px', // Adjust the scrollbar width here
                     },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
                 }}
               >
                 <DataGrid

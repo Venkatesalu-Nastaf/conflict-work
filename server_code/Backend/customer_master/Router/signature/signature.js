@@ -167,9 +167,20 @@ router.post('/api/uploadsignaturedata/:tripid', uploadfile.single('signature_ima
             return res.status(500).json({ message: "err" });
           }
           console.log(result)
-          return res.status(200).json({ message: "signature upload successfully" });
+          if(result.affectedRows === 0){
+            return res.status(200).json({ message: "signature notUploaded " });
+          }
+          db.query('update tripsheet set apps="Closed" where tripid = ? ',[tripid],(err,result2)=>{
+          // return res.status(200).json({ message: "signature upload successfully" });
           // Use the base path
+          if (err) {
+            return res.status(500).json({ message: "err" });
+          }
+          return res.status(200).json({ message: "signature upload successfully" });
+
         })
+        })
+      
       }
     })
   }
@@ -197,9 +208,13 @@ router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
         if (result.affectedRows === 0) {
           return res.status(404).json({ error: "data not found" });
         }
+      
+        
+
         const signimage = results[0].signature_path
 
         if (signimage) {
+         
 
           const oldImagePath = path.join('Backend', 'customer_master', 'public', 'signature_images');
 
@@ -224,6 +239,7 @@ router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
         }
 
       })
+   
       return res.status(200).json({ message: "Data deleted successfully" });
 
     }

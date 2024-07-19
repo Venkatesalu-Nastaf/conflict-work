@@ -560,10 +560,13 @@ const useTripsheet = () => {
             // setIsEditMode(true);
             setIsEditMode(false);
         }
-        // else {
-        //     // setIsEditMode(false);
-        //     setIsEditMode(true);
-        // }
+        else {
+            // setIsEditMode(false);
+            setSmsGuest(false)
+            setSendEmail(false)
+            setDriverSMS(false)
+            setIsEditMode(true);
+        }
 
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
@@ -760,7 +763,7 @@ const useTripsheet = () => {
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+                    vehType: formData.vehType|| selectedCustomerData.vehType || book.vehType || formValues.vehType ,
                     starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
                     status: formData.status || book.status || selectedCustomerData.status,
@@ -945,9 +948,11 @@ const useTripsheet = () => {
         try {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
-                console.log(selectedCustomerDatas.travelsname, selectedCustomerData.travelsname, formData.travelsname, book.travelsname, "trvales")
+                getSignatureImage()
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                const dattasign=signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                
 
                 const updatedCustomer = {
                     ...book,
@@ -955,7 +960,9 @@ const useTripsheet = () => {
                     ...vehilcedetails,
                     ...selectedCustomerData,
                     ...formData,
-                    apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    // apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    apps: dattasign,
+        
                     travelsname: selectedCustomerDatas.travelsname || selectedCustomerData.travelsname || formData.travelsname || book.travelsname,
                     travelsemail: selectedCustomerDatas.travelsemail || selectedCustomerData.travelsemail || formData.travelsemail || book.travelsemail,
                     starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
@@ -1048,6 +1055,13 @@ const useTripsheet = () => {
                     await handlecheck();
                 }
 
+                if (smsguest) {
+                    await handleSendSMS()
+                 }
+                if (DriverSMS) {
+                await handleDriverSendSMS()
+                 }
+                
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
@@ -1149,7 +1163,6 @@ const useTripsheet = () => {
     //             startdate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
 
 
-
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1192,8 +1205,10 @@ const useTripsheet = () => {
 
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+            const dattasign=signimageUrl ? "Closed" : book.apps;
             const updatedBook = {
                 ...book,
+                apps:dattasign,
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                 tripsheetdate: selectedBookingDate,
@@ -2286,7 +2301,7 @@ const useTripsheet = () => {
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // handleChange({ target: { name: "vehType", value: params.vehType } })
-        // handleChange({ target: { name: "vehType", value: params.vehType } })
+        handleChange({ target: { name: "vehType", value: params.vehType } })
 
     };
 
@@ -2418,6 +2433,9 @@ const useTripsheet = () => {
             console.log(err, 'error');
         }
     };
+
+    
+
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
@@ -2869,7 +2887,7 @@ const useTripsheet = () => {
             // vendorduty = vendorinfo.vendor_duty || vendorinfo.duty;
             // vendorvehicleNames = vendorinfo.vendor_vehicle || vendorinfo.vehicleName;
             vendorduty = vendorinfo.vendor_duty || ""
-            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename || "";
+            vendorvehicleNames = vendorinfo.vendor_vehicle || "";
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
@@ -2907,6 +2925,7 @@ const useTripsheet = () => {
             });
             vendordata = response.data;
             // console.log(vendordata,"vendorrrrrrrr")
+            
 
             const packages = vendordata.package;
             const Hours = Number(vendordata.Hours);
@@ -2955,6 +2974,8 @@ const useTripsheet = () => {
 
 
             });
+            setSuccess(true)
+            setSuccessMessage("successfully listed")
             //    
         }
         catch (err) {
@@ -3460,7 +3481,7 @@ const useTripsheet = () => {
     //     fetchData()
     // }, [vehicleRegisterNo])
 
-    // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
+
     const generateAndCopyLinkdata = () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
@@ -3471,11 +3492,11 @@ const useTripsheet = () => {
             setWarningMessage("Enter the tripid")
             return
         }
-        // if (appsstatus === "Closed") {
-        //     setInfo(true)
-        //     setINFOMessage("Signature already uploaded")
-        //     return
-        // }
+        if (appsstatus === "Closed") {
+            setInfo(true)
+            setINFOMessage("Signature already uploaded")
+            return
+        }
 
         const paramsdata = {
             tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
@@ -3489,7 +3510,6 @@ const useTripsheet = () => {
 
 // 
         const generatedLinkdata = url.toString();
-        console.log(generatedLinkdata,"data",url)
         setSignatureWhattsapplink(generatedLinkdata)
 
 
@@ -3501,6 +3521,8 @@ const useTripsheet = () => {
         tempTextarea.select();
         document.execCommand('copy');
         document.body.removeChild(tempTextarea);
+        localStorage.setItem("expiredsign",false);
+        localStorage.setItem("expired", false);
 
 
         setTimeout(() => {

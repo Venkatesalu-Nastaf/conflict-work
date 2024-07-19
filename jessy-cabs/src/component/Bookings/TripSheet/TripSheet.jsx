@@ -244,8 +244,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }, [actionName, handleClick]);
 
-
+ const apiurl=APIURL
   // Permission ------------ayyan
+
   const { permissions } = useContext(PermissionContext)
   const fileInputRefdata = useRef(null);
 
@@ -281,26 +282,20 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const handlesignatureimages = async() => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    await getSignatureImage()
+    // await getSignatureImage()
     if (!tripid) {
 
       setWarning(true);
       setWarningMessage("Enter The Tripid")
       return
     }
-    const response = await fetch(`${APIURL}/get-signimage/${tripid}`);   /// prob004
+    const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
     if (response.status === 200) {
         const imageUrl = URL.createObjectURL(await response.blob());
         setSignImageUrl(imageUrl);
+        setSignaturepopup(true);
+        console.log(imageUrl,"uuuuuuuuuu")
     }
-    // const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-    // if (!tripid) {
-
-    //   setWarning(true);
-    //   setWarningMessage("Enter The Tripid")
-    //   return
-    // }
     else if (signimageUrl === "") {
       if (fileInputRefdata.current) {
         fileInputRefdata.current.click();
@@ -310,6 +305,7 @@ const TripSheet = ({ stationName, logoImage }) => {
         console.error("File input ref is not available");
       }
     } else {
+      console.log("ppppppppppp")
       setSignaturepopup(true);
       getSignatureImage()
     }
@@ -502,7 +498,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   }, [customer, APIURL])
 
-
+  const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
 
 
   // useEffect(() => {
@@ -2680,7 +2676,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-vendor_vehicle"
                           freeSolo
                           sx={{ minWidth: 200 }}
-                          onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_vehicle")}
+                          onChange={(event, value) =>
+                             handleAutocompleteVendor(event, value, "vendor_vehicle")
+      
+                            
+                            }
                           // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
                           // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
                           value={vendorinfo?.vendor_vehicle}
@@ -3071,7 +3071,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ? "0" : vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) || ''}
+                          value={(checkvendorNightBetaEligible() ?  vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3110,7 +3110,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0: 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_Bata"
@@ -3136,7 +3136,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
+                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -3532,7 +3532,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
                       </div>
                       <div className="input">
-                        <Button onClick={handlesignatureimages} variant="contained">Download signature</Button>
+                        <Button onClick={handlesignatureimages} variant="contained">signature</Button>
                       </div>
 
 
@@ -3645,7 +3645,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                       {signaturelinkwhatsapp &&<WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                       { appsstatus !== "Closed" &&signaturelinkwhatsapp &&<WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
                           <button>Share on WhatsApp</button>
                         </WhatsappShareButton>
@@ -3653,27 +3653,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
-
-                      {/* {link && (
-                        <div>
-                          {isSignatureSubmitted ? (
-                            <p>Signature already submitted. Cannot access this link.</p>
-                          ) : (
-                            <div>
-                              <p>Copy this link to send to the passenger:</p>
-                              <div className='link-blank-button'>
-                                <textarea ref={textRef} readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
-                                <button onClick={SignPage} className='signature'>Copy </button>
-                                <div>
-                                  <button onClick={copyToClipboard}>Copy Link</button>
-
-                                </div>
-                              </div>
-                              {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
-                            </div>
-                          )}
-                        </div>
-                      )} */}
                     </div>
 
                     <div className="table-TripSheet">

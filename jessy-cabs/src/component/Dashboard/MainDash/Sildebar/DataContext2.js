@@ -1,8 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { APIURL } from '../../../url';
+import React, { createContext, useContext, useState } from 'react';
 
-const apiUrl = APIURL
 const DataContext = createContext();
 
 export const useData = () => {
@@ -14,6 +11,7 @@ export const DataProvider2 = ({ children }) => {
     // its for organisation logo
     const [logotrigger, setLogoTrigger] = useState(false) //for logo trigger 
     const [logo, setLogo] = useState("")
+    const [orgName, setOrgName] = useState('')
 
 
     // const fetchOrgLogo = async () => {
@@ -40,7 +38,7 @@ export const DataProvider2 = ({ children }) => {
     //-------------------
 
     return (
-        <DataContext.Provider value={{ logotrigger, setLogoTrigger, logo, setLogo }}>
+        <DataContext.Provider value={{ logotrigger, setLogoTrigger, logo, setLogo, orgName, setOrgName }}>
             {children}
         </DataContext.Provider>
     );

@@ -127,6 +127,7 @@ router.get('/allCustomers', (req, res) => {
 })
 
 router.get('/gstdetails/:customer', (req, res) => {
+
   const customer = req.params.customer;
   const sqlquery = "select gstTax from customers where customer=?";
   db.query(sqlquery, [customer], (err, result) => {
@@ -137,6 +138,19 @@ router.get('/gstdetails/:customer', (req, res) => {
 
   })
 })
+
+router.get('/getcustomer-address/:customer', (req, res) => {
+  const customer = req.params.customer;
+  const sqlquery = "select address1 from customers where customer=?";
+  db.query(sqlquery, [customer], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+    }
+    return res.status(200).json(result);
+
+  })
+})
+
 
 router.post('/customerorderdbydata', (req, res) => {
   const customerdata = req.body;

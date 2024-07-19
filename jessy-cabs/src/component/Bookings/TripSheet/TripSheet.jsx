@@ -298,28 +298,28 @@ const TripSheet = ({ stationName, logoImage }) => {
   const textRef = useRef();
 
 
-  const SignPage = async (event) => {
-    event.preventDefault();
-    if (link) {
-      const textElement = textRef.current;
-      navigator.clipboard.writeText(textElement.textContent).then(() => {
-        setSign(true)
-        setTimeout(() => {
-          setSign(false)
-          setLink("")
-        }, 2000)
+//   const SignPage = async (event) => {
+//     event.preventDefault();
+//     if (link) {
+//       const textElement = textRef.current;
+//       navigator.clipboard.writeText(textElement.textContent).then(() => {
+//         setSign(true)
+//         setTimeout(() => {
+//           setSign(false)
+//           setLink("")
+//         }, 2000)
 
-      }).catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
+//       }).catch(err => {
+//         console.error('Failed to copy text: ', err);
+//       });
 
-    } else {
-      alert("no link data ", link)
-    }
-  }
+//     } else {
+//       alert("no link data ", link)
+//     }
+//   }
 
 
- ;
+//  ;
 
 
 

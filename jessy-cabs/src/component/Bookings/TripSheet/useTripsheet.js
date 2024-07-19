@@ -3469,11 +3469,11 @@ const useTripsheet = () => {
             setErrorMessage("Enter the tripid")
             return
         }
-        // if (appsstatus === "Closed") {
-        //     setError(true)
-        //     setErrorMessage("Signature already uploaded")
-        //     return
-        // }
+        if (appsstatus === "Closed") {
+            setError(true)
+            setErrorMessage("Signature already uploaded")
+            return
+        }
 
         const paramsdata = {
             tripid: formData.tripid || selectedCustomerData.tripid || book.tripid

@@ -1,0 +1,10 @@
+.pendingbill-table {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    height: 400px;
+    width: 100%;
+  }
+  .download-btn-pending{
+    margin-top: 10px;
+    padding-bottom: 0px !important;
+  }

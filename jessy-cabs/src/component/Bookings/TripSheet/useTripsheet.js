@@ -10,6 +10,7 @@ import { Button } from '@mui/material';
 
 
 const useTripsheet = () => {
+    const signatureurlinkurl="http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
@@ -3468,18 +3469,18 @@ const useTripsheet = () => {
             setErrorMessage("Enter the tripid")
             return
         }
-        if (appsstatus === "Closed") {
-            setError(true)
-            setErrorMessage("Signature already uploaded")
-            return
-        }
+        // if (appsstatus === "Closed") {
+        //     setError(true)
+        //     setErrorMessage("Signature already uploaded")
+        //     return
+        // }
 
         const paramsdata = {
             tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         };
          
         // Create the URL with the JSON string as a single query parameter
-        const url = new URL(`${apiUrl}/SignatureGenerate`);
+        const url = new URL(signatureurlinkurl);
         Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
        
 

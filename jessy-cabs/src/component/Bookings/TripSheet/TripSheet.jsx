@@ -322,22 +322,7 @@ const TripSheet = ({ stationName, logoImage }) => {
  ;
 
 
-  const [showVehicleDetails, setShowVehicleDetails] = useState(true);
 
-  const toggleVehicleDetails = () => {
-    // setShowVehicleDetails(!showVehicleDetails);
-  }
-
-
-  // for vechicle type vendor info
-  // const [type, setType] = React.useState('');
-
-  // const handlevehiecleChange = (event) => {
-  //   setType(event.target.value);
-  // };
-
-  // for check box vendor info
-  // const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
   // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
 
@@ -890,14 +875,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
               </div>
 
-              <div>
-                <Button variant="contained"
-                  onClick={toggleVehicleDetails}
-                >
-                  Vehicle details
-                  <span><FaChevronDown /></span>
-                </Button>
-              </div>
+          
 
 
 
@@ -962,7 +940,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
               </div>
 
-              {showVehicleDetails && (
+              {/* {showVehicleDetails && ( */}
                 <div className='tripsheet-division3'>
 
                   <div className="input">
@@ -2518,7 +2496,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 </div>
 
-              )}
+              {/* )} */}
 
 
             </div>
@@ -3607,10 +3585,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-       {/* <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+       <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
         
         <button>Share on WhatsApp</button>
-      </WhatsappShareButton> */}
+      </WhatsappShareButton>
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
 

@@ -1984,7 +1984,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     margin="normal"
                     size="small"
                     name="vpermettovendor"
-                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0}
+                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ""}
                     // onChange={handleChange}
                     onChange={(e) => {
                       handleChange(e)
@@ -2003,7 +2003,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     margin="normal"
                     size="small"
                     name="vendortoll"
-                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0}
+                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
                     // onChange={handleChange}
                     onChange={(e) => {
                       handleChange(e)
@@ -2227,7 +2227,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     margin="normal"
                     size="small"
                     name="advancepaidtovendor"
-                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || 0}
+                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
                     // onChange={handleChange}
                     onChange={(e) => {
                       handleChange(e)

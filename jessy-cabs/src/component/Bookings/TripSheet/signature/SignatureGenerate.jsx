@@ -10,13 +10,22 @@ const SignatureGenerate = () => {
 
 
     const [fulldetails, setFulltripdetails] = useState([])
+    // const [expired, setExpired] = useState(() => {
+    //     const expiredInSessionStorage =
+    //         sessionStorage.getItem("expiredsign") && localStorage.getItem("expiredsign");
+    //     return expiredInSessionStorage
+    //         ? JSON.parse(expiredInSessionStorage)
+    //         : false;
+    // });
     const [expired, setExpired] = useState(() => {
         const expiredInSessionStorage =
-            sessionStorage.getItem("expiredsign") && localStorage.getItem("expiredsign");
+         localStorage.getItem("expiredsign");
         return expiredInSessionStorage
             ? JSON.parse(expiredInSessionStorage)
             : false;
     });
+
+    console.log(expired,"datata")
     useEffect(() => {
         const signturedatafullly = async () => {
             const datatripid = tripId

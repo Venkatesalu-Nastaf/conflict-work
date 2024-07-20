@@ -135,7 +135,7 @@ const MonthlyWise = () => {
                         </div>
                     </div>
                     <div className="MonthlyWise-table-container">
-                        <div className="Download-btn-MonthlyWise">
+                        <div className="Download-btn">
                             <PopupState variant="popover" popupId="demo-popup-menu">
                                 {(popupState) => (
                                     <React.Fragment>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -10,7 +10,9 @@ import { Button } from '@mui/material';
 
 
 const useTripsheet = () => {
+    const signatureurlinkurl="http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
+    //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -46,7 +48,8 @@ const useTripsheet = () => {
     const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
+    const [infoMessage, setINFOMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -214,42 +217,42 @@ const useTripsheet = () => {
 
     //generate link
 
-    const generateLink = async () => {
-        try {
-            const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            if (!tripidNO) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-                return;
-            }
-            const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            const data = response.data.link
-            setLink(data);
-            getSignatureImage()
-            // copyToClipboardf(data)
-        } catch {
-        }
-    };
+    // const generateLink = async () => {
+    //     try {
+    //         const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    //         if (!tripidNO) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //             return;
+    //         }
+    //         const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
+    //         const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
+    //         const data = response.data.link
+    //         setLink(data);
+    //         getSignatureImage()
+    //         // copyToClipboardf(data)
+    //     } catch {
+    //     }
+    // };
 
 
-    const SignPage = async (event) => {
-        event.preventDefault();
-        if (link) {
-            try {
-                await navigator.clipboard.writeText(link);
-                setSign(true);
-                setTimeout(() => {
-                    setSign(false);
-                }, 2000);
-            } catch (error) {
-                console.error("Failed to copy text:", error);
-                alert("Failed to copy text to clipboard. Please try again.");
-            }
-        } else {
-            alert("No link data available.");
-        }
-    }
+    // const SignPage = async (event) => {
+    //     event.preventDefault();
+    //     if (link) {
+    //         try {
+    //             await navigator.clipboard.writeText(link);
+    //             setSign(true);
+    //             setTimeout(() => {
+    //                 setSign(false);
+    //             }, 2000);
+    //         } catch (error) {
+    //             console.error("Failed to copy text:", error);
+    //             alert("Failed to copy text to clipboard. Please try again.");
+    //         }
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // }
     // -----------------accountinfo--------------------------------
     useEffect(() => {
         const fetchdataccountinfodata = async () => {
@@ -273,66 +276,66 @@ const useTripsheet = () => {
 
     //---------------------------to copy the link-------------------
 
-    const hiddenInputRef = useRef(null);
+    // const hiddenInputRef = useRef(null);
 
-    const hiddenTextAreaRef = useRef(null);
+    // const hiddenTextAreaRef = useRef(null);
 
-    const copyToClipboard = (e) => {
-        e.preventDefault()
-        if (link) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = link;
-            document.body.appendChild(textArea);
+    // const copyToClipboard = (e) => {
+    //     e.preventDefault()
+    //     if (link) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = link;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
-    const copyToClipboardf = (data) => {
-        // e.preventDefault()
-        if (data) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = data;
-            document.body.appendChild(textArea);
+    // const copyToClipboardf = (data) => {
+    //     // e.preventDefault()
+    //     if (data) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = data;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
     //----------------------------------------------
@@ -557,10 +560,13 @@ const useTripsheet = () => {
             // setIsEditMode(true);
             setIsEditMode(false);
         }
-        // else {
-        //     // setIsEditMode(false);
-        //     setIsEditMode(true);
-        // }
+        else {
+            // setIsEditMode(false);
+            setSmsGuest(false)
+            setSendEmail(false)
+            setDriverSMS(false)
+            setIsEditMode(true);
+        }
 
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
@@ -757,7 +763,7 @@ const useTripsheet = () => {
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+                    vehType: formData.vehType|| selectedCustomerData.vehType || book.vehType || formValues.vehType ,
                     starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
                     status: formData.status || book.status || selectedCustomerData.status,
@@ -942,9 +948,11 @@ const useTripsheet = () => {
         try {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
-                console.log(selectedCustomerDatas.travelsname, selectedCustomerData.travelsname, formData.travelsname, book.travelsname, "trvales")
+                getSignatureImage()
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                const dattasign=signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                
 
                 const updatedCustomer = {
                     ...book,
@@ -952,7 +960,9 @@ const useTripsheet = () => {
                     ...vehilcedetails,
                     ...selectedCustomerData,
                     ...formData,
-                    apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    // apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    apps: dattasign,
+        
                     travelsname: selectedCustomerDatas.travelsname || selectedCustomerData.travelsname || formData.travelsname || book.travelsname,
                     travelsemail: selectedCustomerDatas.travelsemail || selectedCustomerData.travelsemail || formData.travelsemail || book.travelsemail,
                     starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
@@ -1045,6 +1055,13 @@ const useTripsheet = () => {
                     await handlecheck();
                 }
 
+                if (smsguest) {
+                    await handleSendSMS()
+                 }
+                if (DriverSMS) {
+                await handleDriverSendSMS()
+                 }
+                
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
@@ -1146,7 +1163,6 @@ const useTripsheet = () => {
     //             startdate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
 
 
-
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1189,8 +1205,10 @@ const useTripsheet = () => {
 
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+            const dattasign=signimageUrl ? "Closed" : book.apps;
             const updatedBook = {
                 ...book,
+                apps:dattasign,
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                 tripsheetdate: selectedBookingDate,
@@ -2283,7 +2301,7 @@ const useTripsheet = () => {
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // handleChange({ target: { name: "vehType", value: params.vehType } })
-        // handleChange({ target: { name: "vehType", value: params.vehType } })
+        handleChange({ target: { name: "vehType", value: params.vehType } })
 
     };
 
@@ -2415,6 +2433,9 @@ const useTripsheet = () => {
             console.log(err, 'error');
         }
     };
+
+    
+
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
@@ -2866,7 +2887,7 @@ const useTripsheet = () => {
             // vendorduty = vendorinfo.vendor_duty || vendorinfo.duty;
             // vendorvehicleNames = vendorinfo.vendor_vehicle || vendorinfo.vehicleName;
             vendorduty = vendorinfo.vendor_duty || ""
-            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename || "";
+            vendorvehicleNames = vendorinfo.vendor_vehicle || "";
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
@@ -2904,6 +2925,7 @@ const useTripsheet = () => {
             });
             vendordata = response.data;
             // console.log(vendordata,"vendorrrrrrrr")
+            
 
             const packages = vendordata.package;
             const Hours = Number(vendordata.Hours);
@@ -2952,6 +2974,8 @@ const useTripsheet = () => {
 
 
             });
+            setSuccess(true)
+            setSuccessMessage("successfully listed")
             //    
         }
         catch (err) {
@@ -3417,7 +3441,7 @@ const useTripsheet = () => {
         }
 
         fetchData()
-    }, [vehicleRegisterNo])
+    }, [apiUrl,vehicleRegisterNo])
 
 
 
@@ -3457,20 +3481,20 @@ const useTripsheet = () => {
     //     fetchData()
     // }, [vehicleRegisterNo])
 
-    // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
+
     const generateAndCopyLinkdata = () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
 
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         if (!tripid) {
-            setError(true)
-            setErrorMessage("Enter the tripid")
+            setWarning(true)
+            setWarningMessage("Enter the tripid")
             return
         }
         if (appsstatus === "Closed") {
-            setError(true)
-            setErrorMessage("Signature already uploaded")
+            setInfo(true)
+            setINFOMessage("Signature already uploaded")
             return
         }
 
@@ -3479,14 +3503,13 @@ const useTripsheet = () => {
         };
          
         // Create the URL with the JSON string as a single query parameter
-        const url = new URL(`${apiUrl}/SignatureGenerate`);
+        const url = new URL(signatureurlinkurl);
         Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
        
 
 
 // 
         const generatedLinkdata = url.toString();
-        console.log(generatedLinkdata,"data",url)
         setSignatureWhattsapplink(generatedLinkdata)
 
 
@@ -3498,6 +3521,8 @@ const useTripsheet = () => {
         tempTextarea.select();
         document.execCommand('copy');
         document.body.removeChild(tempTextarea);
+        localStorage.setItem("expiredsign",false);
+        localStorage.setItem("expired", false);
 
 
         setTimeout(() => {
@@ -3535,10 +3560,10 @@ const useTripsheet = () => {
             setRowsSignature([])
         }
     }
-    useEffect(() => {
-        signatruretimedetails()
+    // useEffect(() => {
+    //     signatruretimedetails()
            
-    }, [])
+    // }, [])
 
     const handleRefreshsign = () => {
         signatruretimedetails()
@@ -3582,7 +3607,7 @@ const useTripsheet = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
+        infoMessage,
         book,
         handleClick,
         handleChange,
@@ -3650,14 +3675,16 @@ const useTripsheet = () => {
         handleButtonClick,
         handleTripRowClick,
         imgpopupOpen,
-        generateLink,
+        // generateLink,
         selectedRow,
         imageUrl,
         link,
         isSignatureSubmitted, checkCloseKM,
         isEditMode,
-        handleEdit, setFormValues, copyToClipboard,
-        SignPage, handlesignaturePopUpClose, signaturePopUpOpen,
+        handleEdit, setFormValues,
+        //  copyToClipboard,
+        // SignPage,
+         handlesignaturePopUpClose, signaturePopUpOpen,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,
@@ -3667,7 +3694,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature,signaturelinkwhatsapp
+        signaturelinkcopy, columnssignature, rowsignature,setWarning,setWarningMessage,setSignImageUrl,signaturelinkwhatsapp
 
 
     };

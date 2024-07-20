@@ -77,7 +77,7 @@
     background-color: var(--glass);
     padding: 20px 35px 20px 0px;
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 @media only screen and (min-width:380px) and (max-width:901px) {

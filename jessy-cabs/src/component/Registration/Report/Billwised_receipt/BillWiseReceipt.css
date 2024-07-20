@@ -3,6 +3,15 @@
     border-radius: 10px;
     height: 400px;
     width: 100%;
+    background-color: var(--glass);
+}
+
+.bill-wise-reciept-table-right-side {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    height: 360px;
+    width: 100%;
+    background-color: var(--glass);
 }
 
 .bill-wise-reciept-table-main {
@@ -37,7 +46,7 @@
 }
 
 .total-inputs label {
-    padding: 0px 10px;
+    /* padding: 0px 10px; */
     font-weight: 500;
 }
 

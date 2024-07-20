@@ -599,11 +599,11 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (err) {
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
-        var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid),'my-secret-key@123').toString();
-        var cipherunique=CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber),'my-secret-key@123').toString();
-       
+        var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
+        var cipherunique = CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber), 'my-secret-key@123').toString();
+
         // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
-      
+
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext1)}&uniqueNumber=${encodeURIComponent(cipherunique)}`;
 
         res.status(200).json({ message: 'Status updated successfully', link });
@@ -616,9 +616,9 @@ app.post('/generate-link/:tripid', (req, res) => {
         }
         // const dataencryt=encrypt(tripid)
         // console.log(dataencryt,"ll")
-        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(tripid),'my-secret-key@123').toString();
-        var cipherunique2=CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber),'my-secret-key@123').toString();
-       
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
+        var cipherunique2 = CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber), 'my-secret-key@123').toString();
+
         // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext)}&uniqueNumber=${encodeURIComponent(cipherunique2)}`;
 
@@ -751,6 +751,21 @@ app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
     return res.status(200).json("data insert successfully")
   })
 })
+
+
+
+app.get("/getFuelType/:fuelType", (req, res) => {
+  const vehicleName = req.params.fuelType; // Corrected to use req.params
+  const sql = `SELECT fueltype FROM vehicleinfo WHERE vehicleName=?`;
+
+  db.query(sql, [vehicleName], (err, result) => {
+    if (err) {
+      console.log("err", err);
+      return res.status(500).json("Something went wrong ..");
+    }
+    return res.status(200).json(result);
+  });
+});
 
 
 

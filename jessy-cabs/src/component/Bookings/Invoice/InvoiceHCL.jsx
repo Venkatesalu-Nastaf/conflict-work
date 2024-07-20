@@ -4,14 +4,14 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 
-const InvoiceHCL = ({ pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
+const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
 
     const duty = tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty;
     const date = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
     const shedOutDate = tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate;
     const startDate = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
 
-    // console.log("selectedCustomerData", selectedCustomerData)
+    console.log("fueltype", fueltype)
 
     const targetRef = useRef();
     return (
@@ -37,12 +37,12 @@ const InvoiceHCL = ({ pack, airportTransfer, tripSheetData, organizationdata, se
                         <div className='first-table-invoice-container'>
                             <table id='table-invoice' className="firstleftTable">
                                 <tr>
-                                    <th id='table-header'><span>Client Name:HCL</span></th>
+                                    <th id='table-header'><span>Client Name:</span></th>
                                     <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Address:</span></th>
-                                    <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
+                                    <td id='table-data'><span >{customerAddress}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Category:</span></th>
@@ -50,7 +50,7 @@ const InvoiceHCL = ({ pack, airportTransfer, tripSheetData, organizationdata, se
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Fuel Type:</span></th>
-                                    <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                                    <td id='table-data'><span>{fueltype}</span></td>
                                 </tr>
 
                                 <tr>
@@ -59,15 +59,15 @@ const InvoiceHCL = ({ pack, airportTransfer, tripSheetData, organizationdata, se
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Emp.Name:</span></th>
-                                    <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                                    <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Report Add:</span></th>
-                                    <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                                    <td id='table-data'><span>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Drop Address:</span></th>
-                                    <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                                    <td id='table-data'><span>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span>Escort Route:</span></th>

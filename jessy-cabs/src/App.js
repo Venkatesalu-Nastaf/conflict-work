@@ -145,13 +145,15 @@ function App() {
 
   //--------------------------------------------------------
   //fetch org logo
-  const { logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
+  const { orgName, logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
 
   const ref = useRef(false)
+  const organizationname = orgName || localStorage.getItem('usercompany');
 
   const fetchOrgLogo = useCallback(async () => {
     try {
-      const organizationname = localStorage.getItem('usercompany');
+
+      console.log("routeData", organizationname)
       if (!organizationname || organizationname === undefined) return
       const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
 
@@ -164,7 +166,7 @@ function App() {
     } catch (err) {
       console.log(err)
     }
-  }, [apiUrl, setLogo, setLogoTrigger])
+  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname])
 
   useEffect(() => {
     if (!ref.current) {
@@ -319,7 +321,7 @@ function App() {
                   element={R_Employee !== 0 ? <Employes stationName={stationName} /> : <NoPermission />}
                 />
 
-<Route
+                <Route
                   path="/home/registration/reports"
                   element={R_Employee !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
                 />

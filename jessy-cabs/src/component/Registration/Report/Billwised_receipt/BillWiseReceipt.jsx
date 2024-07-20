@@ -11,6 +11,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
+import { MdOutlineEventNote } from "react-icons/md";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+
+
 
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -126,7 +131,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <WorkOutlineRoundedIcon color="action" />
+                    <MdOutlineEventNote color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -152,7 +157,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <WorkOutlineRoundedIcon color="action" />
+                    <MdOutlineEventNote color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -165,7 +170,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <AccountBalanceWalletIcon color="action" />
                   </div>
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                     <InputLabel id="demo-simple-select-standard-label">Customer Id</InputLabel>
@@ -237,7 +242,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FaIndianRupeeSign color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -262,7 +267,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FaIndianRupeeSign color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -274,7 +279,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FaIndianRupeeSign color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -286,7 +291,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FaIndianRupeeSign color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -298,7 +303,7 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FaIndianRupeeSign color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -364,7 +369,7 @@ export const BillWiseReceipt = () => {
                     <Button variant='contained'>Show Pending Bills</Button>
                     <Button variant='contained'>Apply to list</Button>
                   </div>
-                  <div className='bill-wise-reciept-table'>
+                  <div className='bill-wise-reciept-table-right-side'>
                     <DataGrid
                       rows={rowsPendingBill}
                       columns={columnsPendingBill}

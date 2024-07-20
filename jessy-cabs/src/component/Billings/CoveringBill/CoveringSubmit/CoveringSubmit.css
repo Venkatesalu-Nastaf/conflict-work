@@ -27,7 +27,7 @@
 
 .table-bookingCopy-CoveringSubmit {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     margin: 0px 20px;
     width: fit-content;

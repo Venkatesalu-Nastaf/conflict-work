@@ -101,6 +101,9 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
 import InvoiceHCL from '../Invoice/InvoiceHCL';
+import { APIURL } from '../../url';
+import axios from "axios"
+
 
 import {
   vehicaleinfos
@@ -110,8 +113,8 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 
 import useTripsheet from './useTripsheet';
 
-import { FaChevronDown } from "react-icons/fa";
-import {WhatsappShareButton} from 'react-share';
+// import { FaChevronDown } from "react-icons/fa";
+import { WhatsappShareButton } from 'react-share';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -160,7 +163,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     formData,
     handleKeyDown,
     handleDateChange,
-    handleAutocompleteChange, copyToClipboard, setFormValues, handlesignaturePopUpClose,
+    handleAutocompleteChange,
+    //  copyToClipboard, 
+    setFormValues,
+    //  handlesignaturePopUpClose,
     packageData,
     smsguest,
     sendEmail,
@@ -180,9 +186,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     popupOpen,
     setSmsGuest,
     setSelectedCustomerDatas,
-    setreporttime, signaturePopUpOpen,
+    setreporttime, 
+    // signaturePopUpOpen,
     setshedintime,
-    shedKilometers, handleSignaturePopUpOpen,
+    shedKilometers,
+    //  handleSignaturePopUpOpen,
     calculateTotalKilometers,
     additionalTime,
     handleETripsheetClick,
@@ -205,20 +213,20 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleButtonClick,
     handleTripRowClick,
     imgpopupOpen,
-    generateLink,
+    // generateLink,
     selectedRow,
     imageUrl,
-    link,
-    isSignatureSubmitted,
+    // link,
+    // isSignatureSubmitted,
     isEditMode,
     handleEdit, checkCloseKM, checkNightBetaEligible,
     driverdetails, ClosedTripData,
-    sign, handleCalc, calcPackage, extraHR, extraKM, package_amount,
+    // sign, 
+    handleCalc, calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
     driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, setSign, setLink, setError,
-    setErrorMessage,
+    totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
     handlesignaturemageDownload, setSignatureupload,
@@ -226,7 +234,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata,signaturelinkwhatsapp
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp,setWarning,setWarningMessage,setSignImageUrl
 
   } = useTripsheet();
 
@@ -236,8 +244,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }, [actionName, handleClick]);
 
-
+ const apiurl=APIURL
   // Permission ------------ayyan
+
   const { permissions } = useContext(PermissionContext)
   const fileInputRefdata = useRef(null);
 
@@ -271,16 +280,21 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
-  const handlesignatureimages = () => {
-
-    getSignatureImage()
+  const handlesignatureimages = async() => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
+    // await getSignatureImage()
     if (!tripid) {
 
-      setError(true);
-      setErrorMessage("Enter The Tripid")
+      setWarning(true);
+      setWarningMessage("Enter The Tripid")
       return
+    }
+    const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
+    if (response.status === 200) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+        setSignaturepopup(true);
+        console.log(imageUrl,"uuuuuuuuuu")
     }
     else if (signimageUrl === "") {
       if (fileInputRefdata.current) {
@@ -291,53 +305,39 @@ const TripSheet = ({ stationName, logoImage }) => {
         console.error("File input ref is not available");
       }
     } else {
+      console.log("ppppppppppp")
       setSignaturepopup(true);
       getSignatureImage()
     }
   }
-  const textRef = useRef();
+  // const textRef = useRef();
 
 
-  const SignPage = async (event) => {
-    event.preventDefault();
-    if (link) {
-      const textElement = textRef.current;
-      navigator.clipboard.writeText(textElement.textContent).then(() => {
-        setSign(true)
-        setTimeout(() => {
-          setSign(false)
-          setLink("")
-        }, 2000)
+  //   const SignPage = async (event) => {
+  //     event.preventDefault();
+  //     if (link) {
+  //       const textElement = textRef.current;
+  //       navigator.clipboard.writeText(textElement.textContent).then(() => {
+  //         setSign(true)
+  //         setTimeout(() => {
+  //           setSign(false)
+  //           setLink("")
+  //         }, 2000)
 
-      }).catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
+  //       }).catch(err => {
+  //         console.error('Failed to copy text: ', err);
+  //       });
 
-    } else {
-      alert("no link data ", link)
-    }
-  }
-
-
- ;
+  //     } else {
+  //       alert("no link data ", link)
+  //     }
+  //   }
 
 
-  const [showVehicleDetails, setShowVehicleDetails] = useState(true);
-
-  const toggleVehicleDetails = () => {
-    // setShowVehicleDetails(!showVehicleDetails);
-  }
+  //  ;
 
 
-  // for vechicle type vendor info
-  // const [type, setType] = React.useState('');
 
-  // const handlevehiecleChange = (event) => {
-  //   setType(event.target.value);
-  // };
-
-  // for check box vendor info
-  // const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
   // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
 
@@ -467,7 +467,38 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  
+  const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+
+  const [fueltype, setFuelType] = useState('')
+
+  useEffect(() => {
+    const fetchFuleType = async () => {
+      if (!ratefor) return
+      const data = await axios.get(`${APIURL}/getFuelType/${ratefor}`)
+      // console.log("datarate for", data.data[0]?.fueltype)
+      setFuelType(data?.data[0]?.fueltype)
+    }
+
+    fetchFuleType()
+
+  }, [ratefor, APIURL])
+
+
+  // const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+
+  const [customerAddress, setCustomerAddress] = useState("")
+  useEffect(() => {
+    const fetchFuleType = async () => {
+      if (!customer) return
+      const data = await axios.get(`${APIURL}/getcustomer-address/${customer}`)
+      // console.log("customer ", data.data[0].address1)
+      setCustomerAddress(data?.data[0]?.address1)
+    }
+    fetchFuleType()
+
+  }, [customer, APIURL])
+
+  const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
 
 
   // useEffect(() => {
@@ -890,14 +921,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
               </div>
 
-              <div>
-                <Button variant="contained"
-                  onClick={toggleVehicleDetails}
-                >
-                  Vehicle details
-                  <span><FaChevronDown /></span>
-                </Button>
-              </div>
+
 
 
 
@@ -962,56 +986,56 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
               </div>
 
-              {showVehicleDetails && (
-                <div className='tripsheet-division3'>
+              {/* {showVehicleDetails && ( */}
+              <div className='tripsheet-division3'>
 
-                  <div className="input">
-                    <div className="icone">
-                      <StoreIcon color="action" />
-                    </div>
-                    <Autocomplete
-                      fullWidth
-                      size="small"
-                      id="free-solo-department"
-                      freeSolo
-                      sx={{ width: "100%" }}
-                      onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                      value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                      options={stationName.map((option) => ({
-                        label: option.Stationname,
-                      }))}
-                      getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Service Station" autoComplete="password" name="department" inputRef={params.inputRef} />
-                        )
-                      }
-                      }
-                    />
+                <div className="input">
+                  <div className="icone">
+                    <StoreIcon color="action" />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <EmailIcon color="action" />
-                    </div>
-                    <Autocomplete
-                      fullWidth
-                      id="free-Groups_solo-"
-                      freeSolo
-                      size="small"
-                      value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
-                      options={GroupTypes?.map((option) => ({
-                        label: option?.Option,
-                      }))}
-                      onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                        );
-                      }}
-                    />
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-department"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
+                    value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    options={stationName.map((option) => ({
+                      label: option.Stationname,
+                    }))}
+                    getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Service Station" autoComplete="password" name="department" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <EmailIcon color="action" />
                   </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-Groups_solo-"
+                    freeSolo
+                    size="small"
+                    value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                    options={GroupTypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
 
-                  {/* <div className="input radio">
+                {/* <div className="input radio">
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -1025,7 +1049,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-                  {/* <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
@@ -1051,36 +1075,36 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-                  <div className="input">
-                    <div className="icone">
-                      <EngineeringIcon color="action" />
-                    </div>
-                    <Autocomplete
-                      fullWidth
-                      size="small"
-                      id="free-solo-duty"
-                      freeSolo
-                      sx={{ width: "100%" }}
-                      onChange={(event, value) => {
-                        handleAutocompleteChange(event, value, "duty")
-                        if (!lockdata) {
-                          setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
-                        }
-                      }}
-                      value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                      options={Duty.map((option) => ({
-                        label: option.option,
-                      }))}
-                      getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
-                        )
-                      }
-                      }
-                    />
+                <div className="input">
+                  <div className="icone">
+                    <EngineeringIcon color="action" />
                   </div>
-                  {/* <div className="input">
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-duty"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => {
+                      handleAutocompleteChange(event, value, "duty")
+                      if (!lockdata) {
+                        setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
+                      }
+                    }}
+                    value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                    options={Duty.map((option) => ({
+                      label: option.option,
+                    }))}
+                    getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+                {/* <div className="input">
                     <div className="icone">
                       <AirlineStopsIcon color="action" />
                     </div>
@@ -1102,952 +1126,952 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={handleChange}
                     />
                   </div> */}
-                  <div className="input">
-                    <div className="icone">
-                      <DataUsageIcon color="action" />
-                    </div>
-                    <TextField
-                      margin="normal"
-                      size="small"
-                      name="useage"
-                      value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
-                      onChange={handleChange}
-                      label="Usage"
-                      id="useage"
-                      autoComplete="password"
-                    />
+                <div className="input">
+                  <div className="icone">
+                    <DataUsageIcon color="action" />
                   </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="useage"
+                    value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
+                    onChange={handleChange}
+                    label="Usage"
+                    id="useage"
+                    autoComplete="password"
+                  />
+                </div>
 
-                  <div className="input">
-                    <div className="icone">
-                      <BadgeIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="customercode"
-                      value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
-                      onChange={handleChange}
-                      label="Cost Code"
-                      id="customer-customercode"
-                      autoComplete="password"
-                    />
+                <div className="input">
+                  <div className="icone">
+                    <BadgeIcon color="action" />
                   </div>
+                  <TextField
+                    size="small"
+                    name="customercode"
+                    value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
+                    onChange={handleChange}
+                    label="Cost Code"
+                    id="customer-customercode"
+                    autoComplete="password"
+                  />
+                </div>
 
 
 
-                  <div className="input">
+                <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="ShedOut Date"
+                      id="shedOutDate"
+                      value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                      format="DD/MM/YYYY"
+                      onChange={(date) => {
+                        setKmValue((prev) => ({ ...prev, shedOutDate: date }));
+                        handleDateChange(date, 'shedOutDate')
+                        // if(!lockdata){
+                        // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
+                        // }
+                      }}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider>
+                </div>
+
+
+                <div style={{ display: "grid" }} className="input">
+
+                  {startDateCheckFun()}
+                  <div style={{ display: "flex" }}>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="ShedOut Date"
-                        id="shedOutDate"
-                        value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                        label="Start Date"
+                        id="startdate"
+                        value={
+                          formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
+                        }
                         format="DD/MM/YYYY"
                         onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, shedOutDate: date }));
-                          handleDateChange(date, 'shedOutDate')
-                          // if(!lockdata){
-                          // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
+                          setKmValue((prev) => ({ ...prev, startDate: date }));
+                          handleDateChange(date, 'startdate');
+
+                          // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                          // const startdate = date;
+
+                          // if (shedoutdate && startdate) {
+                          //   const shedoutdateObj = dayjs(shedoutdate);
+                          //   const startdateObj = dayjs(startdate);
+                          //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
+                          //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
                           // }
                         }}
                       >
                         {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                        )}
+                      </DatePicker>
+                    </LocalizationProvider>
+                  </div>
+                </div>
+
+
+                <div className="input" style={{ display: "grid" }}>
+                  {closeDateCheckFun()}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Close Date"
+                        id="closedate"
+                        value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                        format="DD/MM/YYYY"
+                        onChange={(date) => {
+
+                          handleDateChange(date, 'closedate')
+                          setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                          // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                          // const closeDate = date
+                          // const shedindate = kmValue.shedInDate
+
+                          // if (startDate && closeDate) {
+                          //   const startDateObj = dayjs(startDate);
+                          //   const closeDateObj = dayjs(closeDate);
+                          //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                          //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                          // }
+
+                          // if (shedindate && closeDate) {
+                          //   const closedateObj = dayjs(closeDate);
+                          //   const shedindateObj = dayjs(shedindate);
+                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                          // }
+                        }}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                        )}
+                      </DatePicker>
+                    </LocalizationProvider>
+                  </div>
+                </div>
+
+
+                <div className="input" style={{ display: "grid" }}>
+
+                  {shedInDateCheck()}
+
+                  <div style={{ display: "flex" }}>
+
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="ShedIn Date"
+                        id="shedInDate"
+                        value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
+                        format="DD/MM/YYYY"
+                        onChange={(date) => {
+                          handleDateChange(date, 'shedInDate')
+
+                          // setKmValue(prev => ({ ...prev, shedInDate: date }))
+                          // const closedate = kmValue.closeDate;
+                          // const shedoutdate = kmValue.shedOutDate;
+                          // const shedindate = date
+
+                          // if (shedoutdate && shedindate) {
+                          //   const shedOutDateObj = dayjs(shedoutdate);
+                          //   const shedindateObj = dayjs(shedindate);
+                          //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+                          //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
+                          // }
+
+                          // if (shedindate && closedate) {
+                          //   const closedateObj = dayjs(closedate);
+                          //   const shedindateObj = dayjs(shedindate);
+                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                          // }
+
+                        }}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
                         )}
                       </DatePicker>
                     </LocalizationProvider>
                   </div>
 
+                </div>
 
-                  <div style={{ display: "grid" }} className="input">
 
-                    {startDateCheckFun()}
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <CalendarMonthIcon color="action" />
-                      </div>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Start Date"
-                          id="startdate"
-                          value={
-                            formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
-                          }
-                          format="DD/MM/YYYY"
-                          onChange={(date) => {
-                            setKmValue((prev) => ({ ...prev, startDate: date }));
-                            handleDateChange(date, 'startdate');
-
-                            // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-                            // const startdate = date;
-
-                            // if (shedoutdate && startdate) {
-                            //   const shedoutdateObj = dayjs(shedoutdate);
-                            //   const startdateObj = dayjs(startdate);
-                            //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
-                            // }
-                          }}
-                        >
-                          {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                          )}
-                        </DatePicker>
-                      </LocalizationProvider>
-                    </div>
+                <div className="input">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
                   </div>
-
-
-                  <div className="input" style={{ display: "grid" }}>
-                    {closeDateCheckFun()}
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <CalendarMonthIcon color="action" />
-                      </div>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Close Date"
-                          id="closedate"
-                          value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
-                          format="DD/MM/YYYY"
-                          onChange={(date) => {
-
-                            handleDateChange(date, 'closedate')
-                            setKmValue(prev => ({ ...prev, closeDate: date }))
-
-                            // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-                            // const closeDate = date
-                            // const shedindate = kmValue.shedInDate
-
-                            // if (startDate && closeDate) {
-                            //   const startDateObj = dayjs(startDate);
-                            //   const closeDateObj = dayjs(closeDate);
-                            //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
-                            // }
-
-                            // if (shedindate && closeDate) {
-                            //   const closedateObj = dayjs(closeDate);
-                            //   const shedindateObj = dayjs(shedindate);
-                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                            // }
-                          }}
-                        >
-                          {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                          )}
-                        </DatePicker>
-                      </LocalizationProvider>
-                    </div>
-                  </div>
-
-
-                  <div className="input" style={{ display: "grid" }}>
-
-                    {shedInDateCheck()}
-
-                    <div style={{ display: "flex" }}>
-
-                      <div className="icone">
-                        <CalendarMonthIcon color="action" />
-                      </div>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="ShedIn Date"
-                          id="shedInDate"
-                          value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
-                          format="DD/MM/YYYY"
-                          onChange={(date) => {
-                            handleDateChange(date, 'shedInDate')
-
-                            // setKmValue(prev => ({ ...prev, shedInDate: date }))
-                            // const closedate = kmValue.closeDate;
-                            // const shedoutdate = kmValue.shedOutDate;
-                            // const shedindate = date
-
-                            // if (shedoutdate && shedindate) {
-                            //   const shedOutDateObj = dayjs(shedoutdate);
-                            //   const shedindateObj = dayjs(shedindate);
-                            //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
-                            // }
-
-                            // if (shedindate && closedate) {
-                            //   const closedateObj = dayjs(closedate);
-                            //   const shedindateObj = dayjs(shedindate);
-                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                            // }
-
-                          }}
-                        >
-                          {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                          )}
-                        </DatePicker>
-                      </LocalizationProvider>
-                    </div>
-
-                  </div>
-
-
-                  <div className="input">
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <DemoItem>
-                      <TextField
-                        name="totaldays"
-                        value={calculateTotalDays()}
-                        label="Total Days"
-                        size="small"
-                        type="number"
-                        id="totaldays"
-                        // variant="standard"
-                        autoComplete="password"
-                      />
-                    </DemoItem>
-                  </div>
-
-
-
-                  <div className="input time" style={{ display: "grid" }}>
-                    {checkTimeandDateConflict()}
-
-                    <div style={{ display: "flex" }}>
-                      <div className='icone'>
-                        <MdOutlineAccessTimeFilled />
-                      </div>
-
-                      <div className='input-type-grid'>
-                        <label>ShedOut Time</label>
-                        <input
-                          type="time"
-                          name="reporttime"
-                          value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
-                          onChange={(event) => {
-
-                            setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                            setBook({ ...book, reporttime: event.target.value });
-                            setreporttime(event.target.value);
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                            }
-
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="input time">
-                    <div className='icone'>
-                      <MdOutlineAccessTimeFilled />
-                    </div>
-                    <div className='input-type-grid'>
-                      {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
-                      <input
-                        type="time"
-                        id="starttime"
-                        name='starttime'
-                        value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
-                        onChange={(event) => {
-
-                          const rTime = event.target.value;
-                          if ((reportTimeVar && rTime <= reportTimeVar)) {
-                            return;
-                          } else {
-
-                            setBook({ ...book, starttime: event.target.value });
-                            setStartTime(event.target.value);
-                            setFormData({ ...formData, starttime: event.target.value });
-                            setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="input time">
-                    <div className='icone'>
-                      <MdOutlineAccessTimeFilled />
-                    </div>
-                    <div className='closetime tripsheet-shed-in-time'>
-                      {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
-
-                      <input
-                        type="time"
-                        name="closetime"
-                        id="closetime"
-                        value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                        onChange={(event) => {
-                          const rTime = event.target.value;
-                          if (calculateTotalDays() === 1 && (startTimeVar && rTime <= startTimeVar)) {
-                            return;
-                          } else {
-                            setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                            setBook({ ...book, closetime: event.target.value });
-                            setCloseTime(event.target.value);
-                          }
-
-                        }}
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="input time">
-                    <div className='icone'>
-                      <MdOutlineAccessTimeFilled />
-                    </div>
-                    <div className='input-type-grid'>
-                      {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> ShedIn Time</label>)}
-
-                      <input
-                        type="time"
-                        name="shedintime"
-                        value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                        onChange={(event) => {
-                          const rTime = event.target.value;
-                          if ((closeTimeVar && rTime <= closeTimeVar)) {
-                            return;
-                          } else {
-                            setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                            setBook({ ...book, shedintime: event.target.value });
-                            setshedintime(event.target.value);
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
-                            }
-                          }
-
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                    </div>
+                  <DemoItem>
                     <TextField
-                      name="totaltime"
-                      value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
-                      onChange={handleChange}
-                      label="Total Time"
-                      id="totaltime"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
-
-
-
-                  <div className="input" style={{ display: "grid" }} >
-                    {/* {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                    {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
-
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-                      <TextField
-                        name="shedout"
-                        value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          if (value >= 0) {
-                            handleChange(e)
-                            setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                            if (!lockdata) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            }
-                          }
-                        }}
-
-                        label="Shed Out"
-                        id="shedout"
-                        size='small'
-                        type="number"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-
-
-                  <div style={{ display: "grid" }} className="input">
-                    {/* {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>} */}
-                    {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
-
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-
-                      <TextField
-                        name="startkm"
-                        value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          if (value >= 0) {
-                            handleChange(e)
-                            setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-
-                          }
-                        }}
-                        size="small"
-                        label="Start KM"
-                        type="number"
-                        id="startkm"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="input" style={{ display: "grid" }}>
-                    {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-                      <TextField
-                        name="closekm"
-                        value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
-
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          if (value >= 0) {
-                            setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
-                            handleChange(e)
-                          }
-                        }}
-                        label="Close KM"
-                        size="small"
-                        type="number"
-                        id="outlined-start-closekm"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ display: "grid" }} className="input">
-                    {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-
-                      <TextField
-                        name="shedin"
-                        value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
-                        onChange={(e) => {
-                          const value = e.target.value
-                          if (value >= 0) {
-                            setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
-                            handleChange(e)
-                            if (!lockdata) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                            }
-
-                          }
-                        }}
-                        label="Shed In"
-                        type="number"
-                        id="shedin"
-                        size='small'
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-
-
-                      name="totalkm1"
-                      value={calculateTotalKilometers() || ''}
-                      onChange={handleChange}
-                      label="Total KM"
-                      id="totalkm1"
+                      name="totaldays"
+                      value={calculateTotalDays()}
+                      label="Total Days"
+                      size="small"
                       type="number"
-                      size='small'
+                      id="totaldays"
+                      // variant="standard"
                       autoComplete="password"
                     />
+                  </DemoItem>
+                </div>
+
+
+
+                <div className="input time" style={{ display: "grid" }}>
+                  {checkTimeandDateConflict()}
+
+                  <div style={{ display: "flex" }}>
+                    <div className='icone'>
+                      <MdOutlineAccessTimeFilled />
+                    </div>
+
+                    <div className='input-type-grid'>
+                      <label>ShedOut Time</label>
+                      <input
+                        type="time"
+                        name="reporttime"
+                        value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                        onChange={(event) => {
+
+                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                          setBook({ ...book, reporttime: event.target.value });
+                          setreporttime(event.target.value);
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                          }
+
+                        }}
+                      />
+                    </div>
                   </div>
 
-                  <div className="input">
+                </div>
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='input-type-grid'>
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    <input
+                      type="time"
+                      id="starttime"
+                      name='starttime'
+                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
+                      onChange={(event) => {
+
+                        const rTime = event.target.value;
+                        if ((reportTimeVar && rTime <= reportTimeVar)) {
+                          return;
+                        } else {
+
+                          setBook({ ...book, starttime: event.target.value });
+                          setStartTime(event.target.value);
+                          setFormData({ ...formData, starttime: event.target.value });
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='closetime tripsheet-shed-in-time'>
+                    {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
+
+                    <input
+                      type="time"
+                      name="closetime"
+                      id="closetime"
+                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                      onChange={(event) => {
+                        const rTime = event.target.value;
+                        if (calculateTotalDays() === 1 && (startTimeVar && rTime <= startTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                          setBook({ ...book, closetime: event.target.value });
+                          setCloseTime(event.target.value);
+                        }
+
+                      }}
+                    />
+                  </div>
+                </div>
+
+
+                <div className="input time">
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div className='input-type-grid'>
+                    {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>ShedIn Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> ShedIn Time</label>)}
+
+                    <input
+                      type="time"
+                      name="shedintime"
+                      value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                      onChange={(event) => {
+                        const rTime = event.target.value;
+                        if ((closeTimeVar && rTime <= closeTimeVar)) {
+                          return;
+                        } else {
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
+                          setBook({ ...book, shedintime: event.target.value });
+                          setshedintime(event.target.value);
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
+                          }
+                        }
+
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  </div>
+                  <TextField
+                    name="totaltime"
+                    value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
+                    onChange={handleChange}
+                    label="Total Time"
+                    id="totaltime"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
+
+
+                <div className="input" style={{ display: "grid" }} >
+                  {/* {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                  {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+
+                  <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
                     </div>
                     <TextField
-                      name="shedkm"
-                      value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                      name="shedout"
+                      value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
                       onChange={(e) => {
-                        const value = e.target.value;
+                        let value = e.target.value;
                         if (value >= 0) {
+                          handleChange(e)
+                          setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                          if (!lockdata) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                          }
+                        }
+                      }}
+
+                      label="Shed Out"
+                      id="shedout"
+                      size='small'
+                      type="number"
+                      autoComplete="password"
+                    />
+                  </div>
+                </div>
+
+
+                <div style={{ display: "grid" }} className="input">
+                  {/* {kmValue.shedOutState && (Number(kmValue.startKMState) <= Number(kmValue.shedOutState)) && <lable className='invalid-km'>invalid KM</lable>} */}
+                  {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
+
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+
+                    <TextField
+                      name="startkm"
+                      value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value >= 0) {
+                          handleChange(e)
+                          setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+
+                        }
+                      }}
+                      size="small"
+                      label="Start KM"
+                      type="number"
+                      id="startkm"
+                      autoComplete="password"
+                    />
+                  </div>
+                </div>
+
+
+                <div className="input" style={{ display: "grid" }}>
+                  {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+                    <TextField
+                      name="closekm"
+                      value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
+
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value >= 0) {
+                          setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                           handleChange(e)
                         }
                       }}
-                      label="Add KM"
+                      label="Close KM"
+                      size="small"
                       type="number"
-                      id="shedkm"
-                      size='small'
+                      id="outlined-start-closekm"
                       autoComplete="password"
                     />
                   </div>
+                </div>
 
+                <div style={{ display: "grid" }} className="input">
+                  {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
 
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                    </div>
                     <TextField
-                      name="additionaltime"
-                      value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
-                      onChange={handleChange}
-                      label="Additional Time"
-                      id="additionaltime"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
+                      name="shedin"
+                      value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        if (value >= 0) {
+                          setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
+                          handleChange(e)
+                          if (!lockdata) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                          }
 
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faStamp} />
-                    </div>
-                    <TextField
-                      name="permit"
-                      value={formData.permit || selectedCustomerData.permit || book.permit || ''}
-                      onChange={handleChange}
-                      label="Permit"
-                      id="permit"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faSquareParking} />
-                    </div>
-                    <TextField
-                      name="parking"
-                      value={formData.parking || selectedCustomerData.parking || book.parking || ''}
-                      onChange={handleChange}
-                      label="Parking"
-                      id="parking"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <TollTwoToneIcon color="action" />
-                    </div>
-                    <TextField
-                      name="toll"
-                      value={formData.toll || selectedCustomerData.toll || book.toll || ''}
-                      onChange={handleChange}
-                      label="Toll"
-                      id="toll"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input tripsheet-calculate-input">
-                    <Button variant="contained"
-                      onClick={() => {
-                        handleCalc();
-                        // handleClickOpen();
+                        }
                       }}
-                    >
-                      calculate
-                    </Button>
+                      label="Shed In"
+                      type="number"
+                      id="shedin"
+                      size='small'
+                      autoComplete="password"
+                    />
                   </div>
+                </div>
 
-                  <React.Fragment>
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faRoad} size="lg" />
+                  </div>
+                  <TextField
 
-                    <Dialog
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"Customer Bill"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          <div className="Customer-Customer-Bill-Slider">
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <Inventory2Icon color="action" />
-                                </div>
 
-                                <TextField
-                                  name="pack"
-                                  value={calcPackage || formData.calcPackage || ''}
-                                  label="Pack"
-                                  id="pack"
-                                  size="small"
-                                  variant="standard"
-                                  autoComplete="password"
-                                  sx={{ m: 1, width: "60ch" }}
-                                />
+                    name="totalkm1"
+                    value={calculateTotalKilometers() || ''}
+                    onChange={handleChange}
+                    label="Total KM"
+                    id="totalkm1"
+                    type="number"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faRoad} size="lg" />
+                  </div>
+                  <TextField
+                    name="shedkm"
+                    value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value >= 0) {
+                        handleChange(e)
+                      }
+                    }}
+                    label="Add KM"
+                    type="number"
+                    id="shedkm"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  </div>
+                  <TextField
+                    name="additionaltime"
+                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
+                    onChange={handleChange}
+                    label="Additional Time"
+                    id="additionaltime"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faStamp} />
+                  </div>
+                  <TextField
+                    name="permit"
+                    value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                    onChange={handleChange}
+                    label="Permit"
+                    id="permit"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faSquareParking} />
+                  </div>
+                  <TextField
+                    name="parking"
+                    value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                    onChange={handleChange}
+                    label="Parking"
+                    id="parking"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <TollTwoToneIcon color="action" />
+                  </div>
+                  <TextField
+                    name="toll"
+                    value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                    onChange={handleChange}
+                    label="Toll"
+                    id="toll"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input tripsheet-calculate-input">
+                  <Button variant="contained"
+                    onClick={() => {
+                      handleCalc();
+                      // handleClickOpen();
+                    }}
+                  >
+                    calculate
+                  </Button>
+                </div>
+
+                <React.Fragment>
+
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Customer Bill"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        <div className="Customer-Customer-Bill-Slider">
+                          <div className="input-field">
+                            <div className="input">
+                              <div className="icone">
+                                <Inventory2Icon color="action" />
                               </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount5"
-                                  value={package_amount || formData.calcPackage || ''}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amount5"
-                                  variant="standard"
-                                />
-                              </div>
+
+                              <TextField
+                                name="pack"
+                                value={calcPackage || formData.calcPackage || ''}
+                                label="Pack"
+                                id="pack"
+                                size="small"
+                                variant="standard"
+                                autoComplete="password"
+                                sx={{ m: 1, width: "60ch" }}
+                              />
                             </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faRoad} />
-                                </div>
-                                <TextField
-                                  name="exkm1"
-                                  className='customer-bill-input'
-                                  value={extraKM || formData.calcPackage || 0}
-                                  label="Ex.Km"
-                                  id="ex-exkm1"
-                                  autoComplete="password"
-                                  size="small"
-                                  variant="standard"
-                                />
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faEquals} />
                               </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField size="small"
-                                  name='exkmTkm2'
-                                  className='customer-bill-input'
-                                  value={extrakm_amount || formData.calcPackage || ''}
-                                  id="exkmTkm2"
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount6"
-                                  className='customer-bill-input'
-                                  value={ex_kmAmount || formData.calcPackage || 0}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amount6"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faStopwatch} />
-                                </div>
-                                <TextField
-                                  name="exHrs1"
-                                  className='customer-bill-input'
-                                  value={extraHR || formData.calcPackage || ''}
-                                  label="exHrs1"
-                                  id="ex-exHrs1"
-                                  size="small"
-                                  autoComplete="password"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  id="exHrsTHrs2"
-                                  name='exHrsTHrs2'
-                                  className='customer-bill-input'
-                                  value={extrahr_amount || formData.calcPackage || ''}
-                                  variant="standard"
-                                />
-
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount7"
-                                  className='customer-bill-input'
-                                  value={ex_hrAmount || formData.calcPackage || 0}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amouamount7"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faCloudMoon} />
-                                </div>
-                                <TextField
-                                  name="night1"
-                                  className='customer-bill-input'
-                                  // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-                                  value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-
-                                  onChange={(e) => setNightBeta(e.target.value)}
-                                  label="Night"
-                                  id="night1"
-                                  autoComplete="password"
-                                  size="small"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  className='customer-bill-input'
-                                  name='nightThrs2'
-                                  id="nightThrs2"
-                                  value={nightCount || ''}
-                                  onChange={(e) => setNightCount(e.target.value)}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount8"
-                                  className='customer-bill-input'
-                                  // value={night_totalAmount || 0}
-                                  value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
-
-                                  size="small"
-                                  autoComplete="password"
-                                  label="Amount"
-                                  id="amount8"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faMoneyBill1Wave} />
-                                </div>
-                                <TextField
-                                  name="driverconvenience1"
-                                  className='customer-bill-input'
-                                  // value={driverBeta || formData.driverBeta || ''}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
-                                  onChange={driverBeta_calc}
-                                  label="Driver Convenience"
-                                  autoComplete="password"
-                                  id="driverconvenience1"
-                                  size="small"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  name='dtc2'
-                                  id='dtc2'
-                                  className='customer-bill-input'
-                                  // value={driverbeta_Count || formData.driverbeta_Count || ''}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
-
-                                  onChange={driverbeta_Count_calc}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount9"
-                                  className='customer-bill-input'
-                                  // value={driverBeta_amount || 0}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
-                                  size="small"
-                                  label="Amount"
-                                  id="amount9"
-                                  autoComplete="password"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-
-                            <TextField
-                              name="amount9"
-                              className='total-amount-textfield'
-                              value={totalcalcAmount || 0}
-                              size="small"
-                              label="Total Amount"
-                              id="amount-amount9"
-                              autoComplete="password"
-                              variant="standard"
-                            />
-
-                            <div className="input-field">
-
-                            </div>
-                            <div className="input-field">
+                              <TextField
+                                name="amount5"
+                                value={package_amount || formData.calcPackage || ''}
+                                size="small"
+                                label="Amount"
+                                autoComplete="password"
+                                id="amount5"
+                                variant="standard"
+                              />
                             </div>
                           </div>
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions className='tripsheet-cancel-save-btn'>
-                        <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" onClick={handleClose} autoFocus>
-                          Save
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </React.Fragment>
+                          <div className="input-field">
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faRoad} />
+                              </div>
+                              <TextField
+                                name="exkm1"
+                                className='customer-bill-input'
+                                value={extraKM || formData.calcPackage || 0}
+                                label="Ex.Km"
+                                id="ex-exkm1"
+                                autoComplete="password"
+                                size="small"
+                                variant="standard"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <TollTwoToneIcon color="action" />
+                              </div>
+                              <TextField size="small"
+                                name='exkmTkm2'
+                                className='customer-bill-input'
+                                value={extrakm_amount || formData.calcPackage || ''}
+                                id="exkmTkm2"
+                                variant="standard"
+                                autoComplete="password"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faEquals} />
+                              </div>
+                              <TextField
+                                name="amount6"
+                                className='customer-bill-input'
+                                value={ex_kmAmount || formData.calcPackage || 0}
+                                size="small"
+                                label="Amount"
+                                autoComplete="password"
+                                id="amount6"
+                                variant="standard"
+                              />
+                            </div>
+                          </div>
 
-                  <div className="input">
-                    <div className="icone">
-                      <BackupTableSharpIcon color="action" />
-                    </div>
-                    <TextField
-                      margin="normal"
-                      size="small"
-                      name="vpermettovendor"
-                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0}
-                      // onChange={handleChange}
-                      onChange={(e) => {
-                        handleChange(e)
-                        setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
-                      }}
-                      label="v-permet-To-Vendor"
-                      id="vpermettovendor"
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <MinorCrashSharpIcon color="action" />
-                    </div>
-                    <TextField
-                      margin="normal"
-                      size="small"
-                      name="vendortoll"
-                      value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0}
-                      // onChange={handleChange}
-                      onChange={(e) => {
-                        handleChange(e)
-                        setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
-                      }}
-                      label="Vendor-Toll"
-                      id="vendor-vendortoll"
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <PaymentsIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="customeradvance"
-                      value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
-                      onChange={handleChange}
-                      label="Customer-customeradvance"
-                      id="customer-advance"
-                      autoComplete="password"
-                    />
-                  </div>
-                  <div className="input tripsheet-e-tripsheet-input">
-                    <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
-                      E-Tripsheet
-                    </Button>
-                  </div>
+                          <div className="input-field">
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faStopwatch} />
+                              </div>
+                              <TextField
+                                name="exHrs1"
+                                className='customer-bill-input'
+                                value={extraHR || formData.calcPackage || ''}
+                                label="exHrs1"
+                                id="ex-exHrs1"
+                                size="small"
+                                autoComplete="password"
+                                variant="standard"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <TollTwoToneIcon color="action" />
+                              </div>
+                              <TextField
+                                size="small"
+                                id="exHrsTHrs2"
+                                name='exHrsTHrs2'
+                                className='customer-bill-input'
+                                value={extrahr_amount || formData.calcPackage || ''}
+                                variant="standard"
+                              />
 
-                  <div className="input tripsheet-remarks-division">
-                    <div className="icone">
-                      <MarkChatReadIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="remark"
-                      value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                      onChange={handleChange}
-                      label="Remark"
-                      id="remark"
-                      multiline
-                      rows={3}
-                      sx={{ width: "100%" }}
-                      autoComplete="password"
-                    />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faEquals} />
+                              </div>
+                              <TextField
+                                name="amount7"
+                                className='customer-bill-input'
+                                value={ex_hrAmount || formData.calcPackage || 0}
+                                size="small"
+                                label="Amount"
+                                autoComplete="password"
+                                id="amouamount7"
+                                variant="standard"
+                              />
+                            </div>
+                          </div>
+                          <div className="input-field">
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faCloudMoon} />
+                              </div>
+                              <TextField
+                                name="night1"
+                                className='customer-bill-input'
+                                // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+                                value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+
+                                onChange={(e) => setNightBeta(e.target.value)}
+                                label="Night"
+                                id="night1"
+                                autoComplete="password"
+                                size="small"
+                                variant="standard"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <TollTwoToneIcon color="action" />
+                              </div>
+                              <TextField
+                                size="small"
+                                className='customer-bill-input'
+                                name='nightThrs2'
+                                id="nightThrs2"
+                                value={nightCount || ''}
+                                onChange={(e) => setNightCount(e.target.value)}
+                                variant="standard"
+                                autoComplete="password"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faEquals} />
+                              </div>
+                              <TextField
+                                name="amount8"
+                                className='customer-bill-input'
+                                // value={night_totalAmount || 0}
+                                value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
+
+                                size="small"
+                                autoComplete="password"
+                                label="Amount"
+                                id="amount8"
+                                variant="standard"
+                              />
+                            </div>
+                          </div>
+                          <div className="input-field">
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                              </div>
+                              <TextField
+                                name="driverconvenience1"
+                                className='customer-bill-input'
+                                // value={driverBeta || formData.driverBeta || ''}
+                                value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
+                                onChange={driverBeta_calc}
+                                label="Driver Convenience"
+                                autoComplete="password"
+                                id="driverconvenience1"
+                                size="small"
+                                variant="standard"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <TollTwoToneIcon color="action" />
+                              </div>
+                              <TextField
+                                size="small"
+                                name='dtc2'
+                                id='dtc2'
+                                className='customer-bill-input'
+                                // value={driverbeta_Count || formData.driverbeta_Count || ''}
+                                value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
+
+                                onChange={driverbeta_Count_calc}
+                                variant="standard"
+                                autoComplete="password"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <FontAwesomeIcon icon={faEquals} />
+                              </div>
+                              <TextField
+                                name="amount9"
+                                className='customer-bill-input'
+                                // value={driverBeta_amount || 0}
+                                value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                                size="small"
+                                label="Amount"
+                                id="amount9"
+                                autoComplete="password"
+                                variant="standard"
+                              />
+                            </div>
+                          </div>
+
+                          <TextField
+                            name="amount9"
+                            className='total-amount-textfield'
+                            value={totalcalcAmount || 0}
+                            size="small"
+                            label="Total Amount"
+                            id="amount-amount9"
+                            autoComplete="password"
+                            variant="standard"
+                          />
+
+                          <div className="input-field">
+
+                          </div>
+                          <div className="input-field">
+                          </div>
+                        </div>
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions className='tripsheet-cancel-save-btn'>
+                      <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
+                      <Button variant="contained" onClick={handleClose} autoFocus>
+                        Save
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </React.Fragment>
+
+                <div className="input">
+                  <div className="icone">
+                    <BackupTableSharpIcon color="action" />
                   </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="vpermettovendor"
+                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
+                    }}
+                    label="v-permet-To-Vendor"
+                    id="vpermettovendor"
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <MinorCrashSharpIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="vendortoll"
+                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                    }}
+                    label="Vendor-Toll"
+                    id="vendor-vendortoll"
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <PaymentsIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="customeradvance"
+                    value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
+                    onChange={handleChange}
+                    label="Customer-customeradvance"
+                    id="customer-advance"
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input tripsheet-e-tripsheet-input">
+                  <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
+                    E-Tripsheet
+                  </Button>
+                </div>
 
-                  <div className='input d-grid'>
+                <div className="input tripsheet-remarks-division">
+                  <div className="icone">
+                    <MarkChatReadIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="remark"
+                    value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                    onChange={handleChange}
+                    label="Remark"
+                    id="remark"
+                    multiline
+                    rows={3}
+                    sx={{ width: "100%" }}
+                    autoComplete="password"
+                  />
+                </div>
 
-                    <Box sx={{ minWidth: '100%' }}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Escort</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-labelescort"
-                          id="demo-simple-select"
-                          // value={bookingStatus}
-                          value={escort}
-                          // label="Status"
-                          onChange={handleEscortChange}
-                        >
-                          <MenuItem value={'Yes'}>Yes</MenuItem>
-                          <MenuItem value={'No'}>No</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
+                <div className='input d-grid'>
 
-                    {/* <label>Escort</label>
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Escort</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        // value={bookingStatus}
+                        value={escort}
+                        // label="Status"
+                        onChange={handleEscortChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  {/* <label>Escort</label>
                   <span>
                     <label>
                       <input
@@ -2070,27 +2094,27 @@ const TripSheet = ({ stationName, logoImage }) => {
                       No
                     </label>
                   </span> */}
-                  </div>
+                </div>
 
-                  <div className='input d-grid'>
+                <div className='input d-grid'>
 
-                    <Box sx={{ minWidth: '100%' }}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-labelescort"
-                          id="demo-simple-select"
-                          value={transferreport}
-                          // label="Status"
-                          onChange={handleTransferChange}
-                        >
-                          <MenuItem value={'Yes'}>Yes</MenuItem>
-                          <MenuItem value={'No'}>No</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        value={transferreport}
+                        // label="Status"
+                        onChange={handleTransferChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
 
-                    {/* <label>Airport Transfer</label>
+                  {/* <label>Airport Transfer</label>
                   <span>
                     <label>
                       <input
@@ -2113,9 +2137,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       No
                     </label>
                   </span> */}
-                  </div>
+                </div>
 
-                  {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                       <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
                     </DialogContent>
@@ -2126,7 +2150,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </DialogActions>
                   </Dialog> */}
 
-                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                       {(/hcl/i.test(customer)) ? (<InvoiceHCL pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
                         : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
@@ -2136,104 +2160,116 @@ const TripSheet = ({ stationName, logoImage }) => {
                         Cancel
                       </Button>
                     </DialogActions>
-                  </Dialog>
+                  </Dialog> */}
+
+                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                    {(/hcl/i.test(customer)) ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handlePopupClose} variant="contained" color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog>
 
 
-                  <div className="input">
-                    {isEditMode ? (<>
-                      <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
-                      {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+                <div className="input">
+                  {isEditMode ? (<>
+                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                    {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
 
-                    </>
-                    ) : (
-                      <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
-                    )}
+                  </>
+                  ) : (
+                    <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                  )}
+                </div>
+
+
+
+
+                <div className="input">
+                  <div className="icone">
+                    <StreamIcon color="action" />
                   </div>
+                  <TextField
+                    size="small"
+                    name="request"
+                    value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
+                    onChange={handleChange}
+                    label="Request"
+                    id="request"
+                    autoComplete="password"
+                  />
 
+                </div>
 
-
-
-                  <div className="input">
-                    <div className="icone">
-                      <StreamIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="request"
-                      value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
-                      onChange={handleChange}
-                      label="Request"
-                      id="request"
-                      autoComplete="password"
-                    />
-
+                <div className="input">
+                  <div className="icone">
+                    <RecentActorsIcon color="action" />
                   </div>
-
-                  <div className="input">
-                    <div className="icone">
-                      <RecentActorsIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
-                      onChange={handleChange}
-                      name="employeeno"
-                      label="Employee No"
-                      id="employeeno"
-                      autoComplete="password"
-                    />
+                  <TextField
+                    size="small"
+                    value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
+                    onChange={handleChange}
+                    name="employeeno"
+                    label="Employee No"
+                    id="employeeno"
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <CurrencyRupeeTwoToneIcon color="action" />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <CurrencyRupeeTwoToneIcon color="action" />
-                    </div>
-                    <TextField
-                      margin="normal"
-                      size="small"
-                      name="advancepaidtovendor"
-                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || 0}
-                      // onChange={handleChange}
-                      onChange={(e) => {
-                        handleChange(e)
-                        setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                      }}
-                      label="advancepaidtovendor"
-                      id="advance-paid-to-vendor"
-                      autoComplete="password"
-                    />
-                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="advancepaidtovendor"
+                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || 0}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                    }}
+                    label="advancepaidtovendor"
+                    id="advance-paid-to-vendor"
+                    autoComplete="password"
+                  />
+                </div>
 
-                  <div className="vehicle-confirm">
-                    <div className="input-field input-feild-vehicle-confirm">
-                      <div className="input">
-                        <div className="icone">
-                          <HowToRegIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-hireTypes"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                          value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                          options={HireTypes.map((option) => ({
-                            label: option.option,
-                          }))}
-                          getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
-                            )
-                          }
-                          }
-                        />
+                <div className="vehicle-confirm">
+                  <div className="input-field input-feild-vehicle-confirm">
+                    <div className="input">
+                      <div className="icone">
+                        <HowToRegIcon color="action" />
                       </div>
-                      <div className="input">
-                        <div className="icone">
-                          <AltRouteIcon color="action" />
-                        </div>
-                        {/* <TextField
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-hireTypes"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
+                        value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        options={HireTypes.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
+                      />
+                    </div>
+                    <div className="input">
+                      <div className="icone">
+                        <AltRouteIcon color="action" />
+                      </div>
+                      {/* <TextField
                           name="travelsname"
                           autoComplete="new-password"
                           value={
@@ -2251,274 +2287,274 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
 
 
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-travelmail"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
-                          value={
-                            selectedCustomerDatas.travelsname ||
-                            formData.travelsname ||
-                            selectedCustomerData.travelsname ||
-                            book.travelsname ||
-                            ""
-                          }
-                          options={accountinfodata.map((option) => ({
-                            label: option?.travelsname,
-                          }))}
-                          getOptionLabel={(option) => option.label || selectedCustomerDatas.travelsname ||
-                            formData.travelsname ||
-                            selectedCustomerData.travelsname ||
-                            book.travelsname ||
-                            ""}
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
-                            )
-                          }
-                          }
-                        />
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <CarCrashIcon color="action" />
-                        </div>
-                        <TextField
-                          margin="normal"
-                          size="small"
-                          id="vehRegNo"
-                          label="Vehicle Rigster No"
-                          name="vehRegNo"
-                          // value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
-                          value={selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || ''}
-                          onChange={handleChange}
-                          autoComplete="password"
-                          onKeyDown={handleKeyEnterDriverDetails}
-                        />
-                      </div>
-                      <div className="input">
-                        <div className="icone">
-                          <PiCarSimpleFill color="action" />
-                        </div>
-
-                        <Autocomplete
-                          fullWidth
-                          id="free-solo-vehType"
-                          freeSolo
-                          size="small"
-                          value={
-                            selectedCustomerDatas.vehType || formData.vehType ||
-                            selectedCustomerData.vehType ||
-                            book.vehType || ""
-                          }
-                          options={vehicaleinfos?.map((option) => ({
-                            label: option?.Option,
-                          }))}
-                          onChange={(event, value) =>
-                            handleAutocompleteChange(event, value, "vehType")
-                          }
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
-                            );
-                          }}
-                        />
-                      </div>
-
-
-                      <div className="input">
-                        <div className="icone">
-                          <NoCrashIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-vehileName2"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
-                          value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
-                          options={vehileNames?.map((option) => ({
-                            label: option,
-                          }))}
-                          renderInput={(params) => (
-                            <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName2" inputRef={params.inputRef} />
-                          )}
-                        />
-                      </div>
-
-
-                      <div className="input">
-                        <div className="icone">
-                          <NoCrashIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          size="small"
-                          id="free-solo-vehileName"
-                          freeSolo
-                          sx={{ width: "100%" }}
-                          onChange={(event, value) => {
-                            handleAutocompleteChange(event, value, "vehicleName")
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
-
-                            }
-                          }}
-                          value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
-                          options={vehileNames?.map((option) => ({
-                            label: option,
-                          }))}
-                          renderInput={(params) => (
-                            <TextField {...params} label="Rate for" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
-                          )}
-                        />
-
-
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <EmailIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          id="free-solo-Groups"
-                          freeSolo
-                          size="small"
-                          value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
-                          options={GroupTypes?.map((option) => ({
-                            label: option?.Option,
-                          }))}
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
-                          renderInput={(params) => {
-                            return (
-                              <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                            );
-                          }}
-                        />
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <SensorOccupiedIcon color="action" />
-                        </div>
-                        <TextField
-                          name="driverName"
-                          className='full-width'
-                          value={selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName || ''}
-                          onChange={(e) => {
-                            handleChange(e)
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value })
-                            setFormData({ ...formData, driverName: e.target.value })
-                            setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
-                            setFormValues({ ...formValues, driverName: e.target.value })
-                            setBook({ ...book, driverName: e.target.value })
-                            if (!lockdata) {
-                              setVendorinfodata({ ...vendorinfo, driverName: e.target.value })
-                            }
-                          }}
-
-                          label="Driver Name"
-                          id="driverName"
-                          // variant="standard"
-                          size='small'
-                          autoComplete="password"
-                          onKeyDown={handleKeyEnterDriverDetails}
-                        />
-
-                      </div>
-
-                      <div className="input">
-                        <div className="icone">
-                          <PhoneIphoneIcon color="action" />
-                        </div>
-                        <TextField
-                          name="mobileNo"
-                          className='full-width'
-                          // value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
-                          value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
-                          onChange={handleChange}
-                          label="Cell"
-                          id="mobileNo"
-                          // variant="standard"
-                          size='small'
-                          autoComplete="password"
-                        />
-                      </div>
-
-
-
-                      <div className="input">
-                        <div className="icone">
-                          <AttachEmailIcon color="action" />
-                        </div>
-                        <TextField
-                          name="travelsemail"
-                          autoComplete="new-password"
-                          value={
-                            selectedCustomerDatas.travelsemail ||
-                            formData.travelsemail ||
-                            selectedCustomerData.travelsemail ||
-                            book.travelsemail ||
-                            ""
-                          }
-                          onChange={handleChange}
-                          label="Travels Email"
-                          id="travelsemail"
-                          // variant="standard"
-                          size='small'
-                        />
-                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-travelmail"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                        value={
+                          selectedCustomerDatas.travelsname ||
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""
+                        }
+                        options={accountinfodata.map((option) => ({
+                          label: option?.travelsname,
+                        }))}
+                        getOptionLabel={(option) => option.label || selectedCustomerDatas.travelsname ||
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
+                      />
                     </div>
-                    <div>
-                      <div className="Scroll-Style tripsheet-table1">
-                        <table>
 
-                          <thead>
-                            <tr>
-                              <th className="table-head-booking table-heading-1"> Driver name</th>
-                              {/* <th className="table-head-booking">Driver phone</th> */}
-                              <th className="table-head-booking">Vehicle Name</th>
-                              {/* <th className="table-head-booking">Vehicle Type</th> */}
-                              <th className="table-head-booking">Vehicle Reg No</th>
-                              {/* <th className="table-head-booking">HireTypes</th> */}
-                              {/* <th className="table-head-booking">Grouphs</th> */}
-                              {/* <th className="table-head-booking">Active</th> */}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {driverdetails.length === 0 ? (
-                              <tr>
-                                <td colSpan={7}>No data available.</td>
-                              </tr>
-                            ) : (
-                              driverdetails.map((row) => (
-                                <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.driverName}</td>
-                                  {/* <td>{row.mobileNo}</td> */}
-                                  <td>{row.vehicleName}</td>
-                                  {/* <td>{row.vechtype}</td> */}
-                                  <td>{row.vehRegNo}</td>
-                                  {/* <td>{row.hiretypes}</td> */}
-                                  {/* <td>{row.Groups}</td> */}
-                                  {/* <td>{row.active}</td> */}
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
-
+                    <div className="input">
+                      <div className="icone">
+                        <CarCrashIcon color="action" />
                       </div>
+                      <TextField
+                        margin="normal"
+                        size="small"
+                        id="vehRegNo"
+                        label="Vehicle Rigster No"
+                        name="vehRegNo"
+                        // value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                        value={selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || ''}
+                        onChange={handleChange}
+                        autoComplete="password"
+                        onKeyDown={handleKeyEnterDriverDetails}
+                      />
+                    </div>
+                    <div className="input">
+                      <div className="icone">
+                        <PiCarSimpleFill color="action" />
+                      </div>
+
+                      <Autocomplete
+                        fullWidth
+                        id="free-solo-vehType"
+                        freeSolo
+                        size="small"
+                        value={
+                          selectedCustomerDatas.vehType || formData.vehType ||
+                          selectedCustomerData.vehType ||
+                          book.vehType || ""
+                        }
+                        options={vehicaleinfos?.map((option) => ({
+                          label: option?.Option,
+                        }))}
+                        onChange={(event, value) =>
+                          handleAutocompleteChange(event, value, "vehType")
+                        }
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
+                          );
+                        }}
+                      />
+                    </div>
+
+
+                    <div className="input">
+                      <div className="icone">
+                        <NoCrashIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-vehileName2"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
+                        value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
+                        options={vehileNames?.map((option) => ({
+                          label: option,
+                        }))}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehicleName2" inputRef={params.inputRef} />
+                        )}
+                      />
+                    </div>
+
+
+                    <div className="input">
+                      <div className="icone">
+                        <NoCrashIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-vehileName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => {
+                          handleAutocompleteChange(event, value, "vehicleName")
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
+
+                          }
+                        }}
+                        value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName || ''}
+                        options={vehileNames?.map((option) => ({
+                          label: option,
+                        }))}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Rate for" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
+                        )}
+                      />
+
+
+                    </div>
+
+                    <div className="input">
+                      <div className="icone">
+                        <EmailIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        id="free-solo-Groups"
+                        freeSolo
+                        size="small"
+                        value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                        options={GroupTypes?.map((option) => ({
+                          label: option?.Option,
+                        }))}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                          );
+                        }}
+                      />
+                    </div>
+
+                    <div className="input">
+                      <div className="icone">
+                        <SensorOccupiedIcon color="action" />
+                      </div>
+                      <TextField
+                        name="driverName"
+                        className='full-width'
+                        value={selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName || ''}
+                        onChange={(e) => {
+                          handleChange(e)
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value })
+                          setFormData({ ...formData, driverName: e.target.value })
+                          setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value })
+                          setFormValues({ ...formValues, driverName: e.target.value })
+                          setBook({ ...book, driverName: e.target.value })
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, driverName: e.target.value })
+                          }
+                        }}
+
+                        label="Driver Name"
+                        id="driverName"
+                        // variant="standard"
+                        size='small'
+                        autoComplete="password"
+                        onKeyDown={handleKeyEnterDriverDetails}
+                      />
+
+                    </div>
+
+                    <div className="input">
+                      <div className="icone">
+                        <PhoneIphoneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="mobileNo"
+                        className='full-width'
+                        // value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                        value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
+                        onChange={handleChange}
+                        label="Cell"
+                        id="mobileNo"
+                        // variant="standard"
+                        size='small'
+                        autoComplete="password"
+                      />
+                    </div>
+
+
+
+                    <div className="input">
+                      <div className="icone">
+                        <AttachEmailIcon color="action" />
+                      </div>
+                      <TextField
+                        name="travelsemail"
+                        autoComplete="new-password"
+                        value={
+                          selectedCustomerDatas.travelsemail ||
+                          formData.travelsemail ||
+                          selectedCustomerData.travelsemail ||
+                          book.travelsemail ||
+                          ""
+                        }
+                        onChange={handleChange}
+                        label="Travels Email"
+                        id="travelsemail"
+                        // variant="standard"
+                        size='small'
+                      />
                     </div>
                   </div>
+                  <div>
+                    <div className="Scroll-Style tripsheet-table1">
+                      <table>
 
+                        <thead>
+                          <tr>
+                            <th className="table-head-booking table-heading-1"> Driver name</th>
+                            {/* <th className="table-head-booking">Driver phone</th> */}
+                            <th className="table-head-booking">Vehicle Name</th>
+                            {/* <th className="table-head-booking">Vehicle Type</th> */}
+                            <th className="table-head-booking">Vehicle Reg No</th>
+                            {/* <th className="table-head-booking">HireTypes</th> */}
+                            {/* <th className="table-head-booking">Grouphs</th> */}
+                            {/* <th className="table-head-booking">Active</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {driverdetails.length === 0 ? (
+                            <tr>
+                              <td colSpan={7}>No data available.</td>
+                            </tr>
+                          ) : (
+                            driverdetails.map((row) => (
+                              <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                <td>{row.driverName}</td>
+                                {/* <td>{row.mobileNo}</td> */}
+                                <td>{row.vehicleName}</td>
+                                {/* <td>{row.vechtype}</td> */}
+                                <td>{row.vehRegNo}</td>
+                                {/* <td>{row.hiretypes}</td> */}
+                                {/* <td>{row.Groups}</td> */}
+                                {/* <td>{row.active}</td> */}
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
                 </div>
 
-              )}
+              </div>
+
+              {/* )} */}
 
 
             </div>
@@ -2640,7 +2676,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-vendor_vehicle"
                           freeSolo
                           sx={{ minWidth: 200 }}
-                          onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_vehicle")}
+                          onChange={(event, value) =>
+                             handleAutocompleteVendor(event, value, "vendor_vehicle")
+      
+                            
+                            }
                           // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
                           // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
                           value={vendorinfo?.vendor_vehicle}
@@ -3025,14 +3065,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
-                    {/* {console.log(checkvendorNightBetaEligible(),"kkktrrrr")} */}
                     <div className="input-field">
                       <span>Night</span>
                       <div className="input">
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ? "0" : vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) || ''}
+                          value={(checkvendorNightBetaEligible() ?  vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3071,7 +3110,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0: 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_Bata"
@@ -3097,7 +3136,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
+                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -3493,7 +3532,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
                       </div>
                       <div className="input">
-                        <Button onClick={handlesignatureimages} variant="contained">Download signature</Button>
+                        <Button onClick={handlesignatureimages} variant="contained">signature</Button>
                       </div>
 
 
@@ -3599,7 +3638,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   </div>
                 </TabPanel>
-                {console.log(signaturelinkwhatsapp)}
                 <TabPanel value={4} sx={{ p: 2 }}>
                   <div className="Customer-Message-Slider">
                     <div className="input-field">
@@ -3607,33 +3645,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-       {/* <WhatsappShareButton url={shareUrl} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
-        
-        <button>Share on WhatsApp</button>
-      </WhatsappShareButton> */}
+                       { appsstatus !== "Closed" &&signaturelinkwhatsapp &&<WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+
+                          <button>Share on WhatsApp</button>
+                        </WhatsappShareButton>
+                       }
+
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>
-
-                      {/* {link && (
-                        <div>
-                          {isSignatureSubmitted ? (
-                            <p>Signature already submitted. Cannot access this link.</p>
-                          ) : (
-                            <div>
-                              <p>Copy this link to send to the passenger:</p>
-                              <div className='link-blank-button'>
-                                <textarea ref={textRef} readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
-                                <button onClick={SignPage} className='signature'>Copy </button>
-                                <div>
-                                  <button onClick={copyToClipboard}>Copy Link</button>
-
-                                </div>
-                              </div>
-                              {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
-                            </div>
-                          )}
-                        </div>
-                      )} */}
                     </div>
 
                     <div className="table-TripSheet">

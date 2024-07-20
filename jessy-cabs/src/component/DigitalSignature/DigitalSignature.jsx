@@ -13,9 +13,16 @@ const DigitalSignature = () => {
 
   const uniqueno = new URLSearchParams(window.location.search).get("uniqueNumber");
   const [successMessage, setSuccessMessage] = useState('')
+  // const [expired, setExpired] = useState(() => {
+  //   const expiredInSessionStorage =
+  //     sessionStorage.getItem("expired") && localStorage.getItem("expired");
+  //   return expiredInSessionStorage
+  //     ? JSON.parse(expiredInSessionStorage)
+  //     : false;
+  // });
   const [expired, setExpired] = useState(() => {
     const expiredInSessionStorage =
-      sessionStorage.getItem("expired") && localStorage.getItem("expired");
+      localStorage.getItem("expired");
     return expiredInSessionStorage
       ? JSON.parse(expiredInSessionStorage)
       : false;

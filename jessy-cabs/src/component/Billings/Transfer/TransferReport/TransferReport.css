@@ -45,7 +45,7 @@
 
 .table-bookingCopy-TransferReport {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     margin: 0px 20px;
     width: fit-content;
@@ -63,7 +63,7 @@
     background-color: var(--glass);
     padding: 10px 13px 30px;
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     margin-left: 20px;
 }
 

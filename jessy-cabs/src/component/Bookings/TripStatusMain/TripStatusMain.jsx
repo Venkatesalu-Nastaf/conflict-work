@@ -7,6 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import VehicleStatement from './VehicleStatement/VehicleStatement';
 import TripStatus from './TripStatus/TripStatus';
+import { PurchaseSummary } from './PurchaseSummary/PurchaseSummary';
 
 const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
     const [value, setValue] = React.useState("tripstatus");
@@ -23,11 +24,14 @@ const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
                         <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Trip Status" value="tripstatus" />
-                                <Tab label="VehicleStatement" value="vehicleStatement" />
+                                <Tab label="vendor Statement" value="vendorStatement" />
+                                <Tab label="purchase Summary" value="purchasesummary" />
                             </TabList>
                         </Box>
                         <TabPanel value="tripstatus"><TripStatus stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> </TabPanel>
-                        <TabPanel value="vehicleStatement"><VehicleStatement /></TabPanel>
+                        <TabPanel value="vendorStatement"><VehicleStatement /></TabPanel>
+                        <TabPanel value="purchasesummary"><PurchaseSummary /></TabPanel>
+                        
                     </TabContext>
                 </Box>
             </div>

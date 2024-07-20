@@ -112,11 +112,11 @@
 
 .Billing-secend-right {
   border: 2px solid #ccc;
-  border-radius: 30px;
+  border-radius: 10px;
   background-color: var(--glass);
-  padding: 10px 15px 10px 12px;
+  padding: 30px 15px 30px 12px;
   margin-left: 13px;
-  width: 35vw;
+  width: 31vw;
   height: fit-content;
   /* margin-top: 30px; */
 }
@@ -136,7 +136,8 @@
 }
 
 .inputfeild-billing-right {
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: space-evenly;
 }
 
 .inputfeild-billing-right-margin-bottom {

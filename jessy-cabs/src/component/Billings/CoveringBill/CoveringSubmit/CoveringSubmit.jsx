@@ -68,7 +68,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
     const CoveringBill_read = permissions[7]?.read;
 
     return (
-        <div className="CoveringSubmit-form Scroll-Style-hide">
+        <div className="CoveringSubmit-form main-content-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main detail-container-main-coveringbill">
                     <div className="container-left-coveringbill">
@@ -171,7 +171,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                         </div>
                     </div>
                 </div>
-                <div className="Download-btn-Covering-submit">
+                <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>

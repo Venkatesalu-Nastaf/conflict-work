@@ -130,9 +130,10 @@
 
 .BankDetails-mainContainer {
     margin-top: 10px;
-    height:350px;
+    height: 490px;
     overflow-y: scroll;
     /* overflow-x:hidden; */
+    width: fit-content;
 }
 
 .BankDetails-mainContainer::-webkit-scrollbar {
@@ -149,8 +150,9 @@
 
 .addedbanks-Details-BankAccount {
     display: flex;
-    width: auto;
-    margin-top: 10px;
+    width: fit-content;
+    margin-top: 0px;
+    margin-bottom: 25px;
     background-color: var(--glass);
     padding: 10px 20px 10px;
     border: 1px solid #ccc;

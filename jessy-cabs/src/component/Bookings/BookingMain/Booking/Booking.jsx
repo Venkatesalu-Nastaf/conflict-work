@@ -459,6 +459,19 @@ const Booking = ({ stationName, customerData }) => {
               <input type="text" value={currentYear} />
               
             </span> */}
+
+            <span className="d-grid">
+              <label>Trip Id</label>
+              <input
+                type="text"
+                value={
+                  formData.tripid ||
+                  selectedCustomerData.tripid ||
+                  book.tripid ||
+                  ""
+                }
+              />
+            </span>
             <span>
               <div className="">
                 <FormControlLabel
@@ -474,18 +487,6 @@ const Booking = ({ stationName, customerData }) => {
                   label="Send Email"
                 />
               </div>
-            </span>
-            <span className="d-grid">
-              <label>Trip Id</label>
-              <input
-                type="text"
-                value={
-                  formData.tripid ||
-                  selectedCustomerData.tripid ||
-                  book.tripid ||
-                  ""
-                }
-              />
             </span>
             {/* <span>
               {isEditMode ? (

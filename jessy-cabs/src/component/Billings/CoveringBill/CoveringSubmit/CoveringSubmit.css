@@ -29,20 +29,20 @@
     border: 2px solid #ccc;
     border-radius: 10px;
     background-color: var(--glass);
-    margin: 0px 20px;
+    /* margin: 0px 20px; */
     width: fit-content;
 }
 
-.Download-btn-Covering-submit {
+/* .Download-btn-Covering-submit {
     padding-left: 20px;
     padding-bottom: 10px;
-}
+} */
 
 .copy-title-btn-CoveringSubmit {
     width: 100%;
     margin-top: 15px;
     /* background-color: var(--glass); */
-    padding: 10px 20px 10px;
+    /* padding: 10px 20px 10px; */
     /* border: 2px solid #ccc;
     border-radius: 15px; */
     margin-left: 0px;

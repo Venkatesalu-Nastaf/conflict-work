@@ -42,7 +42,7 @@ const AppUserList = () => {
   }, [actionName, handleClick]);
 
   return (
-    <div className="appuserlist-form">
+    <div className="appuserlist-form main-content-form">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

@@ -43,6 +43,7 @@
   border-radius: 0px;
   flex-direction: column;
   color: #000;
+  zoom: 90%;
 }
 
 .detail-container-main-customer {

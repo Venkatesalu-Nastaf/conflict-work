@@ -290,7 +290,7 @@ const TransferReport = ({ stationName }) => {
   };
 
   return (
-    <div className="TransferReport-form Scroll-Style-hide">
+    <div className="TransferReport-form main-content-form Scroll-Style-hide">
       <form >
         <div className="detail-container-main detail-container-main-tfreport">
           <div className="container-left-transfer-report">

@@ -11,7 +11,7 @@ import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/Pd
 import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
 import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
 import { PermissionProvider } from "./component/context/permissionContext";
-
+import { ReportProvider } from "./component/Registration/Report/Context/ReportContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,19 +22,19 @@ root.render(
       <PdfDataProvider>
         <MailerTemplateDataProvider>
 
+          <ReportProvider>
+            <DataProvider2>
+              <DataProvider>
+                <UserProvider>
+                  <PermissionProvider>
+                    <App />
+                  </PermissionProvider>
 
-          <DataProvider2>
-            <DataProvider>
-              <UserProvider>
-                <PermissionProvider>
-                  <App />
-                </PermissionProvider>
+                </UserProvider>
+              </DataProvider>
+            </DataProvider2>
 
-              </UserProvider>
-            </DataProvider>
-          </DataProvider2>
-
-
+          </ReportProvider>
         </MailerTemplateDataProvider>
 
       </PdfDataProvider>

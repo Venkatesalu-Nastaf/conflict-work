@@ -143,7 +143,7 @@ const DriverCreation = ({ stationName }) => {
         <div className="DriverCreation-main">
             <div className="DriverCreation-form-container">
                 <form onSubmit={handleClick}>
-                    <div className="DriverCreation-header">
+                    <div className="main-content-form">
                         <div className="input-field driver-info-inputs">
                             <div className="input driver-input">
                                 <div className="icone">

@@ -77,6 +77,7 @@ const User_Permission = require('./customer_master/Router/userpermission/usererm
 const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
 const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
+const GstReport = require('./customer_master/Router/GstReport/GstReport')
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -157,6 +158,8 @@ app.use('/', Templatemailer);// Customer Page Database
 // -------------------------------------------------------------------------------------------
 app.use('/', IndividualBill);//Individual bill
 //theme update in user creation
+// -------------------------------------------------------------------------------------------
+app.use('/',GstReport)
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
   const query = 'UPDATE usercreation SET theme = ? WHERE userid IN (?)';

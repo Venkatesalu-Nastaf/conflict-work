@@ -201,7 +201,7 @@ const Vehicaleinfo = ({ stationName }) => {
   const Supllier_delete = permissions[10]?.delete;
 
   return (
-    <div className="vehicale-form">
+    <div className="main-content-form">
       <form action="">
         <div className="detail-container-main-vehicale">
           <div className="vehicaleinfo-container">

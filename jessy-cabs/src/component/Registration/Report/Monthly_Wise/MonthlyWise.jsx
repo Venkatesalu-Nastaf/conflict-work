@@ -19,38 +19,41 @@ import Menu from '@mui/material/Menu';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MenuItem from '@mui/material/MenuItem';
-import Dialog from '@mui/material/Dialog';
-import Checkbox from '@mui/material/Checkbox';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+// import Dialog from '@mui/material/Dialog';
+// import Checkbox from '@mui/material/Checkbox';
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import ClearIcon from '@mui/icons-material/Clear';
-import DialogContent from '@mui/material/DialogContent';
+// import DialogContent from '@mui/material/DialogContent';
+import Autocomplete from "@mui/material/Autocomplete";
+import {Customertype} from "../../Customer/Customerdata";
 
-const columns = [
-    { field: 'id', headerName: 'Sno', width: 20 },
-    {
-        field: 'billNo',
-        headerName: 'Bill No',
-        type: 'number',
-        width: 90,
-    },
-    { field: 'customerName', headerName: 'Customer Name', width: 180 },
-    { field: 'amount', headerName: 'Amount', width: 130 },
-    { field: 'email', headerName: 'Email', width: 180 },
-    { field: 'customertype', headerName: 'CustomerType', width: 130 },
-    { field: 'cid', headerName: 'CID', width: 70 },
 
-];
+// const columns = [
+//     { field: 'id5', headerName: 'Sno', width: 20 },
+//     {
+//         field: 'billingno',
+//         headerName: 'Bill No',
+//         type: 'number',
+//         width: 90,
+//     },
+//     { field: 'customer', headerName: 'Customer Name', width: 180 },
+//     { field: 'totalAmount', headerName: 'Amount', width: 130 },
+//     { field: 'orderbyemail', headerName: 'Email', width: 180 },
+//     { field: 'customertype', headerName: 'CustomerType', width: 130 },
+//     { field: 'customerId', headerName: 'CID', width: 70 },
 
-const rows = [
-    { id: 2, billNo: 35, customerName: 'Zoho', amount: '2450', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-    { id: 1, billNo: 35, customerName: 'Dhan Lakshmi Bank', amount: '3420', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-    { id: 3, billNo: 35, customerName: 'IDFC Bank', amount: '20345', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-    { id: 4, billNo: 35, customerName: 'Kottak Bank', amount: '34240', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-    { id: 5, billNo: 35, customerName: 'NASTAF Technologies', amount: '2130', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-];
+// ];
+
+// const rows = [
+//     { id: 2, billNo: 35, customerName: 'Zoho', amount: '2450', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
+//     { id: 1, billNo: 35, customerName: 'Dhan Lakshmi Bank', amount: '3420', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
+//     { id: 3, billNo: 35, customerName: 'IDFC Bank', amount: '20345', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
+//     { id: 4, billNo: 35, customerName: 'Kottak Bank', amount: '34240', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
+//     { id: 5, billNo: 35, customerName: 'NASTAF Technologies', amount: '2130', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
+// ];
 const MonthlyWise = () => {
-    const apiUrl = APIURL;
+    // const apiUrl = APIURL;
     const {
         successMessage,
         errorMessage,
@@ -61,23 +64,17 @@ const MonthlyWise = () => {
         warning,
         error,
         hidePopup,
-        deletefile,
-        dialogOpen,
-        handleRowClick,
-        handlecheckbox,
+        customertypedata,
+        handleAutocompleteChange,
+        rows,
         handleExcelDownload,
         handlePdfDownload,
-        handleCloseDialog,
-        selectAll,
-        allFile,
-        handleimagedelete,
-        dialogdeleteOpen,
-        handleDocumentDownload,
-        handleClosedeleteDialog,
-        handleSelectAll,
-        handleContextMenu,
-        Deleted,
+        fromDate, setFromDate, toDate, setToDate,
+        handleShowAll,
+        columns,
+        handleShow,
     } = useMonthlyWise();
+    console.log(rows,"font")
     return (
         <div className="MonthlyWise-main">
             <form >
@@ -92,6 +89,8 @@ const MonthlyWise = () => {
                                     <DatePicker
                                         label="From Date"
                                         format="DD/MM/YYYY"
+                                        value={fromDate}
+                                        onChange={(date) => setFromDate(date)}
                                     />
                                 </DemoContainer>
                             </LocalizationProvider>
@@ -105,6 +104,8 @@ const MonthlyWise = () => {
                                     <DatePicker
                                         label="To Date"
                                         format="DD/MM/YYYY"
+                                        value={toDate}
+                                        onChange={(date) => setToDate(date)}
                                     />
                                 </DemoContainer>
                             </LocalizationProvider>
@@ -114,25 +115,35 @@ const MonthlyWise = () => {
                             <div className="icone">
                                 <GiMatterStates color="action" />
                             </div>
-                            <TextField
-                                name="customertype"
-                                autoComplete="customertype"
-                                className="full-width"
-                                label="Customer Type"
-                                id="customertype"
-                                margin="normal"
-                                size="small"
-                            />
+                            <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value)}
+                  value={customertypedata}
+                  options={Customertype.map((option) => ({
+                    label: option.Option,
+                  }))}
+                //   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
                         </div>
 
                         <div className='show-all-button'>
-                            <div className="input" >
-                                <Button variant="outlined">Show</Button>
-                            </div>
-                            <div className="input">
-                                <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }}>Show All</Button>
-                            </div>
-                        </div>
+                  <div className="input" >
+                    <Button variant="outlined" onClick={handleShow} >Show</Button>
+                  </div>
+                  <div className="input">
+                    <Button className='text-nowrap' variant="outlined" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                  </div>
+                </div>
                     </div>
                     <div className="MonthlyWise-table-container">
                         <div className="Download-btn">
@@ -177,7 +188,6 @@ const MonthlyWise = () => {
                                 <DataGrid
                                     rows={rows}
                                     columns={columns}
-                                    onRowClick={handleRowClick}
                                     initialState={{
                                         pagination: {
                                             paginationModel: { page: 0, pageSize: 5 },
@@ -187,49 +197,7 @@ const MonthlyWise = () => {
                                 />
                             </Box>
                         </div>
-                        <Dialog open={dialogOpen} onClose={handleCloseDialog} >
-                            <DialogContent>
-                                <div className='driver-creation-dialog-box-div1'>
-                                    <Button variant='contained' className='driver-creation-dialog-box-btn' onClick={handleSelectAll}>
-                                        {selectAll ? 'Deselect All' : 'Select All'}
-                                    </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                                        <div key={index} className='driver-creation-dialog-box-div2'>
-                                            {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
-                                                <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
-                                            <Checkbox typeof='checked'
-                                                checked={deletefile.includes(img.fileName)}
-                                                onClick={(event) => {
-
-                                                    handlecheckbox(img.fileName)
-
-                                                }} />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className='driver-creation-delete-print-btn-section'>
-                                    <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
-                                    <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
-                                </div>
-                            </DialogContent>
-                        </Dialog>
-                        <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
-                            <DialogContent>
-                                <div>
-                                    <h3>Are you sure you want to delete?</h3>
-                                    <div>
-                                        <Button onClick={handleContextMenu}>yes</Button>
-                                        <Button onClick={handleClosedeleteDialog}>No</Button>
-                                    </div>
-                                </div>
-                            </DialogContent>
-                        </Dialog>
-                        <Dialog open={Deleted}>
-                            <div className='driver-creation-delete-succesfully'>
-                                <FontAwesomeIcon icon={faCheckCircle} className='driver-creation-delete-succesfully-icon' />
-                                <p className='driver-creation-delete-succesfully-text'>Deleted Successfully...</p>
-                            </div>
-                        </Dialog>
+                        
                     </div>
                     <div className='alert-popup-main'>
                         {error &&

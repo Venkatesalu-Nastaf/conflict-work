@@ -59,12 +59,12 @@
 
 .copy-title-btn-TransferReport {
     width: 100%;
-    margin-top: 15px;
+    /* margin-top: 15px; */
     background-color: var(--glass);
     padding: 10px 13px 30px;
     border: 2px solid #ccc;
     border-radius: 10px;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .TransferReport-form .Title-Name::after {

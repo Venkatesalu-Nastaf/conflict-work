@@ -102,73 +102,73 @@ const StationCreation = () => {
         <form action="">
           <p className="station-creation-heading">
             <span className="Title-Name ">Station Creation</span>
-
           </p>
-          <div className="stationcreation-header-top">
-            <div className="input-field station-creation-inputfeilds" style={{ padding: '10px' }}>
-              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
-                <div className="icone">
-                  <BadgeIcon color="action" />
+          <div className='main-content-form'>
+            <div className="stationcreation-header-top">
+              <div className="input-field station-creation-inputfeilds" style={{ padding: '10px' }}>
+                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="stationid"
+                    label="ID"
+                    name="stationid"
+                    value={selectedCustomerData?.stationid || book.stationid}
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    // variant="standard"
+                    style={{ width: '100%' }}
+                  />
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="stationid"
-                  label="ID"
-                  name="stationid"
-                  value={selectedCustomerData?.stationid || book.stationid}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  // variant="standard"
-                  style={{ width: '100%' }}
-                />
-              </div>
-              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
-                <div className="icone">
-                  <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
+                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="Station-name"
+                    label="Station Name"
+                    sx={{ m: 1, width: "200ch" }}
+                    name="Stationname"
+                    value={selectedCustomerData?.Stationname || book.Stationname}
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                  />
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="Station-name"
-                  label="Station Name"
-                  sx={{ m: 1, width: "200ch" }}
-                  name="Stationname"
-                  value={selectedCustomerData?.Stationname || book.Stationname}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
-                <div className="icone">
-                  <ListAltIcon color="action" />
+                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="short-name"
+                    label="Short Name"
+                    sx={{ m: 1, width: "200ch" }}
+                    name="shortname"
+                    value={selectedCustomerData?.shortname || book.shortname}
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                  />
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="short-name"
-                  label="Short Name"
-                  sx={{ m: 1, width: "200ch" }}
-                  name="shortname"
-                  value={selectedCustomerData?.shortname || book.shortname}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className='input' style={{ paddingRight: '15px' }}>
-                <div className='icone'>
-                  <AddHomeWorkIcon color='action' />
-                </div>
-                <textarea
-                  id="remark"
-                  className='textarea-input'
-                  name="remark"
-                  rows="3"
-                  value={selectedCustomerData?.address || book.address}
-                  onChange={handleChange}
-                  placeholder="Address"
-                />
-                {/* <TextField
+                <div className='input' style={{ paddingRight: '15px' }}>
+                  <div className='icone'>
+                    <AddHomeWorkIcon color='action' />
+                  </div>
+                  <textarea
+                    id="remark"
+                    className='textarea-input'
+                    name="remark"
+                    rows="3"
+                    value={selectedCustomerData?.address || book.address}
+                    onChange={handleChange}
+                    placeholder="Address"
+                  />
+                  {/* <TextField
                   size="small"
                   name="remark"
                   className='address-field'
@@ -180,168 +180,168 @@ const StationCreation = () => {
                   rows={4}
                   autoComplete="password"
                 /> */}
-              </div>
-
-              <div className='input' style={{ paddingRight: '15px' }}>
-                <div className='icone'>
-                  <MdNumbers color='action' />
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="gstno"
-                  label="GST No"
-                  name="gstno"
-                  value={selectedCustomerData?.gstno || book.gstno}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  // variant="standard"
-                  style={{ width: '100%' }}
-                />
-              </div>
-              <div className="input radio input-station-creaton">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Active
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="active"
-                    id="radio1"
-                    value={selectedCustomerData?.active || book.active}
+
+                <div className='input' style={{ paddingRight: '15px' }}>
+                  <div className='icone'>
+                    <MdNumbers color='action' />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="gstno"
+                    label="GST No"
+                    name="gstno"
+                    value={selectedCustomerData?.gstno || book.gstno}
                     autoComplete="new-password"
                     onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div className="input radio input-station-creaton">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Own Branch
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="ownbranch"
-                    id="ownbranch"
-                    value={selectedCustomerData?.ownbranch || book.ownbranch}
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div className="input input-station-creaton" style={{ width: "160px" }}>
-                {isEditMode ? (
-                  <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
-                ) : (
-                  <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
-                )}
+                    // variant="standard"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div className="input radio input-station-creaton">
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Active
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="active"
+                      id="radio1"
+                      value={selectedCustomerData?.active || book.active}
+                      autoComplete="new-password"
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="no"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                <div className="input radio input-station-creaton">
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Own Branch
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="ownbranch"
+                      id="ownbranch"
+                      value={selectedCustomerData?.ownbranch || book.ownbranch}
+                      autoComplete="new-password"
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="no"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                <div className="input input-station-creaton" style={{ width: "160px" }}>
+                  {isEditMode ? (
+                    <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
+                  ) : (
+                    <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div className='alert-popup-main'>
-            {error &&
-              <div className='alert-popup Error' >
-                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{errorMessage}</p>
-              </div>
-            }
-            {warning &&
-              <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{warningMessage}</p>
-              </div>
-            }
-            {success &&
-              <div className='alert-popup Success' >
-                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{successMessage}</p>
-              </div>
-            }
-            {info &&
-              <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{infoMessage}</p>
-              </div>
-            }
-          </div>
-          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
-            <StyledSpeedDial
-              ariaLabel="SpeedDial playground example"
-              icon={<SpeedDialIcon />}
-              direction="left"
-            >
+            <div className='alert-popup-main'>
+              {error &&
+                <div className='alert-popup Error' >
+                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{errorMessage}</p>
+                </div>
+              }
+              {warning &&
+                <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{warningMessage}</p>
+                </div>
+              }
+              {success &&
+                <div className='alert-popup Success' >
+                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{successMessage}</p>
+                </div>
+              }
+              {info &&
+                <div className='alert-popup Info' >
+                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{infoMessage}</p>
+                </div>
+              }
+            </div>
+            <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
+              <StyledSpeedDial
+                ariaLabel="SpeedDial playground example"
+                icon={<SpeedDialIcon />}
+                direction="left"
+              >
 
-              {StationCreation_read === 1 && (
+                {StationCreation_read === 1 && (
+                  <SpeedDialAction
+                    key="list"
+                    icon={<ChecklistIcon />}
+                    tooltipTitle="List"
+                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                  />
+                )}
+                {StationCreation_modify === 1 && (
+                  <SpeedDialAction
+                    key="edit"
+                    icon={<ModeEditIcon />}
+                    tooltipTitle="Edit"
+                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                  />
+                )}
+                {StationCreation_delete === 1 && (
+                  <SpeedDialAction
+                    key="delete"
+                    icon={<DeleteIcon />}
+                    tooltipTitle="Delete"
+                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                  />
+                )}
+                {StationCreation_new === 1 && (
+                  <SpeedDialAction
+                    key="Add"
+                    icon={<BookmarkAddedIcon />}
+                    tooltipTitle="Add"
+                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                  />
+                )}
                 <SpeedDialAction
-                  key="list"
-                  icon={<ChecklistIcon />}
-                  tooltipTitle="List"
-                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                  key="Cancel"
+                  icon={<CancelPresentationIcon />}
+                  tooltipTitle="Cancel"
+                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                 />
-              )}
-              {StationCreation_modify === 1 && (
-                <SpeedDialAction
-                  key="edit"
-                  icon={<ModeEditIcon />}
-                  tooltipTitle="Edit"
-                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
-                />
-              )}
-              {StationCreation_delete === 1 && (
-                <SpeedDialAction
-                  key="delete"
-                  icon={<DeleteIcon />}
-                  tooltipTitle="Delete"
-                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                />
-              )}
-              {StationCreation_new === 1 && (
-                <SpeedDialAction
-                  key="Add"
-                  icon={<BookmarkAddedIcon />}
-                  tooltipTitle="Add"
-                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
-                />
-              )}
-              <SpeedDialAction
-                key="Cancel"
-                icon={<CancelPresentationIcon />}
-                tooltipTitle="Cancel"
-                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
-              />
-            </StyledSpeedDial>
-          </Box>
-          <div className="stationcreation-table-container">
-            <div className="table-stationcreation">
-              {/* <DataGrid
+              </StyledSpeedDial>
+            </Box>
+            <div className="stationcreation-table-container">
+              <div className="table-stationcreation">
+                {/* <DataGrid
                 rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick}
@@ -353,41 +353,42 @@ const StationCreation = () => {
                 pageSizeOptions={[5, 10]}
               /> */}
 
-              <Box
-                 sx={{
-                  height: 400, // Adjust this value to fit your needs
-                  '& .MuiDataGrid-virtualScroller': {
+                <Box
+                  sx={{
+                    height: 400, // Adjust this value to fit your needs
+                    '& .MuiDataGrid-virtualScroller': {
                       '&::-webkit-scrollbar': {
-                          width: '8px', // Adjust the scrollbar width here
-                          height: '8px', // Adjust the scrollbar width here
+                        width: '8px', // Adjust the scrollbar width here
+                        height: '8px', // Adjust the scrollbar width here
                       },
                       '&::-webkit-scrollbar-track': {
-                          backgroundColor: '#f1f1f1',
+                        backgroundColor: '#f1f1f1',
                       },
                       '&::-webkit-scrollbar-thumb': {
-                          backgroundColor: '#457cdc',
-                          borderRadius: '20px',
-                          minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                        backgroundColor: '#457cdc',
+                        borderRadius: '20px',
+                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
 
                       },
                       '&::-webkit-scrollbar-thumb:hover': {
-                          backgroundColor: '#3367d6',
+                        backgroundColor: '#3367d6',
                       },
-                  },
-              }}
-              >
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  onRowClick={handleRowClick}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
                     },
                   }}
-                  pageSizeOptions={[5, 10]}
-                />
-              </Box>
+                >
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    onRowClick={handleRowClick}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                </Box>
+              </div>
             </div>
           </div>
         </form>

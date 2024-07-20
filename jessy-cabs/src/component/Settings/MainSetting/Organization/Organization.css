@@ -5,7 +5,7 @@
 
 .detail-container-main-organisation {
     display: flex;
-    padding: 10px 20px 10px 20px;
+    /* padding: 10px 20px 10px 20px; */
     width: 70%;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .organisation-details {
-    margin: 0px 20px 20px 20px;
+    /* margin: 0px 20px 20px 20px; */
     border: 2px solid #ccc;
     border-radius: 10px;
     padding: 0px;

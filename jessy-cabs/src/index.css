@@ -733,6 +733,7 @@ body {
   flex-direction: column;
   padding: 20px;
   color: #000;
+  zoom: 90%;
 }
 
 /* @media screen and (min-width: 769px) {

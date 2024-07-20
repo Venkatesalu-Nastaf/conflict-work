@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import "./GstReport.css";
 
-import { TextField } from "@mui/material";
+import { Menu, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { GiMatterStates } from "react-icons/gi";
@@ -10,55 +10,38 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DataGrid } from "@mui/x-data-grid";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import MenuItem from '@mui/material/MenuItem';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import useGstReport from './useGstReport';
+import { Autocomplete } from "@mui/material";
+import dayjs from 'dayjs';
 
-
-const columns = [
-  { field: 'id', headerName: 'Sno', width: 70 },
-  {
-    field: 'billNo',
-    headerName: 'Bill No',
-    type: 'number',
-    width: 90,
-  },
-  { field: 'billDate', headerName: 'Bill Date', width: 130 },
-  { field: 'tripDate', headerName: 'Trip Date', width: 130 },
-  { field: 'customerName', headerName: 'Customer Name', width: 130 },
-  { field: 'gstin', headerName: 'GSTIN', width: 130 },
-  { field: 'gross', headerName: 'GROSS', width: 130 },
-  { field: 'gst', headerName: 'GST%', width: 130 },
-  { field: 'cgst', headerName: 'CGST', width: 130 },
-  { field: 'sgst', headerName: 'SGST', width: 130 },
-  { field: 'igst', headerName: 'IGST', width: 130 },
-  { field: 'billed', headerName: 'Billed', width: 130 },
-
-
-
-  // {
-  //   field: 'fullName',
-  //   headerName: 'Full name',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (value, row) => `${row?.firstName || ''} ${row?.lastName || ''}`,
-  // },
-];
-
-const rows = [
-  { id: 1, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 2, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 3, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 4, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 5, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 6, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 7, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 8, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 9, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  { id: 10, billNo: 35, billDate: '17-07-2024', tripDate: '17-07-2024', customerName: 'Vinoth', gstin: '20', gross: '20', gst: '20', cgst: '20', sgst: '20', igst: '20', billed: 'yes'},
-  
-];
 
 
 export const GstReport = () => {
+  const { organization, gstReport, setGstReport, department, handleShow, rows, columns, taxReport, handleDownloadPdf, handleDownloadExcel } = useGstReport();
+
+  const handleDateChange = (field, date) => {
+    setGstReport(prevGstReport => ({
+      ...prevGstReport,
+      [field]: dayjs(date).format('YYYY-MM-DD')
+    }));
+  };
+
+  const handleDepartmentChange = (event, value) => {
+    setGstReport(prevGstReport => ({
+      ...prevGstReport,
+      department: value || '', // Ensure value is not undefined
+    }));
+  };
+
+  const handleCustomerChange = (event, value) => {
+    setGstReport(prevGstReport => ({
+      ...prevGstReport,
+      customer: value || '', // Ensure value is not undefined
+    }));
+  };
 
   return (
     <>
@@ -73,8 +56,8 @@ export const GstReport = () => {
                 <DatePicker
                   label="From Date"
                   format="DD/MM/YYYY"
-                // value={fromDate}
-                // onChange={(date) => setFromDate(date)}
+                  value={dayjs(gstReport?.fromDate)}
+                  onChange={(date) => handleDateChange('fromDate', date)}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -88,8 +71,8 @@ export const GstReport = () => {
                 <DatePicker
                   label="To Date"
                   format="DD/MM/YYYY"
-                // value={toDate}
-                // onChange={(date) => setToDate(date)}
+                  value={dayjs(gstReport?.toDate)}
+                  onChange={(date) => handleDateChange('toDate', date)}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -99,23 +82,17 @@ export const GstReport = () => {
             <div className="icone">
               <GiMatterStates color="action" />
             </div>
-            <TextField
-              name="orderByMobileNo"
-              autoComplete="new-password"
-              className="full-width"
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
-              label="Department"
-              id="department"
-              // variant="standard"
-              margin="normal"
+            <Autocomplete
+              fullWidth
+              id="free-solo-customer"
+              freeSolo
               size="small"
+              options={["All", ...department.map(org => org.stationname)]}
+              value={gstReport.department}
+              onChange={handleDepartmentChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Department" name='department' inputRef={params.inputRef} />
+              )}
             />
           </div>
 
@@ -123,29 +100,29 @@ export const GstReport = () => {
             <div className="icone">
               <GiMatterStates color="action" />
             </div>
-            <TextField
-              name="orderByMobileNo"
-              autoComplete="new-password"
-              className="full-width"
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
-              label="Customer"
-              id="customer"
-              // variant="standard"
-              margin="normal"
+            <Autocomplete
+              fullWidth
+              id="free-solo-customer"
+              freeSolo
               size="small"
+              options={["All", ...organization.map(org => org.customer)]}
+              value={gstReport.customer}
+              onChange={handleCustomerChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Organization"
+                  name='customer'
+                  inputRef={params.inputRef}
+                />
+              )}
             />
+
           </div>
 
           <div className='show-all-button'>
             <div className="input" >
-              <Button variant="outlined">Show</Button>
+              <Button onClick={handleShow} variant="outlined">Show</Button>
             </div>
             <div className="input">
               <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }}>Show All</Button>
@@ -159,6 +136,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.TaxableValue}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -179,6 +157,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.cgst}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -199,6 +178,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.sgst}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -219,6 +199,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.igst}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -239,6 +220,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.totalGST}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -259,6 +241,7 @@ export const GstReport = () => {
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
+              value={taxReport.totalAmount}
               // value={
               //   formData.orderByMobileNo ||
               //   selectedCustomerData.orderByMobileNo ||
@@ -274,19 +257,35 @@ export const GstReport = () => {
               size="small"
             />
           </div>
+          <div className="input">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleDownloadExcel} >Excel</MenuItem>
+                    <MenuItem onClick={handleDownloadPdf} >GST PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
         </div>
 
         <div className='gst-report-table'>
           <DataGrid
             rows={rows}
             columns={columns}
+            getRowId={(row) => row.id}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
               },
             }}
             pageSizeOptions={[5, 10]}
-            // checkboxSelection
+          // checkboxSelection
           />
         </div>
 

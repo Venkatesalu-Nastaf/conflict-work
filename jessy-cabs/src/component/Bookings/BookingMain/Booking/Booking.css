@@ -555,6 +555,7 @@
   align-items: flex-end;
   gap: 10px;
   font-size: 13px;
+  margin-left: -40px;
 }
 
 .booking-top-division input {

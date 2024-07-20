@@ -3,6 +3,7 @@
     border-radius: 10px;
     height: 400px;
     width: 100%;
+    background-color: var(--glass);
   }
   .download-btn-pending{
     margin-top: 10px;

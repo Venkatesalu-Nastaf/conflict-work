@@ -97,63 +97,66 @@ const BackUp = () => {
     return (
         <div className="BackUp-form">
             <form action="">
-                <div className="BackUp-header">
-                    <div className="input-field backup-inputs">
-                        <div className="input">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="Start Date">
-                                    <DatePicker
-                                        id="start_date"
-                                        format="DD/MM/YYYY"
-                                        defaultValue={today}
-                                        minDate={tomorrow}
-                                        views={["year", "month", "day"]}
-                                    />
-                                </DemoItem>
-                            </LocalizationProvider>
+                <div className='main-content-form'>
+                    <div className="BackUp-header">
+                        <div className="input-field backup-inputs">
+                            <div className="input">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label="Start Date">
+                                        <DatePicker
+                                            id="start_date"
+                                            format="DD/MM/YYYY"
+                                            defaultValue={today}
+                                            minDate={tomorrow}
+                                            views={["year", "month", "day"]}
+                                        />
+                                    </DemoItem>
+                                </LocalizationProvider>
+                            </div>
+                            <div className="input">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label="END Date">
+                                        <DatePicker
+                                            id="end_date"
+                                            format="DD/MM/YYYY"
+                                            defaultValue={today}
+                                            minDate={tomorrow}
+                                            views={["year", "month", "day"]}
+                                        />
+                                    </DemoItem>
+                                </LocalizationProvider>
+                            </div>
+                            <div className="input back-up-btns">
+                                <Button startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
+                                    Data BackUp
+                                </Button>
+                            </div>
+                            <div className="input back-up-btns">
+                                <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
+                                    Import Data
+                                </Button>
+                            </div>
                         </div>
-                        <div className="input">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="END Date">
-                                    <DatePicker
-                                        id="end_date"
-                                        format="DD/MM/YYYY"
-                                        defaultValue={today}
-                                        minDate={tomorrow}
-                                        views={["year", "month", "day"]}
-                                    />
-                                </DemoItem>
-                            </LocalizationProvider>
-                        </div>
-                        <div className="input back-up-btns">
-                            <Button startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
-                                Data BackUp
-                            </Button>
-                        </div>
-                        <div className="input back-up-btns">
-                            <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
-                                Import Data
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="loading-spinner-container">
-                        {progress >= 100 ? (
-                            <div className="content">
-                                <div className="input-field">
-                                    <div className="input back-up-btns">
-                                        <Button onClick={DownloadSuccess} startIcon={<FontAwesomeIcon icon={faDownload} size="lg" />} variant="contained">
-                                            Download
-                                        </Button>
+                        <div className="loading-spinner-container">
+                            {progress >= 100 ? (
+                                <div className="content">
+                                    <div className="input-field">
+                                        <div className="input back-up-btns">
+                                            <Button onClick={DownloadSuccess} startIcon={<FontAwesomeIcon icon={faDownload} size="lg" />} variant="contained">
+                                                Download
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <Box sx={{ width: '85%', marginTop: '20%', marginBottom: '20%' }}>
-                                <LinearProgressWithLabel variant="buffer" value={progress} valueBuffer={buffer} />
-                            </Box>
-                        )}
+                            ) : (
+                                <Box sx={{ width: '85%', marginTop: '20%', marginBottom: '20%' }}>
+                                    <LinearProgressWithLabel variant="buffer" value={progress} valueBuffer={buffer} />
+                                </Box>
+                            )}
+                        </div>
                     </div>
                 </div>
+
             </form>
             <div className='alert-popup-main'>
                 {error &&

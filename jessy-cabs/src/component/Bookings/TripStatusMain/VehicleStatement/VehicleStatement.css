@@ -66,12 +66,12 @@
 }
 
 .SearchContainer-VehicleStatement {
-  width: 80vw;
-  background-color: var(--glass);
+  width: 88vw;
+  /* background-color: var(--glass); */
   padding: 10px 20px;
   padding-bottom: 15px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
+  /* border: 2px solid #ccc; */
+  /* border-radius: 10px; */
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px) {

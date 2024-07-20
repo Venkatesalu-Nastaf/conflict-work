@@ -128,7 +128,7 @@ const Employe = () => {
   const Employee_delete = permissions[11]?.delete;
 
   return (
-    <div className="Employe-form Scroll-Style-hide">
+    <div className="main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div className="detail-container-main-Employe">
           <div className="container-Employe">

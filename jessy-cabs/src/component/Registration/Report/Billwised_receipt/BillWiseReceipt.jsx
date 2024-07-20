@@ -97,7 +97,7 @@ export const BillWiseReceipt = () => {
 
   return (
     <>
-      <div className="Employe-form Scroll-Style-hide">
+      <div className="main-content-form Scroll-Style-hide">
         <form >
           <div className="detail-container-main-Employe">
             <div className="container-Employe">

@@ -138,7 +138,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
 
 
     return (
-        <div className="GroupBilling-form Scroll-Style-hide">
+        <div className="main-content-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main detail-container-main-groupbilling">
                     <div className="container-left-groupbilling">

@@ -155,7 +155,7 @@
     margin-bottom: 25px;
     background-color: var(--glass);
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 5px;
 }
 
@@ -176,7 +176,7 @@
 }
 
 .total-account .amount-calculate {
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     background-color: var(--glass);
     display: flex;
     border-radius: 10px;

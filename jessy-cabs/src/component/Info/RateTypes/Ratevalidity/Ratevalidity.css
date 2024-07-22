@@ -80,10 +80,10 @@
 .copy-title-btn-RateValidity {
     /* margin-top: 30px; */
     height: fit-content;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
     padding: 20px 0px 20px 20px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
+    /* border: 2px solid #ccc; */
+    /* border-radius: 10px; */
 }
 
 @media screen and (max-width: 375px) {

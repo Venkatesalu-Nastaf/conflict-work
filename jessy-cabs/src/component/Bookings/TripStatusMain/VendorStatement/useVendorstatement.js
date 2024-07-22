@@ -10,7 +10,6 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "TripNo", width: 130 },
     { field: "tripsheetdate", headerName: "Date", width: 130 },
-    { field: "vehType", headerName: "A/C", width: 120 },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },
     { field: "duty", headerName: "Duty", width: 160 },
@@ -25,7 +24,6 @@ const columns = [
     { field: "vendortoll", headerName: "Vehicle-Toll", width: 130 },
     { field: "totalvendoramount", headerName: "Total Amount", width: 130 },
     { field: "advancepaidtovendor", headerName: "Driver Advance", width: 130 },
-    { field: "bunkadvance", headerName: "Bunk Advance", width: 130 },
     { field: "Vendor_FULLTotalAmount", headerName: "Balance", width: 130 },
     { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 130 },
 ];
@@ -110,10 +108,6 @@ const useVehiclestatement = () => {
 
             rows.forEach((singleData, index) => {
 
-
-                // Add advancepaidtovendor to Vendor_FULLTotalAmount
-
-                singleData["bunkadvance"] = singleData["bunkadvance"] ? singleData["bunkadvance"] : 0
                 singleData["balance"] = singleData["Vendor_FULLTotalAmount"]
                 worksheet.addRow(singleData);
 
@@ -132,7 +126,6 @@ const useVehiclestatement = () => {
             const totaltoll = rows.reduce((sum, row) => sum + parseInt(row.vendortoll || 0, 10), 0);
             const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
             const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
-            const bunkadvance = rows.reduce((sum, row) => sum + parseInt(row.bunkadvance || 0, 10), 0);
             const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
             const bataamount = rows.reduce((sum, row) => sum + parseInt(row.Vendor_BataTotalAmount || 0, 10), 0);
             // Add the total row
@@ -143,7 +136,6 @@ const useVehiclestatement = () => {
             totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle-Toll') + 1).value = totaltoll;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Total Amount') + 1).value = totalfullAmount;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Driver Advance') + 1).value = advancedvendor;
-            totalRow.getCell(columns1.findIndex(col => col.header === 'Bunk Advance') + 1).value = bunkadvance;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = balancefull;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Bata') + 1).value = bataamount;
            
@@ -230,7 +222,6 @@ const useVehiclestatement = () => {
         const totaltoll = rows.reduce((sum, row) => sum + parseInt(row.vendortoll || 0, 10), 0);
         const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
         const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
-        const bunkadvance = rows.reduce((sum, row) => sum + parseInt(row.bunkadvance || 0, 10), 0);
         const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
         const bataamount = rows.reduce((sum, row) => sum + parseInt(row.Vendor_BataTotalAmount || 0, 10), 0);
 
@@ -243,7 +234,6 @@ const useVehiclestatement = () => {
             if (column.field === 'vendortoll') return totaltoll;
             if (column.field === 'totalvendoramount') return totalfullAmount;
             if (column.field === 'advancepaidtovendor') return advancedvendor;
-            if (column.field === 'bunkadvance') return bunkadvance;
             if (column.field === 'Vendor_FULLTotalAmount') return balancefull;
             if (column.field === 'Vendor_BataTotalAmount') return bataamount;
             if (column.headerName === 'Vendor Name') return 'Total';

@@ -659,7 +659,7 @@ body {
   margin: 0px 3px;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
+  border-radius: 15px;
   color: #000;
   background-color: var(--glass);
   transition: all 0.3s ease;

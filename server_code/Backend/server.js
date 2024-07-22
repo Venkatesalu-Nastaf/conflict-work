@@ -774,6 +774,70 @@ app.get("/getFuelType/:fuelType", (req, res) => {
 
 
 
+// app.get("/getvehicleInfo", (req, res) => {
+//   try {
+//     console.log("query", req.query)
+//     const { hireTypes, startDate, endDate } = req.query;
+//     // const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+//     const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+
+//     db.query(sql, [hireTypes, startDate, endDate], (err, result) => {
+//       if (err) {
+//         console.log("err", err)
+//         return res.status(404).json({ message: "somthing went wrong", error: true })
+//       }
+
+//       // console.log("result", result)
+//       return res.status(200).json(result)
+//     })
+
+//   } catch (err) {
+//     console.log("err", err)
+//     res.status(500).json({ message: "something went wrong" })
+//   }
+
+// })
+
+
+
+
+app.get("/getvehicleInfo", (req, res) => {
+  try {
+    console.log("query", req.query);
+    const { hireTypes, startDate, endDate } = req.query;
+    const status = 'Closed'
+    // const sql = `
+    //   SELECT * FROM tripsheet
+    //   WHERE hireTypes = ?
+    //   AND (
+    //     (startdate <= ? AND closedate >= ?)
+    //     OR (startdate BETWEEN ? AND ?)
+    //     OR (closedate BETWEEN ? AND ?)
+    //   )
+    // `;
+
+    const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
+
+
+    // db.query(sql, [hireTypes, startDate, endDate, startDate, endDate, startDate, endDate], (err, result) => {
+    db.query(sql, [hireTypes, startDate, endDate, status], (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ message: "Something went wrong", error: true });
+      }
+
+      return res.status(200).json(result);
+    });
+
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+
+
+
 // const port = 8081;
 const port = process.env.PORT;
 

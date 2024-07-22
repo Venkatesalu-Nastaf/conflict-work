@@ -2676,11 +2676,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-vendor_vehicle"
                           freeSolo
                           sx={{ minWidth: 200 }}
-                          onChange={(event, value) =>
-                             handleAutocompleteVendor(event, value, "vendor_vehicle")
-      
-                            
+                          // onChange={(event, value) =>
+                          //    handleAutocompleteVendor(event, value, "vendor_vehicle")
+                          //  }
+                          onChange={(event, value) => {
+                            if (lockdata) {
+                              handleAutocompleteVendor(event, value, "vendor_vehicle");
+                            } else {
+                              setWarning(true);
+                              setWarningMessage("IS not locked,locked Enter Again");
                             }
+                          }}
+                          
+
                           // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
                           // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
                           value={vendorinfo?.vendor_vehicle}
@@ -2688,6 +2696,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           options={vehileNames?.map((option) => ({
                             label: option,
                           }))}
+                          // options={lockdata ? vehileNames.map((option) => ({
+                          //   label: option,
+                          // })) : []} 
                           renderInput={(params) => (
                             <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
                           )}
@@ -2701,7 +2712,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-duty"
                           freeSolo
                           sx={{ width: "100%" }}
-                          onChange={(event, value) => handleAutocompleteVendor(event, value, "vendor_duty")}
+                          onChange={(event, value) =>{
+                             if (lockdata) {
+                              handleAutocompleteVendor(event, value, "vendor_duty")
+                            } else {
+                              setWarning(true);
+                              setWarningMessage("IS not locked,locked Enter Again");
+                            }
+                            
+                          }}
 
                           // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
                           value={vendorinfo?.vendor_duty}
@@ -2729,9 +2748,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                             // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             format="DD/MM/YYYY"
-                            onChange={(date) => {
+                            // onChange={(date) => {
 
-                              handleDatevendorChange(date, 'vendorshedOutDate')
+                            //   handleDatevendorChange(date, 'vendorshedOutDate')
+                            // }}
+                             onChange={(date) => {
+                              if (lockdata) {
+                                handleDatevendorChange(date, 'vendorshedOutDate')
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
                             }}
                           >
                             {({ inputProps, inputRef }) => (
@@ -2752,7 +2779,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                             // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                             value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                             format="DD/MM/YYYY"
-                            onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                            // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                            onChange={(date) => {
+                              if (lockdata) {
+                                handleDatevendorChange(date, 'vendorshedInDate')
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
+                            }}
                           >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} />
@@ -2800,13 +2835,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                             // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
                             value={vendorinfo?.vendorreporttime}
+                            // onChange={(event) => {
+                            //   if (lockdata) {
+                            //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                            //   }
+
                             onChange={(event) => {
                               if (lockdata) {
                                 setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
                               }
-
-
                             }}
+
+
+                            // }}
                           />
                         </div>
 
@@ -2845,6 +2889,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                               if (lockdata) {
 
                                 setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                              }
+                              else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
                               }
                             }
                             }

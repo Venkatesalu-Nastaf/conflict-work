@@ -77,7 +77,7 @@ const useVehiclestatement = () => {
 
         try {
 
-            const fileName = "VehicleStatement Reports"
+            const fileName = "VendorStatement Reports"
             const worksheet = workbook.addWorksheet(workSheetName);
             const columns1 = columns.map(({ field, headerName, ...rest }) => ({
                 key: field,
@@ -146,6 +146,7 @@ const useVehiclestatement = () => {
             totalRow.getCell(columns1.findIndex(col => col.header === 'Bunk Advance') + 1).value = bunkadvance;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = balancefull;
             totalRow.getCell(columns1.findIndex(col => col.header === 'Bata') + 1).value = bataamount;
+           
 
             totalRow.eachCell((cell) => {
                 cell.font = { bold: true };
@@ -203,7 +204,7 @@ const useVehiclestatement = () => {
         pdf.setFont('helvetica', 'normal');
         // pdf.text("VehicleStatement", 10, 10);
         //  const header = Object.keys(row[0]);
-        const text = "VehicleStatement";
+        const text = "VendorStatement";
 
         // Get page width
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -222,6 +223,33 @@ const useVehiclestatement = () => {
         const rowValues = rows.map(row => {
             return columns.map(column => row[column.field]);
         });
+      
+
+        const totalKms = rows.reduce((sum, row) => sum + parseInt(row.vendortotalkm || 0, 10), 0);
+        const totalpermit = rows.reduce((sum, row) => sum + parseInt(row.vpermettovendor || 0, 10), 0);
+        const totaltoll = rows.reduce((sum, row) => sum + parseInt(row.vendortoll || 0, 10), 0);
+        const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
+        const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
+        const bunkadvance = rows.reduce((sum, row) => sum + parseInt(row.bunkadvance || 0, 10), 0);
+        const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
+        const bataamount = rows.reduce((sum, row) => sum + parseInt(row.Vendor_BataTotalAmount || 0, 10), 0);
+
+        
+
+        // Create the total row
+        const totalRow = columns.map(column => {
+            if (column.field === 'vendortotalkm') return totalKms;
+            if (column.field === 'vpermettovendor') return totalpermit;
+            if (column.field === 'vendortoll') return totaltoll;
+            if (column.field === 'totalvendoramount') return totalfullAmount;
+            if (column.field === 'advancepaidtovendor') return advancedvendor;
+            if (column.field === 'bunkadvance') return bunkadvance;
+            if (column.field === 'Vendor_FULLTotalAmount') return balancefull;
+            if (column.field === 'Vendor_BataTotalAmount') return bataamount;
+            if (column.headerName === 'Vendor Name') return 'Total';
+            return '';
+        });
+        rowValues.push(totalRow);
 
         let fontdata = 1;
         if (header.length <= 13) {
@@ -283,6 +311,24 @@ const useVehiclestatement = () => {
                 // Adjust the font size for the body
 
             },
+            willDrawCell: function (data) {
+                // Check if this cell is part of the total row
+                if (data.row.index === rowValues.length - 1) {
+                    const { cell } = data;
+                    const { x, y, width, height } = cell;
+    
+                    // Set bold text and increased font size
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(9); // Increase the font size as needed
+    
+                    // Draw top border
+                    pdf.setDrawColor(0); // Black color
+                    pdf.setLineWidth(0.5); // Line width
+                    pdf.line(x, y, x + width, y); // Draw top border
+    
+                    // Draw bottom border
+                    pdf.line(x, y + height, x + width, y + height); // Draw bottom border
+                }},
             columnWidth: 'auto'
 
         });
@@ -291,7 +337,7 @@ const useVehiclestatement = () => {
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
+        saveAs(pdfBlob, 'VendorStatement Reports.pdf');
     };
 
 

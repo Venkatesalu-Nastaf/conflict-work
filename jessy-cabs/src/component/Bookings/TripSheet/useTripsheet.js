@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+
 import {
     VehicleRate,
 } from "./TripSheetdata";
@@ -216,6 +217,8 @@ const useTripsheet = () => {
         }
     };
 
+
+   
     //generate link
 
     // const generateLink = async () => {
@@ -2322,7 +2325,7 @@ const useTripsheet = () => {
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehType: selectedCustomerData.vehType || book.vehType ||formValues.vehType || formData.vehType,
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+                    // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',

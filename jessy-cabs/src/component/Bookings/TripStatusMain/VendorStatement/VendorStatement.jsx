@@ -7,13 +7,13 @@ import Box from "@mui/material/Box";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
-import Dialog from '@mui/material/Dialog';
-import { Stations } from "./VendorStatementData";
+// import Dialog from '@mui/material/Dialog';
+// import { Stations } from "./VendorStatementData";
 import Autocomplete from "@mui/material/Autocomplete";
-import DialogTitle from '@mui/material/DialogTitle';
+// import DialogTitle from '@mui/material/DialogTitle';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+// import DialogActions from '@mui/material/DialogActions';
+// import DialogContent from '@mui/material/DialogContent';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -72,11 +72,11 @@ const VendorStatement = () => {
     handleExcelDownload,
     handlePdfDownload,
     handleButtonClick,
-    popupOpen,
-    handlePopupClose,
-    selectedRow,
-    handleBookingClick,
-    handleTripsheetClick,
+    // popupOpen,
+    // handlePopupClose,
+    // selectedRow,
+    // handleBookingClick,
+    // handleTripsheetClick,
     setToDate, accountinfodata, travelsname, fullamountdata,
     columns
   } = useVehiclestatement();
@@ -326,19 +326,6 @@ const VendorStatement = () => {
                   >Show All</Button>
                 </div>
               </div>
-
-              {/* <div className="input-field paid-amount-input-field">
-                <div className="input">
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="paidamount"
-                    label="Paid Amount"
-                    name="paidamount"
-                    autoComplete="off"
-                  />
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
@@ -431,21 +418,7 @@ const VendorStatement = () => {
             </div>
           </div>
         </div>
-        {/* <div className="Download-btn-vehiecle">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </div> */}
+      
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -477,21 +450,7 @@ const VendorStatement = () => {
           }
         </div>
         <div className="table-bookingCopy-VehicleStatement">
-          {/* <div className="Download-btn">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </div> */}
+         
           <div className='vehicle-statement-table'>
             <DataGrid
               rows={rows}

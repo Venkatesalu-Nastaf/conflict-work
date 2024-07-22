@@ -4,6 +4,7 @@ import "./DigitalSignature.css";
 import { APIURL } from "../url";
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import {format as datefunsdata} from 'date-fns';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
@@ -70,11 +71,26 @@ const DigitalSignature = () => {
     sigCanvasRef.current.clear();
   };
 
+  const getCurrentDateTimeFormatted = () => {
+    const now = new Date();
+    const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
+    const formattedTime = datefunsdata(now, 'HH:mm:ss');
+    return {
+      dateTime: formattedDateTime,
+      time: formattedTime
+    };
+  };
+
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
     const status = "Updated"
     const tripId = decryptdata(tripIddata)
     const uniquenodata = decryptunique(uniqueno)
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes={
+        status:status,
+        datesignature:dateTime,
+        signtime:time            }
 
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
@@ -88,7 +104,8 @@ const DigitalSignature = () => {
           uniqueno: uniquenodata,
         }),
       });
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
       setSuccessMessage("upload successfully")
       clearSignature();
       setTimeout(() => {
@@ -115,10 +132,16 @@ const DigitalSignature = () => {
   }
   const Startsignature = async () => {
     const status = "onSign"
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes={
+        status:status,
+        datesignature:dateTime,
+        signtime:time            }
     const tripId = decryptdata(tripIddata)
 
     try {
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
     }
     catch (err) {
       console.log(err)

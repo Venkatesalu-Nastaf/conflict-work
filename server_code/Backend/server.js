@@ -77,7 +77,7 @@ const User_Permission = require('./customer_master/Router/userpermission/usererm
 const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
 const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
-const GstReport = require('./customer_master/Router/GstReport/GstReport')
+const GstReport = require('./customer_master/Router/GstReport/GstReport');
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -724,29 +724,18 @@ WHERE
   })
 })
 
-// app,get("/signaturedatatimes")
-
-const getCurrentDateTimeFormatted = () => {
-  const now = new Date();
-  const formattedDateTime = format(now, 'yyyy-MM-dd HH:mm:ss');
-  const formattedTime = format(now, 'HH:mm:ss');
-  return {
-    dateTime: formattedDateTime,
-    time: formattedTime
-  };
-};
 
 
 
-
-app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
+app.post("/signaturedatatimes/:tripid", (req, res) => {
   const tripid = req.params.tripid;
-  const signstatus = req.params.signstatus;
-  console.log(tripid, signstatus, "jjjjjjj")
-  const { dateTime, time } = getCurrentDateTimeFormatted();
-  console.log('Formatted DateTime:', dateTime);
-  console.log('Current Time:', time);
-  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, dateTime, time, signstatus], (err, results) => {
+  const { 
+    status,
+    datesignature,
+    signtime }=req.body;
+  console.log(tripid,status,datesignature,signtime, "jjjjjjj")
+ 
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid,datesignature,signtime,status], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }

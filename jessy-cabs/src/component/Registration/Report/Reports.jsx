@@ -13,7 +13,7 @@ import { PendingBills } from './pendingBills/PendingBills';
 // import zIndex from '@mui/material/styles/zIndex';
 
 export const Reports = ({ stationName }) => {
-    const [value, setValue] = React.useState("GST Reports");
+    const [value, setValue] = React.useState("Monthly Wise");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -25,7 +25,7 @@ export const Reports = ({ stationName }) => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all" >
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Monthly Wise" className='tab-content' value="Monthly Wise" />0
+                                <Tab label="Monthly Wise" className='tab-content' value="Monthly Wise" />
                                 <Tab label="GST Reports" className='tab-content' value="GST Reports" />
                                 <Tab label="Pending Bills" className='tab-content' value="Pendingbills" />
                                 <Tab label="Billed wise Receipt" className='tab-content' value="Billed wise Receipt" />

@@ -212,8 +212,8 @@ export const BillWiseReceipt = () => {
                     </Select>
                   </FormControl>
                 </div>
-              </div>
-              <div className="input-field " style={{ marginTop: "30px" }}>
+              {/* </div>
+              <div className="input-field " style={{ marginTop: "30px" }}> */}
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -240,7 +240,7 @@ export const BillWiseReceipt = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <FaIndianRupeeSign color="action" />
                   </div>
@@ -251,8 +251,8 @@ export const BillWiseReceipt = () => {
                     label="Bill Amount"
                     name="Bill Amount"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+                {/* <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -262,10 +262,9 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Advanced"
                     name="Advanced"
-
                   />
-                </div>
-                <div className="input">
+                </div> */}
+                {/* <div className="input">
                   <div className="icone">
                     <FaIndianRupeeSign color="action" />
                   </div>
@@ -276,8 +275,8 @@ export const BillWiseReceipt = () => {
                     label="Paid"
                     name="Paid"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+                {/* <div className="input">
                   <div className="icone">
                     <FaIndianRupeeSign color="action" />
                   </div>
@@ -288,8 +287,8 @@ export const BillWiseReceipt = () => {
                     label="Received"
                     name="Received"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+                {/* <div className="input">
                   <div className="icone">
                     <FaIndianRupeeSign color="action" />
                   </div>
@@ -300,8 +299,8 @@ export const BillWiseReceipt = () => {
                     label="Discount"
                     name="Discount"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+                {/* <div className="input">
                   <div className="icone">
                     <FaIndianRupeeSign color="action" />
                   </div>
@@ -312,7 +311,7 @@ export const BillWiseReceipt = () => {
                     label="Balance"
                     name="Balance"
                   />
-                </div>
+                </div> */}
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -346,7 +345,17 @@ export const BillWiseReceipt = () => {
                       <input type="text" />
                     </div>
                     <div className='total-inputs' >
-                      <label htmlFor="">Tot Amt Recieved:</label>
+                      <label htmlFor="">Total Amount:</label>
+                      <input type="text" />
+                    </div>
+
+                    <div className='total-inputs' >
+                      <label htmlFor="">On A/C:</label>
+                      <input type="text" />
+                    </div>
+
+                    <div className='total-inputs' >
+                      <label htmlFor="">TDS:</label>
                       <input type="text" />
                     </div>
                   </div>
@@ -382,7 +391,7 @@ export const BillWiseReceipt = () => {
                       checkboxSelection
                     />
                   </div>
-                  <div style={{display: 'flex', paddingTop: '15px'}}>
+                  {/* <div style={{display: 'flex', paddingTop: '15px'}}>
                     <div className='total-inputs' style={{display: 'flex'}}>
                       <label htmlFor="">Amount:</label>
                       <input type="text" />
@@ -391,7 +400,7 @@ export const BillWiseReceipt = () => {
                       <label htmlFor="">Recieved:</label>
                       <input type="text" />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

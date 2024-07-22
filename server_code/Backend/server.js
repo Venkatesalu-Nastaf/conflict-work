@@ -77,7 +77,7 @@ const User_Permission = require('./customer_master/Router/userpermission/usererm
 const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
 const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
-const GstReport = require('./customer_master/Router/GstReport/GstReport')
+const GstReport = require('./customer_master/Router/GstReport/GstReport');
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -724,29 +724,18 @@ WHERE
   })
 })
 
-// app,get("/signaturedatatimes")
-
-const getCurrentDateTimeFormatted = () => {
-  const now = new Date();
-  const formattedDateTime = format(now, 'yyyy-MM-dd HH:mm:ss');
-  const formattedTime = format(now, 'HH:mm:ss');
-  return {
-    dateTime: formattedDateTime,
-    time: formattedTime
-  };
-};
 
 
 
-
-app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
+app.post("/signaturedatatimes/:tripid", (req, res) => {
   const tripid = req.params.tripid;
-  const signstatus = req.params.signstatus;
-  console.log(tripid, signstatus, "jjjjjjj")
-  const { dateTime, time } = getCurrentDateTimeFormatted();
-  console.log('Formatted DateTime:', dateTime);
-  console.log('Current Time:', time);
-  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, dateTime, time, signstatus], (err, results) => {
+  const { 
+    status,
+    datesignature,
+    signtime }=req.body;
+  console.log(tripid,status,datesignature,signtime, "jjjjjjj")
+ 
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid,datesignature,signtime,status], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
@@ -770,6 +759,70 @@ app.get("/getFuelType/:fuelType", (req, res) => {
   });
 });
 
+
+
+
+
+// app.get("/getvehicleInfo", (req, res) => {
+//   try {
+//     console.log("query", req.query)
+//     const { hireTypes, startDate, endDate } = req.query;
+//     // const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+//     const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+
+//     db.query(sql, [hireTypes, startDate, endDate], (err, result) => {
+//       if (err) {
+//         console.log("err", err)
+//         return res.status(404).json({ message: "somthing went wrong", error: true })
+//       }
+
+//       // console.log("result", result)
+//       return res.status(200).json(result)
+//     })
+
+//   } catch (err) {
+//     console.log("err", err)
+//     res.status(500).json({ message: "something went wrong" })
+//   }
+
+// })
+
+
+
+
+app.get("/getvehicleInfo", (req, res) => {
+  try {
+    console.log("query", req.query);
+    const { hireTypes, startDate, endDate } = req.query;
+    const status = 'Closed'
+    // const sql = `
+    //   SELECT * FROM tripsheet
+    //   WHERE hireTypes = ?
+    //   AND (
+    //     (startdate <= ? AND closedate >= ?)
+    //     OR (startdate BETWEEN ? AND ?)
+    //     OR (closedate BETWEEN ? AND ?)
+    //   )
+    // `;
+
+    const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
+
+
+    // db.query(sql, [hireTypes, startDate, endDate, startDate, endDate, startDate, endDate], (err, result) => {
+    db.query(sql, [hireTypes, startDate, endDate, status], (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ message: "Something went wrong", error: true });
+      }
+
+      return res.status(200).json(result);
+    });
+
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
 
 
 

@@ -198,14 +198,32 @@ const useGstReport = () => {
         }
     };
 
-
     const handleDownloadPdf = () => {
         const doc = new jsPDF();
         const tableColumn = columns.map(column => column.headerName);
+
+        // Calculate the totals for the columns
+        const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.totalcalcAmount || 0), 0);
+        const totalCgst = rows.reduce((acc, row) => acc + parseFloat(row.cgst || 0), 0);
+        const totalSgst = rows.reduce((acc, row) => acc + parseFloat(row.sgst || 0), 0);
+
+        // Create the total row
+        const totalRow = columns.map(column => {
+            if (column.field === 'totalcalcAmount') return totalSum;
+            if (column.field === 'cgst') return totalCgst;
+            if (column.field === 'sgst') return totalSgst;
+            if (column.headerName === 'Customer Name') return 'Total';
+            return '';
+        });
+
+        // Map the rows to the format needed for autoTable
         const tableRows = rows.map(row => [
             row.id, row.billingno, row.billdate, row.tripsheetdate, row.customer,
             row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.billed
         ]);
+
+        // Add the total row to the end of the table rows
+        tableRows.push(totalRow);
 
         const columnWidths = [
             10, 15, 19, 19, 19,
@@ -232,11 +250,33 @@ const useGstReport = () => {
             styles: {
                 cellPadding: 2,
                 fontSize: 8,
+                overflow: 'linebreak',
             },
+            margin: { left: 7, right: 5 }, // Set the margin to ensure equal space on the left and right
+            willDrawCell: function (data) {
+                // Check if this cell is part of the total row
+                if (data.row.index === tableRows.length - 1) {
+                    const { cell, row, column } = data;
+                    const { x, y, width, height } = cell;
+
+                    // Set bold text and increased font size
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(10); // Increase the font size as needed
+
+                    // Draw top border
+                    doc.setDrawColor(0); // Black color
+                    doc.setLineWidth(0.5); // Line width
+                    doc.line(x, y, x + width, y); // Draw top border
+
+                    // Draw bottom border
+                    doc.line(x, y + height, x + width, y + height); // Draw bottom border
+                }
+            }
         });
 
         doc.save('gst_report.pdf');
     };
+
 
     const handleShow = async () => {
         try {

@@ -2,10 +2,21 @@ import React, { useState, useEffect } from 'react'
 import './SignatureGenerate.css'
 import { APIURL } from '../../../url';
 import axios from 'axios'
+import {format as datefunsdata} from 'date-fns';
 
 const SignatureGenerate = () => {
     const apiUrl = APIURL
     const tripId = new URLSearchParams(window.location.search).get("tripid");
+    const getCurrentDateTimeFormatted = () => {
+        const now = new Date();
+        const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
+        const formattedTime = datefunsdata(now, 'HH:mm:ss');
+        return {
+          dateTime: formattedDateTime,
+          time: formattedTime
+        };
+      };
+    // console.log(getCurrentDateTimeFormatted(),"timedetails")
 
 
 
@@ -78,8 +89,14 @@ const SignatureGenerate = () => {
         try {
             const tripno = tripId
             const status = "Accept"
+            const { dateTime, time } = getCurrentDateTimeFormatted();
+            const signtauretimes={
+                status:status,
+                datesignature:dateTime,
+                signtime:time            }
             const response = await axios.post(`${apiUrl}/generate-link/${tripno}`)
-            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}/${status}`)
+            // await axios.post(`${apiUrl}/signaturedatatimes/${tripno}/${status}`)
+            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`,signtauretimes)
 
 
             const data = response.data.link

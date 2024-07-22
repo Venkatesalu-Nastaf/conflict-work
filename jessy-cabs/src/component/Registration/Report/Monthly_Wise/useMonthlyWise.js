@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import Excel from 'exceljs';
-import BorderColor from '@mui/icons-material/BorderColor';
+
 
 const useMonthlyWise = () => {
     const apiUrl = APIURL;
@@ -334,6 +334,24 @@ const useMonthlyWise = () => {
             // Adjust the font size for the body
     
           },
+          willDrawCell: function (data) {
+            // Check if this cell is part of the total row
+            if (data.row.index === rowValues.length - 1) {
+                const { cell} = data;
+                const { x, y, width, height } = cell;
+
+                // Set bold text and increased font size
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(16); // Increase the font size as needed
+
+                // Draw top border
+                pdf.setDrawColor(0); // Black color
+                pdf.setLineWidth(0.5); // Line width
+                pdf.line(x, y, x + width, y); // Draw top border
+
+                // Draw bottom border
+                pdf.line(x, y + height, x + width, y + height); // Draw bottom border
+            }},
           columnWidth: 'auto'
     
         });

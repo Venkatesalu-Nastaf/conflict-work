@@ -9,7 +9,7 @@
 .bill-wise-reciept-table-right-side {
     border: 2px solid #ccc;
     border-radius: 10px;
-    height: 360px;
+    height: 400px;
     width: 100%;
     background-color: var(--glass);
 }
@@ -55,4 +55,5 @@
     border: 1.5px solid #ccc;
     border-radius: 5px;
     padding: 5px;
+    width: 115px;
 }

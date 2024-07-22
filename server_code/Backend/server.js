@@ -8,7 +8,7 @@ const db = require('./db');
 const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
-const { format } = require('date-fns');
+
 
 var CryptoJS = require("crypto-js");
 
@@ -159,7 +159,7 @@ app.use('/', Templatemailer);// Customer Page Database
 app.use('/', IndividualBill);//Individual bill
 //theme update in user creation
 // -------------------------------------------------------------------------------------------
-app.use('/',GstReport)
+app.use('/', GstReport)
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
   const query = 'UPDATE usercreation SET theme = ? WHERE userid IN (?)';
@@ -729,13 +729,13 @@ WHERE
 
 app.post("/signaturedatatimes/:tripid", (req, res) => {
   const tripid = req.params.tripid;
-  const { 
+  const {
     status,
     datesignature,
-    signtime }=req.body;
-  console.log(tripid,status,datesignature,signtime, "jjjjjjj")
- 
-  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid,datesignature,signtime,status], (err, results) => {
+    signtime } = req.body;
+  console.log(tripid, status, datesignature, signtime, "jjjjjjj")
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }

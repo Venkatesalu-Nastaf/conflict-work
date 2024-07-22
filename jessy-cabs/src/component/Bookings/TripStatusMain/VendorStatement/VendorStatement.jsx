@@ -395,27 +395,6 @@ const VendorStatement = () => {
               />
             </div>
 
-            <div className="input">
-              <TextField
-                margin="normal"
-                size="small"
-                id=""
-                label="Total purchase"
-                name=""
-                autoComplete="off"
-              />
-            </div>
-
-            <div className="input">
-              <TextField
-                margin="normal"
-                size="small"
-                id=""
-                label="Payable"
-                name=""
-                autoComplete="off"
-              />
-            </div>
           </div>
         </div>
       

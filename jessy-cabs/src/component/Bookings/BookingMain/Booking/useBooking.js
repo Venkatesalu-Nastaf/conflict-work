@@ -165,8 +165,8 @@ const useBooking = () => {
     const statusValue = params.get("status") || "pending";
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
-    // const dispath = params.get("dispatchcheck");
-    // setIsEditMode(dispath)
+    const dispath = params.get("dispatchcheck");
+    setIsEditMode(dispath)
     const formData = {};
 
     const parameterKeys = [

@@ -54,9 +54,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-
-
-
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
   // console.log(stationName,"sta")
 
@@ -93,7 +90,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     handleTripsheetClick,
     columns,
     filteredColumns,
-    columnshowall, setCutomerName, setVehNo,
+    columnshowall, setCutomerName, setVehNo, handleBookingClick,
   } = useTripStatus();
 
   useEffect(() => {
@@ -101,6 +98,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
 
@@ -115,6 +113,17 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
       setAllStationName(stationName)
     }
   }, [stationName])
+
+  const [allCustomer, setAllCustomer] = useState([])
+
+  useEffect(() => {
+    if (customer?.length > 1) {
+      setAllCustomer([...customer, { customer: "All" }])
+    }
+    else {
+      setAllCustomer(customer)
+    }
+  })
 
 
   return (
@@ -162,7 +171,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div> */}
-              {/* </div>
+                {/* </div>
               <div className="input-field TripStatus-input-feilds"> */}
                 <div className="input">
                   <div className="icone">
@@ -206,15 +215,15 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                          <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                          />
-                          {option.label}
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
                       </li>
-                  )}
+                    )}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Department" inputRef={params.inputRef} />
@@ -234,22 +243,22 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     freeSolo
                     size="small"
                     value={cutomerName}
-                    options={customer?.map((option) => ({
+                    options={allCustomer?.map((option) => ({
                       label: option.customer,
                     }))}
                     disableCloseOnSelect
-                    
+
                     isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleCustomerChange(event, value)}
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                          <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                          />
-                          {option.label}
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
                       </li>
                     )}
                     renderInput={(params) => {
@@ -351,20 +360,20 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
           </Box>
         </div>
         <div className="Download-btn">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </div>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
         <div className="table-bookingCopy-TripStatus">
           {/* <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
@@ -393,6 +402,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
               <DialogContent>
                 {selectedRow && (
                   <div>
+                    <Button onClick={handleBookingClick}>Booking</Button>
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

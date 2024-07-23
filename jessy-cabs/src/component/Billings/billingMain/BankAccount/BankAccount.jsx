@@ -177,84 +177,75 @@ const BankAccount = () => {
         </div>
 
         <div>
-          <div className="BankDetails-mainContainer" >
-            <div className="BankAccount-detail-container-main">
-              {/* <div className="BankAccount-first-container">
-            <div className="input bankaddbtn">
-              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
-                Add bank
-              </Button>
-            </div>
-          </div> */}
-              {showAddBankForm && (
-                <div className="AddBankContainer-BankAccount">
-                  <div className="input-field input-field-bankaccount">
-                    <div className="input input-bankaccount">
-                      <div className="icone">
-                        <AiFillBank color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        label="Bank Name"
-                        name="bankname"
-                        id="banknameHDFC"
-                        autoFocus
-                        value={book.bankname || ''}
-                        onChange={handleChange}
-                      />
+          <div style={{height: '450px', overflow: 'auto', width: 'fit-content', marginTop: '20px' }}>
+            {showAddBankForm && (
+              <div className="AddBankContainer-BankAccount">
+                <div className="input-field input-field-bankaccount">
+                  <div className="input input-bankaccount">
+                    <div className="icone">
+                      <AiFillBank color="action" />
                     </div>
-                    <div className="input input-bankaccount">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faSackDollar} size="xl" />
-                      </div>
-                      <TextField
-                        type="number"
-                        size="small"
-                        label="Capital Amount"
-                        name="capital"
-                        id="capital"
-                        value={book.capital || ''}
-                        onChange={handleChange}
-                      />
+                    <TextField
+                      size="small"
+                      label="Bank Name"
+                      name="bankname"
+                      id="banknameHDFC"
+                      autoFocus
+                      value={book.bankname || ''}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="input input-bankaccount">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSackDollar} size="xl" />
                     </div>
-                    <div className="input input-bankaccount">
-                      <div className="icone">
-                        <ListAltIcon color="action" />
-                      </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo-AccountType"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
-                        value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
-                        options={AccountType.map((option) => ({
-                          label: option.Option,
-                        }))}
-                        getOptionLabel={(option) => option.label || book.AccountType || ''}
-                        renderInput={(params) => {
-                          return (
-                            <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="Capital Amount"
+                      name="capital"
+                      id="capital"
+                      value={book.capital || ''}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="input input-bankaccount">
+                    <div className="icone">
+                      <ListAltIcon color="action" />
                     </div>
-                    <div className="inpu">
-                      <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
-                        Add
-                      </Button>
-                    </div>
-                    <div className="inpu">
-                      <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
-                        <CancelIcon />
-                      </Button>
-                    </div>
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      id="free-solo-demo-AccountType"
+                      freeSolo
+                      sx={{ width: "20ch" }}
+                      onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
+                      value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
+                      options={AccountType.map((option) => ({
+                        label: option.Option,
+                      }))}
+                      getOptionLabel={(option) => option.label || book.AccountType || ''}
+                      renderInput={(params) => {
+                        return (
+                          <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
+                        )
+                      }
+                      }
+                    />
+                  </div>
+                  <div className="inpu">
+                    <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
+                      Add
+                    </Button>
+                  </div>
+                  <div className="inpu">
+                    <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
+                      <CancelIcon />
+                    </Button>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
             {bankDetails.map((bankDetail, index) => (
 
               <div className="addedbanks-Details-BankAccount" key={index}>
@@ -266,7 +257,7 @@ const BankAccount = () => {
                     </div>
                     <TextField
                       size="small"
-                      label="Bank Name"
+                      label="Bank Namxxxe"
                       id="bankname02"
                       name="bankname2"
                       value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
@@ -353,6 +344,178 @@ const BankAccount = () => {
             ))}
           </div>
         </div>
+
+        {/* <div>
+          <div className="BankDetails-mainContainer" >
+            <div className="BankAccount-detail-container-main">
+              
+              {showAddBankForm && (
+                <div className="AddBankContainer-BankAccount">
+                  <div className="input-field input-field-bankaccount">
+                    <div className="input input-bankaccount">
+                      <div className="icone">
+                        <AiFillBank color="action" />
+                      </div>
+                      <TextField
+                        size="small"
+                        label="Bank Name"
+                        name="bankname"
+                        id="banknameHDFC"
+                        autoFocus
+                        value={book.bankname || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="input input-bankaccount">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faSackDollar} size="xl" />
+                      </div>
+                      <TextField
+                        type="number"
+                        size="small"
+                        label="Capital Amount"
+                        name="capital"
+                        id="capital"
+                        value={book.capital || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="input input-bankaccount">
+                      <div className="icone">
+                        <ListAltIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo-AccountType"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
+                        value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
+                        options={AccountType.map((option) => ({
+                          label: option.Option,
+                        }))}
+                        getOptionLabel={(option) => option.label || book.AccountType || ''}
+                        renderInput={(params) => {
+                          return (
+                            <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
+                      />
+                    </div>
+                    <div className="inpu">
+                      <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
+                        Add
+                      </Button>
+                    </div>
+                    <div className="inpu">
+                      <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
+                        <CancelIcon />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {bankDetails.map((bankDetail, index) => (
+
+                <div className="addedbanks-Details-BankAccount" key={index}>
+                  <div className="input-field input-field-bankaccount input-Field-bank-account">
+
+                    <div className="input input-bankname">
+                      <div className="icone">
+                        <AiFillBank color="action" />
+                      </div>
+                      <TextField
+                        size="small"
+                        label="Bank Namxxxe"
+                        id="bankname02"
+                        name="bankname2"
+                        value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
+                        onChange={(event) => handleChange(event, index)}
+                        disabled={editingIndex !== index}
+                      />
+                    </div>
+                    <div className="input input-bankname">
+                      <div className="icone">
+                        <AiFillBank color="action" />
+                      </div>
+                      <TextField
+                        size="small"
+                        label="Net Balance"
+                        name="netbalance"
+                        id="netbalance89"
+                        type="number"
+                        value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
+                        onChange={(event) => handleChange(event, index)}
+                        disabled={editingIndex !== index}
+                      />
+                    </div>
+                    <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`}>
+                      <label htmlFor={`totalin-${index}`}>TotalIn:</label>
+                      <input
+                        className="bank-amount-input"
+                        name="totalin"
+                        type="number"
+                        id={`totalin-${index}`}
+                        value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
+                        onChange={(event) => handleChange(event, index)}
+                        disabled={editingIndex !== index}
+                      />
+                    </div>
+                    <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`}>
+                      <label htmlFor={`totalout-${index}`}>TotalOut:</label>
+                      <input
+                        className="bank-amount-input"
+                        name="totalout"
+                        type="number"
+                        id={`totalout-${index}`}
+                        value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
+                        onChange={(event) => handleChange(event, index)}
+                        disabled={editingIndex !== index}
+                      />
+
+                    </div>
+                    <div className="button-container-bankAccount">
+                      <div className="inpt input-bank-account-icon">
+                        {editingIndex === index ? (
+                          <IconButton color="primary" variant="contained" onClick={() => handleSaveEdit(index)}>
+                            <SaveIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton color="primary" variant="contained" onClick={() => handleEditBank(index)}>
+                            <EditIcon />
+                          </IconButton>
+                        )}
+                      </div>
+                      <div className="inpt input-bank-account-icon">
+
+                        <IconButton color="error" variant="contained" onClick={() => handleDelete(index)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                      <Dialog open={popupOpen} onClose={handlePopupClose}>
+                        <DialogContent>
+                          Are you sure you want to Delete this
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => handlesuredelete(bankDetail.id)} variant="contained" color="primary">
+                            Yes
+                          </Button>
+                          <Button onClick={handlePopupClose} variant="contained" color="primary">
+                            No
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </div>
+                  </div>
+                </div>
+
+
+              ))}
+            </div>
+          </div>
+        </div> */}
         <div className='alert-popup-main'>
           {error && (
             <div className='alert-popup Error' >

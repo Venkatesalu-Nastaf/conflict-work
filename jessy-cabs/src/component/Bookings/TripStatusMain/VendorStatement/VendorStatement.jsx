@@ -316,10 +316,10 @@ const VendorStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input">
+                <div className="">
                   <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                 </div>
-                <div className="input">
+                <div className="">
                   <Button variant="contained" disabled={!TripStatus_read}
                     onClick={handleShowAll}
 

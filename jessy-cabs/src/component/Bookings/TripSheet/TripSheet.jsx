@@ -186,7 +186,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     popupOpen,
     setSmsGuest,
     setSelectedCustomerDatas,
-    setreporttime, 
+    setreporttime,
     // signaturePopUpOpen,
     setshedintime,
     shedKilometers,
@@ -234,7 +234,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp,setWarning,setWarningMessage,setSignImageUrl
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp, setWarning, setWarningMessage, setSignImageUrl
 
   } = useTripsheet();
 
@@ -244,7 +244,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }, [actionName, handleClick]);
 
- const apiurl=APIURL
+  const apiurl = APIURL
   // Permission ------------ayyan
 
   const { permissions } = useContext(PermissionContext)
@@ -280,7 +280,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
-  const handlesignatureimages = async() => {
+  const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
     // await getSignatureImage()
     if (!tripid) {
@@ -291,10 +291,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
     if (response.status === 200) {
-        const imageUrl = URL.createObjectURL(await response.blob());
-        setSignImageUrl(imageUrl);
-        setSignaturepopup(true);
-        console.log(imageUrl,"uuuuuuuuuu")
+      const imageUrl = URL.createObjectURL(await response.blob());
+      setSignImageUrl(imageUrl);
+      setSignaturepopup(true);
+      console.log(imageUrl, "uuuuuuuuuu")
     }
     else if (signimageUrl === "") {
       if (fileInputRefdata.current) {
@@ -537,45 +537,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </span>
 
-                <div className=''>
-                  <FormControlLabel
-                    value="smsguest"
-                    control={
-                      <Checkbox
-                        size="small"
-                        checked={smsguest}
-                        onChange={(event) => setSmsGuest(event.target.checked)}
-                      />
-                    }
-                    label="Guest SMS"
-                  />
-                  <FormControlLabel
-                    value="email"
-                    id="email"
-                    control={
-                      <Checkbox
-                        size="small"
-                        checked={sendEmail}
-                        onChange={(event) => setSendEmail(event.target.checked)}
-                      />
-                    }
-                    label="Email"
-                  />
-                </div>
 
-                <div className="">
-                  <FormControlLabel
-                    value="DriverSMS"
-                    control={
-                      <Checkbox
-                        size="small"
-                        checked={DriverSMS}
-                        onChange={(event) => setDriverSMS(event.target.checked)}
-                      />
-                    }
-                    label="Driver SMS"
-                  />
-                </div>
 
                 <span className="d-grid">
                   <div className="tripsheet-top-division-date">
@@ -637,6 +599,46 @@ const TripSheet = ({ stationName, logoImage }) => {
                       )
                     }
                     }
+                  />
+                </div>
+
+                <div className=''>
+                  <FormControlLabel
+                    value="smsguest"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={smsguest}
+                        onChange={(event) => setSmsGuest(event.target.checked)}
+                      />
+                    }
+                    label="Guest SMS"
+                  />
+                  <FormControlLabel
+                    value="email"
+                    id="email"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={sendEmail}
+                        onChange={(event) => setSendEmail(event.target.checked)}
+                      />
+                    }
+                    label="Email"
+                  />
+                </div>
+
+                <div className="">
+                  <FormControlLabel
+                    value="DriverSMS"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={DriverSMS}
+                        onChange={(event) => setDriverSMS(event.target.checked)}
+                      />
+                    }
+                    label="Driver SMS"
                   />
                 </div>
 
@@ -2687,7 +2689,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               setWarningMessage("IS not locked,locked Enter Again");
                             }
                           }}
-                          
+
 
                           // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
                           // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
@@ -2712,14 +2714,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                           id="free-solo-duty"
                           freeSolo
                           sx={{ width: "100%" }}
-                          onChange={(event, value) =>{
-                             if (lockdata) {
+                          onChange={(event, value) => {
+                            if (lockdata) {
                               handleAutocompleteVendor(event, value, "vendor_duty")
                             } else {
                               setWarning(true);
                               setWarningMessage("IS not locked,locked Enter Again");
                             }
-                            
+
                           }}
 
                           // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
@@ -2752,7 +2754,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                             //   handleDatevendorChange(date, 'vendorshedOutDate')
                             // }}
-                             onChange={(date) => {
+                            onChange={(date) => {
                               if (lockdata) {
                                 handleDatevendorChange(date, 'vendorshedOutDate')
                               } else {
@@ -2850,7 +2852,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             }}
 
 
-                            // }}
+                          // }}
                           />
                         </div>
 
@@ -3119,7 +3121,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ?  vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
+                          value={(checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_NightHALT"
@@ -3158,7 +3160,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0: 0}
+                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0}
                           onChange={handlevendor_billdata}
                           // label="Night"
                           id="Vendor_Bata"
@@ -3184,7 +3186,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={ vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
+                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -3693,11 +3695,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {/* <Button onClick={generateLink}>Generate Link</Button> */}
                         <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                       { appsstatus !== "Closed" &&signaturelinkwhatsapp &&<WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                        {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
                           <button>Share on WhatsApp</button>
                         </WhatsappShareButton>
-                       }
+                        }
 
                         {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                       </div>

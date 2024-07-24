@@ -77,10 +77,10 @@ const AppUserList = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input" style={{ width: "130px" }}>
+                <div className="" style={{ width: "130px" }}>
                   <Button variant="contained" onClick={handleListButtonClick}>List</Button>
                 </div>
-                <div className="input" style={{ width: "130px" }}>
+                <div className="" style={{ width: "130px" }}>
                   <Button
                     variant="outlined"
                     component="label"

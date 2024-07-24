@@ -296,7 +296,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                    <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
 
@@ -336,7 +336,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
           </div>
         </div>
         <div className="SpeedDial">
-          <Box sx={{ position: "relative", mt: 2, }}>
+          <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}

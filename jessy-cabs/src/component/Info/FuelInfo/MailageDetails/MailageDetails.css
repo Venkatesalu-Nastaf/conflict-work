@@ -128,6 +128,7 @@
 
 .detailsFuel-inputs {
     flex-wrap: wrap;
+    gap: 20px;
 }
 
 @media screen and (max-width:1333px) {

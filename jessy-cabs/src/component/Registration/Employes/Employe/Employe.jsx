@@ -394,6 +394,26 @@ const Employe = () => {
                   value={selectedCustomerData?.licenceno || book.licenceno}
                   onChange={handleChange}
                 />
+                <div className="employee-file-upload-division">
+                  {selectedCustomerData?.empid || book.empid ? (
+                    <Button component="label">
+                      <UploadFileIcon />
+                      <input
+                        id="empid_file"
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}>
+                      <UploadFileIcon />
+                    </Button>
+                  )}
+                </div>
 
                 {/* <div className="employee-file-upload-division">
                   {selectedCustomerData?.empid || book.empid ? (
@@ -416,26 +436,7 @@ const Employe = () => {
                   )}
                 </div> */}
               </div>
-              <div className="employee-file-upload-division">
-                {selectedCustomerData?.empid || book.empid ? (
-                  <Button component="label">
-                    <UploadFileIcon />
-                    <input
-                      id="empid_file"
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </Button>
-                ) : (
-                  <Button color="primary" variant="contained" onClick={() => {
-                    setError(true);
-                    setErrorMessage("Please Enter Booking No");
-                  }}>
-                    <UploadFileIcon />
-                  </Button>
-                )}
-              </div>
+
 
               <div className="input">
                 {isEditMode ? (

@@ -143,10 +143,6 @@ const useBankaccount = () => {
                 bankname: book.bankname,
                 capital: book.capital,
                 AccountType: book.AccountType,
-                bankname2: book.bankname,
-                netbalance: book.capital,
-                totalin: book.capital,
-                totalout: 0,
             };
             await axios.post(`${apiUrl}/bankdetails`, newBank);
             handleAddBank();

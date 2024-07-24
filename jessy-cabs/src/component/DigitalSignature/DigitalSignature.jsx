@@ -97,7 +97,10 @@ const DigitalSignature = () => {
         status:status,
         datesignature:dateTime,
         signtime:time            }
-
+      const signaturedata={
+        dataurlsign:dataUrl
+      }
+  
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
@@ -115,7 +118,7 @@ const DigitalSignature = () => {
       await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
       setSuccessMessage("upload successfully")
       // THIS API FRO DRIVER APP
-      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`)
+      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`,signaturedata)
       
       clearSignature();
       setTimeout(() => {

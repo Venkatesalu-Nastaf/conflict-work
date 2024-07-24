@@ -420,7 +420,7 @@ const MailDetails = () => {
               </div>
             </div>
             <div className="container-right-mailDetails">
-              <div className="textbox textbox-mailer">
+              <div className="textbox-mailer">
 
                 <div className="textboxlist-mailer">
                   <div className="textboxlist-customer ">

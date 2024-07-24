@@ -225,23 +225,24 @@ body {
 }
 
 .Scroll-Style {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .Scroll-Style::-webkit-scrollbar {
-  width: 0px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
   position: absolute;
 }
 
 .Scroll-Style::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px transparent;
+  /* box-shadow: inset 0 0 6px transparent; */
 }
 
 .Scroll-Style::-webkit-scrollbar-thumb {
-  background-color: #6d6d6d;
-  width: 0px;
+  background-color: #1976d2;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
   border-radius: 20px;
 }
@@ -671,7 +672,7 @@ body {
 
 @media screen and (min-width: 769px) {
   .side-bar-menu-close .main-content-container {
-    width: 92vw;
+    width: 94vw;
     margin: 0px 4px;
   }
 }
@@ -684,7 +685,7 @@ body {
 
 @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .main-content-container {
-    width: 90vw;
+    width: 98%;
     margin: 0px 3px;
   }
 

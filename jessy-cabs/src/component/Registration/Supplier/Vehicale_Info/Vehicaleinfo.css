@@ -31,6 +31,8 @@
 
 .vehicaleinfo-container {
   display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
 }
 
 .list-update {
@@ -175,7 +177,7 @@
 
 .vehicleinfo-inputfeild {
   flex-wrap: wrap;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   padding-bottom: 15px;
 }
 
@@ -247,8 +249,8 @@
 }
 
 .vehicle-info-table1 {
-  height: 220px;
-  overflow: scroll;
+  height: 190px;
+  /* overflow: scroll; */
 }
 
 .vehicle-info-table-heading-first {

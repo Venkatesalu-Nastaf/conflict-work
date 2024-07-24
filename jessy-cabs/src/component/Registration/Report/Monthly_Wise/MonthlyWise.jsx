@@ -141,7 +141,7 @@ const MonthlyWise = () => {
                     <Button variant="outlined" onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button className='text-nowrap' variant="outlined" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                    <Button className='text-nowrap' variant="contained" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
                     </div>

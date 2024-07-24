@@ -13,87 +13,34 @@ import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { MdOutlineEventNote } from "react-icons/md";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import { FaIndianRupeeSign } from "react-icons/fa6";
-
-
+import useBillWiseReceipt from './useBillWiseReceipt';
+import dayjs from 'dayjs';
 
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 
-const columns = [
-  { field: 'id', headerName: 'Sno', width: 70 },
-  {
-    field: 'billNo',
-    headerName: 'Bill No',
-    type: 'number',
-    width: 90,
-  },
-  { field: 'billDate', headerName: 'Bill Date', width: 130 },
-  { field: 'tripNo', headerName: 'Trip No', width: 130 },
-  { field: 'billAmt', headerName: 'Bill Amt', width: 130 },
-  { field: 'recieved', headerName: 'Recieved', width: 130 },
-  { field: 'disAm', headerName: 'Dis Am', width: 130 },
-  { field: 'balance', headerName: 'Balanace', width: 130 },
-  { field: 'billType', headerName: 'Bill Type', width: 130 },
-  { field: 'uniqueId', headerName: 'Unique Id', width: 130 },
-  // {
-  //   field: 'fullName',
-  //   headerName: 'Full name',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (value, row) => `${row?.firstName || ''} ${row?.lastName || ''}`,
-  // },
-];
-
-const rows = [
-  { id: 1, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 2, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 3, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 4, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 5, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 6, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 7, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 8, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 9, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-  { id: 10, billNo: 35, billDate: '17-07-2024', tripNo: '17-07-2024', billAmt: 'Vinoth', recieved: '20', disAm: '20', balance: '20', billType: '20', uniqueId: '20' },
-
-];
-
-
-const columnsPendingBill = [
-  { field: 'id', headerName: 'Sno', width: 70 },
-  {
-    field: 'billNo',
-    headerName: 'Bill No',
-    type: 'number',
-    width: 90,
-  },
-  { field: 'billDate', headerName: 'Bill Date', width: 130 },
-  { field: 'amount', headerName: 'Amount', width: 130 },
-];
-
-const rowsPendingBill = [
-  { id: 1, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 2, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 3, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 4, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 5, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 6, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 7, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 8, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 9, billNo: 35, billDate: '17-07-2024', amount: '50' },
-  { id: 10, billNo: 35, billDate: '17-07-2024', amount: '50' },
-
-];
 
 export const BillWiseReceipt = () => {
 
-  const [age, setAge] = React.useState('');
+  const { organization, setOrganization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
+    , rows, setRows, pendingBillRows, setPendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
+    totals, handlechange, handleAddBillReceive
+  } = useBillWiseReceipt();
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBillWiseReport((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
+  const handleDateChange = (date) => {
+    setBillWiseReport((prevState) => ({
+      ...prevState,
+      Date: date.format('YYYY-MM-DD'),
+    }));
+  };
+
 
   return (
     <>
@@ -111,8 +58,9 @@ export const BillWiseReceipt = () => {
                     id="voucher ID"
                     className="full-width"
                     label="voucher ID"
-                    name="voucher ID"
+                    name="VoucherId"
                     autoComplete="new-password"
+                  // onChange={handleInputChange}
 
                   />
                 </div>
@@ -123,9 +71,11 @@ export const BillWiseReceipt = () => {
                     </div>
                     <DatePicker
                       id="Date"
+                      name='Date'
                       label=" Date"
                       format="DD/MM/YYYY"
-                    >
+                      value={dayjs(billWiseReport.Date)}
+                      onChange={handleDateChange}                    >
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
@@ -173,20 +123,20 @@ export const BillWiseReceipt = () => {
                     <AccountBalanceWalletIcon color="action" />
                   </div>
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-                    <InputLabel id="demo-simple-select-standard-label">Customer Id</InputLabel>
+                    <InputLabel id="demo-simple-select-standard-label">Customer Name</InputLabel>
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={age}
-                      onChange={handleChange}
                       label="Customer Id"
+                      name='CustomerName'
+                      onChange={handleInputChange}
+                      value={billWiseReport.CustomerName}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      {organization.map((org) => (
+                        <MenuItem key={org} value={org}>
+                          {org}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </div>
@@ -199,20 +149,20 @@ export const BillWiseReceipt = () => {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={age}
-                      onChange={handleChange}
                       label="Account To"
+                      name='AccountDetails'
+                      value={billWiseReport.AccountDetails}
+                      onChange={handleInputChange}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      {accountDetails.map((org) => (
+                        <MenuItem key={org} value={org}>
+                          {org}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </div>
-              {/* </div>
+                {/* </div>
               <div className="input-field " style={{ marginTop: "30px" }}> */}
                 <div className="input">
                   <div className="icone">
@@ -223,7 +173,7 @@ export const BillWiseReceipt = () => {
                     id="voucher ID"
                     className="full-width"
                     label="voucher ID"
-                    name="voucher ID"
+                    // name="voucher ID"
                     autoComplete="new-password"
                   />
                 </div>
@@ -321,7 +271,9 @@ export const BillWiseReceipt = () => {
                     id="unique id"
                     className="full-width"
                     label="unique id"
-                    name="unique id"
+                    name="UniqueID"
+                  // onChange={handleInputChange}
+                  // value={billWiseReport.UniqueID}
                   />
                 </div>
               </div>
@@ -330,11 +282,11 @@ export const BillWiseReceipt = () => {
                   <div className='amount-calculator'>
                     <div className='total-inputs' >
                       <label htmlFor="">Amount:</label>
-                      <input type="text" />
+                      <input type="text" value={totals.amount} />
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">Recieved:</label>
-                      <input type="text" />
+                      <input type="text" value={totals.recieved} />
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">Discount:</label>
@@ -342,22 +294,23 @@ export const BillWiseReceipt = () => {
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">Balance:</label>
-                      <input type="text" />
+                      <input type="text" value={totals.totalBalance} />
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">Total Amount:</label>
-                      <input type="text" />
+                      <input type="text" value={totals.totalAmount} />
                     </div>
 
                     <div className='total-inputs' >
                       <label htmlFor="">On A/C:</label>
-                      <input type="text" />
+                      <input type="text" value={billWiseReport.AccountDetails} />
                     </div>
 
                     <div className='total-inputs' >
                       <label htmlFor="">TDS:</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e) => handlechange(e)} value={totals.tds} />
                     </div>
+
                   </div>
                   <div className='bill-wise-reciept-table'>
                     <DataGrid
@@ -375,12 +328,13 @@ export const BillWiseReceipt = () => {
                 </div>
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
-                    <Button variant='contained'>Show Pending Bills</Button>
-                    <Button variant='contained'>Apply to list</Button>
+                    <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
+                    <Button variant='contained' onClick={() => handlePendingBills(billWiseReport.CustomerName)}>Show Pending Bills</Button>
+                    <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
                   </div>
                   <div className='bill-wise-reciept-table-right-side'>
                     <DataGrid
-                      rows={rowsPendingBill}
+                      rows={pendingBillRows}
                       columns={columnsPendingBill}
                       initialState={{
                         pagination: {
@@ -389,7 +343,10 @@ export const BillWiseReceipt = () => {
                       }}
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
-                    />
+                      onRowSelectionModelChange={(newRowSelectionModel) => {
+                        // setRowSelectionModel(newRowSelectionModel);
+                        handleRowSelection(newRowSelectionModel);
+                      }} />
                   </div>
                   {/* <div style={{display: 'flex', paddingTop: '15px'}}>
                     <div className='total-inputs' style={{display: 'flex'}}>

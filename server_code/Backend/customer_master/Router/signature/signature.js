@@ -94,8 +94,8 @@ router.post('/api/saveSignaturewtid', (req, res) => {
   const { signatureData, tripId, uniqueno,imageName } = req.body;
   const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
   const imageBuffer = Buffer.from(base64Data, 'base64');
-  // const imageName = `signature-${Date.now()}.png`;
-  const imagePath = path.join(baseImagetripidPath, imageName); // Use the base path
+  const imageName2 = `signature-${imageName}.png`;
+  const imagePath = path.join(baseImagetripidPath, imageName2); // Use the base path
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
       console.error('Error saving signature:', error);

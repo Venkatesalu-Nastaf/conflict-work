@@ -6,13 +6,15 @@ import dayjs from "dayjs";
 import {
     VehicleRate,
 } from "./TripSheetdata";
-import { APIURL } from "../../url";
+import { APIURL,Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
 
 
 const useTripsheet = () => {
     const signatureurlinkurl="http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
+    // THIS APIURL TRANSFER FRO DRIVER APP
+    const apiurltransfer=Apiurltransfer;
     //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
@@ -1625,17 +1627,41 @@ const useTripsheet = () => {
         input.click();
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async(event) => {
         const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
         if (file) {
+            const data=Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
 
+          console.log(documentType,"yype")
+        //     // axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
+        //    await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData)
+        //    // Second PUT request if documentType is toll or parking
+        // //    this apiurl transfer for driver app --------------
+        //         if (documentType === 'Toll' || documentType === 'Parking') {
+        //             console.log(documentType,"enter")
+        //             await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+        //         }
 
-            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
+        try {
+            console.log(documentType, "yype");
+            await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
+            
+            if (documentType === 'Toll' || documentType === 'Parking') {
+              console.log(documentType, "enter");
+              await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+            //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
+            }
+          } catch (error) {
+            console.error('Error uploading file:', error);
+          }
+         
+        
+
         }
     };
 
@@ -2446,11 +2472,15 @@ const useTripsheet = () => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
         if (file !== null) {
+            const datadate=Date.now().toString();
             const formData = new FormData();
             formData.append("signature_image", file);
             try {
-                await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}`, formData);
+                await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
+                // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
                 getSignatureImage()
+                // THIS API FRO DRIVER APP 
+                await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`,formData)
 
 
 

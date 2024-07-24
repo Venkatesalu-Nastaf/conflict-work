@@ -30,6 +30,9 @@ const DigitalSignature = () => {
       ? JSON.parse(expiredInSessionStorage)
       : false;
   });
+  
+  // const expiredInSessionStorage =localStorage.getItem("expired") ? JSON.parse(expiredInSessionStorage): false;
+  // console.log(expiredInSessionStorage,localStorage.getItem("expired"))
 
   const decryptdata = (cipherText) => {
 
@@ -110,9 +113,10 @@ const DigitalSignature = () => {
       });
       // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
       await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
+      setSuccessMessage("upload successfully")
       // THIS API FRO DRIVER APP
       await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`)
-      setSuccessMessage("upload successfully")
+      
       clearSignature();
       setTimeout(() => {
         setExpired(true);

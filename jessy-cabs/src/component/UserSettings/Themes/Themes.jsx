@@ -7,9 +7,9 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 
 const Themes = () => {
   const apiUrl = APIURL;
-  const { setSelectedTheme } = useThemes();
-  const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
-
+  const { setSelectedTheme ,selectedTheme} = useThemes();
+  // const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
+// const [storedusertheme,setStoredusertheme]=useState(JSON.parse(localStorage.getItem("selectedusertheme")))
   const [themeOne, setThemeOne] = useState(false);
   const [themeTwo, setThemeTwo] = useState(false);
   const [themeThree, setThemeThree] = useState(false);
@@ -18,14 +18,21 @@ const Themes = () => {
   const [themeSix, setThemeSix] = useState(false);
   const [themeSeven, setThemeSeven] = useState(false);
   const [themeEight, setThemeEight] = useState(false);
+  console.log('sssss',typeof(selectedTheme));
+  // useEffect(()=>{
+  //   setStoredusertheme(JSON.parse(localStorage.getItem("selectedusertheme")));
+
+  // },[selectedTheme])
 
 
 
   const handleThemeChange = async (theme, themeNo) => {
+    
+    console.log(theme,themeNo,'stheme');
     const userid = localStorage.getItem('useridno');
     setSelectedTheme(theme);
-    console.log(themeNo);
-    if (themeNo == 1) {
+    
+    if (themeNo === 1) {
       setThemeOne(true);
       setThemeTwo(false);
       setThemeThree(false);
@@ -35,7 +42,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 2) {
+    else if (themeNo === 2) {
       setThemeTwo(true);
       setThemeOne(false);
       setThemeThree(false);
@@ -45,7 +52,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 3) {
+    else if (themeNo === 3) {
       setThemeThree(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -55,7 +62,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 4) {
+    else if (themeNo === 4) {
       setThemeFour(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -65,7 +72,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 5) {
+    else if (themeNo === 5) {
       setThemeFive(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -75,7 +82,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 6) {
+    else if (themeNo === 6) {
       setThemeSix(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -85,7 +92,7 @@ const Themes = () => {
       setThemeSeven(false);
       setThemeEight(false);
     }
-    else if (themeNo == 7) {
+    else if (themeNo === 7) {
       setThemeSeven(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -95,7 +102,7 @@ const Themes = () => {
       setThemeSix(false);
       setThemeEight(false);
     }
-    else if (themeNo == 8) {
+    else if (themeNo === 8) {
       setThemeEight(true);
       setThemeOne(false);
       setThemeTwo(false);
@@ -119,28 +126,28 @@ const Themes = () => {
         <h2 className="Theme-Title">Select Your Theme</h2>
         <div className="theme-options">
           <div
-            className={`theme-image ${themeOne || storedusertheme == 'theme1' ? "theme-active" : ""}`}
+            className={`theme-image ${selectedTheme === 'theme1' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme1", 1)}
           >
-            {themeOne || storedusertheme == 'theme1' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px', backgroundColor: '#0000ff8c', borderRadius: '50%', height: '24px', width: '24px', padding: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeOne || selectedTheme === 'theme1' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
             <img src="https://nastaf.com/themes/theme-1.jpg" alt="Theme 1" />
             <p>Beach Sunrise</p>
           </div>
           <div
-            className={`theme-image ${themeTwo || storedusertheme == 'theme2' ? "theme-active" : ""}`}
+            className={`theme-image ${themeTwo || selectedTheme === 'theme2' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme2", 2)}
           >
-            {themeTwo || storedusertheme == 'theme2' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeTwo || selectedTheme === 'theme2' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
 
@@ -148,14 +155,14 @@ const Themes = () => {
             <p>Evening City </p>
           </div>
           <div
-            className={`theme-image ${themeThree || storedusertheme == 'theme3' ? "theme-active" : ""}`}
+            className={`theme-image ${themeThree || selectedTheme === 'theme3' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme3", 3)}
           >
-            {themeThree || storedusertheme == 'theme3' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeThree || selectedTheme === 'theme3' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
 
@@ -164,14 +171,14 @@ const Themes = () => {
           </div>
 
           <div
-            className={`theme-image ${themeFour || storedusertheme == 'theme4' ? "theme-active" : ""}`}
+            className={`theme-image ${themeFour || selectedTheme === 'theme4' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme4", 4)}
           >
-            {themeFour || storedusertheme == 'theme4' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeFour || selectedTheme === 'theme4' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
 
@@ -181,42 +188,42 @@ const Themes = () => {
         </div>
         <div className="theme-options">
           <div
-            className={`theme-image ${themeFive || storedusertheme == 'theme5' ? "theme-active" : ""}`}
+            className={`theme-image ${themeFive || selectedTheme === 'theme5' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme5", 5)}
           >
-            {themeFive || storedusertheme == 'theme5' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeFive || selectedTheme === 'theme5' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
             <img src="https://nastaf.com/themes/theme-5.jpg" alt="Theme 5" />
             <p>Art</p>
           </div>
           <div
-            className={`theme-image ${themeSix || storedusertheme == 'theme6' ? "theme-active" : ""}`}
+            className={`theme-image ${themeSix || selectedTheme === 'theme6' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme6", 6)}
           >
-            {themeSix || storedusertheme == 'theme6' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeSix || selectedTheme === 'theme6' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
             <img src="https://nastaf.com/themes/theme-6.jpg" alt="Theme 6" />
             <p>Robot City </p>
           </div>
           <div
-            className={`theme-image ${themeSeven || storedusertheme == 'theme7' ? "theme-active" : ""}`}
+            className={`theme-image ${themeSeven || selectedTheme === 'theme7' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme7", 7)}
           >
-            {themeSeven || storedusertheme == 'theme7' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeSeven || selectedTheme === 'theme7' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
             <img src="https://nastaf.com/themes/theme-7.jpg" alt="Theme 7" />
@@ -224,14 +231,14 @@ const Themes = () => {
           </div>
 
           <div
-            className={`theme-image ${themeEight || storedusertheme == 'theme8' ? "theme-active" : ""}`}
+            className={`theme-image ${themeEight || selectedTheme === 'theme8' ? "theme-active" : ""}`}
             onClick={() => handleThemeChange("theme8", 8)}
           >
-            {themeEight || storedusertheme == 'theme8' ? (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}><IoCheckmarkOutline style={{ backgroundColor: 'blue', color: 'white', padding: '4px', borderRadius: '50%' }} /></span>
+            {themeEight || selectedTheme === 'theme8' ? (
+              <span className="theme-selected-checkbox"><IoCheckmarkOutline /></span>
             ) : (
-              <span style={{ position: 'absolute', top: '5px', left: '5px' }}>
-                <span style={{ width: '15px', height: '15px', display: 'block', border: '1px solid', borderRadius: '50%' }}></span>
+              <span className="theme-unselected-checkbox">
+                <span></span>
               </span>
             )}
             <img src="https://nastaf.com/themes/theme-8.jpg" alt="Theme 8" />

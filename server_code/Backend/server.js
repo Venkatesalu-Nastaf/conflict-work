@@ -306,7 +306,7 @@ const storagetripsheet = multer.diskStorage({
     cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+    cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
   }
 
 })
@@ -315,12 +315,11 @@ const uploadtripsheet = multer({
   storage: storagetripsheet
 })
 
-app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'), (req, res) => {
+app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
   const documentType = req.params.documentType;
   const filename = req.file.originalname;
-
 
   if (userId, fileName, filename, documentType) {
     const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
@@ -336,6 +335,39 @@ app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'),
   }
 
 });
+// --------------------------driverappupdatedtoll and parking image----------------------
+const storagetripsheet1 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+  }
+
+})
+const uploadtripsheet1 = multer({
+  storage: storagetripsheet1
+})
+ app.post('/tripsheetdatadriverappimage/:data',uploadtripsheet1.single('file'),(req,res)=>{
+  console.log(req.params.data,"kk")
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+    // tripid: req.body.tripid,
+    date:req.body.datadate
+   
+};
+console.log(fileData)
+res.send("datasend")
+
+ })
+
+
+
+
+// --------------------------------------------------------
 
 
 

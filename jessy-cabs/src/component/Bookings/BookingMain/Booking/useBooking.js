@@ -161,9 +161,12 @@ const useBooking = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    console.log("params", params)
     const statusValue = params.get("status") || "pending";
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
+    const dispath = params.get("dispatchcheck");
+    setIsEditMode(dispath)
     const formData = {};
 
     const parameterKeys = [
@@ -207,7 +210,13 @@ const useBooking = () => {
       "driverName",
       "mobileNo",
       "travelsemail",
-      "Groups"
+      "Groups",
+      "orderByEmail",
+      "orderbyemail",
+      "mobile",
+      "vehiclemodule",
+
+
     ];
 
     parameterKeys.forEach((key) => {
@@ -220,6 +229,10 @@ const useBooking = () => {
     formData["status"] = statusValue;
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
+
+    console.log("formData", formData)
+
+
 
     setBook(formData);
     setFormData(formData);
@@ -641,7 +654,7 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation:selectedOrder.servicestation
+          servicestation: selectedOrder.servicestation
         }));
 
         setSelectedCustomerData((prevState) => ({
@@ -649,14 +662,14 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation:selectedOrder.servicestation
+          servicestation: selectedOrder.servicestation
         }));
         setFormData((prevState) => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation:selectedOrder.servicestation
+          servicestation: selectedOrder.servicestation
         }));
 
       } else {
@@ -666,7 +679,7 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: '',
           orderByEmail: '',
-          servicestation:'',
+          servicestation: '',
         }));
 
         setSelectedCustomerData((prevState) => ({
@@ -674,14 +687,14 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: '',
           orderByEmail: '',
-          servicestation:'',
+          servicestation: '',
         }));
         setFormData((prevState) => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: '',
           orderByEmail: '',
-          servicestation:'',
+          servicestation: '',
         }));
 
       }
@@ -977,11 +990,11 @@ const useBooking = () => {
   //     }
   //   }
   // };
-  
+
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
-      const datamode = isEditMode ? selectedCustomerData.status : bookingStatus||book.status
-      console.log(datamode,"datata")
+      const datamode = isEditMode ? selectedCustomerData.status : bookingStatus || book.status
+      console.log(datamode, "datata")
       try {
         const user = localStorage.getItem("username")
         const dataToSend = {
@@ -1061,7 +1074,7 @@ const useBooking = () => {
 
   //------------------------------------------------------
 
-// console.log(bookingStatus,"ststt")
+  // console.log(bookingStatus,"ststt")
   const handleAdd = async () => {
 
     if (!selectedCustomerData.guestmobileno) {
@@ -1111,7 +1124,7 @@ const useBooking = () => {
       setDatatrigger(!datatrigger)
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
-      const bookingshedoutdata=selectedCustomerData.shedOutDate || formData.shedOutDate|| book.shedOutDate||dayjs();
+      const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       // let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
@@ -1133,7 +1146,7 @@ const useBooking = () => {
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         // shedOutDate: book.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || formData.shedOutDate,
-        shedOutDate:bookingshedoutdata,
+        shedOutDate: bookingshedoutdata,
 
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
         orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
@@ -1213,7 +1226,7 @@ const useBooking = () => {
 
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
-      const bookingshedoutdata=selectedCustomerData.shedOutDate  || formData.shedOutDate||book.shedOutDate ||dayjs();
+      const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
 
       // let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
@@ -1238,7 +1251,10 @@ const useBooking = () => {
         startdate: bookingstartdate,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
         orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
-        orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || book.orderByEmail,
+        orderByEmail: book.orderByEmail || book.orderbyemail ||
+          formData.orderByemail ||
+          selectedCustomerData.orderByEmail ||
+          selectedCustomerDatas.orderByEmail,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
         pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
         customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,

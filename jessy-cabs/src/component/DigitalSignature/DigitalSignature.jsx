@@ -1,13 +1,15 @@
 import React, { useRef, useEffect, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
-import { APIURL } from "../url";
+import { APIURL,Apiurltransfer } from "../url";
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import {format as datefunsdata} from 'date-fns';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
+  // THSI API FOR DRIVER APP APIURL TRANFER
+  const apiurltransfer=Apiurltransfer;
   const sigCanvasRef = useRef(null);
 
   const tripIddata = new URLSearchParams(window.location.search).get("trip");
@@ -84,6 +86,7 @@ const DigitalSignature = () => {
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
     const status = "Updated"
+    const datadate=Date.now().toString();
     const tripId = decryptdata(tripIddata)
     const uniquenodata = decryptunique(uniqueno)
     const { dateTime, time } = getCurrentDateTimeFormatted();
@@ -102,10 +105,13 @@ const DigitalSignature = () => {
           signatureData: dataUrl,
           tripId: tripId,
           uniqueno: uniquenodata,
+          imageName:datadate
         }),
       });
       // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
       await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
+      // THIS API FRO DRIVER APP
+      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`)
       setSuccessMessage("upload successfully")
       clearSignature();
       setTimeout(() => {

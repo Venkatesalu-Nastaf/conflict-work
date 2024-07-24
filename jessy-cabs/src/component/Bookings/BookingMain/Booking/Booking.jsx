@@ -1225,10 +1225,11 @@ const Booking = ({ stationName, customerData }) => {
                 autoComplete="new-password"
                 className="full-width"
                 value={
-                  formData.orderByMobileNo ||
-                  selectedCustomerData.orderByMobileNo ||
-                  selectedCustomerDatas.orderByMobileNo ||
-                  book.orderByMobileNo ||
+                  book?.mobile ||
+                  formData?.orderByMobileNo ||
+                  selectedCustomerData?.orderByMobileNo ||
+                  selectedCustomerDatas?.orderByMobileNo ||
+                  book?.orderByMobileNo ||
                   ""
                 }
                 onChange={handleChange}
@@ -1243,15 +1244,18 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <ForwardToInboxIcon color="action" />
               </div>
+           
+              {/* {console.log("book--", book)} */}
               <TextField
                 name="orderByEmail"
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.orderByEmail ||
+                  book.orderByEmail || book.orderbyemail ||
+                  formData.orderByemail ||
                   selectedCustomerData.orderByEmail ||
                   selectedCustomerDatas.orderByEmail ||
-                  book.orderByEmail ||
+
                   ""
                 }
                 onChange={handleChange}

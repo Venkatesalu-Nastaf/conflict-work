@@ -7,6 +7,7 @@ const moment = require('moment');
 router.post('/customers', (req, res) => {
   const customerData = req.body;
   // const customerData = req.body;
+  console.log("customerData", customerData)
 
   // Convert billingGroup array to a comma-separated string
   if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
@@ -245,34 +246,34 @@ router.delete("/deletecustomerorderdata/:customer", (req, res) => {
   })
 })
 
-router.get("/Monthilywisedatatrip",(req,res)=>{
-  const { customer,fromDate,toDate} = req.query;
-  console.log(customer,fromDate,toDate)
+router.get("/Monthilywisedatatrip", (req, res) => {
+  const { customer, fromDate, toDate } = req.query;
+  console.log(customer, fromDate, toDate)
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate,"f",formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate)
 
-  db.query('select * from customers where customerType=?',[customer],(err,results)=>{
-    if(err){
+  db.query('select * from customers where customerType=?', [customer], (err, results) => {
+    if (err) {
       return res.status(400).json(err)
     }
     console.log(results)
-    const datas=results?.map((data)=>data.customer)
-    console.log(datas,"dttd")
+    const datas = results?.map((data) => data.customer)
+    console.log(datas, "dttd")
 
 
-  //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
-//    const sql=`SELECT 
-//     customer, 
-//     SUM(totalcalcAmount) AS totalAmount
-// FROM 
-//     tripsheet
-// WHERE 
-//     tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-//     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-//     AND customer IN (?)
-// GROUP BY 
-//     customer `;
+    //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
+    //    const sql=`SELECT 
+    //     customer, 
+    //     SUM(totalcalcAmount) AS totalAmount
+    // FROM 
+    //     tripsheet
+    // WHERE 
+    //     tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+    //     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+    //     AND customer IN (?)
+    // GROUP BY 
+    //     customer `;
     const sql = `
   SELECT 
     customer,orderbyemail,billingno,
@@ -287,40 +288,40 @@ router.get("/Monthilywisedatatrip",(req,res)=>{
     customer
 `;
 
-    db.query(sql,[fromDate,toDate,datas],(err,results1)=>{
-      if(err){
+    db.query(sql, [fromDate, toDate, datas], (err, results1) => {
+      if (err) {
         console.log(err)
       }
-    
+
       const combinedResults = results1?.map(trip => {
         const customerDetail = results?.find(detail => detail.customer === trip.customer);
         return {
           ...trip,
           customerId: customerDetail ? customerDetail.customerId : null,
-          customertype:customerDetail? customerDetail.customerType:null,
-          address:customerDetail? customerDetail.address1:null,
+          customertype: customerDetail ? customerDetail.customerType : null,
+          address: customerDetail ? customerDetail.address1 : null,
         };
       });
-    //   const data= results1.forEach(row => {
-        
+      //   const data= results1.forEach(row => {
+
       return res.status(200).json(combinedResults)
     })
 
     // return res.status(200).json(results)
-  
-})
+
+  })
 
 
 })
 
 
-router.get('/montlywisedataall',(req,res)=>{
+router.get('/montlywisedataall', (req, res) => {
   console.log("enter")
-  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer",(err,result)=>{
-    if(err){
+  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer", (err, result) => {
+    if (err) {
       console.log(err)
     }
-  
+
     return res.status(200).json(result)
   })
 })

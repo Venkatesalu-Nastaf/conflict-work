@@ -271,7 +271,7 @@ router.get('/drivername-details/:driver', (req, res) => {
     });
 });
 
-
+// ----------------------------------tripsheest travelname code api-----------------------
 router.get('/drivername-detailsaccount/:driver', (req, res) => {
     const customer = req.params.driver;
     console.log("customer", customer);
@@ -301,6 +301,7 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
         return res.status(200).json(result);
     });
 });
+
 
 
 router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
@@ -333,8 +334,73 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     });
 });
   
+// -------------------------------------------------------------end of tripsheet code api travrls name-------------------------
 
 
+
+// --------------------------------this for booking travelsname------------------------------------------------------------
+
+router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
+    const travelname = req.params.travelname;
+    console.log("customer", travelname);
+
+    // Query to perform left joins
+    const query = `
+        SELECT 
+            ai.*,
+            vi.Groups, vi.hiretypes as hireTypes, vi.vehicleName, vi.vehType as vehiclemodule, 
+            dc.Mobileno As mobileNo
+        FROM accountinfo ai
+        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+        WHERE ai.travelsname=?
+    `;
+
+    db.query(query, [travelname], (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        console.log(result,"travelanemadata")
+        return res.status(200).json(result);
+    });
+});
+
+
+
+router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
+    const customer = req.params.driver;
+    console.log("customer", customer);
+
+    // Query to perform left joins
+    const query = `
+        SELECT 
+            ai.*,
+            vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
+            dc.Mobileno As mobileNo
+        FROM accountinfo ai
+        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+        WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+    `;
+
+    db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        console.log(result,"rr")
+        return res.status(200).json(result);
+    });
+});
 //send email from booking page
 // router.post('/send-email', async (req, res) => {
 //     try {

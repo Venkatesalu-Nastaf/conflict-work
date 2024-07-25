@@ -101,6 +101,9 @@ const useBooking = () => {
   const [sendmailguestsms, setSendmailGuestsms] = useState(false);
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
   const [datatrigger, setDatatrigger] = useState(false)
+  const [accountinfodata, setAccountInfoData] = useState([])
+  const [ratename, setRate_name] = useState("");
+  const [vehileName, setVehicleName] = useState([])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -129,18 +132,18 @@ const useBooking = () => {
   });
   const [selectedCustomerdriver, setSelectedCustomerdriver] = useState({});
 
-  const transformRow = (originalRow) => {
-    return {
-      driverName: originalRow.driverName,
-      vehRegNo: originalRow.vehRegNo,
-      hireTypes: originalRow.hiretypes,
-      vehType: originalRow.vehicleName,
-      vehiclemodule: originalRow.vehType,
-      mobileNo: originalRow.driverno,
-      active: originalRow.active,
-      Groups: originalRow.Groups
-    };
-  };
+  // const transformRow = (originalRow) => {
+  //   return {
+  //     driverName: originalRow.driverName,
+  //     vehRegNo: originalRow.vehRegNo,
+  //     hireTypes: originalRow.hiretypes,
+  //     vehType: originalRow.vehicleName,
+  //     vehiclemodule: originalRow.vehType,
+  //     mobileNo: originalRow.driverno,
+  //     active: originalRow.active,
+  //     Groups: originalRow.Groups
+  //   };
+  // };
 
   const hidePopup = () => {
     setSuccess(false);
@@ -166,6 +169,7 @@ const useBooking = () => {
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
+    setSendEmail(false)
     setIsEditMode(dispath)
     const formData = {};
 
@@ -186,7 +190,6 @@ const useBooking = () => {
       "streetno",
       "city",
       "report",
-      "vehType",
       "paymenttype",
       "startdate",
       "starttime",
@@ -206,7 +209,7 @@ const useBooking = () => {
       "hireTypes",
       "travelsname",
       "vehRegNo",
-      "vehType",
+      "vehicleName",
       "driverName",
       "mobileNo",
       "travelsemail",
@@ -215,6 +218,9 @@ const useBooking = () => {
       "orderbyemail",
       "mobile",
       "vehiclemodule",
+      "ratenamebook",
+      "shedOutDate"
+      
 
 
     ];
@@ -231,7 +237,9 @@ const useBooking = () => {
     formData["paymenttype"] = payValue;
 
     console.log("formData", formData)
-
+    const ratetye=formData["ratenamebook"]
+    console.log(ratetye,"ratetypelocation")
+    setRate_name(ratetye)
 
 
     setBook(formData);
@@ -263,7 +271,8 @@ const useBooking = () => {
     employeeno: "",
     address1: "",
     report: "",
-    vehType: "",
+    // vehType: "",
+    vehicleName: "",
     paymenttype: "",
     shedOutDate: '',
     startdate: "",
@@ -765,7 +774,7 @@ const useBooking = () => {
     }));
   };
 
-  const [vehileName, setVehicleName] = useState([])
+  
   useEffect(() => {
     const fetchgetvehicleName = async () => {
       try {
@@ -1014,7 +1023,9 @@ const useBooking = () => {
           starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
           startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
           driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
-          vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+          // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+          vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
+
           mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
           vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
           tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
@@ -1142,7 +1153,9 @@ const useBooking = () => {
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+        // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+        vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
+
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         // shedOutDate: book.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || formData.shedOutDate,
@@ -1169,6 +1182,7 @@ const useBooking = () => {
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
+        ratenamebook:ratename,
         // triptime: triptime,
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
@@ -1243,7 +1257,9 @@ const useBooking = () => {
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+        // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+        vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
+
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         // shedOutDate: book.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || formData.shedOutDate,
         shedOutDate: bookingshedoutdata,
@@ -1272,6 +1288,7 @@ const useBooking = () => {
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
+        ratenamebook:ratename,
         reporttime: restSelectedCustomerData.reporttime,
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
@@ -1291,15 +1308,16 @@ const useBooking = () => {
           setInfoMessage(response.data.message);
         }
         setEdit(false)
+        if (sendEmail) {
+          handlecheck(editbookno);
+        }
+      }
         // addPdf(booking_no);
         setRow([]);
         setRowsdriver([])
         setRows([]);
         handleCancel();
-        if (sendEmail) {
-          handlecheck(editbookno);
-        }
-      }
+        setSendEmail(true)
     } catch (error) {
       console.error("An error occurred:", error);
       setError(true);
@@ -1453,13 +1471,15 @@ const useBooking = () => {
       event.preventDefault();
 
       try {
+        setRowsdriver([])
         const response = await axios.get(
-          `${apiUrl}/drivername-details/${event.target.value}`
+          `${apiUrl}/drivername-detailsaccountbooking/${event.target.value}`
         );
         const vehicleData = response.data;
-        const transformedRows = vehicleData.map(transformRow);
+        // const transformedRows = vehicleData.map(transformRow);
 
-        setRowsdriver(transformedRows)
+        // setRowsdriver(transformedRows)
+        setRowsdriver(vehicleData)
         setSuccess(true);
         setSuccessMessage("successfully listed");
 
@@ -1481,6 +1501,7 @@ const useBooking = () => {
   const handleRowClickdriver = (params) => {
 
     setSelectedCustomerdriver(params);
+    setRate_name(params.rateType);
     // setSelectedCustomerDatas(params);
     const keys = Object.keys(params);
 
@@ -1668,6 +1689,68 @@ const useBooking = () => {
   };
 
 
+  useEffect(() => {
+    const fetchdataccountinfodata = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
+            const data = response.data
+            // console.log(data, "accccccccc")
+            setAccountInfoData(data)
+
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    fetchdataccountinfodata()
+}, [apiUrl])
+
+const travelsdatafetch = async (travelsnamedata) => {
+  console.log(travelsnamedata, "datata")
+  try {
+      const response = await axios.get(`${apiUrl}/travelsnamedetailfetchbooking/${travelsnamedata}`)
+      const data = response.data
+      console.log(data)
+      setRowsdriver(data)
+
+      // setDriverDetails(data)
+      setSuccess(true);
+      setSuccessMessage("successfully listed");
+
+  } catch (error) {
+      setError(true);
+      setErrorMessage("Error retrieving vehicle details.");
+  }
+}
+
+const handletravelsAutocompleteChange = (event, value, name) => {
+  const selectedOption = value ? value.label : '';
+
+  setBook(prevState => ({
+    ...prevState,
+    [name]: selectedOption
+  }));
+
+  setSelectedCustomerData((prevData) => ({
+    ...prevData,
+    [name]: selectedOption,
+  }));
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: selectedOption,
+  }));
+ 
+  travelsdatafetch(selectedOption)
+
+  // if (!lockdata) {
+  //     setVendorinfodata((prevValues) => ({
+  //         ...prevValues,
+  //         [name]: selectedOption,
+  //     }))
+  // }
+};
+
+
   //--------------------------------------------------------
 
 
@@ -1752,7 +1835,7 @@ const useBooking = () => {
     handleKeyEnterdriver, orderByDropDown,
     rowdriver,
     handleRowClickdriver,
-    selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus,
+    selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus,handletravelsAutocompleteChange,accountinfodata,
     vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
   };
 };

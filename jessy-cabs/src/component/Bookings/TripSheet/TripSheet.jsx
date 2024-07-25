@@ -2667,11 +2667,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="Customer-Customer-Bill-Slider">
                     <div className="input-field">
                       <div className="input">
-
-
-                        <div className="icone">
+                        {/* <div className="icone">
                           <NoCrashIcon color="action" />
-                        </div>
+                        </div> */}
                         <Autocomplete
                           fullWidth
                           size="small"
@@ -2707,7 +2705,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                       <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                        <p style={{ margin: "0px" }}>Duty</p>
+                        {/* <p style={{ margin: "0px" }}>Duty</p> */}
                         <Autocomplete
                           fullWidth
                           size="small"
@@ -2826,34 +2824,36 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <div className="input-field">
 
                       <div className="input">
-                        <div className='icone'>
+                        {/* <div className='icone'>
                           <MdOutlineAccessTimeFilled />
-                        </div>
-                        <div className='input-type-grid'>
-                          <label>Start Time</label>
-                          <input
-                            type="time"
-                            name="venodrreporttime"
+                        </div> */}
+                        <div className='input'>
+                          <div className='full-width'>
+                            <label>Start Time</label>
+                            <input
+                              type="time"
+                              name="venodrreporttime"
 
-                            // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
-                            value={vendorinfo?.vendorreporttime}
-                            // onChange={(event) => {
-                            //   if (lockdata) {
-                            //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
-                            //   }
+                              // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                              value={vendorinfo?.vendorreporttime}
+                              // onChange={(event) => {
+                              //   if (lockdata) {
+                              //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                              //   }
 
-                            onChange={(event) => {
-                              if (lockdata) {
-                                setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
-                              } else {
-                                setWarning(true);
-                                setWarningMessage("IS not locked,locked Enter Again");
-                              }
-                            }}
+                              onChange={(event) => {
+                                if (lockdata) {
+                                  setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                } else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }}
 
 
-                          // }}
-                          />
+                            // }}
+                            />
+                          </div>
                         </div>
 
 
@@ -2875,9 +2875,9 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </DemoContainer>
                         </LocalizationProvider> */}
-                        <div className='icone'>
+                        {/* <div className='icone'>
                           <MdOutlineAccessTimeFilled />
-                        </div>
+                        </div> */}
                         <div className='closetime tripsheet-shed-in-time'>
                           <label>Close Time</label>
 

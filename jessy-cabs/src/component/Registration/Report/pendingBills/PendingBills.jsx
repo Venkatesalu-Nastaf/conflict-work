@@ -1,11 +1,3 @@
-// import React from 'react'
-// import "./PendingBills.css"
-// export const PendingBills = () => {
-//   return (
-//     <div>PendingBills</div>
-//   )
-// }
-
 
 import React from 'react'
 import { TextField } from "@mui/material";
@@ -30,54 +22,15 @@ import InputLabel from '@mui/material/InputLabel';
 import Box from "@mui/material/Box";
 import { IoCash } from "react-icons/io5";
 import { MdAccountBalanceWallet } from "react-icons/md";
-
-
-
-const columns = [
-    { field: 'id', headerName: 'S.no', width: 100 },
-    { field: 'vehiecle', headerName: 'vehiecle', width: 180 },
-    { field: 'totalkms', headerName: 'Total Kms', width: 180 },
-    { field: 'totaltime', headerName: 'Total Time', width: 180 },
-    { field: 'Amount', headerName: 'Amount', width: 180 },
-    { field: 'Dadvance', headerName: 'D.Advance', width: 180 },
-    { field: 'Balance', headerName: 'Balance', width: 180 },
-    { field: 'Bata', headerName: 'Bata', width: 180 },
-
-
-];
-
-const rows = [
-    { id: 1, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 2, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 3, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 4, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 5, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 6, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 7, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 8, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-    { id: 9, vehiecle: "car", totalkms: '50', totaltime: '4 hrs', Amount: '2000', Dadvance: '200', Balance: '1800', Bata: '200' },
-
-
-];
-
-
-
-
-
-
-
-
-
-
-
+import usePendingBill from './usePendingBill';
+import dayjs from 'dayjs';
 
 export const PendingBills = () => {
 
-    const [age, setAge] = React.useState('');
+    const { handlechange, organization, pendingBill, handleFromDateChange, handleToDateChange,
+        handleShowAllBills, handleShowPendingBills, rows, columns, handlePdfDownload, handleExcelDownload
+    } = usePendingBill()
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
     return (
 
         <>
@@ -90,26 +43,23 @@ export const PendingBills = () => {
                         </div>
 
                         <FormControl sx={{ m: 1, minWidth: 400 }}>
-                            <InputLabel id="demo-simple-select-helper-label">Accout</InputLabel>
+                            <InputLabel id="demo-simple-select-helper-label">Customer Name</InputLabel>
                             <Select
                                 labelId="demo-simple-select-helper-label"
                                 id="demo-simple-select-helper"
-                                value={age}
+                                name='CustomerName'
+                                value={pendingBill.CustomerName}
                                 label="Owner Type"
-                                onChange={handleChange}
+                                onChange={handlechange}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={10}>Attached</MenuItem>
-                                <MenuItem value={20}>Lease</MenuItem>
-                                <MenuItem value={30}>Own</MenuItem>
+                                {organization.map((org) => (
+                                    <MenuItem key={org} value={org}>
+                                        {org}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                     </div>
-
-
-
 
 
                     <div className="input">
@@ -121,6 +71,9 @@ export const PendingBills = () => {
                                 <DatePicker
                                     label="From Date"
                                     format="DD/MM/YYYY"
+                                    name='fromDate'
+                                    onChange={handleFromDateChange}
+                                    value={dayjs(pendingBill.fromDate)}
                                 // value={fromDate}
                                 // onChange={(date) => setFromDate(date)}
                                 />
@@ -136,6 +89,9 @@ export const PendingBills = () => {
                                 <DatePicker
                                     label="To Date"
                                     format="DD/MM/YYYY"
+                                    name='toDate'
+                                    onChange={handleToDateChange}
+                                    value={dayjs(pendingBill.toDate)}
                                 // value={toDate}
                                 // onChange={(date) => setToDate(date)}
                                 />
@@ -145,8 +101,8 @@ export const PendingBills = () => {
 
 
 
-                    <Button variant='contained'>All Bills</Button>
-                    <Button variant='contained'>Pending Bills</Button>
+                    <Button variant='contained' onClick={handleShowAllBills}>All Bills</Button>
+                    <Button variant='contained' onClick={handleShowPendingBills}>Pending Bills</Button>
 
 
 
@@ -162,8 +118,8 @@ export const PendingBills = () => {
                                         Download
                                     </Button>
                                     <Menu {...bindMenu(popupState)}>
-                                        <MenuItem >Excel</MenuItem>
-                                        <MenuItem >PDF</MenuItem>
+                                        <MenuItem onClick={handleExcelDownload} >Excel</MenuItem>
+                                        <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                                     </Menu>
                                 </React.Fragment>
                             )}
@@ -176,12 +132,13 @@ export const PendingBills = () => {
                             <IoCash color="action" />
                         </div>
                         <TextField
-                            name="Total Amount"
+                            name="TotalAmount"
                             autoComplete="totalName"
                             className="full-width"
                             label="Total Amount"
                             margin="normal"
                             size="small"
+                            value={pendingBill.TotalAmount}
                         />
                     </div>
 
@@ -196,6 +153,7 @@ export const PendingBills = () => {
                             label="Balance"
                             margin="normal"
                             size="small"
+                            value={pendingBill.Balance}
                         />
                     </div>
                 </div>

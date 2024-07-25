@@ -78,7 +78,8 @@ const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
 const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
 const GstReport = require('./customer_master/Router/GstReport/GstReport');
-const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport')
+const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport');
+const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -160,9 +161,12 @@ app.use('/', Templatemailer);// Customer Page Database
 app.use('/', IndividualBill);//Individual bill
 //theme update in user creation
 // -------------------------------------------------------------------------------------------
-app.use('/', GstReport)
+app.use('/', GstReport);//GstReport
 // -------------------------------------------------------------------------------------------
-app.use('/',billWiseReport)
+app.use('/', billWiseReport);//billWiseReport
+// -------------------------------------------------------------------------------------------
+app.use('/', pendingBill);//PendingBill
+
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
   const query = 'UPDATE usercreation SET theme = ? WHERE userid IN (?)';
@@ -351,21 +355,21 @@ const storagetripsheet1 = multer.diskStorage({
 const uploadtripsheet1 = multer({
   storage: storagetripsheet1
 })
- app.post('/tripsheetdatadriverappimage/:data',uploadtripsheet1.single('file'),(req,res)=>{
-  console.log(req.params.data,"kk")
+app.post('/tripsheetdatadriverappimage/:data', uploadtripsheet1.single('file'), (req, res) => {
+  console.log(req.params.data, "kk")
   const fileData = {
     name: req.file.originalname,
     mimetype: req.file.mimetype,
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     // tripid: req.body.tripid,
-    date:req.body.datadate
-   
-};
-console.log(fileData)
-res.send("datasend")
+    date: req.body.datadate
 
- })
+  };
+  console.log(fileData)
+  res.send("datasend")
+
+})
 
 
 

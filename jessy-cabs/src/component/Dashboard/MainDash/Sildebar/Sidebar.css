@@ -115,7 +115,7 @@
     position: fixed;
     z-index: 9;
     background: var(--glass);
-    width: 30%;
+    width: 200px;
     padding-right: 1rem;
     height: 92vh;
   }
@@ -126,7 +126,7 @@
     position: fixed;
     z-index: 9;
     background: var(--glass);
-    width: 50% !important;
+    width: 200px;
     padding-right: 1rem;
     height: 92vh;
   }
@@ -142,7 +142,7 @@
     position: fixed;
     z-index: 9;
     background: var(--glass);
-    width: 60% !important;
+    width: 200px;
     padding-right: 1rem;
     height: 92vh;
   }
@@ -213,8 +213,22 @@
   height: fit-content;
 }
 
+
+
 .side-bar-menu-open .bars {
   left: 16vw;
+}
+
+@media screen and (max-width: 768px) {
+  .side-bar-menu-open .bars {
+    left: 220px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1059.99px) {
+  .side-bar-menu-open .bars {
+    left: 170px;
+  }
 }
 
 @media screen and (min-width: 579px) and (max-width: 768px) {
@@ -330,7 +344,13 @@
 }
 
 .closedsidebar {
-  left: 5% !important;
+  left: 60px;
+}
+
+@media screen and (max-width: 768px) {
+  .closedsidebar {
+    left: 20px;
+  }
 }
 
 .user-icon-update {
@@ -378,6 +398,8 @@
   width: 45px;
 }
 
+
+
 .menu-side-bar-closed .logo>img {
   width: 3.5rem;
   height: 3.5rem;
@@ -399,4 +421,20 @@
 
 .side-bar-closed {
   width: 44px;
+}
+
+@media screen and (max-width: 768px) {
+  .side-bar-closed {
+    width: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  .side-bar-closed .logo>img {
+    display: none;
+  }
+
+  .side-bar-closed .sidebar-main-menu {
+    display: none;
+  }
 }

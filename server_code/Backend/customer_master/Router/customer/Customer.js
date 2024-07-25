@@ -326,5 +326,18 @@ router.get('/montlywisedataall', (req, res) => {
   })
 })
 
+router.get('/getCustomer-hybrid/:customer', (req, res) => {
+  const customer = req.params.customer;
+  console.log("customer", customer)
+  db.query("select hybrid from customers where name=?", [customer], (err, result) => {
+    if (err) {
+      console.log("Error", err)
+      return res.status(500).json({ message: "somthing went wrong..", error: true })
+    }
+    console.log("result", result)
+    return res.status(200).json(result[0])
+  })
+})
+
 
 module.exports = router;

@@ -314,18 +314,20 @@ const Customer = ({ stationName }) => {
 
                 <div className='customer-billing-group-input-division'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
-                  <Switch label='label' id="hybrid" onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    setBook((prev) => ({ ...prev, hybrid: isChecked }))
-                    setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }))
-                  }}
-
+                  <Switch
+                    label='label'
+                    id="hybrid"
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      setBook((prev) => ({ ...prev, hybrid: isChecked }));
+                      setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }));
+                      console.log("book.hybrid", isChecked, selectedCustomerData.hybrid);
+                    }}
                     checked={book.hybrid || selectedCustomerData.hybrid}
-
                   />
                 </div>
 
-                {console.log("book.hybrid", book.hybrid, selectedCustomerData.hybrid)}
+
 
               </div>
               <div className="input-field Customer-page-input-field-addbtn">

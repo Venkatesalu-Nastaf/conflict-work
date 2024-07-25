@@ -41,7 +41,6 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-// import CustomInput from './CustomInput';
 import useCustomer from './useCustomer';
 import { PermissionContext } from '../../context/permissionContext';
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
@@ -89,14 +88,14 @@ const Customer = ({ stationName }) => {
     handleButtonClick,
     isInputVisible,
     handleExcelDownload,
-    handlePdfDownload,
+    handlePdfDownload, setBook,
     rows,
     columns,
     isEditMode,
     handleEdit,
     customerfieldSets,
     handleChangecustomer,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, setSelectedCustomerData,
   } = useCustomer();
 
   useEffect(() => {
@@ -313,7 +312,20 @@ const Customer = ({ stationName }) => {
                   </FormControl>
                 </div>
 
+                <div className='customer-billing-group-input-division'>
+                  <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
+                  <Switch label='label' id="hybrid" onChange={(e) => {
+                    const isChecked = e.target.checked;
+                    setBook((prev) => ({ ...prev, hybrid: isChecked }))
+                    setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }))
+                  }}
 
+                    checked={book.hybrid || selectedCustomerData.hybrid}
+
+                  />
+                </div>
+
+                {console.log("book.hybrid", book.hybrid, selectedCustomerData.hybrid)}
 
               </div>
               <div className="input-field Customer-page-input-field-addbtn">
@@ -381,7 +393,6 @@ const Customer = ({ stationName }) => {
 
                 ))}
                 <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
-
 
               </div>
 
@@ -595,9 +606,7 @@ const Customer = ({ stationName }) => {
                     <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
-                  {/* {isInputVisible && (
-                  <CustomInput />
-                )} */}
+
                   {isInputVisible && (
                     <Autocomplete
                       size='small'

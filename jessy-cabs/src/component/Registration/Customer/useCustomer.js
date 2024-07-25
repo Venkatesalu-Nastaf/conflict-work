@@ -299,6 +299,7 @@ const useCustomer = () => {
         SalesPerson: '',
         salesPercentage: '',
         billingGroup: [],
+        hybrid: false
     });
 
     const handleChange = (event) => {
@@ -396,6 +397,7 @@ const useCustomer = () => {
             SalesPerson: '',
             salesPercentage: '',
             billingGroup: [],
+            hybrid: false,
         }));
         setCustomerFieldSets([{
             // dinamic data
@@ -445,6 +447,7 @@ const useCustomer = () => {
     };
 
     // Call the function to add customer property to each object
+    // console.log("")
 
     const handleAdd = async () => {
 
@@ -511,10 +514,12 @@ const useCustomer = () => {
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
+        setBook(prev => ({ ...prev, hybrid: false }))
+        setSelectedCustomerData(prev => ({ ...prev, hybrid: false }))
         handleCancel();
         setRows([]);
-        // setDataTrigger(!datatrigger)
     };
+    
 
     useEffect(() => {
         const handleList = async () => {
@@ -614,9 +619,9 @@ const useCustomer = () => {
         handlePdfDownload,
         rows,
         columns,
-        isEditMode,
+        isEditMode, setSelectedCustomerData,
         handleEdit,
-        customerfieldSets,
+        customerfieldSets, setBook,
         handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling
     };
 };

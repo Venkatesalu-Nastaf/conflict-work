@@ -208,7 +208,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleTripmaplogClick,
     maplogimgpopupOpen,
     row,
-    handleUpload,
+    handleUpload, isHybridCustomer,
     handleRefresh,
     handleButtonClick,
     handleTripRowClick,
@@ -294,7 +294,6 @@ const TripSheet = ({ stationName, logoImage }) => {
       const imageUrl = URL.createObjectURL(await response.blob());
       setSignImageUrl(imageUrl);
       setSignaturepopup(true);
-      console.log(imageUrl, "uuuuuuuuuu")
     }
     else if (signimageUrl === "") {
       if (fileInputRefdata.current) {
@@ -305,7 +304,6 @@ const TripSheet = ({ stationName, logoImage }) => {
         console.error("File input ref is not available");
       }
     } else {
-      console.log("ppppppppppp")
       setSignaturepopup(true);
       getSignatureImage()
     }
@@ -403,35 +401,6 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
 
-  // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
-
-  // const checkTimeandDateConflict2 = () => {
-  //   if (ClosedTripData.length < 1 || !ClosedTripData) return
-
-  //   let time = "00:00", tripid = null;
-  //   for (const trip of ClosedTripData) {
-  //     const shedInDate = new Date(trip.shedInDate);
-  //     const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
-  //     // console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
-
-  //     if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
-  //       if (time < trip.shedintime) {
-  //         time = trip.shedintime;
-  //         tripid = trip.tripid;
-  //       }
-  //     }
-  //   }
-  //   if (shedOuttime && time) {
-  //     if (shedOuttime <= time) {
-  //       return <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p>;
-  //     }
-  //     return
-  //   } else {
-  //     return
-  //   }
-  // }
-
-
 
   const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
@@ -444,7 +413,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     for (const trip of ClosedTripData) {
       const shedInDate = new Date(trip.shedInDate);
       const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
-      // console.log("moth", parcedShedOutDate.getMonth(), "year", parcedShedOutDate.getFullYear())
 
       if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
         if (time < trip.shedintime) {
@@ -475,7 +443,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     const fetchFuleType = async () => {
       if (!ratefor) return
       const data = await axios.get(`${APIURL}/getFuelType/${ratefor}`)
-      // console.log("datarate for", data.data[0]?.fueltype)
       setFuelType(data?.data[0]?.fueltype)
     }
 
@@ -484,14 +451,11 @@ const TripSheet = ({ stationName, logoImage }) => {
   }, [ratefor, APIURL])
 
 
-  // const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
-
   const [customerAddress, setCustomerAddress] = useState("")
   useEffect(() => {
     const fetchFuleType = async () => {
       if (!customer) return
       const data = await axios.get(`${APIURL}/getcustomer-address/${customer}`)
-      // console.log("customer ", data.data[0].address1)
       setCustomerAddress(data?.data[0]?.address1)
     }
     fetchFuleType()
@@ -500,12 +464,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
 
-
-  // useEffect(() => {
-  //   checkTimeandDateConflict()
-  // }, [parcedShedOutDate])
-
-  // console.log(vendorbilldata,"billdataty")
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -1478,8 +1436,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div className="input" style={{ display: "grid" }} >
-                  {/* {kmValue.shedOutState && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (<lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
+                  {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                  {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
 
                   <div style={{ display: "flex" }}>
                     <div className="icone">
@@ -2116,57 +2074,25 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </FormControl>
                   </Box>
 
-                  {/* <label>Airport Transfer</label>
-                  <span>
-                    <label>
-                      <input
-                        id="radioYes-TransferChange"
-                        type="radio"
-                        value="Yes"
-                        checked={transferreport === "Yes"}
-                        onChange={handleTransferChange}
-                      />
-                      Yes
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        value="No"
-                        id="radioNo-TransferChange"
-                        checked={transferreport === "No"}
-                        onChange={handleTransferChange}
-                      />
-                      No
-                    </label>
-                  </span> */}
                 </div>
 
-                {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                      <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handlePopupClose} variant="contained" color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog> */}
 
-                {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                      {(/hcl/i.test(customer)) ? (<InvoiceHCL pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
-                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handlePopupClose} variant="contained" color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog> */}
+                {/* 
+                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                    {(/hcl/i.test(customer))  ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handlePopupClose} variant="contained" color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog> */}
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {(/hcl/i.test(customer)) ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
                       : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
                   </DialogContent>
                   <DialogActions>

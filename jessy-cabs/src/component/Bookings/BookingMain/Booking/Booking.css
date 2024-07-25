@@ -549,13 +549,14 @@
 }
 
 .booking-top-division {
-  width: 100%;
+  width: 90%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-end;
-  gap: 10px;
+  gap: 40px;
   font-size: 13px;
-  margin-left: -40px;
+  margin: 0px 28px;
+  overflow: auto;
 }
 
 .booking-top-division input {
@@ -596,6 +597,7 @@
 .booking-top-division label{
   font-weight: 500;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .pick-up-address-input{

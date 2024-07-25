@@ -188,7 +188,7 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,handletravelsAutocompleteChange,accountinfodata
   } = useBooking();
 
   useEffect(() => {
@@ -1551,7 +1551,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
               </div>
-              <Autocomplete
+              {/* <Autocomplete
                 fullWidth
                 size="small"
                 id="vehType"
@@ -1586,8 +1586,45 @@ const Booking = ({ stationName, customerData }) => {
                     />
                   );
                 }}
-              />
-            </div>
+              /> */}
+
+ <Autocomplete
+                fullWidth
+                size="small"
+                id="vehicleName"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehicleName")
+                }
+                value={
+                  formData.vehicleName ||
+                  selectedCustomerData.vehicleName ||
+                  book.vehicleName || selectedCustomerdriver.vehicleName||
+                  ""
+                }
+                options={vehileName.map((option) => ({
+                  label: option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehicleName ||
+                  selectedCustomerData.vehicleName ||
+                  book.vehicleName || selectedCustomerdriver.vehicleName||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Vehicle Name"
+                      name="vehicleName"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              /> 
+            </div> 
 
 
 
@@ -2278,7 +2315,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <AltRouteIcon color="action" />
               </div>
-              <TextField
+              {/* <TextField
                 name="travelsname"
                 autoComplete="new-password"
                 value={
@@ -2293,7 +2330,37 @@ const Booking = ({ stationName, customerData }) => {
                 // variant="standard"
                 margin="normal"
                 size="small"
-              />
+              /> */}
+
+              
+                    <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-travelmail"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                        value={
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""
+                        }
+                        options={accountinfodata.map((option) => ({
+                          label: option?.travelsname,
+                        }))}
+                        getOptionLabel={(option) => option.label ||
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
+                      />
             </div>
 
             <div className="input">

@@ -15,7 +15,8 @@ import { MdOutlineEventNote } from "react-icons/md";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import useBillWiseReceipt from './useBillWiseReceipt';
 import dayjs from 'dayjs';
-
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import ClearIcon from "@mui/icons-material/Clear";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 
@@ -24,7 +25,7 @@ export const BillWiseReceipt = () => {
 
   const { organization, setOrganization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
     , rows, setRows, pendingBillRows, setPendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
-    totals, handlechange, handleAddBillReceive
+    totals, handlechange, handleAddBillReceive, error,errorMessage,success,successMessage,hidePopup
   } = useBillWiseReceipt();
 
   const handleInputChange = (event) => {
@@ -325,6 +326,43 @@ export const BillWiseReceipt = () => {
                     // checkboxSelection
                     />
                   </div>
+                </div>
+                <div className="alert-popup-main">
+                    {error && (
+                        <div className="alert-popup Error">
+                            <div className="popup-icon">
+                                {" "}
+                                <ClearIcon />{" "}
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />{" "}
+                            </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    )}
+
+                    {/* {info && (
+                        <div className="alert-popup Info">
+                            <div className="popup-icon">
+                                <BsInfo />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    )} */}
+                    {success && (
+                        <div className="alert-popup Success">
+                            <div className="popup-icon">
+                                <FileDownloadDoneIcon />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    )}
                 </div>
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>

@@ -26,7 +26,10 @@ const useBillWiseReceipt = () => {
     const [rows, setRows] = useState([]);
     const [selectedBillRow, setSelectedBillRow] = useState([])
     const apiUrl = APIURL;
-
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false)
     const columns = [
         { field: 'sno', headerName: 'Sno', width: 70 },
         {
@@ -194,10 +197,17 @@ const useBillWiseReceipt = () => {
     };
 
     const handleAddBillReceive = async () => {
+        if (billWiseReport.AccountDetails === "") {
+            setError(true);
+            setErrorMessage("Enter Bank Account");
+            return;  // Early return to prevent further execution
+        }
+
         const combinedData = {
             ...totals,
             ...billWiseReport
         };
+
         // Create a new object with the desired key names
         const formattedData = {
             uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
@@ -207,7 +217,6 @@ const useBillWiseReceipt = () => {
             TDS: combinedData.tds,
             Advance: combinedData.recieved,
             TotalAmount: combinedData.totalAmount,
-            // Balance: combinedData.totalBalance,
             BillDate: combinedData.Date
         };
 
@@ -215,7 +224,9 @@ const useBillWiseReceipt = () => {
 
         try {
             const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
-            console.log(postResponse.data, 'response dataa');
+            console.log(postResponse.data, 'response data');
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
 
             if (postResponse.data) {
                 const deleteResponse = await axios.delete(`${apiUrl}/deleteBillWiseReport`, { data: { BillNo } });
@@ -237,7 +248,7 @@ const useBillWiseReceipt = () => {
                         totalBalance: 0,
                         tds: 0,
                     });
-                    setRows([]);
+                    setRows([])
                     setPendingBillRows([]);
                 } else {
                     console.error('Failed to delete bill data');
@@ -246,6 +257,19 @@ const useBillWiseReceipt = () => {
         } catch (error) {
             console.error('Error posting bill amount received or deleting bill data:', error);
         }
+    };
+
+    useEffect(() => {
+        if (error || success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [error, success]);
+    const hidePopup = () => {
+        setSuccess(false);
+        setError(false);
     };
 
     return {
@@ -266,7 +290,12 @@ const useBillWiseReceipt = () => {
         handleRowSelection,
         totals,
         handlechange,
-        handleAddBillReceive
+        handleAddBillReceive,
+        error,
+        errorMessage,
+        success,
+        successMessage,
+        hidePopup
     };
 };
 

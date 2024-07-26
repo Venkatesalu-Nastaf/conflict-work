@@ -24,11 +24,14 @@ import { IoCash } from "react-icons/io5";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import usePendingBill from './usePendingBill';
 import dayjs from 'dayjs';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import ClearIcon from "@mui/icons-material/Clear";
 
 export const PendingBills = () => {
 
     const { handlechange, organization, pendingBill, handleFromDateChange, handleToDateChange,
-        handleShowAllBills, handleShowPendingBills, rows, columns, handlePdfDownload, handleExcelDownload
+        handleShowAllBills, handleShowPendingBills, rows, columns, handlePdfDownload, handleExcelDownload,success,successMessage,
+        error,errorMessage,hidePopup
     } = usePendingBill()
 
     return (
@@ -157,7 +160,43 @@ export const PendingBills = () => {
                         />
                     </div>
                 </div>
+                <div className="alert-popup-main">
+                    {error && (
+                        <div className="alert-popup Error">
+                            <div className="popup-icon">
+                                {" "}
+                                <ClearIcon />{" "}
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />{" "}
+                            </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    )}
 
+                    {/* {info && (
+                        <div className="alert-popup Info">
+                            <div className="popup-icon">
+                                <BsInfo />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    )} */}
+                    {success && (
+                        <div className="alert-popup Success">
+                            <div className="popup-icon">
+                                <FileDownloadDoneIcon />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    )}
+                </div>
                 <div className='pendingbill-table'>
                     <Box
                         sx={{

@@ -609,6 +609,8 @@ const Customer = ({ stationName }) => {
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
 
+                  {/* {console.log("BillingGroup", BillingGroup)} */}
+
                   {isInputVisible && (
                     <Autocomplete
                       size='small'

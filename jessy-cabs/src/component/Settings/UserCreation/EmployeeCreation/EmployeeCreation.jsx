@@ -11,7 +11,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 // import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
@@ -24,6 +24,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole, faMailBulk, faPhone } from "@fortawesome/free-solid-svg-icons";
+
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
 
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -59,6 +63,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const EmployeeCreation = ({ stationName }) => {
+  console.log("station", stationName)
 
   const {
 
@@ -82,7 +87,7 @@ const EmployeeCreation = ({ stationName }) => {
     handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
-    handleMouseDownPasswords,
+    handleMouseDownPasswords, handleAutocompleteChangeStationName,
     isEditMode,
     handleEdit,
 
@@ -97,12 +102,20 @@ const EmployeeCreation = ({ stationName }) => {
 
 
   const [stationNameforUSer, setSationNameforUser] = useState([])
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   useEffect(() => {
-    if (stationName.length > 1) {
-      setSationNameforUser([...stationName, { Stationname: "ALL" }]);
+
+    console.log("stationName--", stationName)
+    if (stationName?.length > 1) {
+      // const data = stationName?.map(el => el.map(el => el.Stationname));
+      const data = stationName?.map(el => el.Stationname);
+
+      setSationNameforUser([...data, "ALL"]);
     } else {
-      setSationNameforUser(stationName); // Set the original array when length is not greater than 1
+      const data = stationName.map(el => el.Stationname)
+      setSationNameforUser(data); // Set the original array when length is not greater than 1
     }
   }, [stationName]);
 
@@ -130,7 +143,6 @@ const EmployeeCreation = ({ stationName }) => {
 
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
-
   }
 
   const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
@@ -204,7 +216,7 @@ const EmployeeCreation = ({ stationName }) => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-stationname"
@@ -222,6 +234,40 @@ const EmployeeCreation = ({ stationName }) => {
                       )
                     }
                     }
+                  /> */}
+
+                  {console.log("stationNameforUSer", stationNameforUSer)}
+
+                  <Autocomplete
+                    size='small'
+                    multiple
+                    id="stationname-tags-demo"
+                    options={stationNameforUSer}
+                    onChange={(event, value) => handleAutocompleteChangeStationName(event, value, "stationname")}
+                    value={book?.stationname
+                      ? (typeof book.stationname === 'string'
+                        ? book.stationname.split(',').map(item => item.trim()) // Trim extra spaces
+                        : book.stationname)
+                      : []
+                    }
+                    isOptionEqualToValue={(option, value) => option === value}
+                    disableCloseOnSelect
+                    getOptionLabel={(option) => option}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option}
+                      </li>
+                    )}
+                    style={{ width: 170 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="stationname" placeholder="Organization" />
+                    )}
                   />
                 </div>
                 <div className="input" style={{ paddingRight: '15px' }}>

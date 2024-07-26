@@ -141,6 +141,9 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 
 const TripSheet = ({ stationName, logoImage }) => {
+
+  const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,

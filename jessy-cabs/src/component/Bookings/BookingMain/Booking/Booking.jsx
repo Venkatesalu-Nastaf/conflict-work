@@ -108,9 +108,15 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = ({ stationName, customerData }) => {
 
-  const CustomerNames = customerData.map((el) => ({ customer: el.customer }))
+  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
+
+  // to tranform datas based on 
+  const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+
+  // console.log("stationName1", stationName)
 
   const apiUrl = APIURL;
+
   const {
     selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
     selectedCustomerId,
@@ -188,7 +194,7 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,handletravelsAutocompleteChange,accountinfodata
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata
   } = useBooking();
 
   useEffect(() => {
@@ -1244,7 +1250,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <ForwardToInboxIcon color="action" />
               </div>
-           
+
               {/* {console.log("book--", book)} */}
               <TextField
                 name="orderByEmail"
@@ -1270,6 +1276,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <DomainAddIcon color="action" />
               </div>
+
               <Autocomplete
                 fullWidth
                 id="servicestation"
@@ -1278,9 +1285,7 @@ const Booking = ({ stationName, customerData }) => {
                 // value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
                 value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
 
-                options={stationName?.map((option) => ({
-                  label: option?.Stationname,
-                }))}
+                options={stationOptions}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "servicestation")
                 }
@@ -1290,6 +1295,22 @@ const Booking = ({ stationName, customerData }) => {
                   );
                 }}
               />
+
+              {/* <Autocomplete
+                fullWidth
+                id="servicestation"
+                freeSolo
+                size="small"
+                value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                options={stationOptions}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "servicestation")
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
+                )}
+              /> */}
+
             </div>
             <div className="input">
               <div className="icone">
@@ -1588,7 +1609,7 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               /> */}
 
- <Autocomplete
+              <Autocomplete
                 fullWidth
                 size="small"
                 id="vehicleName"
@@ -1600,7 +1621,7 @@ const Booking = ({ stationName, customerData }) => {
                 value={
                   formData.vehicleName ||
                   selectedCustomerData.vehicleName ||
-                  book.vehicleName || selectedCustomerdriver.vehicleName||
+                  book.vehicleName || selectedCustomerdriver.vehicleName ||
                   ""
                 }
                 options={vehileName.map((option) => ({
@@ -1610,7 +1631,7 @@ const Booking = ({ stationName, customerData }) => {
                   option.label ||
                   formData.vehicleName ||
                   selectedCustomerData.vehicleName ||
-                  book.vehicleName || selectedCustomerdriver.vehicleName||
+                  book.vehicleName || selectedCustomerdriver.vehicleName ||
                   ""
                 }
                 renderInput={(params) => {
@@ -1623,8 +1644,8 @@ const Booking = ({ stationName, customerData }) => {
                     />
                   );
                 }}
-              /> 
-            </div> 
+              />
+            </div>
 
 
 
@@ -2332,35 +2353,35 @@ const Booking = ({ stationName, customerData }) => {
                 size="small"
               /> */}
 
-              
-                    <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-travelmail"
-                        freeSolo
-                        sx={{ width: "100%" }}
-                        onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
-                        value={
-                          formData.travelsname ||
-                          selectedCustomerData.travelsname ||
-                          book.travelsname ||
-                          ""
-                        }
-                        options={accountinfodata.map((option) => ({
-                          label: option?.travelsname,
-                        }))}
-                        getOptionLabel={(option) => option.label ||
-                          formData.travelsname ||
-                          selectedCustomerData.travelsname ||
-                          book.travelsname ||
-                          ""}
-                        renderInput={(params) => {
-                          return (
-                            <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
+
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-travelmail"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                value={
+                  formData.travelsname ||
+                  selectedCustomerData.travelsname ||
+                  book.travelsname ||
+                  ""
+                }
+                options={accountinfodata.map((option) => ({
+                  label: option?.travelsname,
+                }))}
+                getOptionLabel={(option) => option.label ||
+                  formData.travelsname ||
+                  selectedCustomerData.travelsname ||
+                  book.travelsname ||
+                  ""}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
             </div>
 
             <div className="input">

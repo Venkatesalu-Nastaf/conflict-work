@@ -111,11 +111,17 @@ function App() {
   useEffect(() => {
     const fetchSattionName = async () => {
       try {
-
         const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
-        const station = response.data;
-        setStationName(station);
+        const resData = response.data;
+        console.log("station--", resData)
 
+        // const trasform = resData.map((item) => {
+        //   const stations = item.Stationname.split(',')
+        //   return stations.map(name => ({ Stationname: name }))
+        // })
+
+        // console.log("trasform", trasform)
+        setStationName(resData);
       } catch (error) {
         console.log("error occur ", error);
       }
@@ -195,7 +201,6 @@ function App() {
       const response = await axios.get(`${apiUrl}/get-customer`)
       setCustomer(response.data)
     }
-
     getCustomer()
   }, [apiUrl])
 

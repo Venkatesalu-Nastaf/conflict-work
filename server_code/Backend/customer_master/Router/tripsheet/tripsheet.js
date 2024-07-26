@@ -939,6 +939,42 @@ router.get('/tripsheet-maindash', (req, res) => {
     });
 });
 
+router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
+    const tripsheet=req.params.tripsheetdate
+    console.log(tripsheet,"dddd")
+
+    db.query('SELECT * FROM tripsheet where tripsheetdate=? ',[tripsheet], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json(result);
+        }
+        // const bookingDetails = result[0]; // Assuming there is only one matching booking
+        console.log(result,"cc")
+        return res.status(200).json(result);
+    });
+});
+router.get('/tripsheet-maindashcuurentdate', (req, res) => {
+    const {toDate,fromDate}=req.query;
+    const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+    const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+    console.log(formattedFromDate,"to",formattedToDate)
+
+    db.query(`SELECT * FROM tripsheet  where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) `,[formattedFromDate,formattedToDate],(err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        // const bookingDetails = result[0]; // Assuming there is only one matching booking
+        console.log(result,"hh")
+        return res.status(200).json(result);
+    });
+});
+
 // collect data from vehicleInfo database------------------------------------
 router.get('/vehicleinfo/:vehRegNo', (req, res) => {
     const vehRegNo = req.params.vehRegNo;

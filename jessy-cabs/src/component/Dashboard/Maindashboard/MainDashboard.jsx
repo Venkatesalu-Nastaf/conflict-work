@@ -42,6 +42,7 @@ const MainDashboard = () => {
   // const { sharedData, setFilteredData,datatriguserinfo } = useData();
   // const { setFilteredData,datatriguserinfo } = useData();
   const { setFilteredData, datatriguserinfo, expanded, setExpanded } = useData1();
+  //  const {datatriguserinfo, expanded, setExpanded } = useData1();
   const navigate = useNavigate();
   // const [expanded, setExpanded] = useState(true);
   const { selectedTheme, setSelectedAvatar, selectedavtar, setSelectedTheme } = useThemes();
@@ -296,6 +297,33 @@ const MainDashboard = () => {
   // localStorage.setItem("usercompany", usercompany);
 
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/tripsheet-maindash`);
+  //       if (response.status === 200) {
+  //         if (response.ok) {
+  //           const data = await response.json();
+  //           if (data.length > 0) {
+  //             setFilteredData(data);
+  //           } else {
+  //             setFilteredData([]);
+  //           }
+  //         } else {
+  //         }
+  //       }
+  //       else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     } catch {
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [apiUrl, setFilteredData]);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -311,16 +339,16 @@ const MainDashboard = () => {
           } else {
           }
         }
-        else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
+        // else {
+        //   const timer = setTimeout(fetchData, 2000);
+        //   return () => clearTimeout(timer);
+        // }
       } catch {
       }
     };
 
     fetchData();
-  }, [apiUrl, setFilteredData]);
+  }, [apiUrl]);
 
   useEffect(() => {
     if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null) {

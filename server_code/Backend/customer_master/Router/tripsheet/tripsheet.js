@@ -861,10 +861,13 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
     });
 });
 
+
+
 // collect data from tripsheet database------------------------------------
 router.get('/tripsheet-enter/:tripid', async (req, res) => {
     const tripid = req.params.tripid;
     const username = req.query.loginUserName;
+    console.log("tripid", tripid, "username", username)
 
     let data = '';
 
@@ -878,9 +881,13 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
         }
 
         data = await results[0]?.Stationname;
+
+        console.log("data", data)
+        const arryData = data.split(',');
+        console.log("arryData", arryData)
         //------------------------------------------------------------
 
-        if (data && data.toLowerCase() === "all") {
+        if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
             // its for fetch by All
             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"`, tripid, (err, result) => {
                 if (err) {
@@ -894,9 +901,12 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                 return res.status(200).json(bookingDetails);
             });
         }
-        else if (data) {
+        else if (arryData) {
             // its for fetch by All
-            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department=${data}`, tripid, (err, result) => {
+
+            const placeholders = arryData?.map(() => '?').join(', ');
+            const queryParams = [tripid, data]
+            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (${placeholders})`, queryParams, (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                 }
@@ -1244,7 +1254,7 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
-    
+
 
 
     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
@@ -1349,9 +1359,9 @@ router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
 
 })
 
-router.get('/tripaccounttravelname',(req,res)=>{
-    db.query("select * from accountinfo",(err,results)=>{
-        if(err){
+router.get('/tripaccounttravelname', (req, res) => {
+    db.query("select * from accountinfo", (err, results) => {
+        if (err) {
             return res.status(500).json({ error: "Internal Server Error" })
         }
         return res.status(200).json(results)
@@ -1359,10 +1369,10 @@ router.get('/tripaccounttravelname',(req,res)=>{
 })
 
 
-router.get('/signaturetimedatadetails/:tripid',(req,res)=>{
-    const tripid=req.params.tripid;
-    db.query("select * from Signaturetimedetails where tripid = ?",[tripid],(err,results)=>{
-        if(err){
+router.get('/signaturetimedatadetails/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+    db.query("select * from Signaturetimedetails where tripid = ?", [tripid], (err, results) => {
+        if (err) {
             return res.status(400).json(err)
         }
         // console.log(results)
@@ -1371,11 +1381,11 @@ router.get('/signaturetimedatadetails/:tripid',(req,res)=>{
     })
 })
 
-router.get('/signaturedataurltrip/:tripid',(req,res)=>{
-    const tripid=req.params.tripid;
+router.get('/signaturedataurltrip/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
     console.log(tripid)
-    db.query("select * from tripsheet where tripid = ?",[tripid],(err,results)=>{
-        if(err){
+    db.query("select * from tripsheet where tripid = ?", [tripid], (err, results) => {
+        if (err) {
             return res.status(400).json(err)
         }
         // console.log(results)

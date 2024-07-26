@@ -28,7 +28,7 @@
     /* display: flex;
     justify-content: center; */
     margin-top: 15px;
-    padding-left: 25px;
+    /* padding-left: 25px; */
 }
 
 .TaxSetting-table-container {
@@ -40,6 +40,12 @@
     padding-top: 0px;
     width: fit-content;
     /* background-color: var(--glass); */
+}
+
+@media screen and (max-width: 1262px) {
+    .TaxSetting-table-container {
+        width: 100%;
+    }
 }
 
 .table-TaxSetting {

@@ -140,7 +140,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     return (
         <div className="main-content-form Scroll-Style-hide">
             <form >
-                <div className="detail-container-main detail-container-main-groupbilling">
+                <div className="detail-container-main-groupbilling">
                     <div className="container-left-groupbilling">
                         <div className="copy-title-btn-GroupBilling">
                             <div className="input-field inputfeild-group-billing">

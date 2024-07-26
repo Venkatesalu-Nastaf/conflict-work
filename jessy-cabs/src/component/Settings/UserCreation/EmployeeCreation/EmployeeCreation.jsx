@@ -390,8 +390,8 @@ const EmployeeCreation = ({ stationName }) => {
                 </div>
               }
             </div>
-            <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "95px", right: "30px" }}
-              className="add-icon">
+            <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "95px", right: "30px", zIndex: '1' }}
+              className="">
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
                 icon={<SpeedDialIcon />}

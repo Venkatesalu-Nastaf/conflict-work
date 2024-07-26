@@ -2287,7 +2287,7 @@ const Booking = ({ stationName, customerData }) => {
         </Box>
         {/**  helloo */}
 
-        <div className="vehicle-confirm" style={{ display: 'flex' }}>
+        <div className="vehicle-confirm">
           <div className="input-field input-feild-vehicle-confirm">
             <div className="input">
               <div className="icone">

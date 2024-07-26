@@ -44,7 +44,7 @@
 }
 
 .copy-title-btn-TransferDataEntry {
-    width: 90%;
+    width: 100%;
     /* margin-top: 15px; */
     background-color: var(--glass);
     padding: 10px 20px 35px;
@@ -120,7 +120,7 @@
 
 @media screen and (min-width:379.99px) and (max-width:700px) {
     .copy-title-btn-TransferDataEntry {
-        width: 80%;
+        width: 80vw;
     }
 }
 

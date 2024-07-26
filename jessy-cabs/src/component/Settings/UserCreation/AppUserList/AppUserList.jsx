@@ -129,7 +129,7 @@ const AppUserList = () => {
         </div>
         <div className="table-bookingCopys-main">
           <div className="table-bookingCopys">
-            <div style={{ height: 400, width: "100%" }}>
+            <div className='app-userlist-table-main'>
               {/* <DataGrid
                 rows={rows}
                 columns={columns}

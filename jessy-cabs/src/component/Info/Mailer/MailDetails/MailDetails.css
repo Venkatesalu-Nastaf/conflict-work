@@ -73,7 +73,7 @@
 @media screen and (min-width: 769px) and (max-width:969.99px) {
 
     .textbox-mailer {
-        width: 65vw !important;
+        /* width: 65vw !important; */
         padding-left: 0px !important;
     }
 }
@@ -252,8 +252,14 @@
     border: 2px solid #ccc;
     border-radius: 10px;
     background-color: var(--glass);
-    margin: 0px 0px;
     width: fit-content;
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 1247px) {
+    .table-bookingCopy-mailer {
+        width: 100%;
+    }
 }
 
 .mail-details-input-field {

@@ -25,12 +25,18 @@
 }
 
 /* TABLE */
-.FuelRate-table-container-info{
+.FuelRate-table-container-info {
   margin-top: 20px;
   /* border: 1px solid #ccc; */
   /* padding: 20px; */
   width: fit-content;
   background-color: transparent !important;
+}
+
+@media screen and (max-width: 950px) {
+  .FuelRate-table-container-info {
+    width: 100%;
+  }
 }
 
 .table-FuelRate {

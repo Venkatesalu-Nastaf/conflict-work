@@ -193,24 +193,27 @@ const SMSReport = () => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="">
+                <div className="input">
                   <Button
                     variant="outlined"
                     component="label"
                     startIcon={<DescriptionIcon />}
                     onClick={handleExcelDownload}
+                    className='full-width'
                   >
                     Excel
 
                   </Button>
                 </div>
+                <div className='input' style={{gap: '15px'}}>
+                  <div className="">
+                    <Button variant="contained" onClick={filterData}>Show</Button>
+                  </div>
+                  <div className="">
+                    <Button variant="outlined" onClick={dataall}>Show All</Button>
+                  </div>
+                </div>
 
-                <div className="">
-                  <Button variant="contained" onClick={filterData}>Show</Button>
-                </div>
-                <div className="">
-                  <Button variant="outlined" onClick={dataall}>Show All</Button>
-                </div>
               </div>
             </div>
           </div>

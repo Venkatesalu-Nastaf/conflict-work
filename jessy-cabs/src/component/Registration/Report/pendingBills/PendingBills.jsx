@@ -30,15 +30,15 @@ import ClearIcon from "@mui/icons-material/Clear";
 export const PendingBills = () => {
 
     const { handlechange, organization, pendingBill, handleFromDateChange, handleToDateChange,
-        handleShowAllBills, handleShowPendingBills, rows, columns, handlePdfDownload, handleExcelDownload,success,successMessage,
-        error,errorMessage,hidePopup
+        handleShowAllBills, handleShowPendingBills, rows, columns, handlePdfDownload, handleExcelDownload, success, successMessage,
+        error, errorMessage, hidePopup
     } = usePendingBill()
 
     return (
 
         <>
             <div className='main-content-form'>
-                <div className='input-field'>
+                <div className='input-field pending-bills-input-field'>
 
                     <div className="inut" style={{ display: "flex", alignItems: "center" }}>
                         <div className="icone">
@@ -103,11 +103,10 @@ export const PendingBills = () => {
                     </div>
 
 
-
-                    <Button variant='contained' onClick={handleShowAllBills}>All Bills</Button>
-                    <Button variant='contained' onClick={handleShowPendingBills}>Pending Bills</Button>
-
-
+                    <div className="input" style={{ gap: '15px' }}>
+                        <Button variant='contained' onClick={handleShowAllBills}>All Bills</Button>
+                        <Button variant='contained' onClick={handleShowPendingBills}>Pending Bills</Button>
+                    </div>
 
 
                 </div>

@@ -129,7 +129,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
       <form action="">
-        <div className="detail-container-main detail-container-main-tripstatus">
+        <div className="detail-container-main-tripstatus">
           <div className="container-left-tripstatus">
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">

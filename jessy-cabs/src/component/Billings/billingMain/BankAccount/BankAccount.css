@@ -267,3 +267,10 @@
     width: fit-content;
     margin-top: 10px;
 }
+
+.bank-account-details-main{
+    width: fit-content;
+    height: 450px;
+    overflow: auto;
+    margin-top: 20px;
+}

@@ -312,7 +312,7 @@ const Customer = ({ stationName }) => {
                   </FormControl>
                 </div>
 
-                <div className='customer-billing-group-input-division'>
+                <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
                   <Switch
                     label='label'

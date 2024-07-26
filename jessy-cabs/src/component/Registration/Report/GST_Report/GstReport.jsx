@@ -46,7 +46,7 @@ export const GstReport = () => {
   return (
     <>
       <div className='main-content-form'>
-        <div className='input-field'>
+        <div className='input-field gst-report-input-field' style={{flexWrap: 'wrap'}}>
           <div className="input">
             <div className="icone">
               <MdOutlineCalendarMonth color="action" />
@@ -120,7 +120,7 @@ export const GstReport = () => {
 
           </div>
 
-          <div className='show-all-button'>
+          <div className='input'>
             <div className="input" >
               <Button onClick={handleShow} variant="outlined">Show</Button>
             </div>

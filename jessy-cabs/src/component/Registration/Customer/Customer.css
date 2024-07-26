@@ -160,7 +160,8 @@
 .Customer-page-input-field {
   flex-wrap: wrap;
 }
-.Customer-page-input-field-addbtn{
+
+.Customer-page-input-field-addbtn {
   flex-wrap: wrap;
   /* padding-left: 30px; */
   margin-top: 5px;
@@ -171,7 +172,7 @@
   flex-wrap: wrap;
 }
 
-@media screen and (max-width:969px) {
+@media screen and (max-width: 768px) {
   .customer-input-feild {
     flex-wrap: wrap;
     justify-content: center;

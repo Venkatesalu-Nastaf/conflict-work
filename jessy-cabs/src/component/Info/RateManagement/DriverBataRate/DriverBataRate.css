@@ -113,13 +113,16 @@
 
 @media only screen and (min-width:654px) and (max-width:768.99px) {
     .copy-title-btn-DriverBataRate {
-        width: 71vw !important;
+        width: 92vw !important;
     }
 }
 
 @media only screen and (min-width:320px) and (max-width:654.99px) {
     .copy-title-btn-DriverBataRate {
         width: 80vw !important;
+    }
+    .DriverBataRate-inputfeild{
+        justify-content: center;
     }
 }
 

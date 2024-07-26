@@ -316,14 +316,15 @@ const VendorStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="">
-                  <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
-                </div>
-                <div className="">
-                  <Button variant="contained" disabled={!TripStatus_read}
-                    onClick={handleShowAll}
-
-                  >Show All</Button>
+                <div className="input" style={{gap: '15px'}}>
+                  <div className="">
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
+                  </div>
+                  <div className="">
+                    <Button variant="contained" disabled={!TripStatus_read}
+                      onClick={handleShowAll}
+                    >Show All</Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -397,7 +398,7 @@ const VendorStatement = () => {
 
           </div>
         </div>
-      
+
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -429,7 +430,7 @@ const VendorStatement = () => {
           }
         </div>
         <div className="table-bookingCopy-VehicleStatement">
-         
+
           <div className='vehicle-statement-table'>
             <DataGrid
               rows={rows}

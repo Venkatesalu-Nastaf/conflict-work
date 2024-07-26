@@ -19,7 +19,7 @@ const CustomerReview = ({ station }) => {
   // const [viewType, setViewType] = useState("monthly");
   const [stationdata, setStationdata] = useState([])
   // const [todaybooking, setTodayBooking] = useState([]);
-  // const [popupOpen, setPopupOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   // const [toDate, setToDate] = useState(dayjs());
   // const [fromDate, setFromDate] = useState(dayjs());
   const {todaybooking,viewmonthdata}=useData1();

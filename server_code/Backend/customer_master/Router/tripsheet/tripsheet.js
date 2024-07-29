@@ -926,8 +926,11 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
 //--------------------------------------------------------
 
 router.get('/tripsheet-maindash', (req, res) => {
+    const {fromDate,toDate}=req.query;
+    console.log(fromDate,"dd",toDate)
 
-    db.query('SELECT * FROM tripsheet ', (err, result) => {
+    db.query(`SELECT * FROM tripsheet where  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)`,[fromDate,toDate], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -935,7 +938,7 @@ router.get('/tripsheet-maindash', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
-      
+        console.log(result.length,"len")
         return res.status(200).json(result);
     });
 });

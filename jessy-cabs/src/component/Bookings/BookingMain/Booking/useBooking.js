@@ -169,7 +169,10 @@ const useBooking = () => {
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
-    setSendEmail(false)
+    if(dispath){
+      setSendEmail(false)
+    }
+    // setSendEmail(false)
     setIsEditMode(dispath)
     const formData = {};
 
@@ -245,6 +248,7 @@ const useBooking = () => {
     setBook(formData);
     setFormData(formData);
   }, [location]);
+ 
 
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);

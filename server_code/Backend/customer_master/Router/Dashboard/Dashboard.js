@@ -232,8 +232,12 @@ router.get('/monthly_data2', (req, res) => {
 //   return res.json({message:"TOKEN NOT EXPIRED"})
 // })
 
-router.get("/customerreviewdataall/:station",(req, res) => {
+router.get("/customerreviewdataallmonth/:station/:fromdate/:todate",(req, res) => {
     const station = req.params.station;
+    const fromtodate=req.params.fromdate;
+    const endtodate=req.params.todate;
+    console.log(fromtodate,"ff",endtodate)
+   
     const stationname = station.split(',');
     // console.log(stationname,"name")
  
@@ -242,7 +246,7 @@ router.get("/customerreviewdataall/:station",(req, res) => {
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=?", [data], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=?  AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)", [data,fromtodate,endtodate], (err, result) => {
         if (err) {
           reject(err);
         } else {

@@ -67,6 +67,9 @@ const makeStyle = (status) => {
 
 export default function BasicTable({stationName}) {
 
+  // const date = new Date();
+  const datestart=dayjs().startOf('month').format('YYYY-MM-DD');
+  const dateEnd = dayjs().endOf('month').format('YYYY-MM-DD');
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
@@ -188,7 +191,7 @@ export default function BasicTable({stationName}) {
   // console.log(filteredData,"ffff")
   const fetchalldata = async () => {
     try {
-      const response = await fetch(`${apiurl}/tripsheet-maindash`);
+      const response = await fetch(`${apiurl}/tripsheet-maindash?fromDate=${datestart}&toDate=${dateEnd}`);
       // if (stationarray.length > 0) {
         // const response2 = axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
         // const data2 = response2.data
@@ -225,7 +228,8 @@ export default function BasicTable({stationName}) {
     const fetchdatachart = async () => {
       try {
         if (stationarray.length > 0) {
-          const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+          // const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+          const response = await axios.get(`${apiurl}/customerreviewdataallmonth/${stationarray}/${datestart}/${dateEnd}`)
           const data = response.data
           setTodayBooking(data)
           // setStationdata(data)

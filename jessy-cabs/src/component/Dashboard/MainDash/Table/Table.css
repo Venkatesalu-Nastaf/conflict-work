@@ -109,3 +109,9 @@ th {
 .driver-details {
   text-align: center !important;
 }
+
+
+.button-container{
+  display: flex;
+  gap: 2px;
+}

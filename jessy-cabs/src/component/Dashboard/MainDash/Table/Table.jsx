@@ -66,7 +66,7 @@ const makeStyle = (status) => {
 }
 
 export default function BasicTable({stationName}) {
-  console.log(stationName,"tablestationname")
+
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
@@ -77,8 +77,8 @@ export default function BasicTable({stationName}) {
     
     const {filteredData,setTodayBooking,setViewMonthdata,setFilteredData} = useData1();
 
-    // const stationarray = stationName?.map((data) => data.Stationname)
-    const stationarray = stationName[0]?.Stationname.split(',');
+    const stationarray = stationName?.map((data) => data.Stationname)
+    // const stationarray = stationName?.Stationname.split(',');
   const showDateFunction = () => {
 
     setShowDate(!showdDate);
@@ -108,17 +108,17 @@ export default function BasicTable({stationName}) {
 
   const dateoftoday = dayjs().format("YYYY-MM-DD")
 
-  const toadybookingdate = async () => {
-    try {
-      const response = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
-      const data = response.data
-      setTodayBooking(data)
+  // const toadybookingdate = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+  //     const data = response.data
+  //     setTodayBooking(data)
 
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
 
 
@@ -128,6 +128,9 @@ export default function BasicTable({stationName}) {
   const tripsheetfiltercurrntdate=async()=>{
     try{
      const response=await axios.get(`${apiurl}/tripsheet-maindashcuurentdate/${dateoftoday}`)
+     const response2 = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+     const data2 = response2.data
+     setTodayBooking(data2)
      const data=response.data;
      console.log(data,"ddd")
     
@@ -135,6 +138,7 @@ export default function BasicTable({stationName}) {
       setFilteredData(response.data)
      }
      else{
+      console.log(data.length,"daaa")
       setFilteredData([])
      }
      
@@ -185,6 +189,11 @@ export default function BasicTable({stationName}) {
   const fetchalldata = async () => {
     try {
       const response = await fetch(`${apiurl}/tripsheet-maindash`);
+      // if (stationarray.length > 0) {
+        // const response2 = axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+        // const data2 = response2.data
+        // setTodayBooking(data2)
+      // }
       if (response.status === 200) {
         if (response.ok) {
           const data = await response.json();
@@ -205,8 +214,8 @@ export default function BasicTable({stationName}) {
   };
  
 
-  const handleWeeklyView = () => {
-    toadybookingdate()
+  const handleWeeklyView = async() => {
+    // toadybookingdate()
     setViewMonthdata("weekly");
     tripsheetfiltercurrntdate()
     // toadybookingdate()
@@ -235,6 +244,7 @@ export default function BasicTable({stationName}) {
     }
     
   useEffect(()=>{
+    console.log("useeffectdata")
     fetchalldata()
     fetchdatachart()
     setViewMonthdata("monthly")
@@ -245,10 +255,13 @@ export default function BasicTable({stationName}) {
     fetchalldata()
     fetchdatachart()
   };
+  console.log(filteredData.length>0?"one":"two","dddd",filteredData,"lenn")
 
   return (
     <div className="Table">
-       <div className="button-container date-button-container">
+      <div style={{display:"flex", justifyContent:"space-between", flexWrap:"wrap",alignItems:"center"}}>
+      <h1 className="live-driver-status-heading">Live Driver Status</h1>
+      <div className="button-container date-button-container">
         <button 
         onClick={handleMonthlyView} 
         className="graph-all-button">All</button>
@@ -296,7 +309,10 @@ export default function BasicTable({stationName}) {
           </div>
         }
       </div>
-      <h1 className="live-driver-status-heading">Live Driver Status</h1>
+
+      </div>
+
+    
       <TableContainer
         className="Scroll-Style total-table"
         component={Paper}
@@ -314,7 +330,7 @@ export default function BasicTable({stationName}) {
           </TableHead>
           <TableBody style={{ color: "white" }}>
             {(
-              filteredData && filteredData.length > 0 ? (
+             filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
                   <TableRow
                     key={trip.id}
@@ -343,9 +359,11 @@ export default function BasicTable({stationName}) {
                   </TableRow>
                 ))
               ) : (
-                <tr>
-                  <td colSpan={6}>No data available.</td>
-                </tr>
+                // <tr>
+                  <TableCell style={{justifyContent:'center'}}>No data available.</TableCell>
+
+                  // <td colSpan={6}>No data available.</td>
+                // </tr>
               )
             )}
           </TableBody>

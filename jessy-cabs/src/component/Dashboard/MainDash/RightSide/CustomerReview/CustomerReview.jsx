@@ -27,7 +27,7 @@ const CustomerReview = ({ station }) => {
 
   // const apiurl = APIURL
   console.log(station,"datastation")
-  const stationarray = station[0]?.Stationname.split(',');
+  const stationarray = station?.map(data => data.Stationname);
   
   // console.log(stationarray,"dattaerrrr")
 
@@ -245,6 +245,7 @@ const CustomerReview = ({ station }) => {
         }
       </div> */}
       <Chart options={data.options} series={data.series} type="bar" />
+      
 
       {/* <Dialog open={popupOpen} onClose={handleCloseDialog}>
         <DialogContent style={{ backgroundColor: 'yellow', display: "flex", gap: '10px', width: 550, justifyContent: "space-around" }}>

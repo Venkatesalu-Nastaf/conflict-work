@@ -935,20 +935,21 @@ router.get('/tripsheet-maindash', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
+      
         return res.status(200).json(result);
     });
 });
 
 router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
     const tripsheet=req.params.tripsheetdate
-    console.log(tripsheet,"dddd")
+   
 
     db.query('SELECT * FROM tripsheet where tripsheetdate=? ',[tripsheet], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
         if (result.length === 0) {
-            return res.status(404).json(result);
+            return res.status(200).json(result);
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
         console.log(result,"cc")

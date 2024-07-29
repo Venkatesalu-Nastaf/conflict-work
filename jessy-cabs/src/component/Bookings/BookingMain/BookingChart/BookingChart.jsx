@@ -113,7 +113,7 @@ const BookingChart = () => {
 
   const handleButtonClick = async () => {
     try {
-      if (!vehdriverNames || vehdriverNames.length === 0) return
+      // if (!vehdriverNames || vehdriverNames.length === 0) return
       const response = await axios.get(`${apiUrl}/getVehicleInfo/${vehicleDetail}`);
       console.log(response.data, 'vehresponse');
       setGetVehicleDetail(response.data)

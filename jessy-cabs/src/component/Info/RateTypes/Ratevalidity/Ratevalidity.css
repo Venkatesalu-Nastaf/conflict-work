@@ -40,8 +40,13 @@
     border-radius: 10px;
     background-color: var(--glass);
     margin-top: 30px;
-    width: 60%;
- 
+    width: fit-content;
+}
+
+@media screen and (max-width: 890px) {
+    .table-bookingCopy-RateValidity {
+        width: 100%;
+    }
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {

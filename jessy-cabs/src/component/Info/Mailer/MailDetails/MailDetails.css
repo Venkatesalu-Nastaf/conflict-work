@@ -65,7 +65,7 @@
 @media screen and (min-width: 970px) and (max-width:1285px) {
 
     .textbox-mailer {
-        width: 75vw !important;
+        /* width: 75vw !important; */
         padding-left: 0px !important;
     }
 }
@@ -81,7 +81,7 @@
 @media screen and (min-width: 650.99px) and (max-width:768.99px) {
 
     .textbox-mailer {
-        width: 73vw !important;
+        /* width: 73vw !important; */
         padding-left: 0px !important;
     }
 }

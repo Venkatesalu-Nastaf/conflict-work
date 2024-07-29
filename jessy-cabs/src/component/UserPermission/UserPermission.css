@@ -10,7 +10,11 @@
     background-color: #457ddd;
 }
 
-
+@media screen and (max-width: 968px) {
+    .permission-table {
+       margin-top: 20px;
+    }
+}
 
 .table-header {
     position: sticky;

@@ -312,6 +312,10 @@
   display: flex;
 }
 
+.side-bar-closed .header-user-mobile{
+  display: none;
+}
+
 .dropdown-icon {
   display: flex;
   gap: 5px;

@@ -366,7 +366,20 @@
 
 @media screen and (max-width: 1241.95px) {
   .input-feild-vehicle-confirm {
-    width: 80%;
+    width: 153vw;
+  }
+}
+
+@media screen and (max-width: 944.95px) {
+  .vehicle-confirm {
+    flex-wrap: wrap;
+  }
+  .input-feild-vehicle-confirm {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .input-feild-vehicle-confirm .input {
+    margin-top: 3px;
   }
 }
 

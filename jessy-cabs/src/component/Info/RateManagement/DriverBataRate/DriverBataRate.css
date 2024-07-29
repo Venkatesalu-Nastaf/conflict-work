@@ -41,6 +41,13 @@
     border-radius: 10px;
     background-color: var(--glass);
     margin-top: 30px;
+    width: fit-content;
+}
+
+@media screen and (max-width: 1365px) {
+    .table-bookingCopy-DriverBataRate {
+        width: 100%;
+    }
 }
 
 /* .form-container-PackageRateEntery .container-main::-webkit-scrollbar-thumb {

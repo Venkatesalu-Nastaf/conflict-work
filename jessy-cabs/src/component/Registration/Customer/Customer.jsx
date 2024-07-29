@@ -337,7 +337,7 @@ const Customer = ({ stationName }) => {
                 {customerfieldSets.map((datafield, index) => (
                   <>
 
-                    <div className="input-field" style={{ flexWrap: 'wrap' }}>
+                    <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap' }}>
                       <div className="input" key={index}>
                         <div className="icone">
                           <PermIdentityIcon color="action" />

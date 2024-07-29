@@ -563,7 +563,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div className=''>
+                <div style={{display: 'flex'}}>
                   <FormControlLabel
                     value="smsguest"
                     control={

@@ -57,3 +57,18 @@
     padding: 5px;
     width: 115px;
 }
+
+@media screen and (max-width: 1280px) {
+    .bill-wise-reciept-table-main{
+        flex-wrap: wrap;
+    }
+
+    .bill-wise-reciept-table-main .bill-wise-reciept-table-first {
+        width: 100%;
+    }
+    
+    .bill-wise-reciept-table-main .bill-wise-reciept-table-second {
+        width: fit-content;
+        margin-top: 20px;
+    }
+}

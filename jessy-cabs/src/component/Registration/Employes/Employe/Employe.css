@@ -143,11 +143,11 @@
   }
 }
 
-@media screen and (max-width:570px) {
+/* @media screen and (max-width:570px) {
   .input-address {
     width: 200px !important;
   }
-}
+} */
 
 .Employe-search-input {
   /* margin-top: 30px; */

@@ -168,6 +168,13 @@
 
 }
 
+@media screen and (max-width: 768px) {
+  .Customer-page-input-field-addbtn, .Customer-page-add-input-field {
+    justify-content: center;
+  }
+  
+}
+
 .customer-input-feild-add {
   flex-wrap: wrap;
 }

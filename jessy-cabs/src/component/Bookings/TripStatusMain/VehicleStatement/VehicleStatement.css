@@ -8,6 +8,7 @@
 
 .download-btn-purchase {
   margin-top: 10px;
+  overflow: auto;
 }
 
 .vendor-statement-input-field {

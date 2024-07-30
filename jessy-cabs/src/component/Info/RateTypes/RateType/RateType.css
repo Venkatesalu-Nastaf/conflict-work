@@ -42,7 +42,13 @@
     border-radius: 10px;
     background-color: var(--glass);
     /* margin-top: 30px; */
-    width: 93%;
+    width: fit-content;
+}
+
+@media screen and (max-width: 1238px) {
+    .table-bookingCopy-RateType {
+        width: 100%;
+    }
 }
 
 .detail-container-main{
@@ -136,7 +142,7 @@
     }
 }
 
-@media only screen and (min-width:374px) and (max-width:699.9px) {
+/* @media only screen and (min-width:374px) and (max-width:699.9px) {
     .copy-title-btn-RateType {
         width: 88% !important;
     }
@@ -146,7 +152,7 @@
     .copy-title-btn-RateType {
         width: 84% !important;
     }
-}
+} */
 
 .ratetype-startdate-icon {
     padding-top: 20px;

@@ -471,7 +471,7 @@ const VehicleStatement = () => {
 
     <>
       <div className='main-content-form'>
-        <div className='input-field'>
+        <div className='input-field vendor-statement-input-field'>
 
           <div className="input">
             <div className="icone">
@@ -528,12 +528,10 @@ const VehicleStatement = () => {
               </DemoContainer>
             </LocalizationProvider>
           </div>
-
-
-          <Button variant="contained" onClick={showList}>List</Button>
-          <Button variant="contained">List All</Button>
-
-
+          <div className='input' style={{gap: '15px'}}>
+            <Button variant="contained" onClick={showList}>List</Button>
+            <Button variant="contained">List All</Button>
+          </div>
         </div>
 
         <div className="Download-btn download-btn-purchase" style={{ display: "flex", gap: "15px" }}>

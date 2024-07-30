@@ -80,19 +80,19 @@
 
 @media screen and (min-width:701px) and (max-width:913.99px) {
     .copy-title-btn-CoveringSubmit {
-        width: 95% !important;
+        width: 100% !important;
     }
 }
 
 @media screen and (min-width:385px) and (max-width:700px) {
     .copy-title-btn-CoveringSubmit {
-        width: 80% !important;
+        width: 100% !important;
     }
 }
 
 @media screen and (min-width:320px) and (max-width:384.99px) {
     .copy-title-btn-CoveringSubmit {
-        width: 75% !important;
+        width: 83% !important;
         position: relative;
         left: 10px;
     }

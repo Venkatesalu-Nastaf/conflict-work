@@ -137,7 +137,7 @@ const PaymentDetail = ({ organizationNames }) => {
                   </LocalizationProvider>
                 </div>
 
-                <div className="inut">
+                <div className="input">
                   <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>

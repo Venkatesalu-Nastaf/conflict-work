@@ -35,7 +35,7 @@
   overflow-x: hidden;
 }
 
-.table-bookingCopys-main{
+.table-bookingCopys-main {
   display: flex;
   justify-content: center;
 }
@@ -46,6 +46,21 @@
   border-radius: 10px;
   margin-top: 20px;
   width: fit-content;
+}
+
+.app-userlist-table-main {
+  height: 400px;
+  width: 100%;
+}
+
+@media screen and (max-width: 818px) {
+  .table-bookingCopys {
+    width: 100%;
+  }
+  
+  /* .app-userlist-table-main {
+    width: 100%;
+  } */
 }
 
 .main-setting-main .container-main::-webkit-scrollbar-thumb {
@@ -112,3 +127,4 @@
     justify-content: center !important;
   }
 }
+

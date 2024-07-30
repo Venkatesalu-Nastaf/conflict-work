@@ -1,12 +1,23 @@
 .pendingbill-table {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    height: 400px;
-    width: 100%;
-    background-color: var(--glass);
-    margin-top: 15px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
+  background-color: var(--glass);
+  margin-top: 15px;
+}
+
+.download-btn-pending {
+  margin-top: 10px;
+  padding-bottom: 0px !important;
+}
+
+.pending-bills-input-field {
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+  .pending-bills-input-field{
+    justify-content: center;
   }
-  .download-btn-pending{
-    margin-top: 10px;
-    padding-bottom: 0px !important;
-  }
+}

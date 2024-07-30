@@ -26,7 +26,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ClearIcon from '@mui/icons-material/Clear';
 // import DialogContent from '@mui/material/DialogContent';
 import Autocomplete from "@mui/material/Autocomplete";
-import {Customertype} from "../../Customer/Customerdata";
+import { Customertype } from "../../Customer/Customerdata";
 
 
 // const columns = [
@@ -74,12 +74,12 @@ const MonthlyWise = () => {
         columns,
         handleShow,
     } = useMonthlyWise();
-    console.log(rows,"font")
+    console.log(rows, "font")
     return (
         <div className="MonthlyWise-main">
             <form >
                 <div className='main-content-form'>
-                    <div className='input-field'>
+                    <div className='input-field' style={{flexWrap: 'wrap'}}>
                         <div className="input">
                             <div className="icone">
                                 <MdOutlineCalendarMonth color="action" />
@@ -116,34 +116,34 @@ const MonthlyWise = () => {
                                 <GiMatterStates color="action" />
                             </div>
                             <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-customerType"
-                  freeSolo
-                  sx={{ width: "100%" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value)}
-                  value={customertypedata}
-                  options={Customertype.map((option) => ({
-                    label: option.Option,
-                  }))}
-                //   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
-                  renderInput={(params) => {
-                    return (
-                      <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
+                                fullWidth
+                                size="small"
+                                id="free-solo-demo-customerType"
+                                freeSolo
+                                sx={{ width: "100%" }}
+                                onChange={(event, value) => handleAutocompleteChange(event, value)}
+                                value={customertypedata}
+                                options={Customertype.map((option) => ({
+                                    label: option.Option,
+                                }))}
+                                //   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
+                                renderInput={(params) => {
+                                    return (
+                                        <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
+                                    )
+                                }
+                                }
+                            />
                         </div>
 
                         <div className='show-all-button'>
-                  <div className="input" >
-                    <Button variant="outlined" onClick={handleShow} >Show</Button>
-                  </div>
-                  <div className="input">
-                    <Button className='text-nowrap' variant="contained" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
-                  </div>
-                </div>
+                            <div className="input" >
+                                <Button variant="outlined" onClick={handleShow} >Show</Button>
+                            </div>
+                            <div className="input">
+                                <Button className='text-nowrap' variant="contained" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                            </div>
+                        </div>
                     </div>
                     <div className="MonthlyWise-table-container">
                         <div className="Download-btn">
@@ -197,7 +197,7 @@ const MonthlyWise = () => {
                                 />
                             </Box>
                         </div>
-                        
+
                     </div>
                     <div className='alert-popup-main'>
                         {error &&

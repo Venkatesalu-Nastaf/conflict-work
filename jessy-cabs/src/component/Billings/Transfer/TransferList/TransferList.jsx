@@ -156,7 +156,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="">
+                                <div className="input">
                                     <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>

@@ -15,16 +15,19 @@ import { MdOutlineEventNote } from "react-icons/md";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import useBillWiseReceipt from './useBillWiseReceipt';
 import dayjs from 'dayjs';
-
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import ClearIcon from "@mui/icons-material/Clear";
+import Box from "@mui/material/Box";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
+
 
 
 export const BillWiseReceipt = () => {
 
   const { organization, setOrganization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
     , rows, setRows, pendingBillRows, setPendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
-    totals, handlechange, handleAddBillReceive
+    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup
   } = useBillWiseReceipt();
 
   const handleInputChange = (event) => {
@@ -313,19 +316,44 @@ export const BillWiseReceipt = () => {
 
                   </div>
                   <div className='bill-wise-reciept-table'>
-                    <DataGrid
-                      rows={rows}
-                      columns={columns}
-                      initialState={{
-                        pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
+                    <Box
+                      sx={{
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                          '&::-webkit-scrollbar': {
+                            width: '8px', // Adjust the scrollbar width here
+                            height: '8px', // Adjust the scrollbar width here
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            backgroundColor: '#f1f1f1',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#457cdc',
+                            borderRadius: '20px',
+                            minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                          },
+                          '&::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#3367d6',
+                          },
                         },
                       }}
-                      pageSizeOptions={[5, 10]}
-                    // checkboxSelection
-                    />
+                    >
+                      <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                      // checkboxSelection
+                      />
+                    </Box>
                   </div>
                 </div>
+
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
                     <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
@@ -333,20 +361,44 @@ export const BillWiseReceipt = () => {
                     <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
                   </div>
                   <div className='bill-wise-reciept-table-right-side'>
-                    <DataGrid
-                      rows={pendingBillRows}
-                      columns={columnsPendingBill}
-                      initialState={{
-                        pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
+                    <Box
+                      sx={{
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                          '&::-webkit-scrollbar': {
+                            width: '8px', // Adjust the scrollbar width here
+                            height: '8px', // Adjust the scrollbar width here
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            backgroundColor: '#f1f1f1',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#457cdc',
+                            borderRadius: '20px',
+                            minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                          },
+                          '&::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#3367d6',
+                          },
                         },
                       }}
-                      pageSizeOptions={[5, 10]}
-                      checkboxSelection
-                      onRowSelectionModelChange={(newRowSelectionModel) => {
-                        // setRowSelectionModel(newRowSelectionModel);
-                        handleRowSelection(newRowSelectionModel);
-                      }} />
+                    >
+                      <DataGrid
+                        rows={pendingBillRows}
+                        columns={columnsPendingBill}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        checkboxSelection
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                          // setRowSelectionModel(newRowSelectionModel);
+                          handleRowSelection(newRowSelectionModel);
+                        }} />
+                    </Box>
                   </div>
                   {/* <div style={{display: 'flex', paddingTop: '15px'}}>
                     <div className='total-inputs' style={{display: 'flex'}}>
@@ -359,6 +411,44 @@ export const BillWiseReceipt = () => {
                     </div>
                   </div> */}
                 </div>
+
+              </div>
+              <div className="alert-popup-main">
+                {error && (
+                  <div className="alert-popup Error">
+                    <div className="popup-icon">
+                      {" "}
+                      <ClearIcon />{" "}
+                    </div>
+                    <span className="cancel-btn" onClick={hidePopup}>
+                      <ClearIcon color="action" />{" "}
+                    </span>
+                    <p>{errorMessage}</p>
+                  </div>
+                )}
+
+                {/* {info && (
+                        <div className="alert-popup Info">
+                            <div className="popup-icon">
+                                <BsInfo />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    )} */}
+                {success && (
+                  <div className="alert-popup Success">
+                    <div className="popup-icon">
+                      <FileDownloadDoneIcon />
+                    </div>
+                    <span className="cancel-btn" onClick={hidePopup}>
+                      <ClearIcon color="action" />
+                    </span>
+                    <p>{successMessage}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

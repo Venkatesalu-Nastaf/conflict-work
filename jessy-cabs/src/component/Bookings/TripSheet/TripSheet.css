@@ -276,7 +276,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 79vw;
+    width: 100vw;
   }
 }
 
@@ -285,7 +285,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 73vw;
+    width: 100vw;
   }
 }
 
@@ -294,7 +294,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 66vw;
+    width: 100vw;
     justify-content: center;
   }
 }
@@ -304,7 +304,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 79vw;
+    width: 100vw;
     justify-content: center;
   }
 }
@@ -432,14 +432,25 @@
 }
 
 .tripsheet-top-division {
-  width: 100%;
+  /* width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
   gap: 10px;
   font-size: 13px;
   margin-top: 8px;
-  margin-left: 8px;
+  margin-left: 8px; */
+
+
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 40px;
+  font-size: 13px;
+  margin: 0px 44px;
+  overflow: auto;
+  padding-bottom: 10px;
 }
 
 .tripsheet-top-division input {

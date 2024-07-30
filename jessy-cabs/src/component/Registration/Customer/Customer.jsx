@@ -312,7 +312,7 @@ const Customer = ({ stationName }) => {
                   </FormControl>
                 </div>
 
-                <div className='customer-billing-group-input-division'>
+                <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
                   <Switch
                     label='label'
@@ -337,7 +337,7 @@ const Customer = ({ stationName }) => {
                 {customerfieldSets.map((datafield, index) => (
                   <>
 
-                    <div className="input-field" style={{ flexWrap: 'wrap' }}>
+                    <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap' }}>
                       <div className="input" key={index}>
                         <div className="icone">
                           <PermIdentityIcon color="action" />
@@ -608,6 +608,8 @@ const Customer = ({ stationName }) => {
                     <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
+
+                  {/* {console.log("BillingGroup", BillingGroup)} */}
 
                   {isInputVisible && (
                     <Autocomplete

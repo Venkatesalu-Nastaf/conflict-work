@@ -164,9 +164,9 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                {/* <div className="input"> */}
-                                <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
-                                {/* </div> */}
+                                <div className="input">
+                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -198,7 +198,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
 
 
                         <Box
-                              sx={{
+                            sx={{
                                 height: 400, // Adjust this value to fit your needs
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {

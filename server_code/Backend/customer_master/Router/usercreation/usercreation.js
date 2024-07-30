@@ -98,6 +98,12 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
   const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email } = updatedCustomer;
 
 
+  if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
+    updatedCustomer.stationname = updatedCustomer.stationname.join(',')
+  }
+
+  console.log("updatedCustomer", updatedCustomer)
+
   try {
     // Clear existing permissions for the user
     await db.query('DELETE FROM user_permissions WHERE user_id = ?', [userid]);
@@ -114,10 +120,12 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
 
     // Update user details
-    await db.query(
-      'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
-      [username, stationname, designation, organizationname, userpassword, active, mobileno, email, userid]
-    );
+    // await db.query(
+    //   'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
+    //   [username, stationname, designation, organizationname, userpassword, active, mobileno, email, userid]
+    // );
+
+    await db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomer, userid]);
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {

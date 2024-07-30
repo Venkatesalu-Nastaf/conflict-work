@@ -176,6 +176,7 @@ const MailDetails = () => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       let indexToRemove = 0;
       jsonData.splice(indexToRemove, 1);
+     
       let objects = jsonData.map(sublist => {
         return {
           Email: sublist[0],

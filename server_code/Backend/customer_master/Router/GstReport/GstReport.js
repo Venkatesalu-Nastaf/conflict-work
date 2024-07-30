@@ -25,7 +25,7 @@ router.get('/getBilledDetails', async (req, res) => {
     try {
         const queries = [
             new Promise((resolve, reject) => {
-                let query = "SELECT * FROM tripsheet WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status IN (?)";
+                let query = "SELECT * FROM tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status IN (?)";
                 let params = [fromDate, toDate, statusValues];
 
                 if (customer !== "All") {
@@ -78,6 +78,22 @@ router.get('/getBilledDetails', async (req, res) => {
                 });
             }),
             new Promise((resolve, reject) => {
+                let query = "SELECT Bill_Date, Customer FROM Individual_Billing WHERE Bill_Date BETWEEN ? AND ?";
+                let params = [fromDate, toDate];
+
+                if (customer !== "All") {
+                    query += " AND Customer = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            }),
+            new Promise((resolve, reject) => {
                 let query = "SELECT gstTax, gstnumber, customer FROM customers";
                 let params = [];
 
@@ -95,12 +111,13 @@ router.get('/getBilledDetails', async (req, res) => {
             })
         ];
 
-        const [tripsheetResults, coveringBilledResults, transferBilledResults, customerResults] = await Promise.all(queries);
+        const [tripsheetResults, coveringBilledResults, transferBilledResults,individualBilledResults, customerResults] = await Promise.all(queries);
 
         const combinedResults = [
             ...tripsheetResults,
             ...coveringBilledResults,
             ...transferBilledResults,
+            ...individualBilledResults,
             ...customerResults
         ];
 
@@ -109,6 +126,7 @@ router.get('/getBilledDetails', async (req, res) => {
             tripsheetResults,
             coveringBilledResults,
             transferBilledResults,
+            individualBilledResults,
             customerResults
         });
     } catch (error) {
@@ -116,9 +134,6 @@ router.get('/getBilledDetails', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
 });
-
-
-
 
 
 module.exports = router;

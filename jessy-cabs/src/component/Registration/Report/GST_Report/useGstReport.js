@@ -283,9 +283,9 @@ const useGstReport = () => {
             const response = await axios.get(`${apiUrl}/getBilledDetails`, {
                 params: gstReport
             });
-            console.log(response.data, 'reportdata');
 
-            const { tripsheetResults, coveringBilledResults, transferBilledResults, customerResults } = response.data;
+            const { tripsheetResults, coveringBilledResults, transferBilledResults,individualBilledResults, customerResults } = response.data;
+            console.log(response.data, 'reportdata');
 
             // Combine coveringBilledResults and transferBilledResults into a single array
             const combinedData = [
@@ -296,6 +296,10 @@ const useGstReport = () => {
                 ...transferBilledResults.map(item => ({
                     billdate: dayjs(item.Billdate).format('YYYY-MM-DD'),
                     customer: item.Organization_name,
+                })),
+                ...individualBilledResults.map(item => ({
+                    billdate: dayjs(item.Bill_Date).format('YYYY-MM-DD'),
+                    customer: item.Customer,
                 }))
             ];
 

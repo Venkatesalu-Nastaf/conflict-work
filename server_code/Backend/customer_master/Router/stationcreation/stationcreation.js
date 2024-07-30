@@ -61,19 +61,24 @@ router.get('/getStation-name', (req, res) => {
     if (result && result.length > 0) {
 
       const station = result[0]?.Stationname;
+      const stationArr = station.split(',')
 
-      if (station?.toLowerCase() === "all") {
+      const data = stationArr.map(el => ({ Stationname: el }))
+
+      if (station?.toLowerCase() === "all" || stationArr.includes("ALL")) {
 
         db.query('SELECT Stationname FROM stationcreation', (err, results) => {
           if (err) {
             return res.status(500).json({ error: "Failed to fetch data" });
           }
-
+          
+          console.log("results", results)
           return res.status(200).json(results);
         });
       }
       else {
-        return res.status(200).json(result);
+        console.log("data", data)
+        return res.status(200).json(data);
       }
     }
     else {

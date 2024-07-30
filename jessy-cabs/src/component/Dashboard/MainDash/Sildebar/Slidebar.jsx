@@ -124,14 +124,20 @@ const Sidebar = () => {
     setIsRegisterdropdownclicked(false);
     setIssettingdropdownclicked(false);
     setIsinfodropdownclicked(false);
-
     setIsbillingdropdownclicked(false);
     setIsbookingdropdownclicked(false);
+
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+    setBillingDropdownVisible(false);
+    setBookingDropdownVisible(false);
   }
 
   document.addEventListener('click', function (event) {
     if ((!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.bars')) && (!event.target.closest('.menu'))) {
       closeMenuFunction();
+      setIssettingdropdownclicked(false);
     }
   });
 

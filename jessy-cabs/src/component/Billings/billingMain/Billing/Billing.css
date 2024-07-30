@@ -83,7 +83,7 @@
 
 @media screen and (min-width: 769px) {
   .side-bar-menu-close .form-container .Billing-form {
-    width: 96vw;
+    width: 100vw;
   }
 }
 
@@ -100,7 +100,7 @@
 
 @media screen and (max-width: 768px) {
   .form-container .Billing-form {
-    width: 93vw;
+    width: 100%;
   }
 }
 
@@ -181,6 +181,10 @@
     flex-wrap: wrap;
   }
 
+  .Billing-page-secend-container .Billing-secend-right{
+    margin-top: 20px;
+  }
+
   .Billing-secend-left {
     width: 80%;
   }
@@ -218,9 +222,13 @@
 
 }
 
-@media screen and (max-width:698.99px) {
+@media screen and (max-width:871.99px) {
   .input-feild-booking {
     flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .Billing-page-secend-container {
     justify-content: center;
   }
 }
@@ -294,6 +302,11 @@
 
 .billing-inputfield-last {
   flex-wrap: wrap;
+  gap: 20px;
+}
+
+.vehicle-type-input-field {
+  margin-bottom: 14px;
 }
 
 @media screen and (max-width: 768px) {
@@ -304,8 +317,9 @@
   .billing-inputfield-last {
     margin: 20px 0px;
   }
+
+  .Billing-secend-left .input {
+    margin-top: 5px;
+  }
 }
 
-.vehicle-type-input-field{
-  margin-bottom: 14px;
-}

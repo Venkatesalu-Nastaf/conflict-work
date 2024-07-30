@@ -3,33 +3,39 @@ import Chart from "react-apexcharts";
 import "./CustomerReview.css";
 import { APIURL } from '../../../../url';
 import axios from 'axios'
-import dayjs from "dayjs";
-import Dialog from "@mui/material/Dialog";
+// import dayjs from "dayjs";
+// import Dialog from "@mui/material/Dialog";
+import { useData1 } from "../../../Maindashboard/DataContext";
 
 
 
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DialogContent from "@mui/material/DialogContent";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Button from "@mui/material/Button";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import DialogContent from "@mui/material/DialogContent";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import Button from "@mui/material/Button";
 
 const CustomerReview = ({ station }) => {
-  const [viewType, setViewType] = useState("monthly");
+  // const [viewType, setViewType] = useState("monthly");
   const [stationdata, setStationdata] = useState([])
-  const [todaybooking, setTodayBooking] = useState([])
+  // const [todaybooking, setTodayBooking] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [toDate, setToDate] = useState(dayjs());
-  const [fromDate, setFromDate] = useState(dayjs());
+  // const [toDate, setToDate] = useState(dayjs());
+  // const [fromDate, setFromDate] = useState(dayjs());
+  const {todaybooking,viewmonthdata}=useData1();
+  // console.log(todaybooking,"todaycont",viewmonthdata)
 
-  const apiurl = APIURL
-  // console.log(station,"datastation")
-  const stationarray = station?.map((data) => data.Stationname)
+  // const apiurl = APIURL
+  console.log(station,"datastation")
+  const stationarray = station?.map(data => data.Stationname);
+  
   // console.log(stationarray,"dattaerrrr")
 
-  const data2 = stationdata?.map((data) => data.count)
+  // const data2 = stationdata?.map((data) => data.count)
+  // const data2 = todaybooking?.map((data) => data.count)
 
   const todaybook = todaybooking?.map((data) => data.count)
+  // console.log(todaybook,"contextsbook")
 
 
   // const handleWeeklyView = () => {
@@ -38,92 +44,85 @@ const CustomerReview = ({ station }) => {
 
   // };
 
-  const handleMonthlyView = () => {
-    setViewType("monthly");
-  };
+  // const handleMonthlyView = () => {
+  //   setViewType("monthly");
+  // };
 
-  const dateoftoday = dayjs().format("YYYY-MM-DD")
+  // const dateoftoday = dayjs().format("YYYY-MM-DD")
 
 
-const datato=localStorage.getItem("tokensdata")
-  useEffect(() => {
-    const fetchdata = async () => {
-      try {
-        if (stationarray.length > 0) {
-          const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
-          const data = response.data
+// const datato=localStorage.getItem("tokensdata")
+//   useEffect(() => {
+//     const fetchdata = async () => {
+//       try {
+//         if (stationarray.length > 0) {
+//           const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+//           const data = response.data
           
-          setStationdata(data)
-        }
-        else {
-          return
-        }
-      }
-      catch (err) {
-        console.log(err)
+//           setStationdata(data)
+//         }
+//         else {
+//           return
+//         }
+//       }
+//       catch (err) {
+//         console.log(err)
       
        
-      }
-    }
-    fetchdata()
-  }, [apiurl,stationarray,datato])
+//       }
+//     }
+//     fetchdata()
+//   }, [apiurl,stationarray,datato,viewmonthdata])
+  
+  
   
 
-  // const handleYesterdayView = () => {
-  //   setPopupOpen(true)
+  // const toadybookingdate = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+  //     const data = response.data
+  //     setTodayBooking(data)
 
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+
+
+
+  // const handleWeeklyView = () => {
+  //   // toadybookingdate()
+  //   setViewType("weekly");
+  //   // toadybookingdate()
 
   // };
 
-  // const [chartData, setChartData] = useState({
-  //   categories: station.map((data)=> data.Stationname),
-  //   data:data2,
-  // });
-  // console.log(chartData,"char")
-  const toadybookingdate = async () => {
-    try {
-      const response = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
-      const data = response.data
-      setTodayBooking(data)
+  // const custombookingdate = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/customerreviecustomerdate?station=${stationarray}&fromDate=${fromDate}&toDate=${toDate}`)
+  //     const data = response.data
+  //     // setTodayBooking(data)
+  //     setPopupOpen(false)
+  //     setFromDate(dayjs())
+  //     setToDate(dayjs())
+  //     setShowDate(false)
 
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
-
-  const handleWeeklyView = () => {
-    toadybookingdate()
-    setViewType("weekly");
-    // toadybookingdate()
-
-  };
-
-  const custombookingdate = async () => {
-    try {
-      const response = await axios.get(`${apiurl}/customerreviecustomerdate?station=${stationarray}&fromDate=${fromDate}&toDate=${toDate}`)
-      const data = response.data
-      setTodayBooking(data)
-      setPopupOpen(false)
-      setFromDate(dayjs())
-      setToDate(dayjs())
-      setShowDate(false)
-
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
 
-
-  const getData = () => {
-    if (viewType === "monthly") {
+  console.log(viewmonthdata,"jjjjjj")
+  const getData =() => {
+    if (viewmonthdata === "monthly") {
       return {
         categories: stationarray,
-        data: data2,
+        data: todaybook,
       }
-    } else if (viewType === "weekly") {
+    } else if (viewmonthdata === "weekly") {
       return {
         categories: stationarray,
         data: todaybook,
@@ -137,6 +136,28 @@ const datato=localStorage.getItem("tokensdata")
       };
     }
   };
+
+
+  // const getData = () => {
+  //   if (datato&& viewmonthdata !== "weekly") {
+  //     return {
+  //       categories: stationarray,
+  //       data: data2,
+  //     }
+  //   } else if (viewmonthdata === "weekly") {
+  //     return {
+  //       categories: stationarray,
+  //       data: todaybook,
+  //     };
+  //   }
+  //   else {
+  //     // Yesterday data is already set in state
+  //     return {
+  //       categories: stationarray,
+  //       data: todaybook,
+  //     };
+  //   }
+  // };
 
   const data = {
     series: [
@@ -159,36 +180,36 @@ const datato=localStorage.getItem("tokensdata")
   }
 
 
-  const [showdDate, setShowDate] = useState(false);
+  // const [showdDate, setShowDate] = useState(false);
 
 
 
-  const showDateFunction = () => {
+  // const showDateFunction = () => {
 
-    setShowDate(!showdDate);
+  //   setShowDate(!showdDate);
 
-  }
+  // }
 
 
 
-  const closeDateFunction = () => {
+  // const closeDateFunction = () => {
 
-    setShowDate(false);
+  //   setShowDate(false);
 
-  }
+  // }
 
-  document.addEventListener('click', function (event) {
-    if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup') && !event.target.closest('.MuiDateCalendar-root'))) {
-      closeDateFunction();
-    }
-  });
+  // document.addEventListener('click', function (event) {
+  //   if ((!event.target.closest('#custom-date') && !event.target.closest('.dashboard-date-popup') && !event.target.closest('.MuiDateCalendar-root'))) {
+  //     closeDateFunction();
+  //   }
+  // });
 
   return (
     <div className="CustomerReview weekly-chart" id="areachart">
-      <div className="button-container date-button-container">
+      {/* <div className="button-container date-button-container">
         <button onClick={handleMonthlyView} className="graph-all-button">All</button>
         <button onClick={handleWeeklyView} className="graph-weekly-button">Today</button>
-        {/* <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button> */}
+       
         <button onClick={showDateFunction} id="custom-date" className="graph-yesterday-button">custom date</button>
         {showdDate &&
           <div className="dashboard-date-popup">
@@ -222,10 +243,11 @@ const datato=localStorage.getItem("tokensdata")
             </div>
           </div>
         }
-      </div>
+      </div> */}
       <Chart options={data.options} series={data.series} type="bar" />
+      
 
-      <Dialog open={popupOpen} onClose={handleCloseDialog}>
+      {/* <Dialog open={popupOpen} onClose={handleCloseDialog}>
         <DialogContent style={{ backgroundColor: 'yellow', display: "flex", gap: '10px', width: 550, justifyContent: "space-around" }}>
           <div style={{ width: 150 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -257,7 +279,7 @@ const datato=localStorage.getItem("tokensdata")
             </Button>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

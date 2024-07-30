@@ -85,13 +85,13 @@ VendorStatement.css
 
 @media screen and (min-width: 570px) and (max-width: 699.99px) {
   .SearchContainer-VehicleStatement {
-    width: 80vw !important;
+    /* width: 80vw !important; */
   }
 }
 
 @media screen and (min-width: 320px) and (max-width: 569.99px) {
   .SearchContainer-VehicleStatement {
-    width: 76vw !important;
+    width: 100vw !important;
   }
 }
 

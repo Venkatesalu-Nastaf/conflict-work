@@ -52,7 +52,7 @@ const useEmplyeecreation = () => {
         { id: 20, name: 'Dashbord', read: false },
     ];
 
-    
+
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
@@ -378,7 +378,8 @@ const useEmplyeecreation = () => {
                 return;
             }
 
-            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const selectedCustomer = rows.find((row) => row.userid === userid); 
+            console.log("book", book)
             const updatedCustomer = { ...selectedCustomer, ...book };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
             // console.log(data)
@@ -537,10 +538,25 @@ const useEmplyeecreation = () => {
         event.preventDefault();
     };
 
+    const handleAutocompleteChangeStationName = (event, newValue, name) => {
+
+        console.log(newValue, "bill")
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: newValue,
+        }));
+        // setSelectedCustomerData((prevData) => ({
+        //     ...prevData,
+        //     [name]: newValue,
+        // }));
+    };
+
+
 
     return {
 
-        selectedCustomerId,
+        selectedCustomerId, handleAutocompleteChangeStationName,
         rows,
         actionName,
         error,

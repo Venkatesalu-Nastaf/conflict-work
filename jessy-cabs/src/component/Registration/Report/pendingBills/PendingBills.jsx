@@ -103,9 +103,9 @@ export const PendingBills = () => {
                     </div>
 
 
-                    <div className="input" style={{ gap: '15px' }}>
-                        <Button variant='contained' onClick={handleShowAllBills}>All Bills</Button>
-                        <Button variant='contained' onClick={handleShowPendingBills}>Pending Bills</Button>
+                    <div className="input bill-btn-main" style={{ gap: '15px' }}>
+                        <Button variant='contained' className='bill-btn' onClick={handleShowAllBills}>All Bills</Button>
+                        <Button variant='contained' className='bill-btn' onClick={handleShowPendingBills}>Pending Bills</Button>
                     </div>
 
 

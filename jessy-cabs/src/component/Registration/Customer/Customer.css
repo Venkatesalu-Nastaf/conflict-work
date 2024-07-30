@@ -204,11 +204,11 @@
 
 }
 
-@media screen and (max-width:400px) {
+/* @media screen and (max-width:400px) {
   .input-address {
     width: 200px !important;
   }
-}
+} */
 
 /* .form-container .Title-Name::after {
   content: "";

@@ -33,6 +33,12 @@
     width: fit-content;
 }
 
+@media screen and (max-width: 1199px) {
+    .table-bookingCopy-CoveringSubmit {
+        width: 100%;
+    }
+}
+
 /* .Download-btn-Covering-submit {
     padding-left: 20px;
     padding-bottom: 10px;
@@ -67,4 +73,3 @@
     height: 400px;
     width: 100%;
 }
-

@@ -283,6 +283,7 @@ const useGroupbilling = () => {
                 },
             });
             const data = response.data;
+            console.log(data,'data');
             if (Array.isArray(data) && data.length > 0) {
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);

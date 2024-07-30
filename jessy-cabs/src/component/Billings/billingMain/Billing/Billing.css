@@ -181,12 +181,14 @@
     flex-wrap: wrap;
   }
 
-  .Billing-page-secend-container .Billing-secend-right{
-    margin-top: 20px;
-  }
-
   .Billing-secend-left {
     width: 80%;
+  }
+}
+
+@media screen and (max-width:1033px) {
+  .Billing-page-secend-container .Billing-secend-right{
+    margin-top: 20px;
   }
 }
 

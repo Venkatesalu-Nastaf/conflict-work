@@ -1,6 +1,6 @@
 import React from 'react';
 import "./GstReport.css";
-
+import Box from "@mui/material/Box";
 import { Menu, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { MdOutlineCalendarMonth } from "react-icons/md";
@@ -46,7 +46,7 @@ export const GstReport = () => {
   return (
     <>
       <div className='main-content-form'>
-        <div className='input-field gst-report-input-field' style={{flexWrap: 'wrap'}}>
+        <div className='input-field gst-report-input-field' style={{ flexWrap: 'wrap' }}>
           <div className="input">
             <div className="icone">
               <MdOutlineCalendarMonth color="action" />
@@ -275,18 +275,42 @@ export const GstReport = () => {
         </div>
 
         <div className='gst-report-table'>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowId={(row) => row.id}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
+          <Box
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                  height: '8px', // Adjust the scrollbar width here
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                  minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
               },
             }}
-            pageSizeOptions={[5, 10]}
-          // checkboxSelection
-          />
+          >
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              getRowId={(row) => row.id}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+            // checkboxSelection
+            />
+          </Box>
         </div>
 
       </div>

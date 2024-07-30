@@ -19,6 +19,7 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
 
 
     ////-------------permission --------------------------
@@ -235,8 +236,32 @@ const useEmplyeecreation = () => {
         setIsEditMode(false)
     };
 
-    // console.log("book", book)
-
+    useEffect(() => {
+        const fetchData = async () => {
+          const organizationname = localStorage.getItem('usercompany');
+    
+          try {
+            if (!organizationname) return
+            const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+            if (response.status === 200) {
+    
+              const userDataArray = await response.json();
+              console.log(userDataArray,'userdata');
+              if (userDataArray.length > 0) {
+                setOrganisationSendEmail(userDataArray[0])
+                // setDatatrigger(!datatrigger)
+    
+              } else {
+                setErrorMessage('User data not found.');
+                setError(true);
+              }
+            }
+          }
+          catch {
+          }
+        };
+        fetchData();
+      }, [apiUrl]);
     // add
     const handleAdd = async () => {
         const username = book.username;
@@ -302,7 +327,7 @@ const useEmplyeecreation = () => {
 
 
         try {
-            const data = { book, permissionsData }
+            const data = { book, permissionsData,organistaionsendmail }
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             setSuccess(true);

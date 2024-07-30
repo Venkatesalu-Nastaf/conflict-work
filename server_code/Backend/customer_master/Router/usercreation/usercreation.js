@@ -6,6 +6,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import the cors middleware
+const nodemailer = require('nodemailer');
+
 
 router.use(cors());
 router.use(express.static('customer_master'));
@@ -26,14 +28,35 @@ const upload = multer({
 
 
 router.post('/usercreation-add', async (req, res) => {
-  const { book, permissionsData } = req.body;
+  const { book, permissionsData, organistaionsendmail } = req.body;
   const { username, stationname, designation, organizationname, userpassword, active, email, mobileno } = book;
-  console.log("email", email, "mobile", mobileno)
+  const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
 
   try {
     await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno)
 VALUES (?,?,?,?,?,?,?,?)`, [username, stationname, designation, organizationname, userpassword, active, email, mobileno]);
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: Sender_Mail,
+        pass: EmailApp_Password
+      }
+    });
 
+    const mailOptions = {
+      from: Sender_Mail,
+      to: email,
+      subject: 'Credential Details',
+      html: `<p>Hi ${username},<br>UserName: ${email}<br>Password: ${userpassword}</p>`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
     db.query(
       'SELECT userid FROM usercreation WHERE username = ?', [username], (err, result) => {
 
@@ -102,7 +125,6 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
     updatedCustomer.stationname = updatedCustomer.stationname.join(',')
   }
 
-  console.log("updatedCustomer", updatedCustomer)
 
   try {
     // Clear existing permissions for the user

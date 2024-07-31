@@ -55,7 +55,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100
             })
         }
-        
+
         setCustomerAddress(address)
         setCustomer(customer)
         setFullAmount(totalamount.toFixed(0))
@@ -76,15 +76,15 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 organisationname = li.organizationname
             })
         }
-        
+
         setOrgaddress1(addressone)
         setOrgaddress3(addressthree)
         setOrgname(organisationname)
     }, [organizationdetails])
-   
+
     const { logo } = useData()
-       // Convert number to words
-       const convertToWords = (num) => {
+    // Convert number to words
+    const convertToWords = (num) => {
         if (!num) return '';
         const [integerPart, decimalPart] = num.toString().split('.');
         let words = numWords(parseInt(integerPart));
@@ -193,7 +193,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}><h4>Rs .</h4><p style={{ marginLeft: 10 }}>{rupeestext}</p></div>
             </div>
             <div className="printdiv">
-                <button className="print" onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })}>PRINT</button>
+                <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>PRINT</button>
                 <button onClick={handlePopup} className="print">
                     Cancel
                 </button>

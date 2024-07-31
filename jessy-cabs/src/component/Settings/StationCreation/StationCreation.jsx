@@ -162,7 +162,7 @@ const StationCreation = () => {
                   <textarea
                     id="remark"
                     className='textarea-input'
-                    name="remark"
+                    name="address"
                     rows="3"
                     value={selectedCustomerData?.address || book.address}
                     onChange={handleChange}

@@ -172,7 +172,27 @@ function App() {
     } catch (err) {
       console.log(err)
     }
-  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname])
+  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+
+        console.log("routeData", organizationname)
+        if (!organizationname || organizationname === undefined) return
+        const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+
+        if (response?.status === 200) {
+          const logoImage = response?.data[0]?.fileName;
+          setLogo(logoImage)
+          setLogoTrigger(false)
+          ref.current = true
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchdata()
+  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
 
   useEffect(() => {
     if (!ref.current) {

@@ -49,29 +49,58 @@ const useCoversubmit = () => {
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
         saveAs(blob, "Cover.csv");
     };
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF();
+    //     pdf.setFontSize(12);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("Cover Submit", 10, 10);
+    //     const tableData = rows.map((row) => [
+    //         row['id'],
+    //         row['Status'],
+    //         row['InvoiceNo'],
+    //         row['InvoiceDate'],
+    //         row['Customer'],
+    //         row['FromDate'],
+    //         row['ToDate'],
+    //         row['Trips'],
+    //         row['Amount']
+    //     ]);
+    //     pdf.autoTable({
+    //         head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
+    //         body: tableData,
+    //         startY: 20,
+    //     });
+    //     const pdfBlob = pdf.output('blob');
+    //     saveAs(pdfBlob, 'Cover.pdf');
+    // };
     const handlePdfDownload = () => {
-        const pdf = new jsPDF();
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text("Cover Submit", 10, 10);
-        const tableData = rows.map((row) => [
-            row['id'],
-            row['Status'],
-            row['InvoiceNo'],
-            row['InvoiceDate'],
-            row['Customer'],
-            row['FromDate'],
-            row['ToDate'],
-            row['Trips'],
-            row['Amount']
-        ]);
-        pdf.autoTable({
-            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
-            body: tableData,
-            startY: 20,
+        rows.forEach((row) => {
+            const pdf = new jsPDF();
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text("Cover Submit", 10, 10);
+
+            const tableData = [[
+                row['id'],
+                row['Status'],
+                row['InvoiceNo'],
+                row['InvoiceDate'],
+                row['Customer'],
+                row['FromDate'],
+                row['ToDate'],
+                row['Trips'],
+                row['Amount']
+            ]];
+
+            pdf.autoTable({
+                head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
+                body: tableData,
+                startY: 20,
+            });
+
+            const pdfBlob = pdf.output('blob');
+            saveAs(pdfBlob, `${row['InvoiceNo']}.pdf`);
         });
-        const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'Cover.pdf');
     };
 
     // POP UP---------------------------------

@@ -2239,7 +2239,7 @@ const Booking = ({ stationName, customerData }) => {
             </div> */}
           {/* </div> */}
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -2609,7 +2609,7 @@ const Booking = ({ stationName, customerData }) => {
             <div className="second-table-driver">
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
-                  <div className="Scroll-Style booking-driver-table">
+                  <div className="booking-driver-table">
                     <table>
                       <thead id="update-header">
                         <tr>

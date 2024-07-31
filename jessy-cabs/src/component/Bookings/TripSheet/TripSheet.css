@@ -276,7 +276,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 100vw;
+    width: 97vw;
   }
 }
 
@@ -285,7 +285,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 100vw;
+    width: 97vw;
   }
 }
 
@@ -294,7 +294,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 100vw;
+    width: 93vw;
     justify-content: center;
   }
 }
@@ -304,7 +304,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 100vw;
+    width: 93vw;
     justify-content: center;
   }
 }
@@ -314,7 +314,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 71vw;
+    width: 93vw;
   }
 }
 
@@ -372,12 +372,20 @@
   .tripsheet-division3 {
     justify-content: center;
   }
+
+  .vehicle-confirm-tripsheet {
+    flex-wrap: wrap;
+    position: relative;
+    left: 15px;
+    justify-content: center;
+  }
 }
 
-.vehicle-confirm {
+.vehicle-confirm-tripsheet {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .input-feild-vehicle-confirm {
@@ -453,6 +461,12 @@
   padding-bottom: 10px;
 }
 
+@media screen and (max-width: 667px) {
+  .tripsheet-top-division {
+    width: 80%;
+  }
+}
+
 .tripsheet-top-division input {
   background-color: transparent;
   border: 1px solid rgba(0, 0, 0, 0.23);
@@ -500,14 +514,52 @@
   border: none;
 }
 
-.tripsheet-remarks-division{
+.tripsheet-remarks-division {
   width: 513px !important;
 }
 
-.tripsheet-calculate-input button, .tripsheet-e-tripsheet-input button{
+.tripsheet-calculate-input button,
+.tripsheet-e-tripsheet-input button {
   width: 100%;
   margin-left: 28px;
 }
 
+.tripsheet-vendor-bill-main {
+  display: grid;
+  gap: 10px;
+}
 
+.tripsheet-vendor-info-main .input-field,
+.tripsheet-vendor-bill-main .input-field,
+.tripsheet-vendor-gps-att-main .input-field {
+  flex-wrap: wrap;
+}
 
+@media screen and (max-width: 565.99px) {
+
+  .tripsheet-vendor-info-main .input-field,
+  .tripsheet-vendor-bill-main .input-field,
+  .tripsheet-vendor-gps-att-main .input-field {
+    justify-content: center;
+  }
+
+  .tripsheet-vendor-bill-amount-input-field {
+    border: 2px solid #ccc;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 568.99px) {
+  .tripsheet-vendor-bill-amount-input-field {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 569px) and (max-width: 867.99px) {
+  .tripsheet-vendor-bill-amount-input-field .input {
+    width: 153px !important;
+  }
+}

@@ -1473,12 +1473,12 @@ const Sidebar = () => {
 {booking_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded==false ? '' : 'vehiecle'}`}
-                to={BOOKING && ("/home/Vehiecle/Vehiecle")}
-                alt="/home/Vehiecle/Vehiecle"
-                value="/home/Vehiecle"
-                menuItemKey="/home/Vehiecle"
-                name="Vehiecle page"
+                label={`${expanded==false ? '' : 'Map'}`}
+                to={BOOKING && ("/home/Map/Map")}
+                alt="/home/Map/Map"
+                value="/home/Map"
+                menuItemKey="/home/Map"
+                name="Map page"
                 isActive={isActive}
                 handleMenuItemClick={handleMenuItemClick}
                 icon={HiOutlineUsers}

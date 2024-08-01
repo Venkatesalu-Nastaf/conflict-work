@@ -563,7 +563,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div style={{display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -1304,7 +1304,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <div className="input time" style={{ display: "grid" }}>
                   {checkTimeandDateConflict()}
 
-                  <div style={{ display: "flex" }}>
+                  <div style={{ display: "flex", alignItems: 'center' }}>
                     <div className='icone'>
                       <MdOutlineAccessTimeFilled />
                     </div>
@@ -2170,7 +2170,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div className="vehicle-confirm">
+                <div className="vehicle-confirm-tripsheet">
                   <div className="input-field input-feild-vehicle-confirm">
                     <div className="input">
                       <div className="icone">
@@ -2593,7 +2593,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </TabList>
 
                 <TabPanel value={0} sx={{ p: 2 }}>
-                  <div className="Customer-Customer-Bill-Slider">
+                  <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main">
                     <div className="input-field">
                       <div className="input">
                         {/* <div className="icone">
@@ -2666,14 +2666,12 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                       </div>
                     </div>
-                    <div className="input-field">
+                    <div className="input-field" style={{ marginTop: '15px' }}>
                       <div className="input" >
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-
                           <DatePicker
                             label="StartDate"
                             id="vendorshedOutDate"
-
                             // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                             format="DD/MM/YYYY"
@@ -2938,7 +2936,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </TabPanel>
 
                 <TabPanel value={1} sx={{ p: 2 }}>
-                  <div className="Customer-Customer-Bill-Slider">
+                  <div className="Customer-Customer-Bill-Slider tripsheet-vendor-bill-main">
                     <div className="input-field">
                       <div className="input">
                         <TextField
@@ -2964,8 +2962,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
                     </div>
 
-                    <div className="input-field">
-                      <span>Ex.Km</span>
+                    <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                      {/* <span>Ex.Km</span> */}
                       <div className="input">
                         <TextField
                           name="Vendor_ExtraKms"
@@ -3004,8 +3002,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
                     </div>
 
-                    <div className="input-field">
-                      <span>Ex.Hr</span>
+                    <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                      {/* <span>Ex.Hr</span> */}
                       <div className="input">
                         <TextField
                           name="Vendor_ExtraHours"
@@ -3044,15 +3042,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
-                    <div className="input-field">
-                      <span>Night</span>
+                    <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                      {/* <span>Night</span> */}
                       <div className="input">
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
                           value={(checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
                           onChange={handlevendor_billdata}
-                          // label="Night"
+                          label="Night"
                           id="Vendor_NightHALT"
                           size="small"
                         // variant="standard"
@@ -3084,14 +3082,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
-                    <div className="input-field">
-                      <span>Bata</span>
+                    <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                      {/* <span>Bata</span> */}
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
                           value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0}
                           onChange={handlevendor_billdata}
-                          // label="Night"
+                          label="Bata"
                           id="Vendor_Bata"
                           autoComplete="password"
                           size="small"
@@ -3388,15 +3386,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
                     </div>
 
-                    <TextField
-                      name="amount9"
-                      value={totalcalcAmount || 0}
-                      size="small"
-                      label="Total Amount"
-                      id="amount"
-                      autoComplete="password"
-                      variant="standard"
-                    />
+                    <div style={{marginTop: '20px'}}>
+                      <TextField
+                        name="amount9"
+                        value={totalcalcAmount || 0}
+                        size="small"
+                        label="Total Amount"
+                        id="amount"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div>
                     <div className="input-field">
 
                     </div>
@@ -3409,7 +3409,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </TabPanel>
 
                 <TabPanel value={3} sx={{ p: 2 }}>
-                  <div className="Customer-Gps-att-Slider">
+                  <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                     <div className="input-field">
                       <div className="input">
                         <Button>View GPS TripSheet</Button>

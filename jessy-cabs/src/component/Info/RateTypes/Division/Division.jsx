@@ -223,7 +223,7 @@ const Division = () => {
             </div>
           }
         </div>
-        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px" }}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}

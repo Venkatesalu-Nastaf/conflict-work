@@ -51,6 +51,12 @@
     width: fit-content;
 }
 
+@media screen and (max-width: 1155px) {
+    .table-bookingCopy-TransferReport {
+        width: 100%;
+    }
+}
+
 .tripsheet-table-transferReport {
     display: flex;
     flex-direction: column;

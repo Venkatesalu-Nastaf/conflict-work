@@ -46,6 +46,9 @@ import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
 import { Reports } from "./component/Registration/Report/Reports";
+import Vehiecle from "./component/Vehiecle/Vehiecle";
+import { Overview } from "./component/Vehiecle/Overview/Overview";
+import { Vehiecles } from "./component/Vehiecle/Vehiecles/Vehiecles";
 
 
 
@@ -332,6 +335,24 @@ function App() {
                   element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> : <NoPermission />}
                 />
               </Route>
+
+              <Route path="/home/Vehiecle" element={<Vehiecle />}>
+                <Route
+                  path="/home/Vehiecle/Overview"
+                  element={BOOKING !== 0 ? <Overview stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                />
+                <Route
+                  path="/home/Vehiecle/Vehiecles"
+                  element={TriSheet !== 0 ? <Vehiecles stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+                
+              </Route>
+
+
+
+
+
+
               <Route path="/home/registration" element={<Registration />}>
                 <Route
                   path="/home/registration/customer"

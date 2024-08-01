@@ -1123,6 +1123,8 @@ const Sidebar = () => {
               />
             </div>
           }
+
+
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1466,6 +1468,41 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
+{/* for vehiecle */}
+{booking_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded==false ? '' : 'vehiecle'}`}
+                to={BOOKING && ("/home/Vehiecle/Vehiecle")}
+                alt="/home/Vehiecle/Vehiecle"
+                value="/home/Vehiecle"
+                menuItemKey="/home/Vehiecle"
+                name="Vehiecle page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={HiOutlineUsers}
+              />
+            </div>
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <MenuItem
             label={`${expanded==false ? '' : 'User'}`}
             to="/home/usersettings/usersetting"

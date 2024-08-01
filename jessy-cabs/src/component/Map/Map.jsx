@@ -1,10 +1,12 @@
 // import React from 'react'
 
-// export const Vehiecle = () => {
+// export const Map = () => {
 //   return (
-//     <div>Vehiecle</div>
+//     <div>Map</div>
 //   )
 // }
+
+
 
 import React from 'react'
 import { useState, useContext, useEffect } from 'react';
@@ -27,7 +29,7 @@ const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   );
 };
 
-const Vehiecle = () => {
+const Map = () => {
   //permission --------------
 
   return (
@@ -36,7 +38,7 @@ const Vehiecle = () => {
       <div className="menu-bar-main">
         <div className="menu-bar">
           <MenuItem
-            label="overview"
+            label="RealTime"
             // to={Billing && ("/home/billing/billing")}
             alt="/home/billing/billing"
             menuItemKey="Billing"
@@ -44,7 +46,7 @@ const Vehiecle = () => {
             // handleMenuItemClick={handleMenuItemClick}
           />
           <MenuItem
-            label="Vehiecle"
+            label="Vehicle"
             // to={Transfer && ("/home/billing/transfer")}
             alt="/home/billing/transfer"
             menuItemKey="Transfer"
@@ -71,4 +73,4 @@ const Vehiecle = () => {
   );
 };
 
-export default Vehiecle;
+export default Map;

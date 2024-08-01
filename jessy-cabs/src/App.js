@@ -49,6 +49,9 @@ import { Reports } from "./component/Registration/Report/Reports";
 import Vehiecle from "./component/Vehiecle/Vehiecle";
 import { Overview } from "./component/Vehiecle/Overview/Overview";
 import { Vehiecles } from "./component/Vehiecle/Vehiecles/Vehiecles";
+import Map from "./component/Map/Map";
+import { RealTime } from "./component/Map/RealTime/RealTime";
+import { Vehicle } from "./component/Map/Vehicle/Vehicle";
 
 
 
@@ -344,6 +347,18 @@ function App() {
                 <Route
                   path="/home/Vehiecle/Vehiecles"
                   element={TriSheet !== 0 ? <Vehiecles stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+                
+              </Route>
+
+              <Route path="/home/Map" element={<Map />}>
+                <Route
+                  path="/home/Map/RealTime"
+                  element={BOOKING !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                />
+                <Route
+                  path="/home/Map/Vehicle"
+                  element={TriSheet !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
                 
               </Route>

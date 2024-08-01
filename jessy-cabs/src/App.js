@@ -46,6 +46,12 @@ import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
 import { Reports } from "./component/Registration/Report/Reports";
+import Vehiecle from "./component/Vehiecle/Vehiecle";
+import { Overview } from "./component/Vehiecle/Overview/Overview";
+import { Vehiecles } from "./component/Vehiecle/Vehiecles/Vehiecles";
+import Map from "./component/Map/Map";
+import { RealTime } from "./component/Map/RealTime/RealTime";
+import { Vehicle } from "./component/Map/Vehicle/Vehicle";
 
 
 
@@ -172,7 +178,27 @@ function App() {
     } catch (err) {
       console.log(err)
     }
-  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname])
+  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+
+        console.log("routeData", organizationname)
+        if (!organizationname || organizationname === undefined) return
+        const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+
+        if (response?.status === 200) {
+          const logoImage = response?.data[0]?.fileName;
+          setLogo(logoImage)
+          setLogoTrigger(false)
+          ref.current = true
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchdata()
+  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
 
   useEffect(() => {
     if (!ref.current) {
@@ -312,6 +338,36 @@ function App() {
                   element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> : <NoPermission />}
                 />
               </Route>
+
+              <Route path="/home/Vehiecle" element={<Vehiecle />}>
+                <Route
+                  path="/home/Vehiecle/Overview"
+                  element={BOOKING !== 0 ? <Overview stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                />
+                <Route
+                  path="/home/Vehiecle/Vehiecles"
+                  element={TriSheet !== 0 ? <Vehiecles stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+                
+              </Route>
+
+              <Route path="/home/Map" element={<Map />}>
+                <Route
+                  path="/home/Map/RealTime"
+                  element={BOOKING !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                />
+                <Route
+                  path="/home/Map/Vehicle"
+                  element={TriSheet !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+                
+              </Route>
+
+
+
+
+
+
               <Route path="/home/registration" element={<Registration />}>
                 <Route
                   path="/home/registration/customer"

@@ -680,6 +680,7 @@ body {
 @media screen and (max-width: 768px) {
   .main-content-container {
     width: 96vw;
+    margin-top: 20px;
   }
 }
 
@@ -715,7 +716,7 @@ body {
 .head-tab-type-2-all {
   position: sticky !important;
   top: 0px;
-  z-index: 1051;
+  z-index: 2;
   background-color: #ffffff;
   padding: 15px 10px 10px 10px !important;
   margin: 0px;
@@ -739,6 +740,10 @@ body {
   padding: 20px;
   color: #000;
   zoom: 90%;
+}
+
+.css-k008qs{
+  overflow: auto;
 }
 
 /* @media screen and (min-width: 769px) {

@@ -109,7 +109,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-                  <div className='input'>
+                  {/* <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
@@ -124,7 +124,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         />
                       </DemoContainer>
                     </LocalizationProvider>
-                  </div>
+                  </div> */}
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />

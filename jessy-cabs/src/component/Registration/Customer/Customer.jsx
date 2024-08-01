@@ -688,7 +688,7 @@ const Customer = ({ stationName }) => {
                     size='small'
                   />
                 </div>
-                <div className="">
+                <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
                   ) : (

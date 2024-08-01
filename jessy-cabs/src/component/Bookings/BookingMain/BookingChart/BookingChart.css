@@ -422,10 +422,10 @@
 
 @media screen and (max-width: 720px) {
 
-  .graph-table,
+  /* .graph-table,
   .graph-total-table {
     width: 71vw;
-  }
+  } */
 }
 
 .graph-table th {
@@ -468,7 +468,7 @@
 .total-car-table-division .total-vehiecle {
   display: flex;
   justify-content: center;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .search-bar-input .search-button svg {

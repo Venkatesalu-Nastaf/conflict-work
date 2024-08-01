@@ -212,7 +212,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <MinorCrashIcon color="action" />
                   </div>
                   <TextField
-                    margin='normal'
+                    // margin='normal'
                     size='small'
                     name="vehicleId"
                     value={selectedCustomerData?.vehicleId || ""}
@@ -228,7 +228,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <FaCar />
                   </div>
                   <TextField
-                    margin='normal'
+                    // margin='normal'
                     size='small'
                     name="vehicleName"
                     value={
@@ -355,7 +355,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <CarCrashIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     size="small"
                     id="vehRegNo"
                     className='full-width'
@@ -442,7 +442,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DocumentScannerIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 name="statepermito"
                 className='full-width'
@@ -541,7 +541,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 name="insuranceno"
                 className='full-width'
@@ -678,7 +678,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DocumentScannerIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 name="nationalpermito"
                 className='full-width'
@@ -787,7 +787,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <AssessmentIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 className='full-width'
                 id="year_model"
@@ -802,7 +802,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <HistoryEduIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 className='full-width'
                 name="rcbookno"
@@ -906,7 +906,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 className='full-width'
                 name="tankCap"

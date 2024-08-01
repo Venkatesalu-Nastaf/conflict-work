@@ -96,9 +96,9 @@
 }
 
 @media screen and (min-width: 385px) and (max-width: 450.99px) {
-  .copy-title-btn-TripStatus {
+  /* .copy-title-btn-TripStatus {
     width: 87% !important;
-  }
+  } */
   .detail-container-main{
     padding: 0px !important;
   }

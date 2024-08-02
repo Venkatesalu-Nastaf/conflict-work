@@ -74,7 +74,8 @@ const BankAccount = () => {
         <div className="total-account">
           <div className='amount-calculate'>
             <div className='total-inputs' >
-              <label htmlFor="totalCapital" style={{ display: "flex" }}><span style={{ marginRight: "2px" }}>Total</span><span>Capital:</span> </label>
+              {/* <label htmlFor="totalCapital" style={{ display: "flex" }}><span style={{ marginRight: "2px" }}>Total</span><span>Capital:</span> </label> */}
+              <label htmlFor="totalCapital">Total Capital:</label>
               <input type="number" id="totalCapital" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >

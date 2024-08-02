@@ -1412,6 +1412,7 @@ const Booking = ({ stationName, customerData }) => {
                 <MdDataUsage />
               </div>
               <TextField
+                className="full-width"
                 margin="normal"
                 size="small"
                 id="usage"
@@ -1699,6 +1700,7 @@ const Booking = ({ stationName, customerData }) => {
                   <DatePicker
                     label="shedOut Date"
                     id="shedOutDate"
+                    className="full-width"
                     value={
                       formData.shedOutDate || selectedCustomerData.shedOutDate
                         ? dayjs(selectedCustomerData.shedOutDate)
@@ -1735,6 +1737,7 @@ const Booking = ({ stationName, customerData }) => {
                     <DatePicker
                       label="Start Date"
                       id="report_date"
+                      className="full-width"
                       value={
                         formData.startdate || selectedCustomerData.startdate
                           ? dayjs(selectedCustomerData.startdate)
@@ -2239,7 +2242,7 @@ const Booking = ({ stationName, customerData }) => {
             </div> */}
           {/* </div> */}
         </div>
-        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -2390,6 +2393,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
               <TextField
                 name="vehRegNo"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.vehRegNo ||
@@ -2513,6 +2517,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
               <TextField
                 name="driverName"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.driverName ||
@@ -2536,6 +2541,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
               <TextField
                 name="mobileNo"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.mobileNo ||
@@ -2558,6 +2564,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
               <TextField
                 name="travelsemail"
+                className="full-width"
                 autoComplete="new-password"
                 value={
                   formData.travelsemail ||

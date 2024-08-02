@@ -90,8 +90,8 @@ const MailDetails = () => {
         <Button
           onClick={() => handleButtonEditClick(params)}
           aria-label="edit"
-          variant="contained"
-          sx={{ backgroundColor: '#1976d2', color: 'white', '&:hover': { backgroundColor: 'dark#1976d2' } }}
+          // variant="contained"
+          sx={{ color: '#1976d2' }}
         >
           <ModeEditIcon />
         </Button>
@@ -105,8 +105,8 @@ const MailDetails = () => {
         <Button
           onClick={() => handleButtondeleteClick(params)}
           aria-label="delete"
-          variant="contained"
-          sx={{ backgroundColor: 'red', color: 'white', '&:hover': { backgroundColor: 'darkred' } }}
+          // variant="contained"
+          sx={{ color: 'red' }}
         >
           <DeleteIcon />
         </Button>

@@ -369,6 +369,29 @@ const MainDashboard = () => {
     setPopupVisible(false);
   };
 
+  const getDeviceType = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // iOS detection
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return 'iPhone-responsive';
+    }
+
+    // Android detection
+    if (/android/i.test(userAgent)) {
+        return 'Android';
+    }
+
+    return 'unknown';
+};
+
+const [deviceType, setDeviceType] = useState('');
+
+useEffect(() => {
+    const type = getDeviceType();
+    setDeviceType(type);
+}, []);
+
   return (
     <>
       {isPopupVisible && (
@@ -399,7 +422,7 @@ const MainDashboard = () => {
         </div>
       ) :
         <section
-          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}
+          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme} ${deviceType}`}
         >
           {/* <div className="glass"> */}
           <div className={`glass ${expanded ? 'side-bar-menu-open' : 'side-bar-menu-close'}`}>

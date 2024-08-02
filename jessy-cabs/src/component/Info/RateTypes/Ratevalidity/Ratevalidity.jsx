@@ -126,6 +126,7 @@ const Ratevalidity = () => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             id="fromdate"
+                                            className='full-width'
                                             label="From Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -144,6 +145,7 @@ const Ratevalidity = () => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             id="todate"
+                                            className='full-width'
                                             label="To Date"
                                             format="DD/MM/YYYY"
                                             value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}

@@ -177,6 +177,7 @@ const SMSReport = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       id="from-date"
+                      className='full-width'
                       label="From Date"
                       value={fromDate}
                       onChange={(newValue) => setFromDate(newValue)}
@@ -187,6 +188,7 @@ const SMSReport = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       id="to-date"
+                      className='full-width'
                       label="To Date"
                       value={toDate}
                       onChange={(newValue) => setToDate(newValue)}

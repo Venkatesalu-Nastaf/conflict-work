@@ -118,13 +118,25 @@
     flex-wrap: wrap;
     align-items: center;
     /* justify-content: center; */
-    width: 92vw;
+    width: 89vw;
     /* width: 100%; */
     margin: 10px auto;
     background-color: var(--glass);
     padding: 20px 35px 20px 0px;
     border: 2px solid #ccc;
     border-radius: 10px;
+}
+
+@media screen and (max-width: 460px) {
+    .container-organisation-main {
+        width: 95%;
+    }
+    .container-organisation{
+        width: 95%;
+    }
+    .detail-container-main-organisation{
+        width: 95%;
+    }
 }
 
 .container-organisation-left {

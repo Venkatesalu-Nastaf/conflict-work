@@ -145,6 +145,12 @@
   }
 }
 
+/* @media screen and (max-width: 600px) {
+  .glass {
+    height: 60% !important;
+  }
+} */
+
 .glass::-webkit-scrollbar {
   width: 3px;
 }
@@ -152,7 +158,7 @@
 @media screen and (max-width: 1200px) {
   .dash-board {
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 }
 
@@ -163,12 +169,17 @@
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   }
 
+  /* .iPhone-responsive{
+    height: 88vh !important;
+  } */
+
   .header-user {
     display: none !important;
   }
 
   .glass {
     grid-template-columns: auto !important;
+    /* height: 93% !important; */
   }
 }
 

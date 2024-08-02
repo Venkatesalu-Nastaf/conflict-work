@@ -186,6 +186,7 @@ const handleClose=()=>{
                     // margin="normal"
                     size="small"
                     id="name"
+                    className='full-width'
                     label="Organizer Name"
                     value={selectedCustomerData?.name || book.name}
                     autoComplete="new-password"
@@ -224,6 +225,7 @@ const handleClose=()=>{
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Date"
+                      className='full-width'
                       value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null || book.date ? dayjs(book.date) : null}
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'date')}
@@ -722,6 +724,7 @@ const handleClose=()=>{
                   </div>
                   <TextField
                     name="gstnumber"
+                    className='full-width'
                     label="GST-Number"
                     value={selectedCustomerData?.gstnumber || book.gstnumber}
                     autoComplete="new-password"
@@ -736,6 +739,7 @@ const handleClose=()=>{
                   </div>
                   <TextField
                     name="SalesPerson"
+                    className='full-width'
                     value={selectedCustomerData?.SalesPerson || book.SalesPerson}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -750,6 +754,7 @@ const handleClose=()=>{
                   </div>
                   <TextField
                     type='number'
+                    className='full-width'
                     name="salesPercentage"
                     value={selectedCustomerData?.salesPercentage || book.salesPercentage}
                     autoComplete="new-password"

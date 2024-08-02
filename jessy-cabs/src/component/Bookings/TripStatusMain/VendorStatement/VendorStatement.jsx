@@ -316,7 +316,7 @@ const VendorStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{gap: '15px'}}>
+                <div className="input" style={{ gap: '15px' }}>
                   <div className="">
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
@@ -357,7 +357,7 @@ const VendorStatement = () => {
         </div>
 
         <div style={{ display: "flex" }}>
-          <div className="Download-btn">
+          <div className="Download-btn" style={{ paddingRight: '15px' }}>
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
@@ -372,31 +372,30 @@ const VendorStatement = () => {
               )}
             </PopupState>
           </div>
-          <div className="input-field paid-amount-input-field">
-            <div className="input">
-              <TextField
-                margin="normal"
-                size="small"
-                id="paidamount"
-                label="Paid Amount"
-                name="paidamount"
-                value={fullamountdata}
-
-              />
-            </div>
-
-            <div className="input">
-              <TextField
-                margin="normal"
-                size="small"
-                id=""
-                label="opening balance"
-                name=""
-                autoComplete="off"
-              />
-            </div>
-
+          {/* <div className="paid-amount-input-field"> */}
+          <div className="input">
+            <TextField
+              margin="normal"
+              size="small"
+              id="paidamount"
+              label="Paid Amount"
+              name="paidamount"
+              value={fullamountdata}
+            />
           </div>
+
+          <div className="input">
+            <TextField
+              margin="normal"
+              size="small"
+              id=""
+              label="opening balance"
+              name=""
+              autoComplete="off"
+            />
+          </div>
+
+          {/* </div> */}
         </div>
 
         <div className='alert-popup-main'>
@@ -430,16 +429,37 @@ const VendorStatement = () => {
           }
         </div>
         <div className="table-bookingCopy-VehicleStatement">
-
           <div className='vehicle-statement-table'>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              onRowClick={(event) => handleButtonClick(event.row)}
-              pageSize={5}
-            />
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
 
-
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowClick={(event) => handleButtonClick(event.row)}
+                pageSize={5}
+              />
+            </Box>
           </div>
         </div>
       </form>

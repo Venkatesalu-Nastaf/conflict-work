@@ -91,7 +91,7 @@ VendorStatement.css
 
 @media screen and (min-width: 320px) and (max-width: 569.99px) {
   .SearchContainer-VehicleStatement {
-    width: 100vw !important;
+    width: 88vw !important;
   }
 }
 
@@ -147,9 +147,9 @@ VendorStatement.css
     width: 100% !important;
   }
 
-  .SearchContainer-VehicleStatement {
+  /* .SearchContainer-VehicleStatement {
     padding: 0px !important;
-  }
+  } */
 
   /* .vehiecle-date {
     width: 200px !important;
@@ -158,7 +158,7 @@ VendorStatement.css
 
 .paid-amount-input-field {
   justify-content: end;
-  height: 30px;
+  /* height: 30px; */
 }
 
 .SpeedDial-division {

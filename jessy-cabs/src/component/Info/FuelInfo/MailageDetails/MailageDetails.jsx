@@ -148,6 +148,7 @@ const MailageDetails = () => {
                     </div>
                     <DatePicker
                       label="Fill Date"
+                      className='full-width'
                       format="DD/MM/YYYY"
                       id="fill_date1"
                       value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null}
@@ -167,6 +168,7 @@ const MailageDetails = () => {
                     <DatePicker
                       id="empty_Date"
                       label="Empty Date"
+                      className='full-width'
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null}
                       onChange={(date) => handleDateChange(date, 'emptydate')}

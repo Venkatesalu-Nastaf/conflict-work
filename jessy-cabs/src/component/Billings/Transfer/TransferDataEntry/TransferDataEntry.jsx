@@ -102,6 +102,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <TextField
                       size="small"
                       id="tripid"
+                      className='full-width'
                       label="Group Trip ID"
                       name="tripid"
                       value={groupId || ''}
@@ -133,6 +134,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
                           id="Billingdate"
+                          className='full-width'
                           label="Bill Date"
                           name="Billingdate"
                           value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
@@ -148,6 +150,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <TextField
                       size="small"
                       id="invoiceno"
+                      className='full-width'
                       label="Invoice No"
                       name="invoiceno"
                       value={invoiceno || ''}
@@ -163,6 +166,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <Autocomplete
                       fullWidth
                       id="free-solo-Organization"
+                      className='full-width'
                       freeSolo
                       size="small"
                       value={customer || ''}
@@ -184,6 +188,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         <DatePicker
                           label="From Date"
                           id="fromDate"
+                          className='full-width'
                           value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -209,6 +214,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         <DatePicker
                           label="To Date"
                           id="toDate"
+                          className='full-width'
                           value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -232,6 +238,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <Autocomplete
                       fullWidth
                       id="free-station"
+                      className='full-width'
                       freeSolo
                       size="small"
                       value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}

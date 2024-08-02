@@ -194,6 +194,7 @@
 .total-account .total-inputs label {
     padding: 0px 10px;
     font-weight: 500;
+    width: 87px;
 }
 
 .total-account .total-inputs input {

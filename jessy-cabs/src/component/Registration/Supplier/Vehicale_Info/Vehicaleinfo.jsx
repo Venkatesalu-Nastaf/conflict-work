@@ -184,7 +184,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,
+    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata
   } = useVehicleinfo();
 
   useEffect(() => {
@@ -350,7 +350,8 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{display: 'grid'}}>
+                <div style={{display: 'flex'}}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -362,8 +363,13 @@ const Vehicaleinfo = ({ stationName }) => {
                     label="Vehicle Reg No"
                     name="vehRegNo"
                     value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
+                    onChange={handleChangecredent}
                   />
+                    </div>
+                    <div style={{textAlign: 'center'}}>
+                      <span style={{color:"red"}}>{cerendentialdata ? `vehRegno Already Exist`: ""}</span>
+                    </div>
                 </div>
                 <div className="input">
                   <div className="icone">

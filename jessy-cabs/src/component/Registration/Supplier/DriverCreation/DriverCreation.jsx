@@ -122,7 +122,7 @@ const DriverCreation = ({ stationName }) => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
-        handleFileChange
+        handleFileChange,handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
 
     } = useDrivercreation();
 
@@ -161,7 +161,8 @@ const DriverCreation = ({ stationName }) => {
                                 // variant="standard"
                                 />
                             </div>
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{display: 'grid'}}>
+                            <div style={{display: 'flex'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -173,10 +174,16 @@ const DriverCreation = ({ stationName }) => {
                                     label="Driver Name"
                                     name="drivername"
                                     value={selectedCustomerData?.drivername || book.drivername}
-                                    onChange={handleChange}
+                                    // onChange={handleChange}
+                                    onChange={handleChangecredentdrivername}
                                 />
+                                </div>
+                                 <div style={{textAlign: 'center'}}>
+                              <span style={{color:"red"}}>{cerendentialdata ? `Drivername Already Exist`: ""}</span>
+                               </div>
                             </div>
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{display: 'grid'}}>
+                            <div style={{display: 'flex'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -188,8 +195,13 @@ const DriverCreation = ({ stationName }) => {
                                     label="User Name"
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
-                                    onChange={handleChange}
+                                    // onChange={handleChange}
+                                    onChange={handleChangecredentusername}
                                 />
+                                </div>
+                                 <div style={{textAlign: 'center'}}>
+                                <span style={{color:"red"}}>{cerendentialdata2 ? `UserName Already Exist`: ""}</span>
+                               </div>
                             </div>
                             <div className="input driver-input">
                                 <div className="icone">

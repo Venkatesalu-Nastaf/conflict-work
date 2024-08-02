@@ -302,6 +302,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="GroupTrip Id"
                     name="referenceno"
                     autoComplete='off'
@@ -315,6 +316,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="Invoice No"
                     value={invoiceno}
                     name="invoiceno"
@@ -328,6 +330,7 @@ const TransferReport = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
+                    className='full-width'
                     freeSolo
                     size="small"
                     options={MISformat?.map((option) => ({
@@ -349,6 +352,7 @@ const TransferReport = ({ stationName }) => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Month"
+                        className='full-width'
                         name="month"
                         value={date}
                         format="MMMM YYYY"
@@ -363,6 +367,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="free-solo-demo"
+                    className='full-width'
                     label="Organization"
                     value={customer}
                     name="customer"
@@ -376,6 +381,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="Rate Type"
                     value={ratetypeforpage}
                     name="ratetype"
@@ -389,6 +395,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="Invoice Date"
                     value={invoiceDate}
                     name="Billdate"
@@ -402,6 +409,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="From Date"
                     value={fromDate}
                     name="fromdate"
@@ -415,6 +423,7 @@ const TransferReport = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="id"
+                    className='full-width'
                     label="To Date"
                     value={endDate}
                     name="todate"
@@ -428,6 +437,7 @@ const TransferReport = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
+                    className='full-width'
                     freeSolo
                     size="small"
                     value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
@@ -449,6 +459,7 @@ const TransferReport = ({ stationName }) => {
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
+                    className='full-width'
                     freeSolo
                     size="small"
                     options={PDFbill.map((option) => ({

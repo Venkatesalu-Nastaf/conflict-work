@@ -215,6 +215,7 @@ const Employe = () => {
                   </div>
                   <DatePicker
                     id="Joining_Date"
+                    className="full-width"
                     label="Joining Date"
                     format="DD/MM/YYYY"
                     value={

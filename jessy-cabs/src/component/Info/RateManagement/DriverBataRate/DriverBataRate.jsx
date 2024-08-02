@@ -101,6 +101,7 @@ const DriverBataRate = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       id="from_date"
+                      className='full-width'
                       label="From Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
@@ -119,6 +120,7 @@ const DriverBataRate = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       id="to_end"
+                      className='full-width'
                       label="To Date"
                       format="DD/MM/YYYY"
                       value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
@@ -218,6 +220,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
+                    className='full-width'
                     id="ExtraPerHoursPrice"
                     label="ExtraPerHoursPrice"
                     name="ExtraPerHoursPrice"
@@ -239,6 +242,7 @@ const DriverBataRate = () => {
                   <TextField
                     type='number'
                     size="small"
+                    className='full-width'
                     id="ExtraPerDayPrice"
                     label="ExtraPerDayPrice"
                     name="ExtraPerDayPrice"

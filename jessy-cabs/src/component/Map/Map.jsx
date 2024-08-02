@@ -14,6 +14,7 @@ import { useState, useContext, useEffect } from 'react';
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ClearIcon from '@mui/icons-material/Clear';
+import { PermissionContext } from '../context/permissionContext';
 const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -30,6 +31,52 @@ const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
 };
 
 const Map = () => {
+  const [activeMenuItem, setActiveMenuItem] = useState('');
+  const { permissions } = useContext(PermissionContext)
+  const Maps = permissions[21]?.read;
+
+
+
+  const [warning, setWarning] = useState(false);
+  const hidePopup = () => {
+    setWarning(false);
+  };
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [warning]);
+  const handleMenuItemClick = (menuItem, alt, e) => {
+    localStorage.setItem('activeMenuItem', menuItem);
+    setActiveMenuItem(menuItem);
+    let hasPermission = 0;
+    switch (menuItem) {
+      case "RealTime":
+        hasPermission = Maps;
+        break;
+        case "Vehicle":
+        hasPermission = Maps;
+        break;
+      default:
+        break;
+    }
+    try {
+      if (hasPermission === 1) {
+        Navigate(alt)
+      }
+      else if (hasPermission === 0) {
+        e.preventDefault();
+        setWarning(true);
+        // setInfoMessage("You do not have Permission ..!")
+        // alert("You do not have Permission ..!");
+      }
+    }
+    catch {
+    }
+  };
   //permission --------------
 
   return (
@@ -40,30 +87,31 @@ const Map = () => {
           <MenuItem
             label="RealTime"
             // to={Billing && ("/home/billing/billing")}
-            alt="/home/billing/billing"
-            menuItemKey="Billing"
-            // activeMenuItem={activeMenuItem}
-            // handleMenuItemClick={handleMenuItemClick}
+            to={"/home/Map/RealTime"}
+            alt="/home/Map/RealTime"
+            menuItemKey="RealTime"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
           />
           <MenuItem
             label="Vehicle"
-            // to={Transfer && ("/home/billing/transfer")}
-            alt="/home/billing/transfer"
-            menuItemKey="Transfer"
-            // activeMenuItem={activeMenuItem}
-            // handleMenuItemClick={handleMenuItemClick}
+            to={"/home/Map/Vehicle"}
+            alt="/home/Map/Vehicle"
+            menuItemKey="Vehicle"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
           />
          
         </div>
       </div>
       <div className='alert-popup-main'>
-        {/* {warning &&
+        {warning &&
           <div className='alert-popup Warning' >
             <div className="popup-icon"> <ErrorOutlineIcon /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
             <p>You do not have Permission ..!</p>
           </div>
-        } */}
+        }
       </div>
 
       <Outlet />
@@ -74,3 +122,4 @@ const Map = () => {
 };
 
 export default Map;
+

@@ -6,12 +6,14 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import Excel from 'exceljs';
+import Email from '@mui/icons-material/Email';
+
 
 
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
-    const token = localStorage.getItem('tokensdata');
+    const create_atdata=dayjs().format("YYYY-MM-DD");
     // const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +27,7 @@ const useDrivercreation = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [searchText, setSearchText] = useState("")
@@ -36,6 +38,10 @@ const useDrivercreation = () => {
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [edit, setEdit] = useState(false)
+    const [cerendentialdata,setCredentialData]=useState();
+    const [cerendentialdata2,setCredentialData2]=useState();
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
+    const [datatrigger, setDatatrigger] = useState(false)
     // const [profileimage,setProfileimage]=useState('')
     // console.log(profileimage,"imagedata")
     // venkat
@@ -117,6 +123,7 @@ const useDrivercreation = () => {
         aadharno: '',
         Email:'',
         Profile_image:null,
+        created_at:dayjs().format("YYYY-MM-DD")
     });
 
     const handleFileChange = (e) => {
@@ -347,6 +354,83 @@ const useDrivercreation = () => {
         }));
     };
 
+
+    const uniquedrivernameno=async(drivernamedata)=>{
+        // console.log(customerdataname,"namee")
+        // console.log(customerdataname,ratenamedata,"ratt")
+        if(drivernamedata){
+
+            const response= await axios.get(`${apiUrl}/getcreduniquedrivername/${drivernamedata}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        } }
+
+        const uniquedriverusername=async(driverusernamedata)=>{
+            // console.log(customerdataname,"namee")
+            // console.log(customerdataname,ratenamedata,"ratt")
+            if(driverusernamedata){
+    
+                const response= await axios.get(`${apiUrl}/getcreduniqueusername/${driverusernamedata}`)
+                const responsedata=response.data;
+                
+                // console.log(response,"data")
+                // console.log(responsedata?.length,"reeee")
+               
+                if(responsedata?.length >=1){
+                    
+                    setCredentialData2(true)
+                    // return true;
+                }
+                else{
+                    setCredentialData2(false)
+                    // return false;
+                }
+            } }
+
+       const  handleChangecredentdrivername=(event)=>{
+        const { name, value } = event.target;
+       
+        const data=uniquedrivernameno(value)
+        console.log(data)
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+       }
+
+       const  handleChangecredentusername=(event)=>{
+        const { name, value } = event.target;
+       
+        const data=uniquedriverusername(value)
+        console.log(data)
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+       }
+
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
@@ -388,6 +472,7 @@ const useDrivercreation = () => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
+            formData.append("created_at",create_atdata)
 
             try {
                 await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
@@ -412,6 +497,7 @@ const useDrivercreation = () => {
         if (licencepdf !== null) {
             const formData = new FormData();
             formData.append("file", licencepdf);
+            formData.append("created_at",create_atdata)
             
             try {
                 await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
@@ -459,28 +545,105 @@ const useDrivercreation = () => {
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
+    
+  useEffect(() => {
+    const fetchData = async () => {
+      const organizationname = localStorage.getItem('usercompany');
+
+      try {
+        if (!organizationname) return
+        const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        if (response.status === 200) {
+
+          const userDataArray = await response.json();
+          if (userDataArray.length > 0) {
+            setOrganisationSendEmail(userDataArray[0])
+            setDatatrigger(!datatrigger)
+
+          } else {
+            setErrorMessage('User data not found.');
+            setError(true);
+          }
+        }
+      }
+      catch {
+      }
+    };
+    fetchData();
+  }, [apiUrl, datatrigger]);
+//   console.log(organistaionsendmail,"dataatatta")
+
+
+    const handlecheckmaildriver = async (lastBookingno) => {
+      
+         
+          try {
+          
+            const dataToSend = {
+              userid:lastBookingno,
+              Drivername:book.drivername,
+              UserName:book.username,
+              password:book.userpassword,
+              Sendmailauth: organistaionsendmail.Sender_Mail,
+              Mailauthpass: organistaionsendmail.EmailApp_Password,
+              Email:book.Email
+    
+    
+    
+            };
+            console.log(dataToSend, "datta")
+            await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
+            setSuccess(true);
+            setSuccessMessage("Mail Sent Successfully");
+          } catch (error) {
+            console.log(error,"dd")
+            setError(true);
+            setErrorMessage("An error occured while sending mail", error);
+          }
+        }
+        //  else {
+        //   setError(true);
+        //   setErrorMessage("Send mail checkbox is not checked. Email not sent.");
+        // }
+    //   };
+    
 
     const handleAdd = async () => {
         if (!book.stations && !book.drivername) {
-            setError(true)
-            setErrorMessage("All fields are mandatory");
+            setWarning(true);
+            setWarningMessage("All fields are mandatory");
             return
         }
-        if (!book.password && !book.address1) {
-            setError(true)
-            setErrorMessage("All fields are mandatory");
+        if (!book.Email) {
+            setWarning(true);
+            setWarningMessage("All fields are mandatory");
+            return
+        }
+        if (!book.userpassword && !book.address1) {
+            setWarning(true);
+            setWarningMessage("All fields are mandatory");
             return
         }
 
         if (!book.Mobileno && !book.licenseno) {
-            setError(true)
-            setErrorMessage("All fields are mandatory");
+            setWarning(true);
+            setWarningMessage("All fields are mandatory");
             return
         }
         if (!book.licenseexpdate) {
-            setError(true)
-            setErrorMessage("All fields are mandatory");
+            setWarning(true);
+            setWarningMessage("All fields are mandatory");
             return
+        }
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" Drivername Already Exists");
+            return;
+        }
+        if (cerendentialdata2 === true) {
+            setWarning(true);
+            setWarningMessage(" UserName Already Exists");
+            return;
         }
 
         try {
@@ -490,23 +653,20 @@ const useDrivercreation = () => {
                 console.log(key,book[key])
                 formData.append(key, book[key]);
               }
-
-             
-
-            // const data = { ...book }
-            // console.log(data, "bookadd")
-            // await axios.post(`${apiUrl}/drivercreation`, data);
-            await axios.post(`${apiUrl}/drivercreation`, formData, {
-                headers: {
-                  'x-auth-token': token,
+               // await axios.post(`${apiUrl}/drivercreation`, formData, {
+            //     headers: {
+            //       'x-auth-token': token,
                   
-                }
-              })
+            //     }
+            //   })
+
+            await axios.post(`${apiUrl}/drivercreation`, formData,)
             
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;
             licenceSubmit(lastdriveridno);
             addPdf(lastdriveridno);
+            handlecheckmaildriver(lastdriveridno)
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
@@ -542,7 +702,7 @@ const useDrivercreation = () => {
             }
         } catch {
             setError(true);
-            setErrorMessage("sorry");
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -569,7 +729,7 @@ const useDrivercreation = () => {
                 }
             } catch {
                 setError(true);
-                setErrorMessage("sorry");
+                setErrorMessage("Check your Network Connection");
             }
 
         }
@@ -919,7 +1079,7 @@ const useDrivercreation = () => {
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
         handleExcelDownload,
-        handleFileChange
+        handleFileChange, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
         
         // venkat
     };

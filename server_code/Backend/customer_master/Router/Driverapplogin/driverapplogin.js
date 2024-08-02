@@ -63,7 +63,8 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
     badgeno,
     badgeexpdate,
     aadharno,
-    Email
+    Email,
+    created_at
   } = req.body;
   console.log(drivername,
     username,
@@ -78,11 +79,11 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
     badgeno,
     badgeexpdate,
     aadharno,
-    Email)
+    Email,created_at)
  
 
-  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image], (err, result) => {
+  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
     if (err) {
       console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
@@ -300,6 +301,70 @@ router.get('/searchfordriver', (req, res) => {
     // console.log(result,"searef")
     return res.status(200).json(result);
   });
+});
+
+router.get("/getcreduniquedrivername/:drivername",(req,res)=>{
+  const drivername=req.params.drivername;
+  db.query("select drivername from drivercreation  where drivername=?",[drivername],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results)
+    return res.status(200).json(results);
+  })
+})
+router.get("/getcreduniqueusername/:username",(req,res)=>{
+  const username=req.params.username;
+  db.query("select username from drivercreation  where username=?",[username],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results)
+    return res.status(200).json(results);
+  })
+})
+
+//send email from booking page
+router.post('/send-emaildriverdata', async (req, res) => {
+    try {
+    
+        const { userid,Drivername,UserName,password,Sendmailauth,Mailauthpass,Email} = req.body;
+        console.log( userid,Drivername,UserName,password,Sendmailauth,Mailauthpass,Email,"ggggggggg")
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: Sendmailauth, // Your email address
+                pass: Mailauthpass, // Your email password
+            },
+            tls: {
+                // Ignore SSL certificate errors
+                rejectUnauthorized: false
+            }
+        });
+
+        // Email content for the owner
+        const ownerMailOptions = {
+            from:Sendmailauth,
+            to:`${Email},${Sendmailauth}`, // Set the owner's email address
+            // text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
+            text: `HI WELCOME TO JESSCY CABS,\n UserId:${userid}\n DriverName:${Drivername}\n UserName:${UserName}\n Password:${password}`,
+        };
+
+        // Send email to the owner
+        await transporter.sendMail(ownerMailOptions);
+
+        // Email content for the customer
+       
+
+        // Send greeting email to the customer
+    
+
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch {
+        res.status(500).json({ message: 'An error occurred while sending the email' });
+    }
 });
 
 module.exports = router;

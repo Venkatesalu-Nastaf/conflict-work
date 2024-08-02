@@ -79,7 +79,7 @@ const RateType = ({ stationName, organizationNames }) => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,
+        handleDateChange,cerendentialdata,handleChangecredent
     } = useRatype();
 
     useEffect(() => {
@@ -114,7 +114,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         name="driverid"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
-                                        onChange={handleChange}
+                                        onChange={handleChangecredent}
                                     />
                                 </div>
                                 <div className="input">
@@ -164,7 +164,8 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{display: 'grid'}}>
+                                <div style={{display: 'flex'}}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -193,8 +194,13 @@ const RateType = ({ stationName, organizationNames }) => {
                                         label="Ratename"
                                         name="ratename"
                                         value={selectedCustomerData?.ratename || book.ratename}
-                                        onChange={handleChange}
+                                        onChange={handleChangecredent}
+
                                     />
+                                    </div>
+                                    <div style={{textAlign: 'center'}}>
+                                    <span style={{color:"red"}}>{cerendentialdata ? `${selectedCustomerData?.ratetype || book.ratetype} Already Exist`: ""}</span>
+                                    </div>
                                 </div>
                                 <div className="input">
                                     <div className="icone">

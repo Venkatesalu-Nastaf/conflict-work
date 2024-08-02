@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import "./Billing.css";
 import {
     Autocomplete,
@@ -55,6 +55,9 @@ import InvoicePdf from '../Pdf/InvoicePdf';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
 import { PdfData } from '../../Transfer/TransferReport/PdfContext';
 import Modal from '@mui/material/Modal';
+
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -137,8 +140,10 @@ const Billing = () => {
     //   organisation logo
     const { logo } = useData()
     const { particularPdf, organizationDetail } = PdfData()
+
     return (
         <div className="form-container form-container-billing">
+
             <div className="Billing-form">
                 <form onSubmit={handleClick}>
                     <div className="Billing-page-header">
@@ -151,6 +156,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="tripid"
+                                    className='full-width'
                                     label="Trip Sheet No"
                                     name="tripid"
                                     autoFocus
@@ -168,6 +174,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="Billingno"
+                                    className='full-width'
                                     label="Billing No"
                                     name="billingno"
                                     autoComplete="new-password"
@@ -184,6 +191,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="department"
+                                    className='full-width'
                                     label="Station"
                                     name="department"
                                     autoComplete="new-password"
@@ -198,6 +206,7 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         id="billingDate"
+                                        className='full-width'
                                         label="Billing Date"
                                         value={book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         format="DD/MM/YYYY"
@@ -217,6 +226,7 @@ const Billing = () => {
                                     type='number'
                                     // margin="normal"
                                     id="totalkm1"
+                                    className='full-width'
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
@@ -233,6 +243,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="totaltime"
+                                    className='full-width'
                                     label="Total Hours"
                                     name="totaltime"
                                     autoComplete="new-password"
@@ -247,7 +258,7 @@ const Billing = () => {
                                 <TextField
                                     // margin="normal"
                                     size="small"
-                                    sx={{ width: "300px" }}
+                                    className='full-width'
                                     id="Customer"
                                     label="Customer"
                                     name="customer"
@@ -263,7 +274,7 @@ const Billing = () => {
                                 <TextField
                                     // margin="normal"
                                     size="small"
-                                    sx={{ width: "300px" }}
+                                    className='full-width'
                                     id="Supplier"
                                     label="Supplier"
                                     name="supplier"
@@ -280,6 +291,7 @@ const Billing = () => {
                                     <DatePicker
                                         label="Trip Date"
                                         id="tripDate"
+                                        className='full-width'
                                         value={book.startdate ? dayjs(book.startdate) : null}
                                         format="DD/MM/YYYY"
                                         onChange={(date) => handleDateChange(date, 'startdate')}
@@ -299,6 +311,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="totaldays"
+                                    className='full-width'
                                     label="Total Days"
                                     name="totaldays"
                                     autoComplete="new-password"
@@ -346,6 +359,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="vehRegNo"
+                                    className='full-width'
                                     label="Vehicle No"
                                     name="vehRegNo"
                                     autoComplete="new-password"
@@ -361,6 +375,7 @@ const Billing = () => {
                                     // margin="normal"
                                     size="small"
                                     id="Trips"
+                                    className='full-width'
                                     label="Trips"
                                     name="trips"
                                     autoComplete="new-password"
@@ -1387,8 +1402,8 @@ const Billing = () => {
                     }
                 </div>
 
-                <div style={{position: 'relative', right: '86px'}}>
-                    <Box className='' sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: "1" }}>
+                <div style={{ position: 'relative', right: '86px' }}>
+                    <Box className='' sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "1" }}>
                         <StyledSpeedDial
                             ariaLabel="SpeedDial playground example"
                             icon={<SpeedDialIcon />}

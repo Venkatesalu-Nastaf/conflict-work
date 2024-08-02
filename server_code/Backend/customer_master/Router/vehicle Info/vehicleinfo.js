@@ -54,10 +54,10 @@ router.get('/vechiclenameinfo', (req, res) => {
 
   db.query('SELECT * FROM vehicleinfo WHERE vehicleName LIKE ?', [`${vehicletypename}%`], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
     }
     if (result.length === 0) {
-      return res.status(404).json({ error: 'Customer not found' });
+      return res.status(404).json({ error: 'Vehicle Not Found' });
     }
     const vehicletypedetails = result;
     // Assuming there is only one matching customer
@@ -192,9 +192,10 @@ router.post('/insurance-pdf/:vehicleId', Insurance_uploadfile.single("file"), as
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
 
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) {
         console.log(err)
@@ -222,9 +223,10 @@ router.post('/licence-pdf/:vehicleId', Licence_uploadfile.single("file"), async 
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
   if (fileName && vehicleId) {
 
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });
@@ -249,9 +251,10 @@ router.post('/nationalPermit-pdf/:vehicleId', NationalPermit_uploadfile.single("
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
 
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });
@@ -275,9 +278,10 @@ router.post('/statePermit-pdf/:vehicleId', StatePermit_uploadfile.single("file")
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
 
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });
@@ -301,9 +305,10 @@ router.post('/rcBook-pdf/:vehicleId', Rcbook_uploadfile.single("file"), async (r
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
 
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });
@@ -328,8 +333,10 @@ router.post('/fcCopy-pdf/:vehicleId', setFcCopy_uploadfile.single("file"), async
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
+  
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });
@@ -347,6 +354,22 @@ router.get('/vehicle-docView/:vechicleId', (req, res) => {
     return res.json(result);
   })
 })
+
+router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
+  const vehregno=req.params.vehregno;
+  db.query("select vehRegNo from vehicleinfo where vehRegNo=?",[vehregno],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results)
+    return res.status(200).json(results);
+  })
+})
+
+
+
+
+
 
 
 

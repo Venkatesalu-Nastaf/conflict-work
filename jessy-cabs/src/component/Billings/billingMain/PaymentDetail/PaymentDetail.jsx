@@ -78,6 +78,7 @@ const PaymentDetail = ({ organizationNames }) => {
                   <TextField
                     size="small"
                     id="billingno"
+                    className='full-width'
                     label="Billing No"
                     name="billingno"
                     value={billingno || ''}

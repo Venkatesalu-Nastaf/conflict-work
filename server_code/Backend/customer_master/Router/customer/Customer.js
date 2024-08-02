@@ -196,40 +196,117 @@ router.get('/getcustomerorderdata/:customerdata', (req, res) => {
   })
 
 })
-router.put('/updatecustomerorderdata', (req, res) => {
+// router.put('/updatecustomerorderdata', (req, res) => {
 
+//   const customerdata = req.body;
+//   if (!Array.isArray(customerdata)) {
+//     return res.status(400).json({ error: "Request body must be an array" });
+//   }
+
+//   // Insert each object in the array as a separate row in the database
+//   const insertQueries = customerdata.map(bookData => {
+
+//     return new Promise((resolve, reject) => {
+//       db.query('Update customerOrderdata SET customer=?,orderedby=?,orderByEmail=?,orderByMobileNo=? where id=?'
+//         , [bookData.customer, bookData.orderedby, bookData.orderByEmail, bookData.orderByMobileNo, bookData.id], (err, result) => {
+//           if (err) {
+//             reject(err);
+//           } else {
+//             resolve(result);
+//           }
+//         });
+//     });
+//   });
+
+//   // Execute all insert queries concurrently
+//   Promise.all(insertQueries)
+//     .then(() => {
+//       return res.status(200).json({ message: "Data inserted successfully" });
+
+//     })
+//     .catch(err => {
+//       console.log(err);
+//       return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//     });
+
+// })
+
+router.put('/updatecustomerorderdata', (req, res) => {
   const customerdata = req.body;
+
   if (!Array.isArray(customerdata)) {
     return res.status(400).json({ error: "Request body must be an array" });
   }
 
-  // Insert each object in the array as a separate row in the database
-  const insertQueries = customerdata.map(bookData => {
-
+  // Prepare queries based on whether 'id' is present
+  const queries = customerdata.map(data => {
     return new Promise((resolve, reject) => {
-      db.query('Update customerOrderdata SET customer=?,orderedby=?,orderByEmail=?,orderByMobileNo=? where id=?'
-        , [bookData.customer, bookData.orderedby, bookData.orderByEmail, bookData.orderByMobileNo, bookData.id], (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
+      if (data.id) {
+        // Update existing record
+        db.query(
+          'UPDATE customerOrderdata SET customer=?, orderedby=?, orderByEmail=?, orderByMobileNo=? WHERE id=?',
+          [data.customer, data.orderedby, data.orderByEmail, data.orderByMobileNo, data.id],
+          (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
           }
-        });
+        );
+      } else {
+        // Insert new record
+        db.query(
+          'INSERT INTO customerOrderdata (customer, orderedby, orderByEmail, orderByMobileNo) VALUES (?, ?, ?, ?)',
+          [data.customer, data.orderedby, data.orderByEmail, data.orderByMobileNo],
+          (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      }
     });
   });
 
-  // Execute all insert queries concurrently
-  Promise.all(insertQueries)
-    .then(() => {
-      return res.status(200).json({ message: "Data inserted successfully" });
 
+  // Execute all queries concurrently
+  Promise.all(queries)
+    .then(() => {
+      return res.status(200).json({ message: "Data processed successfully" });
     })
     .catch(err => {
       console.log(err);
-      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+      return res.status(500).json({ error: "Failed to process data into MySQL" });
     });
+});
+
+router.delete("/deletecustomerorderdatasdata/:id",(req,res)=>{
+  const deleteid=req.params.id;
+  
+  db.query("delete from customerOrderdata where id=?",[deleteid],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    
+    return res.status(200).json("data delete succesfuully")
+  })
 
 })
+
+router.get('/ratemanagmentCustomerdata',(req,res)=>{
+  db.query(`SELECT ratename from ratetype where ratetype="Customer"`, (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+      }
+      console.log(results,"hhh")
+      return res.status(200).json(results);
+  });
+
+})
+
 
 router.delete("/deletecustomerorderdata/:customer", (req, res) => {
 
@@ -335,6 +412,19 @@ router.get('/getCustomer-hybrid/:customer', (req, res) => {
     }
     console.log("result", result)
     return res.status(200).json(result[0])
+  })
+})
+
+router.get("/getuniqueCustomerdata/:customer",(req,res)=>{
+  const customer=req.params.customer;
+  console.log(customer,"params")
+  db.query("select customer from customers where customer=?",[customer],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+    }
+    console.log(results.length)
+    return res.status(200).json(results);
+
   })
 })
 

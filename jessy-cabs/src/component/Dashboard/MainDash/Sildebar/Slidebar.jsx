@@ -234,6 +234,8 @@ const Sidebar = () => {
   const SETTING = permissions[12]?.read || permissions[13]?.read;
   const INFO = permissions[16]?.read;
   const Dashbord_read = permissions[20]?.read;
+   // thsi for map page permisiion
+   const Maps=permissions[21]?.read;
 
 
   // its for hiding navigation based on permission 
@@ -242,6 +244,9 @@ const Sidebar = () => {
   const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
   const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
   const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+
+     // thsi for map page permisiion
+     const Map_page_permission=permissions[21]?.read;
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
@@ -269,6 +274,9 @@ const Sidebar = () => {
       case "Dashboard page":
         hasPermission = Dashbord_read;
         break;
+      case "Map page":
+          hasPermission = Maps;
+            break;  
       case "User page":
         hasPermission = 1;
         break;
@@ -1470,12 +1478,13 @@ const Sidebar = () => {
           )}
 
 {/* for vehiecle */}
-{booking_page_permission &&
+{/* for vehiecle */}
+{Map_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded==false ? '' : 'Map'}`}
-                to={BOOKING && ("/home/Map/Map")}
-                alt="/home/Map/Map"
+                to={Maps && ("/home/Map/RealTime")}
+                alt="/home/Map/RealTime"
                 value="/home/Map"
                 menuItemKey="/home/Map"
                 name="Map page"

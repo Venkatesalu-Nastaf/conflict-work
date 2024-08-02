@@ -80,6 +80,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-Organization"
+                                        className='full-width'
                                         freeSolo
                                         size="small"
                                         value={customer}
@@ -100,6 +101,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 id="fromDate"
+                                                className='full-width'
                                                 label="From Date"
                                                 format="DD/MM/YYYY"
                                                 value={fromDate}
@@ -116,6 +118,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 id="toDate"
+                                                className='full-width'
                                                 label="To Date"
                                                 format="DD/MM/YYYY"
                                                 value={toDate}

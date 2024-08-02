@@ -742,9 +742,11 @@ body {
   zoom: 90%;
 }
 
-.css-k008qs{
+.head-tab-all .css-k008qs {
   overflow: auto;
 }
+
+
 
 /* @media screen and (min-width: 769px) {
   .side-bar-menu-close .form-container-booking .container-main,

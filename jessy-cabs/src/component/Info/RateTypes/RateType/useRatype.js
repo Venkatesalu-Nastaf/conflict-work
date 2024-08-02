@@ -35,8 +35,10 @@ const useRatype = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
+    const [cerendentialdata,setCredentialData]=useState()
+    
 
 
 
@@ -303,6 +305,47 @@ const useRatype = () => {
         closetime:dayjs(),
     });
 
+   
+
+     const uniqueRatetype=async(customerdataname,ratenamedata)=>{
+        // console.log(customerdataname,"namee")
+        console.log(customerdataname,ratenamedata,"ratt")
+        if(customerdataname && ratenamedata){
+
+            const response= await axios.get(`${apiUrl}/getcustomeruniqueratetype/${customerdataname}/${ratenamedata}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        } }
+
+       const  handleChangecredent=(event)=>{
+        const { name, value } = event.target;
+        console.log(selectedCustomerData?.ratename || book.ratename,value,"valuee")
+        const data=uniqueRatetype(selectedCustomerData?.ratetype || book.ratetype,value)
+        console.log(data)
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+       }
+  
+
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
@@ -338,6 +381,7 @@ const useRatype = () => {
             [name]: selectedOption,
         }));
     };
+    
 
 
 
@@ -350,8 +394,8 @@ const useRatype = () => {
             ratename: '',
             validity: '',
             active: '',
-            starttime: '',
-            closetime: '',
+            starttime:dayjs(),
+            closetime:dayjs(),
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
@@ -368,21 +412,45 @@ const useRatype = () => {
 
     const handleAdd = async () => {
         const ratename = book.ratename;
+        const stations = book.stations;
+        const ratetype = book.ratetype;
+        if (!stations) {
+            setWarning(true);
+            setWarningMessage("Fill The Ratename");
+            return;
+        }
+        if (!ratetype) {
+            setWarning(true);
+            setWarningMessage("Fill The RateType");
+            return;
+        }
         if (!ratename) {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+            setWarning(true);
+            setWarningMessage("Fill The Ratename");
+            return;
+        }
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" Ratename Already Exists");
             return;
         }
         try {
+            console.log(book.starttime,book.closetime)
+            const starttime=book.starttime || selectedCustomerData.starttime||dayjs();
+           const  closetime=  book.closetime || selectedCustomerData.closetime|| dayjs();
+           console.log(starttime,"start",closetime,"clos")
             const updatedBook = {
                 stations: book.stations || selectedCustomerData.stations,
                 ratetype:book.ratetype || selectedCustomerData.ratetype,
                 ratename: book.ratename || selectedCustomerData.ratename,
                 validity: book.validity || selectedCustomerData.validity,
                 active: book.active || selectedCustomerData.active,
-                starttime: book.starttime || selectedCustomerData.starttime,
-                closetime: book.closetime || selectedCustomerData.closetime
-            };
+                // starttime: book.starttime || selectedCustomerData.starttime,
+                // closetime: book.closetime || selectedCustomerData.closetime
+                starttime:starttime,
+                closetime:closetime
+            }; 
+             console.log(updatedBook)
 
             await axios.post(`${apiUrl}/ratetype`, updatedBook);
             handleCancel();
@@ -411,9 +479,16 @@ const useRatype = () => {
             }
         }
         handlelist();
-    }, [apiUrl]);
+    }, [apiUrl,rows]);
 
     const handleEdit = async (driverid) => {
+
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" Ratename Already Exists");
+            return;
+        }
+        try{
         const selectedCustomer = rows.find((row) => row.driverid === driverid);
         const updatedCustomer = {
             driverid: selectedCustomer,
@@ -429,6 +504,11 @@ const useRatype = () => {
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
+    }
+    catch(err){
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+    }
     };
 
     const handleClick = async (event, actionName, driverid) => {
@@ -520,7 +600,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,
+        handleDateChange,cerendentialdata,handleChangecredent
 
     };
 };

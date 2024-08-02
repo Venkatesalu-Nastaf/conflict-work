@@ -101,6 +101,7 @@ const TaxSetting = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         id="tate_tax_form"
+                                        className='full-width'
                                         label="Date Tax From"
                                         value={formData.startdate || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null || book.DateTaxFrom ? dayjs(book.DateTaxFrom) : null}
                                         format="DD/MM/YYYY"
@@ -119,6 +120,7 @@ const TaxSetting = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         id="date_tax_to"
+                                        className='full-width'
                                         label="Date Tax To"
                                         value={formData.startdate || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null || book.DateTaxTo ? dayjs(book.DateTaxTo) : null}
                                         format="DD/MM/YYYY"

@@ -75,10 +75,11 @@ router.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
   console.log(fileName,"driver pdf",fileType,userId)
   if (fileName) {
 
-    const sql = `insert into driver_proof(driverid,fileName,file_type	)values('${userId}','${fileName}','${fileType}')`;
+    const sql = `insert into driver_proof(driverid,fileName,file_type,created_at)values('${userId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) {
 
@@ -107,8 +108,10 @@ router.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (r
   const userId = req.params.id
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
+  const {created_at}=req.body;
+  console.log(created_at)
   if (fileName) {
-    const sql = `insert into driver_proof(driverid,fileName,file_type)values('${userId}','${fileName}','${fileType}')`;
+    const sql = `insert into driver_proof(driverid,fileName,file_type,created_at)values('${userId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       console.log(result, "license")

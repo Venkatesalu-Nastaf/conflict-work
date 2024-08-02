@@ -151,6 +151,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-ReferenceNo"
+                                        className='full-width'
                                         freeSolo
                                         size="small"
                                         value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
@@ -171,6 +172,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-customer"
+                                        className='full-width'
                                         freeSolo
                                         size="small"
                                         value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
@@ -191,6 +193,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 id="Billingdate"
+                                                className='full-width'
                                                 label="Bill Date"
                                                 name="Billingdate"
                                                 value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
@@ -207,6 +210,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 id="fromdate"
+                                                className='full-width'
                                                 label="From Date"
                                                 value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
                                                 format="DD/MM/YYYY"
@@ -234,6 +238,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
                                                 format="DD/MM/YYYY"
                                                 id="todate"
+                                                className='full-width'
                                                 label="ToDate"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'todate');
@@ -256,6 +261,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         id="freestation"
+                                        className='full-width'
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}

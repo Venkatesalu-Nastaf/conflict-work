@@ -11,6 +11,9 @@ import Excel from 'exceljs';
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const createddata=dayjs().format('YYYY-MM-DD')
+    console.log(createddata,"datta")
+
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
     const [rows1, setRows1] = useState([]);
@@ -23,13 +26,14 @@ const useVehicleinfo = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [drivername, setDrivername] = useState([]);
     const [enterPressCount, setEnterPressCount] = useState(0);
     const [edit, setEdit] = useState(false)
+    const [cerendentialdata,setCredentialData]=useState()
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -464,6 +468,7 @@ const useVehicleinfo = () => {
         driverName: '',
         tankCap: '',
         active: 'yes',
+        created_at:dayjs(),
     });
 
     const handleCancel = () => {
@@ -495,6 +500,7 @@ const useVehicleinfo = () => {
             driverName: '',
             tankCap: '',
             active: 'yes',
+            created_at:dayjs(),
 
         }));
         setSelectedCustomerData({});
@@ -550,6 +556,44 @@ const useVehicleinfo = () => {
             [name]: parsedDate,
         }));
     };
+
+    const uniquevechicleRegno=async(veghnodata)=>{
+        // console.log(customerdataname,"namee")
+        // console.log(customerdataname,ratenamedata,"ratt")
+        if(veghnodata){
+
+            const response= await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        } }
+
+       const  handleChangecredent=(event)=>{
+        const { name, value } = event.target;
+       
+        const data=uniquevechicleRegno(value)
+        console.log(data)
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+       }
 
 
     const handleKeyEnter = useCallback(
@@ -611,6 +655,7 @@ const useVehicleinfo = () => {
         if (insurance !== null) {
             const formData = new FormData();
             formData.append("file", insurance);
+            formData.append("created_at",createddata);
             try {
                 await axios.post(`${apiUrl}/insurance-pdf/${vehicleid}`, formData)
                 setInsurance(null)
@@ -652,6 +697,7 @@ const useVehicleinfo = () => {
         if (nationalPermit !== null) {
             const formData = new FormData();
             formData.append("file", nationalPermit);
+            formData.append("created_at",createddata);
             try {
                 await axios.post(`${apiUrl}/nationalPermit-pdf/${vehicleid}`, formData);
                 setNationalPermit(null);
@@ -672,6 +718,7 @@ const useVehicleinfo = () => {
         if (statePermit !== null) {
             const formData = new FormData();
             formData.append("file", statePermit);
+            formData.append("created_at",createddata);
             try {
                 await axios.post(`${apiUrl}/statePermit-pdf/${vechicleid}`, formData);
                 setStatePermit(null);
@@ -692,6 +739,7 @@ const useVehicleinfo = () => {
         if (rcBook !== null) {
             const formData = new FormData();
             formData.append("file", rcBook);
+            formData.append("created_at",createddata);
             try {
                 await axios.post(`${apiUrl}/rcBook-pdf/${vechicleid}`, formData);
                 setRcbook(null);
@@ -712,6 +760,7 @@ const useVehicleinfo = () => {
         if (fcCopy !== null) {
             const formData = new FormData();
             formData.append("file", fcCopy);
+            formData.append("created_at",createddata);
             try {
                 await axios.post(`${apiUrl}/fcCopy-pdf/${vechicleid}`, formData);
                 setFcCopy(null);
@@ -730,64 +779,69 @@ const useVehicleinfo = () => {
 
 
         if (!book.vehicleName) {
-            setError(true);
-            setErrorMessage("Enter Vehiclename");
+            setWarning(true);
+            setWarningMessage("Enter Vehiclename");
             return;
 
         }
         if (!book.hiretypes) {
-            setError(true);
-            setErrorMessage("Enter Hiretypes");
+            setWarning(true);
+            setWarningMessage("Enter Hiretypes");
             return;
 
         }
         if (!book.fueltype) {
-            setError(true);
-            setErrorMessage("Enter Fueltype");
+            setWarning(true);
+            setWarningMessage("Enter Fueltype");
             return;
 
         }
         if (!book.Groups) {
-            setError(true);
-            setErrorMessage("Enter Groups");
+            setWarning(true);
+            setWarningMessage("Enter Groups");
             return;
 
         }
         if (!book.vehType) {
-            setError(true);
-            setErrorMessage("Choose vehicletype");
+            setWarning(true);
+            setWarningMessage("Choose vehicletype");
             return;
 
         }
         if (!book.mobileNo) {
-            setError(true);
-            setErrorMessage("Enter MobileNo");
+            setWarning(true);
+            setWarningMessage("Enter MobileNo");
             return;
 
         }
         if (!book.driverName) {
-            setError(true);
-            setErrorMessage(" Choose Drivername");
+            setWarning(true);
+            setWarningMessage(" Choose Drivername");
             return;
 
         }
         if (!book.vehRegNo) {
-            setError(true);
-            setErrorMessage("Enter VehicleRegNo");
+            setWarning(true);
+            setWarningMessage("Enter VehicleRegNo");
             return;
 
         }
         if (!book.stations) {
-            setError(true);
-            setErrorMessage("Choose Stations");
+            setWarning(true);
+            setWarningMessage("Choose Stations");
             return;
 
         }
         if (!book.owner) {
-            setError(true);
-            setErrorMessage("Enter The Owner Name");
+            setWarning(true);
+            setWarningMessage("Enter The Owner Name");
             return;
 
+        }
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" VehicleRegNo Already Exists");
+            return;
         }
 
 
@@ -804,6 +858,7 @@ const useVehicleinfo = () => {
             // addLicence_copy(lastvehicleidno);
             addInsurence_copy(lastvehicleidno);
             handleCancel();
+            setCredentialData()
 
             setRows([]);
             setSuccess(true);
@@ -873,7 +928,7 @@ const useVehicleinfo = () => {
             // addLicence_copy(selectedCustomerData.vehicleId);
             addInsurence_copy(selectedCustomerData.vehicleId);
             handleCancel();
-
+            setCredentialData()
             setRows1([]);
             setRows([])
             setSuccess(true);
@@ -966,7 +1021,7 @@ const useVehicleinfo = () => {
             }
         } catch {
             setError(true);
-            setErrorMessage("No data found")
+            setErrorMessage("Check your Network Connection")
         }
     };
 
@@ -994,7 +1049,7 @@ const useVehicleinfo = () => {
                 }
             } catch {
                 setError(true);
-                setErrorMessage("sorry");
+                setErrorMessage("Check your Network Connection");
             }
 
         }
@@ -1006,6 +1061,7 @@ const useVehicleinfo = () => {
         handleChange({
             target: { name: "vehicleName", value: customerData.vehicleName },
         });
+        setCredentialData()
 
         setEdit(true)
         setIsEditMode(true);
@@ -1013,7 +1069,7 @@ const useVehicleinfo = () => {
     const handleRowClick1 = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-
+        setCredentialData()
         setEdit(true)
         setIsEditMode(true);
     }, []);
@@ -1112,7 +1168,7 @@ const useVehicleinfo = () => {
         setSelectAll,
         selectAll,
         handleSelectAll,
-        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,
+        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata
     };
 };
 

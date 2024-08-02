@@ -63,7 +63,8 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
     badgeno,
     badgeexpdate,
     aadharno,
-    Email
+    Email,
+    created_at
   } = req.body;
   console.log(drivername,
     username,
@@ -78,11 +79,11 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
     badgeno,
     badgeexpdate,
     aadharno,
-    Email)
+    Email,created_at)
  
 
-  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image], (err, result) => {
+  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
     if (err) {
       console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });

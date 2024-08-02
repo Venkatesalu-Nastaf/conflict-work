@@ -46,9 +46,6 @@ import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
 import { Reports } from "./component/Registration/Report/Reports";
-import Vehiecle from "./component/Vehiecle/Vehiecle";
-import { Overview } from "./component/Vehiecle/Overview/Overview";
-import { Vehiecles } from "./component/Vehiecle/Vehiecles/Vehiecles";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
@@ -93,12 +90,14 @@ function App() {
   const Mailers = permissions[18]?.read;
   const INFO_FuelInfo = permissions[19]?.read;
   const Dashbord_read = permissions[20]?.read;
-
+   // this for map page
+   const Maps=permissions[21]?.read;
 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
   const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
   const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
   const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
+  const Map_page_permission=permissions[21]?.read;
   // const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
 
   //   let landingPAge ;
@@ -315,7 +314,7 @@ function App() {
                   (
                     Billing_permission ? (<Navigate to="/home/billing/billing" />) :
                       (
-                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : <Navigate to="/home/info/ratetype" />)
+                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission? (<Navigate to="/home/Map/RealTime" />) : <Navigate to="/home/info/ratetype" />)
                       )
                   )
                 )
@@ -339,26 +338,15 @@ function App() {
                 />
               </Route>
 
-              <Route path="/home/Vehiecle" element={<Vehiecle />}>
-                <Route
-                  path="/home/Vehiecle/Overview"
-                  element={BOOKING !== 0 ? <Overview stationName={stationName} customerData={customerData} /> : <NoPermission />}
-                />
-                <Route
-                  path="/home/Vehiecle/Vehiecles"
-                  element={TriSheet !== 0 ? <Vehiecles stationName={stationName} logoImage={logo} /> : <NoPermission />}
-                />
-                
-              </Route>
 
               <Route path="/home/Map" element={<Map />}>
                 <Route
                   path="/home/Map/RealTime"
-                  element={BOOKING !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={Maps !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/Map/Vehicle"
-                  element={TriSheet !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Maps !== 0  ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
                 
               </Route>

@@ -87,6 +87,18 @@ router.get('/ratetypevendor/:ratetype', (req, res) => {
     return res.status(200).json(results);
   });
 });
+router.get('/getcustomeruniqueratetype/:ratetype/:ratename',(req,res)=>{
+  const ratetype=req.params.ratetype;
+  const ratename=req.params.ratename;
+
+  db.query("select ratename from ratetype where ratetype=? and ratename=?",[ratetype,ratename],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results)
+    return res.status(200).json(results);
+  })
+})
 // End Ratetype database
 
 module.exports = router;

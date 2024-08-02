@@ -15,6 +15,7 @@ import { BsExclamationCircle } from "react-icons/bs";
 import { APIURL } from '../../../url';
 import { useLocation } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 
 
@@ -30,6 +31,8 @@ const TemplateCreation = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
+  const [warning,setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState({});
   const [editmode, setEditmode] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -146,6 +149,9 @@ const TemplateCreation = () => {
       setTemplateData({})
       setSuccess(true);
       setSuccessMessage("Successfully Added");
+      setTimeout(() => {
+        navigate("/home/info/mailer");
+      },1000);
 
     } catch (err) {
       console.log(err);
@@ -184,7 +190,12 @@ const TemplateCreation = () => {
         await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`, formDataeditToSend)
 
       }
-      navigate("/home/info/mailer");
+      // navigate("/home/info/mailer");
+      setSuccess(true);
+      setSuccessMessage("Successfully Updated");
+      setTimeout(() => {
+        navigate("/home/info/mailer");
+      },1000);
 
     }
     catch (err) {
@@ -389,6 +400,13 @@ const TemplateCreation = () => {
             <p>{successMessage}</p>
           </div>
         )}
+         {warning &&(
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p style={{color:'black'}}>{warningMessage}</p>
+              </div>
+            )}
       </div>
     </>
   );

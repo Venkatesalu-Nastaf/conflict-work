@@ -18,8 +18,10 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch,Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
+
+
 
 
 // ICONS
@@ -94,8 +96,8 @@ const Customer = ({ stationName }) => {
     isEditMode,
     handleEdit,
     customerfieldSets,
-    handleChangecustomer,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, setSelectedCustomerData,
+    handleChangecustomer,deletedialogbox,setDeletedDialog,
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, setSelectedCustomerData,handleRemove,customerratetype,handleChangeuniquecustomer,cerendentialdata
   } = useCustomer();
 
   useEffect(() => {
@@ -113,6 +115,17 @@ const Customer = ({ stationName }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+  const handleClickOpen = () => {
+   console.log(true,"truu")
+    setDeletedDialog(true)
+  };
+
+  
+const handleClose=()=>{
+  console.log("false")
+  setDeletedDialog(false)
+}  
+  
 
 
 
@@ -156,9 +169,14 @@ const Customer = ({ stationName }) => {
                     value={selectedCustomerData?.customer || book.customer}
                     autoComplete="new-password"
                     // variant="standard"
-                    onChange={handleChange}
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquecustomer}
                     name="customer"
                   />
+                  <>
+                  {cerendentialdata?
+                  <p style={{color:'red'}}>customer Adlready exist</p>:""}
+                  </>
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -237,7 +255,7 @@ const Customer = ({ stationName }) => {
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     margin='normal'
                     size='small'
                     name="rateType"
@@ -248,7 +266,27 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     id="ratetype"
                   // variant="standard"
-                  />
+                  /> */}
+
+                  <Autocomplete
+                  fullWidth
+                  size="small"
+                   id="ratetype"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
+                  // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                  value={selectedCustomerData?.rateType || book.rateType || ''}
+                  // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+                  options={customerratetype.map((option) => ({ label: option }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.rateType || book.rateType || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Rate Type" name="rateType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -330,6 +368,7 @@ const Customer = ({ stationName }) => {
 
 
               </div>
+              
               <div className="input-field Customer-page-input-field-addbtn">
                 {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
 
@@ -390,11 +429,43 @@ const Customer = ({ stationName }) => {
                       </div>
 
                     </div>
+                   
+                     {/* Remove Button */}
+          {/* {index >=1 && (
+            <Button variant="contained" color="error" onClick={() => handleRemove(index,datafield.id)}>
+              x
+            </Button>
+          )} */}
 
+          {index >=1 && (
+            <Button variant="contained" color="error" onClick={handleClickOpen}>
+              x
+            </Button>
+          )}
+             <Dialog open={deletedialogbox} onClose={handleClose}>
+  <DialogTitle>{"Are you sure you want to delete this item?"}</DialogTitle>
+  <DialogContent>
+   
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleClose} color="primary">
+      Cancel
+    </Button>
+    <Button
+     onClick={() => handleRemove(index,datafield.id)} 
+     color="error">
+      Delete
+    </Button>
+  </DialogActions>
+</Dialog>
+        
                   </>
+                  
 
                 ))}
+                
                 <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
+             
 
               </div>
 

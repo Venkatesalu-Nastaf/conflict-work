@@ -47,6 +47,10 @@ const useCustomer = () => {
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [BillingGroup, setBillingGroup] = useState([]);
+    const [customerratetype,setCustomerRatetype]=useState([])
+    const [cerendentialdata,setCredentialData]=useState()
+    const [deletedialogbox,setDeletedDialog]=useState(false)
+    
 
 
     //---------------------------------------
@@ -302,6 +306,9 @@ const useCustomer = () => {
         hybrid: false
     });
 
+   
+    
+
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
@@ -422,6 +429,50 @@ const useCustomer = () => {
         }
     }
 
+    const uniquecustomer=async(customerdataname)=>{
+        // console.log(customerdataname,"namee")
+        if(customerdataname){
+
+            const response= await axios.get(`${apiUrl}/getuniqueCustomerdata/${customerdataname}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        }
+
+    
+            
+      
+    }
+
+
+   
+    const handleChangeuniquecustomer=(event)=>{
+        const { name, value} = event.target;
+        const datacrendital= uniquecustomer(value);
+        console.log(datacrendital,"cred")
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]:value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]:value,
+        }));
+
+
+    }
+   
+
 
     const handleRowClick = (params) => {
         const customerData = params.row;
@@ -471,10 +522,19 @@ const useCustomer = () => {
             setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
             return;
         }
+         
+        if(cerendentialdata === true){
+            setError(true);
+            setErrorMessage('customer aldrreay exist.');
+            return;
+        }
 
         try {
+            console.log(cerendentialdata,"credddatattaatta")
             // const datasets={...customerfieldSets,customer:book.customer}
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
+           
+            
 
 
             const response = await axios.post(`${apiUrl}/customers`, book);
@@ -487,6 +547,7 @@ const useCustomer = () => {
                 setRows([]);
                 setSuccess(true);
                 setSuccessMessage(response.data.message);
+                setCredentialData()
             } else {
                 setError(true);
                 setErrorMessage(response.data.message);
@@ -500,6 +561,14 @@ const useCustomer = () => {
 
     const handleEdit = async () => {
         // const selectedCustomer = rows.find((row) => row.customerId === customerId);
+        const hasEmptyFields = customerfieldSets.some(fieldSet =>
+            !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+        );
+        if (hasEmptyFields) {
+            setError(true);
+            setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
+            return;
+        }
 
         const { id, orderByEmail, orderedby, orderByMobileNo, ...restselectedcustomerdata } = selectedCustomerData
         const updatedCustomer = {
@@ -510,6 +579,7 @@ const useCustomer = () => {
         };
 
         const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
+        console.log(datasets,"hhhhh")
         await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
@@ -519,6 +589,48 @@ const useCustomer = () => {
         handleCancel();
         setRows([]);
     };
+    const deletedatecustomerorder=async(id)=>{
+        console.log(id,"iddddd")
+        try{
+            await axios.delete(`${apiUrl}/deletecustomerorderdatasdata/${id}`);
+            setDeletedDialog(false)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    const handleRemove = (index,id) => {
+        console.log(index,"customer",id)
+        setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
+        if(id){
+            console.log(id,"datatta")
+            setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
+             deletedatecustomerorder(id)
+        }
+        else{
+            console.log(id,"elsedata")
+            setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
+            setDeletedDialog(false)
+        }
+        
+        // deletedatecustomerorder(id)
+    
+    }
+    useEffect(()=>{
+        const fetchcustomerratedata=async()=>{
+          try{
+         const response= await axios.get(`${apiUrl}/ratemanagmentCustomerdata`)
+          const data=response.data
+          setCustomerRatetype(data.map(row=>row.ratename))
+          }
+          catch(err){
+            console.log(err)
+          }
+        }
+        fetchcustomerratedata()
+      },[apiUrl])
+
     
 
     useEffect(() => {
@@ -621,8 +733,8 @@ const useCustomer = () => {
         columns,
         isEditMode, setSelectedCustomerData,
         handleEdit,
-        customerfieldSets, setBook,
-        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling
+        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,
+        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove,customerratetype,handleChangeuniquecustomer,cerendentialdata
     };
 };
 

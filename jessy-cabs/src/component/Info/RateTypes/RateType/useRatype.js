@@ -37,6 +37,8 @@ const useRatype = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
+    const [customerratetype,setCustomerRatetype]=useState([])
+    const [cerendentialdata,setCredentialData]=useState()
 
 
 
@@ -302,6 +304,31 @@ const useRatype = () => {
         starttime:dayjs(),
         closetime:dayjs(),
     });
+
+     // const uniquecustomer=async(customerdataname)=>{
+    //     // console.log(customerdataname,"namee")
+    //     if(customerdataname){
+
+    //         const response= await axios.get(`${apiUrl}/getcustomeruniqueratetype/${bo}/:ratename`)
+    //         const responsedata=response.data;
+            
+    //         // console.log(response,"data")
+    //         // console.log(responsedata?.length,"reeee")
+           
+    //         if(responsedata?.length >=1){
+    //             setCredentialData(true)
+    //             // return true;
+    //         }
+    //         else{
+    //             setCredentialData(false)
+    //             // return false;
+    //         }
+    //     }
+
+    
+            
+      
+    // }
 
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;

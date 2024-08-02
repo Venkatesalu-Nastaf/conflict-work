@@ -1,33 +1,106 @@
 import React, { useRef, useEffect, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
-import { APIURL } from "../url";
+import { APIURL,Apiurltransfer } from "../url";
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
+import {format as datefunsdata} from 'date-fns';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
+  // THSI API FOR DRIVER APP APIURL TRANFER
+  const apiurltransfer=Apiurltransfer;
   const sigCanvasRef = useRef(null);
-  const tripId = new URLSearchParams(window.location.search).get("tripid");
-  const uniqueno = new URLSearchParams(window.location.search).get(
-    "uniqueNumber"
-  );
-  const [successMessage,setSuccessMessage]=useState('')
+
+  const tripIddata = new URLSearchParams(window.location.search).get("trip");
+
+  const uniqueno = new URLSearchParams(window.location.search).get("uniqueNumber");
+  const [successMessage, setSuccessMessage] = useState('')
+  // const [expired, setExpired] = useState(() => {
+  //   const expiredInSessionStorage =
+  //     sessionStorage.getItem("expired") && localStorage.getItem("expired");
+  //   return expiredInSessionStorage
+  //     ? JSON.parse(expiredInSessionStorage)
+  //     : false;
+  // });
   const [expired, setExpired] = useState(() => {
     const expiredInSessionStorage =
-      sessionStorage.getItem("expired") && localStorage.getItem("expired");
+      localStorage.getItem("expired");
     return expiredInSessionStorage
       ? JSON.parse(expiredInSessionStorage)
       : false;
   });
+  
+  // const expiredInSessionStorage =localStorage.getItem("expired") ? JSON.parse(expiredInSessionStorage): false;
+  // console.log(expiredInSessionStorage,localStorage.getItem("expired"))
+
+  const decryptdata = (cipherText) => {
+
+    try {
+      if (cipherText) {
+        const bytes = CryptoJS.AES.decrypt(cipherText, 'my-secret-key@123');
+        const plainText = bytes.toString(CryptoJS.enc.Utf8);
+
+        const parsedNumber = JSON.parse(plainText);
+
+        return parsedNumber;
+      }
+
+    } catch (error) {
+      console.error("Error during decryption:", error.message);
+
+    }
+  };
+
+  const decryptunique = (cipherText) => {
+
+    try {
+      if (cipherText) {
+        const bytes = CryptoJS.AES.decrypt(cipherText, 'my-secret-key@123');
+        const plainText = bytes.toString(CryptoJS.enc.Utf8);
+
+        const parsedNumber = JSON.parse(plainText);
+
+        return parsedNumber;
+      }
+
+    } catch (error) {
+      console.error("Error during decryption:", error.message);
+
+    }
+  };
+
+
 
   const clearSignature = () => {
     sigCanvasRef.current.clear();
   };
 
+  const getCurrentDateTimeFormatted = () => {
+    const now = new Date();
+    const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
+    const formattedTime = datefunsdata(now, 'HH:mm:ss');
+    return {
+      dateTime: formattedDateTime,
+      time: formattedTime
+    };
+  };
+
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
-    const status="Updated"
-
+    const status = "Updated"
+    const datadate=Date.now().toString();
+    const tripId = decryptdata(tripIddata)
+    const uniquenodata = decryptunique(uniqueno)
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes={
+        status:status,
+        datesignature:dateTime,
+        signtime:time            }
+      const signaturedata={
+        dataurlsign:dataUrl
+      }
+  
     try {
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
@@ -37,11 +110,16 @@ const DigitalSignature = () => {
         body: JSON.stringify({
           signatureData: dataUrl,
           tripId: tripId,
-          uniqueno: uniqueno,
+          uniqueno: uniquenodata,
+          imageName:datadate
         }),
       });
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-        setSuccessMessage("upload successfully")
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
+      setSuccessMessage("upload successfully")
+      // THIS API FRO DRIVER APP
+      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`,signaturedata)
+      
       clearSignature();
       setTimeout(() => {
         setExpired(true);
@@ -65,17 +143,24 @@ const DigitalSignature = () => {
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
   }
-  const Startsignature= async()=>{
-    console.log("startsignature")
-    const status="onSign"
-    try{
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+  const Startsignature = async () => {
+    const status = "onSign"
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes={
+        status:status,
+        datesignature:dateTime,
+        signtime:time            }
+    const tripId = decryptdata(tripIddata)
+
+    try {
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
-  
+
 
 
   return (
@@ -91,7 +176,7 @@ const DigitalSignature = () => {
         onBegin={Startsignature}
       />
       <div>
-        <p style={{textAlign:'center',color:"green"}}>{successMessage}...</p>
+        <p style={{ textAlign: 'center', color: "green" }}>{successMessage}...</p>
         <button className="clear-button" onClick={clearSignature}>
           Clear Signature
         </button>

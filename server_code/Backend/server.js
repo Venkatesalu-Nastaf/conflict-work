@@ -8,7 +8,10 @@ const db = require('./db');
 const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
-const { format } = require('date-fns');
+
+
+var CryptoJS = require("crypto-js");
+
 // const jwt = require('jsonwebtoken')
 require('dotenv').config()
 app.use(bodyParser.json());
@@ -74,6 +77,9 @@ const User_Permission = require('./customer_master/Router/userpermission/usererm
 const SignatureRouter = require('./customer_master/Router/signature/signature');
 const Templatemailer = require('./customer_master/Router/Templatemailer/mailers');
 const IndividualBill = require('./customer_master/Router/Individual_Billing/IndividualBill')
+const GstReport = require('./customer_master/Router/GstReport/GstReport');
+const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport');
+const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -154,6 +160,13 @@ app.use('/', Templatemailer);// Customer Page Database
 // -------------------------------------------------------------------------------------------
 app.use('/', IndividualBill);//Individual bill
 //theme update in user creation
+// -------------------------------------------------------------------------------------------
+app.use('/', GstReport);//GstReport
+// -------------------------------------------------------------------------------------------
+app.use('/', billWiseReport);//billWiseReport
+// -------------------------------------------------------------------------------------------
+app.use('/', pendingBill);//PendingBill
+
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
   const query = 'UPDATE usercreation SET theme = ? WHERE userid IN (?)';
@@ -300,7 +313,7 @@ const storagetripsheet = multer.diskStorage({
     cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+    cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
   }
 
 })
@@ -309,12 +322,11 @@ const uploadtripsheet = multer({
   storage: storagetripsheet
 })
 
-app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'), (req, res) => {
+app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
   const documentType = req.params.documentType;
   const filename = req.file.originalname;
-
 
   if (userId, fileName, filename, documentType) {
     const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
@@ -330,6 +342,39 @@ app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'),
   }
 
 });
+// --------------------------driverappupdatedtoll and parking image----------------------
+const storagetripsheet1 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+  }
+
+})
+const uploadtripsheet1 = multer({
+  storage: storagetripsheet1
+})
+app.post('/tripsheetdatadriverappimage/:data', uploadtripsheet1.single('file'), (req, res) => {
+  console.log(req.params.data, "kk")
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+    // tripid: req.body.tripid,
+    date: req.body.datadate
+
+  };
+  console.log(fileData)
+  res.send("datasend")
+
+})
+
+
+
+
+// --------------------------------------------------------
 
 
 
@@ -576,6 +621,10 @@ app.get('/get-profileimage/:tripid', (req, res) => {
 });
 
 
+
+
+
+
 app.post('/generate-link/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   console.log("tripid", tripid)
@@ -592,7 +641,13 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (err) {
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
-        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
+        var cipherunique = CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber), 'my-secret-key@123').toString();
+
+        // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+
+        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext1)}&uniqueNumber=${encodeURIComponent(cipherunique)}`;
+
         res.status(200).json({ message: 'Status updated successfully', link });
       });
     } else {
@@ -601,7 +656,14 @@ app.post('/generate-link/:tripid', (req, res) => {
         if (insertErr) {
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
-        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        // const dataencryt=encrypt(tripid)
+        // console.log(dataencryt,"ll")
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
+        var cipherunique2 = CryptoJS.AES.encrypt(JSON.stringify(uniqueNumber), 'my-secret-key@123').toString();
+
+        // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
+        const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext)}&uniqueNumber=${encodeURIComponent(cipherunique2)}`;
+
         res.status(200).json({ link });
       });
     }
@@ -701,29 +763,18 @@ WHERE
   })
 })
 
-// app,get("/signaturedatatimes")
-
-const getCurrentDateTimeFormatted = () => {
-  const now = new Date();
-  const formattedDateTime = format(now, 'yyyy-MM-dd HH:mm:ss');
-  const formattedTime = format(now, 'HH:mm:ss');
-  return {
-    dateTime: formattedDateTime,
-    time: formattedTime
-  };
-};
 
 
 
-
-app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
+app.post("/signaturedatatimes/:tripid", (req, res) => {
   const tripid = req.params.tripid;
-  const signstatus = req.params.signstatus;
-  console.log(tripid, signstatus, "jjjjjjj")
-  const { dateTime, time } = getCurrentDateTimeFormatted();
-  console.log('Formatted DateTime:', dateTime);
-  console.log('Current Time:', time);
-  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, dateTime, time, signstatus], (err, results) => {
+  const {
+    status,
+    datesignature,
+    signtime } = req.body;
+  console.log(tripid, status, datesignature, signtime, "jjjjjjj")
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
@@ -731,6 +782,88 @@ app.post("/signaturedatatimes/:tripid/:signstatus", (req, res) => {
     return res.status(200).json("data insert successfully")
   })
 })
+
+
+
+app.get("/getFuelType/:fuelType", (req, res) => {
+  const vehicleName = req.params.fuelType; // Corrected to use req.params
+  const sql = `SELECT fueltype FROM vehicleinfo WHERE vehicleName=?`;
+
+  db.query(sql, [vehicleName], (err, result) => {
+    if (err) {
+      console.log("err", err);
+      return res.status(500).json("Something went wrong ..");
+    }
+    return res.status(200).json(result);
+  });
+});
+
+
+
+
+
+// app.get("/getvehicleInfo", (req, res) => {
+//   try {
+//     console.log("query", req.query)
+//     const { hireTypes, startDate, endDate } = req.query;
+//     // const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+//     const sql = 'SELECT * FROM tripsheet WHERE hireTypes = ? AND startdate <= ? AND closedate >= ?  ';
+
+//     db.query(sql, [hireTypes, startDate, endDate], (err, result) => {
+//       if (err) {
+//         console.log("err", err)
+//         return res.status(404).json({ message: "somthing went wrong", error: true })
+//       }
+
+//       // console.log("result", result)
+//       return res.status(200).json(result)
+//     })
+
+//   } catch (err) {
+//     console.log("err", err)
+//     res.status(500).json({ message: "something went wrong" })
+//   }
+
+// })
+
+
+
+
+app.get("/getvehicleInfo", (req, res) => {
+  try {
+    console.log("query", req.query);
+    const { hireTypes, startDate, endDate } = req.query;
+    const status = 'Closed'
+    // const sql = `
+    //   SELECT * FROM tripsheet
+    //   WHERE hireTypes = ?
+    //   AND (
+    //     (startdate <= ? AND closedate >= ?)
+    //     OR (startdate BETWEEN ? AND ?)
+    //     OR (closedate BETWEEN ? AND ?)
+    //   )
+    // `;
+
+    const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
+
+
+    // db.query(sql, [hireTypes, startDate, endDate, startDate, endDate, startDate, endDate], (err, result) => {
+    db.query(sql, [hireTypes, startDate, endDate, status], (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ message: "Something went wrong", error: true });
+      }
+
+      return res.status(200).json(result);
+    });
+
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+
 
 
 // const port = 8081;

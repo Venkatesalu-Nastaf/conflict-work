@@ -145,11 +145,12 @@
 }
 
 .vehicle-confirm {
+  display: flex;
   border: 2px solid #ccc;
   border-radius: 10px;
   padding: 10px 20px 10px 20px;
   background-color: var(--glass);
-  margin-top: 25px;
+  margin-top: 15px;
 }
 
 .booking-form .Title-Name {
@@ -178,7 +179,7 @@
 
 .table-bookingCopy-Booking {
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--glass);
 }
 
@@ -354,16 +355,40 @@
 .input-feild-vehicle-confirm {
   flex-wrap: wrap;
   /* gap: 0px; */
-  width: 100%;
+  width: 70%;
+}
+
+@media screen and (min-width: 1242px) and (max-width: 1321px) {
+  .input-feild-vehicle-confirm {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 1241.95px) {
+  .input-feild-vehicle-confirm {
+    width: 153vw;
+  }
+}
+
+@media screen and (max-width: 944.95px) {
+  .vehicle-confirm {
+    flex-wrap: wrap;
+  }
+  .input-feild-vehicle-confirm {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .input-feild-vehicle-confirm .input {
+    margin-top: 3px;
+  }
 }
 
 @media screen and (max-width:1118px) {
-
   .sub-section1 .first-division,
   .second-division,
   .sub-section-second-division,
   .input-feild-vehicle-confirm {
-    justify-content: space-evenly !important;
+    /* justify-content: space-evenly !important; */
   }
 }
 
@@ -399,11 +424,11 @@
   }
 }
 
-@media screen and (min-width:1451px) and (max-width:1500px) {
+@media screen and (min-width:1451px) {
 
   .sub-section2,
   .sub-section2-driver {
-    width: 60% !important;
+    width: 40% !important;
   }
 }
 
@@ -436,7 +461,7 @@
 }
 
 .service-station-input {
-  margin-top: 9px;
+  /* margin-top: 9px; */
 }
 
 .booking-update-main-table {
@@ -549,12 +574,15 @@
 }
 
 .booking-top-division {
-  width: 100%;
+  width: 90%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-end;
-  gap: 10px;
+  gap: 40px;
   font-size: 13px;
+  margin: 0px 28px;
+  overflow: auto;
+  padding-bottom: 10px;
 }
 
 .booking-top-division input {
@@ -595,6 +623,7 @@
 .booking-top-division label{
   font-weight: 500;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .pick-up-address-input{

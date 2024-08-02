@@ -45,10 +45,16 @@
 
 .table-bookingCopy-TransferReport {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     margin: 0px 20px;
     width: fit-content;
+}
+
+@media screen and (max-width: 1155px) {
+    .table-bookingCopy-TransferReport {
+        width: 100%;
+    }
 }
 
 .tripsheet-table-transferReport {
@@ -59,12 +65,12 @@
 
 .copy-title-btn-TransferReport {
     width: 100%;
-    margin-top: 15px;
+    /* margin-top: 15px; */
     background-color: var(--glass);
     padding: 10px 13px 30px;
     border: 2px solid #ccc;
-    border-radius: 15px;
-    margin-left: 20px;
+    border-radius: 10px;
+    /* margin-left: 20px; */
 }
 
 .TransferReport-form .Title-Name::after {
@@ -90,7 +96,7 @@
 
 @media screen and (min-width:380.99px) and (max-width:700px) {
     .copy-title-btn-TransferReport {
-        width: 83%;
+        width: 80vw;
     }
 }
 

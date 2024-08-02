@@ -18,16 +18,16 @@
 
 @media screen and (max-width: 768px) {
   .DriverCreation-main .DriverCreation-form-container {
-    width: 93vw;
+    width: 95vw;
   }
 }
 
 
 .DriverCreation-header {
-  border-top: solid 1px #ccc;
+  /* border-top: solid 1px #ccc; */
   /* background: var(--glass); */
-  padding: 20px 20px 0px 20px;
-  margin-bottom: -10px;
+  /* padding: 20px 20px 0px 20px; */
+  /* margin-bottom: -10px; */
 }
 
 .DriverCreation-main .DriverCreation-form-container::-webkit-scrollbar {
@@ -48,7 +48,7 @@
 .DriverCreation-table-container {
   /* margin-top: 10px; */
   /* border: 1px solid #ccc; */
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   /* background-color: var(--glass); */
 }
 
@@ -102,6 +102,7 @@
 .detail-container-main-crivercreation {
   /* justify-content: center !important; */
   margin-top: 25px;
+  margin-bottom: 0px;
 }
 
 @media screen and (min-width:320px) and (max-width:700px) {

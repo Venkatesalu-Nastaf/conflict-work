@@ -18,6 +18,7 @@
   /* background: var(--glass); */
   padding: 0px;
   margin-bottom: -10px;
+  zoom: 90%;
 }
 
 .detail-container-main-Tripsheet {
@@ -38,7 +39,7 @@
   position: relative;
 }
 
-.form-container .Title-Name::after {
+/* .form-container .Title-Name::after {
   content: "";
   position: absolute;
   bottom: -10px;
@@ -47,7 +48,7 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-}
+} */
 
 /* .form-container .Tripsheet-form::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -121,7 +122,6 @@
 
 /* TRIPSHEET CONETNT */
 .Tipsheet-content-table-main {
-  background: var(--glass);
   padding: 15px;
   margin-top: 15px;
 }
@@ -276,7 +276,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 79vw;
+    width: 97vw;
   }
 }
 
@@ -285,7 +285,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 73vw;
+    width: 97vw;
   }
 }
 
@@ -294,7 +294,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 66vw;
+    width: 93vw;
     justify-content: center;
   }
 }
@@ -304,7 +304,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 79vw;
+    width: 93vw;
     justify-content: center;
   }
 }
@@ -314,7 +314,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 71vw;
+    width: 93vw;
   }
 }
 
@@ -372,12 +372,20 @@
   .tripsheet-division3 {
     justify-content: center;
   }
+
+  .vehicle-confirm-tripsheet {
+    flex-wrap: wrap;
+    position: relative;
+    left: 15px;
+    justify-content: center;
+  }
 }
 
-.vehicle-confirm {
+.vehicle-confirm-tripsheet {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .input-feild-vehicle-confirm {
@@ -432,13 +440,31 @@
 }
 
 .tripsheet-top-division {
-  width: 100%;
+  /* width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
   gap: 10px;
   font-size: 13px;
   margin-top: 8px;
+  margin-left: 8px; */
+
+
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 40px;
+  font-size: 13px;
+  margin: 0px 44px;
+  overflow: auto;
+  padding-bottom: 10px;
+}
+
+@media screen and (max-width: 667px) {
+  .tripsheet-top-division {
+    width: 80%;
+  }
 }
 
 .tripsheet-top-division input {
@@ -488,14 +514,52 @@
   border: none;
 }
 
-.tripsheet-remarks-division{
-  width: 535px !important;
+.tripsheet-remarks-division {
+  width: 513px !important;
 }
 
-.tripsheet-calculate-input button, .tripsheet-e-tripsheet-input button{
+.tripsheet-calculate-input button,
+.tripsheet-e-tripsheet-input button {
   width: 100%;
   margin-left: 28px;
 }
 
+.tripsheet-vendor-bill-main {
+  display: grid;
+  gap: 10px;
+}
 
+.tripsheet-vendor-info-main .input-field,
+.tripsheet-vendor-bill-main .input-field,
+.tripsheet-vendor-gps-att-main .input-field {
+  flex-wrap: wrap;
+}
 
+@media screen and (max-width: 565.99px) {
+
+  .tripsheet-vendor-info-main .input-field,
+  .tripsheet-vendor-bill-main .input-field,
+  .tripsheet-vendor-gps-att-main .input-field {
+    justify-content: center;
+  }
+
+  .tripsheet-vendor-bill-amount-input-field {
+    border: 2px solid #ccc;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 568.99px) {
+  .tripsheet-vendor-bill-amount-input-field {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 569px) and (max-width: 867.99px) {
+  .tripsheet-vendor-bill-amount-input-field .input {
+    width: 153px !important;
+  }
+}

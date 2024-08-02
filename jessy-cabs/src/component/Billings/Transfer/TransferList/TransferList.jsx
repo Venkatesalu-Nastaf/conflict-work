@@ -67,7 +67,7 @@ const TransferList = ({ stationName, organizationNames }) => {
     const Transfer_read = permissions[6]?.read;
 
     return (
-        <div className="TransferList-form Scroll-Style-hide">
+        <div className="TransferList-form main-content-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main">
                     <div className="container-left-transferlist">

@@ -46,7 +46,7 @@ const MainDash = ({stationName}) => {
             <div className="first-div">
               <div className="left-div">
                 <Cards />
-                <Table />
+                <Table  stationName={stationName}/>
               </div>
               <div className="right-div">
                 <RightSide  stationName={stationName} />

@@ -147,39 +147,48 @@ const Division = () => {
                   />
                 </div>
                 <div className="input radio division-radio-input">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Active
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="active"
+                  <div style={{display: 'flex'}}>
+                    <FormControl>
+                      <FormLabel id="demo-row-radio-buttons-group-label">
+                        Active
+                      </FormLabel>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="active"
 
-                      autoComplete="new-password"
-                      value={selectedCustomerData?.active || book.active}
-                      onChange={handleChange}
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
+                        autoComplete="new-password"
+                        value={selectedCustomerData?.active || book.active}
+                        onChange={handleChange}
+                      >
+                        <FormControlLabel
+                          value="yes"
+                          control={<Radio />}
+                          label="Yes"
+                        />
+                        <FormControlLabel
+                          value="no"
+                          control={<Radio />}
+                          label="No"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                    <div className="input division-add-input">
+                      {isEditMode ? (
+                        <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
+                      ) : (
+                        <Button variant="contained" disabled={!INFO_new} onClick={handleAdd} >Add</Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="input division-add-input">
+                {/* <div className="input division-add-input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
                     <Button variant="contained" disabled={!INFO_new} onClick={handleAdd} >Add</Button>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -214,7 +223,7 @@ const Division = () => {
             </div>
           }
         </div>
-        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px" }}>
+        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -276,24 +285,24 @@ const Division = () => {
                 sx={{
                   height: 400, // Adjust this value to fit your needs
                   '& .MuiDataGrid-virtualScroller': {
-                      '&::-webkit-scrollbar': {
-                          width: '8px', // Adjust the scrollbar width here
-                          height: '8px', // Adjust the scrollbar width here
-                      },
-                      '&::-webkit-scrollbar-track': {
-                          backgroundColor: '#f1f1f1',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                          backgroundColor: '#457cdc',
-                          borderRadius: '20px',
-                          minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                      height: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
 
-                      },
-                      '&::-webkit-scrollbar-thumb:hover': {
-                          backgroundColor: '#3367d6',
-                      },
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
                   },
-              }}
+                }}
               >
                 <DataGrid
                   rows={rows}

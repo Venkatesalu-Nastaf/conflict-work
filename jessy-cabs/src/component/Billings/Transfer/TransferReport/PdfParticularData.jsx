@@ -537,12 +537,9 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
           }
 
 
-
-
-
         </div>
         <div className="printdiv">
-          <button className="print" onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })}>PRINT</button>
+          <button className="print" onClick={() => generatePDF(targetRef, { filename: `Trip No ${Tripidno}` })}>PRINT</button>
           <button onClick={handlePopup} className="print">
             Cancel
           </button>

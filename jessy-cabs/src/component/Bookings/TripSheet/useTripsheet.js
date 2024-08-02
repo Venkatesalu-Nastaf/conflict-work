@@ -1,16 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+
 import {
     VehicleRate,
 } from "./TripSheetdata";
-import { APIURL } from "../../url";
+import { APIURL, Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
 
 
 const useTripsheet = () => {
+    const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
+    // THIS APIURL TRANSFER FRO DRIVER APP
+    const apiurltransfer = Apiurltransfer;
+    //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -46,10 +51,12 @@ const useTripsheet = () => {
     const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
+    const [infoMessage, setINFOMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    // const [isEditMode, setIsEditMode] = useState(true);
     const [sign, setSign] = useState(false)
     const [smsguest, setSmsGuest] = useState(true);
     const [DriverSMS, setDriverSMS] = useState(true);
@@ -59,6 +66,7 @@ const useTripsheet = () => {
 
     const [signaturepopup, setSignaturepopup] = useState(false)
     const [signatureupload, setSignatureupload] = useState(false)
+    const [isHybridCustomer, setIsHybridCustomer] = useState(false)
 
 
 
@@ -154,6 +162,23 @@ const useTripsheet = () => {
     const [ratename, setRate_name] = useState("")
     const [signaturelinkcopy, setSignaturtCopied] = useState(false)
     const [rowsignature, setRowsSignature] = useState([])
+    const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
+
+    const [kmValue, setKmValue] = useState({
+        shedOutState: '',
+        startKMState: '',
+        closeKMState: '',
+        shedInState: '',
+        shedOutDate: '',
+        startDate: '',
+        closeDate: '',
+        shedInDate: '',
+        start_totalDays: '',
+        close_totalDays: '',
+        shedIn_TotalDays: '',
+        close_shedOut_totalDays: '',
+        totalDays: '',
+    })
 
 
 
@@ -182,15 +207,6 @@ const useTripsheet = () => {
 
     ];
 
-    const columnssignature = [
-        { field: "id5", headerName: "Sno", width: 70 },
-        { field: "sign_logId", headerName: "LogID", width: 160 },
-        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
-        { field: "startsigntime", headerName: "CTime", width: 130 },
-        { field: "Signstatus", headerName: "SignStatus", width: 160 },
-
-
-    ];
 
 
     const handleRemoveMapLogPoint = async (params) => {
@@ -220,44 +236,46 @@ const useTripsheet = () => {
         }
     };
 
+
+
     //generate link
 
-    const generateLink = async () => {
-        try {
-            const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            if (!tripidNO) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-                return;
-            }
-            const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-            const data = response.data.link
-            setLink(data);
-            getSignatureImage()
-            // copyToClipboardf(data)
-        } catch {
-        }
-    };
+    // const generateLink = async () => {
+    //     try {
+    //         const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    //         if (!tripidNO) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //             return;
+    //         }
+    //         const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
+    //         const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
+    //         const data = response.data.link
+    //         setLink(data);
+    //         getSignatureImage()
+    //         // copyToClipboardf(data)
+    //     } catch {
+    //     }
+    // };
 
 
-    const SignPage = async (event) => {
-        event.preventDefault();
-        if (link) {
-            try {
-                await navigator.clipboard.writeText(link);
-                setSign(true);
-                setTimeout(() => {
-                    setSign(false);
-                }, 2000);
-            } catch (error) {
-                console.error("Failed to copy text:", error);
-                alert("Failed to copy text to clipboard. Please try again.");
-            }
-        } else {
-            alert("No link data available.");
-        }
-    }
+    // const SignPage = async (event) => {
+    //     event.preventDefault();
+    //     if (link) {
+    //         try {
+    //             await navigator.clipboard.writeText(link);
+    //             setSign(true);
+    //             setTimeout(() => {
+    //                 setSign(false);
+    //             }, 2000);
+    //         } catch (error) {
+    //             console.error("Failed to copy text:", error);
+    //             alert("Failed to copy text to clipboard. Please try again.");
+    //         }
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // }
     // -----------------accountinfo--------------------------------
     useEffect(() => {
         const fetchdataccountinfodata = async () => {
@@ -266,7 +284,6 @@ const useTripsheet = () => {
                 const data = response.data
                 // console.log(data, "accccccccc")
                 setAccountInfoData(data)
-
             }
             catch (err) {
                 console.log(err)
@@ -281,66 +298,66 @@ const useTripsheet = () => {
 
     //---------------------------to copy the link-------------------
 
-    const hiddenInputRef = useRef(null);
+    // const hiddenInputRef = useRef(null);
 
-    const hiddenTextAreaRef = useRef(null);
+    // const hiddenTextAreaRef = useRef(null);
 
-    const copyToClipboard = (e) => {
-        e.preventDefault()
-        if (link) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = link;
-            document.body.appendChild(textArea);
+    // const copyToClipboard = (e) => {
+    //     e.preventDefault()
+    //     if (link) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = link;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
-    const copyToClipboardf = (data) => {
-        // e.preventDefault()
-        if (data) {
-            // Create a hidden textarea and append it to the body
-            const textArea = document.createElement("textarea");
-            textArea.value = data;
-            document.body.appendChild(textArea);
+    // const copyToClipboardf = (data) => {
+    //     // e.preventDefault()
+    //     if (data) {
+    //         // Create a hidden textarea and append it to the body
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = data;
+    //         document.body.appendChild(textArea);
 
-            // Select the text in the textarea
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+    //         // Select the text in the textarea
+    //         textArea.select();
+    //         textArea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Execute the copy command
-            document.execCommand('copy');
+    //         // Execute the copy command
+    //         document.execCommand('copy');
 
-            // Remove the textarea from the document
-            document.body.removeChild(textArea);
+    //         // Remove the textarea from the document
+    //         document.body.removeChild(textArea);
 
-            // Set the confirmation message
-            setSign(true);
-            setTimeout(() => {
-                setSign(false);
-            }, 2000);
-        } else {
-            alert("No link data available.");
-        }
-    };
+    //         // Set the confirmation message
+    //         setSign(true);
+    //         setTimeout(() => {
+    //             setSign(false);
+    //         }, 2000);
+    //     } else {
+    //         alert("No link data available.");
+    //     }
+    // };
 
 
     //----------------------------------------------
@@ -523,7 +540,7 @@ const useTripsheet = () => {
         // });
 
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
+            'dispatchcheck', 'vehType', 'shedInDate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -565,10 +582,14 @@ const useTripsheet = () => {
             // setIsEditMode(true);
             setIsEditMode(false);
         }
-        // else {
-        //     // setIsEditMode(false);
-        //     setIsEditMode(true);
-        // }
+        else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
+            // setIsEditMode(false);
+            console.log("editmode data", "ee")
+            setSmsGuest(false)
+            setSendEmail(false)
+            setDriverSMS(false)
+            setIsEditMode(true);
+        }
 
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
@@ -745,7 +766,24 @@ const useTripsheet = () => {
         setTransferreport("No");
         setVendorinfodata({});
         setVendorbilldata({});
-
+        setIsHybridCustomer(false)
+        setKmValue({
+            shedOutState: '',
+            startKMState: '',
+            closeKMState: '',
+            shedInState: '',
+            shedOutDate: '',
+            startDate: '',
+            closeDate: '',
+            shedInDate: '',
+            start_totalDays: '',
+            close_totalDays: '',
+            shedIn_TotalDays: '',
+            close_shedOut_totalDays: '',
+            totalDays: '',
+        })
+        setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
+        
         localStorage.removeItem('selectedTripid');
     };
 
@@ -765,7 +803,7 @@ const useTripsheet = () => {
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+                    vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
                     starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
                     status: formData.status || book.status || selectedCustomerData.status,
@@ -950,9 +988,11 @@ const useTripsheet = () => {
         try {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
-                console.log(selectedCustomerDatas.travelsname, selectedCustomerData.travelsname, formData.travelsname, book.travelsname, "trvales")
+                getSignatureImage()
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+
 
                 const updatedCustomer = {
                     ...book,
@@ -960,7 +1000,9 @@ const useTripsheet = () => {
                     ...vehilcedetails,
                     ...selectedCustomerData,
                     ...formData,
-                    apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    // apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    apps: dattasign,
+
                     travelsname: selectedCustomerDatas.travelsname || selectedCustomerData.travelsname || formData.travelsname || book.travelsname,
                     travelsemail: selectedCustomerDatas.travelsemail || selectedCustomerData.travelsemail || formData.travelsemail || book.travelsemail,
                     starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
@@ -1051,6 +1093,13 @@ const useTripsheet = () => {
                 setRows([]);
                 if (sendEmail) {
                     await handlecheck();
+                }
+
+                if (smsguest) {
+                    await handleSendSMS()
+                }
+                if (DriverSMS) {
+                    await handleDriverSendSMS()
                 }
 
                 setSendEmail(true)
@@ -1154,7 +1203,6 @@ const useTripsheet = () => {
     //             startdate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
 
 
-
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1197,8 +1245,10 @@ const useTripsheet = () => {
 
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+            const dattasign = signimageUrl ? "Closed" : book.apps;
             const updatedBook = {
                 ...book,
+                apps: dattasign,
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                 tripsheetdate: selectedBookingDate,
@@ -1610,17 +1660,41 @@ const useTripsheet = () => {
         input.click();
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
         if (file) {
+            const data = Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
 
+            console.log(documentType, "yype")
+            //     // axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
+            //    await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData)
+            //    // Second PUT request if documentType is toll or parking
+            // //    this apiurl transfer for driver app --------------
+            //         if (documentType === 'Toll' || documentType === 'Parking') {
+            //             console.log(documentType,"enter")
+            //             await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+            //         }
 
-            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
+            try {
+                console.log(documentType, "yype");
+                await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
+
+                if (documentType === 'Toll' || documentType === 'Parking') {
+                    console.log(documentType, "enter");
+                    await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+                    //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
+                }
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+
+
+
         }
     };
 
@@ -2291,7 +2365,7 @@ const useTripsheet = () => {
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // handleChange({ target: { name: "vehType", value: params.vehType } })
-        // handleChange({ target: { name: "vehType", value: params.vehType } })
+        handleChange({ target: { name: "vehType", value: params.vehType } })
 
     };
 
@@ -2309,7 +2383,8 @@ const useTripsheet = () => {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
-                    vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+                    vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
+                    // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',
@@ -2423,15 +2498,22 @@ const useTripsheet = () => {
             console.log(err, 'error');
         }
     };
+
+
+
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
         if (file !== null) {
+            const datadate = Date.now().toString();
             const formData = new FormData();
             formData.append("signature_image", file);
             try {
-                await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}`, formData);
+                await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
+                // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
                 getSignatureImage()
+                // THIS API FRO DRIVER APP 
+                await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
 
 
 
@@ -2874,7 +2956,7 @@ const useTripsheet = () => {
             // vendorduty = vendorinfo.vendor_duty || vendorinfo.duty;
             // vendorvehicleNames = vendorinfo.vendor_vehicle || vendorinfo.vehicleName;
             vendorduty = vendorinfo.vendor_duty || ""
-            vendorvehicleNames = vendorinfo.vendor_vehicle || ratename || "";
+            vendorvehicleNames = vendorinfo.vendor_vehicle || "";
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
@@ -2912,6 +2994,7 @@ const useTripsheet = () => {
             });
             vendordata = response.data;
             // console.log(vendordata,"vendorrrrrrrr")
+
 
             const packages = vendordata.package;
             const Hours = Number(vendordata.Hours);
@@ -2960,6 +3043,8 @@ const useTripsheet = () => {
 
 
             });
+            setSuccess(true)
+            setSuccessMessage("successfully listed")
             //    
         }
         catch (err) {
@@ -3381,12 +3466,33 @@ const useTripsheet = () => {
 
     const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
 
+
+    const [hybridCheckCus, setHybridCheckCus] = useState([])
+    useEffect(() => {
+        const getCustomer = async () => {
+            const response = await axios.get(`${apiUrl}/get-customer`)
+            const data = response.data.map(el => ({ customer: el.customer, hybrid: el.hybrid }))
+            setHybridCheckCus(data)
+        }
+        getCustomer()
+    }, [apiUrl])
+
+    const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+    const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+
     const transformFun = (data) => {
+        const hybridcheck = hybridCheckCus.find((el) => customer === el.customer)
+
+        // if (/hcl/i.test(data.customer)) {
+        if (hybridcheck && hybridcheck.hybrid) {
+            return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+        }
         return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
     }
 
     // to fetch closed tripdata for valiation
     const [ClosedTripData, setClosedTripData] = useState([])
+
     useEffect(() => {
 
         const fetchData = async () => {
@@ -3394,7 +3500,9 @@ const useTripsheet = () => {
             const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
 
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
-            setClosedTripData(mapdata)
+            setClosedTripData(mapdata);
+            console.log("mapdata", mapdata)
+
             //to get KM
             let maxShedInkm = -Infinity;
             let maxTripId = null;
@@ -3406,109 +3514,129 @@ const useTripsheet = () => {
                 }
             })
             setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
-
-            //TO get Date and Time
-            console.log("mapdata", mapdata)
-
-
         }
 
         fetchData()
-    }, [vehicleRegisterNo])
+    }, [apiUrl, vehicleRegisterNo])
 
-    // console.log(vendorbilldata,"lastofupdateeeeeeeeeee")
+
+
     const generateAndCopyLinkdata = () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
 
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         if (!tripid) {
-            setError(true)
-            setErrorMessage("Enter the tripid")
+            setWarning(true)
+            setWarningMessage("Enter the tripid")
             return
         }
         if (appsstatus === "Closed") {
-            setError(true)
-            setErrorMessage("Apps are closed")
+            setInfo(true)
+            setINFOMessage("Signature already uploaded")
             return
         }
 
-        const params = {
-            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-            GuestName: formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestnametripid,
-            guestMobileNo: formData.mobile || selectedCustomerData.mobile || book.mobiletripid,
-            vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleNametripid,
-            vehicleType: selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehTypetripid,
-            startDate: formData.startdate || selectedCustomerData.startdate || book.startdatetripid,
-            startTime: formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttimetripid,
-            startKM: formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkmtripid,
-            closeDate: formData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedatetripid,
-            closeTime: formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetimetripid,
-            closeKM: formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekmtripid,
-            toll: formData.toll || selectedCustomerData.toll || book.tolltripid,
-            parking: formData.parking || selectedCustomerData.parking || book.parkingtripid,
-            permit: formData.permit || selectedCustomerData.permit || book.permittripid,
+        const paramsdata = {
+            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         };
 
+        // Create the URL with the JSON string as a single query parameter
+        const url = new URL(signatureurlinkurl);
+        Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
 
 
-        const url = new URL(`http://localhost:3000/SignatureGenerate`);
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        const generatedLink = url.toString();
+        // 
+        const generatedLinkdata = url.toString();
+        setSignatureWhattsapplink(generatedLinkdata)
 
 
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
         const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = generatedLink;
+        tempTextarea.value = generatedLinkdata;
         document.body.appendChild(tempTextarea);
         tempTextarea.select();
         document.execCommand('copy');
         document.body.removeChild(tempTextarea);
-
+        localStorage.setItem("expiredsign", false);
+        localStorage.setItem("expired", false);
 
         setTimeout(() => {
             setSignaturtCopied(false)
         }, 2000)
 
-        // Show notification
-        // const notification = document.getElementById('notification');
-        // notification.style.display = 'block';
-        // setTimeout(() => { notification.style.display = 'none'; }, 2000);
     }
 
-    useEffect(() => {
-        const signatruretimedetails = async () => {
-            const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
 
-            if (tripidsign) {
+    const signatruretimedetails = async () => {
+        const tripidsign = book.tripid || formData.tripid || selectedCustomerData.tripid;
 
-                try {
-
-                    const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
-                    const data2 = response.data
-
-                    const rowsWithUniqueId = data2.map((row, index) => ({
-                        ...row,
-                        id5: index + 1,
-                    }));
-
-                    setRowsSignature(rowsWithUniqueId)
-                }
-                catch (err) {
-                    setRowsSignature([])
-                    console.log(err)
-
-                }
+        if (tripidsign) {
+            try {
+                const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripidsign}`)
+                const data2 = response.data
+                const rowsWithUniqueId = data2.map((row, index) => ({
+                    ...row,
+                    id5: index + 1,
+                }));
+                setRowsSignature(rowsWithUniqueId)
             }
-            else {
-
+            catch (err) {
                 setRowsSignature([])
+                console.log(err)
+
             }
         }
+        else {
+
+            setRowsSignature([])
+        }
+    }
+    // useEffect(() => {
+    //     signatruretimedetails()
+
+    // }, [])
+
+    const handleRefreshsign = () => {
         signatruretimedetails()
-    }, [apiUrl, formData.tripid, selectedCustomerData.tripid, book.tripid])
+    };
+
+    const columnssignature = [
+        { field: "id5", headerName: "Sno", width: 70 },
+        { field: "sign_logId", headerName: "LogID", width: 160 },
+        { field: "logdatetime", headerName: "LogDateTime", width: 200 },
+        { field: "startsigntime", headerName: "CTime", width: 130 },
+        { field: "Signstatus", headerName: "SignStatus", width: 160 },
+        {
+
+            width: 300,
+            renderHeader: () => (
+                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+                    Refresh
+                </Button>
+            )
+        }
+    ]
+
+    // CUSTOMER GET HYBRID
+
+    useEffect(() => {
+
+        console.log("customer", customer, "trip", tripID)
+        const handleHybridCheck = async () => {
+            if (tripID && customer) {
+                const response = await axios.get(`${apiUrl}/getCustomer-hybrid/${customer}`)
+                console.log("customer---", response)
+                setIsHybridCustomer((response?.data.hybrid === 1) ? true : false)
+            } else {
+                return
+            }
+        }
+        handleHybridCheck()
+    }, [customer, tripID, apiUrl])
+
 
 
     return {
@@ -3522,7 +3650,7 @@ const useTripsheet = () => {
         //  signaturePopUpOpen,
         handleSignaturePopUpOpen,
         rows, ClosedTripData,
-        error, checkNightBetaEligible,
+        error, checkNightBetaEligible, isHybridCustomer,
         success,
         info,
         warning,
@@ -3530,7 +3658,7 @@ const useTripsheet = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
+        infoMessage,
         book,
         handleClick,
         handleChange,
@@ -3540,7 +3668,7 @@ const useTripsheet = () => {
         formData,
         handleKeyDown,
         handleDateChange,
-        handleAutocompleteChange,
+        handleAutocompleteChange, setKmValue, kmValue,
         packageData,
         smsguest,
         sendEmail,
@@ -3598,14 +3726,16 @@ const useTripsheet = () => {
         handleButtonClick,
         handleTripRowClick,
         imgpopupOpen,
-        generateLink,
+        // generateLink,
         selectedRow,
         imageUrl,
         link,
         isSignatureSubmitted, checkCloseKM,
         isEditMode,
-        handleEdit, setFormValues, copyToClipboard,
-        SignPage, handlesignaturePopUpClose, signaturePopUpOpen,
+        handleEdit, setFormValues,
+        //  copyToClipboard,
+        // SignPage,
+        handlesignaturePopUpClose, signaturePopUpOpen,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,
@@ -3615,7 +3745,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp
 
 
     };

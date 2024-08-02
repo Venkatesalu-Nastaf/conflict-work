@@ -261,11 +261,31 @@ router.delete('/deleteGroup/:groupid', (req, res) => {
 router.get('/Transfer-Billing', (req, res) => {
   const { customer, fromDate, toDate, servicestation } = req.query;
 
-  let query = 'SELECT * FROM tripsheet WHERE  apps="Closed" and status="Transfer_Closed" and customer=? AND department=? AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+  // Decode the URL-encoded query parameters
+  const decodedCustomer = decodeURIComponent(customer);
+  const decodedServiceStation = decodeURIComponent(servicestation);
 
+  // Validate required parameters
+  if (!decodedCustomer || !fromDate || !toDate || !decodedServiceStation) {
+    return res.status(400).json({ error: 'Missing required query parameters' });
+  }
 
-  db.query(query, [customer, servicestation, fromDate, toDate], (err, result) => {
+  // SQL query
+  const query = `
+    SELECT * 
+    FROM tripsheet 
+    WHERE apps = "Closed" 
+      AND status = "Transfer_Closed" 
+      AND customer = ? 
+      AND department = ? 
+      AND tripsheetdate >= ? 
+      AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  `;
+
+  // Execute query with parameterized values
+  db.query(query, [decodedCustomer, decodedServiceStation, fromDate, toDate], (err, result) => {
     if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     return res.status(200).json(result);
@@ -273,14 +293,36 @@ router.get('/Transfer-Billing', (req, res) => {
 });
 
 
+
+
 router.get('/Group-Billing', (req, res) => {
-  const { customer, fromDate, toDate } = req.query;
+  const { customer, fromDate, toDate, servicestation } = req.query;
 
-  let query = 'SELECT * FROM tripsheet WHERE  apps="Closed" and status="Covering_Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+  // Decode the URL-encoded query parameters
+  const decodedCustomer = decodeURIComponent(customer);
+  const decodedServiceStation = decodeURIComponent(servicestation);
 
+  // Validate required parameters
+  if (!decodedCustomer || !fromDate || !toDate || !decodedServiceStation) {
+    return res.status(400).json({ error: 'Missing required query parameters' });
+  }
 
-  db.query(query, [customer, fromDate, toDate], (err, result) => {
+  // SQL query
+  const query = `
+    SELECT * 
+    FROM tripsheet 
+    WHERE apps = "Closed" 
+      AND status = "Covering_Closed" 
+      AND customer = ? 
+      AND department = ? 
+      AND tripsheetdate >= ? 
+      AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  `;
+
+  // Execute query with parameterized values
+  db.query(query, [decodedCustomer, decodedServiceStation, fromDate, toDate], (err, result) => {
     if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     return res.status(200).json(result);

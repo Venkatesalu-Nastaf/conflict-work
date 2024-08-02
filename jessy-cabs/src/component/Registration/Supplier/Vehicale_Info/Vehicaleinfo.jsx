@@ -59,6 +59,7 @@ import { APIURL } from "../../../url";
 import { FaCar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RiFileUploadLine } from "react-icons/ri";
+import { FaBuilding } from "react-icons/fa";
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -200,7 +201,7 @@ const Vehicaleinfo = ({ stationName }) => {
   const Supllier_delete = permissions[10]?.delete;
 
   return (
-    <div className="vehicale-form">
+    <div className="main-content-form">
       <form action="">
         <div className="detail-container-main-vehicale">
           <div className="vehicaleinfo-container">
@@ -211,7 +212,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <MinorCrashIcon color="action" />
                   </div>
                   <TextField
-                    margin='normal'
+                    // margin='normal'
                     size='small'
                     name="vehicleId"
                     value={selectedCustomerData?.vehicleId || ""}
@@ -227,7 +228,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <FaCar />
                   </div>
                   <TextField
-                    margin='normal'
+                    // margin='normal'
                     size='small'
                     name="vehicleName"
                     value={
@@ -354,7 +355,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     <CarCrashIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     size="small"
                     id="vehRegNo"
                     className='full-width'
@@ -366,7 +367,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <FontAwesomeIcon icon={faBuildingFlag} />
+                    <FaBuilding />
                   </div>
                   <Autocomplete
                     fullWidth
@@ -438,36 +439,60 @@ const Vehicaleinfo = ({ stationName }) => {
           <div className="input-field vehicleinfo-inputfeild">
             <div className="input">
               <div className="icone">
-                <ContactMailIcon color="action" />
+                <DocumentScannerIcon color="action" />
               </div>
               <TextField
+                // margin="normal"
                 size="small"
-                id="Segment"
+                name="statepermito"
                 className='full-width'
-                label="Segment"
-                name="segement"
-                value={
-                  book.segement || selectedCustomerData?.segement ||
-                  ""
-                }
+                value={selectedCustomerData?.statepermito || book.statepermito || ""}
                 onChange={handleChange}
+                label="State Permit No"
+                id="statepermito"
               />
+              <div className='state-permit-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>                  <input
+                      type="file"
+                      id=" State_Permit "
+                      style={{ display: "none" }}
+                      onChange={(e) => setStatePermit(e.target.files[0])}
+                    />
+                  </span>
+                </Button>
+                <span class="state-permit-copy-tooltiptext">Upload State Permit Copy</span>
+              </div>
             </div>
             <div className="input">
-              <div className="icone">
-                <AssessmentIcon color="action" />
+              <div className='icone'>
+                <CalendarMonthIcon />
               </div>
-              <TextField
-                margin="normal"
-                size="small"
-                className='full-width'
-                id="year_model"
-                name="yearModel"
-                value={selectedCustomerData?.yearModel || book.yearModel || ""}
-                onChange={handleChange}
-                label="Year Model"
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="State Permit Date"
+                  id="State_Permit"
+                  format="DD/MM/YYYY"
+                  value={
+                    selectedCustomerData?.spdate
+                      ? dayjs(selectedCustomerData.spdate)
+                      : null || book.spdate
+                        ? dayjs(book.spdate)
+                        : null
+                  }
+                  onChange={(date) => handleDateChange(date, 'spdate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData?.spdate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
             </div>
+
             <div className="input">
               <div className="icone">
                 <EmojiTransportationIcon color="action" />
@@ -516,7 +541,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 name="insuranceno"
                 className='full-width'
@@ -626,11 +651,34 @@ const Vehicaleinfo = ({ stationName }) => {
               </LocalizationProvider>
             </div>
             <div className="input">
+              <div className='icone'>
+                <CalendarMonthIcon />
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="National Permit Date"
+                  format="DD/MM/YYYY"
+                  value={
+                    selectedCustomerData?.npdate
+                      ? dayjs(selectedCustomerData?.npdate)
+                      : null || book.npdate
+                        ? dayjs(book.npdate)
+                        : null
+                  }
+                  onChange={(date) => handleDateChange(date, 'npdate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData?.npdate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input">
               <div className="icone">
                 <DocumentScannerIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 name="nationalpermito"
                 className='full-width'
@@ -656,29 +704,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <span class="national-permit-copy-tooltiptext">Upload National Permit Copy</span>
               </div>
             </div>
-            <div className="input">
-              <div className='icone'>
-                <CalendarMonthIcon />
-              </div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="National Permit Date"
-                  format="DD/MM/YYYY"
-                  value={
-                    selectedCustomerData?.npdate
-                      ? dayjs(selectedCustomerData?.npdate)
-                      : null || book.npdate
-                        ? dayjs(book.npdate)
-                        : null
-                  }
-                  onChange={(date) => handleDateChange(date, 'npdate')}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData?.npdate} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider>
-            </div>
+
             {/* <div className="input">
               <Button size="md" className='vehicle-info-upload-btn' component="label">
                 <span class="button-29 vehicle-info-upload-btn-width">
@@ -707,61 +733,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 size="small"
               />
             </div>
-            <div className="input">
-              <div className="icone">
-                <DocumentScannerIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                name="statepermito"
-                className='full-width'
-                value={selectedCustomerData?.statepermito || book.statepermito || ""}
-                onChange={handleChange}
-                label="State Permit No"
-                id="statepermito"
-              />
-              <div className='state-permit-copy-tooltip'>
-                <Button size="md" component="label" className='vehicle-info-upload-btn'>
-                  <span class=" vehicle-info-upload-btn-width">
-                    <span className='upload-icon'>
-                      <RiFileUploadLine />
 
-                    </span>                  <input
-                      type="file"
-                      id=" State_Permit "
-                      style={{ display: "none" }}
-                      onChange={(e) => setStatePermit(e.target.files[0])}
-                    />
-                  </span>
-                </Button>
-                <span class="state-permit-copy-tooltiptext">Upload State Permit Copy</span>
-              </div>
-            </div>
-            <div className="input">
-              <div className='icone'>
-                <CalendarMonthIcon />
-              </div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="State Permit Date"
-                  id="State_Permit"
-                  format="DD/MM/YYYY"
-                  value={
-                    selectedCustomerData?.spdate
-                      ? dayjs(selectedCustomerData.spdate)
-                      : null || book.spdate
-                        ? dayjs(book.spdate)
-                        : null
-                  }
-                  onChange={(date) => handleDateChange(date, 'spdate')}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData?.spdate} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider>
-            </div>
             {/* <div className="input">
 
               <Button size="md" component="label" className='vehicle-info-upload-btn'>
@@ -795,10 +767,42 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
             <div className="input">
               <div className="icone">
+                <ContactMailIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="Segment"
+                className='full-width'
+                label="Segment"
+                name="segement"
+                value={
+                  book.segement || selectedCustomerData?.segement ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AssessmentIcon color="action" />
+              </div>
+              <TextField
+                // margin="normal"
+                size="small"
+                className='full-width'
+                id="year_model"
+                name="yearModel"
+                value={selectedCustomerData?.yearModel || book.yearModel || ""}
+                onChange={handleChange}
+                label="Year Model"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
                 <HistoryEduIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 className='full-width'
                 name="rcbookno"
@@ -902,7 +906,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <ContactPhoneIcon color="action" />
               </div>
               <TextField
-                margin="normal"
+                // margin="normal"
                 size="small"
                 className='full-width'
                 name="tankCap"

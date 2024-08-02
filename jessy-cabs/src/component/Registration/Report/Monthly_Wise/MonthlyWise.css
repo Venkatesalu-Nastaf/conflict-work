@@ -1,0 +1,33 @@
+.MonthlyWise-main {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  color: #000;
+}
+
+.MonthlyWise-table-container {
+  /* margin-top: 10px; */
+  /* border: 1px solid #ccc; */
+  /* padding: 20px; */
+  /* background-color: var(--glass); */
+  margin-top: 20px;
+}
+
+/* .Download-btn-MonthlyWise{
+    padding: 0px 20px 20px 0px;
+  } */
+
+.table-MonthlyWise {
+  background: var(--glass);
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  height: 400px;
+  width: 99vw;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .table-MonthlyWise {
+    width: 101vw;
+  }
+}

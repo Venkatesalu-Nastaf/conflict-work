@@ -411,7 +411,7 @@ const useRatype = () => {
             }
         }
         handlelist();
-    }, []);
+    }, [apiUrl]);
 
     const handleEdit = async (driverid) => {
         const selectedCustomer = rows.find((row) => row.driverid === driverid);

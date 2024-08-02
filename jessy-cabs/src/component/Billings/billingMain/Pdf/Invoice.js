@@ -14,7 +14,8 @@ const Invoice = () => {
         Status: '',
         Amount: '',
         Bill_Date: '',
-        Customer: ''
+        Customer: '',
+        Trips: "1"
     })
 
     const apiUrl = APIURL;

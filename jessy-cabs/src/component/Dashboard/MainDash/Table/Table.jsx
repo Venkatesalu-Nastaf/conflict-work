@@ -1,5 +1,5 @@
-import { React, useState } from "react";
-// import axios from 'axios';
+import { React, useEffect, useState } from "react";
+import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,17 +12,28 @@ import format from 'date-fns/format';
 import "./Table.css";
 import { Button, IconButton } from "@mui/material";
 //dialog box
-import Dialog from '@mui/material/Dialog';
+// import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-// import { APIURL } from "../../../url";
+
+import { APIURL } from "../../../url";
 import { useData1 } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+// import axios from 'axios'
+import dayjs from "dayjs";
+import Dialog from "@mui/material/Dialog";
+
+
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import DialogContent from "@mui/material/DialogContent";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import Button from "@mui/material/Button";
 // import { BiBorderRadius } from "react-icons/bi";
 
-// const apiUrl = APIURL;
+const apiurl = APIURL;
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
@@ -54,12 +65,38 @@ const makeStyle = (status) => {
   }
 }
 
-export default function BasicTable() {
+export default function BasicTable({stationName}) {
+
+  // const date = new Date();
+  const datestart=dayjs().startOf('month').format('YYYY-MM-DD');
+  const dateEnd = dayjs().endOf('month').format('YYYY-MM-DD');
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
+   const [toDate, setToDate] = useState(dayjs());
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [showdDate, setShowDate] = useState(false);
+   
+    
+    const {filteredData,setTodayBooking,setViewMonthdata,setFilteredData} = useData1();
 
-  const { filteredData } = useData1();
+    const stationarray = stationName?.map((data) => data.Stationname)
+    // const stationarray = stationName?.Stationname.split(',');
+  const showDateFunction = () => {
+
+    setShowDate(!showdDate);
+
+  }
+
+ 
+
+
+
+  const closeDateFunction = () => {
+
+    setShowDate(false);
+
+  }
 
   // const data1 = filteredData;
   const handlePopupClose = () => {
@@ -67,14 +104,219 @@ export default function BasicTable() {
   };
 
   const handleButtonClickTripsheet = (trip) => {
-    console.log(trip, "ttt")
+    // console.log(trip, "ttt")
     setSelectedTrip(trip);
     setPopupOpen(true);
   };
 
+  const dateoftoday = dayjs().format("YYYY-MM-DD")
+
+  // const toadybookingdate = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+  //     const data = response.data
+  //     setTodayBooking(data)
+
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+
+
+
+
+  
+
+  const tripsheetfiltercurrntdate=async()=>{
+    try{
+     const response=await axios.get(`${apiurl}/tripsheet-maindashcuurentdate/${dateoftoday}`)
+     const response2 = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
+     const data2 = response2.data
+     setTodayBooking(data2)
+     const data=response.data;
+     console.log(data,"ddd")
+    
+     if(data.length >=1){
+      setFilteredData(response.data)
+     }
+     else{
+      console.log(data.length,"daaa")
+      setFilteredData([])
+     }
+     
+     
+    }
+    catch(err){
+      console.log(err,"err")
+    }
+  }
+
+  const tripsheetfiltercustomdate=async()=>{
+    try{
+     const response=await axios.get(`${apiurl}/tripsheet-maindashcuurentdate?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`)
+     const data=response.data;
+     console.log(data,"ddd")
+    
+     if(data.length >=1){
+      setFilteredData(response.data)
+     }
+     else{
+      setFilteredData([])
+     }
+     
+     
+    }
+    catch(err){
+      console.log(err,"err")
+    }
+  }
+
+  const custombookingdate = async () => {
+    tripsheetfiltercustomdate()
+    try {
+      const response = await axios.get(`${apiurl}/customerreviecustomerdate?station=${stationarray}&fromDate=${fromDate}&toDate=${toDate}`)
+      const data = response.data
+      setTodayBooking(data)
+      // setPopupOpen(false)
+      setFromDate(dayjs())
+      setToDate(dayjs())
+      setShowDate(false)
+
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+  // console.log(filteredData,"ffff")
+  const fetchalldata = async () => {
+    try {
+      const response = await fetch(`${apiurl}/tripsheet-maindash?fromDate=${datestart}&toDate=${dateEnd}`);
+      // if (stationarray.length > 0) {
+        // const response2 = axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+        // const data2 = response2.data
+        // setTodayBooking(data2)
+      // }
+      if (response.status === 200) {
+        if (response.ok) {
+          const data = await response.json();
+          if (data.length > 0) {
+            setFilteredData(data);
+          } else {
+            setFilteredData([]);
+          }
+        } else {
+        }
+      }
+      // else {
+      //   const timer = setTimeout(fetchData, 2000);
+      //   return () => clearTimeout(timer);
+      // }
+    } catch {
+    }
+  };
+ 
+
+  const handleWeeklyView = async() => {
+    // toadybookingdate()
+    setViewMonthdata("weekly");
+    tripsheetfiltercurrntdate()
+    // toadybookingdate()
+
+  };
+  
+    const fetchdatachart = async () => {
+      try {
+        if (stationarray.length > 0) {
+          // const response = await axios.get(`${apiurl}/customerreviewdataall/${stationarray}`)
+          const response = await axios.get(`${apiurl}/customerreviewdataallmonth/${stationarray}/${datestart}/${dateEnd}`)
+          const data = response.data
+          setTodayBooking(data)
+          // setStationdata(data)
+          console.log(data)
+
+        }
+        else {
+          return
+        }
+      }
+      catch (err) {
+        console.log(err)
+      
+       
+      }
+    }
+    
+  useEffect(()=>{
+    console.log("useeffectdata")
+    fetchalldata()
+    fetchdatachart()
+    setViewMonthdata("monthly")
+  },[])
+
+  const handleMonthlyView = () => {
+    setViewMonthdata("monthly");
+    fetchalldata()
+    fetchdatachart()
+  };
+  console.log(filteredData.length>0?"one":"two","dddd",filteredData,"lenn")
+
   return (
     <div className="Table">
+      <div style={{display:"flex", justifyContent:"space-between", flexWrap:"wrap",alignItems:"center"}}>
       <h1 className="live-driver-status-heading">Live Driver Status</h1>
+      <div className="button-container date-button-container">
+        <button 
+        onClick={handleMonthlyView} 
+        className="graph-all-button">All</button>
+        <button 
+        onClick={handleWeeklyView} 
+        className="graph-weekly-button">Today</button>
+        {/* <button onClick={handleYesterdayView} className="graph-yesterday-button">custom date</button> */}
+        <button
+         onClick={showDateFunction}
+         id="custom-date" className="graph-yesterday-button">custom date</button>
+        {showdDate &&
+          <div className="dashboard-date-popup">
+            <div className="dashboard-date-popup-close" 
+            onClick={closeDateFunction}
+            >x</div>
+            <div className="dashboard-date-popup-main-division">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="From Date"
+                  id="fromDate"
+                  name="fromDate"
+                  format="DD/MM/YYYY"
+                  value={fromDate}
+                  onChange={(date) => setFromDate(date)}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="To Date"
+                  name="toDate"
+                  id="toDate"
+                  format="DD/MM/YYYY"
+                  value={toDate}
+                  onChange={(date) => setToDate(date)}
+                />
+              </LocalizationProvider>
+            </div>
+            <div className="dashboard-date-popup-search-division">
+              <Button variant="contained" 
+              onClick={custombookingdate}
+              >
+                Search
+              </Button>
+            </div>
+          </div>
+        }
+      </div>
+
+      </div>
+
+    
       <TableContainer
         className="Scroll-Style total-table"
         component={Paper}
@@ -92,7 +334,7 @@ export default function BasicTable() {
           </TableHead>
           <TableBody style={{ color: "white" }}>
             {(
-              filteredData && filteredData.length > 0 ? (
+             filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
                   <TableRow
                     key={trip.id}
@@ -121,9 +363,11 @@ export default function BasicTable() {
                   </TableRow>
                 ))
               ) : (
-                <tr>
-                  <td colSpan={6}>No data available.</td>
-                </tr>
+                // <tr>
+                  <TableCell style={{justifyContent:'center'}}>No data available.</TableCell>
+
+                  // <td colSpan={6}>No data available.</td>
+                // </tr>
               )
             )}
           </TableBody>

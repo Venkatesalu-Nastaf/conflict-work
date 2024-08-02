@@ -6,6 +6,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import the cors middleware
+const nodemailer = require('nodemailer');
+
 
 router.use(cors());
 router.use(express.static('customer_master'));
@@ -26,14 +28,35 @@ const upload = multer({
 
 
 router.post('/usercreation-add', async (req, res) => {
-  const { book, permissionsData } = req.body;
+  const { book, permissionsData, organistaionsendmail } = req.body;
   const { username, stationname, designation, organizationname, userpassword, active, email, mobileno } = book;
-  console.log("email", email, "mobile", mobileno)
+  const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
 
   try {
     await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno)
 VALUES (?,?,?,?,?,?,?,?)`, [username, stationname, designation, organizationname, userpassword, active, email, mobileno]);
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: Sender_Mail,
+        pass: EmailApp_Password
+      }
+    });
 
+    const mailOptions = {
+      from: Sender_Mail,
+      to: email,
+      subject: 'Credential Details',
+      html: `<p>Hi ${username},<br>UserName: ${email}<br>Password: ${userpassword}</p>`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
     db.query(
       'SELECT userid FROM usercreation WHERE username = ?', [username], (err, result) => {
 
@@ -98,6 +121,11 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
   const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email } = updatedCustomer;
 
 
+  if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
+    updatedCustomer.stationname = updatedCustomer.stationname.join(',')
+  }
+
+
   try {
     // Clear existing permissions for the user
     await db.query('DELETE FROM user_permissions WHERE user_id = ?', [userid]);
@@ -114,10 +142,12 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
 
     // Update user details
-    await db.query(
-      'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
-      [username, stationname, designation, organizationname, userpassword, active, mobileno, email, userid]
-    );
+    // await db.query(
+    //   'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?,active=?,mobileno=?,email=? WHERE userid = ?',
+    //   [username, stationname, designation, organizationname, userpassword, active, mobileno, email, userid]
+    // );
+
+    await db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomer, userid]);
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {

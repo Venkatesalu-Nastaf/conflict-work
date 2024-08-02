@@ -38,9 +38,16 @@
 
 .table-bookingCopy-DriverBataRate {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     margin-top: 30px;
+    width: fit-content;
+}
+
+@media screen and (max-width: 1365px) {
+    .table-bookingCopy-DriverBataRate {
+        width: 100%;
+    }
 }
 
 /* .form-container-PackageRateEntery .container-main::-webkit-scrollbar-thumb {
@@ -67,7 +74,7 @@
 .copy-title-btn-DriverBataRate {
     width: 100%;
     /* margin-top: 30px; */
-    padding: 10px;
+    padding: 20px 10px;
     border: 2px solid #ccc;
     border-radius: 15px;
     background-color: var(--glass);
@@ -113,13 +120,16 @@
 
 @media only screen and (min-width:654px) and (max-width:768.99px) {
     .copy-title-btn-DriverBataRate {
-        width: 71vw !important;
+        width: 92vw !important;
     }
 }
 
 @media only screen and (min-width:320px) and (max-width:654.99px) {
     .copy-title-btn-DriverBataRate {
-        width: 80vw !important;
+        width: 91vw !important;
+    }
+    .DriverBataRate-inputfeild{
+        justify-content: center;
     }
 }
 

@@ -54,9 +54,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-
-
-
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
   // console.log(stationName,"sta")
 
@@ -93,7 +90,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     handleTripsheetClick,
     columns,
     filteredColumns,
-    columnshowall, setCutomerName, setVehNo,
+    columnshowall, setCutomerName, setVehNo, handleBookingClick,
   } = useTripStatus();
 
   useEffect(() => {
@@ -101,6 +98,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
 
@@ -116,11 +114,22 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     }
   }, [stationName])
 
+  const [allCustomer, setAllCustomer] = useState([])
+
+  useEffect(() => {
+    if (customer?.length > 1) {
+      setAllCustomer([...customer, { customer: "All" }])
+    }
+    else {
+      setAllCustomer(customer)
+    }
+  })
+
 
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
       <form action="">
-        <div className="detail-container-main detail-container-main-tripstatus">
+        <div className="detail-container-main-tripstatus">
           <div className="container-left-tripstatus">
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">
@@ -162,7 +171,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div> */}
-              {/* </div>
+                {/* </div>
               <div className="input-field TripStatus-input-feilds"> */}
                 <div className="input">
                   <div className="icone">
@@ -206,15 +215,15 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                          <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                          />
-                          {option.label}
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
                       </li>
-                  )}
+                    )}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Department" inputRef={params.inputRef} />
@@ -234,22 +243,22 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     freeSolo
                     size="small"
                     value={cutomerName}
-                    options={customer?.map((option) => ({
+                    options={allCustomer?.map((option) => ({
                       label: option.customer,
                     }))}
                     disableCloseOnSelect
-                    
+
                     isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleCustomerChange(event, value)}
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                          <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                          />
-                          {option.label}
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
                       </li>
                     )}
                     renderInput={(params) => {
@@ -287,7 +296,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                    <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
 
@@ -327,7 +336,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
           </div>
         </div>
         <div className="SpeedDial">
-          <Box sx={{ position: "relative", mt: 2, }}>
+          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
@@ -351,20 +360,20 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
           </Box>
         </div>
         <div className="Download-btn">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </div>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
         <div className="table-bookingCopy-TripStatus">
           {/* <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
@@ -382,17 +391,42 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             </PopupState>
           </div> */}
           <div className='trip-status-table'>
-            <DataGrid
-              rows={reversedRows}
-              columns={columnshowall ? columns : filteredColumns}
-              onRowClick={(event) => handleButtonClick(event.row)}
-              pageSize={5}
-            />
+            <Box
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              <DataGrid
+                rows={reversedRows}
+                columns={columnshowall ? columns : filteredColumns}
+                onRowClick={(event) => handleButtonClick(event.row)}
+                pageSize={5}
+              />
+            </Box>
             <Dialog open={popupOpen} onClose={handlePopupClose}>
               <DialogTitle>Select an Option</DialogTitle>
               <DialogContent>
                 {selectedRow && (
                   <div>
+                    <Button onClick={handleBookingClick}>Booking</Button>
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

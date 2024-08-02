@@ -78,7 +78,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
 
 
-    cb(null, `signature-${Date.now()}.png`);
+    cb(null, `signature-${req.params.data}.png`);
   },
 
 
@@ -91,11 +91,11 @@ const uploadfile = multer({ storage: storage });
 const baseImagetripidPath = 'customer_master/public/signature_images'; // Relative path to the base directory
 
 router.post('/api/saveSignaturewtid', (req, res) => {
-  const { signatureData, tripId, uniqueno } = req.body;
+  const { signatureData, tripId, uniqueno,imageName } = req.body;
   const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
   const imageBuffer = Buffer.from(base64Data, 'base64');
-  const imageName = `signature-${Date.now()}.png`;
-  const imagePath = path.join(baseImagetripidPath, imageName); // Use the base path
+  const imageName2 = `signature-${imageName}.png`;
+  const imagePath = path.join(baseImagetripidPath, imageName2); // Use the base path
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
       console.error('Error saving signature:', error);
@@ -136,7 +136,7 @@ router.post('/api/saveSignaturewtid', (req, res) => {
 function generateUniqueNumbers() {
   return Math.floor(10000 + Math.random() * 90000);
 }
-router.post('/api/uploadsignaturedata/:tripid', uploadfile.single('signature_image'), (req, res) => {
+router.post('/api/uploadsignaturedata/:tripid/:data', uploadfile.single('signature_image'), (req, res) => {
 
   const tripid = req.params.tripid;
 
@@ -167,9 +167,20 @@ router.post('/api/uploadsignaturedata/:tripid', uploadfile.single('signature_ima
             return res.status(500).json({ message: "err" });
           }
           console.log(result)
-          return res.status(200).json({ message: "signature upload successfully" });
+          if(result.affectedRows === 0){
+            return res.status(200).json({ message: "signature notUploaded " });
+          }
+          db.query('update tripsheet set apps="Closed" where tripid = ? ',[tripid],(err,result2)=>{
+          // return res.status(200).json({ message: "signature upload successfully" });
           // Use the base path
+          if (err) {
+            return res.status(500).json({ message: "err" });
+          }
+          return res.status(200).json({ message: "signature upload successfully" });
+
         })
+        })
+      
       }
     })
   }
@@ -197,9 +208,13 @@ router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
         if (result.affectedRows === 0) {
           return res.status(404).json({ error: "data not found" });
         }
+      
+        
+
         const signimage = results[0].signature_path
 
         if (signimage) {
+         
 
           const oldImagePath = path.join('Backend', 'customer_master', 'public', 'signature_images');
 
@@ -224,12 +239,31 @@ router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
         }
 
       })
+   
       return res.status(200).json({ message: "Data deleted successfully" });
 
     }
   })
 })
 
+
+// -----------------------------driver app signature image storage ----------------------
+router.post("/signautureimagedriverapp",(req,res)=>{
+  const {signatureData,imageName}=req.body;
+  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+  // const imageName = `signature-${Date.now()}.png`;
+  const imagePath = path.join(baseImagetripidPath, imageName);
+  fs.writeFile(imagePath, imageBuffer, (error) => {
+    if (error) {
+      console.error('Error saving signature:', error);
+      res.status(500).json({ error: 'Failed to save signature' });
+    } else {
+  res.send("success")
+    }
+  })
+
+})
 // function generateUniqueNumbers() {
 //   return Math.floor(10000 + Math.random() * 90000);
 // }

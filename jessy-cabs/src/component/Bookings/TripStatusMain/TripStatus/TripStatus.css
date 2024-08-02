@@ -37,7 +37,7 @@
 
 .table-bookingCopy-TripStatus {
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--glass);
   margin-top: 0px;
 }
@@ -72,10 +72,10 @@
 .copy-title-btn-TripStatus {
   width: 100%;
   /* margin-top: 30px; */
-  background-color: var(--glass);
-  padding: 20px 20px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
+  /* background-color: var(--glass); */
+  /* padding: 20px 20px; */
+  /* border: 2px solid #ccc; */
+  /* border-radius: 10px; */
 }
 
 .TripStatus-form .Title-Name::after {
@@ -91,17 +91,21 @@
 
 @media screen and (min-width: 451px) and (max-width: 700px) {
   .copy-title-btn-TripStatus {
-    width: 80% !important;
+    /* width: 80% !important; */
   }
 }
 
 @media screen and (min-width: 385px) and (max-width: 450.99px) {
-  .copy-title-btn-TripStatus {
+  /* .copy-title-btn-TripStatus {
     width: 87% !important;
-  }
+  } */
   .detail-container-main{
     padding: 0px !important;
   }
+}
+
+.detail-container-main-tripstatus{
+  margin-bottom: 20px;
 }
 
 @media screen and (min-width: 320px) and (max-width: 384.99px) {

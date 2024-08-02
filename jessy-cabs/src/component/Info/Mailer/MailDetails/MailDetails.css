@@ -58,10 +58,14 @@
     }
 }
 
+.textbox-mailer {
+    margin-top: 20px;
+}
+
 @media screen and (min-width: 970px) and (max-width:1285px) {
 
     .textbox-mailer {
-        width: 75vw !important;
+        /* width: 75vw !important; */
         padding-left: 0px !important;
     }
 }
@@ -69,7 +73,7 @@
 @media screen and (min-width: 769px) and (max-width:969.99px) {
 
     .textbox-mailer {
-        width: 65vw !important;
+        /* width: 65vw !important; */
         padding-left: 0px !important;
     }
 }
@@ -77,7 +81,7 @@
 @media screen and (min-width: 650.99px) and (max-width:768.99px) {
 
     .textbox-mailer {
-        width: 73vw !important;
+        /* width: 73vw !important; */
         padding-left: 0px !important;
     }
 }
@@ -148,7 +152,6 @@
 
 /* TRIPSHEET CONETNT */
 .Tipsheet-content-table-main {
-    background: var(--glass);
     padding: 40px;
 }
 
@@ -213,6 +216,10 @@
     /* margin-top: 20px; */
 }
 
+.container-left-mailDetails {
+    width: 60%;
+}
+
 @media screen and (min-width:769px) and (max-width:820px) {
     .container-left-mailDetails {
         width: 79vh;
@@ -243,10 +250,16 @@
 
 .table-bookingCopy-mailer {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
-    margin: 0px 20px;
-    width: 100%;
+    width: fit-content;
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 1247px) {
+    .table-bookingCopy-mailer {
+        width: 100%;
+    }
 }
 
 .mail-details-input-field {
@@ -282,5 +295,5 @@
     justify-content: space-between;
 }
 .input-feild-mailer{
-    width: 60%;
+    width: 100%;
 }

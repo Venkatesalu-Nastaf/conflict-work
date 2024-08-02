@@ -21,8 +21,9 @@ import { PermissionContext } from "../../context/permissionContext";
 import update from "../../../assets/img/update.png"
 import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
 import { FaBell } from "react-icons/fa";
-import axios  from 'axios'
+import axios from 'axios'
 // import axios from "axios";
+import { useData } from "../MainDash/Sildebar/DataContext2";
 
 //dialog box
 import Dialog from "@mui/material/Dialog";
@@ -40,10 +41,11 @@ const MainDashboard = () => {
   const apiUrl = APIURL;
   // const { sharedData, setFilteredData,datatriguserinfo } = useData();
   // const { setFilteredData,datatriguserinfo } = useData();
-  const { setFilteredData, datatriguserinfo,expanded,setExpanded} = useData1();
+  const { setFilteredData, datatriguserinfo, expanded, setExpanded } = useData1();
+  //  const {datatriguserinfo, expanded, setExpanded } = useData1();
   const navigate = useNavigate();
   // const [expanded, setExpanded] = useState(true);
-  const { selectedTheme,setSelectedAvatar,selectedavtar, setSelectedTheme } = useThemes();
+  const { selectedTheme, setSelectedAvatar, selectedavtar, setSelectedTheme } = useThemes();
   // const { setSelectedTheme } = useThemes();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -57,18 +59,18 @@ const MainDashboard = () => {
   const data6 = localStorage.getItem("organizationimages")
 
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
- 
-
-// ------------
-
-const [sendTrue,setSendTrue] = useState("");
-const sendTrueValue =(datavaule)=>{
-  setSendTrue(datavaule);
-}
 
 
+  // ------------
 
-// ------------
+  const [sendTrue, setSendTrue] = useState("");
+  const sendTrueValue = (datavaule) => {
+    setSendTrue(datavaule);
+  }
+
+
+
+  // ------------
   // useEffect(() => {
 
   //   setSelectedImage(sharedData)
@@ -107,7 +109,7 @@ const sendTrueValue =(datavaule)=>{
       localStorage.removeItem("username")
       localStorage.removeItem("tokensdata")
       // localStorage.removeItem("expiretime")
-      
+
 
 
       setPermission([]);
@@ -115,7 +117,7 @@ const sendTrueValue =(datavaule)=>{
       navigate("/");
       setMakeRender((prev) => !prev);
     },
-    [navigate,setMakeRender,setPermission]
+    [navigate, setMakeRender, setPermission]
   );
 
   // useEffect(() => {
@@ -150,48 +152,48 @@ const sendTrueValue =(datavaule)=>{
   //     };
   //   }
   // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
-const IDLE_TIMEOUT_DURATION = 30*60 * 1000;
+  const IDLE_TIMEOUT_DURATION = 30 * 60 * 1000;
 
-const useIdleTimeout = (handleLogoutdialog) => {
-  const checkinactivity = useCallback(() => {
-    const expiretime = localStorage.getItem("expiretime");
+  const useIdleTimeout = (handleLogoutdialog) => {
+    const checkinactivity = useCallback(() => {
+      const expiretime = localStorage.getItem("expiretime");
 
-    if (expiretime && Number(expiretime) < Date.now()) {
-      // console.log("logout");
-      handleLogoutdialog();
-    }
-    // console.log("timeout");
-  }, [handleLogoutdialog]);
+      if (expiretime && Number(expiretime) < Date.now()) {
+        // console.log("logout");
+        handleLogoutdialog();
+      }
+      // console.log("timeout");
+    }, [handleLogoutdialog]);
 
-  const Upadteexpiretime = useCallback(() => {
-    const expiretime = Date.now() + IDLE_TIMEOUT_DURATION;
-    localStorage.setItem("expiretime", expiretime);
-  }, []);
+    const Upadteexpiretime = useCallback(() => {
+      const expiretime = Date.now() + IDLE_TIMEOUT_DURATION;
+      localStorage.setItem("expiretime", expiretime);
+    }, []);
 
-  useEffect(() => {
-    Upadteexpiretime();
+    useEffect(() => {
+      Upadteexpiretime();
 
-    const events = ["mousemove", "keypress", "click", "scroll", "keydown"];
-    events.forEach(event => window.addEventListener(event, Upadteexpiretime));
+      const events = ["mousemove", "keypress", "click", "scroll", "keydown"];
+      events.forEach(event => window.addEventListener(event, Upadteexpiretime));
 
-    return () => {
-      events.forEach(event => window.removeEventListener(event, Upadteexpiretime));
-    };
-  }, [Upadteexpiretime]);
+      return () => {
+        events.forEach(event => window.removeEventListener(event, Upadteexpiretime));
+      };
+    }, [Upadteexpiretime]);
 
-  useEffect(() => {
-    const checkintrvval = setInterval(() => {
-      checkinactivity();
-    }, 1000); // Check inactivity every second
+    useEffect(() => {
+      const checkintrvval = setInterval(() => {
+        checkinactivity();
+      }, 1000); // Check inactivity every second
 
-    return () => clearInterval(checkintrvval);
-  }, [checkinactivity]);
-};
+      return () => clearInterval(checkintrvval);
+    }, [checkinactivity]);
+  };
 
-useIdleTimeout(handleLogoutdialog)
+  useIdleTimeout(handleLogoutdialog)
 
 
-  
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -213,8 +215,8 @@ useIdleTimeout(handleLogoutdialog)
       const successMessagepopup = `Login successful ${user.username}`;
       setSuccess(successMessagepopup);
     }
-  }, [user,datatriguserinfo ]);
-  
+  }, [user, datatriguserinfo]);
+
 
   // const checkertoken=()=>{
   //   setPopupOpenToken(true)
@@ -237,7 +239,7 @@ useIdleTimeout(handleLogoutdialog)
   // })
   // console.log(popupOpentoken,"ty")
 
- 
+
 
   const storedUsername = localStorage.getItem("username");
 
@@ -248,12 +250,14 @@ useIdleTimeout(handleLogoutdialog)
   };
 
   const [routeData, setRouteData] = useState("");
-
   const storeUsername = localStorage.getItem("username");
+
+  const { setOrgName } = useData()
 
   useEffect(() => {
     const fetchData = async () => {
       const username = storeUsername;
+      console.log("routeData username", username)
       try {
         const response = await fetch(
           `${apiUrl}/userdata/${encodeURIComponent(username)}`
@@ -263,27 +267,61 @@ useIdleTimeout(handleLogoutdialog)
         }
         const routeData = await response.json();
         const usertheme = routeData[0]?.theme;
-        const userprofile=routeData[0]?.profile_image
-        console.log(usertheme,"themme",userprofile)
+        const userprofile = routeData[0]?.profile_image
         setSelectedTheme(usertheme);
         setSelectedAvatar(userprofile)
-
+        console.log("routeData", routeData)
         localStorage.setItem("selectedusertheme", JSON.stringify(usertheme));
-        localStorage.setItem("selectedProfileimageuser",JSON.stringify(userprofile))
-        setRouteData(routeData);
-      } catch (error) { }
+        localStorage.setItem("selectedProfileimageuser", JSON.stringify(userprofile))
+
+        if (routeData) {
+          setOrgName(routeData[0]?.organizationname)
+          localStorage.setItem("useridno", routeData[0]?.userid);
+          localStorage.setItem("usercompany", routeData[0]?.organizationname);
+          setRouteData(routeData);
+        }
+
+      } catch (error) {
+        console.log("error", error)
+      }
     };
     fetchData();
-  }, [storeUsername, setSelectedTheme, apiUrl,setSelectedAvatar]);
+  }, [storeUsername, setSelectedTheme, apiUrl, setSelectedAvatar]);
   const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
 
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
   setUser_id(useridno);
 
-  localStorage.setItem("useridno", useridno);
+  // localStorage.setItem("useridno", useridno);
+  // localStorage.setItem("usercompany", usercompany);
 
-  localStorage.setItem("usercompany", usercompany);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/tripsheet-maindash`);
+  //       if (response.status === 200) {
+  //         if (response.ok) {
+  //           const data = await response.json();
+  //           if (data.length > 0) {
+  //             setFilteredData(data);
+  //           } else {
+  //             setFilteredData([]);
+  //           }
+  //         } else {
+  //         }
+  //       }
+  //       else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     } catch {
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [apiUrl, setFilteredData]);
 
 
   useEffect(() => {
@@ -300,20 +338,20 @@ useIdleTimeout(handleLogoutdialog)
             }
           } else {
           }
-        } 
-        else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
         }
+        // else {
+        //   const timer = setTimeout(fetchData, 2000);
+        //   return () => clearTimeout(timer);
+        // }
       } catch {
       }
     };
 
     fetchData();
-  }, [apiUrl, setFilteredData]);
+  }, [apiUrl]);
 
   useEffect(() => {
-    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null ) {
+    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null) {
       setTimeout(() => {
         setUserdashboard(false)
       }, 3000);

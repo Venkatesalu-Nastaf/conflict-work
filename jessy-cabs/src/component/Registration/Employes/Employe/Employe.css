@@ -25,11 +25,11 @@
 .form-container-Emplyes .Employe-form {
   /* height: 100vh; */
   /* width: 100vw; */
-  overflow-x: hidden;
+  /* overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  color: #000;
+  color: #000; */
   /* background-color: var(--glass); */
 }
 
@@ -46,7 +46,7 @@
 
 .table-bookingCopy-Employe {
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--glass);
 }
 
@@ -79,9 +79,9 @@
   }
 }
 
-.Employe-form .Title-Name {
+/* .Employe-form .Title-Name {
   position: relative;
-}
+} */
 
 /* .copy-title-btn-RateType {
   width: 100%;
@@ -92,7 +92,7 @@
   border-radius: 15px;
 } */
 
-.Employe-form .Title-Name::after {
+/* .Employe-form .Title-Name::after {
   content: "";
   position: absolute;
   bottom: -10px;
@@ -101,11 +101,11 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-}
+} */
 
 .Employe-search-container {
   /* margin-top: 30px; */
-  padding: 10px ;
+  padding: 10px;
   border-radius: 15px;
   /* width: 100%; */
   display: flex;
@@ -137,16 +137,22 @@
   /* justify-content: space-evenly; */
 }
 
-@media screen and (max-width:570px) {
+@media screen and (max-width:768px) {
+  .employee-input-feilds {
+    justify-content: center;
+  }
+}
+
+/* @media screen and (max-width:570px) {
   .input-address {
     width: 200px !important;
   }
-}
+} */
 
 .Employe-search-input {
   /* margin-top: 30px; */
   /* background-color: var(--glass); */
-  padding: 10px ;
+  padding: 10px;
   /* border: 2px solid #ccc; */
   /* border-radius: 15px; */
 }
@@ -154,11 +160,12 @@
 @media screen and (max-width:500px) {
   .Employe-search-input {
     flex-wrap: wrap;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     background-color: var(--glass);
     padding: 10px 20px 35px;
     border: 2px solid #ccc;
     border-radius: 15px;
+    justify-content: center;
   }
 }
 
@@ -182,9 +189,9 @@
   margin-top: 20px;
 }
 
-.employee-file-upload-division {
+/* .employee-file-upload-division {
   padding-left: 20px;
-}
+} */
 
 .registration-employee-table {
   height: 400px;
@@ -205,14 +212,14 @@
   opacity: 0;
 }
 
-.Employe-form{
+/* .Employe-form{
   padding: 20px;
-}
+} */
 
-.download-search{
+.download-search {
   display: flex;
   align-items: center;
-  gap:40px;
+  /* gap:40px; */
 }
 
 /* .Download-btn-employees{

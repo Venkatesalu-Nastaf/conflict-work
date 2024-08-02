@@ -1,5 +1,5 @@
 import React from 'react'
-
+import "./BillWiseReceipt.css";
 import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -9,295 +9,451 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import { DataGrid } from "@mui/x-data-grid";
+import Button from "@mui/material/Button";
+import { MdOutlineEventNote } from "react-icons/md";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import useBillWiseReceipt from './useBillWiseReceipt';
+import dayjs from 'dayjs';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import ClearIcon from "@mui/icons-material/Clear";
+import Box from "@mui/material/Box";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 
+
+
 export const BillWiseReceipt = () => {
 
-    const [age, setAge] = React.useState('');
+  const { organization, setOrganization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
+    , rows, setRows, pendingBillRows, setPendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
+    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup
+  } = useBillWiseReceipt();
 
-    const handleChange = (event) => {
-      setAge(event.target.value);
-    };
-
-    return (
-        <>
- <div className="Employe-form Scroll-Style-hide">
-      <form >
-        <div className="detail-container-main-Employe">
-          <div className="container-Employe">
-            <div className="input-field employee-input-feilds">
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="voucher ID"
-                  className="full-width"
-                  label="voucher ID"
-                  name="voucher ID"
-                  autoComplete="new-password"
-                  
-                />
-              </div>
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBillWiseReport((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleDateChange = (date) => {
+    setBillWiseReport((prevState) => ({
+      ...prevState,
+      Date: date.format('YYYY-MM-DD'),
+    }));
+  };
 
 
-
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+  return (
+    <>
+      <div className="main-content-form Scroll-Style-hide">
+        <form >
+          <div className="detail-container-main-Employe">
+            <div className="container-Employe">
+              <div className="input-field employee-input-feilds">
+                <div className="input">
                   <div className="icone">
-                    <CalendarMonthIcon color="action" />
+                    <BadgeIcon color="action" />
                   </div>
-                  <DatePicker
-                    id="Date"
-                    label=" Date"
-                    format="DD/MM/YYYY"
-                  
-                  >
-                    
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
+                  <TextField
+                    size="small"
+                    id="voucher ID"
+                    className="full-width"
+                    label="voucher ID"
+                    name="VoucherId"
+                    autoComplete="new-password"
+                  // onChange={handleInputChange}
 
-              <div className="input">
-                <div className="icone">
-                  <WorkOutlineRoundedIcon color="action" />
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  id="cover Note"
-                  className="full-width"
-                  label="cover Note"
-                  name="cover Note"
-                  autoComplete="new-password"
-                
-                />
-              </div>
-
-              
-              <div className="input">
-                <div className="icone">
-                  <WorkOutlineRoundedIcon color="action" />
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <DatePicker
+                      id="Date"
+                      name='Date'
+                      label=" Date"
+                      format="DD/MM/YYYY"
+                      value={dayjs(billWiseReport.Date)}
+                      onChange={handleDateChange}                    >
+                    </DatePicker>
+                  </LocalizationProvider>
                 </div>
-                <TextField
-                  size="small"
-                  id="cheque No"
-                  className="full-width"
-                  label="cheque No"
-                  name="cheque No"
-                  autoComplete="new-password"
-                
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <WorkOutlineRoundedIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="Narration"
-                  className="full-width"
-                  label="Narration"
-                  name="Narration"
-                  autoComplete="new-password"
-                
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel id="demo-simple-select-standard-label">Customer Id</InputLabel>
-        <Select
-          labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
-          value={age}
-          onChange={handleChange}
-          label="Customer Id"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel id="demo-simple-select-standard-label">Account To</InputLabel>
-        <Select
-          labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
-          value={age}
-          onChange={handleChange}
-          label="Account To"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-              </div>
-
-             
-            </div>
-
-            <div className="input-field " style={{marginTop:"30px"}}>
-              
-            <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="voucher ID"
-                  className="full-width"
-                  label="voucher ID"
-                  name="voucher ID"
-                  autoComplete="new-password"
-                  
-                />
-              </div>
-
-
-
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="input">
                   <div className="icone">
-                    <CalendarMonthIcon color="action" />
+                    <MdOutlineEventNote color="action" />
                   </div>
-                  <DatePicker
-                    id="Date"
-                    label=" Date"
-                    format="DD/MM/YYYY"
-                  
-                  >
-                    
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
-
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                  <TextField
+                    size="small"
+                    id="cover Note"
+                    className="full-width"
+                    label="cover Note"
+                    name="cover Note"
+                    autoComplete="new-password"
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  id="Bill Amount"
-                  className="full-width"
-                  label="Bill Amount"
-                  name="Bill Amount"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                <div className="input">
+                  <div className="icone">
+                    <WorkOutlineRoundedIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="cheque No"
+                    className="full-width"
+                    label="cheque No"
+                    name="cheque No"
+                    autoComplete="new-password"
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  id="Advanced"
-                  className="full-width"
-                  label="Advanced"
-                  name="Advanced"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                <div className="input">
+                  <div className="icone">
+                    <MdOutlineEventNote color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Narration"
+                    className="full-width"
+                    label="Narration"
+                    name="Narration"
+                    autoComplete="new-password"
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  id="Paid"
-                  className="full-width"
-                  label="Paid"
-                  name="Paid"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                <div className="input">
+                  <div className="icone">
+                    <AccountBalanceWalletIcon color="action" />
+                  </div>
+                  <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Customer Name</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      label="Customer Id"
+                      name='CustomerName'
+                      onChange={handleInputChange}
+                      value={billWiseReport.CustomerName}
+                    >
+                      {organization.map((org) => (
+                        <MenuItem key={org} value={org}>
+                          {org}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
-                <TextField
-                  size="small"
-                  id="Received"
-                  className="full-width"
-                  label="Received"
-                  name="Received"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                <div className="input">
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Account To</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      label="Account To"
+                      name='AccountDetails'
+                      value={billWiseReport.AccountDetails}
+                      onChange={handleInputChange}
+                    >
+                      {accountDetails.map((org) => (
+                        <MenuItem key={org} value={org}>
+                          {org}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
-                <TextField
-                  size="small"
-                  id="Discount"
-                  className="full-width"
-                  label="Discount"
-                  name="Discount"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                {/* </div>
+              <div className="input-field " style={{ marginTop: "30px" }}> */}
+                <div className="input">
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="voucher ID"
+                    className="full-width"
+                    label="voucher ID"
+                    // name="voucher ID"
+                    autoComplete="new-password"
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  id="Balance"
-                  className="full-width"
-                  label="Balance"
-                  name="Balance"
-                  
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <DatePicker
+                      id="Date"
+                      label=" Date"
+                      format="DD/MM/YYYY"
+                    >
+                    </DatePicker>
+                  </LocalizationProvider>
                 </div>
-                <TextField
-                  size="small"
-                  id="unique id"
-                  className="full-width"
-                  label="unique id"
-                  name="unique id"
-                  
-                />
+                {/* <div className="input">
+                  <div className="icone">
+                    <FaIndianRupeeSign color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Bill Amount"
+                    className="full-width"
+                    label="Bill Amount"
+                    name="Bill Amount"
+                  />
+                </div> */}
+                {/* <div className="input">
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Advanced"
+                    className="full-width"
+                    label="Advanced"
+                    name="Advanced"
+                  />
+                </div> */}
+                {/* <div className="input">
+                  <div className="icone">
+                    <FaIndianRupeeSign color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Paid"
+                    className="full-width"
+                    label="Paid"
+                    name="Paid"
+                  />
+                </div> */}
+                {/* <div className="input">
+                  <div className="icone">
+                    <FaIndianRupeeSign color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Received"
+                    className="full-width"
+                    label="Received"
+                    name="Received"
+                  />
+                </div> */}
+                {/* <div className="input">
+                  <div className="icone">
+                    <FaIndianRupeeSign color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Discount"
+                    className="full-width"
+                    label="Discount"
+                    name="Discount"
+                  />
+                </div> */}
+                {/* <div className="input">
+                  <div className="icone">
+                    <FaIndianRupeeSign color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="Balance"
+                    className="full-width"
+                    label="Balance"
+                    name="Balance"
+                  />
+                </div> */}
+                <div className="input">
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="unique id"
+                    className="full-width"
+                    label="unique id"
+                    name="UniqueID"
+                  // onChange={handleInputChange}
+                  // value={billWiseReport.UniqueID}
+                  />
+                </div>
               </div>
-             
+              <div className='bill-wise-reciept-table-main' style={{ display: 'flex' }}>
+                <div className='bill-wise-reciept-table-first'>
+                  <div className='amount-calculator'>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Amount:</label>
+                      <input type="text" value={totals.amount} />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Recieved:</label>
+                      <input type="text" value={totals.recieved} />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Discount:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Balance:</label>
+                      <input type="text" value={totals.totalBalance} />
+                    </div>
+                    <div className='total-inputs' >
+                      <label htmlFor="">Total Amount:</label>
+                      <input type="text" value={totals.totalAmount} />
+                    </div>
+
+                    <div className='total-inputs' >
+                      <label htmlFor="">On A/C:</label>
+                      <input type="text" value={billWiseReport.AccountDetails} />
+                    </div>
+
+                    <div className='total-inputs' >
+                      <label htmlFor="">TDS:</label>
+                      <input type="text" onChange={(e) => handlechange(e)} value={totals.tds} />
+                    </div>
+
+                  </div>
+                  <div className='bill-wise-reciept-table'>
+                    <Box
+                      sx={{
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                          '&::-webkit-scrollbar': {
+                            width: '8px', // Adjust the scrollbar width here
+                            height: '8px', // Adjust the scrollbar width here
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            backgroundColor: '#f1f1f1',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#457cdc',
+                            borderRadius: '20px',
+                            minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                          },
+                          '&::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#3367d6',
+                          },
+                        },
+                      }}
+                    >
+                      <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                      // checkboxSelection
+                      />
+                    </Box>
+                  </div>
+                </div>
+
+                <div className='bill-wise-reciept-table-second'>
+                  <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
+                    <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
+                    <Button variant='contained' onClick={() => handlePendingBills(billWiseReport.CustomerName)}>Show Pending Bills</Button>
+                    <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
+                  </div>
+                  <div className='bill-wise-reciept-table-right-side'>
+                    <Box
+                      sx={{
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                          '&::-webkit-scrollbar': {
+                            width: '8px', // Adjust the scrollbar width here
+                            height: '8px', // Adjust the scrollbar width here
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            backgroundColor: '#f1f1f1',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#457cdc',
+                            borderRadius: '20px',
+                            minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                          },
+                          '&::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#3367d6',
+                          },
+                        },
+                      }}
+                    >
+                      <DataGrid
+                        rows={pendingBillRows}
+                        columns={columnsPendingBill}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        checkboxSelection
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                          // setRowSelectionModel(newRowSelectionModel);
+                          handleRowSelection(newRowSelectionModel);
+                        }} />
+                    </Box>
+                  </div>
+                  {/* <div style={{display: 'flex', paddingTop: '15px'}}>
+                    <div className='total-inputs' style={{display: 'flex'}}>
+                      <label htmlFor="">Amount:</label>
+                      <input type="text" />
+                    </div>
+                    <div className='total-inputs' style={{display: 'flex'}}>
+                      <label htmlFor="">Recieved:</label>
+                      <input type="text" />
+                    </div>
+                  </div> */}
+                </div>
+
+              </div>
+              <div className="alert-popup-main">
+                {error && (
+                  <div className="alert-popup Error">
+                    <div className="popup-icon">
+                      {" "}
+                      <ClearIcon />{" "}
+                    </div>
+                    <span className="cancel-btn" onClick={hidePopup}>
+                      <ClearIcon color="action" />{" "}
+                    </span>
+                    <p>{errorMessage}</p>
+                  </div>
+                )}
+
+                {/* {info && (
+                        <div className="alert-popup Info">
+                            <div className="popup-icon">
+                                <BsInfo />
+                            </div>
+                            <span className="cancel-btn" onClick={hidePopup}>
+                                <ClearIcon color="action" />
+                            </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    )} */}
+                {success && (
+                  <div className="alert-popup Success">
+                    <div className="popup-icon">
+                      <FileDownloadDoneIcon />
+                    </div>
+                    <span className="cancel-btn" onClick={hidePopup}>
+                      <ClearIcon color="action" />
+                    </span>
+                    <p>{successMessage}</p>
+                  </div>
+                )}
+              </div>
             </div>
-
           </div>
-        </div>
-       
-
-      </form>
-    </div>
-        </>
-    )
+        </form>
+      </div>
+    </>
+  )
 }

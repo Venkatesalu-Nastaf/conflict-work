@@ -5,11 +5,11 @@
 
 .account-form {
   /* width: 100%; */
-  overflow-x: hidden;
+  /* overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  color: #000;
+  color: #000; */
   /* background-color: var(--glass); */
 }
 
@@ -52,7 +52,7 @@
 
 .detail-container-main-account {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 7px;
 }
 
 .detail-container-main-account .container-right-account {

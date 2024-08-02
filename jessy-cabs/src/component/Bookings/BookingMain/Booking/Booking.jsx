@@ -108,9 +108,15 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = ({ stationName, customerData }) => {
 
-  const CustomerNames = customerData.map((el) => ({ customer: el.customer }))
+  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
+
+  // to tranform datas based on 
+  const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+
+  // console.log("stationName1", stationName)
 
   const apiUrl = APIURL;
+
   const {
     selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
     selectedCustomerId,
@@ -188,7 +194,7 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata
   } = useBooking();
 
   useEffect(() => {
@@ -459,6 +465,19 @@ const Booking = ({ stationName, customerData }) => {
               <input type="text" value={currentYear} />
               
             </span> */}
+
+            <span className="d-grid">
+              <label>Trip Id</label>
+              <input
+                type="text"
+                value={
+                  formData.tripid ||
+                  selectedCustomerData.tripid ||
+                  book.tripid ||
+                  ""
+                }
+              />
+            </span>
             <span>
               <div className="">
                 <FormControlLabel
@@ -474,18 +493,6 @@ const Booking = ({ stationName, customerData }) => {
                   label="Send Email"
                 />
               </div>
-            </span>
-            <span className="d-grid">
-              <label>Trip Id</label>
-              <input
-                type="text"
-                value={
-                  formData.tripid ||
-                  selectedCustomerData.tripid ||
-                  book.tripid ||
-                  ""
-                }
-              />
             </span>
             {/* <span>
               {isEditMode ? (
@@ -1224,10 +1231,11 @@ const Booking = ({ stationName, customerData }) => {
                 autoComplete="new-password"
                 className="full-width"
                 value={
-                  formData.orderByMobileNo ||
-                  selectedCustomerData.orderByMobileNo ||
-                  selectedCustomerDatas.orderByMobileNo ||
-                  book.orderByMobileNo ||
+                  book?.mobile ||
+                  formData?.orderByMobileNo ||
+                  selectedCustomerData?.orderByMobileNo ||
+                  selectedCustomerDatas?.orderByMobileNo ||
+                  book?.orderByMobileNo ||
                   ""
                 }
                 onChange={handleChange}
@@ -1242,15 +1250,18 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <ForwardToInboxIcon color="action" />
               </div>
+
+              {/* {console.log("book--", book)} */}
               <TextField
                 name="orderByEmail"
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.orderByEmail ||
+                  book.orderByEmail || book.orderbyemail ||
+                  formData.orderByemail ||
                   selectedCustomerData.orderByEmail ||
                   selectedCustomerDatas.orderByEmail ||
-                  book.orderByEmail ||
+
                   ""
                 }
                 onChange={handleChange}
@@ -1265,6 +1276,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <DomainAddIcon color="action" />
               </div>
+
               <Autocomplete
                 fullWidth
                 id="servicestation"
@@ -1273,9 +1285,7 @@ const Booking = ({ stationName, customerData }) => {
                 // value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
                 value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
 
-                options={stationName?.map((option) => ({
-                  label: option?.Stationname,
-                }))}
+                options={stationOptions}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "servicestation")
                 }
@@ -1285,6 +1295,22 @@ const Booking = ({ stationName, customerData }) => {
                   );
                 }}
               />
+
+              {/* <Autocomplete
+                fullWidth
+                id="servicestation"
+                freeSolo
+                size="small"
+                value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
+                options={stationOptions}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "servicestation")
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
+                )}
+              /> */}
+
             </div>
             <div className="input">
               <div className="icone">
@@ -1546,7 +1572,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
               </div>
-              <Autocomplete
+              {/* <Autocomplete
                 fullWidth
                 size="small"
                 id="vehType"
@@ -1577,6 +1603,43 @@ const Booking = ({ stationName, customerData }) => {
                       {...params}
                       label="Vehicle Name"
                       name="vehType"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              /> */}
+
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="vehicleName"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehicleName")
+                }
+                value={
+                  formData.vehicleName ||
+                  selectedCustomerData.vehicleName ||
+                  book.vehicleName || selectedCustomerdriver.vehicleName ||
+                  ""
+                }
+                options={vehileName.map((option) => ({
+                  label: option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehicleName ||
+                  selectedCustomerData.vehicleName ||
+                  book.vehicleName || selectedCustomerdriver.vehicleName ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Vehicle Name"
+                      name="vehicleName"
                       inputRef={params.inputRef}
                     />
                   );
@@ -2176,7 +2239,7 @@ const Booking = ({ stationName, customerData }) => {
             </div> */}
           {/* </div> */}
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        <Box sx={{ position:"fixed", mt: 3, height: 320 ,bottom:"30px" ,right:"30px", zIndex: '1' }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -2224,7 +2287,7 @@ const Booking = ({ stationName, customerData }) => {
         </Box>
         {/**  helloo */}
 
-        <div className="vehicle-confirm" style={{ display: 'flex' }}>
+        <div className="vehicle-confirm">
           <div className="input-field input-feild-vehicle-confirm">
             <div className="input">
               <div className="icone">
@@ -2273,7 +2336,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <AltRouteIcon color="action" />
               </div>
-              <TextField
+              {/* <TextField
                 name="travelsname"
                 autoComplete="new-password"
                 value={
@@ -2288,6 +2351,36 @@ const Booking = ({ stationName, customerData }) => {
                 // variant="standard"
                 margin="normal"
                 size="small"
+              /> */}
+
+
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-travelmail"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                value={
+                  formData.travelsname ||
+                  selectedCustomerData.travelsname ||
+                  book.travelsname ||
+                  ""
+                }
+                options={accountinfodata.map((option) => ({
+                  label: option?.travelsname,
+                }))}
+                getOptionLabel={(option) => option.label ||
+                  formData.travelsname ||
+                  selectedCustomerData.travelsname ||
+                  book.travelsname ||
+                  ""}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="Travels Name" name="travelsname" inputRef={params.inputRef} />
+                  )
+                }
+                }
               />
             </div>
 
@@ -2516,7 +2609,7 @@ const Booking = ({ stationName, customerData }) => {
             <div className="second-table-driver">
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
-                  <div className="Scroll-Style booking-driver-table">
+                  <div className="booking-driver-table">
                     <table>
                       <thead id="update-header">
                         <tr>

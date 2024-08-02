@@ -42,7 +42,7 @@ const AppUserList = () => {
   }, [actionName, handleClick]);
 
   return (
-    <div className="appuserlist-form">
+    <div className="appuserlist-form main-content-form">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
@@ -77,10 +77,10 @@ const AppUserList = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input" style={{ width: "130px" }}>
+                <div className="" style={{ width: "130px" }}>
                   <Button variant="contained" onClick={handleListButtonClick}>List</Button>
                 </div>
-                <div className="input" style={{ width: "130px" }}>
+                <div className="" style={{ width: "130px" }}>
                   <Button
                     variant="outlined"
                     component="label"
@@ -129,7 +129,7 @@ const AppUserList = () => {
         </div>
         <div className="table-bookingCopys-main">
           <div className="table-bookingCopys">
-            <div style={{ height: 400, width: "100%" }}>
+            <div className='app-userlist-table-main'>
               {/* <DataGrid
                 rows={rows}
                 columns={columns}

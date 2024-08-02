@@ -65,9 +65,9 @@ const PaymentDetail = ({ organizationNames }) => {
   const Billing_read = permissions[5]?.read;
 
   return (
-    <div className="PaymentDetail-form Scroll-Style-hide">
+    <div className="PaymentDetail-form main-content-form Scroll-Style-hide">
       <form >
-        <div className="detail-container-main detail-container-main-payment">
+        <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
               <div className="input-field input-field-payment">
@@ -137,7 +137,7 @@ const PaymentDetail = ({ organizationNames }) => {
                   </LocalizationProvider>
                 </div>
 
-                <div className="inut">
+                <div className="input">
                   <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>

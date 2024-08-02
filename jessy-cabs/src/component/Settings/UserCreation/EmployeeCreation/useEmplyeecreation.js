@@ -19,6 +19,7 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
 
 
     ////-------------permission --------------------------
@@ -52,7 +53,7 @@ const useEmplyeecreation = () => {
         { id: 20, name: 'Dashbord', read: false },
     ];
 
-    
+
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
@@ -235,8 +236,32 @@ const useEmplyeecreation = () => {
         setIsEditMode(false)
     };
 
-    // console.log("book", book)
-
+    useEffect(() => {
+        const fetchData = async () => {
+          const organizationname = localStorage.getItem('usercompany');
+    
+          try {
+            if (!organizationname) return
+            const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+            if (response.status === 200) {
+    
+              const userDataArray = await response.json();
+              console.log(userDataArray,'userdata');
+              if (userDataArray.length > 0) {
+                setOrganisationSendEmail(userDataArray[0])
+                // setDatatrigger(!datatrigger)
+    
+              } else {
+                setErrorMessage('User data not found.');
+                setError(true);
+              }
+            }
+          }
+          catch {
+          }
+        };
+        fetchData();
+      }, [apiUrl]);
     // add
     const handleAdd = async () => {
         const username = book.username;
@@ -302,7 +327,7 @@ const useEmplyeecreation = () => {
 
 
         try {
-            const data = { book, permissionsData }
+            const data = { book, permissionsData,organistaionsendmail }
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             setSuccess(true);
@@ -378,7 +403,8 @@ const useEmplyeecreation = () => {
                 return;
             }
 
-            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const selectedCustomer = rows.find((row) => row.userid === userid); 
+            console.log("book", book)
             const updatedCustomer = { ...selectedCustomer, ...book };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
             // console.log(data)
@@ -537,10 +563,25 @@ const useEmplyeecreation = () => {
         event.preventDefault();
     };
 
+    const handleAutocompleteChangeStationName = (event, newValue, name) => {
+
+        console.log(newValue, "bill")
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: newValue,
+        }));
+        // setSelectedCustomerData((prevData) => ({
+        //     ...prevData,
+        //     [name]: newValue,
+        // }));
+    };
+
+
 
     return {
 
-        selectedCustomerId,
+        selectedCustomerId, handleAutocompleteChangeStationName,
         rows,
         actionName,
         error,

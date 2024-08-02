@@ -9,8 +9,9 @@ router.get('/pending_tripsheet-show', (req, res) => {
   const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  const datadepartment= department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
- const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
+  const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
+  const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
+
 
 
   let sqlQuery = '';
@@ -27,8 +28,7 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
     queryParams = [formattedFromDate, formattedToDate, status];
 
-    if (datadepartment.length>=1 && !datadepartment.includes('All')) {
-      console.log(department,"hhhhh")
+    if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       // sqlQuery += ' AND servicestation = ?';
       sqlQuery += ' AND servicestation  IN  (?)';
       queryParams.push(datadepartment);
@@ -39,7 +39,7 @@ router.get('/pending_tripsheet-show', (req, res) => {
       queryParams.push(VehNo)
     }
 
-    if ( datacustomer.length >=1) {
+    if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
       sqlQuery += 'AND customer IN (?)';
       queryParams.push(datacustomer)
     }
@@ -76,7 +76,7 @@ router.get('/pending_tripsheet-show', (req, res) => {
     }
 
 
-    if (datadepartment.length>=1 && !datadepartment.includes('All')) {
+    if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND tripsheet.department IN (?)';
       queryParams.push(datadepartment);
     }
@@ -86,21 +86,20 @@ router.get('/pending_tripsheet-show', (req, res) => {
       queryParams.push(VehNo)
     }
 
-    if (datacustomer.length >=1) {
+    if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
       sqlQuery += 'AND tripsheet.customer iN (?)';
       queryParams.push(datacustomer)
     }
-
   }
 
-  console.log(sqlQuery, queryParams)
+  // console.log(sqlQuery, queryParams)
 
   db.query(sqlQuery, queryParams, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
-    
+
     return res.status(200).json(result);
   });
 });
@@ -155,42 +154,42 @@ router.get('/tripsheet-showall', (req, res) => {
   });
 });
 
-router.get('/VehicleStatement-bookings',(req,res)=>{
-  const { Travelsname,fromDate,toDate} = req.query;
-  console.log(Travelsname,fromDate,toDate,"hhh")
+router.get('/VehicleStatement-bookings', (req, res) => {
+  const { Travelsname, fromDate, toDate } = req.query;
+  console.log(Travelsname, fromDate, toDate, "hhh")
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate,"f",formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate)
 
 
   db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)",
-    [Travelsname,fromDate,toDate],(err,results)=>{
-      if(err){
-        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" }); 
+    [Travelsname, fromDate, toDate], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
       }
-      console.log(results,'ff')
+      console.log(results, 'ff')
       return res.status(200).json(results)
     }
   )
 
 })
 
-router.get('/tripsheetvendordata',(req,res)=>{
+router.get('/tripsheetvendordata', (req, res) => {
 
 
 
-  db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet",(err,results)=>{
-      if(err){
-        console.log(err)
-        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" }); 
-      }
-
-      if(results.length === 0){
-        return res.status(400).json({ error: "Data not Found" });
-      }
-      console.log(results,'ff')
-      return res.status(200).json(results)
+  db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
     }
+
+    if (results.length === 0) {
+      return res.status(400).json({ error: "Data not Found" });
+    }
+    console.log(results, 'ff')
+    return res.status(200).json(results)
+  }
   )
 
 })

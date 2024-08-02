@@ -4,8 +4,8 @@
 }
 
 .organisationnametext {
-  font-size: 22px;
-  font-weight: 900;
+  font-size: 21px;
+  font-weight: 645;
   margin: 0px;
 }
 
@@ -52,7 +52,7 @@
 .clientName {
   width: 170px;
   white-space: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   text-align: left;
 }
 
@@ -60,6 +60,7 @@
   padding-left: 10px;
   padding-right: 10px;
   margin: 9px 9px;
+  /* font-weight: 400; */
 }
 
 .labeltag {

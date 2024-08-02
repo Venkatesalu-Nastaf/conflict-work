@@ -103,7 +103,7 @@ const Accuntinfo = () => {
   const Supllier_delete = permissions[10]?.delete;
 
   return (
-    <div className="account-form">
+    <div className="main-content-form">
       <form onSubmit={handleClick}>
         <div className="detail-container-main-account">
           <div className="container-left-account">

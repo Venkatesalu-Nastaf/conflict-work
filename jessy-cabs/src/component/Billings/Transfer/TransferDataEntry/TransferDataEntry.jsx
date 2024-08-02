@@ -88,7 +88,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   const Transfer_new = permissions[6]?.new;
 
   return (
-    <div className="TransferDataEntry-form Scroll-Style-hide">
+    <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
       <form >
         <div className="detail-container-main detail-container-main-transfer-data">
           <div className="TransferDataEntry">
@@ -109,7 +109,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-                  <div className='input'>
+                  {/* <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
@@ -124,7 +124,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         />
                       </DemoContainer>
                     </LocalizationProvider>
-                  </div>
+                  </div> */}
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />

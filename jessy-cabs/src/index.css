@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap");
 
 * {
-  font-family: "Quicksand", sans-serif;
+  /* font-family: "Quicksand", sans-serif; */
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  /* font-size: .985rem; */
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 body {
@@ -221,23 +225,24 @@ body {
 }
 
 .Scroll-Style {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .Scroll-Style::-webkit-scrollbar {
-  width: 0px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
   position: absolute;
 }
 
 .Scroll-Style::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px transparent;
+  /* box-shadow: inset 0 0 6px transparent; */
 }
 
 .Scroll-Style::-webkit-scrollbar-thumb {
-  background-color: #6d6d6d;
-  width: 0px;
+  background-color: #1976d2;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
   border-radius: 20px;
 }
@@ -401,7 +406,7 @@ body {
 }
 
 .Download-btn {
-  padding-bottom: 20px;
+  padding-bottom: 15px;
 }
 
 .select-field {
@@ -425,7 +430,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 5px;
   }
 
   .input-field .radio {
@@ -655,11 +660,11 @@ body {
   border: 2px solid #ccc;
   overflow: scroll;
   height: 80vh;
-  width: 81vw;
+  width: 83vw;
   margin: 0px 3px;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
+  border-radius: 15px;
   color: #000;
   background-color: var(--glass);
   transition: all 0.3s ease;
@@ -667,25 +672,26 @@ body {
 
 @media screen and (min-width: 769px) {
   .side-bar-menu-close .main-content-container {
-    width: 92vw;
-    margin: 0px 4px;
+    width: 94vw;
+    /* margin: 0px 4px; */
   }
 }
 
 @media screen and (max-width: 768px) {
   .main-content-container {
-    width: 93vw;
+    width: 96vw;
+    margin-top: 20px;
   }
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .main-content-container {
-    width: 90vw;
+    width: 98%;
     margin: 0px 3px;
   }
 
   .main-content-container {
-    width: 76vw;
+    width: 83vw;
   }
 }
 
@@ -695,7 +701,7 @@ body {
   }
 
   .main-content-container {
-    width: 70vw;
+    width: 79vw;
   }
 }
 
@@ -710,7 +716,7 @@ body {
 .head-tab-type-2-all {
   position: sticky !important;
   top: 0px;
-  z-index: 1051;
+  z-index: 2;
   background-color: #ffffff;
   padding: 15px 10px 10px 10px !important;
   margin: 0px;
@@ -733,6 +739,11 @@ body {
   flex-direction: column;
   padding: 20px;
   color: #000;
+  zoom: 90%;
+}
+
+.css-k008qs{
+  overflow: auto;
 }
 
 /* @media screen and (min-width: 769px) {

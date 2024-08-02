@@ -33,9 +33,9 @@
 
 .table-bookingCopy-TransferDataEntry {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
-    margin: 0px 20px;
+    /* margin: 0px 20px; */
     /* width: 100%; */
 }
 
@@ -44,13 +44,13 @@
 }
 
 .copy-title-btn-TransferDataEntry {
-    width: 90%;
-    margin-top: 15px;
+    width: 100%;
+    /* margin-top: 15px; */
     background-color: var(--glass);
     padding: 10px 20px 35px;
     border: 2px solid #ccc;
     border-radius: 10px;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .TransferDataEntry-Box {
@@ -64,7 +64,7 @@
     align-items: center;
     /* justify-content: center; */
     flex-wrap: wrap;
-    padding: 10px 25px;
+    /* padding: 10px 25px; */
 }
 
 .total-container-TransferDataEntry .amount-calculator {
@@ -72,7 +72,7 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 0px;
+    gap: 10px;
     padding: 10px;
     border-radius: 10px;
 }
@@ -120,7 +120,7 @@
 
 @media screen and (min-width:379.99px) and (max-width:700px) {
     .copy-title-btn-TransferDataEntry {
-        width: 80%;
+        width: 80vw;
     }
 }
 

@@ -143,14 +143,14 @@ const DriverCreation = ({ stationName }) => {
         <div className="DriverCreation-main">
             <div className="DriverCreation-form-container">
                 <form onSubmit={handleClick}>
-                    <div className="DriverCreation-header">
+                    <div className="main-content-form">
                         <div className="input-field driver-info-inputs">
                             <div className="input driver-input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="driverid"
                                     className='full-width'
@@ -166,7 +166,7 @@ const DriverCreation = ({ stationName }) => {
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="drivername"
                                     className='full-width'
@@ -181,7 +181,7 @@ const DriverCreation = ({ stationName }) => {
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="username"
                                     className='full-width'
@@ -196,7 +196,7 @@ const DriverCreation = ({ stationName }) => {
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
                                 <TextField
-                                    margin="normal"
+                                    // margin="normal"
                                     size="small"
                                     id="Email"
                                     className='full-width'
@@ -329,7 +329,7 @@ const DriverCreation = ({ stationName }) => {
                                     <AddIcCallTwoToneIcon color="action" />
                                 </div>
                                 <TextField
-                                    margin='normal'
+                                    // margin='normal'
                                     size='small'
                                     name="Mobileno"
                                     autoComplete="new-password"

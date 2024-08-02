@@ -37,11 +37,16 @@
 
 .table-bookingCopy-RateValidity {
     border: 2px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--glass);
     margin-top: 30px;
-    width: 60%;
- 
+    width: fit-content;
+}
+
+@media screen and (max-width: 890px) {
+    .table-bookingCopy-RateValidity {
+        width: 100%;
+    }
 }
 
 /* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
@@ -80,10 +85,10 @@
 .copy-title-btn-RateValidity {
     /* margin-top: 30px; */
     height: fit-content;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
     padding: 20px 0px 20px 20px;
-    border: 2px solid #ccc;
-    border-radius: 15px;
+    /* border: 2px solid #ccc; */
+    /* border-radius: 10px; */
 }
 
 @media screen and (max-width: 375px) {

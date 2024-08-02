@@ -23,9 +23,9 @@
 }
 
 .EmployeeCreation-header {
-  border-top: solid 1px #ccc;
+  /* border-top: solid 1px #ccc; */
   /* background: var(--glass); */
-  padding: 10px;
+  /* padding: 10px; */
   /* margin-bottom: -10px; */
 }
 
@@ -46,9 +46,10 @@
 
 /* TABLE */
 .EmployeeCreation-table-container {
-  border: 1px solid #ccc;
-  padding: 20px;
+  /* border: 1px solid #ccc;
+  padding: 20px; */
   /* background-color: var(--glass); */
+  margin-top: 10px;
 }
 
 .table-EmployeeCreations {
@@ -79,7 +80,7 @@
     display: flex;
     flex-direction: column;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
   }
 }
 

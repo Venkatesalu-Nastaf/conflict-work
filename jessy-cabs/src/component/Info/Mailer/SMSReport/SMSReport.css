@@ -38,7 +38,7 @@
 
 .table-bookingCopy-SMSReport {
   border: 2px solid #ccc;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--glass);
   margin-top: 30px;
 }
@@ -128,7 +128,7 @@
 
 }
 
-@media screen and (min-width: 430px) and (max-width:700px) {
+/* @media screen and (min-width: 430px) and (max-width:700px) {
   .copy-title-btn-SMSReport {
     width: 86%;
   }
@@ -141,7 +141,7 @@
 
   }
 
-}
+} */
 
 @media screen and (max-width:380.99px) {
   .copy-title-btn-SMSReport {

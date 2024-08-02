@@ -295,7 +295,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="add-edit-ratetype">
+                                <div className="add-edit-ratetype input">
                                     {isEditMode ? (
                                         <Button variant="contained"
                                             // disabled={INFO_modify} 

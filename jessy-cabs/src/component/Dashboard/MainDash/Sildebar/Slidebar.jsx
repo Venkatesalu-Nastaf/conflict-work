@@ -124,14 +124,20 @@ const Sidebar = () => {
     setIsRegisterdropdownclicked(false);
     setIssettingdropdownclicked(false);
     setIsinfodropdownclicked(false);
-
     setIsbillingdropdownclicked(false);
     setIsbookingdropdownclicked(false);
+
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+    setBillingDropdownVisible(false);
+    setBookingDropdownVisible(false);
   }
 
   document.addEventListener('click', function (event) {
     if ((!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.bars')) && (!event.target.closest('.menu'))) {
       closeMenuFunction();
+      setIssettingdropdownclicked(false);
     }
   });
 
@@ -1117,6 +1123,8 @@ const Sidebar = () => {
               />
             </div>
           }
+
+
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1460,6 +1468,41 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
+{/* for vehiecle */}
+{booking_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded==false ? '' : 'Map'}`}
+                to={BOOKING && ("/home/Map/Map")}
+                alt="/home/Map/Map"
+                value="/home/Map"
+                menuItemKey="/home/Map"
+                name="Map page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={HiOutlineUsers}
+              />
+            </div>
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <MenuItem
             label={`${expanded==false ? '' : 'User'}`}
             to="/home/usersettings/usersetting"

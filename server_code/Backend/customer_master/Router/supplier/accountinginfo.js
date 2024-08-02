@@ -79,4 +79,17 @@ router.get('/accountinfodatavehcile',(req,res)=>{
     })
 })
 
+router.get("/getuniqueacccounttaveldata/:travelsname",(req,res)=>{
+    const customer=req.params.travelsname;
+    console.log(customer,"params")
+    db.query("select travelsname from accountinfo where travelsname=?",[customer],(err,results)=>{
+      if (err) {
+        return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+      }
+      console.log(results.length)
+      return res.status(200).json(results);
+  
+    })
+  })
+
 module.exports = router;

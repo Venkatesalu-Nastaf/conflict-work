@@ -390,14 +390,14 @@ const TemplateCreation = () => {
           <div className='alert-popup Error'>
             <div className="popup-icon"> <ClearIcon /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-            <p>{errorMessage}</p>
+            <p style={{color:"black"}}>{errorMessage}</p>
           </div>
         )}
         {success && (
           <div className='alert-popup Success'>
             <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-            <p>{successMessage}</p>
+            <p style={{color:"black"}}>{successMessage}</p>
           </div>
         )}
          {warning &&(

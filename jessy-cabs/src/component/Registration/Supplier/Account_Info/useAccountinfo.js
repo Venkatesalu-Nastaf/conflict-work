@@ -19,11 +19,12 @@ const useAccountinfo = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage,setWarningMessage] = useState({});
   // const [infoMessage, setInfoMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [suppilerrate,setSupplierRatetpe]=useState([])
-  const [vechiledata,setVehicleData]=useState([])
+  const [vechiledata,setVehicleData]=useState([]);
+  const [cerendentialdata,setCredentialData]=useState()
 
   //----------popup----------------------
 
@@ -284,6 +285,7 @@ const handlePdfDownload = () => {
   const columns = [
     { field: "id", headerName: "Sno", width: 100 },
     { field: "cperson", headerName: "Supplier_Name", width: 160 },
+    { field: "travelsname", headerName: "Travel_Name", width: 160 },
     { field: "accountNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
     { field: "phone", headerName: "Phone", width: 160 },
@@ -428,6 +430,49 @@ const handlePdfDownload = () => {
     setIsEditMode(true);
   }, []);
 
+  const uniquetravellname=async(traveldataname)=>{
+    // console.log(customerdataname,"namee")
+    if(traveldataname){
+
+        const response= await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${traveldataname}`)
+        const responsedata=response.data;
+        
+        // console.log(response,"data")
+        // console.log(responsedata?.length,"reeee")
+       
+        if(responsedata?.length >=1){
+            setCredentialData(true)
+            // return true;
+        }
+        else{
+            setCredentialData(false)
+            // return false;
+        }
+    }
+
+
+        
+  
+}
+
+
+
+const handleChangeuniquetravelname=(event)=>{
+    const { name, value} = event.target;
+    const datacrendital= uniquetravellname(value);
+    console.log(datacrendital,"cred")
+    setBook((prevBook) => ({
+        ...prevBook,
+        [name]:value,
+    }));
+    setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]:value,
+    }));
+
+
+}
+
   const handleAdd = async () => {
     const ratetype =book.rateType;
     const travelsname=book.travelsname;
@@ -436,41 +481,46 @@ const handlePdfDownload = () => {
     const travelsemail=book.travelsemail;
     const vehRegNo=book.vehRegNo;
     if (!datefiled) {
-      setError(true);
-      setErrorMessage("Fill Date fields");
+      setWarning(true);
+      setWarningMessage("Fill Date fields");
       return;
     }
     if (!travelsname) {
-      setError(true);
-      setErrorMessage("Fill Vehicle Travels fields");
+      setWarning(true);
+      setWarningMessage("Fill Vehicle Travels fields");
       return;
     }
     if (!travelsemail) {
-      setError(true);
-      setErrorMessage("Fill Travel Mail fields");
+      setWarning(true);
+      setWarningMessage("Fill Travel Mail fields");
       return;
     }
     if (!vehiclinfo) {
-      setError(true);
-      setErrorMessage("Fill Vehicle info fields");
+      setWarning(true);
+      setWarningMessage("Fill Vehicle info fields");
       return;
     }
     if (!ratetype) {
-      setError(true);
-      setErrorMessage("Fill Rate Type fields");
+      setWarning(true);
+      setWarningMessage("Fill Rate Type fields");
       return;
     }
     if (!vehRegNo) {
-      setError(true);
-      setErrorMessage("Fill VehRegno fields");
+      setWarning(true);
+      setWarningMessage("Fill VehRegno fields");
       return;
     }
+    if (cerendentialdata === true) {
+      setWarning(true);
+      setWarningMessage(" travelsname Already Exists");
+      return;
+  }
     
     try {
       console.log(book,"datata")
       await axios.post(`${apiUrl}/accountinfo`, book);
       handleCancel();
-      setRows([]);
+      // setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch {
@@ -480,6 +530,11 @@ const handlePdfDownload = () => {
   };
 
   const handleEdit = async () => {
+    if (cerendentialdata === true) {
+      setWarning(true);
+      setWarningMessage(" travelsname Already Exists");
+      return;
+  }
     try {
       // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
       const {id,...restselectedcustomer}=selectedCustomerData
@@ -615,7 +670,7 @@ fetchdatafromvehcileinfo()
     rows,
     columns,
     isEditMode,
-    handleEdit,suppilerrate,vechiledata
+    handleEdit,suppilerrate,vechiledata,handleChangeuniquetravelname,cerendentialdata
   };
 };
 

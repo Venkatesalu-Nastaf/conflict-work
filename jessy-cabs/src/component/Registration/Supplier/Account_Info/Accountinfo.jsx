@@ -86,7 +86,7 @@ const Accuntinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit, suppilerrate, vechiledata
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata
   } = useAccountinfo();
 
   useEffect(() => {
@@ -147,22 +147,28 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input">
-                <div className="icone">
-                  <MinorCrashIcon color="action" />
+              <div className="input" style={{display: 'grid'}}>
+                <div style={{display: 'flex'}}>
+                  <div className="icone">
+                    <MinorCrashIcon color="action" />
+                  </div>
+                  <TextField
+                    // margin='normal'
+                    size='small'
+                    name="travelsname"
+                    autoComplete="new-password"
+                    className='full-width'
+                    value={selectedCustomerData?.travelsname || book.travelsname}
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquetravelname}
+                    label="Vehicle/Travels"
+                    id="vehicleTravels"
+                  // variant="standard"
+                  />
                 </div>
-                <TextField
-                  // margin='normal'
-                  size='small'
-                  name="travelsname"
-                  autoComplete="new-password"
-                  className='full-width'
-                  value={selectedCustomerData?.travelsname || book.travelsname}
-                  onChange={handleChange}
-                  label="Vehicle/Travels"
-                  id="vehicleTravels"
-                // variant="standard"
-                />
+                <div style={{textAlign: 'center'}}>
+                  <span style={{ color: "red" }}>{cerendentialdata ? `Travel Name Already Exist` : ""}</span>
+                </div>
               </div>
               <div className="input">
                 <div className="icone">
@@ -580,26 +586,26 @@ const Accuntinfo = () => {
             pageSizeOptions={[5, 10]}
           /> */}
           <Box
-              sx={{
-                height: 400, // Adjust this value to fit your needs
-                '& .MuiDataGrid-virtualScroller': {
-                    '&::-webkit-scrollbar': {
-                        width: '8px', // Adjust the scrollbar width here
-                        height: '8px', // Adjust the scrollbar width here
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: '#f1f1f1',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#457cdc',
-                        borderRadius: '20px',
-                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#3367d6',
-                    },
+            sx={{
+              height: 400, // Adjust this value to fit your needs
+              '& .MuiDataGrid-virtualScroller': {
+                '&::-webkit-scrollbar': {
+                  width: '8px', // Adjust the scrollbar width here
+                  height: '8px', // Adjust the scrollbar width here
                 },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#457cdc',
+                  borderRadius: '20px',
+                  minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#3367d6',
+                },
+              },
             }}
           >
             <DataGrid

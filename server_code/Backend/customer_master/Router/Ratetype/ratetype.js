@@ -90,6 +90,9 @@ router.get('/ratetypevendor/:ratetype', (req, res) => {
 router.get('/getcustomeruniqueratetype/:ratetype/:ratename',(req,res)=>{
   const ratetype=req.params.ratetype;
   const ratename=req.params.ratename;
+  console.log(ratetype,ratename,"jjjj")
+    
+  
 
   db.query("select ratename from ratetype where ratetype=? and ratename=?",[ratetype,ratename],(err,results)=>{
     if (err) {

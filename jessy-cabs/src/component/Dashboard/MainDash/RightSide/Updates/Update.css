@@ -9,6 +9,12 @@
     font-size: 13px;
 }
 
+@media screen and (max-width: 768px) {
+    .Updates {
+        width: 87%;
+    }
+}
+
 
 @media only screen and (min-width:769px) and (max-width:881px) {
     .Updates {

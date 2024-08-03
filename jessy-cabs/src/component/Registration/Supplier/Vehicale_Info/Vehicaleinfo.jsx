@@ -184,7 +184,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata
+    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata
   } = useVehicleinfo();
 
   useEffect(() => {
@@ -219,7 +219,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     onChange={handleChange}
                     label="Vehicle ID"
                     id="vehicleId"
-                  // className='full-width'
+                    className='full-width'
                   // variant="standard"
                   />
                 </div>
@@ -350,26 +350,28 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input" style={{display: 'grid'}}>
-                <div style={{display: 'flex'}}>
-                  <div className="icone">
-                    <CarCrashIcon color="action" />
+                <div className="input">
+                  <div className='full-width' style={{ display: 'grid' }}>
+                    <span className='full-width' style={{ display: 'flex' }}>
+                      <div className="icone">
+                        <CarCrashIcon color="action" />
+                      </div>
+                      <TextField
+                        // margin="normal"
+                        size="small"
+                        id="vehRegNo"
+                        className='full-width'
+                        label="Vehicle Reg No"
+                        name="vehRegNo"
+                        value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                        // onChange={handleChange}
+                        onChange={handleChangecredent}
+                      />
+                    </span>
+                    <span style={{ textAlign: 'center' }}>
+                      <span style={{ color: "red" }}>{cerendentialdata ? `vehRegno Already Exist` : ""}</span>
+                    </span>
                   </div>
-                  <TextField
-                    // margin="normal"
-                    size="small"
-                    id="vehRegNo"
-                    className='full-width'
-                    label="Vehicle Reg No"
-                    name="vehRegNo"
-                    value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
-                    // onChange={handleChange}
-                    onChange={handleChangecredent}
-                  />
-                    </div>
-                    <div style={{textAlign: 'center'}}>
-                      <span style={{color:"red"}}>{cerendentialdata ? `vehRegno Already Exist`: ""}</span>
-                    </div>
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -482,6 +484,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DatePicker
                   label="State Permit Date"
                   id="State_Permit"
+                  className='full-width'
                   format="DD/MM/YYYY"
                   value={
                     selectedCustomerData?.spdate
@@ -583,6 +586,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DatePicker
                   label="Insurance Due Date"
                   id="Insurance_date"
+                  className='full-width'
                   format="DD/MM/YYYY"
                   value={selectedCustomerData?.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
                   onChange={(date) => handleDateChange(date, 'insduedate')}
@@ -640,6 +644,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 <DatePicker
                   label="Attached Date"
                   id="Attached_date"
+                  className='full-width'
                   format="DD/MM/YYYY"
                   value={
                     selectedCustomerData?.doadate
@@ -663,6 +668,7 @@ const Vehicaleinfo = ({ stationName }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="National Permit Date"
+                  className='full-width'
                   format="DD/MM/YYYY"
                   value={
                     selectedCustomerData?.npdate
@@ -998,6 +1004,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <TextField
                     size="small"
                     id="searchText"
+                    className='full-width'
                     label="Search"
                     name="searchText"
                     value={searchText}
@@ -1012,6 +1019,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     </div>
                     <DatePicker
                       id="fromDate"
+                      className='full-width'
                       label="From Date"
                       format="DD/MM/YYYY"
                       name='fromDate'
@@ -1027,6 +1035,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     </div>
                     <DatePicker
                       id="toDate"
+                      className='full-width'
                       label="To Date"
                       format="DD/MM/YYYY"
                       name="toDate"

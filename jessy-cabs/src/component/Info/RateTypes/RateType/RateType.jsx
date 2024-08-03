@@ -79,7 +79,7 @@ const RateType = ({ stationName, organizationNames }) => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent
+        handleDateChange, cerendentialdata, handleChangecredent
     } = useRatype();
 
     useEffect(() => {
@@ -164,12 +164,13 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{display: 'grid'}}>
-                                <div style={{display: 'flex'}}>
-                                    <div className="icone">
-                                        <RateReviewIcon color="action" />
-                                    </div>
-                                    {/* <Autocomplete
+                                <div className="input">
+                                    <div className='full-width' style={{ display: 'grid' }}>
+                                        <span style={{ display: 'flex' }}>
+                                            <div className="icone">
+                                                <RateReviewIcon color="action" />
+                                            </div>
+                                            {/* <Autocomplete
                                         fullWidth
                                         size="small"
                                         id="ratename"
@@ -187,19 +188,20 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     /> */}
 
-                                    <TextField
-                                        size="small"
-                                        id="ratename"
-                                        className='full-width'
-                                        label="Ratename"
-                                        name="ratename"
-                                        value={selectedCustomerData?.ratename || book.ratename}
-                                        onChange={handleChangecredent}
+                                            <TextField
+                                                size="small"
+                                                id="ratename"
+                                                className='full-width'
+                                                label="Ratename"
+                                                name="ratename"
+                                                value={selectedCustomerData?.ratename || book.ratename}
+                                                onChange={handleChangecredent}
 
-                                    />
-                                    </div>
-                                    <div style={{textAlign: 'center'}}>
-                                    <span style={{color:"red"}}>{cerendentialdata ? `${selectedCustomerData?.ratetype || book.ratetype} Already Exist`: ""}</span>
+                                            />
+                                        </span>
+                                        <span style={{ textAlign: 'center' }}>
+                                            <span style={{ color: "red" }}>{cerendentialdata ? `${selectedCustomerData?.ratetype || book.ratetype} Already Exist` : ""}</span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="input">
@@ -451,7 +453,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         backgroundColor: '#457cdc',
                                         borderRadius: '20px',
                                         minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-              
+
                                     },
                                     '&::-webkit-scrollbar-thumb:hover': {
                                         backgroundColor: '#3367d6',

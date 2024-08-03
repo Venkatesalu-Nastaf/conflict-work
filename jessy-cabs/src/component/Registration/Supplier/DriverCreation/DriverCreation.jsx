@@ -122,7 +122,7 @@ const DriverCreation = ({ stationName }) => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
-        handleFileChange,handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
+        handleFileChange, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
 
     } = useDrivercreation();
 
@@ -161,47 +161,51 @@ const DriverCreation = ({ stationName }) => {
                                 // variant="standard"
                                 />
                             </div>
-                            <div className="input driver-input" style={{display: 'grid'}}>
-                            <div style={{display: 'flex'}}>
-                                <div className="icone">
-                                    <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                            <div className="input driver-input">
+                                <div className='full-width' style={{ display: 'grid' }}>
+                                    <span className='full-width' style={{ display: 'flex' }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                                        </div>
+                                        <TextField
+                                            // margin="normal"
+                                            size="small"
+                                            id="drivername"
+                                            className='full-width'
+                                            label="Driver Name"
+                                            name="drivername"
+                                            value={selectedCustomerData?.drivername || book.drivername}
+                                            // onChange={handleChange}
+                                            onChange={handleChangecredentdrivername}
+                                        />
+                                    </span>
+                                    <span style={{ textAlign: 'center' }}>
+                                        <span style={{ color: "red" }}>{cerendentialdata ? `Drivername Already Exist` : ""}</span>
+                                    </span>
                                 </div>
-                                <TextField
-                                    // margin="normal"
-                                    size="small"
-                                    id="drivername"
-                                    className='full-width'
-                                    label="Driver Name"
-                                    name="drivername"
-                                    value={selectedCustomerData?.drivername || book.drivername}
-                                    // onChange={handleChange}
-                                    onChange={handleChangecredentdrivername}
-                                />
-                                </div>
-                                 <div style={{textAlign: 'center'}}>
-                              <span style={{color:"red"}}>{cerendentialdata ? `Drivername Already Exist`: ""}</span>
-                               </div>
                             </div>
-                            <div className="input driver-input" style={{display: 'grid'}}>
-                            <div style={{display: 'flex'}}>
-                                <div className="icone">
-                                    <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                            <div className="input driver-input">
+                                <div className='full-width' style={{ display: 'grid' }}>
+                                    <span className='full-width' style={{ display: 'flex' }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                                        </div>
+                                        <TextField
+                                            // margin="normal"
+                                            size="small"
+                                            id="username"
+                                            className='full-width'
+                                            label="User Name"
+                                            name="username"
+                                            value={selectedCustomerData?.username || book.username}
+                                            // onChange={handleChange}
+                                            onChange={handleChangecredentusername}
+                                        />
+                                    </span>
+                                    <span style={{ textAlign: 'center' }}>
+                                        <span style={{ color: "red" }}>{cerendentialdata2 ? `UserName Already Exist` : ""}</span>
+                                    </span>
                                 </div>
-                                <TextField
-                                    // margin="normal"
-                                    size="small"
-                                    id="username"
-                                    className='full-width'
-                                    label="User Name"
-                                    name="username"
-                                    value={selectedCustomerData?.username || book.username}
-                                    // onChange={handleChange}
-                                    onChange={handleChangecredentusername}
-                                />
-                                </div>
-                                 <div style={{textAlign: 'center'}}>
-                                <span style={{color:"red"}}>{cerendentialdata2 ? `UserName Already Exist`: ""}</span>
-                               </div>
                             </div>
                             <div className="input driver-input">
                                 <div className="icone">
@@ -316,6 +320,7 @@ const DriverCreation = ({ stationName }) => {
                                     <DatePicker
                                         label="Badge Exp date "
                                         id="date2"
+                                        className='full-width'
                                         value={
                                             selectedCustomerData.badgeexpdate
                                                 ? dayjs(selectedCustomerData.badgeexpdate)
@@ -421,6 +426,7 @@ const DriverCreation = ({ stationName }) => {
                                     <DatePicker
                                         label="joining Date"
                                         id="date3"
+                                        className='full-width'
                                         value={
                                             selectedCustomerData.joiningdate
                                                 ? dayjs(selectedCustomerData.joiningdate)
@@ -478,6 +484,7 @@ const DriverCreation = ({ stationName }) => {
                                     <DatePicker
                                         label="License Exp Date "
                                         id="date4"
+                                        className='full-width'
                                         value={
                                             selectedCustomerData.licenseexpdate
                                                 ? dayjs(selectedCustomerData.licenseexpdate)
@@ -554,6 +561,7 @@ const DriverCreation = ({ stationName }) => {
                                             <TextField
                                                 size="small"
                                                 id="searchText"
+                                                className='full-width'
                                                 label="Search"
                                                 name="searchText"
                                                 value={searchText || ""}
@@ -568,6 +576,7 @@ const DriverCreation = ({ stationName }) => {
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                     id="date5"
+                                                    className='full-width'
                                                     label="From Date"
                                                     name="fromDate"
                                                     format="DD/MM/YYYY"
@@ -583,6 +592,7 @@ const DriverCreation = ({ stationName }) => {
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                     id="date6"
+                                                    className='full-width'
                                                     label="To Date"
                                                     name="toDate"
                                                     format="DD/MM/YYYY"
@@ -727,7 +737,7 @@ const DriverCreation = ({ stationName }) => {
                             /> */}
 
                             <Box
-                                  sx={{
+                                sx={{
                                     height: 400, // Adjust this value to fit your needs
                                     '& .MuiDataGrid-virtualScroller': {
                                         '&::-webkit-scrollbar': {
@@ -741,7 +751,7 @@ const DriverCreation = ({ stationName }) => {
                                             backgroundColor: '#457cdc',
                                             borderRadius: '20px',
                                             minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-    
+
                                         },
                                         '&::-webkit-scrollbar-thumb:hover': {
                                             backgroundColor: '#3367d6',

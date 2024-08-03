@@ -79,7 +79,7 @@ const useTransferreport = () => {
       setGroupTripid('');
       setCustomerData("")
       setRows([])
-      setRowSelectionModel([])
+      // setRowSelectionModel([])
     }
   }, [transferReport, setTransferReport])
   useEffect(() => {
@@ -501,7 +501,7 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
+  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);  
   return {
     rows,
     error,

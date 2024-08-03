@@ -86,4 +86,15 @@ tbody {
 
 .tdata {
   padding: 10px;
+  border-right: 1px solid gray;
+}
+
+.tabledata-ref{
+  font-size: 15px;
+  font-weight: 500; 
+  border-bottom: 1px solid gray;
+}
+
+.table-ref{
+  border: 1px solid gray;
 }

@@ -83,15 +83,17 @@ const Organization = ({ logoImage }) => {
                                             </Avatar>
                                         </div>
                                     </div>
-                                    <div className="input-field">
+                                    {editMode ?
                                         <div className="input-field">
-                                            <div className='input'>
-                                                <div className='input-field' style={{ marginTop: '10px' }}>
-                                                    <Button color="primary" size='small' variant="contained" disabled={!MainSetting_modify} onClick={handleUpload} component="label" > update</Button>
+                                            <div className="input-field">
+                                                <div className='input'>
+                                                    <div className='input-field' style={{ marginTop: '10px' }}>
+                                                        <Button color="primary" size='small' variant="contained" disabled={!MainSetting_modify} onClick={handleUpload} component="label" > Edit</Button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </div> : <div></div>
+                                    }
                                 </div>
                                 <div className='container-organisation-right'>
                                     <div className="input-field organisation-details-input-feilds">
@@ -164,7 +166,12 @@ const Organization = ({ logoImage }) => {
                                             />
                                         </div>
                                     </div>
-                                    {editMode ? (
+                                    <div className="user-photo-edit">
+                                        <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                            <ModeEditIcon />
+                                        </IconButton>
+                                    </div>
+                                    {/* {editMode ? (
                                         <div className="input-field save-cancel-inputs">
                                             <div className="input">
                                                 <Button variant="outlined" onClick={toggleEditMode}>
@@ -183,7 +190,7 @@ const Organization = ({ logoImage }) => {
                                                 <ModeEditIcon />
                                             </IconButton>
                                         </div>
-                                    )}
+                                    )} */}
                                     <div className='alert-popup-main'>
                                         {error &&
                                             <div className='alert-popup Error' >
@@ -224,6 +231,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.organizationtype || book.organizationtype}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -236,6 +244,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.website || book.website}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -251,6 +260,7 @@ const Organization = ({ logoImage }) => {
                                         multiline
                                         rows={3}
                                         autoComplete="password"
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -263,6 +273,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.pannumber || book.pannumber}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -275,6 +286,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.location || book.location}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -287,6 +299,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.employees || book.employees}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -299,6 +312,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.partnershipsAlliances || book.partnershipsAlliances}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -311,6 +325,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData?.gstnumber || book.gstnumber}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className="input organization-input">
@@ -323,6 +338,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData.telephone || book.telephone || ''}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
 
@@ -336,6 +352,7 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData.Sender_Mail || book.Sender_Mail || ''}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
 
@@ -349,10 +366,32 @@ const Organization = ({ logoImage }) => {
                                         className='organisation-input-field'
                                         value={selectedCustomerData.EmailApp_Password || book.EmailApp_Password || ''}
                                         onChange={handleChange}
+                                        disabled={!editMode}
                                     />
                                 </div>
                             </div>
-                            <div className='organisation-input-row'>
+                            {editMode ? (
+                                <div className="input-field save-cancel-inputs">
+                                    <div className="input">
+                                        <Button variant="outlined" onClick={toggleEditMode}>
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                    <div className="input">
+                                        <Button variant="contained" onClick={handleUpdate} disabled={!MainSetting_modify}   >
+                                            Update
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div></div>
+                                // <div className="user-photo-edit">
+                                //     <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                //         <ModeEditIcon />
+                                //     </IconButton>
+                                // </div>
+                            )}
+                            {/* <div className='organisation-input-row'>
                                 {selectedCustomerData?.length === 0 ?
                                     <div className='organisation-btn-row'>
                                         <div className="input organisation-btn">
@@ -380,7 +419,7 @@ const Organization = ({ logoImage }) => {
                                         </div>
                                     </>
                                 }
-                            </div>
+                            </div> */}
                         </div>
                         <div className='alert-popup-main'>
                             {info &&

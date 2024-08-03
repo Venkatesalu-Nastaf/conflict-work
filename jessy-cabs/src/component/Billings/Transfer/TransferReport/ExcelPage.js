@@ -6,7 +6,7 @@ import { saveAs } from "file-saver";
 import dayjs from 'dayjs';
 import JSZip from 'jszip';
 
-import {  pdf } from '@react-pdf/renderer';
+import { pdf } from '@react-pdf/renderer';
 import { PDFDocument } from 'pdf-lib';
 
 import PdfzipParticularData from './Pdfpatricularzipdata'
@@ -20,8 +20,7 @@ const useExeclpage = () => {
     // const [misformat,setMisformat]=useState('')
     const [error1, setError1] = useState(false)
     const [errormessage1, setErrorMessage1] = useState({})
-    const apiurl=APIURL
-    
+    const apiurl = APIURL
     const columns2 = [
         { key: "SNo", header: "Ref", width: 130 },
         { key: "department", header: "Hub Location", width: 150 },
@@ -158,7 +157,7 @@ const useExeclpage = () => {
             setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
             return
         }
-        
+
         if (misformat === "Old MIS") {
             try {
                 const fileName = `OLD MIS ${dayjs(invoicedate).format(" MMMM D")}`
@@ -187,7 +186,7 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
-                    console.log(index,"innn")
+                    console.log(index, "innn")
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -348,26 +347,28 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (misformat, invoice, invoicedate,customer,organizationsdetail1,imageorganisation,rowSelectionModel ) => {
-        console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo",imageorganisation)
+    const handledatazipDownload = async (misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel) => {
+        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation)
         const data = invoice;
-        const customername=customer;
+        const customername = customer;
         const workbook = new Excel.Workbook();
+        console.log(rowSelectionModel, 'rid');
+
         try {
             const zip = new JSZip();
-              if(rowSelectionModel.length === 0){
+            if (rowSelectionModel.length === 0) {
                 setError1(true)
                 setErrorMessage1(" SELECT DATA ")
                 return
-              }
+            }
 
             if (!misformat) {
                 setError1(true)
                 setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
                 return
             }
-           
-            
+
+
             if (misformat === "Old MIS") {
                 //    try {
                 const fileName = `OLD MIS ${dayjs(invoicedate).format(" MMMM D")}`
@@ -396,7 +397,7 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
-                   
+
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -537,113 +538,107 @@ const useExeclpage = () => {
                 const buf = await workbook.xlsx.writeBuffer();
                 const timestamp = new Date().getTime();
                 folder.file(`${fileName}_${timestamp}.xlsx`, buf)
-             
+
 
             }
-        
+
 
             //  let dataimagebook=[]
-             const pdffolder = zip.folder("pdffolder");
+            const pdffolder = zip.folder("pdffolder");
             const pdfPromises = invoice?.map(async (pdfData, index) => {
-            //   console.log(pdfData,"modedata")
-            //  dataimagebook=pdfData.bookattachedimage
-           
-            
-              const blob = await pdf(
-                  <PdfzipParticularData
-                     
-                      particularPdf={[pdfData]} 
-                      organisationdetail={organizationsdetail1} 
-                      imagename={imageorganisation} 
-                     
-                  />
-              ).toBlob();
-             
-              const pdfBytes = await blob.arrayBuffer(); 
-              
-            const reactPDFDocument = await PDFDocument.load(pdfBytes);
-           
-            const data=  await JSON.parse(pdfData.bookattachedimage)
-            const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-            const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-            const datalink=JSON.parse(uniqueJsonStringbook)
-          
-          
-            // return datalink
-            
-            
-            // console.log(pdfPromises1,"pmisddd")
-          
-            const pdfDocuments = [];
-            for (const data of datalink) {
-                if(data.imagees !== null){
-                    const data2=data.imagees.split('.').pop()
-                    if(data2 === "pdf"){
+                //   console.log(pdfData,"modedata")
+                //  dataimagebook=pdfData.bookattachedimage
 
-                const filePath = `${apiurl}/images/${data.imagees}`;
-                
-                // Fetch the PDF file
-                const response = await fetch(filePath);
-                const pdfBytes = await response.arrayBuffer();
-               
-                // Load the PDF document
-                const pdfDocument = await PDFDocument.load(pdfBytes);
-                console.log(pdfDocument)
-            
-                // Add the PDF document to the array
-                pdfDocuments.push(pdfDocument);
+
+                const blob = await pdf(
+                    <PdfzipParticularData
+
+                        particularPdf={[pdfData]}
+                        organisationdetail={organizationsdetail1}
+                        imagename={imageorganisation}
+
+                    />
+                ).toBlob();
+
+                const pdfBytes = await blob.arrayBuffer();
+
+                const reactPDFDocument = await PDFDocument.load(pdfBytes);
+
+                const data = await JSON.parse(pdfData.bookattachedimage)
+                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                const datalink = JSON.parse(uniqueJsonStringbook)
+
+
+                // return datalink
+
+
+                // console.log(pdfPromises1,"pmisddd")
+
+                const pdfDocuments = [];
+                for (const data of datalink) {
+                    if (data.imagees !== null) {
+                        const data2 = data.imagees.split('.').pop()
+                        if (data2 === "pdf") {
+
+                            const filePath = `${apiurl}/images/${data.imagees}`;
+
+                            // Fetch the PDF file
+                            const response = await fetch(filePath);
+                            const pdfBytes = await response.arrayBuffer();
+
+                            // Load the PDF document
+                            const pdfDocument = await PDFDocument.load(pdfBytes);
+                            console.log(pdfDocument)
+
+                            // Add the PDF document to the array
+                            pdfDocuments.push(pdfDocument);
+                        }
+                    }
                 }
-            }
-            }
-            
-           
-            const mergedPDFDocument = await PDFDocument.create();
-            // console.log(mergedPDFDocument)
 
-        // // Add pages from React PDF
-        const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
-        mergedPDFDocument.addPage(firstReactPage);
-        for (const page of restReactPages) {
-            mergedPDFDocument.addPage(page);
-        }
 
-        // Add pages from external PDF
+                const mergedPDFDocument = await PDFDocument.create();
+                // console.log(mergedPDFDocument)
 
-       
+                // // Add pages from React PDF
+                const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+                mergedPDFDocument.addPage(firstReactPage);
+                for (const page of restReactPages) {
+                    mergedPDFDocument.addPage(page);
+                }
 
-// Add pages from each PDF document to the merged PDF document
-for (const pdfDocument of pdfDocuments) {
-    // console.log(pdfDocument,"doc")
-    const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
-    for (const page of pages) {
-        // console.log(page,"docpage")
-        mergedPDFDocument.addPage(page);
-    }
-}
-        // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
-        // for (const page of externalPages) {
-        //     mergedPDFDocument.addPage(page);
-        // }
-             
-              
-            
-              
-        
-        const mergedPDFBytes = await mergedPDFDocument.save();
-              const fileName = `PDF_${index + 1}.pdf`; 
-              // console.log(blob,"pdfblob")
-              // zip.file(fileName, blob);
-              pdffolder.file(fileName,mergedPDFBytes);
-          
-              // Return the filename for tracking
-          });
-          
-          // Wait for all promises to resolve
-          await Promise.all(pdfPromises);
-          
-            
+                // Add pages from external PDF
 
-                
+
+
+                // Add pages from each PDF document to the merged PDF document
+                for (const pdfDocument of pdfDocuments) {
+                    // console.log(pdfDocument,"doc")
+                    const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+                    for (const page of pages) {
+                        // console.log(page,"docpage")
+                        mergedPDFDocument.addPage(page);
+                    }
+                }
+                // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
+                // for (const page of externalPages) {
+                //     mergedPDFDocument.addPage(page);
+                // }
+
+                const mergedPDFBytes = await mergedPDFDocument.save();
+                //   const fileName = `PDF_${index + 1}.pdf`; 
+                const fileName = `PDF_${rowSelectionModel[index]}.pdf`;
+                // console.log(blob,"pdfblob")
+                // zip.file(fileName, blob);
+                pdffolder.file(fileName, mergedPDFBytes);
+
+                // Return the filename for tracking
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(pdfPromises);
+
             const zipContent = await zip.generateAsync({ type: 'blob' });
             // Download the ZIP file
             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);

@@ -679,8 +679,17 @@ body {
 
 @media screen and (max-width: 768px) {
   .main-content-container {
-    width: 96vw;
+    width: 98vw;
     margin-top: 20px;
+    height: 78vh;
+  }
+
+  .Android .main-content-container {
+    margin-top: -35px;
+  }
+
+  .iPhone-responsive .main-content-container {
+    height: 86vh;
   }
 }
 

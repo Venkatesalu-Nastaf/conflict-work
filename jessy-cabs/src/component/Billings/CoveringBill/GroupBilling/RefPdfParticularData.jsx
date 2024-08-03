@@ -144,7 +144,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div>
-                    <table>
+                    <table className="table-ref">
                         <thead>
                             <tr>
                                 <th className="tableheadtext">S No</th>
@@ -160,7 +160,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         </thead>
                         <tbody className="tablebody" style={{ height: pdfData.length <= 2 ? '180px' : '100%' }}>
                             {pdfData.map((li, index) => (
-                                <tr key={index} className="tabledata">
+                                <tr key={index} className="tabledata-ref">
                                     <td className="tdata">{index + 1}</td>
                                     <td className="tdata">{li.InvoiceNo}</td>
                                     <td className="tdata">{li.InvoiceDate}</td>

@@ -221,15 +221,15 @@ const TransferReport = ({ stationName }) => {
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
       const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
       saveAs(blob, fileName);
-      localStorage.removeItem("selectedcustomerdata");
-      localStorage.removeItem("selectedtripsheetid");
+      // localStorage.removeItem("selectedcustomerdata");
+      // localStorage.removeItem("selectedtripsheetid");
     }
     else if (pdfBillList === "PDF 2") {
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
       const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
       saveAs(blob, fileName);
-      localStorage.removeItem("selectedcustomerdata");
-      localStorage.removeItem("selectedtripsheetid");
+      // localStorage.removeItem("selectedcustomerdata");
+      // localStorage.removeItem("selectedtripsheetid");
     }
 
   }

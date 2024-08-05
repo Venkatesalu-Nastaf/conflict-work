@@ -606,7 +606,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
-  const remainingItems = routemap.slice(24);
+  const remainingItems = routemap.slice(24);  
   return (
     <>
       <PDFDocument>

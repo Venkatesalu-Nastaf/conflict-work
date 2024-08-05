@@ -155,6 +155,22 @@
   width: 3px;
 }
 
+@media screen and (max-width: 768px) {
+  .glass {
+    display: grid;
+    height: 97% !important;
+    width: 100%;
+    backdrop-filter: blur(5px);
+    border-radius: 0rem;
+    border: 0px solid var(--glass);
+    gap: 0px;
+    grid-template-columns: 0rem auto 84%;
+    overflow: hidden !important;
+    padding-bottom: 20px;
+    margin-top: 0px !important;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .dash-board {
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");

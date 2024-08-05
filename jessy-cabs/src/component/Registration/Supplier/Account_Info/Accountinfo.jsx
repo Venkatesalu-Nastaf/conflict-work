@@ -136,6 +136,7 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    className='full-width'
                     id="date1"
                     value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null || book.Accdate ? dayjs(book.Accdate) : null}
                     format="DD/MM/YYYY"
@@ -147,27 +148,29 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{display: 'grid'}}>
-                <div style={{display: 'flex'}}>
-                  <div className="icone">
-                    <MinorCrashIcon color="action" />
-                  </div>
-                  <TextField
-                    // margin='normal'
-                    size='small'
-                    name="travelsname"
-                    autoComplete="new-password"
-                    className='full-width'
-                    value={selectedCustomerData?.travelsname || book.travelsname}
-                    // onChange={handleChange}
-                    onChange={handleChangeuniquetravelname}
-                    label="Vehicle/Travels"
-                    id="vehicleTravels"
-                  // variant="standard"
-                  />
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <span style={{ color: "red" }}>{cerendentialdata ? `Travel Name Already Exist` : ""}</span>
+              <div className="input">
+                <div className='full-width' style={{ display: 'grid' }}>
+                  <span className='full-width' style={{ display: 'flex' }}>
+                    <div className="icone">
+                      <MinorCrashIcon color="action" />
+                    </div>
+                    <TextField
+                      // margin='normal'
+                      className='full-width'
+                      size='small'
+                      name="travelsname"
+                      autoComplete="new-password"
+                      value={selectedCustomerData?.travelsname || book.travelsname}
+                      // onChange={handleChange}
+                      onChange={handleChangeuniquetravelname}
+                      label="Vehicle/Travels"
+                      id="vehicleTravels"
+                    // variant="standard"
+                    />
+                  </span>
+                  <span style={{ textAlign: 'center' }}>
+                    <span style={{ color: "red" }}>{cerendentialdata ? `Travel Name Already Exist` : ""}</span>
+                  </span>
                 </div>
               </div>
               <div className="input">
@@ -403,7 +406,7 @@ const Accuntinfo = () => {
                 />
               </div>
 
-              <div className=" radio">
+              <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     A/C Type

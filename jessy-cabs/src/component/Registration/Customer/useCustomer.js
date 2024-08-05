@@ -276,7 +276,7 @@ const useCustomer = () => {
 
 
     const [book, setBook] = useState({
-        customerId: '',
+        // customerId: '',
         name: '',
         customer: '',
         customerType: '',
@@ -377,7 +377,7 @@ const useCustomer = () => {
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            customerId: '',
+            // customerId: '',
             name: '',
             customer: '',
             customerType: '',
@@ -499,7 +499,7 @@ const useCustomer = () => {
 
     // Call the function to add customer property to each object
     // console.log("")
-
+console.log(book,"boooooo")
     const handleAdd = async () => {
 
         const hasEmptyFields = customerfieldSets.some(fieldSet =>
@@ -535,7 +535,7 @@ const useCustomer = () => {
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
            
             
-
+            console.log(book,"gggg")
 
             const response = await axios.post(`${apiUrl}/customers`, book);
 
@@ -570,7 +570,7 @@ const useCustomer = () => {
             return;
         }
 
-        const { id, orderByEmail, orderedby, orderByMobileNo, ...restselectedcustomerdata } = selectedCustomerData
+        const { id, orderByEmail, orderedby, orderByMobileNo,customerId, ...restselectedcustomerdata } = selectedCustomerData
         const updatedCustomer = {
             // ...selectedCustomer,
             ...restselectedcustomerdata,
@@ -580,7 +580,7 @@ const useCustomer = () => {
 
         const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
         console.log(datasets,"hhhhh")
-        await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+        await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
@@ -679,7 +679,7 @@ const useCustomer = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`);
+                await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
                 await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer || book.customer}`);
                 setSelectedCustomerData(null);
                 handleCancel();

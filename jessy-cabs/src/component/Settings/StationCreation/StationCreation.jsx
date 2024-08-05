@@ -78,7 +78,8 @@ const StationCreation = () => {
     handleAdd,
     hidePopup,
     isEditMode,
-    handleEdit,
+    handleEdit, cerendentialdata,
+    handleChangeuniquestation
   } = useStationCreation();
 
   useEffect(() => {
@@ -110,20 +111,24 @@ const StationCreation = () => {
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
-                  <TextField
-                    margin="normal"
+                
+                       <TextField
+                    // margin="normal"
                     size="small"
-                    id="stationid"
-                    label="ID"
+                    // id="stationid"
+                    label="Station ID"
                     name="stationid"
-                    value={selectedCustomerData?.stationid || book.stationid}
-                    autoComplete="new-password"
-                    onChange={handleChange}
+                    value={selectedCustomerData?.stationid ||""}
+                    // autoComplete="new-password"
+                    // onChange={handleChange}
                     // variant="standard"
                     style={{ width: '100%' }}
+                    // disabled={true}
                   />
+                  
                 </div>
-                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                <div className="input input-station-creaton" style={{ paddingRight: '15px'}}>
+                
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
@@ -136,8 +141,14 @@ const StationCreation = () => {
                     name="Stationname"
                     value={selectedCustomerData?.Stationname || book.Stationname}
                     autoComplete="new-password"
-                    onChange={handleChange}
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquestation}
+                    
                   />
+                   
+                    <div style={{textAlign: 'center'}}>
+                    <span style={{color:"red"}}>{cerendentialdata ? `StationName Already Exist`: ""}</span>
+                    </div>
                 </div>
                 <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                   <div className="icone">

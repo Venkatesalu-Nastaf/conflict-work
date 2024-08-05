@@ -197,6 +197,12 @@
     width: 87px;
 }
 
+@media screen and (min-width: 688px) {
+    .total-account .total-inputs label {
+        width: auto;
+    }
+}
+
 .total-account .total-inputs input {
     background-color: transparent;
     border: 1.5px solid #ccc;

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+import dayjs from 'dayjs';
 
 const useBankaccount = () => {
     const apiUrl = APIURL;
@@ -137,12 +138,15 @@ const useBankaccount = () => {
     };
 
     const handleAdd = async () => {
-
+         const createdat=dayjs();
         try {
             const newBank = {
                 bankname: book.bankname,
                 capital: book.capital,
                 AccountType: book.AccountType,
+                created_at:createdat
+                
+
             };
             await axios.post(`${apiUrl}/bankdetails`, newBank);
             handleAddBank();
@@ -162,6 +166,7 @@ const useBankaccount = () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
+                    console.log(data,"accont")
                     setBankDetails(data);
                 } else {
                     setBankDetails([]);

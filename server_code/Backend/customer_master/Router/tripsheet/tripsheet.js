@@ -1434,6 +1434,19 @@ router.get('/signaturedataurltrip/:tripid', (req, res) => {
     })
 
 })
+router.post("/uploadtollandparkinglink",(req,res)=>{
+    const { toll, parking, tripid } = req.body;
+    const query = 'UPDATE tripsheet SET toll = ?, parking = ? WHERE tripid = ?';
+
+    db.query(query, [toll, parking, tripid], (err, results) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal server error' });
+            return;
+        }
+        res.status(200).json({ message: 'Status updated successfully' });
+    });
+
+})
 
 
 

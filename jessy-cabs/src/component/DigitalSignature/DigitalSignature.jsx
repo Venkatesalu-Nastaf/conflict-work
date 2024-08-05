@@ -5,9 +5,14 @@ import { APIURL,Apiurltransfer } from "../url";
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import {format as datefunsdata} from 'date-fns';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
+  const [uploadtoll,setUploadToll]=useState()
   // THSI API FOR DRIVER APP APIURL TRANFER
   const apiurltransfer=Apiurltransfer;
   const sigCanvasRef = useRef(null);
@@ -30,6 +35,25 @@ const DigitalSignature = () => {
       ? JSON.parse(expiredInSessionStorage)
       : false;
   });
+
+  const handleuploaddialog=()=>{
+    const tripId = decryptdata(tripIddata)
+    const data= `http://taaftechnology.com/SignatureGenerate/?tripid=${tripId}`
+  //  const data=`http://localhost:3000/SignatureGenerate?tripid=${tripId}`
+   localStorage.setItem("expireuploadpage",false)
+   sessionStorage.setItem("expiredsign", false);
+   localStorage.setItem("expiredsign",false);
+   localStorage.setItem("uploadtollparkdata",true);
+   window.open(data, '_blank');
+
+  }
+  const handleuploadclose=()=>{
+    setUploadToll(false)
+    setExpired(true);
+    sessionStorage.setItem("expired", true);
+    localStorage.setItem("expired", true);
+    localStorage.setItem("expireuploadpage",true)
+  }
   
   // const expiredInSessionStorage =localStorage.getItem("expired") ? JSON.parse(expiredInSessionStorage): false;
   // console.log(expiredInSessionStorage,localStorage.getItem("expired"))
@@ -121,24 +145,25 @@ const DigitalSignature = () => {
       await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`,signaturedata)
       
       clearSignature();
-      setTimeout(() => {
-        setExpired(true);
-        sessionStorage.setItem("expired", true);
-        localStorage.setItem("expired", true);
-      }, 5000);
+      setUploadToll(true)
+      // setTimeout(() => {
+      //   setExpired(true);
+      //   sessionStorage.setItem("expired", true);
+      //   localStorage.setItem("expired", true);
+      // }, 5000);
     } catch {
       setExpired(true);
     }
   };
 
-  useEffect(() => {
-    const expirationTimer = setTimeout(() => {
-      setExpired(true);
-      sessionStorage.setItem("expired", true);
-      localStorage.setItem("expired", true);
-    }, 30000);
-    return () => clearTimeout(expirationTimer);
-  }, []);
+  // useEffect(() => {
+  //   const expirationTimer = setTimeout(() => {
+  //     setExpired(true);
+  //     sessionStorage.setItem("expired", true);
+  //     localStorage.setItem("expired", true);
+  //   }, 30000);
+  //   return () => clearTimeout(expirationTimer);
+  // }, []);
 
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
@@ -184,6 +209,28 @@ const DigitalSignature = () => {
           Done
         </button>
       </div>
+      <Dialog open={uploadtoll}>
+            <DialogContent>
+             
+              <p className="modal-warning-text">Are you want upload Toll and Parking</p>
+            </DialogContent>
+            <DialogActions className="yes-no-buttons">
+              <Button
+                onClick={handleuploaddialog}
+                variant="contained"
+                className="logout-btn"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={handleuploadclose}
+                variant="contained"
+                className="logout-cancel-btn"
+              >
+                NO
+              </Button>
+            </DialogActions>
+          </Dialog>
     </div>
   );
 };

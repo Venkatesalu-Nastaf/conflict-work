@@ -151,4 +151,17 @@ router.get('/employee-docView/:id', (req, res) => {
 
 //--------------------------------------------------------------------------------------
 
+router.get("/getuniqueusercreationdata/:Username",(req,res)=>{
+    const username=req.params.Username;
+    console.log(username,"params")
+    db.query("select username from  usercreation where username=?",[username],(err,results)=>{
+      if (err) {
+        return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+      }
+      console.log(results.length)
+      return res.status(200).json(results);
+  
+    })
+  })
+
 module.exports = router;

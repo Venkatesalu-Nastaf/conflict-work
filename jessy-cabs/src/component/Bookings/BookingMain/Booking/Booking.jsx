@@ -2197,6 +2197,23 @@ const Booking = ({ stationName, customerData }) => {
                 }
               />
             </div>
+            <div className="input" style={{ marginTop: '0px' }}>
+              <div className="input">
+                {isEditMode ? (
+                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                    Edit
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={!Booking_new}
+                    variant="contained"
+                    onClick={handleAdd}
+                  >
+                    Add
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
           {/* <div className="sub-section2-driver">
               <div className="second-table-driver">
@@ -2581,23 +2598,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-            <div className="input" style={{ marginTop: '0px' }}>
-              <div className="input">
-                {isEditMode ? (
-                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
-                    Edit
-                  </Button>
-                ) : (
-                  <Button
-                    disabled={!Booking_new}
-                    variant="contained"
-                    onClick={handleAdd}
-                  >
-                    Add
-                  </Button>
-                )}
-              </div>
-            </div>
+
 
             <div>
               {
@@ -2616,7 +2617,31 @@ const Booking = ({ stationName, customerData }) => {
             <div className="second-table-driver">
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
-                  <div className="booking-driver-table">
+                  {/* <div className="booking-driver-table"> */}
+                  <Box
+                    className="booking-driver-table"
+                    sx={{
+                      height: 400, // Adjust this value to fit your needs
+                      '& .MuiDataGrid-virtualScroller': {
+                        '&::-webkit-scrollbar': {
+                          width: '8px', // Adjust the scrollbar width here
+                          height: '8px', // Adjust the scrollbar width here
+                        },
+                        '&::-webkit-scrollbar-track': {
+                          backgroundColor: '#f1f1f1',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                          backgroundColor: '#457cdc',
+                          borderRadius: '20px',
+                          minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                        },
+                        '&::-webkit-scrollbar-thumb:hover': {
+                          backgroundColor: '#3367d6',
+                        },
+                      },
+                    }}
+                  >
                     <table>
                       <thead id="update-header">
                         <tr>
@@ -2649,7 +2674,8 @@ const Booking = ({ stationName, customerData }) => {
                         )}
                       </tbody>
                     </table>
-                  </div>
+                  </Box>
+                  {/* </div> */}
                 </div>
               </div>
             </div>

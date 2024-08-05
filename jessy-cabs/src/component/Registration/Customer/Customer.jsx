@@ -151,8 +151,8 @@ const handleClose=()=>{
                     id="customerId"
                     className='full-width'
                     autoComplete="new-password"
-                    value={selectedCustomerData?.customerId || book.customerId}
-                    onChange={handleChange}
+                    value={selectedCustomerData?.customerId ||""}
+                    // onChange={handleChange}
                   // variant="standard"
                   />
                 </div>

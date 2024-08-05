@@ -87,7 +87,7 @@ const EmployeeCreation = ({ stationName }) => {
     handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
-    handleMouseDownPasswords, handleAutocompleteChangeStationName,
+    handleMouseDownPasswords, handleAutocompleteChangeStationName,handleChangeuniquecreation,cerendentialdata,
     isEditMode,
     handleEdit,
 
@@ -121,11 +121,12 @@ const EmployeeCreation = ({ stationName }) => {
 
 
   //  for showing table
-  const [showPermission, setShowPermission] = useState(false);
+  // const [showPermission, setShowPermission] = useState(false);
+  const [showPermission, setShowPermission] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
-    setShowPermission(!showPermission);
+    setShowPermission(true);
     setSelectedUserId(row.userid)
   };
 
@@ -144,7 +145,7 @@ const EmployeeCreation = ({ stationName }) => {
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
   }
-
+console.log(rows,"filter")
   const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
 
   return (
@@ -178,11 +179,15 @@ const EmployeeCreation = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     id="user-name"
-                    label="User Mail-Id"
+                    label="User Name"
                     name="username"
                     value={book.username || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquecreation}
                   />
+                    <div style={{textAlign: 'center'}}>
+                    <span style={{color:"red"}}>{cerendentialdata ? `UserName Already Exist`: ""}</span>
+                    </div>
                 </div>
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
@@ -236,7 +241,7 @@ const EmployeeCreation = ({ stationName }) => {
                     }
                   /> */}
 
-                  {console.log("stationNameforUSer", stationNameforUSer)}
+                  {/* {console.log("stationNameforUSer", stationNameforUSer)} */}
 
                   <Autocomplete
                     size='small'
@@ -483,11 +488,11 @@ const EmployeeCreation = ({ stationName }) => {
                   deleteState={deleteState}
                 />}
               </div>
-              {/* {isEditMode == true && */}
+              {!isEditMode &&
               <div style={{ display: "flex", justifyContent: "end" }}>
                 <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
               </div>
-              {/* } */}
+              }
             </div>
           </form>
         </div>

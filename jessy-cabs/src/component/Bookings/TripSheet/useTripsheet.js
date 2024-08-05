@@ -11,11 +11,11 @@ import { Button } from '@mui/material';
 
 
 const useTripsheet = () => {
-    // const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
+    const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
     // THIS APIURL TRANSFER FRO DRIVER APP
     const apiurltransfer = Apiurltransfer;
-     const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
+    //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',

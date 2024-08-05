@@ -219,32 +219,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input radio">
-                                    <FormControl>
-                                        <FormLabel id="demo-row-radio-buttons-group-label">
-                                            Active
-                                        </FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="active"
-                                            autoComplete="new-password"
-                                            value={selectedCustomerData?.active || book.active}
-                                            onChange={handleChange}
-                                        >
-                                            <FormControlLabel
-                                                value="yes"
-                                                control={<Radio />}
-                                                label="Yes"
-                                            />
-                                            <FormControlLabel
-                                                value="no"
-                                                control={<Radio />}
-                                                label="No"
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
+
                                 <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
@@ -302,6 +277,32 @@ const RateType = ({ stationName, organizationNames }) => {
                                             </DatePicker>
                                         </DemoItem>
                                     </LocalizationProvider>
+                                </div>
+                                <div className="input radio">
+                                    <FormControl>
+                                        <FormLabel id="demo-row-radio-buttons-group-label">
+                                            Active
+                                        </FormLabel>
+                                        <RadioGroup
+                                            row
+                                            aria-labelledby="demo-row-radio-buttons-group-label"
+                                            name="active"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.active || book.active}
+                                            onChange={handleChange}
+                                        >
+                                            <FormControlLabel
+                                                value="yes"
+                                                control={<Radio />}
+                                                label="Yes"
+                                            />
+                                            <FormControlLabel
+                                                value="no"
+                                                control={<Radio />}
+                                                label="No"
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
                                 </div>
                                 <div className="add-edit-ratetype input">
                                     {isEditMode ? (

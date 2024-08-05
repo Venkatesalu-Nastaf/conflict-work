@@ -247,6 +247,20 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
+
+                                <div className="input organization-input">
+                                    <label htmlFor="">PAN Number:</label>
+                                    <TextField
+                                        sx={{ width: "100%" }}
+                                        size="small"
+                                        id="pannumber"
+                                        name="pannumber"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.pannumber || book.pannumber}
+                                        onChange={handleChange}
+                                        disabled={!editMode}
+                                    />
+                                </div>
                                 <div className="input organization-input">
                                     <TextField
                                         size="small"
@@ -260,19 +274,6 @@ const Organization = ({ logoImage }) => {
                                         multiline
                                         rows={3}
                                         autoComplete="password"
-                                        disabled={!editMode}
-                                    />
-                                </div>
-                                <div className="input organization-input">
-                                    <label htmlFor="">PAN Number:</label>
-                                    <TextField
-                                        sx={{ width: "100%" }}
-                                        size="small"
-                                        id="pannumber"
-                                        name="pannumber"
-                                        className='organisation-input-field'
-                                        value={selectedCustomerData?.pannumber || book.pannumber}
-                                        onChange={handleChange}
                                         disabled={!editMode}
                                     />
                                 </div>

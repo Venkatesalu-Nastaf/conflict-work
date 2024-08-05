@@ -59,6 +59,7 @@ router.delete('/customers/:customerId', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
+  console.log(updatedCustomerData,"dddd")
   if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
     updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
   }

@@ -988,10 +988,12 @@ const useTripsheet = () => {
         try {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
-                getSignatureImage()
+                await getSignatureImage()
+               
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
                 const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                console.log(dattasign,"kkkkk")
 
 
                 const updatedCustomer = {
@@ -3562,6 +3564,8 @@ const useTripsheet = () => {
         document.body.removeChild(tempTextarea);
         localStorage.setItem("expiredsign", false);
         localStorage.setItem("expired", false);
+        localStorage.setItem("uploadtollparkdata",false);
+        localStorage.setItem("expireuploadpage",false);
 
         setTimeout(() => {
             setSignaturtCopied(false)

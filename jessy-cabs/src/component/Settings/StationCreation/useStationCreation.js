@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../url";
+import dayjs from 'dayjs';
 
 const useStationCreation = () => {
     const apiUrl = APIURL;
@@ -16,9 +17,10 @@ const useStationCreation = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    const [cerendentialdata,setCredentialData]=useState()
 
     //-----------------popup---------------------
 
@@ -40,13 +42,14 @@ const useStationCreation = () => {
     //-------------------------------------------------
 
     const [book, setBook] = useState({
-        stationid: '',
+        // stationid: '',
         Stationname: '',
         shortname: '',
         active: '',
         ownbranch: '',
         address: '',
         gstno: '',
+        created_at:dayjs(),
 
     });
     const handleChange = (event) => {
@@ -76,7 +79,7 @@ const useStationCreation = () => {
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            stationid: '',
+            // stationid: '',
             Stationname: '',
             shortname: '',
             active: '',
@@ -89,6 +92,48 @@ const useStationCreation = () => {
         setRows([]);
         setIsEditMode(false);
     };
+
+
+    const uniquestation=async(stationname)=>{
+        // console.log(customerdataname,"namee")
+        if(stationname){
+
+            const response= await axios.get(`${apiUrl}/getcreduniquestationname/${stationname}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        }
+
+    
+            
+      
+    }
+
+    const handleChangeuniquestation=(event)=>{
+        const { name, value} = event.target;
+        const datacrendital= uniquestation(value);
+        console.log(datacrendital,"cred")
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]:value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]:value,
+        }));
+
+
+    }
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
@@ -99,15 +144,20 @@ const useStationCreation = () => {
     const handleAdd = async () => {
         const Stationname = book.Stationname;
         if (!Stationname) {
-            setError(true);
-            setErrorMessage("Fill Mandatery Fields");
+            setWarning(true);
+            setWarningMessage("Fill Mandatery Fields");
+            return;
+        }
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" Station Name Already Exists");
             return;
         }
 
         try {
             await axios.post(`${apiUrl}/stationcreation`, book);
             handleCancel();
-            setRows([]);
+            // setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } catch {
@@ -117,11 +167,14 @@ const useStationCreation = () => {
     };
 
 
-    const handleEdit = async (stationid) => {
+    const handleEdit = async () => {
         try {
-            const selectedCustomer = rows.find((row) => row.stationid === stationid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
+            // const selectedCustomer = rows.find((row) => row.stationid === stationid);
+            // console.log(selectedCustomer,"slecu")
+            // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            const updatedCustomer = {...selectedCustomerData };
+    
+            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -149,7 +202,7 @@ const useStationCreation = () => {
             }
         }
         handlelist();
-    }, [apiUrl]);
+    }, [apiUrl,rows]);
 
     const handleClick = async (event, actionName, stationid) => {
         event.preventDefault();
@@ -174,7 +227,7 @@ const useStationCreation = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`);
+                await axios.delete(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
@@ -184,12 +237,7 @@ const useStationCreation = () => {
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.stationid === stationid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
+                handleEdit()
             } else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -224,6 +272,8 @@ const useStationCreation = () => {
         hidePopup,
         isEditMode,
         handleEdit,
+        cerendentialdata,
+        handleChangeuniquestation
     };
 };
 

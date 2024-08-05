@@ -5,7 +5,8 @@ import axios from 'axios'
 import {format as datefunsdata} from 'date-fns';
 
 const SignatureGenerate = () => {
-    const apiUrl = APIURL
+    const apiUrl = APIURL;
+    const[uploadtoll,setUploadToll]=useState()
     const tripId = new URLSearchParams(window.location.search).get("tripid");
     const getCurrentDateTimeFormatted = () => {
         const now = new Date();
@@ -16,7 +17,16 @@ const SignatureGenerate = () => {
           time: formattedTime
         };
       };
-    // console.log(getCurrentDateTimeFormatted(),"timedetails")
+  
+  const uploaddata=()=>{
+    // localStorage.getItem("uploadtolldata");
+    const data= localStorage.getItem("uploadtollparkdata");
+       console.log(data,"dattataaaaaaaaaaaaa")
+       setUploadToll(data)
+  }
+  useEffect(()=>{
+    uploaddata()
+  })
 
 
 
@@ -39,7 +49,6 @@ const SignatureGenerate = () => {
     const expiredInSessionStorage1 =localStorage.getItem("expiredsign") ? "true": false;
     console.log(expiredInSessionStorage1,localStorage.getItem("expiredsign"),"erfcdfskdnmcnndnmnmnfdsnndnf")
 
-    console.log(expired,"datata")
     useEffect(() => {
         const signturedatafullly = async () => {
             const datatripid = tripId
@@ -70,16 +79,16 @@ const SignatureGenerate = () => {
     }, [apiUrl, tripId])
 
 
-    useEffect(() => {
-        if (fulldetails.length > 0) {
-            const expirationTimer = setTimeout(() => {
-                setExpired(true);
-                sessionStorage.setItem("expiredsign", true);
-                localStorage.setItem("expiredsign", true);
-            }, 30000);
-            return () => clearTimeout(expirationTimer);
-        }
-    }, [fulldetails]);
+    // useEffect(() => {
+    //     if (fulldetails.length > 0) {
+    //         const expirationTimer = setTimeout(() => {
+    //             setExpired(true);
+    //             sessionStorage.setItem("expiredsign", true);
+    //             localStorage.setItem("expiredsign", true);
+    //         }, 30000);
+    //         return () => clearTimeout(expirationTimer);
+    //     }
+    // }, [fulldetails]);
 
 
     if (expired) {
@@ -104,6 +113,9 @@ const SignatureGenerate = () => {
 
             const data = response.data.link
             window.open(data, '_blank');
+            setExpired(true);
+                sessionStorage.setItem("expiredsign", true);
+                localStorage.setItem("expiredsign", true);
 
             // setLink(data);
             // getSignatureImage()
@@ -115,6 +127,15 @@ const SignatureGenerate = () => {
         console.log("naviagte data")
         generateLink()
     }
+     const handleTollParkinglink= ()=>{
+        const tripdata=tripId;
+         const uploadtollaprk=`http://taaftechnology.com/UploadtollPark?Tripid=${tripdata}`
+        // const uploadtollaprk=`http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
+        window.open(uploadtollaprk,'_blank')
+        setExpired(true);
+        sessionStorage.setItem("expiredsign", true);
+        localStorage.setItem("expiredsign", true);
+     }
 
 
     return (
@@ -171,6 +192,14 @@ const SignatureGenerate = () => {
                 </div>
                 <button className='Accept-btn' onClick={handlesignaturedata}> Accept</button>
             </div>
+
+            <>
+            <div>
+             {uploadtoll === "true" ?
+            <button className='Accept-btn' onClick={handleTollParkinglink}>upload toll & parking</button> : <></>
+             }
+            </div>
+            </>
 
 
 

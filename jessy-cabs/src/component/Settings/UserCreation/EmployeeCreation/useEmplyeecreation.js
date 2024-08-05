@@ -18,8 +18,9 @@ const useEmplyeecreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
+    const [cerendentialdata,setCredentialData]=useState()
 
 
     ////-------------permission --------------------------
@@ -263,6 +264,45 @@ const useEmplyeecreation = () => {
         fetchData();
       }, [apiUrl]);
     // add
+
+
+    const uniqueusercreationname=async(usernname)=>{
+        // console.log(customerdataname,"namee")
+        if(usernname){
+
+            const response= await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
+            const responsedata=response.data;
+            
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+           
+            if(responsedata?.length >=1){
+                setCredentialData(true)
+                // return true;
+            }
+            else{
+                setCredentialData(false)
+                // return false;
+            }
+        }
+
+    
+            
+      
+    }
+
+    const handleChangeuniquecreation=(event)=>{
+        const { name, value} = event.target;
+        const datacrendital= uniqueusercreationname(value);
+        console.log(datacrendital,"cred")
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]:value,
+        }));
+     
+
+
+    }
     const handleAdd = async () => {
         const username = book.username;
         const branchName = book.stationname;
@@ -278,49 +318,55 @@ const useEmplyeecreation = () => {
         console.log("mobileno", mobileno)
 
         if (!password) {
-            setError(true);
-            setErrorMessage("Fill password");
+            setWarning(true);
+            setWarningMessage("Fill password");
             return;
         }
 
         if (!username) {
-            setError(true);
-            setErrorMessage("Fill UserName..");
+            setWarning(true);
+            setWarningMessage("Fill UserName..");
             return;
         }
         if (!email) {
-            setError(true);
-            setErrorMessage("Fill Email");
+            setWarning(true);
+            setWarningMessage("Fill Email");
             return;
         }
         if (!mobileno) {
-            setError(true);
-            setErrorMessage("Fill Mobileno");
+            setWarning(true);
+            setWarningMessage("Fill Mobileno");
             return;
         }
 
         if (!branchName) {
-            setError(true);
-            setErrorMessage("Fill BranchName..");
+            setWarning(true);
+            setWarningMessage("Fill BranchName..");
             return;
         }
 
         if (!designation) {
-            setError(true);
-            setErrorMessage("Fill Designation..");
+            setWarning(true);
+            setWarningMessage("Fill Designation..");
             return;
         }
 
         if (!organisation) {
-            setError(true);
-            setErrorMessage("Fill Organisation..");
+            setWarning(true);
+            setWarningMessage("Fill Organisation..");
             return;
         }
 
 
         if (!active) {
-            setError(true);
-            setErrorMessage("Fill Active..");
+            setWarning(true);
+            setWarningMessage("Fill Active..");
+            return;
+        }
+
+        if (cerendentialdata === true) {
+            setWarning(true);
+            setWarningMessage(" User Name Already Exists");
             return;
         }
 
@@ -332,6 +378,7 @@ const useEmplyeecreation = () => {
             handleCancel();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setCredentialData()
         } catch (error) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -449,7 +496,7 @@ const useEmplyeecreation = () => {
             return data;
         } catch {
         }
-    }, [apiUrl, setRows])
+    }, [apiUrl, setRows,rows])
 
     //------------------------------------------------------
 
@@ -602,7 +649,7 @@ const useEmplyeecreation = () => {
         handleClickShowPasswords,
         handleMouseDownPasswords,
         isEditMode,
-        handleEdit,
+        handleEdit,handleChangeuniquecreation,cerendentialdata,
 
         //ffor permission
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,

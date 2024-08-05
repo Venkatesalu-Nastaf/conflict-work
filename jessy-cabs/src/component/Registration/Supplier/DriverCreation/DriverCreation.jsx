@@ -363,6 +363,64 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             </div>
                             <div className="input driver-input">
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="joining Date"
+                                        id="date3"
+                                        className='full-width'
+                                        value={
+                                            selectedCustomerData.joiningdate
+                                                ? dayjs(selectedCustomerData.joiningdate)
+                                                : dayjs() || book.joiningdate
+                                                    ? dayjs(book.joiningdate)
+                                                    : dayjs()
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "joiningdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.joiningdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+                                </LocalizationProvider>
+                            </div>
+                            <div className="input driver-input">
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="License Exp Date "
+                                        id="date4"
+                                        className='full-width'
+                                        value={
+                                            selectedCustomerData.licenseexpdate
+                                                ? dayjs(selectedCustomerData.licenseexpdate)
+                                                : null || book.licenseexpdate
+                                                    ? dayjs(book.licenseexpdate)
+                                                    : null
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "licenseexpdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.licenseexpdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+                                </LocalizationProvider>
+                            </div>
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
@@ -407,46 +465,8 @@ const DriverCreation = ({ stationName }) => {
                                     />
                                 </Button>
                             </div> */}
-                            <div className="input driver-input">
-                                <Button color="primary" variant="contained" component="label">
-                                    PROFILE IMAGE
-                                    <input
-                                        type="file"
-                                        name="Profile_image"
-                                        style={{ display: "none" }}
-                                        onChange={handleFileChange}
-                                    />
-                                </Button>
-                            </div>
-                            <div className="input driver-input">
-                                <div className='icone'>
-                                    <CalendarMonthIcon />
-                                </div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="joining Date"
-                                        id="date3"
-                                        className='full-width'
-                                        value={
-                                            selectedCustomerData.joiningdate
-                                                ? dayjs(selectedCustomerData.joiningdate)
-                                                : dayjs() || book.joiningdate
-                                                    ? dayjs(book.joiningdate)
-                                                    : dayjs()
-                                        }
-                                        format="DD/MM/YYYY"
-                                        onChange={(date) => handleDateChange(date, "joiningdate")}
-                                    >
-                                        {({ inputProps, inputRef }) => (
-                                            <TextField
-                                                {...inputProps}
-                                                inputRef={inputRef}
-                                                value={selectedCustomerData?.joiningdate}
-                                            />
-                                        )}
-                                    </DatePicker>
-                                </LocalizationProvider>
-                            </div>
+
+
                             <div className="input driver-input">
                                 <div className="icone">
                                     <TaxiAlertIcon color="action" />
@@ -476,35 +496,19 @@ const DriverCreation = ({ stationName }) => {
                                     </Button>
                                 </Tooltip>
                             </div>
+
                             <div className="input driver-input">
-                                <div className='icone'>
-                                    <CalendarMonthIcon />
-                                </div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="License Exp Date "
-                                        id="date4"
-                                        className='full-width'
-                                        value={
-                                            selectedCustomerData.licenseexpdate
-                                                ? dayjs(selectedCustomerData.licenseexpdate)
-                                                : null || book.licenseexpdate
-                                                    ? dayjs(book.licenseexpdate)
-                                                    : null
-                                        }
-                                        format="DD/MM/YYYY"
-                                        onChange={(date) => handleDateChange(date, "licenseexpdate")}
-                                    >
-                                        {({ inputProps, inputRef }) => (
-                                            <TextField
-                                                {...inputProps}
-                                                inputRef={inputRef}
-                                                value={selectedCustomerData?.licenseexpdate}
-                                            />
-                                        )}
-                                    </DatePicker>
-                                </LocalizationProvider>
+                                <Button color="primary" variant="contained" component="label">
+                                    PROFILE IMAGE
+                                    <input
+                                        type="file"
+                                        name="Profile_image"
+                                        style={{ display: "none" }}
+                                        onChange={handleFileChange}
+                                    />
+                                </Button>
                             </div>
+
                             {/* <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     License

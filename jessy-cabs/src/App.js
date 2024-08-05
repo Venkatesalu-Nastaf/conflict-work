@@ -49,7 +49,7 @@ import { Reports } from "./component/Registration/Report/Reports";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
-
+import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 
 
 
@@ -440,6 +440,10 @@ function App() {
             <Route
               path="/SignatureGenerate"
               element={<SignatureGenerate />}
+            />
+            <Route
+              path="/UploadtollPark"
+              element={<UploadTollParking />}
             />
             <Route
               path="*"

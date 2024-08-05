@@ -183,13 +183,14 @@ else{
 async function tripdriversendSMS(dataSend) {
     const {tripid, guestname,guestmobileno ,mobileNo, reporttime, startdate, address1} = dataSend;
     console.log(tripid, guestname,guestmobileno, mobileNo, reporttime, startdate,address1,"driversms")
-    const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
-    console.log(formattedFromDate,"date")
+    // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+    // console.log(formattedFromDate,"date")
     // const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const apiUrl = process.env.SMS_APIURL;
     const params = {
         SenderId: 'JSYCAB',
-        Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date:${formattedFromDate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,
+        Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`, 
+        // Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date:${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,
         MobileNumbers: `${mobileNo}`,
         // TemplateId: '1107169000156593966',
         // TemplateId: '1107169000164228655',

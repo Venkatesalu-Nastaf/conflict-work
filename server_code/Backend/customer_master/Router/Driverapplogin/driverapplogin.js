@@ -4,6 +4,7 @@ const db = require('../../../db');
 const moment = require('moment');
 const multer = require('multer');
 const path = require('path');
+const nodemailer = require('nodemailer');
 router.use(express.static('customer_master'));
 // user creation database
 // add user creation database
@@ -362,7 +363,8 @@ router.post('/send-emaildriverdata', async (req, res) => {
     
 
         res.status(200).json({ message: 'Email sent successfully' });
-    } catch {
+    } catch(err) {
+      console.log(err,"sms")
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });

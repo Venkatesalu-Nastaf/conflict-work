@@ -28,6 +28,7 @@ router.delete('/stationcreation/:stationid', (req, res) => {
 router.put('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
   const updatedCustomerData = req.body;
+  
   db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -87,7 +88,16 @@ router.get('/getStation-name', (req, res) => {
   });
 });
 
-
+router.get("/getcreduniquestationname/:stationname",(req,res)=>{
+  const stationname=req.params.stationname;
+  db.query("select Stationname  from stationcreation where Stationname=?",[stationname],(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results)
+    return res.status(200).json(results);
+  })
+})
 
 
 

@@ -1716,7 +1716,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabList>
 
                         <TabPanel value={0} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main">
+                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main tripsheet-popup-vendor-bill-vendor-info-main">
                             <div className="input-field">
                               <div className="input">
                                 {/* <div className="icone">
@@ -1859,7 +1859,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   type="number"
                                   id="totaldays"
                                   // variant="standard"
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ width: "100%" }}
                                 />
                               </div>
                               <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
@@ -1871,7 +1871,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <p style={{ margin: "0px" }}>Lock</p>
                               </div>
                             </div>
-                            <div className="input-field">
+                            <div className="input-field" style={{ marginBottom: '10px' }}>
 
                               <div className="input">
                                 {/* <div className='icone'>
@@ -1955,7 +1955,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
 
-                              <div className="input" style={{ marginTop: '45px' }}>
+                              <div className="input">
                                 <TextField
                                   name="vendorTotaltime"
                                   value={calculatevendorTotalTime() || ""}
@@ -2059,7 +2059,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabPanel>
 
                         <TabPanel value={1} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-bill-main">
+                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
                             <div className="input-field">
                               <div className="input">
                                 <TextField
@@ -2263,7 +2263,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabPanel>
 
                         <TabPanel value={2} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider">
+                          <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                             <div className="input-field">
                               <div className="input">
                                 <div className="icone">
@@ -2291,7 +2291,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   size="small"
                                   label="Amount"
                                   autoComplete="password"
-                                  id="amount"
+                                  id="amount5"
                                   variant="standard"
                                 />
                               </div>
@@ -2303,9 +2303,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   name="exkm1"
-                                  value={extraKM || formData.calcPackage || ''}
+                                  className='customer-bill-input'
+                                  value={extraKM || formData.calcPackage || 0}
                                   label="Ex.Km"
-                                  id="ex-km"
+                                  id="ex-exkm1"
                                   autoComplete="password"
                                   size="small"
                                   variant="standard"
@@ -2317,8 +2318,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField size="small"
                                   name='exkmTkm2'
+                                  className='customer-bill-input'
                                   value={extrakm_amount || formData.calcPackage || ''}
-                                  id="exkmTkm"
+                                  id="exkmTkm2"
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2329,11 +2331,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   name="amount6"
+                                  className='customer-bill-input'
                                   value={ex_kmAmount || formData.calcPackage || 0}
                                   size="small"
                                   label="Amount"
                                   autoComplete="password"
-                                  id="amount"
+                                  id="amount6"
                                   variant="standard"
                                 />
                               </div>
@@ -2346,9 +2349,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   name="exHrs1"
+                                  className='customer-bill-input'
                                   value={extraHR || formData.calcPackage || ''}
-                                  label="Ex.Hrs"
-                                  id="ex-Hrs"
+                                  label="exHrs1"
+                                  id="ex-exHrs1"
                                   size="small"
                                   autoComplete="password"
                                   variant="standard"
@@ -2360,7 +2364,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   size="small"
+                                  id="exHrsTHrs2"
                                   name='exHrsTHrs2'
+                                  className='customer-bill-input'
                                   value={extrahr_amount || formData.calcPackage || ''}
                                   variant="standard"
                                 />
@@ -2372,11 +2378,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   name="amount7"
+                                  className='customer-bill-input'
                                   value={ex_hrAmount || formData.calcPackage || 0}
                                   size="small"
                                   label="Amount"
                                   autoComplete="password"
-                                  id="amount"
+                                  id="amouamount7"
                                   variant="standard"
                                 />
                               </div>
@@ -2386,14 +2393,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faCloudMoon} />
                                 </div>
-
                                 <TextField
                                   name="night1"
-                                  // value={nightBta || ''}
+                                  className='customer-bill-input'
+                                  // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
                                   value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+
                                   onChange={(e) => setNightBeta(e.target.value)}
                                   label="Night"
-                                  id="night"
+                                  id="night1"
                                   autoComplete="password"
                                   size="small"
                                   variant="standard"
@@ -2405,7 +2413,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   size="small"
+                                  className='customer-bill-input'
                                   name='nightThrs2'
+                                  id="nightThrs2"
                                   value={nightCount || ''}
                                   onChange={(e) => setNightCount(e.target.value)}
                                   variant="standard"
@@ -2416,22 +2426,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faEquals} />
                                 </div>
-                                {/* <TextField
-                          name="amount8"
-                          value={night_totalAmount || 0}
-                          size="small"
-                          autoComplete="password"
-                          label="Amount"
-                          id="amount"
-                          variant="standard"
-                        /> */}
                                 <TextField
                                   name="amount8"
+                                  className='customer-bill-input'
+                                  // value={night_totalAmount || 0}
                                   value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
+
                                   size="small"
                                   autoComplete="password"
                                   label="Amount"
-                                  id="amount"
+                                  id="amount8"
                                   variant="standard"
                                 />
                               </div>
@@ -2441,23 +2445,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faMoneyBill1Wave} />
                                 </div>
-                                {/* <TextField
-                          name="driverconvenience1"
-                          value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
-                          onChange={driverBeta_calc}
-                          label="Driver Convenience"
-                          autoComplete="password"
-                          id="driver-convenience"
-                          size="small"
-                          variant="standard"
-                        /> */}
                                 <TextField
                                   name="driverconvenience1"
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverBeta || formData.driverBeta || '') : ''}
+                                  className='customer-bill-input'
+                                  // value={driverBeta || formData.driverBeta || ''}
+                                  value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
                                   onChange={driverBeta_calc}
                                   label="Driver Convenience"
                                   autoComplete="password"
-                                  id="driver-convenience"
+                                  id="driverconvenience1"
                                   size="small"
                                   variant="standard"
                                 />
@@ -2466,18 +2462,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="icone">
                                   <TollTwoToneIcon color="action" />
                                 </div>
-                                {/* <TextField
-                          size="small"
-                          name='dtc2'
-                          value={driverbeta_Count || formData.driverbeta_Count || ''}
-                          onChange={driverbeta_Count_calc}
-                          variant="standard"
-                          autoComplete="password"
-                        /> */}
                                 <TextField
                                   size="small"
                                   name='dtc2'
+                                  id='dtc2'
+                                  className='customer-bill-input'
+                                  // value={driverbeta_Count || formData.driverbeta_Count || ''}
                                   value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
+
                                   onChange={driverbeta_Count_calc}
                                   variant="standard"
                                   autoComplete="password"
@@ -2487,41 +2479,31 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faEquals} />
                                 </div>
-                                {/* <TextField
-                          name="amount9"
-                          value={driverBeta_amount || 0}
-                          size="small"
-                          label="Amount"
-                          id="amount"
-                          autoComplete="password"
-                          variant="standard"
-                        /> */}
                                 <TextField
                                   name="amount9"
+                                  className='customer-bill-input'
+                                  // value={driverBeta_amount || 0}
                                   value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                                   size="small"
                                   label="Amount"
-                                  id="amount"
+                                  id="amount9"
                                   autoComplete="password"
                                   variant="standard"
                                 />
                               </div>
                             </div>
 
-                            <div style={{ marginTop: '20px' }}>
-                              <TextField
-                                name="amount9"
-                                value={totalcalcAmount || 0}
-                                size="small"
-                                label="Total Amount"
-                                id="amount"
-                                autoComplete="password"
-                                variant="standard"
-                              />
-                            </div>
-                            <div className="input-field">
+                            <TextField
+                              name="amount9"
+                              className='total-amount-textfield'
+                              value={totalcalcAmount || 0}
+                              size="small"
+                              label="Total Amount"
+                              id="amount-amount9"
+                              autoComplete="password"
+                              variant="standard"
+                            />
 
-                            </div>
                             <div className="input-field">
 
                             </div>

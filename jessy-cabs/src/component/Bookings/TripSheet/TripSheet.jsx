@@ -93,8 +93,8 @@ import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+// import DialogContentText from '@mui/material/DialogContentText';
+// import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
@@ -103,7 +103,8 @@ import Select from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
 import InvoiceHCL from '../Invoice/InvoiceHCL';
 import { APIURL } from '../../url';
-import axios from "axios"
+import axios from "axios";
+import CopyEmailHtmlcontent from './CopyEmailcontent';
 
 
 import {
@@ -253,10 +254,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     openEditMapLog,
     handleEditMapDetails,
     selectedMapRow,
-    setSelectedMapRow,
+    setSelectedMapRow,CopyEmail,setCopyEmail
 
 
   } = useTripsheet();
+  const{ getHtmlContentdata }=CopyEmailHtmlcontent();
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -462,27 +464,71 @@ const TripSheet = ({ stationName, logoImage }) => {
   useEffect(() => {
     const fetchFuleType = async () => {
       if (!ratefor) return
-      const data = await axios.get(`${APIURL}/getFuelType/${ratefor}`)
+      const data = await axios.get(`${apiurl}/getFuelType/${ratefor}`)
       setFuelType(data?.data[0]?.fueltype)
     }
 
     fetchFuleType()
 
-  }, [ratefor, APIURL])
+  }, [ratefor, apiurl])
 
 
   const [customerAddress, setCustomerAddress] = useState("")
   useEffect(() => {
     const fetchFuleType = async () => {
       if (!customer) return
-      const data = await axios.get(`${APIURL}/getcustomer-address/${customer}`)
+      const data = await axios.get(`${apiurl}/getcustomer-address/${customer}`)
       setCustomerAddress(data?.data[0]?.address1)
     }
     fetchFuleType()
 
-  }, [customer, APIURL])
+  }, [customer,apiurl])
 
   const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
+
+  const dataToSend = {
+    bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
+    guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+    guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+    email: formValues.email || selectedCustomerData.email || book.email || formData.email,
+    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+    // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+    vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
+    starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+    startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+    status: formData.status || book.status || selectedCustomerData.status,
+    customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
+    servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
+  }
+  
+    const handlecopiedemailcontent=()=>{
+    const tripidstatus =  formData.status || book.status || selectedCustomerData.status;
+  
+    if(tripidstatus === "Cancelled" ||  tripidstatus === "Opened"){
+   const data = getHtmlContentdata(tripidstatus,dataToSend);
+   const tempTextarea = document.createElement('textarea');
+   tempTextarea.value = data;
+   document.body.appendChild(tempTextarea);
+   tempTextarea.select();
+   document.execCommand('copy');
+   document.body.removeChild(tempTextarea);
+   setCopyEmail(true)
+  
+   setTimeout(() => {
+     setCopyEmail(false)
+   }, (2000));
+  }
+  else{
+    
+      setWarning(true)
+      setWarningMessage("Check Your Trip Status")
+  }
+  
+   
+      //  console.log(data,"copydara")     
+  }
 
 
   return (
@@ -604,6 +650,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Email"
                   />
+                  {isEditMode  && 
+                    <><Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
+                     Copy
+                    </Button>
+                    {CopyEmail ? "Link Copied...":"" }
+                    </>
+                   } 
                 </div>
 
                 <div className="">

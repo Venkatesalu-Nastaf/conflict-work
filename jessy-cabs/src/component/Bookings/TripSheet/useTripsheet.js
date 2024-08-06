@@ -8,7 +8,7 @@ import {
 } from "./TripSheetdata";
 import { APIURL, Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
-import { RiDeleteBinLine } from "react-icons/ri";
+// import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 
 const useTripsheet = () => {
@@ -165,6 +165,7 @@ const useTripsheet = () => {
     const [rowsignature, setRowsSignature] = useState([])
     const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
     const [selectedMapRow, setSelectedMapRow] = useState("");
+    const [CopyEmail,setCopyEmail]=useState(false);
 
     const [kmValue, setKmValue] = useState({
         shedOutState: '',
@@ -851,6 +852,12 @@ const useTripsheet = () => {
 
 
     const handlecheck = async () => {
+        const  statusdata= formData.status || book.status || selectedCustomerData.status;
+        if(statusdata !== "Cancelled" || statusdata !== "Opened"){
+            setWarning(true)
+            setWarningMessage("Check Your Trip Status")
+            return
+           }
         if (sendEmail) {
 
             try {
@@ -3817,7 +3824,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp,CopyEmail,setCopyEmail
 
 
     };

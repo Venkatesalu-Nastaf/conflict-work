@@ -450,8 +450,8 @@ router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
 
 router.post('/send-email', async (req, res) => {
     try {
-        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
-        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehType, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
+        const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
+        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
         const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -513,7 +513,7 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Car Sent:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehType}</td>
+                            <td style="padding: 8px;color: #000"">${vehicleName}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
@@ -530,6 +530,8 @@ router.post('/send-email', async (req, res) => {
         
           `,
             };
+            console.log(customerMailOptions.html);
+            
             await transporter.sendMail(customerMailOptions);
             // await transporter.sendMail(ownerMailOptions);
             res.status(200).json({ message: 'Email sent successfully' });
@@ -539,8 +541,10 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',
+                // from: Sendmailauth,
+                // to: `${email},${customeremail}`,
                 from: Sendmailauth,
-                to: `${email},${customeremail}`,
+                to: `${email}`,
                 subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
             <p>Dear Sir/Madam,</p>
@@ -584,8 +588,8 @@ router.post('/send-email', async (req, res) => {
                         </tr>
                        
                         <tr>
-                        <td style="padding: 8px;"><strong>Type of Car Requiredt:</strong></td>
-                        <td style="padding: 8px;color: #000"">${vehType}</td>
+                        <td style="padding: 8px;"><strong>Type of Car Required:</strong></td>
+                        <td style="padding: 8px;color: #000"">${vehicleName}</td>
                     </tr>
                     <tr>
                         <td style="padding: 8px;"><strong>Duty Type</strong></td>
@@ -602,6 +606,7 @@ router.post('/send-email', async (req, res) => {
           `,
             }
             // await transporter.sendMail(ownerMailOptions1);
+            
             await transporter.sendMail(customerMailOptions1);
             res.status(200).json({ message: 'Email sent successfully' });
 

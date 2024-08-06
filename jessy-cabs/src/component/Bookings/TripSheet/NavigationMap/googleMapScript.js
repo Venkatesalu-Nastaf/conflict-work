@@ -6,6 +6,7 @@ import { APIURL } from "../../../url";
 let map;
 let directionsService;
 let directionsRenderer;
+let markersMap = {}; // Dictionary to keep track of markers by their labels
 let startMarker;
 let endMarker;
 let searchBox;
@@ -13,7 +14,6 @@ let popup;
 let waypoints = [];
 
 const apiUrl = APIURL;
-
 
 function initMap() {
     try {
@@ -60,17 +60,20 @@ function initMap() {
     }
 }
 
-function submitPopup() {
+function submitMapPopup() {
     const date = document.getElementById('date').value;
     const time = document.getElementById('time').value;
     const tripTypeElement = document.getElementById('tripType');
     const placeName = document.getElementById('placeName').value;
     const tripid = localStorage.getItem('selectedTripid');
+
     if (!date || !time || !tripTypeElement) {
         alert('Please fill in all required fields.');
         return;
     }
+
     const selectedTripType = tripTypeElement.value;
+
     fetch(`${apiUrl}/gmap-submitForm`, {
         method: 'POST',
         headers: {
@@ -84,6 +87,7 @@ function submitPopup() {
             // Handle the response as needed
         })
         .catch(error => console.error('Error:', error));
+
     popup.close();
     if (selectedTripType === 'start') {
         startMarker = createMarker(popup.getPosition(), 'A', date, time, selectedTripType, placeName);
@@ -109,6 +113,7 @@ function submitPopup() {
     }
 }
 
+
 function getNextAlphabeticLetter(currentLetter) {
     return String.fromCharCode(currentLetter.charCodeAt(0) + 1);
 }
@@ -118,32 +123,35 @@ function getNextWaypointLabel() {
     const nextCharCode = lastWaypointLabel.charCodeAt(0) + 1;
     return String.fromCharCode(nextCharCode);
 }
-
 function handleMapClick(latLng) {
     const geocoder = new google.maps.Geocoder();
     const popupContent = document.createElement('div');
     popupContent.innerHTML = `
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" value='' required /><br/>
-            <label for="time">Time:</label>
-            <input type="time" id="time" name="time" value='' required /><br/>
-            <label for="tripType">Trip Type:</label>
-            <select id="tripType" name="tripType" value=''>
-                <option value="start">Start</option>
-                <option value="end">End</option>
-                <option value="waypoint">Waypoint</option>
-            </select><br/>
-            <input type="hidden" id="placeName" name="placeName" value="" disabled />
-            <button id="submitButton">Submit</button>
-        `;
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value='' required /><br/>
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" value='' required /><br/>
+        <label for="tripType">Trip Type:</label>
+        <select id="tripType" name="tripType" value=''>
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="waypoint">Waypoint</option>
+        </select><br/>
+        <input type="hidden" id="placeName" name="placeName" value="" disabled />
+        <button id="submitButton">Submit</button>
+    `;
+
     popup = new google.maps.InfoWindow({
         content: popupContent,
         position: latLng,
     });
     popup.open(map);
+
+
     geocoder.geocode({ location: latLng }, (results, status) => {
         console.log('Geocoding Results:', results);
         console.log('Geocoding Status:', status);
+
         if (status === 'OK' && results[0]) {
             const placeName = results[0].formatted_address;
             const placeNameElement = document.getElementById('placeName');
@@ -154,7 +162,9 @@ function handleMapClick(latLng) {
             }
             const submitButton = document.getElementById('submitButton');
             if (submitButton) {
-                submitButton.addEventListener('click', submitPopup);
+                submitButton.addEventListener('click', () => {
+                    submitMapPopup();
+                });
             } else {
                 console.error("Element with ID 'submitButton' not found");
             }
@@ -162,13 +172,78 @@ function handleMapClick(latLng) {
     });
 }
 
-function createMarker(position, label) {
-    return new google.maps.Marker({
+
+
+// Modify createMarker to set popup.marker
+function createMarker(position, label, date = '', time = '', tripType = '', placeName = '') {
+    
+    if (markersMap[label]) {
+        markersMap[label].setMap(null); // Remove old marker
+    }
+
+    const marker = new google.maps.Marker({
         position: position,
         map: map,
         label: label,
+        title: `${label}: ${placeName} (${date} ${time})`,
     });
+
+    // Store additional data in the marker
+    marker.data = {
+        date: date,
+        time: time,
+        tripType: tripType,
+        placeName: placeName
+    };
+
+    markersMap[label] = marker; // Add new marker to the dictionary
+
+    // Add a click event listener to open the popup
+    marker.addListener('click', () => {
+        const { date, time, tripType, placeName } = marker.data;
+
+        const popupContent = document.createElement('div');
+        popupContent.innerHTML = `
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="${date}" required /><br/>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" value="${time}" required /><br/>
+            <label for="tripType">Trip Type:</label>
+            <select id="tripType" name="tripType">
+                <option value="start" ${tripType === 'start' ? 'selected' : ''}>Start</option>
+                <option value="end" ${tripType === 'end' ? 'selected' : ''}>End</option>
+                <option value="waypoint" ${tripType === 'waypoint' ? 'selected' : ''}>Waypoint</option>
+            </select><br/>
+            <input type="hidden" id="placeName" name="placeName" value="${placeName}" />
+            <button id="submitButton">Submit</button>
+        `;
+
+        popup = new google.maps.InfoWindow({
+            content: popupContent,
+            position: position,
+        });
+        popup.marker = marker; // Store marker reference in popup
+        popup.open(map);
+
+        // const submitButton = document.getElementById('submitButton');
+     
+
+        const submitButton = popupContent.querySelector('#submitButton');
+
+        if (submitButton) {
+            
+            submitButton.addEventListener('click', () => {
+                submitMapPopup(); // Call the renamed function
+            });
+        } else {
+            console.error("Element with ID 'submitButton' not found in marker popup");
+        }
+    
+    });
+
+    return marker;
 }
+
 
 function clearMarkers() {
     if (startMarker) {
@@ -180,6 +255,7 @@ function clearMarkers() {
     for (const waypoint of waypoints) {
         waypoint.setMap(null);
     }
+    markersMap = {}; // Clear the markers map
 }
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer) {

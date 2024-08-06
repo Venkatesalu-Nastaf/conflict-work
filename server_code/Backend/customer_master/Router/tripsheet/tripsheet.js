@@ -926,11 +926,11 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
 //--------------------------------------------------------
 
 router.get('/tripsheet-maindash', (req, res) => {
-    const {fromDate,toDate}=req.query;
-    console.log(fromDate,"dd",toDate)
+    const { fromDate, toDate } = req.query;
+    console.log(fromDate, "dd", toDate)
 
     db.query(`SELECT * FROM tripsheet where  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)`,[fromDate,toDate], (err, result) => {
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)`, [fromDate, toDate], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -938,16 +938,16 @@ router.get('/tripsheet-maindash', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
-        console.log(result.length,"len")
+        console.log(result.length, "len")
         return res.status(200).json(result);
     });
 });
 
 router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
-    const tripsheet=req.params.tripsheetdate
-   
+    const tripsheet = req.params.tripsheetdate
 
-    db.query('SELECT * FROM tripsheet where tripsheetdate=? ',[tripsheet], (err, result) => {
+
+    db.query('SELECT * FROM tripsheet where tripsheetdate=? ', [tripsheet], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -955,18 +955,18 @@ router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
             return res.status(200).json(result);
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
-        console.log(result,"cc")
+        console.log(result, "cc")
         return res.status(200).json(result);
     });
 });
 router.get('/tripsheet-maindashcuurentdate', (req, res) => {
-    const {toDate,fromDate}=req.query;
+    const { toDate, fromDate } = req.query;
     const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
     const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-    console.log(formattedFromDate,"to",formattedToDate)
+    console.log(formattedFromDate, "to", formattedToDate)
 
     db.query(`SELECT * FROM tripsheet  where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) `,[formattedFromDate,formattedToDate],(err, result) => {
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) `, [formattedFromDate, formattedToDate], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -974,7 +974,7 @@ router.get('/tripsheet-maindashcuurentdate', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         // const bookingDetails = result[0]; // Assuming there is only one matching booking
-        console.log(result,"hh")
+        console.log(result, "hh")
         return res.status(200).json(result);
     });
 });
@@ -1236,9 +1236,6 @@ router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
     });
 });
 
-
-
-
 router.post('/gmap-submitForm', (req, res) => {
     const date = req.body.date;
     const time = req.body.time;
@@ -1246,16 +1243,45 @@ router.post('/gmap-submitForm', (req, res) => {
     const placeName = req.body.placeName;
     const tripid = req.body.tripid;
 
-    // Insert data into MySQL
-    const query = `INSERT INTO gmapdata (date, time, trip_type, place_name, tripid ) VALUES (?, ?, ?, ?, ?)`;
-    db.query(query, [date, time, tripType, placeName, tripid], (err, results) => {
+    // Query to check if the tripid and trip_type exist
+    const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+
+    db.query(getquery, [tripid, tripType], (err, results) => {
         if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (results.length > 0) {
+            // Trip ID and trip type exist, delete the old row
+            const deleteQuery = "DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+            db.query(deleteQuery, [tripid, tripType], (err, deleteResults) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+
+                // Insert the new row
+                const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid) VALUES (?, ?, ?, ?, ?)";
+                db.query(insertQuery, [date, time, tripType, placeName, tripid], (err, insertResults) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+                    res.status(200).json({ message: 'Form data submitted successfully' });
+                });
+            });
         } else {
-            res.status(200).json({ message: 'Form data submitted successfully' });
+            // Trip ID and trip type do not exist, insert the new row directly
+            const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid) VALUES (?, ?, ?, ?, ?)";
+            db.query(insertQuery, [date, time, tripType, placeName, tripid], (err, insertResults) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                res.status(200).json({ message: 'Form data submitted successfully' });
+            });
         }
     });
 });
+
+
 
 // Collect maplogdata for gmapdata table
 router.get('/get-gmapdata/:tripid', (req, res) => {
@@ -1265,6 +1291,41 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
         return res.status(200).json(results);
+    });
+});
+router.get('/getAllGmapdata', (req, res) => {
+    db.query('SELECT * FROM gmapdata', (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+        }
+        return res.status(200).json(results);
+    });
+});
+
+
+router.post('/updateGPS-LOG/:tripid', (req, res) => {
+    const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL
+    const { time, date,trip_type } = req.body; // Extracting time and date from the request body
+
+    if (!tripid || !time || !date) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    // SQL query to update the database
+    const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ?';
+
+    // Execute the query with the provided parameters
+    db.query(query, [time, date, tripid,trip_type], (err, result) => {
+        if (err) {
+            console.error('Error updating GPS log:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+
+        res.status(200).json({ message: 'GPS log updated successfully' });
     });
 });
 
@@ -1434,7 +1495,7 @@ router.get('/signaturedataurltrip/:tripid', (req, res) => {
     })
 
 })
-router.post("/uploadtollandparkinglink",(req,res)=>{
+router.post("/uploadtollandparkinglink", (req, res) => {
     const { toll, parking, tripid } = req.body;
     const query = 'UPDATE tripsheet SET toll = ?, parking = ? WHERE tripid = ?';
 

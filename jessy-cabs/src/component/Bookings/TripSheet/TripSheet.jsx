@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import Tabs from "@mui/joy/Tabs";
 import Box from "@mui/material/Box";
 import TabList from "@mui/joy/TabList";
+import Modal from '@mui/material/Modal';
 import TabPanel from "@mui/joy/TabPanel";
 import Invoice from '../Invoice/Invoice';
 import Button from "@mui/material/Button";
@@ -138,7 +139,17 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const TripSheet = ({ stationName, logoImage }) => {
 
@@ -237,7 +248,13 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp, setWarning, setWarningMessage, setSignImageUrl
+    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp, setWarning, setWarningMessage, setSignImageUrl,
+    handleCloseMapLog,
+    openEditMapLog,
+    handleEditMapDetails,
+    selectedMapRow,
+    setSelectedMapRow,
+
 
   } = useTripsheet();
 
@@ -1669,7 +1686,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   >
                     <div className="Tipsheet-content-table-main">
                       <Tabs
-                        className='Scroll-Style'
+                        className='Scroll-Style tripsheet-calculate-popup-main'
                         aria-label="Pricing plan"
                         defaultValue={0}
                         sx={(theme) => ({
@@ -1716,8 +1733,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabList>
 
                         <TabPanel value={0} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main tripsheet-popup-vendor-bill-vendor-info-main">
-                            <div className="input-field">
+                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+                            <div className="input-field tripsheet-vendor-info-first-input-field">
                               <div className="input">
                                 {/* <div className="icone">
                           <NoCrashIcon color="action" />
@@ -1727,7 +1744,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   size="small"
                                   id="free-solo-vendor_vehicle"
                                   freeSolo
-                                  sx={{ minWidth: 200 }}
+                                  // sx={{ minWidth: 200 }}
                                   // onChange={(event, value) =>
                                   //    handleAutocompleteVendor(event, value, "vendor_vehicle")
                                   //  }
@@ -1983,7 +2000,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   label="starting Kilometers"
                                   id="vendorshedoutkm"
                                   size="small"
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ my: 1, width: "100%" }}
                                 />
                               </div>
 
@@ -2006,7 +2023,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   onChange={handlevendorinfofata}
                                   id="vendorshedinkm"
                                   size="small"
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ my: 1, width: "100%" }}
                                 />
                               </div>
 
@@ -2019,7 +2036,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   label="Total kilometers"
                                   id="vendortotalkm"
                                   size="small"
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ my: 1, width: "100%" }}
                                 />
                               </div>
                             </div>
@@ -2039,7 +2056,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   size="small"
                                   // variant="standard"
 
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ my: 1, width: "100%" }}
                                 />
 
                               </div>
@@ -4329,6 +4346,32 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }
                         />
                       </div>
+                      <Modal
+                        open={openEditMapLog}
+                        onClose={handleCloseMapLog}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                            <div>
+                              <TextField type="date"
+                                value={selectedMapRow?.date || ''}
+                                onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                            </div>
+                            <div>
+                              <TextField type="time"
+                                value={selectedMapRow?.time || ''}
+                                onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                            </div>
+                            <div>
+
+                              <Button onClick={handleEditMapDetails}>Submit</Button>
+                            </div>
+                          </div>
+
+                        </Box>
+                      </Modal>
                       <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faFileLines} size="lg" />

@@ -8,7 +8,8 @@ import {
 } from "./TripSheetdata";
 import { APIURL, Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
-
+import { RiDeleteBinLine } from "react-icons/ri";
+import { FiEdit3 } from "react-icons/fi";
 
 const useTripsheet = () => {
     const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
@@ -163,6 +164,7 @@ const useTripsheet = () => {
     const [signaturelinkcopy, setSignaturtCopied] = useState(false)
     const [rowsignature, setRowsSignature] = useState([])
     const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
+    const [selectedMapRow, setSelectedMapRow] = useState("");
 
     const [kmValue, setKmValue] = useState({
         shedOutState: '',
@@ -184,34 +186,61 @@ const useTripsheet = () => {
 
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
-        { field: "tripid", headerName: "TripSheet No", width: 130 },
+        { field: "tripid", headerName: "TripSheet No", width: 120 },
+
+        { field: "time", headerName: "Trip Time", width: 100 },
+
+        { field: "date", headerName: "Trip Date", width: 100, },
+        { field: "trip_type", headerName: "Trip Type", width: 120 },
+        { field: "place_name", headerName: "Place Name", width: 120 },
         {
-            field: 'actions',
-            headerName: 'Actions',
-            width: 130,
+            field: '',
+            headerName: 'Edit',
+            width: 120,
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleRemoveMapLogPoint(params)}
+                    onClick={() => handleEditMapLogPoint(params)}
                     aria-label="open-dialog"
                 >
-                    <Button variant="contained" color="primary">
-                        Remove
+                    <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                        <FiEdit3 />
+
+                        <p style={{ margin: "0px" }}>Edit</p>
+
                     </Button>
                 </Button>
             ),
         },
-        { field: "date", headerName: "Trip Date", width: 160 },
-        { field: "time", headerName: "Trip Time", width: 130 },
-        { field: "trip_type", headerName: "Trip Type", width: 160 },
-        { field: "place_name", headerName: "Place Name", width: 600 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 150,
+            renderCell: (params) => (
+                <Button
+                    onClick={() => handleRemoveMapLogPoint(params)}
+                    aria-label="open-dialog"
+
+                >
+
+
+                    <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                        <FiEdit3 />
+                        <p style={{ margin: "0px" }}>Remove</p>
+
+                    </Button>
+                </Button>
+            ),
+        },
 
     ];
 
 
-
+    const [openEditMapLog, setOpenEditMapLog] = useState(false);
+    const handleOpenMapLog = () => setOpenEditMapLog(true);
+    const handleCloseMapLog = () => setOpenEditMapLog(false);
     const handleRemoveMapLogPoint = async (params) => {
         try {
-            const id = params.id
+            const id = params.id;
             const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
                 handleTripmaplogClick()
@@ -220,6 +249,41 @@ const useTripsheet = () => {
             console.log(err.message)
         }
     }
+    const handleEditMapDetails = async () => {
+
+        if (!selectedMapRow) return;
+
+        const { tripid, time, date, trip_type } = selectedMapRow;
+
+        try {
+            const response = await axios.post(`${apiUrl}/updateGPS-LOG/${tripid}`, { time, date, trip_type });
+            if (response.status === 200) {
+                setOpenEditMapLog(false); // Close the modal
+            }
+        } catch (err) {
+            console.error('Error updating GPS log:', err);
+        }
+    };
+
+    const handleEditMapLogPoint = (params) => {
+
+        setSelectedMapRow(params.row); // Store the selected row data
+        handleOpenMapLog(); // Open the modal
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { tripid } = selectedMapRow;
+                const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
+                const data = response.data;
+                setRow(data);
+            } catch (error) {
+                console.error('Error fetching map data:', error);
+            }
+        };
+        fetchData()
+    }, [openEditMapLog, selectedMapRow, apiUrl])
 
     const handleButtonClick = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
@@ -282,7 +346,6 @@ const useTripsheet = () => {
             try {
                 const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
                 const data = response.data
-                // console.log(data, "accccccccc")
                 setAccountInfoData(data)
             }
             catch (err) {
@@ -391,7 +454,6 @@ const useTripsheet = () => {
         } catch {
         }
     };
-
 
 
     const handleTripmaplogClick = async () => {
@@ -569,7 +631,6 @@ const useTripsheet = () => {
 
         setVendorpassvalue(formvendorinfo);
         setVendorinfodata(formvendorinfo);
-        console.log(formvendorinfo, "nnnnnnnnnnn")
 
 
 
@@ -783,7 +844,7 @@ const useTripsheet = () => {
             totalDays: '',
         })
         setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
-        
+
         localStorage.removeItem('selectedTripid');
     };
 
@@ -989,11 +1050,11 @@ const useTripsheet = () => {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
                 await getSignatureImage()
-               
+
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
                 const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
-                console.log(dattasign,"kkkkk")
+                console.log(dattasign, "kkkkk")
 
 
                 const updatedCustomer = {
@@ -3564,8 +3625,8 @@ const useTripsheet = () => {
         document.body.removeChild(tempTextarea);
         localStorage.setItem("expiredsign", false);
         localStorage.setItem("expired", false);
-        localStorage.setItem("uploadtollparkdata",false);
-        localStorage.setItem("expireuploadpage",false);
+        localStorage.setItem("uploadtollparkdata", false);
+        localStorage.setItem("expireuploadpage", false);
 
         setTimeout(() => {
             setSignaturtCopied(false)
@@ -3670,8 +3731,15 @@ const useTripsheet = () => {
         handleAdd,
         hidePopup,
         formData,
+        handleOpenMapLog,
+        handleCloseMapLog,
+        openEditMapLog,
+        setOpenEditMapLog,
+        handleEditMapDetails,
         handleKeyDown,
         handleDateChange,
+        selectedMapRow,
+        setSelectedMapRow,
         handleAutocompleteChange, setKmValue, kmValue,
         packageData,
         smsguest,

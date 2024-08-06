@@ -56,7 +56,7 @@ import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 // import LocationCityIcon from "@mui/icons-material/LocationCity";
-import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+// import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -155,7 +155,8 @@ const Booking = ({ stationName, customerData }) => {
     sendEmail,
     setSendEmail,
     lastBookingNo,
-    currentYear, bookingStatus, setBookingStatus,
+    // currentYear, 
+    bookingStatus, setBookingStatus,
     // handleClickHide,
     // searchText,
     // setSearchText,
@@ -235,6 +236,7 @@ const Booking = ({ stationName, customerData }) => {
 
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
+    setSelectedCustomerData({...selectedCustomerData,status:event.target.value})
   };
 
   // const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;

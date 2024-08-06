@@ -12,7 +12,7 @@ const MapComponent = () => {
         window.initMap();
     }, []);
 
-    const handleSelect = async (address) => {
+    const handleSelect = async (address) => {        
         const geocoder = new google.maps.Geocoder();
 
         try {
@@ -36,10 +36,11 @@ const MapComponent = () => {
     };
 
     const handleChange = (newAddress) => {
+        
         setAddress(newAddress);
     };
 
-    const generateStaticMap = () => {
+    const generateStaticMap = () => {        
         window.generateStaticMap();
     };
 

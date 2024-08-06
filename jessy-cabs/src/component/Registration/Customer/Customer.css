@@ -34,8 +34,9 @@
   border: 2px solid #ccc;
   border-radius: 10px;
   height: 400px;
-  width: 100%;
+  width: 1000px;
   background-color: var(--glass);
+  overflow-x: auto;
 }
 
 .form-container .Title-Name {

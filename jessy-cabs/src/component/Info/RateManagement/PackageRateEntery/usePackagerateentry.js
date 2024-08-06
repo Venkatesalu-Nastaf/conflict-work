@@ -302,17 +302,17 @@ const usePackagerateentry = () => {
     };
 
 
-    // useEffect(() => {
-    //     const handleList = async () => {
-    //         try {
-    //             const response = await axios.get(`${apiUrl}/ratemanagement`);
-    //             const data = response.data;
-    //             setRows(data);
-    //         } catch {
-    //         }
-    //     }
-    //     handleList();
-    // }, [apiUrl]);
+    useEffect(() => {
+        const handleList = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/ratemanagement`);
+                const data = response.data;
+                setRows(data);
+            } catch {
+            }
+        }
+        handleList();
+    }, [apiUrl,rows]);
 
 
     const handleShow = async () => {

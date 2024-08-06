@@ -122,8 +122,8 @@
 
 /* TRIPSHEET CONETNT */
 .Tipsheet-content-table-main {
-  padding: 15px;
-  margin-top: 15px;
+  padding: 0px 7px;
+  margin-top: 0px;
 }
 
 .Tipsheet-content-table-main .Tipsheet-content-table {
@@ -226,7 +226,7 @@
   border-radius: 10px;
   border: 2px solid #ccc;
   height: 250px;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 @media screen and (max-width: 667px) {
@@ -566,15 +566,34 @@
 
 @media screen and (min-width: 992px) {
   .tripsheet-popup-vendor-bill-vendor-info-main .input-field .input{
-    width: 165px !important;
+    width: 190px !important;
   }
 
   .Customer-Customer-Bill-Slider-popup .input-field .input{
+    width: 190px !important;
+  }
+
+  .tripsheet-vendor-info-main-popup .input-field .input{
     width: 165px !important;
+  }
+
+  .tripsheet-vendor-info-first-input-field .input{
+    width: 200px !important;
   }
 }
 
 .Customer-Customer-Bill-Slider-popup .input-field{
   margin-bottom: 10px;
+}
+
+.tripsheet-calculate-popup-main{
+  border: none !important;
+  box-shadow: none !important;
+  padding: 2px;
+}
+
+.MuiDialog-paperWidthSm{
+  max-width: 1200px !important;
+  width: 750px;
 }
 

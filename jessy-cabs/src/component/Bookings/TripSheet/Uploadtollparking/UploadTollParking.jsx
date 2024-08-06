@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import './Uploadtollpark.css'
 import { APIURL,Apiurltransfer } from '../../../url';
 import axios from 'axios';
@@ -150,7 +150,6 @@ const [documentTypedata,setDocumentTypedata]=useState("")
   
     <div className="input">
         <Button variant="contained" onClick={() => handleUpload("Toll")}>Select File & Upload Toll</Button> 
-        {/* {documentType=== "Toll" && success?`${documentType}image uploaded`:""} */}
         {documentTypedata === "Toll" && success ? <p style={{color:"green"}}>{`${documentTypedata} image uploaded`}</p> : ""}
       </div>
       </div>

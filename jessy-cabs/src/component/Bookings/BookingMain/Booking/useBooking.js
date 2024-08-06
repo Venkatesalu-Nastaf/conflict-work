@@ -312,7 +312,7 @@ const useBooking = () => {
     setBook(bookDatdObj);
 
     setOrderByDropDown([])
-    setBookingStatus('')
+    setBookingStatus('pending')
 
     setFormValues({});
     setSelectedCustomerData({});
@@ -1002,12 +1002,11 @@ const useBooking = () => {
   //       setErrorMessage("Error sending SMS");
   //     }
   //   }
-  // };
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
-      const datamode = isEditMode ? selectedCustomerData.status : bookingStatus || book.status
-      console.log(datamode, "datata")
+      const datamode = isEditMode ? selectedCustomerData.status || book.status || bookingStatus : bookingStatus || book.status
+    
       try {
         const user = localStorage.getItem("username")
         const dataToSend = {
@@ -1048,8 +1047,10 @@ const useBooking = () => {
 
 
         };
-        console.log(dataToSend, "datta")
-        await axios.post(`${apiUrl}/send-email`, dataToSend);
+        console.log(dataToSend, "dattaxfgvhjn")
+      const response =  await axios.post(`${apiUrl}/send-email`, dataToSend);
+      console.log(response,"reeeeee")
+      console.log(response.data.customer)
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
@@ -1424,6 +1425,8 @@ const useBooking = () => {
       }
     }
   };
+
+ 
 
   const [currentYear, setCurrentYear] = useState("");
 

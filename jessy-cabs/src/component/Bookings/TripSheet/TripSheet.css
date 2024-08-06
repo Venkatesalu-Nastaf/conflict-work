@@ -563,3 +563,18 @@
     width: 153px !important;
   }
 }
+
+@media screen and (min-width: 992px) {
+  .tripsheet-popup-vendor-bill-vendor-info-main .input-field .input{
+    width: 165px !important;
+  }
+
+  .Customer-Customer-Bill-Slider-popup .input-field .input{
+    width: 165px !important;
+  }
+}
+
+.Customer-Customer-Bill-Slider-popup .input-field{
+  margin-bottom: 10px;
+}
+

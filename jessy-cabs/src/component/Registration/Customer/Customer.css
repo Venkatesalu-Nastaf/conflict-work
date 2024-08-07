@@ -34,7 +34,7 @@
   border: 2px solid #ccc;
   border-radius: 10px;
   height: 400px;
-  width: 1000px;
+  /* width: 1000px; */
   background-color: var(--glass);
   overflow-x: auto;
 }

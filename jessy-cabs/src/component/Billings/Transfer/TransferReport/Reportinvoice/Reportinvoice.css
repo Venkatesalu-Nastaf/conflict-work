@@ -1,6 +1,6 @@
 .MuiDialog-paperWidthSm {
-    /* max-width: 630px !important; */
-    min-width: 930px !important;
+    max-width: 930px !important;
+    /* min-width: 930px !important; */
 }
 
 .Reportinvoice-table-container {

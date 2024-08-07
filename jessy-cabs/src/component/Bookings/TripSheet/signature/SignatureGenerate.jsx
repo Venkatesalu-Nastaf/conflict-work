@@ -139,54 +139,53 @@ const SignatureGenerate = () => {
 
 
     return (
-        <div>
-
-            <div className='top-div'>
-                <div>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            <div className='top-div signature-generate-main'>
+                <div className='signature-generate-input'>
                     <p>Trip Id : </p>
                     <input value={fulldetails[0]?.tripid || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Guest Name : </p>
                     <input value={fulldetails[0]?.guestname || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Guest MobileNo : </p>
                     <input value={fulldetails[0]?.guestmobileno || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Vehicle Type : </p>
                     <input value={`${fulldetails[0]?.vehicleName || ""} ${fulldetails[0]?.vehType || ""}`} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Starting Date :</p>
                     <input value={fulldetails[0]?.startdate || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Starting Time :</p>
                     <input value={fulldetails[0]?.starttime || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Starting KM : </p>
                     <input value={fulldetails[0]?.startkm || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Closing Date </p>
                     <input value={fulldetails[0]?.closedate || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Closing Time </p>
                     <input value={fulldetails[0]?.closetime || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Closing KM </p>
                     <input value={fulldetails[0]?.closekm || ""} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Toll & Parking </p>
                     <input value={`${fulldetails[0]?.toll || ""} & ${fulldetails[0]?.parking || ""}`} />
                 </div>
-                <div>
+                <div className='signature-generate-input'>
                     <p>Permit</p>
                     <input value={fulldetails[0]?.permit || ""} />
                 </div>

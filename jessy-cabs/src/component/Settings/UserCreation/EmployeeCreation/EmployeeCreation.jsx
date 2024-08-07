@@ -87,7 +87,7 @@ const EmployeeCreation = ({ stationName }) => {
     handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
-    handleMouseDownPasswords, handleAutocompleteChangeStationName,handleChangeuniquecreation,cerendentialdata,
+    handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
     isEditMode,
     handleEdit,
 
@@ -145,7 +145,7 @@ const EmployeeCreation = ({ stationName }) => {
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
   }
-console.log(rows,"filter")
+  console.log(rows, "filter")
   const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
 
   return (
@@ -171,7 +171,7 @@ console.log(rows,"filter")
                     style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                {/* <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                   </div>
@@ -185,10 +185,37 @@ console.log(rows,"filter")
                     // onChange={handleChange}
                     onChange={handleChangeuniquecreation}
                   />
-                    <div style={{textAlign: 'center'}}>
-                    <span style={{color:"red"}}>{cerendentialdata ? `UserName Already Exist`: ""}</span>
-                    </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ color: "red" }}>{cerendentialdata ? `UserName Already Exist` : ""}</span>
+                  </div>
+                </div> */}
+
+
+                <div className="input">
+                  <div className='full-width' style={{ display: 'grid' }}>
+                    <span className='full-width' style={{ display: 'flex' }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                      </div>
+                      <TextField
+                        margin="normal"
+                        size="small"
+                        id="user-name"
+                        label="User Name"
+                        name="username"
+                        className='full-width'
+                        value={book.username || ''}
+                        // onChange={handleChange}
+                        onChange={handleChangeuniquecreation}
+                      />
+                    </span>
+                    <span style={{ textAlign: 'center' }}>
+                      <span style={{ color: "red" }}>{cerendentialdata ? `UserName Already Exist` : ""}</span>
+                    </span>
+                  </div>
                 </div>
+
+
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faMailBulk} size="lg" />
@@ -489,9 +516,9 @@ console.log(rows,"filter")
                 />}
               </div>
               {!isEditMode &&
-              <div style={{ display: "flex", justifyContent: "end" }}>
-                <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
-              </div>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
+                </div>
               }
             </div>
           </form>

@@ -1,11 +1,11 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import './Uploadtollpark.css'
-import { APIURL,Apiurltransfer } from '../../../url';
+import { APIURL, Apiurltransfer } from '../../../url';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 
-const UploadTollParking=()=>{
+const UploadTollParking = () => {
   // const [selectedfile,setSelectedfile]=useState("");
   const [expired, setExpired] = useState(() => {
     const expiredInSessionStorage =
@@ -25,51 +25,51 @@ const UploadTollParking=()=>{
   const [inputData, setInputData] = useState({
     toll: '',
     parking: '',
-});
-const [documentTypedata,setDocumentTypedata]=useState("")
-  
+  });
+  const [documentTypedata, setDocumentTypedata] = useState("")
 
 
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
 
-      setInputData((prevInputData) => ({
-          ...prevInputData,
-          [name]: value,
-      }));
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setInputData((prevInputData) => ({
+      ...prevInputData,
+      [name]: value,
+    }));
   };
 
 
-  const handleFileChange = async (event,documentdata) => {
+  const handleFileChange = async (event, documentdata) => {
     // const document1data=documentdata;
-      const tripid = tripId;
-      const file = event.target.files[0];
-      if (!file) return;
-      try{
+    const tripid = tripId;
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
       if (file) {
-          const data = Date.now().toString();
-          const formData = new FormData();
-          formData.append('image', file);
-         
-              // console.log(documentTypedata, "yypeenter34543243",documentdata);
-            
-              await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentdata}/${data}`, formData);
-                  await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
-                  //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
-                setSuccess(true)
-                setTimeout(() => {
-                  setSuccess(false)
-                  setDocumentTypedata("")
-                },2000);
-              
-          } 
-        }catch (error) {
-              console.error('Error uploading file:', error);
-          }
+        const data = Date.now().toString();
+        const formData = new FormData();
+        formData.append('image', file);
+
+        // console.log(documentTypedata, "yypeenter34543243",documentdata);
+
+        await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentdata}/${data}`, formData);
+        await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+        //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
+        setSuccess(true)
+        setTimeout(() => {
+          setSuccess(false)
+          setDocumentTypedata("")
+        }, 2000);
+
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
 
 
 
-      
+
   };
   const handleUpload = (type) => {
     const input = document.createElement('input');
@@ -79,39 +79,39 @@ const [documentTypedata,setDocumentTypedata]=useState("")
     input.onchange = (event) => handleFileChange(event, type);
     input.click();
     setDocumentTypedata(type)
-    
-};
- 
-  const handleCancel=()=>{
+
+  };
+
+  const handleCancel = () => {
     console.log("cancle")
     setInputData((prevBook) => ({
       toll: '',
       parking: '',
-  }));
-  setDocumentTypedata("")
+    }));
+    setDocumentTypedata("")
   }
 
-  const handlesubmit= async()=>{
-     const tripid=tripId;
-     const toll=inputData.toll;
-     const parking=inputData.parking;
-   
+  const handlesubmit = async () => {
+    const tripid = tripId;
+    const toll = inputData.toll;
+    const parking = inputData.parking;
 
-     if(!toll){
+
+    if (!toll) {
       setError(true);
       setErrorMessage("ENTER TOLL Amount")
       return
-     }
-     if(!parking){
+    }
+    if (!parking) {
       setError(true);
       setErrorMessage("ENTER parking Amount")
       return
-     }
-     try{
+    }
+    try {
       const updatedData = {
-          tripid: tripid,
-          toll: inputData.toll,// Include both toll and parking in the request data
-          parking: inputData.parking, // Include parking
+        tripid: tripid,
+        toll: inputData.toll,// Include both toll and parking in the request data
+        parking: inputData.parking, // Include parking
       };
       await axios.post(`${apiUrl}/uploadtollandparkinglink`, updatedData)
       setError(false)
@@ -119,52 +119,55 @@ const [documentTypedata,setDocumentTypedata]=useState("")
       setDocumentTypedata("")
       setSuccess(true);
       setSuccessMessage("succesfully added")
-    setTimeout(() => {
-      setSuccess(false)
-      setSuccessMessage()
-      localStorage.setItem("expireuploadpage",true)
-      setExpired(true)
-      
-    },1600);
-      
+      setTimeout(() => {
+        setSuccess(false)
+        setSuccessMessage()
+        localStorage.setItem("expireuploadpage", true)
+        setExpired(true)
+
+      }, 1600);
+
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
-        
+
 
   }
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
   }
 
-  
+
   return (
     <>
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100vh' }}>
-    <div>UploadTollParking</div>
-    <div style={{display:"flex", gap:"10px", flexDirection: 'row', alignItems: 'center' }}>
-      <h1>Enter Toll amount:</h1>
-      <TextField id="standard-basic" label="toll amount" name="toll"  value={inputData.toll} onChange={handleInputChange} type="number"variant="standard" />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100vh' }}>
+        <h1>Upload Toll Parking</h1>
+        <div style={{ display: "flex", gap: "10px", flexDirection: 'row', alignItems: 'end',  marginBottom: '20px' }}>
+          <div style={{ display: 'grid' }}>
+            <h4 style={{margin: '0px'}}>Enter Toll amount:</h4>
+            <TextField id="standard-basic" label="toll amount" name="toll" size='small' value={inputData.toll} onChange={handleInputChange} type="number" />
+          </div>
 
-  
-    <div className="input">
-        <Button variant="contained" onClick={() => handleUpload("Toll")}>Select File & Upload Toll</Button> 
-        {documentTypedata === "Toll" && success ? <p style={{color:"green"}}>{`${documentTypedata} image uploaded`}</p> : ""}
-      </div>
-      </div>
-      <div style={{display:"flex", gap:"10px"}}>
-      <h1>Enter parking amount:</h1>
-      <TextField id="standard-basic" label="parking amount"   value={inputData.parking} name="parking" onChange={handleInputChange} type="number"variant="standard" />
-      <div className="input">
-        <Button variant="contained" onClick={() =>handleUpload("Parking")}>Select File & Upload Parking</Button>
-        {documentTypedata === "Parking" && success ?<p style={{color:"green"}}>{`${documentTypedata} image uploaded`}</p> : ""}
-      </div>
-      </div>
-      {error && <div className="error-message" style={{color:"red"}}>{errorMessage}</div>}
+          <div className="input" style={{ display: 'grid' }}>
+            <Button variant="contained" onClick={() => handleUpload("Toll")}>Upload Toll</Button>
+            {documentTypedata === "Toll" && success ? <p style={{ color: "green" }}>{`${documentTypedata} image uploaded`}</p> : ""}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: "10px", flexDirection: 'row', alignItems: 'end', marginBottom: '20px' }}>
+          <div style={{display: 'grid'}}>
+            <h4 style={{margin: '0px'}}>Enter parking amount:</h4>
+            <TextField id="standard-basic" label="parking amount" value={inputData.parking} name="parking" size='small' onChange={handleInputChange} type="number" />
+          </div>
+          <div className="input" style={{ display: 'grid' }}>
+            <Button variant="contained" onClick={() => handleUpload("Parking")}>Upload Parking</Button>
+            {documentTypedata === "Parking" && success ? <p style={{ color: "green" }}>{`${documentTypedata} image uploaded`}</p> : ""}
+          </div>
+        </div>
+        {error && <div className="error-message" style={{ color: "red" }}>{errorMessage}</div>}
 
-      <Button variant="contained" onClick={handlesubmit}>Submit</Button>
-      {success && successMessage ? <p style={{color:"green",fontSize:13}}>{`${successMessage}`}</p>:""}
+        <Button variant="contained" onClick={handlesubmit}>Submit</Button>
+        {success && successMessage ? <p style={{ color: "green", fontSize: 13 }}>{`${successMessage}`}</p> : ""}
       </div>
 
     </>

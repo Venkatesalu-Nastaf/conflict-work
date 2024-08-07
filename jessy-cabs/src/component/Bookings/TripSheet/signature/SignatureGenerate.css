@@ -1,25 +1,36 @@
-.top-div {
+/* .top-div {
+    
+} */
+
+.signature-generate-main {
     padding-bottom: 20px;
+    width: 715px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
+@media screen and (max-width: 745px) {
+    .signature-generate-main {
+        width: 100%;
+    }
+}
 
+.signature-generate-main .signature-generate-input {
+    width: 350px;
+}
 
-
-input {
+.signature-generate-main .signature-generate-input input {
     color: rgb(15, 15, 58);
     padding: 5px;
-    width: 100%;
+    width: -webkit-fill-available;
     padding: 6px;
 }
 
-p {
-    margin-bottom: 0px;
-}
-
-
 .Accept-btn {
     margin-top: 15px;
-    width: 102.5%;
+    width: 350px;
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -28,3 +39,24 @@ p {
     background-color: rgb(24, 24, 153);
     color: white;
 }
+
+@media screen and (max-width: 410px) {
+    .signature-generate-main .signature-generate-input, .Accept-btn {
+        width: 290px;
+    }
+}
+
+
+/* 
+input {
+    color: rgb(15, 15, 58);
+    padding: 5px;
+    width: 100%;
+    padding: 6px;
+} */
+
+p {
+    margin-bottom: 0px;
+}
+
+

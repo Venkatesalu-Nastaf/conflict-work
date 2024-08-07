@@ -166,7 +166,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
                                     <div className='full-width' style={{ display: 'grid' }}>
-                                        <span style={{ display: 'flex' }}>
+                                        <span className='full-width' style={{ display: 'flex' }}>
                                             <div className="icone">
                                                 <RateReviewIcon color="action" />
                                             </div>

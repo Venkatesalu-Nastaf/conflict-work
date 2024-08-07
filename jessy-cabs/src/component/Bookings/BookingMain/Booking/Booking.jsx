@@ -570,7 +570,7 @@ const Booking = ({ stationName, customerData }) => {
                     <><Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
                      Copy
                     </Button>
-                    {CopyEmail ? "Link Copied...":"" }
+                    <span style={{color: 'green'}}>{CopyEmail ? "Link Copied...":"" }</span>
                     </>
                    } 
               </div>

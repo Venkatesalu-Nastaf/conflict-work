@@ -111,24 +111,24 @@ const StationCreation = () => {
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
-                
-                       <TextField
+
+                  <TextField
                     // margin="normal"
                     size="small"
                     // id="stationid"
                     label="Station ID"
                     name="stationid"
-                    value={selectedCustomerData?.stationid ||""}
+                    value={selectedCustomerData?.stationid || ""}
                     // autoComplete="new-password"
                     // onChange={handleChange}
                     // variant="standard"
                     style={{ width: '100%' }}
-                    // disabled={true}
+                  // disabled={true}
                   />
-                  
+
                 </div>
-                <div className="input input-station-creaton" style={{ paddingRight: '15px'}}>
-                
+                {/* <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
@@ -143,13 +143,41 @@ const StationCreation = () => {
                     autoComplete="new-password"
                     // onChange={handleChange}
                     onChange={handleChangeuniquestation}
-                    
+
                   />
-                   
-                    <div style={{textAlign: 'center'}}>
-                    <span style={{color:"red"}}>{cerendentialdata ? `StationName Already Exist`: ""}</span>
-                    </div>
+
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ color: "red" }}>{cerendentialdata ? `StationName Already Exist` : ""}</span>
+                  </div>
+                </div> */}
+
+                <div className="input">
+                  <div className='full-width' style={{ display: 'grid' }}>
+                    <span className='full-width' style={{ display: 'flex' }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
+                      </div>
+                      <TextField
+                        margin="normal"
+                        size="small"
+                        id="Station-name"
+                        label="Station Name"
+                        name="Stationname"
+                         className='full-width'
+                        value={selectedCustomerData?.Stationname || book.Stationname}
+                        autoComplete="new-password"
+                        // onChange={handleChange}
+                        onChange={handleChangeuniquestation}
+
+                      />
+                    </span>
+                    <span style={{ textAlign: 'center' }}>
+                      <span style={{ color: "red" }}>{cerendentialdata ? `StationName Already Exist` : ""}</span>
+                    </span>
+                  </div>
                 </div>
+
+
                 <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <ListAltIcon color="action" />

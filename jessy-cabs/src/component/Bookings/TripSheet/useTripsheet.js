@@ -8,7 +8,7 @@ import {
 } from "./TripSheetdata";
 import { APIURL, Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
-// import { RiDeleteBinLine } from "react-icons/ri";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 
 const useTripsheet = () => {
@@ -165,7 +165,7 @@ const useTripsheet = () => {
     const [rowsignature, setRowsSignature] = useState([])
     const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
     const [selectedMapRow, setSelectedMapRow] = useState("");
-    const [CopyEmail,setCopyEmail]=useState(false);
+    const [CopyEmail, setCopyEmail] = useState(false);
 
     const [kmValue, setKmValue] = useState({
         shedOutState: '',
@@ -204,10 +204,7 @@ const useTripsheet = () => {
                     aria-label="open-dialog"
                 >
                     <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
-                        <FiEdit3 />
-
-                        <p style={{ margin: "0px" }}>Edit</p>
-
+                        <FiEdit3 style={{fontSize:"18px"}}/>
                     </Button>
                 </Button>
             ),
@@ -222,12 +219,8 @@ const useTripsheet = () => {
                     aria-label="open-dialog"
 
                 >
-
-
                     <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
-                        <FiEdit3 />
-                        <p style={{ margin: "0px" }}>Remove</p>
-
+                        <RiDeleteBinLine style={{fontSize:"18px"}}/>
                     </Button>
                 </Button>
             ),
@@ -852,12 +845,12 @@ const useTripsheet = () => {
 
 
     const handlecheck = async () => {
-        const  statusdata= formData.status || book.status || selectedCustomerData.status;
-        if(statusdata !== "Cancelled" || statusdata !== "Opened"){
+        const statusdata = formData.status || book.status || selectedCustomerData.status;
+        if (statusdata !== "Cancelled" || statusdata !== "Opened") {
             setWarning(true)
             setWarningMessage("Check Your Trip Status")
             return
-           }
+        }
         if (sendEmail) {
 
             try {
@@ -3824,7 +3817,7 @@ const useTripsheet = () => {
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
         checkvendorNightBetaEligible,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp,CopyEmail,setCopyEmail
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail
 
 
     };

@@ -20,6 +20,7 @@ router.post('/booking', async (req, res) => {
 
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
         if (err) {
+          
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
@@ -781,11 +782,12 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
-    console.log("booking_id", booking_id, fileType, fileName)
+    const {created_at}=req.body;
+    console.log("booking_id", booking_id, fileType, fileName,created_at)
     console.log("id", booking_id)
 
-    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
-    db.query(sql, [booking_id, fileName, fileType], (err, result) => {
+    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
+    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -799,9 +801,11 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
     const path = req.file.path;
+    const {created_at}=req.body;
+    console.log(booking_id,"ll", fileName,"ll", fileType,path)
 
-    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype) VALUES (?, ?, ?)`;
-    db.query(sql, [booking_id, fileName, fileType], (err, result) => {
+    const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
+    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }

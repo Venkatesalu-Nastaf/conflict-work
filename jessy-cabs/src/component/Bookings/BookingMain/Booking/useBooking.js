@@ -86,7 +86,7 @@ const useBooking = () => {
   const [infoMessage, setInfoMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  // const [warningMessage, setWarningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [searchText, setSearchText] = useState("");
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -103,7 +103,8 @@ const useBooking = () => {
   const [datatrigger, setDatatrigger] = useState(false)
   const [accountinfodata, setAccountInfoData] = useState([])
   const [ratename, setRate_name] = useState("");
-  const [vehileName, setVehicleName] = useState([])
+  const [vehileName, setVehicleName] = useState([]);
+  const [CopyEmail, setCopyEmail] = useState(false);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -868,13 +869,15 @@ const useBooking = () => {
 
   const [file, setFile] = useState(null);
 
-
+  
 
   const addPdf = async (lastbookid, fileData) => {
     const uploadFile = fileData || file
     if (uploadFile !== null) {
+      const createddata=dayjs().format('YYYY-MM-DD')
       const formData = new FormData();
       formData.append("file", uploadFile);
+      formData.append("created_at",createddata);
       try {
         await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
         setFile(null)
@@ -1004,6 +1007,7 @@ const useBooking = () => {
   //   }
 
   const handlecheck = async (lastBookingno) => {
+
     if (sendEmail || sendmailguestsms) {
       const datamode = isEditMode ? selectedCustomerData.status || book.status || bookingStatus : bookingStatus || book.status
     
@@ -1047,10 +1051,8 @@ const useBooking = () => {
 
 
         };
-        console.log(dataToSend, "dattaxfgvhjn")
-      const response =  await axios.post(`${apiUrl}/send-email`, dataToSend);
-      console.log(response,"reeeeee")
-      console.log(response.data.customer)
+        
+       await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
@@ -1206,9 +1208,11 @@ const useBooking = () => {
 
       //image upload
       await Promise.all(selectetImg?.map(async (img) => {
+        const createddata=dayjs().format('YYYY-MM-DD')
         const formImageData = new FormData();
         formImageData.append('file', img);
         formImageData.append('bookingId', lastBookingno)
+        formImageData.append("created_at",createddata);
         await axios.post(`${apiUrl}/upload-booking-image`, formImageData)
       }))
       setImagedata([])
@@ -1226,7 +1230,7 @@ const useBooking = () => {
 
       setEdit(false)
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.log("An error occurred:", error);
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -1843,7 +1847,7 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus,handletravelsAutocompleteChange,accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
+    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,CopyEmail, setCopyEmail,setWarning,setWarningMessage,warningMessage,warning
   };
 };
 

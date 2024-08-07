@@ -13,6 +13,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import CopyEmailHtmlBooking from "./CopyEmailBooking";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 // import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 // import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import {
@@ -195,8 +197,10 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata,CopyEmail, setCopyEmail,setWarningMessage,setWarning,warningMessage,warning
   } = useBooking();
+
+  const { getHtmlContentdata}=CopyEmailHtmlBooking();
 
   useEffect(() => {
     if (actionName === "List") {
@@ -271,6 +275,74 @@ const Booking = ({ stationName, customerData }) => {
       return
     }
   }
+  const userNamed = localStorage.getItem("username")
+
+  const dataToSend = {
+    guestname:
+      formValues.guestname ||
+      selectedCustomerData.guestname ||
+      book.guestname ||
+      formData.guestname,
+    guestmobileno:
+      formValues.guestmobileno ||
+      selectedCustomerData.guestmobileno ||
+      book.guestmobileno ||
+      formData.guestmobileno,
+    email: formValues.email || selectedCustomerData.email || book.email,
+    pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+    useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
+    starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
+    startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
+    driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
+    // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+    vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
+
+    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
+    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
+    tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
+    servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation || selectedCustomerDatas.servicestation,
+    // status: book.status || formData.status || selectedCustomerData.status,
+    requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
+    duty: formData.duty || selectedCustomerData.duty || book.duty || "",
+    bookingno:book.bookingno || selectedCustomerData.bookingno || formData.bookingno,
+    customeremail: formData.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || book.orderByEmail || "",
+    username: userNamed,
+    Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
+    status: selectedCustomerData.status || book.status || bookingStatus 
+  
+
+
+
+  };
+
+  const handlecopiedemailcontentbooking=()=>{
+    const   tripidstatus = selectedCustomerData.status || book.status || bookingStatus ;
+    if(tripidstatus === "Cancelled" ||  tripidstatus === "pending"){
+   const data = getHtmlContentdata(tripidstatus,dataToSend);
+   const tempTextarea = document.createElement('textarea');
+   tempTextarea.value = data;
+   document.body.appendChild(tempTextarea);
+   tempTextarea.select();
+   document.execCommand('copy');
+   document.body.removeChild(tempTextarea);
+   setCopyEmail(true)
+  
+   setTimeout(() => {
+     setCopyEmail(false)
+   }, (2000));
+  }
+  else{
+    
+    setWarning(true)
+    setWarningMessage("Check Your Trip Status")
+}
+}
+ 
+  
+  
+   
+      //  console.log(data,"copydara")     
+  
 
 
   return (
@@ -494,6 +566,13 @@ const Booking = ({ stationName, customerData }) => {
                   }
                   label="Send Email"
                 />
+                 {isEditMode  && 
+                    <><Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
+                     Copy
+                    </Button>
+                    {CopyEmail ? "Link Copied...":"" }
+                    </>
+                   } 
               </div>
             </span>
             {/* <span>
@@ -2736,6 +2815,13 @@ const Booking = ({ stationName, customerData }) => {
               <p>{successMessage}</p>
             </div>
           )}
+           {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
         </div>
         {/* <div className="detail-container-main">
           <div className="container-left">

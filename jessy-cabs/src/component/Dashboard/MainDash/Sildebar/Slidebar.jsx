@@ -53,6 +53,7 @@ import Box from '@mui/material/Box';
 import update from "../../../../assets/img/update.png";
 import { useThemes } from "../../../UserSettings/Themes/ThemesContext";
 import { useData1 } from "../../Maindashboard/DataContext";
+import { FaMapMarked } from "react-icons/fa";
 
 
 const MenuItem = ({
@@ -1490,7 +1491,7 @@ const Sidebar = () => {
                 name="Map page"
                 isActive={isActive}
                 handleMenuItemClick={handleMenuItemClick}
-                icon={HiOutlineUsers}
+                icon={FaMapMarked}
               />
             </div>
           }

@@ -6,8 +6,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { ToggleButton, ToggleButtonGroup, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { FiUpload } from "react-icons/fi";
-import { FaRegClock } from "react-icons/fa6";
-import { FaLocationDot } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
 import { GiPathDistance } from "react-icons/gi";
 import { GoClock } from "react-icons/go";
@@ -32,9 +30,6 @@ import Textarea from '@mui/joy/Textarea';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useTheme } from '@mui/material/styles';
 import { Drawer } from '@mui/material';
-import { selectClasses } from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { GoHistory } from "react-icons/go";
 import { MdChangeHistory } from "react-icons/md";
 import { FaCarOn } from "react-icons/fa6";
@@ -45,13 +40,12 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { FaShare } from "react-icons/fa";
-import { AppBar, Toolbar, Slide } from '@mui/material';
+import {  Slide } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import DialogContentText from '@mui/material/DialogContentText';
 import { Checkbox, ListItemText } from '@mui/material';
 import { IoBook } from "react-icons/io5";
-import { format } from 'date-fns';
 import { TbReportSearch } from "react-icons/tb";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaList } from "react-icons/fa";
@@ -61,7 +55,6 @@ import { IoSpeedometerSharp } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { FaHistory } from "react-icons/fa";
 import { BiUpArrowAlt } from "react-icons/bi";
-import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 
@@ -1181,30 +1174,26 @@ export const RealTime = () => {
                       </div>
                       <div style={{ width: "48%" }}>
                         <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Fuel Summary
-                            (Diesel)</p>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
-                            No fuel data available for this period.
-
-                          </div>
+                         
 
                           <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChangetimelinetab} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Fuel Summary" {...a11yProps(0)} />
+          <Tab label="Speed Graph" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Item One
-      </CustomTabPanel>
+      <p>Fuel Summary
+                            (Diesel)</p>
+                          <div style={{ display: "flex", justifyContent: "center" }}>
+                            No fuel data available for this period.
+
+                          </div>      </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Item Two
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Item Three
-      </CustomTabPanel>
+      
     </Box>
 
 

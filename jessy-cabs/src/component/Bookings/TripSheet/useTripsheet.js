@@ -841,17 +841,18 @@ const useTripsheet = () => {
 
         localStorage.removeItem('selectedTripid');
     };
-
-
-
+  
     const handlecheck = async () => {
-        const statusdata = formData.status || book.status || selectedCustomerData.status;
-        if (statusdata !== "Cancelled" || statusdata !== "Opened") {
-            setWarning(true)
-            setWarningMessage("Check Your Trip Status")
-            return
-        }
+    
+       
         if (sendEmail) {
+
+            // if (statusdata !== 'Opened' || statusdata !== 'Cancelled') {
+            //     setWarning(true)
+            //     setWarningMessage("Check Your Trip Status")
+            //     return
+            // }
+          
 
             try {
 
@@ -865,7 +866,8 @@ const useTripsheet = () => {
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
-                    starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+                    // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+                    starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
                     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
                     status: formData.status || book.status || selectedCustomerData.status,
                     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
@@ -2448,7 +2450,8 @@ const useTripsheet = () => {
                     vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
                     // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
-                    reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+                    // reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+                    reporttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',
                 };
@@ -2486,7 +2489,8 @@ const useTripsheet = () => {
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
-                    reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+                    // reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+                    reporttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                 };
 

@@ -282,7 +282,7 @@ router.get("/customerreviewtoday/:station/:dateoftoday", (req, res) => {
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) ", [data,dateoftoday], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=? and  bookingdate = DATE_ADD(?, INTERVAL 0 DAY) ", [data,dateoftoday], (err, result) => {
         if (err) {
           reject(err);
         } else {

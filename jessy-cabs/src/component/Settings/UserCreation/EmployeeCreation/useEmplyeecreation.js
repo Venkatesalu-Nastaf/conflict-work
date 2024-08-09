@@ -451,10 +451,9 @@ const useEmplyeecreation = () => {
             }
 
             const selectedCustomer = rows.find((row) => row.userid === userid); 
-            console.log("book", book)
             const updatedCustomer = { ...selectedCustomer, ...book };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
-            // console.log(data)
+
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             setSuccess(true);
@@ -488,11 +487,12 @@ const useEmplyeecreation = () => {
         try {
             const response = await axios.get(`${apiUrl}/usercreation`);
             const data = response.data;
-            const rowsWithUniqueId = data.map((row, index) => ({
-                ...row,
-                id: index + 1,
-            }));
-            setRows(rowsWithUniqueId);
+            // const rowsWithUniqueId = data.map((row, index) => ({
+            //     ...row,
+            //     id: index + 1,
+            // }));
+            // setRows(rowsWithUniqueId);
+            setRows(data);
             return data;
         } catch {
         }

@@ -28,13 +28,18 @@ const upload = multer({
 
 
 router.post('/usercreation-add', async (req, res) => {
-  const { book, permissionsData, organistaionsendmail } = req.body;
+  const { book, permissionsData, organistaionsendmail,created_at } = req.body;
   const { username, stationname, designation, organizationname, userpassword, active, email, mobileno } = book;
   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
-
+  
+console.log(username, stationname, designation, organizationname, userpassword, active, email, mobileno,created_at);
+console.log(Sender_Mail, EmailApp_Password,permissionsData)
+console.log(stationname,"stt",typeof(stationname))
+const idString = stationname.join(',');
+console.log(idString,"ff")
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno)
-VALUES (?,?,?,?,?,?,?,?)`, [username, stationname, designation, organizationname, userpassword, active, email, mobileno]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,created_at)
+VALUES (?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at]);
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -65,8 +70,8 @@ VALUES (?,?,?,?,?,?,?,?)`, [username, stationname, designation, organizationname
         if (userid) {
           for (const permission of permissionsData) {
             db.query(
-              'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
-              [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete]
+              'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`,`created_at`) VALUES (?, ?, ?, ?, ?, ?,?)',
+              [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete,created_at]
             );
           }
 
@@ -118,7 +123,8 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
-  const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email } = updatedCustomer;
+    
+  const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email,created_at } = updatedCustomer;
 
 
   if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
@@ -133,8 +139,8 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
     // Insert new permissions
     for (const permission of permissionsData) {
       await db.query(
-        'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
-        [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete]
+        'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`,`created_at`) VALUES (?, ?, ?, ?, ?, ?,?)',
+        [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete,created_at]
       );
     }
 
@@ -183,18 +189,19 @@ router.get('/user-permissionget/:userid', (req, res) => {
 //  -----------------------------------------------
 
 router.get('/usercreation', (req, res) => {
-  const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
+  // const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
   let query = 'SELECT * FROM usercreation';
 
-  if (filterValue) {
-    // Add a WHERE clause to filter based on the query parameter
-    query += ` WHERE userid = '${filterValue}'`; // Replace 'column_name' with the actual column name you want to filter on
-  }
+  // if (filterValue) {
+  //   // Add a WHERE clause to filter based on the query parameter
+  //   query += ` WHERE userid = '${filterValue}'`; // Replace 'column_name' with the actual column name you want to filter on
+  // }
 
   db.query(query, (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
+    // console.log(results,"ree")
     return res.status(200).json(results);
   });
 });

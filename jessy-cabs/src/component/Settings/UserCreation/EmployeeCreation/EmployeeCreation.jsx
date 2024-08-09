@@ -244,7 +244,15 @@ const EmployeeCreation = ({ stationName }) => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
+                <div className="input">
+                  <div>
+                    {book?.stationname
+                      ? (typeof book.stationname === 'string'
+                        ? book.stationname.split(',').map(item => item.trim()) // Trim extra spaces
+                        : book.stationname)
+                      : []
+                    }
+                  </div>
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>

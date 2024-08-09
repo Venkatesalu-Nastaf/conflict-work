@@ -246,7 +246,7 @@ router.get("/customerreviewdataallmonth/:station/:fromdate/:todate",(req, res) =
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=?  AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)", [data,fromtodate,endtodate], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=?  AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)", [data,fromtodate,endtodate], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -274,15 +274,15 @@ router.get("/customerreviewtoday/:station/:dateoftoday", (req, res) => {
    
     const station = req.params.station;
     const stationname = station.split(',');
-    // console.log(stationname,"name")
-    // console.log(dateoftoday,"of date")
+    console.log(stationname,"name")
+    console.log(dateoftoday,"of date")
  
     const promises = stationname.map(data => {
         return new Promise((resolve, reject) => {
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) ", [data,dateoftoday], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) ", [data,dateoftoday], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -324,7 +324,7 @@ router.get("/customerreviecustomerdate", (req, res) => {
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='Opened' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) and bookingdate <= DATE_ADD(?, INTERVAL 1 DAY);", [data,formattedFromDate,formattedToDate], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=? and  bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) and bookingdate <= DATE_ADD(?, INTERVAL 1 DAY);", [data,formattedFromDate,formattedToDate], (err, result) => {
         if (err) {
           reject(err);
         } else {

@@ -99,9 +99,9 @@ const useOrganization = () => {
         try {
             const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-            const encode = companyname;
-            const decode = decodeURIComponent(encode);
+            // const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
+            // const encode = companyname;
+            // const decode = decodeURIComponent(encode);
             console.log(updatedCustomer.id, "SELECT ID")
             await axios.put(`${apiUrl}/companyupdate/${updatedCustomer.id}`, updatedCustomer);
             setSuccess(true);
@@ -132,14 +132,15 @@ const useOrganization = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const organizationname = localStorage.getItem('usercompany');
+            // const organizationname = localStorage.getItem('usercompany');
 
             try {
-                if (!organizationname) return
-                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                // if (!organizationname) return
+                const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();
+
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
                         setDataclose(false)
@@ -154,8 +155,6 @@ const useOrganization = () => {
         };
         fetchData();
     }, [apiUrl, dataclose]);
-
-
 
 
     const toggleEditMode = () => {

@@ -19,7 +19,7 @@ const useGroupbilling = () => {
     const [tripData, setTripData] = useState("");
     const [customer, setCustomer] = useState("");
     const [toDate, setToDate] = useState(dayjs());
-    const [Billingdate] = useState(dayjs());
+    const [Billingdate, setBillingDate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
     const [invoiceno, setInvoiceno] = useState("");
     const [totalValue, setTotalValue] = useState("");
@@ -51,6 +51,14 @@ const useGroupbilling = () => {
     const { setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
     const [groupBillAmount, setGroupBillAmount] = useState(0)
     const [trips, setTrips] = useState(0)
+    const [department, setDepartment] = useState('')
+    const [viewGroupBill, setViewGroupBill] = useState({
+        InvoiceDate: '',
+        FromDate: '',
+        ToDate: '',
+        Customer: '',
+        station: ''
+    })
     // popup------------------------------
     const hidePopup = () => {
         setError(false);
@@ -135,7 +143,7 @@ const useGroupbilling = () => {
             }
         }
         fetchData()
-    }, [apiUrl, groupBillId,groupInvoice,groupInvoiceDate,groupInvoiceNumber])
+    }, [apiUrl, groupBillId, groupInvoice, groupInvoiceDate, groupInvoiceNumber])
 
     useEffect(() => {
         ReferenceNo()
@@ -213,6 +221,7 @@ const useGroupbilling = () => {
             try {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
+                setViewGroupBill(response.data)
                 // setRows(GroupReference)
                 // const RefId = GroupReference.map((li) => li.Trip_id)
                 // setParticularId(RefId)
@@ -264,7 +273,7 @@ const useGroupbilling = () => {
         fetchData();
 
         // No cleanup function needed in this case
-    }, [particularId,apiUrl,groupInvoice,refInvDate,refInvNo]);
+    }, [particularId, apiUrl, groupInvoice, refInvDate, refInvNo]);
 
 
     const handleShow = useCallback(async () => {
@@ -283,7 +292,6 @@ const useGroupbilling = () => {
                 },
             });
             const data = response.data;
-            console.log(data,'data');
             if (Array.isArray(data) && data.length > 0) {
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
@@ -308,7 +316,7 @@ const useGroupbilling = () => {
         } catch {
             setRows([]);
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Please fill All Fields");
         }
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
@@ -455,7 +463,13 @@ const useGroupbilling = () => {
             })
             .filter((tripid) => tripid !== null);
 
-
+        const selectStation = newSelectionModel
+            .filter((selectedId) => selectedId !== null)
+            .map((selectedId) => {
+                const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+                return selectedRow ? selectedRow.department : null;
+            })
+            .filter((tripid) => tripid !== null);
 
         const PdfSelectedTrips = newSelectionModel
             .filter((selectedId) => selectedId !== null)
@@ -475,6 +489,7 @@ const useGroupbilling = () => {
 
 
         setRowSelectionModel(PdfSelectedTrips);
+        setDepartment(selectStation)
         setSelectedRow(selectedTripIds)
         setRowSelectedValues(selectedTrips)
         setRefPdfData(PdfSelectedTrips)
@@ -558,7 +573,6 @@ const useGroupbilling = () => {
         setRowSelectionModel([]);
     };
 
-
     const handlegroupData = async () => {
         const TripsCount = rowSelectionModel.length;
         let TotalAmount = 0; // Change from const to let
@@ -567,7 +581,7 @@ const useGroupbilling = () => {
         });
         const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
         const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-        const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
+        const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
         if (rowSelectionModel.length === 0) {
             setError(true);
             setErrorMessage("Please select the Row");
@@ -583,7 +597,9 @@ const useGroupbilling = () => {
                 Trips: TripsCount,
                 Amount: TotalAmount,
                 Trip_id: selectedRow,
+                station: department
             };
+
             await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
             setSuccess(true)
             setSuccessMessage("Successfully Added")
@@ -638,7 +654,10 @@ const useGroupbilling = () => {
         refToDate,
         gstno,
         setGstno,
-        handleRemoveData
+        handleRemoveData,
+        viewGroupBill,
+        setBillingDate,
+        setServiceStation
     };
 };
 

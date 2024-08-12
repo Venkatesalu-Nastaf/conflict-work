@@ -15,12 +15,12 @@ router.post('/billing', (req, res) => {
 });
 
 router.post('/GroupBillingList', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id } = req.body;
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station } = req.body;
 
-  const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
   const sqlquery1 = "UPDATE tripsheet SET status = 'Covering_Billed' WHERE tripid IN (?)";
 
-  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(',')], (err, result) => {
+  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','),station], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }

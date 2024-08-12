@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: 'center',
     gap: '10px',
+    paddingRight: "10px"
   },
   deatilssection: {
 
@@ -395,12 +396,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [category, setCategory] = useState('')
   const [addresscustomer, setAddresscustomer] = useState('')
   const [bookimage, setBookingimage] = useState([])
-  const [starttime,setStarttime] = useState('0')
-  const [shedintime,setShedintime] = useState('0')
-  const [startkm,setStartkm] = useState('0')
-  const [closekm,setClosekm] = useState('0')
-  const [releasingKM,setReleasingKM] = useState('0')
-  const [reportKM,setReportKM] = useState('0')
+  const [starttime, setStarttime] = useState('0')
+  const [shedintime, setShedintime] = useState('0')
+  const [startkm, setStartkm] = useState('0')
+  const [closekm, setClosekm] = useState('0')
+  const [releasingKM, setReleasingKM] = useState('0')
+  const [reportKM, setReportKM] = useState('0')
 
 
   const [remark, setRemark] = useState('')
@@ -603,10 +604,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setReportKM(reportkm)
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
-
+ 
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
-  const remainingItems = routemap.slice(24);  
+  const remainingItems = routemap.slice(24);
   return (
     <>
       <PDFDocument>
@@ -988,6 +989,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                 </View> */}
                 <View style={{ flexDirection: 'row', gap: '10px', marginTop: '3px' }}>
+                  {firstSet.length > 0 ?
                   <View style={{ width: "48%" }}>
                     {firstSet.map((item, index) => (
                       <View key={index} style={{ flexDirection: 'row' }}>
@@ -1000,36 +1002,40 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                       </View>
                     ))}
                   </View>
+                  : <></> }
 
-                  <View style={{ width: "48%" }}>
-                    {nextSet.map((item, index) => (
-                      <View key={index + 12} style={{ flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                          {index + 13} .
-                        </Text>
-                        <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                          {item.trip_type}, {item.place_name}
+                  {nextSet.length > 0 ?
+                    <View style={{ width: "48%" }}>
+                      {nextSet.map((item, index) => (
+                        <View key={index + 12} style={{ flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                            {index + 13} .
+                          </Text>
+                          <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                            {item.trip_type}, {item.place_name}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                    : <></>}
+
+
+                </View>
+                {remainingItems.length > 0 ?
+                  <View style={{ marginTop: '10px' }}>
+                    <Text style={{ opacity: 0 }}>empty Line</Text>
+                    <Text style={{ opacity: 0 }}>empty Line</Text>
+                    {remainingItems.map((item, index) => (
+                      <View key={index + 24} style={{ marginTop: '10px' }}>
+                        <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
+                          {index + 25}. {item.trip_type}, {item.place_name}
                         </Text>
                       </View>
                     ))}
-                  </View>
+                  </View> : <></>}
 
 
-                </View>
-                <View style={{ marginTop: '10px' }}>
-                  <Text style={{ opacity: 0 }}>empty Line</Text>
-                  <Text style={{ opacity: 0 }}>empty Line</Text>
-                  {remainingItems.map((item, index) => (
-                    <View key={index + 24} style={{ marginTop: '10px' }}>
-                      <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
-                        {index + 25}. {item.trip_type}, {item.place_name}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-
-
-                <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}>
+                {/* <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}> */}
                   {attachedImage && attachedImage.length > 0 ? (
                     <>
                       {/* <View style={{ width: "100%" }}> */}
@@ -1044,40 +1050,40 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                       </View>
                     </>
                   ) : (
-
-                    <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
-                      <Text style={styles.atimg}>  No Attached image</Text>
-                    </View>
+                    <></>
+                    // <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
+                    //   <Text style={styles.atimg}>  No Attached image</Text>
+                    // </View>
                   )}
-                </View>
+                {/* </View> */}
 
 
-                <View style={{ flexDirection: 'column', width: '100%' }}>
-                  {bookimage && bookimage.length > 0 && (
-                    <>
-                      <View style={{ width: '100%' }}>
+                {/* <View style={{ flexDirection: 'column', width: '100%' }}> */}
+                {bookimage && bookimage.length > 0 && (
+                  <>
+                    <View style={{ width: '100%' }}>
 
-                        {bookimage.map((item, index) => {
-                          const dataimgetype = item.imagees.split('.').pop();
-                          // URL.createObjectURL(img)
-                          if (dataimgetype !== "pdf") {
-                            return (
-                              <View key={index} style={{ width: '100%' }}>
-                                <Image src={`${apiUrl}/images/${item.imagees}`} style={{ height: '500px' }} />
-                              </View>
-                            );
-                          } else {
-                            return null;
-                          }
-                        })}
+                      {bookimage.map((item, index) => {
+                        const dataimgetype = item.imagees.split('.').pop();
+                        // URL.createObjectURL(img)
+                        if (dataimgetype !== "pdf") {
+                          return (
+                            <View key={index} style={{ width: '100%' }}>
+                              <Image src={`${apiUrl}/images/${item.imagees}`}  />
+                            </View>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
 
-                      </View>
-                    </>
-                  )
-                  }
+                    </View>
+                  </>
+                )
+                }
 
 
-                </View>
+                {/* </View> */}
               </View>
 
             </View>

@@ -65,9 +65,15 @@ router.get('/pending_tripsheet-show', (req, res) => {
       sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
       // queryParams.push(status);
     }
+    // ----old
+    // else if (status === "Closed") {
+
+    //   sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
+    // }
+    // ---new
     else if (status === "Closed") {
 
-      sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
+      sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed" OR tripsheet.status = "Closed")';
     }
 
     else if (status && status !== 'All') {
@@ -154,6 +160,20 @@ router.get('/tripsheet-showall', (req, res) => {
   });
 });
 
+
+router.get('/getdatafromboookingvalue/:bookingno',(req,res)=>{
+  const bookingno = req.params.bookingno;
+  db.query("select * from booking where bookingno=?",[bookingno],(err,results)=>{
+
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+    }
+    console.log(results, 'ff')
+    return res.status(200).json(results)
+  
+
+  })
+})
 router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
   console.log(Travelsname, fromDate, toDate, "hhh")

@@ -244,7 +244,7 @@ const useBooking = () => {
     const ratetye=formData["ratenamebook"]
     console.log(ratetye,"ratetypelocation")
     setRate_name(ratetye)
-
+    setBookingStatus(formData["status"])
 
     setBook(formData);
     setFormData(formData);
@@ -1313,14 +1313,15 @@ const useBooking = () => {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
+          if (sendEmail) {
+            handlecheck(editbookno);
+          }
         } else {
           setInfo(true);
           setInfoMessage(response.data.message);
         }
         setEdit(false)
-        if (sendEmail) {
-          handlecheck(editbookno);
-        }
+       
       }
         // addPdf(booking_no);
         setRow([]);

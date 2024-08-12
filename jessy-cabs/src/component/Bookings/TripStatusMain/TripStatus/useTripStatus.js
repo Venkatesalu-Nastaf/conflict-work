@@ -15,7 +15,7 @@ const columns = [
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "servicestation", headerName: "Service Station", width: 130 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
-  { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+  { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) =>params.value ? dayjs(params.value).format('DD/MM/YYYY'):"" },
   { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "guestname", headerName: "Guest Name", width: 140 },
@@ -358,14 +358,14 @@ const useDispatched = () => {
           ...row,
           id1: index + 1,
         }));
-
+       console.log(bookingRowsWithUniqueId,"iiiii")
         // Combine both sets of data
         const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
         const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
           ...row,
           id5: index + 1,
         }));
-
+        console.log(tripsheetRowsWithUniqueId2,"datattttrip")
         setRows(tripsheetRowsWithUniqueId2);
         setSuccess(true);
         setSuccessMessage("Successfully listed");
@@ -399,7 +399,15 @@ const useDispatched = () => {
     setPopupOpen(false);
   };
 
-  console.log(selectedRow,"dtatatselected")
+
+ const dataget=async(bookingno)=>{
+  const bookdatano=bookingno
+  console.log(bookdatano)
+   const responsedata= await axios.get(`${apiUrl}/getdatafromboookingvalue/${bookdatano}`)
+   console.log(responsedata.data,"valureswpol")
+   return responsedata.data[0]
+ }
+  // console.log(selectedRow,"dtatatselected")
   const handleTripsheetClick = async () => {
     const dispatchcheck = "true";
     const calcPackageString = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
@@ -416,12 +424,11 @@ const useDispatched = () => {
 
   const handleBookingClick = async () => {
     const dispatchcheck = "true";
-    console.log("selectedrow", selectedRow)
-    const calcPackageString = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
-    const vendorcalcPackageString = selectedRow.Vendor_Calcpackage ? encodeURIComponent(selectedRow.Vendor_Calcpackage.toString()) : '';
-    // const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow.ratenamebook || ""}&advance=${selectedRow.advance}&remarks=${selectedRow.remarks}&vehiclemodule=${selectedRow.vehiclemodule}&flightno=${selectedRow.flightno}&vehicleName=${selectedRow.vehicleName}&Groups=${selectedRow.Groups}&servicestation=${selectedRow.servicestation}&registerno=${selectedRow.registerno}&travelsname=${selectedRow.travelsname || ""}&travelsemail=${selectedRow.travelsemail || ""}&vehicleName=${selectedRow.vehicleName || selectedRow.vehType || ""}&vehicleName2=${selectedRow.vehicleName2 || ""}&tripid=${selectedRow.tripid || ''}&bookingno=${selectedRow.bookingno || ''}&status=${selectedRow.status || ''}&billingno=${selectedRow.billingno || ''}&apps=${selectedRow.apps || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || selectedRow.orderByMobileNo || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&employeeno=${selectedRow.employeeno || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&orderbyemail=${selectedRow.orderbyemail || selectedRow.orderByEmail || ''}&address1=${selectedRow.address1 || ''}&hireTypes=${selectedRow.hireTypes || ''}&department=${selectedRow.department || selectedRow.servicestation}&vehRegNo=${selectedRow.vehRegNo || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&driversmsexbetta=${selectedRow.driversmsexbetta || ''}&gps=${selectedRow.gps || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&useage=${selectedRow.useage || ''}&request=${selectedRow.request || selectedRow.registerno}&startdate=${selectedRow.startdate || ''}&closedate=${selectedRow.closedate || ''}&totaldays=${selectedRow.totaldays || ''}&employeeno=${selectedRow.employeeno || ''}&shedOutDate=${selectedRow.shedOutDate || ''}&shedInDate=${selectedRow.shedInDate || ''}&reporttime=${selectedRow.reporttime || ''}&shedintime=${selectedRow.shedintime || ''}&shedkm=${selectedRow.shedkm || ''}&shedin=${selectedRow.shedin || ''}&shedout=${selectedRow.shedout || ''}&starttime=${selectedRow.starttime || ''}&closetime=${selectedRow.closetime || ''}&additionaltime=${selectedRow.additionaltime || ''}&advancepaidtovendor=${selectedRow.advancepaidtovendor || ""}&customercode=${selectedRow.customercode || ''}&startkm=${selectedRow.startkm || ''}&closekm=${selectedRow.closekm || ''}&permit=${selectedRow.permit || ''}&parking=${selectedRow.parking || ''}&toll=${selectedRow.toll || ''}&vpermettovendor=${selectedRow.vpermettovendor || ''}&vendortoll=${selectedRow.vendortoll || ''}&customeradvance=${selectedRow.customeradvance || selectedRow.advance || ''}&email1=${selectedRow.email1 || ''}&remark=${selectedRow.remark || selectedRow.remarks || ''}&smsguest=${selectedRow.smsguest || ''}&documentnotes=${selectedRow.documentnotes || ''}&VendorTripNo=${selectedRow.VendorTripNo || ''}&vehicles=${selectedRow.vehicles || ''}&duty1=${selectedRow.duty1 || ''}&startdate1=${selectedRow.startdate1 || ''}&closedate1=${selectedRow.closedate1 || ''}&starttime2=${selectedRow.starttime2 || ''}`;
-    const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow.ratenamebook || ""}&advance=${selectedRow.advance}&remarks=${selectedRow.remarks}&vehiclemodule=${selectedRow.vehiclemodule}&flightno=${selectedRow.flightno}&vehicleName=${selectedRow.vehicleName || ""}&Groups=${selectedRow.Groups}&servicestation=${selectedRow.servicestation}&registerno=${selectedRow.registerno}&travelsname=${selectedRow.travelsname || ""}&travelsemail=${selectedRow.travelsemail || ""}&tripid=${selectedRow.tripid || ''}&bookingno=${selectedRow.bookingno || ''}&status=${selectedRow.status || ''}&billingno=${selectedRow.billingno || ''}&apps=${selectedRow.apps || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || selectedRow.orderByMobileNo || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&employeeno=${selectedRow.employeeno || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&orderbyemail=${selectedRow.orderbyemail || selectedRow.orderByEmail || ''}&address1=${selectedRow.address1 || ''}&hireTypes=${selectedRow.hireTypes || ''}&department=${selectedRow.department || selectedRow.servicestation}&vehRegNo=${selectedRow.vehRegNo || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&gps=${selectedRow.gps || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&useage=${selectedRow.useage || ''}&request=${selectedRow.request || selectedRow.registerno}&startdate=${selectedRow.startdate || ''}&employeeno=${selectedRow.employeeno || ''}&shedOutDate=${selectedRow.shedOutDate || ''}&shedInDate=${selectedRow.shedInDate || ''}&reporttime=${selectedRow.reporttime || ''}&shedintime=${selectedRow.shedintime || ''}&starttime=${selectedRow.starttime || ''}&customercode=${selectedRow.customercode || ''}&customeradvance=${selectedRow.customeradvance || selectedRow.advance || ''}&documentnotes=${selectedRow.documentnotes || ''}&vehicles=${selectedRow.vehicles || ''}`;
-
+    console.log("selectedrow", selectedRow,dispatchcheck)
+    const selectedRow1=await dataget(selectedRow.tripid)
+    // console.log(datavalue,"value")
+    const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow1.ratenamebook || ""}&bookingdate=${selectedRow1.bookingdate}&advance=${selectedRow1.advance}&remarks=${selectedRow1.remarks}&vehiclemodule=${selectedRow1.vehiclemodule}&flightno=${selectedRow1.flightno}&vehicleName=${selectedRow1.vehicleName || ""}&Groups=${selectedRow1.Groups}&servicestation=${selectedRow1.servicestation}&registerno=${selectedRow1.registerno}&travelsname=${selectedRow1.travelsname || ""}&travelsemail=${selectedRow1.travelsemail || ""}&tripid=${selectedRow1.tripid || ''}&bookingno=${selectedRow1.bookingno || ''}&status=${selectedRow1.status || ''}&billingno=${selectedRow1.billingno || ''}&apps=${selectedRow1.apps || ''}&customer=${selectedRow1.customer || ''}&orderedby=${selectedRow1.orderedby || ''}&mobile=${selectedRow1.mobile || selectedRow1.orderByMobileNo || ''}&guestname=${selectedRow1.guestname || ''}&guestmobileno=${selectedRow1.guestmobileno || ''}&email=${selectedRow1.email || ''}&employeeno=${selectedRow1.employeeno || ''}&guestmobileno=${selectedRow1.guestmobileno || ''}&orderbyemail=${selectedRow1.orderbyemail || selectedRow1.orderByEmail || ''}&address1=${selectedRow1.address1 || ''}&hireTypes=${selectedRow1.hireTypes || ''}&department=${selectedRow1.department || selectedRow1.servicestation}&vehRegNo=${selectedRow1.vehRegNo || ''}&driverName=${selectedRow1.driverName || ''}&mobileNo=${selectedRow1.mobileNo || ''}&gps=${selectedRow1.gps || ''}&duty=${selectedRow1.duty || ''}&pickup=${selectedRow1.pickup || ''}&useage=${selectedRow1.useage || ''}&request=${selectedRow1.request || selectedRow1.registerno}&startdate=${selectedRow1.startdate || ''}&employeeno=${selectedRow1.employeeno || ''}&shedOutDate=${selectedRow1.shedOutDate || ''}&shedInDate=${selectedRow1.shedInDate || ''}&reporttime=${selectedRow1.reporttime || ''}&shedintime=${selectedRow1.shedintime || ''}&starttime=${selectedRow1.starttime || ''}&customercode=${selectedRow1.customercode || ''}&customeradvance=${selectedRow1.customeradvance || selectedRow1.advance || ''}&documentnotes=${selectedRow1.documentnotes || ''}&vehicles=${selectedRow1.vehicles || ''}&bookingtime=${selectedRow1.bookingtime||""}`;
+    //  const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow1.ratenamebook || ""}&bookingdate=${selectedRow1.bookingdate}&advance=${selectedRow1.advance || ""}&remarks=${selectedRow1.remarks ||""}&vehiclemodule=${selectedRow1.vehiclemodule}&flightno=${selectedRow1.flightno||""}&vehicleName=${selectedRow1.vehicleName}&Groups=${selectedRow1.Groups}&servicestation=${selectedRow1.servicestation}&registerno=${selectedRow1.registerno}&travelsname=${selectedRow1.travelsname || ""}&travelsemail=${selectedRow1.travelsemail || ""}&tripid=${selectedRow1.tripid || ''}&bookingno=${selectedRow1.bookingno || ''}&status=${selectedRow1.status || ''}&billingno=${selectedRow1.billingno || ''}&apps=${selectedRow1.apps || ''}&customer=${selectedRow1.customer || ''}&orderedby=${selectedRow1.orderedby || ''}&guestname=${selectedRow1.guestname || ''}&guestmobileno=${selectedRow1.guestmobileno || ''}&email=${selectedRow1.email || ''}&employeeno=${selectedRow1.employeeno || ''}&address1=${selectedRow1.address1 || ''}&hireTypes=${selectedRow1.hireTypes || ''}&vehRegNo=${selectedRow1.vehRegNo || ''}&driverName=${selectedRow1.driverName || ''}&mobileNo=${selectedRow1.mobileNo || ''}&duty=${selectedRow1.duty || ''}&pickup=${selectedRow1.pickup || ''}&useage=${selectedRow1.useage || ''}&startdate=${selectedRow1.startdate || ''}&employeeno=${selectedRow1.employeeno || ''}&shedOutDate=${selectedRow1.shedOutDate || ''}&reporttime=${selectedRow1.reporttime || ''}&starttime=${selectedRow1.starttime || ''}&customercode=${selectedRow1.customercode || ''}&orderByMobileNo=${selectedRow1.orderByMobileNo ||""}&orderByEmail=${selectedRow1.orderByEmail || ''}&paymenttype=${selectedRow1.paymenttype || ''}`;
     window.location.href = await bookingPageUrl;
   }
 

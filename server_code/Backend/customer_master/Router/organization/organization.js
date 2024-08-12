@@ -20,10 +20,9 @@ router.post('/addcompany', (req, res) => {
     });
 });
 //for get company details
-router.get('/organizationdata/:organizationname', (req, res) => {
-    const organizationname = req.params.organizationname;
+router.get('/organizationdata', (req, res) => {
 
-    db.query('SELECT * FROM organizationdetails WHERE organizationname = ?', organizationname, (err, result) => {
+    db.query('SELECT * FROM organizationdetails', (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
         }
@@ -45,8 +44,6 @@ router.get('/organisationpdfdata', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Route data not found' });
         }
-
-
         return res.status(200).json(result);
     });
 
@@ -56,9 +53,8 @@ router.get('/organisationpdfdata', (req, res) => {
 router.put('/companyupdate/:id', (req, res) => {
     const id = req.params.id;
     const updatedCustomerData = req.body;
-    console.log(id,updatedCustomerData,'org');
-    
-    db.query('UPDATE organizationdetails SET ? WHERE id = ?', [updatedCustomerData,id], (err, result) => {
+
+    db.query('UPDATE organizationdetails SET ? WHERE id = ?', [updatedCustomerData, id], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }

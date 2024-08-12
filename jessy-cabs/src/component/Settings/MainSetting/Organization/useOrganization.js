@@ -55,8 +55,8 @@ const useOrganization = () => {
         pannumber: '',
         gstnumber: '',
         telephone: '',
-        Sender_Mail:'',
-        EmailApp_Password:''
+        Sender_Mail: '',
+        EmailApp_Password: ''
     });
 
 
@@ -85,7 +85,7 @@ const useOrganization = () => {
             return;
         }
         try {
-            console.log(book,"ookk")
+            console.log(book, "ookk")
             await axios.post(`${apiUrl}/addcompany`, book);
             setSuccess(true);
             setSuccessMessage("Organization Added Successfully");
@@ -102,8 +102,8 @@ const useOrganization = () => {
             const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
             const encode = companyname;
             const decode = decodeURIComponent(encode);
-            console.log(updatedCustomer,"ccccc")
-            await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
+            console.log(updatedCustomer.id, "SELECT ID")
+            await axios.put(`${apiUrl}/companyupdate/${updatedCustomer.id}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setEditMode((prevEditMode) => !prevEditMode);
@@ -135,7 +135,7 @@ const useOrganization = () => {
             const organizationname = localStorage.getItem('usercompany');
 
             try {
-                if(!organizationname) return
+                if (!organizationname) return
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
 
@@ -147,7 +147,7 @@ const useOrganization = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                } 
+                }
             }
             catch {
             }
@@ -179,7 +179,7 @@ const useOrganization = () => {
             if (!file) return;
 
             const base64Format = await imageToBase64(file)
-             const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
+            const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
 
             if (response.status === 200) {
                 setLogoTrigger(true)

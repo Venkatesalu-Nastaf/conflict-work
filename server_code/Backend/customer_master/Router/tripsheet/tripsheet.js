@@ -1347,6 +1347,7 @@ router.delete('/dlete-mapLocationPoint/:payload', (req, res) => {
 
 //------------------------------------
 
+
 router.get(`/t4hr-pack`, (req, res) => {
     // Extract dynamic inputs from query parameters
     const totalHours = req.query.totalHours;
@@ -1355,6 +1356,7 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
+    console.log(VehicleName,duty,totkm,OrganizationName,totalHours,"ll")
 
 
 
@@ -1362,6 +1364,8 @@ router.get(`/t4hr-pack`, (req, res) => {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
+
+
 
     const sql = `SELECT * 
                     FROM ratemanagement
@@ -1371,6 +1375,7 @@ router.get(`/t4hr-pack`, (req, res) => {
                         AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
                     ORDER BY UptoHours 
                     LIMIT 1;`
+                    
 
     // Execute the query with dynamic parameters 
     db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {

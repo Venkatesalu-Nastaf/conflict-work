@@ -542,10 +542,8 @@ router.post('/send-email', async (req, res) => {
 
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',
-                // from: Sendmailauth,
-                // to: `${email},${customeremail}`,
                 from: Sendmailauth,
-                to: `${email}`,
+                to: `${email},${customeremail}`,
                 subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
             <p>Dear Sir/Madam,</p>

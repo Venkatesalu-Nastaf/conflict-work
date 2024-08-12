@@ -244,15 +244,20 @@ const EmployeeCreation = ({ stationName }) => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input">
-                  <div>
-                    {book?.stationname
-                      ? (typeof book.stationname === 'string'
-                        ? book.stationname.split(',').map(item => item.trim()) // Trim extra spaces
-                        : book.stationname)
-                      : []
-                    }
+                <div className="input" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
                   </div>
+                  <TextField
+                    size="small"
+                    name="designation"
+                    value={book.designation || ''}
+                    onChange={handleChange}
+                    label="Designation"
+                    id="designation"
+                  />
+                </div>
+                <div className="input user-creation-station-select-main">
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
@@ -304,25 +309,14 @@ const EmployeeCreation = ({ stationName }) => {
                         {option}
                       </li>
                     )}
-                    style={{ width: 170 }}
+                    // style={{ width: 170 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="stationname" placeholder="Organization" />
+                      <TextField {...params} label="stationname" placeholder="Organization" style={{ width: '330px' }} />
                     )}
+
                   />
                 </div>
-                <div className="input" style={{ paddingRight: '15px' }}>
-                  <div className="icone">
-                    <ListAltIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="designation"
-                    value={book.designation || ''}
-                    onChange={handleChange}
-                    label="Designation"
-                    id="designation"
-                  />
-                </div>
+
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />

@@ -40,7 +40,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { FaShare } from "react-icons/fa";
-import {  Slide } from '@mui/material';
+import { Slide } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -57,6 +57,8 @@ import { FaHistory } from "react-icons/fa";
 import { BiUpArrowAlt } from "react-icons/bi";
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
+import { AiFillEdit } from "react-icons/ai";
+import { IoIosWarning } from "react-icons/io";
 
 
 const label = { inputProps: { 'aria-label': 'Size switch demo' } };
@@ -225,6 +227,147 @@ const rows = [
 
 
 
+//  for timelinetable
+const columnstimeline = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'Vehicle',
+    headerName: 'Vehicle',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'StartTime',
+    headerName: 'Start Time',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndTime',
+    headerName: 'End Time',
+    type: 'number',
+    width: 150,
+    editable: true,
+  },
+
+  {
+    field: 'Duration',
+    headerName: 'Duration',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Location',
+    headerName: 'Location',
+    width: 350,
+    editable: true,
+  },
+  {
+    field: 'NearestAddress',
+    headerName: 'Nearest Address',
+    width: 250,
+    editable: true,
+  },
+  {
+    field: 'DistanceTravelled',
+    headerName: 'Distance Travelled',
+    width: 150,
+    editable: true,
+  }
+
+
+];
+
+const rowstimeline = [
+  { id: 1, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 2, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 3, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 4, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 5, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 6, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+
+];
+
+
+
+
+
+
+//  for timelinetable
+const columnstripsite = [
+  { field: 'id', headerName: 'ID', width: 90 },
+
+  {
+    field: 'StartTime',
+    headerName: 'Start Time',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndTime',
+    headerName: 'End Time',
+    type: 'number',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'RunningTime',
+    headerName: 'Running Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'stoptime',
+    headerName: 'Stop Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'totalTime',
+    headerName: 'Total Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'DistanceTravelled',
+    headerName: 'Distance Travelled',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'fuelcomsumed',
+    headerName: 'Total Fuel consumed',
+    width: 350,
+    editable: true,
+  },
+ 
+
+
+];
+
+const rowstripsite = [
+  { id: 1, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 2, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 3, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 4, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 5, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 6, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  { id: 7, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14,fuelcomsumed:456 },
+  
+
+];
+
+
+
+
+
+
 // for timeline tab
 
 function CustomTabPanel(props) {
@@ -256,6 +399,8 @@ function a11yProps(index) {
   };
 }
 
+
+const labelswitch = { inputProps: { 'aria-label': 'Size switch demo' } };
 
 
 
@@ -611,6 +756,10 @@ export const RealTime = () => {
   const opentimelineTab = () => {
     SetHistory(false);
     SetTimeline(true);
+    SetSpeedviolation(false)
+    SetStoppages(false);
+
+
   }
 
   const [stoppages, SetStoppages] = useState(false);
@@ -619,6 +768,26 @@ export const RealTime = () => {
     SetTimeline(false);
     SetStoppages(true);
   }
+
+
+  const [speedviolation, SetSpeedviolation] = useState(false);
+  const openspeedviolationTab = () => {
+    SetHistory(false);
+    SetTimeline(false);
+    SetStoppages(false);
+    SetSpeedviolation(true)
+  }
+
+
+  const [tripsites, SetTripsites] = useState(false);
+  const opentripsitesTab = () => {
+    SetHistory(false);
+    SetTimeline(false);
+    SetStoppages(false);
+    SetSpeedviolation(false);
+    SetTripsites(true);
+  }
+
 
 
 
@@ -632,6 +801,32 @@ export const RealTime = () => {
 
   const handleChangetimelinetab = (event, newValue) => {
     setValue(newValue);
+  };
+
+  // timeline switch
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleSwitchChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
+
+
+
+
+  // for trip sites dropdown 1
+  const [selectedValuetripsites, setSelectedValuetripsites] = useState('');
+
+  const handleChangetripsites1 = (event) => {
+    setSelectedValuetripsites(event.target.value);
+  };
+
+  // for trip sites dropdown 2
+  const [selectedValuetripsitesSelect, setSelectedValuetripsitesSelect] = useState('');
+
+  const handleChangetripsitesSelect = (event) => {
+    setSelectedValuetripsitesSelect(event.target.value);
   };
 
 
@@ -885,9 +1080,7 @@ export const RealTime = () => {
 
 
       <div>
-        {/* <Button variant="outlined" >
-        Open Full-Page Drawer
-      </Button> */}
+
         <Drawer
           anchor="top"
           open={openHistoryDrawer}
@@ -1019,12 +1212,12 @@ export const RealTime = () => {
                       Stoppages
                     </button>
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }}>
+                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={openspeedviolationTab}>
                       <IoSpeedometerSharp />
                       speed Violation
                     </button>
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }}>
+                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={opentripsitesTab}>
                       <FaRegEye />
 
                       Trips b/w Sites
@@ -1032,7 +1225,7 @@ export const RealTime = () => {
                     </button>
 
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }}>
+                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }}  onClick={handleOpenhistoryLocation}>
                       <FaHistory />
 
                       Historical Location
@@ -1126,7 +1319,7 @@ export const RealTime = () => {
                   </>
                 }
 
-{timeline &&
+                {timeline &&
                   <>
                     <div style={{ display: "flex", gap: "10px", justifyContent: "space-around", alignItems: "initial" }}>
 
@@ -1174,149 +1367,210 @@ export const RealTime = () => {
                       </div>
                       <div style={{ width: "48%" }}>
                         <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                         
+
 
                           <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChangetimelinetab} aria-label="basic tabs example">
-          <Tab label="Fuel Summary" {...a11yProps(0)} />
-          <Tab label="Speed Graph" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-      <p>Fuel Summary
-                            (Diesel)</p>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
-                            No fuel data available for this period.
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                              <Tabs value={value} onChange={handleChangetimelinetab} aria-label="basic tabs example">
+                                <Tab label="Fuel Summary" {...a11yProps(0)} />
+                                <Tab label="Speed Graph" {...a11yProps(1)} />
+                              </Tabs>
+                            </Box>
+                            <CustomTabPanel value={value} index={0}>
+                              <p>Fuel Summary
+                                (Diesel)</p>
+                              <div style={{ display: "flex", justifyContent: "center" }}>
+                                No fuel data available for this period.
 
-                          </div>      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-      
-    </Box>
+                              </div>      </CustomTabPanel>
+                            <CustomTabPanel value={value} index={1}>
+                              Item Two
+                            </CustomTabPanel>
+
+                          </Box>
 
 
                         </div>
                       </div>
-                      
+
                     </div>
-                    <div style={{border:"1px solid #ccc", display:"flex", justifyContent:"space-between"}}>
-                      
-                        <div>
-
-                        </div>
-                        <div>
-
-                        </div>
-                      
+                    <div style={{ border: "1px solid #ccc", display: "flex", justifyContent: "space-between" }}>
+                      <div></div>
+                      <div></div>
                     </div>
-
-                    {/* <div style={{ padding: "20px" }}>
-                      <p>History - 0703 (KA03AD0703)
-                      </p>
-
-                      <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                          rows={rows}
-                          columns={columns}
-                          initialState={{
-                            pagination: {
-                              paginationModel: {
-                                pageSize: 5,
-                              },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          disableRowSelectionOnClick
-                        />
-                      </Box>
-
-                    </div> */}
                   </>
                 }
 
-{stoppages &&
+                {stoppages &&
                   <>
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "space-around", alignItems: "initial" }}>
+                    <div style={{ border: "1px solid #ccc" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", padding: "20px", alignItems: "center" }}>
+                        <div>
+                          <p style={{ marginTop: "0px" }}>Stoppages - 0715 (TN75AL0715)</p>
+                        </div>
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                          <p style={{ marginTop: "0px" }}>Only Addressbook Stops</p>
+                          <Switch {...labelswitch}
+                            checked={isChecked}
+                            onChange={handleSwitchChange}
+                          />
+                          <p style={{ marginTop: "0px" }}>Minimum Stoppage Time</p>
+                          <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 
-
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Accountdddddddddddddd Summary</p>
-                          <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                            <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
-                                  <BiUpArrowAlt />
-                                </span>
-                              </div>
-                              <p style={{ margin: "0px" }}>Runnings</p>
-
-                            </div>
-
-
-                            <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
-                                  <BiUpArrowAlt />
-                                </span>
-                              </div>
-                              <p style={{ margin: "0px" }}>Total Km</p>
-
-                            </div>
-
-
-                            <div>
-
-                              <span>0</span>
-
-                              <p style={{ margin: "0px" }}>Alarms</p>
-
-                            </div>
+                            <p style={{ marginTop: "0px" }}>0 mins(All Stops)</p>
+                            <AiFillEdit />
 
                           </div>
-
 
 
                         </div>
                       </div>
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Fuel Summary
-                            (Diesel)</p>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
-                            No fuel data available for this period.
 
-                          </div>
+                      {isChecked ? (
+                        <div style={{ padding: '10px', display: "flex", justifyContent: "center" }}>
+                          <p style={{ color: "red", display: "flex", gap: "5px", alignItems: "center", fontSize: "18px" }}>
+                            <IoIosWarning />
+                            No Stops available for this duration.
 
-
+                          </p>
                         </div>
+                      ) : (
+                        <div style={{ padding: '10px' }}>
+                          <Box sx={{ height: 400, width: '100%' }}>
+                            <DataGrid
+                              rows={rowstimeline}
+                              columns={columnstimeline}
+                              initialState={{
+                                pagination: {
+                                  paginationModel: {
+                                    pageSize: 5,
+                                  },
+                                },
+                              }}
+                              pageSizeOptions={[5]}
+                              disableRowSelectionOnClick
+                            />
+                          </Box>  
+                                </div>
+                      )}
+
+
+                    </div>
+                  </>
+                }
+
+                {speedviolation &&
+                  <>
+                    <div>
+                      <p>Speeding - 0715 (TN75AL0715)</p>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <div style={{ display: "flex", gap: "20px" }}>
+                          <p>Speed Limit :</p>
+                          <TextField
+                            type="number"
+                            // value={value}
+                            // onChange={handleChange}
+                            variant="outlined"
+                            placeholder="Enter number"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            sx={{ width: '70px' }}
+                          />
+                        </div>
+                        <div style={{ display: "flex", gap: "20px" }}>
+                          <p>Speed Limit :</p>
+                          <TextField
+                            type="number"
+                            // value={value}
+                            // onChange={handleChange}
+                            variant="outlined"
+                            // placeholder="Enter number"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            sx={{ width: '70px' }}
+                          />
+                        </div>
+                        <Button>Submit</Button>
+
+                      </div>
+                      <div style={{ padding: '10px', display: "flex", justifyContent: "center" }}>
+                        <p style={{ color: "red", display: "flex", gap: "5px", alignItems: "center", fontSize: "18px" }}>
+                          <IoIosWarning />
+                          No Stops available for this duration.
+
+                        </p>
                       </div>
                     </div>
+                  </>
+                }
 
-                    {/* <div style={{ padding: "20px" }}>
-                      <p>History - 0703 (KA03AD0703)
-                      </p>
 
-                      <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                          rows={rows}
-                          columns={columns}
-                          initialState={{
-                            pagination: {
-                              paginationModel: {
-                                pageSize: 5,
-                              },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          disableRowSelectionOnClick
-                        />
-                      </Box>
+                {tripsites &&
+                  <>
+                    <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <p>Trips b/w Sites - 0715 (TN75AL0715)</p>
+                        <p style={{ color: "rgb(148 142 142)" }}>View trips between source and destination addresses</p>
+                      </div>
+                      <div>
+                        <div style={{ display: "flex", gap: "10px" , alignItems:"center"}}>
+                          <p style={{marginTop:"0px", width:"100px"}}>Source</p>
+                          <Box sx={{ m: 2, minWidth: 220 }}>
+                            <FormControl fullWidth>
+                              <Select
+                                value={selectedValuetripsites}
+                                onChange={handleChangetripsites1}
+                                displayEmpty
+                                inputProps={{ 'aria-label': 'Without label' }}
+                              >
+                                
+                                <MenuItem value={10}>Option 1</MenuItem>
+                                <MenuItem value={20}>Option 2</MenuItem>
+                                <MenuItem value={30}>Option 3</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </div>
+                        <div style={{ display: "flex", gap: "10px" ,alignItems:"center"}}>
+                          <p style={{marginTop:"0px", width:"100px"}}>Destination</p>
+                          <Box sx={{ m: 2, minWidth: 220 }}>
+                            <FormControl fullWidth>
+                              <Select
+                                value={selectedValuetripsitesSelect}
+                                onChange={handleChangetripsitesSelect}
+                                displayEmpty
+                                inputProps={{ 'aria-label': 'Without label' }}
+                              >
+                              
+                                <MenuItem value={10}>Option 1</MenuItem>
+                                <MenuItem value={20}>Option 2</MenuItem>
+                                <MenuItem value={30}>Option 3</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </div>
+                      </div>
 
-                    </div> */}
+                       
+
+                    </div>
+                    <Box sx={{ height: 400, width: '100%' }}>
+                            <DataGrid
+                              rows={rowstripsite}
+                              columns={columnstripsite}
+                              initialState={{
+                                pagination: {
+                                  paginationModel: {
+                                    pageSize: 5,
+                                  },
+                                },
+                              }}
+                              pageSizeOptions={[5]}
+                              disableRowSelectionOnClick
+                            />
+                          </Box> 
                   </>
                 }
 

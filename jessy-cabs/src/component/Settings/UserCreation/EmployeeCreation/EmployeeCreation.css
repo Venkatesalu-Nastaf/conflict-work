@@ -166,3 +166,7 @@ div .user-name-text , div .user-details-text{
   overflow: hidden;
   text-overflow:ellipsis;
 }
+
+.user-creation-station-select-main{
+  width: 360px !important;
+}

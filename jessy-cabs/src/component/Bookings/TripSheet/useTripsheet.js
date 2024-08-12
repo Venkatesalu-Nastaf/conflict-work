@@ -68,6 +68,7 @@ const useTripsheet = () => {
     const [signaturepopup, setSignaturepopup] = useState(false)
     const [signatureupload, setSignatureupload] = useState(false)
     const [isHybridCustomer, setIsHybridCustomer] = useState(false)
+   
 
 
 
@@ -2330,6 +2331,7 @@ const useTripsheet = () => {
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
 
+
             try {
 
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
@@ -2936,7 +2938,7 @@ const useTripsheet = () => {
         VendorextraClac();
     }, [vendorbilldata.Vendor_ExtraKms, vendorbilldata.Vendor_ExtraAmountKms, vendorpassvalue.Vendor_ExtraKms, vendorpassvalue.Vendor_ExtraAmountKms])
 
-
+ 
 
 
     useEffect(() => {
@@ -3192,6 +3194,58 @@ const useTripsheet = () => {
         setTotalcalcAmount();
     }
 
+
+    // useEffect(async()=>{
+    //  const customerdata =  formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
+    //  console
+    //  if(customerdata){
+    //     console.log(customerdata,"customerdatatatat")
+    //  try{
+    //     const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdata}`)
+    //     const res=response.data
+    //     console.log(res,"cuuuu")
+    //  }
+    //  catch(err){
+    //     console.log(err)
+    //  }
+
+
+    //  }
+    // },[ formData.customer ])
+
+
+
+     const fetchdatacustomeraratename=async()=>{
+
+     const customerdata =  formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
+    //  const customerdata = "jdienek"
+     console.log(customerdata,"daa")
+     if(customerdata){
+        console.log(customerdata,"customerdatatatat")
+   
+        const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdata}`)
+        console.log(response,"resplommm",response.data.length)
+        const data=response.data
+        console.log(data,"ddddd")
+        if(data.length > 0){
+            console.log(data.length,"eneter")
+            const res=response.data[0].rateType
+            return res
+        }
+       
+      return ""
+     }
+
+   else{
+          return ''
+    }
+   
+}
+
+
+   
+
+
     // calc function
 
     let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname;
@@ -3203,8 +3257,10 @@ const useTripsheet = () => {
             // totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             totkm = await (calculateTotalKilometers() || formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
-            organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-
+            // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
+            organizationname= await fetchdatacustomeraratename()
+            console.log(organizationname,"organisatiom")
+         console.log(totkm ,tothr ,duty,vehicleNames ,organizationname)
 
             if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {
                 setError(true);

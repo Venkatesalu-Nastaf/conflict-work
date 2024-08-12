@@ -84,12 +84,12 @@ const EmployeeCreation = ({ stationName }) => {
     handleRowClickUser,
     handleAdd,
     hidePopup,
-    handleAutocompleteChange,
+    // handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
     handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
     isEditMode,
-    handleEdit,
+    handleEdit,showPermission, setShowPermission,
 
     permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
   } = useEmplyeecreation();
@@ -122,7 +122,7 @@ const EmployeeCreation = ({ stationName }) => {
 
   //  for showing table
   // const [showPermission, setShowPermission] = useState(false);
-  const [showPermission, setShowPermission] = useState(true);
+  // const [showPermission, setShowPermission] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {

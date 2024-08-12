@@ -21,6 +21,7 @@ const useEmplyeecreation = () => {
     const [warningMessage,setWarningMessage] = useState({});
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata,setCredentialData]=useState()
+    const [showPermission, setShowPermission] = useState(true);
 
 
     ////-------------permission --------------------------
@@ -235,6 +236,7 @@ const useEmplyeecreation = () => {
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
+       
     };
 
     useEffect(() => {
@@ -459,6 +461,8 @@ const useEmplyeecreation = () => {
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
+            
+            
 
         } catch {
             setError(true);
@@ -496,7 +500,7 @@ const useEmplyeecreation = () => {
             return data;
         } catch {
         }
-    }, [apiUrl, setRows,rows])
+    }, [apiUrl, setRows])
 
     //------------------------------------------------------
 
@@ -599,6 +603,7 @@ const useEmplyeecreation = () => {
         setSelectedCustomerId(params.customerId);
         setIsEditMode(true);
         updatePermissionsState();
+        // setShowPermission(false)
     };
 
 
@@ -649,7 +654,7 @@ const useEmplyeecreation = () => {
         handleClickShowPasswords,
         handleMouseDownPasswords,
         isEditMode,
-        handleEdit,handleChangeuniquecreation,cerendentialdata,
+        handleEdit,handleChangeuniquecreation,cerendentialdata,showPermission, setShowPermission,
 
         //ffor permission
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,

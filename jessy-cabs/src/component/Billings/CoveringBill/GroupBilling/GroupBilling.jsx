@@ -74,7 +74,10 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         refToDate,
         gstno,
         setGstno,
-        handleRemoveData
+        handleRemoveData,
+        viewGroupBill,
+        setBillingDate,
+        setServiceStation
     } = useGroupbilling();
 
 
@@ -136,7 +139,17 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const CoveringBill_read = permissions[7]?.read;
     const CoveringBill_new = permissions[7]?.new;
 
-
+    useEffect(() => {
+        if (viewGroupBill && viewGroupBill.length > 0) {
+            const firstBill = viewGroupBill[0];
+            setBillingDate(dayjs(firstBill.InvoiceDate, "YYYY-MM-DD"));
+            setCustomer(firstBill.Customer);
+            setFromDate(dayjs(firstBill.FromDate, "YYYY-MM-DD"));
+            setToDate(dayjs(firstBill.ToDate, "YYYY-MM-DD"));
+            setServiceStation(firstBill.station)
+            handleDateChange(dayjs(firstBill.InvoiceDate, "DD-MM-YYYY"), 'Billingdate');
+        }
+    }, [viewGroupBill]);
     return (
         <div className="main-content-form Scroll-Style-hide">
             <form >
@@ -196,8 +209,14 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 className='full-width'
                                                 label="Bill Date"
                                                 name="Billingdate"
-                                                value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
+                                                value={
+                                                    Billingdate ||
+                                                    (viewGroupBill?.InvoiceDate ? dayjs(viewGroupBill.InvoiceDate) : null) ||
+                                                    (selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas.Billingdate) : null)
+                                                }
                                                 format="DD/MM/YYYY"
+                                                onChange={(newValue) => handleDateChange(newValue, 'Billingdate')}
+
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
@@ -331,7 +350,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         /> */}
 
                         <Box
-                              sx={{
+                            sx={{
                                 height: 400, // Adjust this value to fit your needs
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {

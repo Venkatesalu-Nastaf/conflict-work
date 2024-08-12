@@ -392,6 +392,15 @@ const Organization = ({ logoImage }) => {
                                 //     </IconButton>
                                 // </div>
                             )}
+                            {/* {
+                                selectedCustomerData.length < 0 ? 
+                                <div className="input organisation-btn">
+
+                                    <Button variant="contained" onClick={handleAdd} >
+                                        Save
+                                    </Button>
+                                </div>  : <></>
+                            } */}
                             {/* <div className='organisation-input-row'>
                                 {selectedCustomerData?.length === 0 ?
                                     <div className='organisation-btn-row'>

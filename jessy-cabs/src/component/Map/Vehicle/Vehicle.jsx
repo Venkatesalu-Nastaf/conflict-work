@@ -21,7 +21,7 @@ export const Vehicle = () => {
           </p> */}
           <div className='main-content-form'>
             <div style={{ display: 'flex' }}>
-              <div style={{ width: '40%' }}>Vehicles</div>
+              <div style={{ width: '40%' }}> <span style={{fontSize: '25px', fontWeight: '600'}}>Vehicles</span> </div>
               <div style={{ display: 'flex', width: '60%' }}>
                 <span>
                   <Box sx={{ minWidth: 120 }}>

@@ -197,10 +197,10 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata,CopyEmail, setCopyEmail,setWarningMessage,setWarning,warningMessage,warning
+    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
   } = useBooking();
 
-  const { getHtmlContentdata}=CopyEmailHtmlBooking();
+  const { getHtmlContentdata } = CopyEmailHtmlBooking();
 
   useEffect(() => {
     if (actionName === "List") {
@@ -240,7 +240,7 @@ const Booking = ({ stationName, customerData }) => {
 
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
-    setSelectedCustomerData({...selectedCustomerData,status:event.target.value})
+    setSelectedCustomerData({ ...selectedCustomerData, status: event.target.value })
   };
 
   // const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
@@ -304,45 +304,45 @@ const Booking = ({ stationName, customerData }) => {
     // status: book.status || formData.status || selectedCustomerData.status,
     requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
     duty: formData.duty || selectedCustomerData.duty || book.duty || "",
-    bookingno:book.bookingno || selectedCustomerData.bookingno || formData.bookingno,
+    bookingno: book.bookingno || selectedCustomerData.bookingno || formData.bookingno,
     customeremail: formData.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || book.orderByEmail || "",
     username: userNamed,
     Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
-    status: selectedCustomerData.status || book.status || bookingStatus 
-  
+    status: selectedCustomerData.status || book.status || bookingStatus
+
 
 
 
   };
 
-  const handlecopiedemailcontentbooking=()=>{
-    const   tripidstatus = selectedCustomerData.status || book.status || bookingStatus ;
-    if(tripidstatus === "Cancelled" ||  tripidstatus === "pending"){
-   const data = getHtmlContentdata(tripidstatus,dataToSend);
-   const tempTextarea = document.createElement('textarea');
-   tempTextarea.value = data;
-   document.body.appendChild(tempTextarea);
-   tempTextarea.select();
-   document.execCommand('copy');
-   document.body.removeChild(tempTextarea);
-   setCopyEmail(true)
-  
-   setTimeout(() => {
-     setCopyEmail(false)
-   }, (2000));
+  const handlecopiedemailcontentbooking = () => {
+    const tripidstatus = selectedCustomerData.status || book.status || bookingStatus;
+    if (tripidstatus === "Cancelled" || tripidstatus === "pending") {
+      const data = getHtmlContentdata(tripidstatus, dataToSend);
+      const tempTextarea = document.createElement('textarea');
+      tempTextarea.value = data;
+      document.body.appendChild(tempTextarea);
+      tempTextarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextarea);
+      setCopyEmail(true)
+
+      setTimeout(() => {
+        setCopyEmail(false)
+      }, (2000));
+    }
+    else {
+
+      setWarning(true)
+      setWarningMessage("Check Your Trip Status")
+    }
   }
-  else{
-    
-    setWarning(true)
-    setWarningMessage("Check Your Trip Status")
-}
-}
- 
-  
-  
-   
-      //  console.log(data,"copydara")     
-  
+
+
+
+
+  //  console.log(data,"copydara")     
+
 
 
   return (
@@ -469,7 +469,7 @@ const Booking = ({ stationName, customerData }) => {
                 storedUsername ||
                 ""} />
             </span>
-            <span className="d-grid">
+            {/* <span className="d-grid"> */}
               {/* <label>Booking Date</label> */}
               {/* <input
                 type="date"
@@ -485,7 +485,7 @@ const Booking = ({ stationName, customerData }) => {
                     ? dayjs(book.bookingdate)
                     : dayjs()
               } /> */}
-              <div className="booking-top-division-date">
+              {/* <div className="booking-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
@@ -508,6 +508,35 @@ const Booking = ({ stationName, customerData }) => {
                       )}
                     </DatePicker>
                   </DemoItem>
+                </LocalizationProvider>
+              </div> */}
+            {/* </span> */}
+
+            <span className="d-grid">
+              <div className="tripsheet-top-division-date">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    // id="tripsheetdate"
+                    value={
+                      formData.bookingdate || selectedCustomerData.bookingdate
+                        ? dayjs(selectedCustomerData.bookingdate)
+                        : null || book.bookingdate
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    label='Booking Date'
+                    onChange={(date) => handleDateChange(date, "bookingdate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.bookingdate}
+                      />
+                    )}
+                  </DatePicker>
+
                 </LocalizationProvider>
               </div>
             </span>
@@ -566,13 +595,13 @@ const Booking = ({ stationName, customerData }) => {
                   }
                   label="Send Email"
                 />
-                 {isEditMode  && 
-                    <><Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
-                     Copy
-                    </Button>
-                    <span style={{color: 'green'}}>{CopyEmail ? "Link Copied...":"" }</span>
-                    </>
-                   } 
+                {isEditMode &&
+                  <><Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
+                    Copy
+                  </Button>
+                    <span style={{ color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
+                  </>
+                }
               </div>
             </span>
             {/* <span>
@@ -2815,13 +2844,13 @@ const Booking = ({ stationName, customerData }) => {
               <p>{successMessage}</p>
             </div>
           )}
-           {warning &&
-              <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{warningMessage}</p>
-              </div>
-            }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
         </div>
         {/* <div className="detail-container-main">
           <div className="container-left">

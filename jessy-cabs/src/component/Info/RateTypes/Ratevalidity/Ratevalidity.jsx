@@ -165,7 +165,7 @@ const Ratevalidity = () => {
                                         size="small"
                                         id="Remarks"
                                         className='full-width'
-                                        label="ReMarks"
+                                        label="Remarks"
                                         name="Remarks"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.Remarks || book.Remarks}

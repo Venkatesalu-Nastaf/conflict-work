@@ -60,7 +60,7 @@ export const BillWiseReceipt = () => {
                     size="small"
                     id="voucher ID"
                     className="full-width"
-                    label="voucher ID"
+                    label="Voucher ID"
                     name="VoucherId"
                     autoComplete="new-password"
                   // onChange={handleInputChange}
@@ -90,7 +90,7 @@ export const BillWiseReceipt = () => {
                     size="small"
                     id="cover Note"
                     className="full-width"
-                    label="cover Note"
+                    label="Cover Note"
                     name="cover Note"
                     autoComplete="new-password"
                   />
@@ -103,7 +103,7 @@ export const BillWiseReceipt = () => {
                     size="small"
                     id="cheque No"
                     className="full-width"
-                    label="cheque No"
+                    label="Cheque No"
                     name="cheque No"
                     autoComplete="new-password"
                   />
@@ -175,7 +175,7 @@ export const BillWiseReceipt = () => {
                     size="small"
                     id="voucher ID"
                     className="full-width"
-                    label="voucher ID"
+                    label="Voucher ID"
                     // name="voucher ID"
                     autoComplete="new-password"
                   />
@@ -273,7 +273,7 @@ export const BillWiseReceipt = () => {
                     size="small"
                     id="unique id"
                     className="full-width"
-                    label="unique id"
+                    label="Unique Id"
                     name="UniqueID"
                   // onChange={handleInputChange}
                   // value={billWiseReport.UniqueID}

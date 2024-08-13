@@ -1,0 +1,47 @@
+.vehicle-main {
+    display: flex;
+}
+
+.vehicle-top-section-left {
+    width: 37%;
+}
+
+.vehicle-top-section-left span {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.vehicle-top-section-right {
+    display: flex;
+    width: 63%;
+    align-items: center;
+    gap: 0px 20px;
+}
+
+.vehicle-tab-main {
+    padding-top: 20px;
+    display: flex;
+}
+
+.vehicle-tab-left-main {
+    width: 25%;
+}
+
+.vehicle-tab-right-main {
+    width: 75%;
+    padding: 20px;
+}
+
+.vehicle-details-section-main {
+    height: 80vh;
+    overflow: auto;
+}
+
+
+
+
+.azazazaz {
+    width: 325px;
+    display: grid;
+    text-align: center;
+}

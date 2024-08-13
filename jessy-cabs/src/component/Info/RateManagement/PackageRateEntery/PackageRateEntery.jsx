@@ -163,7 +163,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     getOptionLabel={(option) => option.label || commonData?.vehicleName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="VehicleType" name="vehicleName" inputRef={params.inputRef} />
+                        <TextField {...params} label="Vehicle Type" name="vehicleName" inputRef={params.inputRef} />
                       )
                     }
                     }
@@ -313,7 +313,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                       size="small"
                       id="UptoHours"
                       className='full-width'
-                      label="UptoHours  "
+                      label="Upto Hours  "
                       name="UptoHours"
                       autoComplete="new-password"
                       value={fieldSet.UptoHours || ""}
@@ -326,7 +326,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                       size="small"
                       id="UptoKMS"
                       className='full-width'
-                      label="UptoKMS"
+                      label="Upto KMS"
                       name="UptoKMS"
                       autoComplete="new-password"
                       value={fieldSet.UptoKMS || ""}
@@ -339,7 +339,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                       size="small"
                       id="extraHours"
                       className='full-width'
-                      label="ExtraHours"
+                      label="Extra Hours"
                       name="extraHours"
                       autoComplete="new-password"
                       value={fieldSet.extraHours || ""}
@@ -352,7 +352,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                       size="small"
                       id="extraKMS"
                       className='full-width'
-                      label="ExtraKMS"
+                      label="Extra KMS"
                       name="extraKMS"
                       autoComplete="new-password"
                       value={fieldSet.extraKMS || ""}

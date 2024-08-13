@@ -311,7 +311,7 @@ const EmployeeCreation = ({ stationName }) => {
                     )}
                     // style={{ width: 170 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="stationname" placeholder="Organization" style={{ width: '330px' }} />
+                      <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '330px' }} />
                     )}
 
                   />

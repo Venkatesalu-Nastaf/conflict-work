@@ -389,7 +389,7 @@ const VendorStatement = () => {
               margin="normal"
               size="small"
               id=""
-              label="opening balance"
+              label="Opening Balance"
               name=""
               autoComplete="off"
             />

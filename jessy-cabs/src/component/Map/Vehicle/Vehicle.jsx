@@ -15,7 +15,7 @@ import { FaPlus } from "react-icons/fa";
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
+import "./Vehicle.css";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,9 +67,9 @@ export const Vehicle = () => {
             <span className="Title-Name">Real Time</span>
           </p> */}
           <div className='main-content-form'>
-            <div style={{ display: 'flex' }}>
-              <div style={{ width: '37%' }}> <span style={{ fontSize: '25px', fontWeight: '600' }}>Vehicles</span> </div>
-              <div style={{ display: 'flex', width: '63%', alignItems: 'center', gap: '0px 20px' }}>
+            <div className='vehicle-main'>
+              <div className='vehicle-top-section-left'> <span>Vehicles</span> </div>
+              <div className='vehicle-top-section-right'>
                 <span>
                   <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
@@ -133,13 +133,13 @@ export const Vehicle = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  <div style={{ paddingTop: '20px', display: 'flex' }}>
-                    <div style={{ width: '25%' }}>
+                  <div className='vehicle-tab-main'>
+                    <div className='vehicle-tab-left-main'>
                       <div style={{ marginBottom: '20px' }}>
                         <Button variant="outlined">Sort Options</Button>
                       </div>
-                      <div style={{ height: '80vh', overflow: 'auto' }}>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
+                      <div className='vehicle-details-section-main'>
+                        <div className='' style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
                           <span style={{ fontWeight: '600' }}>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
@@ -183,7 +183,7 @@ export const Vehicle = () => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ width: '75%' }}>
+                    <div className='vehicle-tab-right-main'>
                       <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '10px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <div style={{ fontWeight: '600' }}>TN22EB3001</div>
@@ -206,23 +206,130 @@ export const Vehicle = () => {
                         <span style={{ fontWeight: '600' }}>Vehicle Cost</span>
                         <div>
                           <span>Vehicle Stats</span>
-                          <div>
-                            <div style={{display: 'grid', width: 'fit-content', textAlign: 'center'}}>
-                              <span style={{display: 'grid'}}>
-                                <span>0 Min</span>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', border: '1px solid #ccc', padding: '25px', borderRadius: '10px' }}>
+
+                            <div className='azazazaz' style={{ borderRight: '1px solid #ccc', paddingRight: '20px' }}>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Min</span>
                                 <span>Running time</span>
                               </span>
-                              <span style={{display: 'grid'}}>
-                                <span>-</span>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>-</span>
                                 <span>Stoppage time</span>
                               </span>
-                              <span style={{display: 'grid'}}>
-                                <span>0</span>
+                              <span style={{ display: 'grid' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600', padding: '20px 0px' }}>0</span>
                                 <span>Average Speed</span>
                               </span>
                             </div>
-                            <div></div>
-                            <div></div>
+
+                            <div className='azazazaz' style={{ borderRight: '1px solid #ccc', paddingRight: '20px' }}>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>INR 0</span>
+                                <span>Fuel Cost</span>
+                              </span>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>-</span>
+                                <span>Stoppage time</span>
+                              </span>
+                              <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0</span>
+                                <span>Average Speed</span>
+                              </span>
+                            </div>
+
+                            <div className='azazazaz'>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+
+                              <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginTop: '20px' }}>
+
+                            <div className='azazazaz' style={{ width: '21%', border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
+                            <div className='' style={{ width: '70%', border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
+                              <span style={{ display: 'grid' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Transactions</span>
+                                <span>No data found</span>
+                              </span>
+
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginTop: '20px' }}>
+                            <div className='' style={{ width: '61%', border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
+                              <span style={{ display: 'grid' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Transactions</span>
+                                <span>No data found</span>
+                              </span>
+                            </div>
+
+                            <div className='azazazaz' style={{ width: '30%', border: '1px solid #ccc', borderRadius: '10px', padding: '20px', display: 'flex', gap: '15px' }}>
+                              <div>
+                                <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                  <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                  <span>Distance</span>
+                                </span>
+                                <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                  <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                  <span>Consumption per Hour</span>
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                  <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                  <span>Distance</span>
+                                </span>
+                                <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                  <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                  <span>Consumption per Hour</span>
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '20px' }}>
+
+                            <div className='azazazaz' style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
+                            <div className='azazazaz' style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
+                              <span style={{ display: 'grid', borderBottom: '1px solid #ccc', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span style={{ display: 'grid', padding: '20px 0px' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
                           </div>
                         </div>
                       </div>

@@ -192,7 +192,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                                 size="small"
                                                 id="ratename"
                                                 className='full-width'
-                                                label="Ratename"
+                                                label="Rate Name"
                                                 name="ratename"
                                                 value={selectedCustomerData?.ratename || book.ratename}
                                                 onChange={handleChangecredent}
@@ -225,7 +225,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="startDate">
+                                        <DemoItem label="Start Date">
                                             <DatePicker
                                                 id="startDate"
                                                 value={
@@ -254,7 +254,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="closeDate">
+                                        <DemoItem label="Close Date">
                                             <DatePicker
                                                 id="startDate2"
                                                 value={

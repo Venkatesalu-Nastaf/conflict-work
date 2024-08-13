@@ -434,7 +434,7 @@ const MailDetails = () => {
                           <TextField
                             size="small"
                             id="searchname"
-                            label="Searchname"
+                            label="Search Name"
                             name="Searchname"
                             value={searchname || ""}
                             sx={{ m: 1, width: "200ch" }}

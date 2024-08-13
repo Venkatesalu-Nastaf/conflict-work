@@ -190,7 +190,7 @@ const DriverBataRate = () => {
                     size="small"
                     id="ExtraHours"
                     className='full-width'
-                    label="ExtraHours"
+                    label="Extra Hours"
                     name="ExtraHours"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraHours || book.ExtraHours}
@@ -206,7 +206,7 @@ const DriverBataRate = () => {
                     size="small"
                     id="ExtraDays"
                     className='full-width'
-                    label="ExtraDays"
+                    label="Extra Days"
                     name="ExtraDays"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraDays || book.ExtraDays}
@@ -222,7 +222,7 @@ const DriverBataRate = () => {
                     size="small"
                     className='full-width'
                     id="ExtraPerHoursPrice"
-                    label="ExtraPerHoursPrice"
+                    label="Extra Per Hours Price"
                     name="ExtraPerHoursPrice"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraPerHoursPrice || book.ExtraPerHoursPrice}
@@ -244,7 +244,7 @@ const DriverBataRate = () => {
                     size="small"
                     className='full-width'
                     id="ExtraPerDayPrice"
-                    label="ExtraPerDayPrice"
+                    label="Extra Per Day Price"
                     name="ExtraPerDayPrice"
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraPerDayPrice || book.ExtraPerDayPrice}

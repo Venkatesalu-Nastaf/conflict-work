@@ -285,7 +285,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     onChange={(event, value) => handleVechicleNoChange(event, value)}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="vehicleNo" inputRef={params.inputRef} />
+                        <TextField {...params} label="Vehicle No" inputRef={params.inputRef} />
                       );
                     }}
                   />

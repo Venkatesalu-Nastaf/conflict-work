@@ -1011,7 +1011,7 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        label="V-Permit-TO-Vendor"
+                                        label="V Permit To Vendor"
                                         name='vpermettovendor'
                                         autoComplete="new-password"
                                         value={book.vpermettovendor || ''}

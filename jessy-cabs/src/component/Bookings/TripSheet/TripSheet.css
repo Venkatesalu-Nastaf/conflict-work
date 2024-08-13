@@ -598,3 +598,8 @@
   width: 750px;
 }
 
+.tripsheet-top-division-status-main .MuiOutlinedInput-root.MuiInputBase-sizeSmall{
+  padding: 0px !important;
+  font-size: 14px;
+}
+

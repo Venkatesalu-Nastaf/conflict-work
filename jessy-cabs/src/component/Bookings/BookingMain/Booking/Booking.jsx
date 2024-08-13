@@ -349,7 +349,7 @@ const Booking = ({ stationName, customerData }) => {
     <div className="booking-form main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div>
-          <div className="booking-top-division">
+          <div className="booking-top-division Scroll-Style">
             <span className="d-grid">
               <label>Booking</label>
               <input

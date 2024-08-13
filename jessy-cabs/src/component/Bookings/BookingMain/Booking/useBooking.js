@@ -780,14 +780,32 @@ const useBooking = () => {
   };
 
   
+  // useEffect(() => {
+  //   const fetchgetvehicleName = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+  //       const data = response.data
+  //       const name = data?.map((res) => res.vehicleName)
+
+  //       setVehicleName(name)
+
+
+  //     }
+  //     catch (error) {
+  //       console.log(error, "error");
+  //     }
+  //   };
+  //   fetchgetvehicleName()
+  // }, [apiUrl])
+
   useEffect(() => {
     const fetchgetvehicleName = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+        const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
         const data = response.data
-        const name = data?.map((res) => res.vehicleName)
+        const names = data.map(res => res.VechicleNames)
 
-        setVehicleName(name)
+        setVehicleName(names)
 
 
       }
@@ -801,11 +819,12 @@ const useBooking = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const organizationname = localStorage.getItem('usercompany');
+      // const organizationname = localStorage.getItem('usercompany');
 
       try {
-        if (!organizationname) return
-        const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        // if (!organizationname) return
+        // const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
 
           const userDataArray = await response.json();
@@ -824,6 +843,7 @@ const useBooking = () => {
     };
     fetchData();
   }, [apiUrl, datatrigger]);
+  console.log(organistaionsendmail,"organ")
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);

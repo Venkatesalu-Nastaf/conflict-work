@@ -548,11 +548,12 @@ const useDrivercreation = () => {
     
   useEffect(() => {
     const fetchData = async () => {
-      const organizationname = localStorage.getItem('usercompany');
+    //   const organizationname = localStorage.getItem('usercompany');
 
       try {
-        if (!organizationname) return
-        const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        // if (!organizationname) return
+        // const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+        const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
 
           const userDataArray = await response.json();
@@ -591,6 +592,18 @@ const useDrivercreation = () => {
     
     
             };
+            // const dataToSend = {
+            //     userid:lastBookingno,
+            //     Drivername:selectedCustomerData.drivername,
+            //     UserName:selectedCustomerData.username,
+            //     password:selectedCustomerData.userpassword,
+            //     Sendmailauth: organistaionsendmail.Sender_Mail,
+            //     Mailauthpass: organistaionsendmail.EmailApp_Password,
+            //     Email:selectedCustomerData.Email
+      
+      
+      
+            //   };
            
             console.log(dataToSend, "datta")
             await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
@@ -773,6 +786,7 @@ const useDrivercreation = () => {
         handleCancel();
         addPdf(data);
         licenceSubmit(data);
+        // handlecheckmaildriver(data)
         setRows([]);
         setEdit(true)
     };

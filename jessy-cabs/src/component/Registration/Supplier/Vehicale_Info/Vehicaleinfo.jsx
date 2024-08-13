@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext} from 'react';
 import dayjs from "dayjs";
 import "./Vehicaleinfo.css";
 import Box from "@mui/material/Box";
@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Autocomplete } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FiUpload } from "react-icons/fi";
+// import { FiUpload } from "react-icons/fi";
 import { PermissionContext } from '../../../context/permissionContext';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -48,8 +48,8 @@ import useVehicleinfo from './useVehicleinfo';
 import EmailIcon from "@mui/icons-material/Email";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PiCarSimpleFill } from "react-icons/pi";
 import { BsFillFuelPumpFill } from "react-icons/bs";
@@ -60,7 +60,8 @@ import { FaCar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RiFileUploadLine } from "react-icons/ri";
 import { FaBuilding } from "react-icons/fa";
-
+import VehicleAddData from './VehicleAdddata';
+import axios from 'axios'
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -184,14 +185,43 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata
+    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,vehiclenames,setVehilcNames
   } = useVehicleinfo();
+  const { handleinputchnagevehicle,handleADDvehicledata,vechiclevalue,isOpenvehcile,setIsOpenvehicle,error1,errorMessage1,success1,successMessage1,hidePopup1
+  }=VehicleAddData()
 
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+ 
+  
+const handleClickOpen=()=>{
+  setIsOpenvehicle(true)
+}
+const handleClose=()=>{
+  setIsOpenvehicle(false)
+}
+
+useEffect(()=>{
+  const fetchgetvehicleNames = async () => {
+      try {
+          const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+          const data = response.data
+          const names = data.map(res => res.VechicleNames)
+
+          setVehilcNames(names)
+
+
+      }
+      catch (error) {
+          console.log(error, "error");
+      }
+  };
+  fetchgetvehicleNames()
+},[apiUrl,isOpenvehcile,setVehilcNames])
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
@@ -227,7 +257,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <div className="icone">
                     <FaCar />
                   </div>
-                  <TextField
+                  {/* <TextField
                     // margin='normal'
                     size='small'
                     name="vehicleName"
@@ -239,7 +269,27 @@ const Vehicaleinfo = ({ stationName }) => {
                     id="vehicleName"
                     className='full-width'
                   // variant="standard"
-                  />
+                  /> */}
+
+<Autocomplete
+                fullWidth
+                size="small"
+               id="vehicleName"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={book.vehicleName || selectedCustomerData?.vehicleName || ""}
+                 // value={selectedCustomerData?.driverName || book.selectedCustomerData || ""}
+                options={vehiclenames?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleName || ''}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params}    label="Vehicle Name" name="vehicleName" onKeyDown={handleKeyEnter} inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -397,6 +447,32 @@ const Vehicaleinfo = ({ stationName }) => {
                     }
                   />
                 </div>
+                <div>
+                <div>
+                  { !isEditMode &&
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Add Vechicle
+            </Button>
+             }
+            <Dialog open={isOpenvehcile}  onClose={handleClose}>
+                <DialogContent>
+                    <TextField
+                      
+                        id="name"
+                        label="Vehicle Name"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={vechiclevalue ||""}
+                        onChange={handleinputchnagevehicle}
+                    />
+                </DialogContent>
+              
+                    <Button onClick={handleADDvehicledata}>Done</Button>
+            
+            </Dialog>
+        </div>
+        </div>
               </div>
               <div className="vehicaleinfo-container-right">
                 <div className="vehicaleinfo-update-main">
@@ -970,6 +1046,11 @@ const Vehicaleinfo = ({ stationName }) => {
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
             <p>{errorMessage}</p>
           </div>}
+          {error1 && <div className='alert-popup Error' >
+            <div className="popup-icon"> <ClearIcon /> </div>
+            <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' /> </span>
+            <p>{errorMessage1}</p>
+          </div>}
           {warning &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon /> </div>
@@ -989,6 +1070,13 @@ const Vehicaleinfo = ({ stationName }) => {
               <div className="popup-icon"> <ClearIcon /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
+            </div>
+          }
+            {success1 &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' /> </span>
+              <p>{successMessage1}</p>
             </div>
           }
         </div>

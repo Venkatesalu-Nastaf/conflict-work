@@ -1,0 +1,28 @@
+.card-report{
+    box-shadow: 2px 0 6px 0 rgba(0, 0, 0, .05);
+    border: 1px solid #e3e8ed;
+    width: 300px;
+    /* width: fit-content; */
+    padding: 8px;
+}
+
+.vehicle-stats-box-content {
+    display: grid;
+    padding: 20px 0px;
+}
+
+
+.vehicle-stats-box-content-heading {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.vehicle-stats-graph-right {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    text-align: center;
+    /* background-color: var(--glass); */
+}

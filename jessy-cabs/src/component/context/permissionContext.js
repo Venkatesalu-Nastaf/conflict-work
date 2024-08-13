@@ -7,10 +7,21 @@ const apiurl = APIURL;
 export const PermissionContext = createContext();
 
 export const PermissionProvider = ({ children }) => {
+    
+    const [open, setOpen] = useState(false);
+    const [openAddTag, setOpenAddTag] = React.useState(false);
+    const [opendetailsDrawer, setOpendetailsDrawer] = useState(false);
+
+    const [historyLocation, setHistoryLocation] = React.useState(false);
+    const [openshare, setOpenshare] = React.useState(false);
+    const [openDriverModify, setOpenDriverModify] = React.useState(false);
+    const [openHistoryDrawer, setOpenHistoryDrawer] = useState(false);
+    const [openmessage, setOpenmessage] = React.useState(false);
 
     const [permissions, setPermission] = useState([]);
     const [makeRender, setMakeRender] = useState(false);
     const [user_id, setUser_id] = useState("")
+    
     const userid = localStorage.getItem('useridno') || user_id;
     // const token=localStorage.getItem("tokensdata")
     
@@ -45,7 +56,7 @@ export const PermissionProvider = ({ children }) => {
 
 
     return (
-        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id }}>
+        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation,openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen}}>
             {children}
         </PermissionContext.Provider>
     )

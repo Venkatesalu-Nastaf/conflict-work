@@ -388,7 +388,7 @@ const Customer = ({ stationName }) => {
                           id="orderedbycutomer"
                           className='full-width'
                           sx={{ width: "300px" }}
-                          label="Orderedby"
+                          label="Ordered By"
                           name="orderedby"
                           value={datafield.orderedby || ""}
 
@@ -405,7 +405,7 @@ const Customer = ({ stationName }) => {
                           size="small"
                           id="orderebyemail"
                           className='full-width'
-                          label="OrderedByemail"
+                          label="Ordered By Email"
                           name="orderByEmail"
                           autoComplete="new-password"
                           value={datafield.orderByEmail || ""}
@@ -658,7 +658,7 @@ const Customer = ({ stationName }) => {
                     getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
+                        <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
                       )
                     }
                     }
@@ -725,7 +725,7 @@ const Customer = ({ stationName }) => {
                   <TextField
                     name="gstnumber"
                     className='full-width'
-                    label="GST-Number"
+                    label="GST Number"
                     value={selectedCustomerData?.gstnumber || book.gstnumber}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -743,7 +743,7 @@ const Customer = ({ stationName }) => {
                     value={selectedCustomerData?.SalesPerson || book.SalesPerson}
                     autoComplete="new-password"
                     onChange={handleChange}
-                    label="Sales-Person"
+                    label="Sales Person"
                     id="SalesPerson"
                     size='small'
                   />

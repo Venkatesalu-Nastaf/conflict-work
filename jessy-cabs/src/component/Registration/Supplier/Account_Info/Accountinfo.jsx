@@ -382,7 +382,7 @@ const Accuntinfo = () => {
                   getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="vehRegNo" name="vehRegNo" inputRef={params.inputRef} />
+                      <TextField {...params} label="Veh Reg No" name="vehRegNo" inputRef={params.inputRef} />
                     )
                   }
                   }

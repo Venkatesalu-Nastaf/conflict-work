@@ -241,11 +241,11 @@ const useEmplyeecreation = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          const organizationname = localStorage.getItem('usercompany');
+        //   const organizationname = localStorage.getItem('usercompany');
     
           try {
-            if (!organizationname) return
-            const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+            // if (!organizationname) return
+            const response = await fetch(`${apiUrl}/organizationdata`);
             if (response.status === 200) {
     
               const userDataArray = await response.json();

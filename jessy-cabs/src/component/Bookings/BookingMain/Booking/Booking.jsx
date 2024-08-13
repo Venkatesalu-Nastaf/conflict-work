@@ -349,7 +349,7 @@ const Booking = ({ stationName, customerData }) => {
     <div className="booking-form main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div>
-          <div className="booking-top-division">
+          <div className="booking-top-division Scroll-Style">
             <span className="d-grid">
               <label>Booking</label>
               <input
@@ -398,6 +398,8 @@ const Booking = ({ stationName, customerData }) => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     size="small"
+                    className="booking-top-section-status-main"
+                    sx={{padding: '0px 30px 0px 10px', fontSize: '14px'}}
                     // value={
                     //   bookingStatus || "pending" ||
                     //   ""
@@ -1297,7 +1299,7 @@ const Booking = ({ stationName, customerData }) => {
                   return (
                     <TextField
                       {...params}
-                      label="orderedby"
+                      label="Ordered By"
                       name="orderedby"
                       inputRef={params.inputRef}
                     />
@@ -1401,7 +1403,7 @@ const Booking = ({ stationName, customerData }) => {
                 }
                 renderInput={(params) => {
                   return (
-                    <TextField {...params} label="service station" name="servicestation" inputRef={params.inputRef} />
+                    <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                   );
                 }}
               />
@@ -1671,7 +1673,7 @@ const Booking = ({ stationName, customerData }) => {
                   ""
                 }
                 onChange={handleChange}
-                label="Cost code"
+                label="Cost Code"
                 id="customercode"
                 // variant="standard"
                 margin="normal"

@@ -1413,6 +1413,7 @@ const useTripsheet = () => {
 
 
             };
+            console.log(updatedBook,"book")
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -2449,7 +2450,8 @@ const useTripsheet = () => {
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
-                    vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+                    // vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+                    vehRegNo:formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
                     // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     // reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
@@ -2457,6 +2459,7 @@ const useTripsheet = () => {
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                     ofclanno: '044-49105959',
                 };
+                console.log(dataToSend,"sendsms")
 
                 const response = await fetch(`${apiUrl}/tripguest-send-sms`, {
                     method: 'POST',
@@ -2480,13 +2483,14 @@ const useTripsheet = () => {
     };
     //send sms from tripsheet to driver
     // const [DriverSMS, setDriverSMS] = useState(false);
-
+//   console.log(formData.address1 ,"ff", selectedCustomerData.address1 ,"ss", formValues.address1 ,"val", selectedCustomerDatas.address1 ,"datas",book.address1 )
     const handleDriverSendSMS = async () => {
         if (DriverSMS || formData.DriverSMS || book.DriverSMS) {
             try {
+                
                 const dataSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-                    address1: formData.address1 || selectedCustomerData.address1 || formValues.address1 || selectedCustomerDatas.address1 || book.address1 || '',
+                    address1: formData.address1 || selectedCustomerData.address1 || formValues.address1 ||book.address1 || selectedCustomerDatas.address1|| '',
 
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -2495,6 +2499,8 @@ const useTripsheet = () => {
                     reporttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || '',
                     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
                 };
+
+                console.log(dataSend,"driversms")
 
                 const response = await fetch(`${apiUrl}/tripdriver-send-sms`, {
                     method: 'POST',
@@ -2725,17 +2731,18 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const encoded = localStorage.getItem('usercompany');
-            localStorage.setItem('usercompanyname', encoded);
+            // const encoded = localStorage.getItem('usercompany');
+            // localStorage.setItem('usercompanyname', encoded);
             // const storedcomanyname = localStorage.getItem('usercompanyname');
             // const organizationname = decodeURIComponent(storedcomanyname);
 
-            if (encoded === "undefined") {
-                return;
-            }
+            // if (encoded === "undefined") {
+            //     return;
+            // }
 
             try {
-                const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+                // const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+                const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();
@@ -2758,6 +2765,7 @@ const useTripsheet = () => {
 
         fetchData();
     }, [apiUrl, sendEmail, location, organizationdata, triggerdata, dataname]);
+   
 
 
 
@@ -3482,17 +3490,29 @@ const useTripsheet = () => {
 
     const [vehileNames, setVehicleNames] = useState([])
 
+    // useEffect(() => {
+    //     const getvehicleName = async () => {
+    //         const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+    //         const data = response.data;
+    //         const name = data?.map((res) => res.vehicleName)
+    //         console.log(name)
+    //         // setVehicleNames(name)
+    //     }
+    //     getvehicleName()
+
+    // }, [apiUrl])
     useEffect(() => {
         const getvehicleName = async () => {
-            const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
-            const data = response.data;
-            const name = data?.map((res) => res.vehicleName)
+            const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+            const data = response.data
+            const names = data?.map(res => res.VechicleNames)
 
-            setVehicleNames(name)
+            setVehicleNames(names)
         }
         getvehicleName()
 
     }, [apiUrl])
+
 
 
     // const [escort, setEscort] = useState('No');

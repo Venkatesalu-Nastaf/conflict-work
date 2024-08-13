@@ -15,7 +15,7 @@ import { FaPlus } from "react-icons/fa";
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
+import "./Vehicle.css";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,9 +67,9 @@ export const Vehicle = () => {
             <span className="Title-Name">Real Time</span>
           </p> */}
           <div className='main-content-form'>
-            <div style={{ display: 'flex' }}>
-              <div style={{ width: '37%' }}> <span style={{ fontSize: '25px', fontWeight: '600' }}>Vehicles</span> </div>
-              <div style={{ display: 'flex', width: '63%', alignItems: 'center', gap: '0px 20px' }}>
+            <div className='vehicle-main'>
+              <div className='vehicle-top-section-left'> <span>Vehicles</span> </div>
+              <div className='vehicle-top-section-right'>
                 <span>
                   <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
@@ -133,49 +133,49 @@ export const Vehicle = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  <div style={{ paddingTop: '20px', display: 'flex' }}>
-                    <div style={{ width: '25%' }}>
+                  <div className='vehicle-tab-main'>
+                    <div className='vehicle-tab-left-main'>
                       <div style={{ marginBottom: '20px' }}>
                         <Button variant="outlined">Sort Options</Button>
                       </div>
-                      <div style={{ height: '80vh', overflow: 'auto' }}>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                      <div className='vehicle-details-section-main Scroll-Style'>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', marginTop: '20px', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', marginTop: '20px', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', marginTop: '20px', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', marginTop: '20px', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
-                        <div style={{ display: 'grid', width: 'fit-content', padding: '20px', border: '1px solid #ccc', marginTop: '20px', borderRadius: '5px' }}>
-                          <span style={{ fontWeight: '600' }}>TN22EB3001</span>
+                        <div className='vehicle-details-box'>
+                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
                           <span>2023 mahindra reva | CNG | car</span>
@@ -183,17 +183,17 @@ export const Vehicle = () => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ width: '75%' }}>
-                      <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '10px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontWeight: '600' }}>TN22EB3001</div>
-                          <div style={{ display: 'flex', gap: '0px 15px' }}>
+                    <div className='vehicle-tab-right-main Scroll-Style'>
+                      <div className='vehicle-tab-right-top-division-main'>
+                        <div className='vehicle-tab-right-top-division-box'>
+                          <div className='vehicle-details-box-veh-no'>TN22EB3001</div>
+                          <div className='vehicle-tab-right-top-division-btn-section'>
                             <span><Button variant="outlined">Live</Button></span>
                             <span><Button variant="outlined">History</Button></span>
                             <span><Button variant="contained">View Details</Button></span>
                           </div>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', gap: '0px 15px', marginTop: '20px' }}>
+                        <div className='vehicle-tab-right-top-division-btn-section-2'>
                           <Button variant="outlined">Jobs</Button>
                           <Button variant="outlined">Alarms</Button>
                           <Button variant="outlined">DTCs</Button>
@@ -203,26 +203,133 @@ export const Vehicle = () => {
                         </div>
                       </div>
                       <div>
-                        <span style={{ fontWeight: '600' }}>Vehicle Cost</span>
+                        <h3>Vehicle Cost</h3>
                         <div>
-                          <span>Vehicle Stats</span>
-                          <div>
-                            <div style={{display: 'grid', width: 'fit-content', textAlign: 'center'}}>
-                              <span style={{display: 'grid'}}>
-                                <span>0 Min</span>
+                          <h2>Vehicle Stats</h2>
+                          <div className='vehicle-stats-main'>
+
+                            <div className='vehicle-stats-box vehicle-stats-box-border'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>0 Min</span>
                                 <span>Running time</span>
                               </span>
-                              <span style={{display: 'grid'}}>
-                                <span>-</span>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>-</span>
                                 <span>Stoppage time</span>
                               </span>
-                              <span style={{display: 'grid'}}>
-                                <span>0</span>
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0</span>
                                 <span>Average Speed</span>
                               </span>
                             </div>
-                            <div></div>
-                            <div></div>
+
+                            <div className='vehicle-stats-box vehicle-stats-box-border'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>INR 0</span>
+                                <span>Fuel Cost</span>
+                              </span>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>-</span>
+                                <span>Stoppage time</span>
+                              </span>
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0</span>
+                                <span>Average Speed</span>
+                              </span>
+                            </div>
+
+
+                            <div className='vehicle-stats-box'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className='vehicle-stats-distance-box'>
+
+                            <div className='vehicle-stats-distance-box-left'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
+                            <div className='vehicle-stats-distance-box-right'>
+                              <span style={{ display: 'grid' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Transactions</span>
+                                <span>No data found</span>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className='vehicle-stats-graph-main'>
+                            <div className='vehicle-stats-graph-left'>
+                              <span style={{ display: 'grid' }}>
+                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Graph</span>
+                                <span>No data found</span>
+                              </span>
+                            </div>
+
+                            <div className='vehicle-stats-graph-right'>
+                              <div>
+                                <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                  <span>Distance</span>
+                                </span>
+                                <span className='vehicle-stats-box-content'>
+                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                  <span>Consumption per Hour</span>
+                                </span>
+                              </div>
+                              <div>
+                                <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                  <span>Distance</span>
+                                </span>
+                                <span className='vehicle-stats-box-content'>
+                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                  <span>Consumption per Hour</span>
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div className='vehicle-stats-fuel-cost-main'>
+
+                            <div className='vehicle-stats-fuel-cost-box'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
+                            <div className='vehicle-stats-fuel-cost-box'>
+                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
+                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                <span>Distance</span>
+                              </span>
+                              <span className='vehicle-stats-box-content'>
+                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                <span>Consumption per Hour</span>
+                              </span>
+                            </div>
+
                           </div>
                         </div>
                       </div>

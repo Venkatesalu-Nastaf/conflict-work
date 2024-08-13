@@ -280,13 +280,28 @@ function App() {
   //------------fetch vehicle name-------------------------------------------------------------------------------------------------
 
   const [vehileName, setVehicleName] = useState([])
-  useEffect(() => {
+  // useEffect(() => {
+  //   const fetchgetvehicleName = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+  //       const data = response.data
+  //       const name = data?.map((res) => res.vehicleName)
+  //       setVehicleName(name)
+  //     }
+  //     catch (error) {
+  //       console.log(error, "error");
+  //     }
+  //   };
+  //   fetchgetvehicleName()
+  // }, [apiUrl])
+
+   useEffect(() => {
     const fetchgetvehicleName = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
-        const data = response.data
-        const name = data?.map((res) => res.vehicleName)
-        setVehicleName(name)
+        const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+            const data = response.data
+            const names = data?.map(res => res.VechicleNames)
+        setVehicleName(names)
       }
       catch (error) {
         console.log(error, "error");

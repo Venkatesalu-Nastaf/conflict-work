@@ -366,8 +366,31 @@ router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
   })
 })
 
+// =========================================addvehcile
 
+router.post("/getvehciledatauniquevehilcle",(req,res)=>{
+  const {vechiclevalue,created_at}=req.body;
+  console.log(vechiclevalue,created_at,"vehhh")
+  db.query("insert into VehicleName(VechicleNames,created_at) values(?,?)",[vechiclevalue,created_at],(err,result)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+   
+    return res.status(200).json({message:"inserted succesfully"});
 
+  })
+})
+
+router.get('/getvehicledatauniquevehicleNames',(req,res)=>{
+ 
+  db.query("select * from  VehicleName ",(err,results)=>{
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results,"jjjj")
+    return res.status(200).json(results);
+  })
+})
 
 
 

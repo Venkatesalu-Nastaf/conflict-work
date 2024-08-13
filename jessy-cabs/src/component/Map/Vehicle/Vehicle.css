@@ -1,0 +1,183 @@
+.vehicle-main {
+    display: flex;
+}
+
+.vehicle-top-section-left {
+    width: 37%;
+}
+
+.vehicle-top-section-left span {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.vehicle-top-section-right {
+    display: flex;
+    width: 63%;
+    align-items: center;
+    gap: 0px 20px;
+}
+
+.vehicle-tab-main {
+    padding-top: 20px;
+    display: flex;
+}
+
+.vehicle-tab-left-main {
+    width: 22%;
+}
+
+.vehicle-tab-right-main {
+    width: 75%;
+    padding: 20px;
+    height: 80vh;
+    overflow: auto;
+}
+
+.vehicle-details-section-main {
+    height: 80vh;
+    overflow: auto;
+}
+
+.vehicle-details-box {
+    display: grid;
+    width: fit-content;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: var(--glass);
+}
+
+.vehicle-details-box-veh-no {
+    font-weight: 600;
+}
+
+.vehicle-tab-right-top-division-main {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--glass);
+}
+
+.vehicle-tab-right-top-division-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vehicle-tab-right-top-division-btn-section {
+    display: flex;
+    gap: 0px 15px;
+}
+
+.vehicle-tab-right-top-division-btn-section-2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0px 15px;
+    margin-top: 20px;
+}
+
+.vehicle-stats-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    background-color: var(--glass);
+}
+
+.vehicle-stats-box {
+    width: 325px;
+    display: grid;
+    text-align: center;
+}
+
+.vehicle-stats-box-border {
+    border-right: 1px solid #ccc;
+    padding-right: 20px;
+}
+
+.vehicle-stats-box-content {
+    display: grid;
+    padding: 20px 0px;
+}
+
+.vehicle-stats-box-content-border-bottom {
+    border-bottom: 1px solid #ccc;
+}
+
+.vehicle-stats-box-content-heading {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.vehicle-stats-distance-box {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.vehicle-stats-distance-box-left {
+    width: 21%;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    display: grid;
+    text-align: center;
+    background-color: var(--glass);
+}
+
+.vehicle-stats-distance-box-right {
+    width: 70%;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--glass);
+}
+
+.vehicle-stats-graph-main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.vehicle-stats-graph-left {
+    width: 61%;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--glass);
+}
+
+.vehicle-stats-graph-right {
+    width: 30%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    text-align: center;
+    background-color: var(--glass);
+}
+
+.vehicle-stats-fuel-cost-main {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.vehicle-stats-fuel-cost-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 325px;
+    display: grid;
+    text-align: center;
+    background-color: var(--glass);
+}

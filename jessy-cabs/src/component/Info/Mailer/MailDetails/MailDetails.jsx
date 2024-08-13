@@ -293,7 +293,7 @@ const MailDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const organizationname = localStorage.getItem('usercompany');
+      // const organizationname = localStorage.getItem('usercompany');
 
 
       try {
@@ -302,7 +302,7 @@ const MailDetails = () => {
         //     return
         //   }
         // else{
-        const response = await fetch(`${apiurl}/organizationdata/${organizationname}`);
+        const response = await fetch(`${apiurl}/organizationdata`);
         if (response.status === 200) {
 
           const userDataArray = await response.json();
@@ -434,7 +434,7 @@ const MailDetails = () => {
                           <TextField
                             size="small"
                             id="searchname"
-                            label="Searchname"
+                            label="Search Name"
                             name="Searchname"
                             value={searchname || ""}
                             sx={{ m: 1, width: "200ch" }}

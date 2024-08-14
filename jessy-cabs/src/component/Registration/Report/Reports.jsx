@@ -11,10 +11,11 @@ import { BillWiseReceipt } from './Billwised_receipt/BillWiseReceipt';
 import MonthlyWise from './Monthly_Wise/MonthlyWise';
 import { PendingBills } from './pendingBills/PendingBills';
 // import zIndex from '@mui/material/styles/zIndex';
+import { ReportData } from './Context/ReportContext';
 
 export const Reports = ({ stationName }) => {
-    const [value, setValue] = React.useState("Monthly Wise");
-
+    // const [value, setValue] = React.useState("Monthly Wise");
+     const {value, setValue} = ReportData()
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -27,15 +28,15 @@ export const Reports = ({ stationName }) => {
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Monthly Wise" className='tab-content' value="Monthly Wise" />
                                 <Tab label="GST Reports" className='tab-content' value="GST Reports" />
-                                <Tab label="Pending Bills" className='tab-content' value="Pendingbills" />
                                 <Tab label="Billed wise Receipt" className='tab-content' value="Billed wise Receipt" />
+                                <Tab label="Pending Bills" className='tab-content' value="Pendingbills" />
                             </TabList>
                         </Box>
                         {/* <TabPanel value="Reports"></TabPanel> */}
                         <TabPanel value="Monthly Wise"><MonthlyWise /></TabPanel>
                         <TabPanel value="GST Reports"><GstReport /></TabPanel>
-                        <TabPanel value="Pendingbills"><PendingBills /></TabPanel>
                         <TabPanel value="Billed wise Receipt"><BillWiseReceipt stationName={stationName} /></TabPanel>
+                        <TabPanel value="Pendingbills"><PendingBills /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

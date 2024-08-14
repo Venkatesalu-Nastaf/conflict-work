@@ -29,9 +29,9 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
     const startDate = dayjs(book.startdate);
     const billingdate = startDate.format('YYYY-MM-DD');
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
-    const cgst = totalAmount * 2.5 / 100;
-    const sgst = totalAmount * 2.5 / 100;
-    const paymentValue = totalAmount + cgst + sgst;
+    const cgst = totalAmount * 2.5 / 100 || 0;
+    const sgst = totalAmount * 2.5 / 100 || 0;
+    const paymentValue = totalAmount + cgst + sgst || 0;
     const AmountInWords = numWords(parseInt(paymentValue));
 
     // setting the Billed details
@@ -39,7 +39,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
         const Invoice_No = `RF${particularRefNo}`;
         const Trip_id = particularRefNo;
         const Status = "Billed";
-        const Amount = book.totalcalcAmount;
+        const Amount = book.totalcalcAmount || 0;
         const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
         const Customer = customerData.customer;
 
@@ -128,7 +128,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                                             {book.pickup}
                                         </td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking)}</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -174,7 +174,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                             </div>
                         </div>
                         <div>
-                            {attachedImage ? <p className="attach-text">Attached Images</p> : <p className="attachtext"> No Attached Image</p>}
+                            {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : <p className="attachtext"> No Attached Image</p>}
                             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
                                 attachedImage.map((image, index) => (
                                     <img key={index} src={image} alt='' className="attachimage" />

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./Billing.css";
 import {
     Autocomplete,
@@ -8,18 +8,14 @@ import {
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
 
 import SpeedDial from "@mui/material/SpeedDial";
 
-import Paymentinvoice from '../Accountsinvoice/Paymentinvoice';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 //dialog box
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -95,32 +91,32 @@ const Billing = () => {
         handleAutocompleteChange,
         selectedBankAccount,
         bankOptions,
-        popupOpen,
         handlePopupClose,
-        organizationdata,
-        triprequest,
-        tripcode,
-        tripdepartment,
-        routeData,
-        tripShedkm,
-        tripshedin,
-        tripshedout,
-        tripreporttime,
-        selectedImage,
-        tripshedintime,
-        tripadditionaltime,
-        tripstartkm,
-        tripclosekm,
-        tripstarttime,
-        tripclosetime,
-        tripstartdate,
-        tripclosedate,
+        // organizationdata,
+        // triprequest,
+        // tripcode,
+        // tripdepartment,
+        // routeData,
+        // tripShedkm,
+        // tripshedin,
+        // tripshedout,
+        // tripreporttime,
+        // selectedImage,
+        // tripshedintime,
+        // tripadditionaltime,
+        // tripstartkm,
+        // tripclosekm,
+        // tripstarttime,
+        // tripclosetime,
+        // tripstartdate,
+        // tripclosedate,
         organizationaddress1,
-        organizationaddress2,
-        organizationcity,
-        organizationgstnumber,
-        GmapimageUrl,
-        mapimageUrl, total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount, handleKeyenterBilling, discound_PercentageCalc,
+        // organizationaddress2,
+        // organizationcity,
+        // organizationgstnumber,
+        // GmapimageUrl,
+        // mapimageUrl,
+         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount, handleKeyenterBilling, discound_PercentageCalc,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,
 
         // ... (other state variables and functions)

@@ -17,6 +17,26 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import "./Vehicle.css";
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
+import { CiEdit } from "react-icons/ci";
+
+import Driving from "./Driving/Driving";
+import Running from "./Running/Running";
+import Fuel from "./Fuel/Fuel";
+import Cost from './Cost/Cost';
+import Safety from './Safety/Safety';
+import VehicleTag from './VehicleTag/VehicleTag';
+
+
+
+
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -46,6 +66,10 @@ function a11yProps(index) {
   };
 }
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 
 export const Vehicle = () => {
   const [vehicleNO, setVehicleNO] = React.useState('');
@@ -59,6 +83,31 @@ export const Vehicle = () => {
   const handleChangeTabs = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [openEditDriver, setOpenEditDriver] = React.useState(false);
+
+  const handleClickOpenEditDriver = () => {
+    setOpenEditDriver(true);
+    setOpenAddDriver(false);
+  };
+
+  const handleCloseEditDriver = () => {
+    setOpenEditDriver(false);
+  };
+
+  const [openAddDriver, setOpenAddDriver] = React.useState(false);
+
+  const handleClickOpenAddDriver = () => {
+    setOpenAddDriver(true);
+    setOpenEditDriver(false);
+  };
+
+  const handleCloseAddDriver = () => {
+    setOpenAddDriver(false);
+  };
+
+
+
   return (
     <>
       <div className="form-container-realtime">
@@ -142,7 +191,7 @@ export const Vehicle = () => {
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
                           <span>Add Tag</span>
                         </div>
@@ -183,6 +232,170 @@ export const Vehicle = () => {
                         </div>
                       </div>
                     </div>
+
+                    <React.Fragment>
+                      <Dialog
+                        open={openEditDriver}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handleCloseEditDriver}
+                        aria-describedby="alert-dialog-slide-description"
+                      >
+                        <DialogTitle>
+                          <div>Modify Driver</div>
+                          <span>Add, Edit and Delete Driver</span>
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-slide-description">
+                            <div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Vehicle:</span>
+                                <span>0642 (TN11AA0642)</span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Driver Name:</span>
+                                <span>
+                                  palani (+91-9443011846)
+                                </span>
+                                <span>
+                                  <Button variant='outlined'>Edit</Button>
+                                </span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Remove Driver:</span>
+                                <span>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker']}>
+                                      <DatePicker label="From Date" />
+                                    </DemoContainer>
+                                  </LocalizationProvider>
+                                </span>
+                                <span>
+                                  <Button variant='contained'>Remove Driver</Button>
+                                </span>
+                              </div>
+
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Change Driver:</span>
+                                <span>
+                                  <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                      <InputLabel id="demo-simple-select-label">Vehicle No</InputLabel>
+                                      <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={vehicleNO}
+                                        label="Vehicle No"
+                                        onChange={handleChange}
+                                      >
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </Box>
+                                </span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Assigned From:</span>
+                                <span>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker']}>
+                                      <DatePicker label="From Date" />
+                                    </DemoContainer>
+                                  </LocalizationProvider>
+                                </span>
+                              </div>
+                              <div>
+                                <Button onClick={handleClickOpenAddDriver}>Add Driver</Button>
+                              </div>
+                            </div>
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button variant='contained' onClick={handleCloseEditDriver}>Update</Button>
+                        </DialogActions>
+                      </Dialog>
+                    </React.Fragment>
+
+                    <React.Fragment>
+                      <Dialog
+                        open={openAddDriver}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handleCloseAddDriver}
+                        aria-describedby="alert-dialog-slide-description"
+                      >
+                        <DialogTitle>
+                          <div>Modify Driver</div>
+                          <span>Add, Edit and Delete Driver</span>
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-slide-description">
+                            <div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Vehicle:</span>
+                                <span>0642 (TN11AA0642)</span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>First Name*:</span>
+                                <span>
+                                  <input type="text" name="" id="" />
+                                </span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Last Name:</span>
+                                <span>
+                                  <input type="text" name="" id="" />
+                                </span>
+                              </div>
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Mobile No*:</span>
+                                <span>
+                                  <input type="text" name="" id="" />
+                                </span>
+                              </div>
+
+
+                              <div className='edit-driver-details-div'>
+                                <span className='edit-driver-heading'>Group:</span>
+                                <span>
+                                  <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                      <InputLabel id="demo-simple-select-label">Select Group</InputLabel>
+                                      <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={vehicleNO}
+                                        label="Vehicle No"
+                                        onChange={handleChange}
+                                      >
+                                        <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                                        <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                                        <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                                        <MenuItem value={'Goa'}>Goa</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </Box>
+                                </span>
+                              </div>
+
+                              <div>
+                                <Button onClick={handleClickOpenEditDriver}>Select Existing Driver</Button>
+                              </div>
+                            </div>
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button variant='contained' onClick={handleCloseAddDriver}>Update</Button>
+                        </DialogActions>
+                      </Dialog>
+                    </React.Fragment>
                     <div className='vehicle-tab-right-main Scroll-Style'>
                       <div className='vehicle-tab-right-top-division-main'>
                         <div className='vehicle-tab-right-top-division-box'>
@@ -306,6 +519,8 @@ export const Vehicle = () => {
 
                           </div>
 
+
+
                           <div className='vehicle-stats-fuel-cost-main'>
 
                             <div className='vehicle-stats-fuel-cost-box'>
@@ -337,22 +552,34 @@ export const Vehicle = () => {
                   </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                  Item Two
+                  <div>
+                    <Driving></Driving>
+                  </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  Item Three
+                  <div>
+                    <Running></Running>
+                  </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
-                  Item 4
+                  <div>
+                    <Fuel></Fuel>
+                  </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={4}>
-                  Item 5
+                  <div>
+                    <Cost></Cost>
+                  </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={5}>
-                  Item 6
+                  <div>
+                    <Safety></Safety>
+                  </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={6}>
-                  Item 7
+                  <div>
+                    <VehicleTag></VehicleTag>
+                  </div>
                 </CustomTabPanel>
               </Box>
             </div>

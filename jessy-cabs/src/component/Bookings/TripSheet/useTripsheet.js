@@ -640,7 +640,6 @@ const useTripsheet = () => {
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
             // setIsEditMode(false);
-            console.log("editmode data", "ee")
             setSmsGuest(false)
             setSendEmail(false)
             setDriverSMS(false)
@@ -843,6 +842,7 @@ const useTripsheet = () => {
         localStorage.removeItem('selectedTripid');
     };
   
+
     const handlecheck = async () => {
     
        
@@ -864,8 +864,8 @@ const useTripsheet = () => {
                     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
                     driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
-                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    vehRegNo: formData.vehRegNo ||selectedCustomerDatas.vehRegNo|| selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+                    mobileNo: formData.mobileNo ||selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo  || book.mobileNo || '',
                     vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
                     // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
                     starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
@@ -1047,6 +1047,7 @@ const useTripsheet = () => {
 
 
     // handleConfirm
+  
 
     const handleEdit = async () => {
         try {
@@ -1080,7 +1081,7 @@ const useTripsheet = () => {
                     additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
                     tripsheetdate: selectedBookingDate,
                     hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
-                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+                    vehRegNo: selectedCustomerDatas.vehRegNo ||formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo  || book.vehRegNo || '',
                     driverName: selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     // mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     mobileNo: selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo,
@@ -1268,7 +1269,7 @@ const useTripsheet = () => {
     //         startdate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
     //             startdate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
 
-
+   
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1348,6 +1349,7 @@ const useTripsheet = () => {
                 parking: book.parking,
                 permit: book.permit,
                 travelsname: selectedCustomerDatas.travelsname || formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
+                travelsemail: selectedCustomerDatas.travelsemail || selectedCustomerData.travelsemail || formData.travelsemail || book.travelsemail,
                 remark: book.remark,
                 reporttime: formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime,
                 shedin: book.shedin,
@@ -1737,7 +1739,6 @@ const useTripsheet = () => {
             const formData = new FormData();
             formData.append('image', file);
 
-            console.log(documentType, "yype")
             //     // axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
             //    await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData)
             //    // Second PUT request if documentType is toll or parking
@@ -1748,11 +1749,10 @@ const useTripsheet = () => {
             //         }
 
             try {
-                console.log(documentType, "yype");
+    
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
 
                 if (documentType === 'Toll' || documentType === 'Parking') {
-                    console.log(documentType, "enter");
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
                     //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
                 }
@@ -3605,7 +3605,8 @@ const useTripsheet = () => {
         }
     }
 
-    const vehicleRegisterNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+    const vehicleRegisterNo = formData.vehRegNo || selectedCustomerDatas.vehRegNo||selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '';
+
 
     const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
 

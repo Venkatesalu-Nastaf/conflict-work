@@ -240,9 +240,7 @@ const useBooking = () => {
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
 
-    console.log("formData", formData)
     const ratetye=formData["ratenamebook"]
-    console.log(ratetye,"ratetypelocation")
     setRate_name(ratetye)
     setBookingStatus(formData["status"])
 
@@ -843,7 +841,7 @@ const useBooking = () => {
     };
     fetchData();
   }, [apiUrl, datatrigger]);
-  console.log(organistaionsendmail,"organ")
+  
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -1113,7 +1111,7 @@ const useBooking = () => {
 
   //------------------------------------------------------
 
-  // console.log(bookingStatus,"ststt")
+  
   const handleAdd = async () => {
 
     if (!selectedCustomerData.guestmobileno) {
@@ -1173,7 +1171,7 @@ const useBooking = () => {
         bookingtime: bookingtime || getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
-        status: bookingStatus,
+        status:bookingStatus,
         mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
         guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
         guestmobileno: formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno,
@@ -1259,7 +1257,6 @@ const useBooking = () => {
   };
 
 
-
   const handleEdit = async (userid) => {
     try {
       const selectedCustomer = rows.find(
@@ -1268,15 +1265,17 @@ const useBooking = () => {
           formData.bookingno
       );
 
-      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate ||book.bookingdate || dayjs();
+      const selectedbookingtime=selectedCustomerData.bookingtime || formData.bookingtime ||book.bookingtime || getCurrentTime();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
-
+       
       // let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
         ...selectedCustomer,
-        bookingtime: bookingtime || getCurrentTime(),
+        // bookingtime: bookingtime || getCurrentTime(),
+        bookingtime:selectedbookingtime,
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
         status: bookingStatus,
@@ -1743,7 +1742,7 @@ const travelsdatafetch = async (travelsnamedata) => {
   try {
       const response = await axios.get(`${apiUrl}/travelsnamedetailfetchbooking/${travelsnamedata}`)
       const data = response.data
-      console.log(data)
+   
       setRowsdriver(data)
 
       // setDriverDetails(data)

@@ -520,6 +520,12 @@ router.post('/send-email', async (req, res) => {
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                             <td style="padding: 8px;color: #000"">${vehRegNo}</td>
                         </tr>
+                          ${requestno ? `
+                    <tr>
+                     <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                      <td style="padding: 8px; color: #000;">${requestno}</td>
+                      </tr>
+                       ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
                             <td style="padding: 8px;color: #000"">${driverName}</td>
@@ -531,7 +537,7 @@ router.post('/send-email', async (req, res) => {
         
           `,
             };
-            console.log(customerMailOptions.html);
+
             
             await transporter.sendMail(customerMailOptions);
             // await transporter.sendMail(ownerMailOptions);
@@ -594,6 +600,12 @@ router.post('/send-email', async (req, res) => {
                         <td style="padding: 8px;"><strong>Duty Type</strong></td>
                         <td style="padding: 8px;color: #000"">${duty}</td>
                     </tr>
+                     ${requestno ? `
+                    <tr>
+                     <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                      <td style="padding: 8px; color: #000;">${requestno}</td>
+                      </tr>
+                       ` : ''}
                     <tr>
                         <td style="padding: 8px;"><strong>Confirmed By:</strong></td>
                         <td style="padding: 8px;color: #000"">${username}</td>
@@ -605,6 +617,7 @@ router.post('/send-email', async (req, res) => {
           `,
             }
             // await transporter.sendMail(ownerMailOptions1);
+
             
             await transporter.sendMail(customerMailOptions1);
             res.status(200).json({ message: 'Email sent successfully' });

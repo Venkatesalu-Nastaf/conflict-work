@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import { MdOutlineFileUpload } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import { IoTimer } from "react-icons/io5";
@@ -14,27 +14,120 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./Detailsvehicle.css"
+import { Select, MenuItem, FormControl } from '@mui/material';
+
+import VehicleDriverHistory from "./VehicleDriverHistory/VehicleDriverHistory"
+import RemainderAndRecord from "./RemainderAndRecord/RemainderAndRecord"
+import SensorAndTracking from "./SensorAndTracking/SensorAndTracking"
+
+
 
 const Detailsvehicle = () => {
   const { opendetailsDrawer, setOpendetailsDrawer } = useContext(PermissionContext)
-
-
-
   const handleClosedetailsDrawer = () => {
     setOpendetailsDrawer(false);
   };
 
-  const [selectedValuesdetails, setSelectedValuesdetails] = useState([]);
 
+  const [selectedValuesdetails, setSelectedValuesdetails] = useState([]);
   const optionsdetails = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
-
-
-  const [setValuedetailstabs, SetValuedetailstabs] = React.useState('1');
+  const [valuedetailstabs, SetValuedetailstabs] = React.useState('1');
 
   const handleChangedetailstabs = (event, newValue) => {
     SetValuedetailstabs(newValue);
   };
+
+
+  const [selectedValuephotos, setSelectedValuephotos] = useState('');
+  const handleChangephotos = (event) => {
+    setSelectedValuephotos(event.target.value);
+  };
+
+  const [selectedValuedocument, setSelectedValuedocument] = useState('');
+  const handleChangedocument = (event) => {
+    setSelectedValuedocument(event.target.value);
+  };
+
+
+
+
+
+
+
+
+  const fileInputRef = useRef(null);
+  const handleDivClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    console.log('Files selected:', files);
+  };
+
+
+  const handleDivClickdocument = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChangedocument = (event) => {
+    const files = event.target.files;
+    console.log('Files selected:', files);
+  };
+
+
+  // vehicle imformation
+  const [vehicleInformation, setVehicleInformation] = useState(true);
+  const handlevehicleInformation = () => {
+    setVehicleInformation(true);
+    setVehDriverHistory(false);
+    setRemainderRecord(false);
+    setTrackingsensor(false);
+
+  };
+
+  // vehicle drver history
+const [vehDriverHistory, setVehDriverHistory] = useState(false);
+const handlevehDriverHistory = () => {
+    setVehDriverHistory(true);
+    setVehicleInformation(false);
+    setRemainderRecord(false);
+    setTrackingsensor(false);
+
+  }
+
+// Remainder And Record
+const [remainderRecord, setRemainderRecord] = useState(false);
+
+// const handleremainderRecord = () => {
+//   setRemainderRecord(true);
+
+//     setVehDriverHistory(false);
+//     setVehicleInformation(false);
+//     setTrackingsensor(false);
+
+
+//   }
+  const handleremainderRecord = () => {
+    setRemainderRecord(true);
+    setVehDriverHistory(false);
+    setVehicleInformation(false);
+    setTrackingsensor(false);
+  };
+
+
+// sensor and tracking
+const [trackingsensor, setTrackingsensor] = useState(false);
+const handletrackingsensor = () => {
+  setTrackingsensor(true);
+
+    setVehDriverHistory(false);
+    setVehicleInformation(false);
+    setRemainderRecord(false);
+
+  }
+
 
 
 
@@ -179,165 +272,327 @@ const Detailsvehicle = () => {
                 </div>
 
 
-                <div style={{ display: "flex", gap: "20px", borderBottom: "1px solid #000000" }}>
-                  <p>Vehicle Information</p>
-                  <p>Vehicle - Driver History</p>
-                  <p>Reminders & Records</p>
-                  <p>Sensors & Tracking</p>
+                <div style={{ display: "flex", gap: "20px", borderBottom: "1px solid #000000" , marginTop:"30px"}}>
+                 
+                  <button onClick={handlevehicleInformation} style={{border:"none", background:"none"}}>Vehicle Information</button>
+                  <button onClick={handlevehDriverHistory} style={{border:"none", background:"none"}}>Vehicle - Driver History</button>
+                  <button onClick={handleremainderRecord} style={{border:"none", background:"none"}}> Reminders & Records</button>
+                  <button onClick={handletrackingsensor} style={{border:"none", background:"none"}}>Sensors & Tracking</button>
+
                 </div>
                 <div style={{ marginTop: "10px" }}>
-                  <Box sx={{ width: '100%', typography: 'body1' }}>
-                    <TabContext value={setValuedetailstabs}>
-                      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
-                          <Tab label="Details" value="1" />
-                          <Tab label="Photos" value="2" />
-                          <Tab label="Documents" value="3" />
-                          {/* <Tab label="Near By" value="4" /> */}
-                        </TabList>
-                      </Box>
-                      <TabPanel value="1" >
-                        <>
-                          <div style={{ padding: "10px", width: "100%" }}>
-                            <p>Summary</p>
-                            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around" }}>
+
+                  {vehicleInformation &&
+                    <Box sx={{ width: '100%', typography: 'body1' }}>
+                      <TabContext value={valuedetailstabs}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                          <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
+                            <Tab label="Details" value="1" />
+                            <Tab label="Photos" value="2" />
+                            <Tab label="Documents" value="3" />
+                            {/* <Tab label="Near By" value="4" /> */}
+                          </TabList>
+                        </Box>
+                        <TabPanel value="1" >
+                          <>
+                            <div style={{ padding: "10px", width: "100%" }}>
+                              <p>Summary</p>
+                              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around" }}>
 
 
-                              <div className='card-report' >
-                                <p>Running</p>
-                                <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" }}>
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      49.8
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Running in KMs</p>
+                                <div className='card-report' >
+                                  <p>Running</p>
+                                  <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" }}>
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        49.8
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>Running in KMs</p>
+                                    </div>
+
+
+
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        13
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>Running </p>
+                                    </div>
+
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        0
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>% Job Utilization</p>
+                                    </div>
+
+
+                                  </div>
+                                </div>
+
+                                <div className='card-report' >
+                                  <p>Alerts & Service</p>
+                                  <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        0
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>Alerts</p>
+                                    </div>
+
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        0
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>
+                                        DTC's</p>
+                                    </div>
+
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
+                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                        0
+                                      </h5>
+                                      <p style={{ margin: "0px" }}>Service Cost</p>
+                                    </div>
+
+
+                                  </div>
+                                </div>
+
+
+
+
+
+                                <div className='vehicle-stats-graph-right'>
+
+                                  <div>
+                                    <span className='vehicle-stats-box-content '>
+                                      <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                      <span>Distance</span>
+                                    </span>
+                                    <span className='vehicle-stats-box-content'>
+                                      <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                      <span>Consumption per Hour</span>
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className='vehicle-stats-box-content '>
+                                      <span className='vehicle-stats-box-content-heading'>0 Km</span>
+                                      <span>Distance</span>
+                                    </span>
+                                    <span className='vehicle-stats-box-content'>
+                                      <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
+                                      <span>Consumption per Hour</span>
+                                    </span>
+                                  </div>
+                                </div>
+
+
+                                <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", gap: "15px", margin: "20px" }}>
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
                                   </div>
 
 
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
 
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      13
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Running </p>
                                   </div>
 
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>% Job Utilization</p>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
                                   </div>
 
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
+
+                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                    <p>Daily Mileage (km/L)</p>
+
+                                  </div>
 
                                 </div>
-                              </div>
-
-                              <div className='card-report' >
-                                <p>Alerts & Service</p>
-                                <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width:"40%" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Alerts</p>
-                                  </div>
-
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" , width:"40%"}}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>
-                                      DTC's</p>
-                                  </div>
-
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" , width:"40%"}}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Service Cost</p>
-                                  </div>
-
-
-                                </div>
-                              </div>
-
-
-                              {/* <div className='card-report' >
-                                <p>Fuel</p>
-                                <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap:"5px" }}>
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Fuel Consumption (lts)</p>
-                                  </div>
-
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Sec. Fuel Consumption</p>
-                                  </div>
-
-                                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                    <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
-                                      0
-                                    </h5>
-                                    <p style={{ margin: "0px" }}>Fuel Cost (INR/km)</p>
-                                  </div>
-
-
-                               
-
-                                  
 
 
 
-                                </div>
-                              </div> */}
 
-                              <div className='vehicle-stats-graph-right'>
-                              <div>
-                                <span className='vehicle-stats-box-content '>
-                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                  <span>Distance</span>
-                                </span>
-                                <span className='vehicle-stats-box-content'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                  <span>Consumption per Hour</span>
-                                </span>
-                              </div>
-                              <div>
-                                <span className='vehicle-stats-box-content '>
-                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                  <span>Distance</span>
-                                </span>
-                                <span className='vehicle-stats-box-content'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                  <span>Consumption per Hour</span>
-                                </span>
+
+
+
                               </div>
                             </div>
+                          </>
+                        </TabPanel>
+                        <TabPanel value="2" >
+                          <>
+                            <div style={{ width: "100%" }}>
+                              <FormControl sx={{ minWidth: '100%' }}>
+                                <Select
+                                  value={selectedValuephotos}
+                                  onChange={handleChangephotos}
+                                  displayEmpty
+                                  renderValue={(value) => (value ? value : 'Select an Image tag')} // Placeholder
+                                  variant="outlined"
+                                  sx={{ minWidth: '100%' }} // Ensures the Select takes up the full width of the FormControl
+
+                                >
+
+                                  <MenuItem value="Option 1">Option 1</MenuItem>
+                                  <MenuItem value="Option 2">Option 2</MenuItem>
+                                  <MenuItem value="Option 3">Option 3</MenuItem>
+                                </Select>
+                              </FormControl>
+
+
+                              <div>
+                                <div
+                                  style={{
+                                    border: "2px dotted #ccc",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height: "200px",
+                                    cursor: "pointer"
+                                  }}
+                                  onClick={handleDivClick}
+                                >
+                                  <p>Click to Upload your photos</p>
+                                </div>
+                                <input
+                                  type="file"
+                                  ref={fileInputRef}
+                                  style={{ display: "none" }}
+                                  onChange={handleFileChange}
+                                  multiple // Allows multiple file uploads
+                                />
+                              </div>
+
+
+                              <div style={{ border: "1px solid #ccc", marginTop: "20px" }}>
+                                <div style={{ borderBottom: '1px solid #ccc', padding: "5px 5px 5px 15px" }}>
+                                  <p>Images</p>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-around", gap: "15px" }}>
+                                  <img src="" alt="" />
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+                                  <p>No Images Found
+                                  </p>
+                                </div>
 
 
 
+                              </div>
 
                             </div>
-                          </div>
-                        </>
-                      </TabPanel>
-                      <TabPanel value="2" >
-                        <p>aaaaaaaaaaaaaaa</p>
+                          </>
+                        </TabPanel>
+                        <TabPanel value="3" >
+                          <>
+                            <div style={{ width: "100%" }}>
+                              <FormControl sx={{ minWidth: '100%' }}>
+                                <Select
+                                  value={selectedValuedocument}
+                                  onChange={handleChangedocument}
+                                  displayEmpty
+                                  renderValue={(value) => (value ? value : 'Select an Document Tag')} // Placeholder
+                                  variant="outlined"
+                                  sx={{ minWidth: '100%' }}>
 
-                      </TabPanel>
-                      <TabPanel value="3" >
-                        <p>aaaaaaaaaaaaaaa</p>
+                                  <MenuItem value="Option 1">Option 1</MenuItem>
+                                  <MenuItem value="Option 2">Option 2</MenuItem>
+                                  <MenuItem value="Option 3">Option 3</MenuItem>
+                                </Select>
+                              </FormControl>
 
-                      </TabPanel>
 
-                    </TabContext>
-                  </Box>
+                              <div>
+                                <div
+                                  style={{
+                                    border: "2px dotted #ccc",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height: "200px",
+                                    cursor: "pointer"
+                                  }}
+                                  onClick={handleDivClickdocument}
+                                >
+                                  <p>Click to Upload your Documents</p>
+                                </div>
+                                <input
+                                  type="file"
+                                  ref={fileInputRef}
+                                  style={{ display: "none" }}
+                                  onChange={handleFileChangedocument}
+                                  multiple // Allows multiple file uploads
+                                />
+                              </div>
+
+
+                              <div style={{ border: "1px solid #ccc", marginTop: "20px" }}>
+                                <div style={{ borderBottom: '1px solid #ccc', padding: "5px 5px 5px 15px" }}>
+                                  <p>Documents</p>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-around", gap: "15px" }}>
+                                  <p></p>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+                                  <p>No Documents Found</p>
+                                </div>
+
+
+
+                              </div>
+
+                            </div>
+                          </>
+                        </TabPanel>
+
+                      </TabContext>
+                    </Box>
+                  }
+
+                  {vehDriverHistory &&
+                    <VehicleDriverHistory/>
+                  }
+
+                  {remainderRecord &&
+                  <RemainderAndRecord/>
+                  }
+
+                  {trackingsensor && 
+                     <SensorAndTracking/>
+
+                  }
+
+
+
                 </div>
 
 

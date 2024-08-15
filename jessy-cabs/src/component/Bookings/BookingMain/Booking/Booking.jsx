@@ -291,7 +291,8 @@ const Booking = ({ stationName, customerData }) => {
     email: formValues.email || selectedCustomerData.email || book.email,
     pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
-    starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
+    starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime|| book.starttime || "",
+    // starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
     driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
     // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
@@ -317,6 +318,12 @@ const Booking = ({ stationName, customerData }) => {
 
   const handlecopiedemailcontentbooking = () => {
     const tripidstatus = selectedCustomerData.status || book.status || bookingStatus;
+
+
+    if (sendEmail) {
+      return;
+    }
+
     if (tripidstatus === "Cancelled" || tripidstatus === "pending") {
       const data = getHtmlContentdata(tripidstatus, dataToSend);
       const tempTextarea = document.createElement('textarea');
@@ -408,13 +415,16 @@ const Booking = ({ stationName, customerData }) => {
                     //   bookingStatus || 
                     //   ""
                     // }
-                    value={['pending', 'Cancelled'].includes(bookingStatus) ? bookingStatus : ''}
+                    value={['pending', 'Cancelled',"Opened"].includes(bookingStatus) ? bookingStatus : ''}
+                    // value={['pending', 'Cancelled',].includes(bookingStatus) ? bookingStatus : ''}
                     label="Status"
                     onChange={handleStatusChange}
                   // onChange={handleChange}
                   >
                     <MenuItem value={'pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
+                    <MenuItem value={'Opened'}>Opened</MenuItem>
+              
                   </Select>
                 </FormControl>
               </Box>
@@ -597,13 +607,16 @@ const Booking = ({ stationName, customerData }) => {
                   }
                   label="Send Email"
                 />
-                {isEditMode &&
-                  <><Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
-                    Copy
-                  </Button>
-                    <span style={{ color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
+                 {isEditMode && !sendEmail && (
+                  <>
+                    <Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
+                      Copy
+                    </Button>
+                    <span style={{ color: 'green' }}>
+                      {CopyEmail ? "Link Copied..." : ""}
+                    </span>
                   </>
-                }
+                )}
               </div>
             </span>
             {/* <span>
@@ -2162,31 +2175,6 @@ const Booking = ({ stationName, customerData }) => {
               </DialogContent>
             </Dialog>
 
-            {/* <div className="booking-main-section2">
-            <div className="sub-section1 sub-section-second-division"> */}
-
-            {/* <div className="input">
-              <div className="icone">
-                <LocationCityIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                id="pickup"
-                label="PickUp"
-                name="pickup"
-                autoComplete="new-password"
-                value={
-                  formData.pickup ||
-                  selectedCustomerData.pickup ||
-                  formValues.pickup ||
-                  book.pickup ||
-                  ""
-                }
-                onChange={handleChange}
-              />
-            </div> */}
-
 
 
 
@@ -3048,8 +3036,27 @@ const Booking = ({ stationName, customerData }) => {
               </Button>
               {Array.isArray(allFile) && allFile.map((img, index) => (
                 <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "10px" }}>
-                  {(img.mimetype === "jpg" || "png") && <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "400px", objectFit: "contain" }} />}
-                  {(img.mimetype === "pdf") && <>< embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", display: "block", height: "600px" }} /> <button>Show</button></>}
+                  {/* {(img.mimetype === "jpg" || "png") && <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "400px", objectFit: "contain" }} />}
+                  {(img.mimetype === "pdf") && <>< embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", display: "block", height: "600px" }} /> <button>Show</button></>} */}
+
+                   {(img.mimetype === "jpeg" || img.mimetype === "png"||img.mimetype === "jpg") && (
+            <img
+              src={`${apiUrl}/images/${img.path}`}
+              alt='vehicle_docimage'
+              style={{ width: "100%", height: "400px", objectFit: "contain" }}
+            />
+          )}
+          {img.mimetype === "pdf" && (
+            <>
+              <embed
+                src={`${apiUrl}/images/${img.path}`}
+                type="application/pdf"
+                style={{ width: "100%", display: "block", height: "600px" }}
+              />
+             
+            </>
+          )}
+
 
                   <Checkbox
                     checked={deletefile.includes(img.path)}

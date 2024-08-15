@@ -16,6 +16,8 @@ router.post('/billing', (req, res) => {
 
 router.post('/GroupBillingList', (req, res) => {
   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station } = req.body;
+  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station,"group bill");
+  
 
   const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
   const sqlquery1 = "UPDATE tripsheet SET status = 'Covering_Billed' WHERE tripid IN (?)";

@@ -853,7 +853,6 @@ app.get("/getvehicleInfo", (req, res) => {
         console.error("Error executing query:", err);
         return res.status(500).json({ message: "Something went wrong", error: true });
       }
-
       return res.status(200).json(result);
     });
 

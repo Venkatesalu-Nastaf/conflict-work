@@ -47,6 +47,7 @@
     border-radius: 5px;
     margin-bottom: 20px;
     background-color: var(--glass);
+    gap: 10px;
 }
 
 .vehicle-details-box-veh-no {
@@ -180,4 +181,21 @@
     display: grid;
     text-align: center;
     background-color: var(--glass);
+}
+
+.edit-driver-details-div{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.edit-driver-heading{
+    width: 200px;
+    display: block;
+    font-weight: 600;
+}
+
+.vehicle-details-box svg{
+    font-size: 20px;
 }

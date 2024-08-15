@@ -463,13 +463,23 @@ const useGroupbilling = () => {
             })
             .filter((tripid) => tripid !== null);
 
-        const selectStation = newSelectionModel
-            .filter((selectedId) => selectedId !== null)
-            .map((selectedId) => {
-                const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-                return selectedRow ? selectedRow.department : null;
-            })
-            .filter((tripid) => tripid !== null);
+        // const selectStation = newSelectionModel
+        //     .filter((selectedId) => selectedId !== null)
+        //     .map((selectedId) => {
+        //         const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+        //         return selectedRow ? selectedRow.department : null;
+        //     })
+        //     .filter((tripid) => tripid !== null);
+        const selectStation = [...new Set(
+            newSelectionModel
+                .filter((selectedId) => selectedId !== null)
+                .map((selectedId) => {
+                    const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+                    return selectedRow ? selectedRow.department : null;
+                })
+                .filter((tripid) => tripid !== null)
+        )];
+        
 
         const PdfSelectedTrips = newSelectionModel
             .filter((selectedId) => selectedId !== null)

@@ -62,7 +62,6 @@ router.get('/getTripAdvance', (req, res) => {
 
 router.post('/addBillAmountReceived', (req, res) => {
     const totalBillReport = req.body;
-
     const timestamp = Date.now();
     const uniqueId = timestamp % 1000000;
     const formattedUniqueId = uniqueId.toString().padStart(6, '0');

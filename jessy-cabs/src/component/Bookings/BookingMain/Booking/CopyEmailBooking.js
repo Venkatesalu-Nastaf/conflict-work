@@ -5,12 +5,12 @@ const CopyEmailHtmlBooking = () => {
 
     // HTML content for pending status
 
-    const pendingHtmlContent =(datatripsheet)=>{
-        const updatdata=datatripsheet
+    const pendingHtmlContent = (datatripsheet) => {
+        const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
         const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
 
-    return `
+        return `
        <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
@@ -57,6 +57,12 @@ const CopyEmailHtmlBooking = () => {
                         <td style="padding: 8px;"><strong>Duty Type</strong></td>
                         <td style="padding: 8px;color: #000"">${updatdata?.duty}</td>
                     </tr>
+                    ${updatdata?.requestno ? `
+                      <tr>
+                      <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                       <td style="padding: 8px; color: #000;">${updatdata?.requestno}</td>
+                    </tr>
+                      ` : ''}
                     <tr>
                         <td style="padding: 8px;"><strong>Confirmed By:</strong></td>
                         <td style="padding: 8px;color: #000"">${updatdata?.username}</td>
@@ -66,16 +72,16 @@ const CopyEmailHtmlBooking = () => {
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
     `;
     }
-    
+
 
     // HTML content for cancelled status
-    const cancelledHtmlContent =(datatripsheet)=>{
-        const updatdata=datatripsheet
+    const cancelledHtmlContent = (datatripsheet) => {
+        const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
         const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
-    
 
-    return `
+
+        return `
         <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
                         <tr>
@@ -111,6 +117,12 @@ const CopyEmailHtmlBooking = () => {
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                             <td style="padding: 8px;color: #000"">${updatdata?.vehRegNo}</td>
                         </tr>
+                         ${updatdata?.requestno ? `
+                              <tr>
+                               <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                                <td style="padding: 8px; color: #000;">${updatdata?.requestno}</td>
+                                </tr>
+                                ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
                             <td style="padding: 8px;color: #000"">${updatdata?.driverName}</td>
@@ -122,8 +134,8 @@ const CopyEmailHtmlBooking = () => {
     `;
     }
 
-    const getHtmlContentdata= (status,datatripsheet) => {
-        switch(status) {
+    const getHtmlContentdata = (status, datatripsheet) => {
+        switch (status) {
             case 'pending':
                 return pendingHtmlContent(datatripsheet);
             case 'Cancelled':
@@ -133,12 +145,12 @@ const CopyEmailHtmlBooking = () => {
         }
     };
 
-   
+
 
     return {
         getHtmlContentdata
     }
-    
+
 };
 
 export default CopyEmailHtmlBooking;

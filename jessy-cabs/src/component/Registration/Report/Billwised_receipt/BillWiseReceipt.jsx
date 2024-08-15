@@ -25,9 +25,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 
 export const BillWiseReceipt = () => {
 
-  const { organization, setOrganization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
-    , rows, setRows, pendingBillRows, setPendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
-    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup
+  const { organization,  accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
+    , rows,  pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
+    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange
   } = useBillWiseReceipt();
 
   const handleInputChange = (event) => {
@@ -296,14 +296,20 @@ export const BillWiseReceipt = () => {
                       <input type="text" />
                     </div>
                     <div className='total-inputs' >
+                      <label htmlFor="">Total Amount:</label>
+                      <input type="text" value={totals.totalAmount} />
+                    </div>
+                    <div className='total-inputs' >
                       <label htmlFor="">Balance:</label>
                       <input type="text" value={totals.totalBalance} />
                     </div>
                     <div className='total-inputs' >
-                      <label htmlFor="">Total Amount:</label>
-                      <input type="text" value={totals.totalAmount} />
+                      <label htmlFor="">Collected Amount:</label>
+                      <input type="text" value={totals.collectedAmount} onChange={(e) => handleCollectedChange(e)} />
                     </div>
-
+                    <div className='total-inputs' >
+                      <Button variant='contained' onClick={handlePending}>Pending </Button>
+                    </div>
                     <div className='total-inputs' >
                       <label htmlFor="">On A/C:</label>
                       <input type="text" value={billWiseReport.AccountDetails} />

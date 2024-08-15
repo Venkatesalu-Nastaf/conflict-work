@@ -13,11 +13,13 @@ router.post('/bankdetails', (req, res) => {
 });
 
 router.get('/getbankdetails', (req, res) => {
-    db.query('SELECT * FROM bankaccountdetails', (err, rows) => {
+    db.query('SELECT * FROM bankaccountdetails', (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
-        return res.status(200).json(rows);
+        console.log(result,'rows');
+        
+        return res.status(200).json(result);
     });
 });
 

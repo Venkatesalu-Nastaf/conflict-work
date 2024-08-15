@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
+import { ReportData } from "../Context/ReportContext";
 
 const useBillWiseReceipt = () => {
     const [organization, setOrganization] = useState([]);
@@ -12,6 +13,7 @@ const useBillWiseReceipt = () => {
         AccountDetails: "",
         UniqueID: "",
     });
+    const { setValue } = ReportData()
     const [totals, setTotals] = useState({
         amount: 0,
         recieved: 0,
@@ -21,6 +23,7 @@ const useBillWiseReceipt = () => {
         onAccount: 0,
         totalBalance: 0,
         tds: 0,
+        collectedAmount: 0,
     });
     const [pendingBillRows, setPendingBillRows] = useState([]);
     const [rows, setRows] = useState([]);
@@ -167,7 +170,9 @@ const useBillWiseReceipt = () => {
             const totalBalance = updatedRows.reduce((acc, row) => acc + (Number(row.balance) || 0), 0);
             const totalOnAccount = updatedRows.reduce((acc, row) => acc + (Number(row.onAccount) || 0), 0); // Assuming onAccount is in rows
             const totalTDS = updatedRows.reduce((acc, row) => acc + (Number(row.tds) || 0), 0); // Assuming tds is in rows
+            // const collected = updatedRows.reduce((acc,row)=> acc + (Number(row.collectedAmount) || 0), 0)
             const totBalance = totalAmount - totalRecieved;
+            // const balance = totBalance - collected
             setTotals({
                 amount: totalAmount,
                 recieved: totalRecieved,
@@ -175,7 +180,7 @@ const useBillWiseReceipt = () => {
                 balance: totalBalance,
                 totalAmount: totBalance,
                 onAccount: totalOnAccount,
-                // totalBalance: totBalance,
+                // totalBalance: balance,
                 tds: totalTDS
             });
         } catch (error) {
@@ -184,7 +189,6 @@ const useBillWiseReceipt = () => {
     };
     const handlechange = (event) => {
         const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
-
         // Calculate new totalAmount based on the new TDS value
         const newTotalAmount = (totals.totalAmount || 0) + (totals.tds || 0) - newTDS;
 
@@ -192,7 +196,19 @@ const useBillWiseReceipt = () => {
         setTotals((prevTotals) => ({
             ...prevTotals,
             tds: newTDS,
-            totalAmount: newTotalAmount
+            totalAmount: newTotalAmount,
+        }));
+    };
+
+    const handleCollectedChange = (event) => {
+        const collectedValue = Number(event.target.value) || 0; // Convert to number, default to 0 if necessary
+        const balance = totals.totalAmount - collectedValue;
+
+        // Update only the collectedAmount in the totals state
+        setTotals((prevTotals) => ({
+            ...prevTotals,
+            collectedAmount: collectedValue,  // Update collectedAmount with the new value
+            totalBalance: balance
         }));
     };
 
@@ -217,7 +233,9 @@ const useBillWiseReceipt = () => {
             TDS: combinedData.tds,
             Advance: combinedData.recieved,
             TotalAmount: combinedData.totalAmount,
-            BillDate: combinedData.Date
+            BillDate: combinedData.Date,
+            Collected: combinedData.collectedAmount.toString(),
+            TotalBalance: combinedData.totalAmount - combinedData.collectedAmount
         };
 
         const BillNo = rows.map(li => li.BillNo);
@@ -247,6 +265,7 @@ const useBillWiseReceipt = () => {
                         onAccount: 0,
                         totalBalance: 0,
                         tds: 0,
+                        collectedAmount: 0
                     });
                     setRows([])
                     setPendingBillRows([]);
@@ -272,6 +291,9 @@ const useBillWiseReceipt = () => {
         setError(false);
     };
 
+    const handlePending = () => {
+        setValue("Pendingbills")
+    }
     return {
         organization,
         setOrganization,
@@ -295,7 +317,9 @@ const useBillWiseReceipt = () => {
         errorMessage,
         success,
         successMessage,
-        hidePopup
+        hidePopup,
+        handlePending,
+        handleCollectedChange
     };
 };
 

@@ -23,6 +23,9 @@
     padding: 20px;
     display: flex;
     gap: 15px;
+    justify-content: center;
     text-align: center;
+    align-items: center;
     /* background-color: var(--glass); */
 }
+

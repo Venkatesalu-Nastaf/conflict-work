@@ -458,6 +458,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+  
 
   const [fueltype, setFuelType] = useState('')
 
@@ -486,6 +487,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
 
+
   const dataToSend = {
     bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
@@ -493,10 +495,13 @@ const TripSheet = ({ stationName, logoImage }) => {
     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
     driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
-    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+
+    vehRegNo: formData.vehRegNo ||selectedCustomerDatas.vehRegNo|| selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+    mobileNo: formData.mobileNo ||selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo  || book.mobileNo || '',
+
     vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
-    starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+    // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+    starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
     status: formData.status || book.status || selectedCustomerData.status,
     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
@@ -505,6 +510,11 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const handlecopiedemailcontent = () => {
     const tripidstatus = formData.status || book.status || selectedCustomerData.status;
+
+    if (sendEmail) {
+      return;
+    }
+
 
     if (tripidstatus === "Cancelled" || tripidstatus === "Opened") {
       const data = getHtmlContentdata(tripidstatus, dataToSend);
@@ -652,13 +662,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Email"
                   />
-                  {isEditMode &&
-                    <><Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
+
+                {isEditMode && !sendEmail && (
+                  <>
+                    <Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
                       Copy
                     </Button>
-                      <span style={{ display: 'flex', alignItems: 'center', color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
-                    </>
-                  }
+                    <span style={{ color: 'green' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
+                    </span>
+                  </>
+                )}
                 </div>
 
                 <div className="">
@@ -1507,8 +1521,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-
-
 
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}

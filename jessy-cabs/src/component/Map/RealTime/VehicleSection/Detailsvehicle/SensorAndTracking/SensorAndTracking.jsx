@@ -4,6 +4,46 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { DataGrid } from '@mui/x-data-grid';
+
+
+//  for historytable
+const sensorcolumns = [
+  { field: 'id', headerName: 'ID', width: 150 },
+  {
+      field: 'DutyType',
+      headerName: 'Driver Name',
+      width: 300,
+      editable: true,
+  },
+  {
+      field: 'DutyDate',
+      headerName: 'Driver Number',
+      width: 300,
+      editable: true,
+  },
+  {
+      field: 'TechnicianName',
+      headerName: 'Assigned From',
+      width: 300,
+      editable: true,
+  },
+  {
+      field: 'Images',
+      headerName: 'Assigned Till',
+      width: 300,
+      editable: true,
+  },
+
+
+
+];
+
+const sensorrows = [
+  { id: 1, DutyType: 'Snow', DutyDate: 'Jon', TechnicianName: 14, Images: "", },
+
+];
+
 
 const SensorAndTracking = () => {
 
@@ -31,17 +71,17 @@ const SensorAndTracking = () => {
             </Box>
             <TabPanel value="1" >
               <>
-                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop:"20px" }}>
+                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop: "20px" }}>
                   <p>Device Details</p>
                   <p>Device Install Date</p>
-                  <p style={{marginTop:"0px"}}>13/07/2024 2:27 PM</p>
+                  <p style={{ marginTop: "0px" }}>13/07/2024 2:27 PM</p>
 
                 </div>
               </>
             </TabPanel>
             <TabPanel value="2" >
-            <>
-                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop:"20px" }}>
+              <>
+                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop: "20px" }}>
                   <p>Fuel Sensor Details</p>
                   <p>No Active Fuel Calibration.</p>
 
@@ -54,30 +94,48 @@ const SensorAndTracking = () => {
 
             <TabPanel value="4" >
               <>
-              <div style={{padding:"20px", width:"100%"}}>
-                <div style={{ border: "1px solid #91caff",  width: "100%", marginTop:"20px",  display:"flex", justifyContent:"center", width:"100%", alignContent:"center", alignItems:"center", padding:"20px" }}>
-                  <p style={{color:"#91caff", margin:"0px"}}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+                <div style={{ padding: "20px", width: "100%" }}>
+                  <div style={{ border: "1px solid #91caff", width: "100%", marginTop: "20px", display: "flex", justifyContent: "center", width: "100%", alignContent: "center", alignItems: "center", padding: "20px" }}>
+                    <p style={{ color: "#91caff", margin: "0px" }}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+                  </div>
                 </div>
-              </div>
               </>
             </TabPanel>
 
             <TabPanel value="5" >
-              n
+              <>
+                <div style={{ marginTop: "30px" }}>
+
+
+                  <Box sx={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={sensorrows}
+                      columns={sensorcolumns}
+                      initialState={{
+                        pagination: {
+                          paginationModel: {
+                            pageSize: 5,
+                          },
+                        },
+                      }}
+                      pageSizeOptions={[5]}
+                      disableRowSelectionOnClick
+                    />
+                  </Box>
+                </div>
+              </>
             </TabPanel>
 
             <TabPanel value="6" >
-            <>            
-              <div style={{padding:"20px", width:"100%"}}>
-              <p>Device Details History
-              </p>
-                <div style={{ border: "1px solid #91caff",  width: "100%", marginTop:"20px",  display:"flex", justifyContent:"center", width:"100%", alignContent:"center", alignItems:"center", padding:"20px" }}>
-                  <p style={{color:"#91caff", margin:"0px"}}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+              <>
+                <div style={{ padding: "20px", width: "100%" }}>
+                  <p>Device Details History</p>
+                  <div style={{ border: "1px solid #91caff", width: "100%", marginTop: "20px", display: "flex", justifyContent: "center", width: "100%", alignContent: "center", alignItems: "center", padding: "20px" }}>
+                    <p style={{ color: "#91caff", margin: "0px" }}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+                  </div>
                 </div>
-              </div>
-            </>
+              </>
             </TabPanel>
-
           </TabContext>
         </Box>
       </div>

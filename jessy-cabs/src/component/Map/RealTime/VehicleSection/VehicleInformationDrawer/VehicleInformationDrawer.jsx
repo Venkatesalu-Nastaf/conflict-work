@@ -22,7 +22,21 @@ import { PermissionContext } from '../../../../context/permissionContext';
 const VehicleInformationDrawer = () => {
 
     //vehicle section drawer
-    const { open, setOpen } = useContext(PermissionContext);
+    const { open, setOpen ,setOpenHistoryDrawer,setOpenshare, setHistoryLocation,setOpendetailsDrawer } = useContext(PermissionContext);
+    const handleopenHistoryDrawer = () => {
+        setOpenHistoryDrawer(true);
+    };
+
+    const handleopenHistoryLocation = () => {
+        setHistoryLocation(true);
+    };
+
+    const handleopenDetailsDrawer = () => {
+        setOpendetailsDrawer(true);
+    };
+    const handleopensharedrawer = () => {
+        setOpenshare(true);
+    };
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -119,22 +133,22 @@ const VehicleInformationDrawer = () => {
                                         </FormControl>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "3px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }}>
+                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "3px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }} onClick={handleopenHistoryDrawer}>
                                         <MdChangeHistory />
                                         <p style={{ margin: "0px" }}>History</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }}>
+                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }} onClick={handleopenHistoryLocation}>
                                         <GoHistory />
                                         <p style={{ margin: "0px" }}>History Location</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }}>
+                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }}onClick={handleopenDetailsDrawer} >
                                         <FaCarOn />
                                         <p style={{ margin: "0px" }}>Details</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", backgroundColor: "#0078d4", color: "white", borderRadius: "8px", padding: "10px 20px", height: "11px" }}>
+                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", backgroundColor: "#0078d4", color: "white", borderRadius: "8px", padding: "10px 20px", height: "11px" }} onClick={handleopensharedrawer}y>
                                         <FaShare />
 
                                         <p style={{ margin: "0px" }}>Share Realtime Tracking </p>

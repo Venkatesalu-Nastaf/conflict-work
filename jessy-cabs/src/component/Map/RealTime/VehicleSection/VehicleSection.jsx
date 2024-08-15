@@ -193,7 +193,7 @@ const VehicleSection = () => {
           </div>
         </div>
         {selectedOption === 'Vehicle' && (
-          <div className='vehicle-details' onClick={toggleDrawer(false)}>
+          <div className='vehicle-details' onClick={toggleDrawer(true)}>
 
 
             <div className="vehicle-indiduals">

@@ -458,7 +458,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-  
+
 
   const [fueltype, setFuelType] = useState('')
 
@@ -496,8 +496,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
 
-    vehRegNo: formData.vehRegNo ||selectedCustomerDatas.vehRegNo|| selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
-    mobileNo: formData.mobileNo ||selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo  || book.mobileNo || '',
+    vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+    mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
 
     vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
     // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
@@ -663,16 +663,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Email"
                   />
 
-                {isEditMode && !sendEmail && (
-                  <>
-                    <Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
-                      Copy
-                    </Button>
-                    <span style={{ color: 'green' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
-                    </span>
-                  </>
-                )}
+                  {isEditMode && !sendEmail && (
+                    <>
+                      <Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
+                        Copy
+                      </Button>
+                      <span style={{ color: 'green' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', color: 'green' }}>{CopyEmail ? "Link Copied..." : ""}</span>
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 <div className="">
@@ -4562,7 +4562,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </div>
                     </div>
 
-                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth>
+                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
+                      PaperProps={{
+                        style: {
+                          width: 'fit-content',
+                          maxWidth: '90%',
+                          padding: '10px'
+                        }
+                      }}
+                    >
                       <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         {selectedRow && (
                           <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />

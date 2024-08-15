@@ -45,9 +45,10 @@
 }
 
 .form-container .Title-Name {
-  font-size: 20px;
+  font-size: 18px;
   padding-left: 0px;
-  font-weight: 500;
+  font-weight: 400;
+  color: #457cdc;
 }
 
 

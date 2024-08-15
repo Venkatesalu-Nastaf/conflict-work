@@ -33,6 +33,10 @@ import Cost from './Cost/Cost';
 import Safety from './Safety/Safety';
 import VehicleTag from './VehicleTag/VehicleTag';
 
+import { TextField } from "@mui/material";
+import Switch from '@mui/material/Switch';
+
+import Menu from '@mui/material/Menu';
 
 
 
@@ -106,18 +110,43 @@ export const Vehicle = () => {
     setOpenAddDriver(false);
   };
 
+  const [openFilter, setOpenFilter] = React.useState(false);
+
+  const handleClickOpenFilter = () => {
+    setOpenFilter(true);
+    setOpenEditDriver(false);
+  };
+
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+
+  const [checked, setChecked] = React.useState(true);
+
+  const handleChangeSwitch = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
   return (
     <>
       <div className="form-container-realtime">
         <div className="main-content-container">
-          {/* <p className="head-tab-type-2-all">
-            <span className="Title-Name">Real Time</span>
-          </p> */}
+          <p className="head-tab-type-2-all">
+            <span className="Title-Name">Vehicles</span>
+          </p>
           <div className='main-content-form'>
             <div className='vehicle-main'>
-              <div className='vehicle-top-section-left'> <span>Vehicles</span> </div>
+              {/* <div className='vehicle-top-section-left'> <span>Vehicles</span> </div> */}
               <div className='vehicle-top-section-right'>
                 <span>
                   <Box sx={{ minWidth: 120 }}>
@@ -157,16 +186,238 @@ export const Vehicle = () => {
                   </LocalizationProvider>
                 </span>
                 <span>
-                  <Button variant="outlined">Filters</Button>
+                  <Button variant="outlined" onClick={handleClickOpenFilter}>Filters</Button>
                 </span>
                 <span>
-                  <Button variant="contained">Reports</Button>
+                  <div>
+                    <Button variant="contained" onClick={handleClick}>Reports</Button>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Night Driving</MenuItem>
+                      <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
+                    </Menu>
+                  </div>
                 </span>
                 <span>
-                  <Button variant="contained"><FaPlus /></Button>
+
+                  <div>
+                    <Button variant="contained" onClick={handleClick}><FaPlus /></Button>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Night Driving</MenuItem>
+                      <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
+                      <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
+                    </Menu>
+                  </div>
                 </span>
               </div>
             </div>
+
+
+
+            <React.Fragment>
+              <Dialog
+                open={openFilter}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleCloseFilter}
+                aria-describedby="alert-dialog-slide-description"
+              >
+                <DialogTitle>
+                  <div>Filters</div>
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-slide-description">
+                    <div>
+                      <div className='edit-driver-details-div'>
+                        <Button variant='contained'>Filter By Tags</Button>
+                      </div>
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Category</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={vehicleNO}
+                              label="Vehicle No"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                              <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                              <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                              <MenuItem value={'Goa'}>Goa</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Vehicle Make</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={vehicleNO}
+                              label="Vehicle No"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                              <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                              <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                              <MenuItem value={'Goa'}>Goa</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Group</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={vehicleNO}
+                              label="Vehicle No"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                              <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                              <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                              <MenuItem value={'Goa'}>Goa</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <TextField
+                            size="small"
+                            name="advancepaidtovendor"
+                            className='full-width'
+                            value=''
+                            // onChange={handleChange}
+                            // onChange={(e) => {
+                            //   handleChange(e)
+                            //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                            // }}
+                            label="Search Device"
+                            id="advance-paid-to-vendor"
+                            autoComplete="password"
+                          />
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Vehicle Ownership</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={vehicleNO}
+                              label="Vehicle No"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                              <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                              <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                              <MenuItem value={'Goa'}>Goa</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <Box sx={{ minWidth: 320 }}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Transporter</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={vehicleNO}
+                              label="Vehicle No"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={'Chennai'}>Chennai</MenuItem>
+                              <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
+                              <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
+                              <MenuItem value={'Goa'}>Goa</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Switch
+                            checked={checked}
+                            onChange={handleChangeSwitch}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <span>Show Deleted Vehicles</span>
+                        </div>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Switch
+                            checked={checked}
+                            onChange={handleChangeSwitch}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <span>Show Removed Vehicles</span>
+                        </div>
+                      </div>
+
+                      <div className='dddddddddddd'>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Switch
+                            checked={checked}
+                            onChange={handleChangeSwitch}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <span>Current Transporter</span>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button variant='contained' onClick={handleCloseFilter}>Update</Button>
+                </DialogActions>
+              </Dialog>
+            </React.Fragment>
 
             <div>
               <Box sx={{ width: '100%' }}>
@@ -185,7 +436,25 @@ export const Vehicle = () => {
                   <div className='vehicle-tab-main'>
                     <div className='vehicle-tab-left-main'>
                       <div style={{ marginBottom: '20px' }}>
-                        <Button variant="outlined">Sort Options</Button>
+                        <Button variant="outlined" onClick={handleClick}>Sort Options</Button>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                          }}
+                        >
+                          <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
+                          <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
+                          <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
+                          <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
+                          <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
+                          <MenuItem onClick={handleClose}>Night Driving</MenuItem>
+                          <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
+                          <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
+                        </Menu>
                       </div>
                       <div className='vehicle-details-section-main Scroll-Style'>
                         <div className='vehicle-details-box'>
@@ -193,42 +462,42 @@ export const Vehicle = () => {
                           <span><span>Group: </span><span>Chennai</span></span>
                           <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                         <div className='vehicle-details-box'>
                           <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                           <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span></span>
+                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
                           <span>2023 mahindra reva | CNG | car</span>
-                          <span>Add Tag</span>
+                          <span><Button>Add Tag</Button></span>
                         </div>
                       </div>
                     </div>
@@ -344,28 +613,67 @@ export const Vehicle = () => {
                               </div>
                               <div className='edit-driver-details-div'>
                                 <span className='edit-driver-heading'>First Name*:</span>
-                                <span>
-                                  <input type="text" name="" id="" />
-                                </span>
+                                <Box>
+                                  <TextField
+                                    size="small"
+                                    name="advancepaidtovendor"
+                                    className='full-width'
+                                    value=''
+                                    // onChange={handleChange}
+                                    // onChange={(e) => {
+                                    //   handleChange(e)
+                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                                    // }}
+                                    // label="Search Device"
+                                    id="advance-paid-to-vendor"
+                                    autoComplete="password"
+                                  />
+                                </Box>
                               </div>
                               <div className='edit-driver-details-div'>
                                 <span className='edit-driver-heading'>Last Name:</span>
-                                <span>
-                                  <input type="text" name="" id="" />
-                                </span>
+                                <Box>
+                                  <TextField
+                                    size="small"
+                                    name="advancepaidtovendor"
+                                    className='full-width'
+                                    value=''
+                                    // onChange={handleChange}
+                                    // onChange={(e) => {
+                                    //   handleChange(e)
+                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                                    // }}
+                                    // label="Search Device"
+                                    id="advance-paid-to-vendor"
+                                    autoComplete="password"
+                                  />
+                                </Box>
                               </div>
                               <div className='edit-driver-details-div'>
                                 <span className='edit-driver-heading'>Mobile No*:</span>
-                                <span>
-                                  <input type="text" name="" id="" />
-                                </span>
+                                <Box>
+                                  <TextField
+                                    size="small"
+                                    name="advancepaidtovendor"
+                                    className='full-width'
+                                    value=''
+                                    // onChange={handleChange}
+                                    // onChange={(e) => {
+                                    //   handleChange(e)
+                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                                    // }}
+                                    // label="Search Device"
+                                    id="advance-paid-to-vendor"
+                                    autoComplete="password"
+                                  />
+                                </Box>
                               </div>
 
 
                               <div className='edit-driver-details-div'>
                                 <span className='edit-driver-heading'>Group:</span>
                                 <span>
-                                  <Box sx={{ minWidth: 120 }}>
+                                  <Box sx={{ minWidth: 162 }}>
                                     <FormControl fullWidth>
                                       <InputLabel id="demo-simple-select-label">Select Group</InputLabel>
                                       <Select
@@ -396,6 +704,7 @@ export const Vehicle = () => {
                         </DialogActions>
                       </Dialog>
                     </React.Fragment>
+
                     <div className='vehicle-tab-right-main Scroll-Style'>
                       <div className='vehicle-tab-right-top-division-main'>
                         <div className='vehicle-tab-right-top-division-box'>

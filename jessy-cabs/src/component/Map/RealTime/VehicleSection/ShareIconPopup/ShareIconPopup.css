@@ -1,0 +1,45 @@
+.day-hours {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.days-hours-share {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.toggle-share-switch {
+    display: flex;
+    gap: 5px;
+}
+
+.dflex {
+    display: flex;
+}
+
+.justifycenter {
+    justify-content: center;
+}
+
+.justifyaround {
+    justify-content: space-around;
+}
+
+.justifybetween {
+    justify-content: space-between;
+}
+
+.red {
+    color: rgb(252, 13, 13);
+}
+
+.share-border {
+    border: 1px solid #1976d2;
+}
+
+.share-border-cancel {
+    border: 1px solid red;
+    color: red;
+}

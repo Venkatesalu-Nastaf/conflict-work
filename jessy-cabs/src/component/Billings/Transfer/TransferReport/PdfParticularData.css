@@ -42,7 +42,7 @@
 .detailstext {
   font-size: 14px;
   white-space: nowrap;
-  font-weight: bold;
+  /* font-weight: bold; */
   display: flex;
   align-items: center;
   margin: 0%;

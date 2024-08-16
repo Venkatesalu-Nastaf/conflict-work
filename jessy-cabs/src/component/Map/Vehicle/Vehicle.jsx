@@ -24,7 +24,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
-import { CiEdit } from "react-icons/ci";
 
 import Driving from "./Driving/Driving";
 import Running from "./Running/Running";
@@ -37,6 +36,9 @@ import { TextField } from "@mui/material";
 import Switch from '@mui/material/Switch';
 
 import Menu from '@mui/material/Menu';
+import Vehicles from './Vehicles/Vehicles';
+
+import { useNavigate, Link, useLocation, } from "react-router-dom";
 
 
 
@@ -88,53 +90,61 @@ export const Vehicle = () => {
     setValue(newValue);
   };
 
-  const [openEditDriver, setOpenEditDriver] = React.useState(false);
-
-  const handleClickOpenEditDriver = () => {
-    setOpenEditDriver(true);
-    setOpenAddDriver(false);
-  };
-
-  const handleCloseEditDriver = () => {
-    setOpenEditDriver(false);
-  };
-
-  const [openAddDriver, setOpenAddDriver] = React.useState(false);
-
-  const handleClickOpenAddDriver = () => {
-    setOpenAddDriver(true);
-    setOpenEditDriver(false);
-  };
-
-  const handleCloseAddDriver = () => {
-    setOpenAddDriver(false);
-  };
 
   const [openFilter, setOpenFilter] = React.useState(false);
 
   const handleClickOpenFilter = () => {
     setOpenFilter(true);
-    setOpenEditDriver(false);
   };
 
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
 
-  const [checked, setChecked] = React.useState(true);
+  const [checkedDeletedVehicles, setCheckedDeletedVehicles] = React.useState(true);
 
-  const handleChangeSwitch = (event) => {
-    setChecked(event.target.checked);
+  const handleChangeSwitchDeletedVehicles = (event) => {
+    setCheckedDeletedVehicles(event.target.checked);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [checkedRemovedVehicles, setCheckedRemovedVehicles] = React.useState(true);
+
+  const handleChangeSwitchRemovedVehicles = (event) => {
+    setCheckedRemovedVehicles(event.target.checked);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const [checkedCurrentTransporter, setCheckedCurrentTransporter] = React.useState(true);
+
+  const handleChangeSwitchCurrentTransporter = (event) => {
+    setCheckedCurrentTransporter(event.target.checked);
   };
+
+
+
+
+  const [anchorElReoprts, setAnchorElReoprts] = React.useState(null);
+  const openReoprts = Boolean(anchorElReoprts);
+  const openReports = (event) => {
+    setAnchorElReoprts(event.currentTarget);
+  };
+  const closeReoprts = () => {
+    setAnchorElReoprts(null);
+  };
+
+  const [anchorElMenu, setAnchorElMenu] = React.useState(null);
+  const openPlusMenu = Boolean(anchorElMenu);
+  const openMenu = (event) => {
+    setAnchorElMenu(event.currentTarget);
+  };
+  const closeMenu = () => {
+    setAnchorElMenu(null);
+  };
+
+  const navigate = useNavigate();
+
+  const navigateAddVehicle = () => {
+    navigate("/home/Map/Vehicle/AddVehicle");
+  }
 
 
   return (
@@ -190,48 +200,48 @@ export const Vehicle = () => {
                 </span>
                 <span>
                   <div>
-                    <Button variant="contained" onClick={handleClick}>Reports</Button>
+                    <Button variant="contained" onClick={openReports}>Reports</Button>
                     <Menu
                       id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
+                      anchorEl={anchorElReoprts}
+                      open={openReoprts}
+                      onClose={closeReoprts}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Night Driving</MenuItem>
-                      <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>All Summary Vehicles</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Vehicles Details Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Vehicle PnL Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Vehicle Tag Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Day Wise Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Night Driving</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Sim Tracking Report</MenuItem>
+                      <MenuItem onClick={closeReoprts}>Vehicle Performance Report</MenuItem>
                     </Menu>
                   </div>
                 </span>
                 <span>
 
                   <div>
-                    <Button variant="contained" onClick={handleClick}><FaPlus /></Button>
+                    <Button variant="contained" onClick={openMenu}><FaPlus /></Button>
                     <Menu
                       id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
+                      anchorEl={anchorElMenu}
+                      open={openPlusMenu}
+                      onClose={closeMenu}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Night Driving</MenuItem>
-                      <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
-                      <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
+                      <MenuItem onClick={navigateAddVehicle}>Add Vehicles</MenuItem>
+                      <MenuItem onClick={closeMenu}>Vehicles Details Report</MenuItem>
+                      <MenuItem onClick={closeMenu}>Vehicle PnL Report</MenuItem>
+                      <MenuItem onClick={closeMenu}>Vehicle Tag Report</MenuItem>
+                      <MenuItem onClick={closeMenu}>Day Wise Report</MenuItem>
+                      <MenuItem onClick={closeMenu}>Night Driving</MenuItem>
+                      <MenuItem onClick={closeMenu}>Sim Tracking Report</MenuItem>
+                      <MenuItem onClick={closeMenu}>Vehicle Performance Report</MenuItem>
                     </Menu>
                   </div>
                 </span>
@@ -257,7 +267,7 @@ export const Vehicle = () => {
                       <div className='edit-driver-details-div'>
                         <Button variant='contained'>Filter By Tags</Button>
                       </div>
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Select Category</InputLabel>
@@ -277,7 +287,7 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Vehicle Make</InputLabel>
@@ -297,7 +307,7 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Select Group</InputLabel>
@@ -317,7 +327,7 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <TextField
                             size="small"
@@ -336,7 +346,7 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Select Vehicle Ownership</InputLabel>
@@ -356,7 +366,7 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <Box sx={{ minWidth: 320 }}>
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Select Transporter</InputLabel>
@@ -376,33 +386,33 @@ export const Vehicle = () => {
                         </Box>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           <Switch
-                            checked={checked}
-                            onChange={handleChangeSwitch}
+                            checked={checkedDeletedVehicles}
+                            onChange={handleChangeSwitchDeletedVehicles}
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
                           <span>Show Deleted Vehicles</span>
                         </div>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           <Switch
-                            checked={checked}
-                            onChange={handleChangeSwitch}
+                            checked={checkedRemovedVehicles}
+                            onChange={handleChangeSwitchRemovedVehicles}
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
                           <span>Show Removed Vehicles</span>
                         </div>
                       </div>
 
-                      <div className='dddddddddddd'>
+                      <div className='vehicles-filter-division'>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           <Switch
-                            checked={checked}
-                            onChange={handleChangeSwitch}
+                            checked={checkedCurrentTransporter}
+                            onChange={handleChangeSwitchCurrentTransporter}
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
                           <span>Current Transporter</span>
@@ -433,7 +443,7 @@ export const Vehicle = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  <div className='vehicle-tab-main'>
+                  {/* <div className='vehicle-tab-main'>
                     <div className='vehicle-tab-left-main'>
                       <div style={{ marginBottom: '20px' }}>
                         <Button variant="outlined" onClick={handleClick}>Sort Options</Button>
@@ -858,7 +868,9 @@ export const Vehicle = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+
+                  <Vehicles></Vehicles>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                   <div>

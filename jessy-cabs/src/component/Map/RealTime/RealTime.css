@@ -45,96 +45,45 @@
 }
 
 .form-container .Title-Name {
-  font-size: 18px;
+  font-size: 20px;
   padding-left: 0px;
-  font-weight: 400;
-  color: #457cdc;
+  font-weight: 500;
+  /* color: #457cdc; */
 }
 
 
 
-.main-head-hover {
-  background-color: #fff;
-  border: 1px solid grey;
-  height: 55px !important;
-  z-index: 999;
-  width: 100%;
-
-}
-
-.main-head-hover:hover {
-  background-color: #fff;
-  border: 1px solid grey;
-  height: 300px !important;
-  position: absolute;
-  width: 90%;
-  z-index: 999;
-}
-
-.dummy-hover {
-  height: 55px !important;
-  overflow: hidden;
-
-}
-
-.dummy-hover:hover {
-
-  overflow: hidden;
-  height: 300px !important;
-}
-
-
-.hovering-contents {
-  display: flex;
-  justify-content: space-around;
-  align-items: baseline;
-  padding: 10px;
-}
-
-.first-div-realtime {
-  display: flex;
-  justify-content: space-between;
-  width: 30%;
-}
-
-.second-div-realtime {
-  display: flex;
-  justify-content: space-between;
-  width: 30%;
-  border-left: 1px solid grey;
-  padding-left: 10px;
-}
-
-.third-div-realtime {
-  display: flex;
-  justify-content: space-between;
-  width: 30%;
-  border-left: 1px solid grey;
-  padding-left: 10px;
-}
-
-.spantext {
-  font-size: 18px;
-  font-weight: 800;
-
-}
 
 .orange {
-  color: rgb(255, 72, 0);
+  color:#fe662a;
 }
 
 .red {
-  color: red;
+  color: rgb(252, 13, 13);
 }
 
 .green {
-  color: green;
+  color:rgb(14, 194, 14);
 }
 
 .main-body-container {
   display: flex;
+  flex-wrap: wrap;
   gap: "10px";
   justify-content: space-between;
+}
+
+
+@media screen and (max-width:1000px) {
+
+  .vehicle-section {
+
+    width: 100%;
+
+  }
+
+  
+
 }
 
 .vehicle-section {
@@ -165,6 +114,7 @@
 .indidual-para {
   margin: 0px;
   font-size: 17px;
+  padding-left:10px ;
 }
 
 .driver-para {
@@ -173,7 +123,7 @@
 }
 
 .last-row-buttons {
-  border-top: 1px solid #536c79;
+  border-top: 1px solid #bbc0c2;;
   display: flex;
   gap: 10px;
   padding: 10px;
@@ -221,8 +171,8 @@
 
 .location-icon {
   background-color: #42e442;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -231,8 +181,8 @@
 
 .call-icon {
   background-color: gray;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -241,8 +191,8 @@
 
 .share-icon {
   background-color: gray;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -251,8 +201,8 @@
 
 .message-icon {
   background-color: gray;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;

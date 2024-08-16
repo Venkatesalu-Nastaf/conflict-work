@@ -132,7 +132,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         vehno = li.vehRegNo
         drivernames = li.driverName
         remarks = li.remark
-        driverMobNo = li.mobile
+        driverMobNo = li.mobileNo
         request = li.request
 
         packages = li.calcPackage

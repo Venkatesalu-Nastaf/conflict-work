@@ -1,0 +1,17 @@
+.dialog-content-download {
+    padding: 30px;
+}
+
+.dialog-dowload-first {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.downloadicon-warning {
+    color: red;
+}
+
+.Download-PDF-btn {
+    font-size: 13px;
+}

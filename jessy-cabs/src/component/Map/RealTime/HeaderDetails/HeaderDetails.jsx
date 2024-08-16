@@ -1,6 +1,6 @@
 import React from 'react'
 import "../RealTime.css"
-
+import "./HeaderDetails.css"
 import ViewIcon from "./ViewIcon/ViewIcon";
 import DownLoadIcon from "./DownLoadIcon/DownLoadIcon";
 import FilterIcon from "./FilterIcon/FilterIcon";
@@ -13,64 +13,57 @@ const HeaderDetails = () => {
                     <div className='hovering-contents'>
                         <div className='first-div-realtime'>
                             <div>
-                                <p><span className='spantext'>48</span> vehicle</p>
-                                <p><span className='spantext orange'>7</span> Idle</p>
-                                <p><span className='spantext red'>3</span> Dispatched</p>
+                                <p className='top-head-section'><span className='spantext'>48</span><span className='text-color-head'>vehicle</span> </p>
+                                <p><span className='spantext orange'>7</span><span className='text-color-head'>Idle</span> </p>
+                                <p><span className='spantext red'>3</span><span className='text-color-head'>Dispatched</span> </p>
                             </div>
-                            <div>
-                                <p><span className='spantext green'>6</span> Running</p>
-                                <p><span className='spantext orange'>28</span> Parked</p>
-                                <p><span className='spantext red'>3</span> Not Online</p>
+                            <div className='top-head-section'>
+                                <p className='top-head-section'><span className='spantext green'>6</span> <span className='text-color-head'>Running</span></p>
+                                <p><span className='spantext orange'>28</span><span className='text-color-head'>Parked</span> </p>
+                                <p><span className='spantext red'>3</span><span className='text-color-head'>Not Online</span> </p>
                             </div>
                         </div>
                         <div className='second-div-realtime'>
                             <div>
-                                <p><span className='spantext'>48</span> Not On Job</p>
-                                <p><span className='spantext'>0</span> On Job</p>
-                                <p><span className='spantext'>0</span> Waiting To Load</p>
-                                <p><span className='spantext'>0</span> Loaded</p>
-                                <p><span className='spantext'>0</span> Waiting To Unload</p>
-                                <p><span className='spantext'>0</span> Waiting In Garage</p>
+                                <p className='top-head-section'><span className='spantext'>48</span><span className='text-color-head'>Not On Job</span></p>
+                                <p><span className='spantext'>0</span><span className='text-color-head'>On Job</span> </p>
+                                <p><span className='spantext'>0</span><span className='text-color-head'>Waiting To Load</span> </p>
+                                <p><span className='spantext'>0</span><span className='text-color-head'>Loaded</span> </p>
+                                <p><span className='spantext'>0</span><span className='text-color-head'>Waiting To Unload</span> </p>
+                                <p><span className='spantext'>0</span><span className='text-color-head'>Waiting In Garage</span> </p>
                             </div>
                             <div>
-                                <p><span className='spantext'>0</span> In Garage</p>
-                                <p><span className='spantext'>0</span> Unloading</p>
-                                <p><span className='spantext'>0</span> Empty</p>
-                                <p><span className='spantext'>0</span> Scheduled</p>
+                                <p className='top-head-section'><span className='spantext'>0</span> <span className='text-color-head'> In Garage</span> </p>
+                                <p><span className='spantext'>0</span> <span className='text-color-head'> Unloading</span> </p>
+                                <p><span className='spantext'>0</span> <span className='text-color-head'> Empty</span> </p>
+                                <p><span className='spantext'>0</span> <span className='text-color-head'> Scheduled</span> </p>
                             </div>
                         </div>
                         <div className='third-div-realtime'>
-                            <div>
-                                <p><span className='spantext'>0</span> Late</p>
-                                <p><span className='spantext'>0</span> On Time</p>
-                                <p><span className='spantext'>0</span> Early</p>
+                            <div >
+                                <p className='top-head-section'><span className='spantext'>0</span> <span className='text-color-head'>Late</span> </p>
+                                <p><span className='spantext'>0</span> <span className='text-color-head'>On Time</span></p>
+                                <p><span className='spantext'>0</span> <span className='text-color-head'>Early</span></p>
                             </div>
-
                         </div>
 
 
-
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", justifyContent: "space-around" }}>
-
-
-                            <div style={{ fontSize: "25px" }}>
-                                < ViewIcon />
-                            </div>
-                            <div style={{ fontSize: "25px" }}>
-                                <ShareIcon />
-                            </div>
-                            <div style={{ fontSize: "25px" }}>
-                                <DownLoadIcon />
-                            </div>
-                            <div style={{ fontSize: "25px" }}>
-                                <FilterIcon />
-                            </div>
-
+                    </div>
+                    <div className='head-icon-section'>
+                        <div className='icon-division'>
+                            <ViewIcon />
+                        </div>
+                        <div className='icon-division'>
+                            <ShareIcon />
+                        </div>
+                        <div className='icon-division'>
+                            <DownLoadIcon />
+                        </div>
+                        <div className='icon-division'>
+                            <FilterIcon />
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </>
     )

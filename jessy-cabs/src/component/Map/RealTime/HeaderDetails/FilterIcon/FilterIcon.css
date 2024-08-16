@@ -1,0 +1,63 @@
+.filterIcon-drawer {
+    width: 250px !important;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+.dflex {
+    display: flex;
+}
+
+.justifycenter {
+    justify-content: center;
+}
+
+.justifyaround {
+    justify-content: space-around;
+}
+
+.justifyend {
+    justify-content: flex-end;
+}
+
+.filter-content {
+    padding: 10px;
+}
+
+.filter-content-select {
+    width: 100%;
+    padding: 10px;
+}
+
+.filter-by-tags-btn {
+    border: 1px solid #ddd;
+    background-color: none;
+    color: #000000;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.not-on-job-filter {
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+.width {
+    width: 100%;
+}
+
+.toggle-switches-filter {
+    display: grid;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.sort-text {
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}

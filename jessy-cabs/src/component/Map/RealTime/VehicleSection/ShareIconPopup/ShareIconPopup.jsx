@@ -16,7 +16,7 @@ import Switch from '@mui/material/Switch';
 import { TextField } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import { PermissionContext } from '../../../../context/permissionContext';
-
+import "./ShareIconPopup.css"
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -62,7 +62,6 @@ const names = [
   'Kelly Snyder',
 ];
 
-
 const ShareIconPopup = () => {
 
   const { openshare, setOpenshare } = useContext(PermissionContext);
@@ -73,11 +72,6 @@ const ShareIconPopup = () => {
   };
 
 
-  //   const [openshare, setOpenshare] = React.useState(false);
-
-  //   const handleClickOpenshare = () => {
-  //     setOpenshare(true);
-  //   };
   const handleCloseshare = () => {
     setOpenshare(false);
   };
@@ -146,7 +140,7 @@ const ShareIconPopup = () => {
               <div>
                 <label htmlFor="">Select one or more vehicles to share*</label>
                 <div>
-                  <FormControl sx={{ m: 1, width: "100%" }}>
+                  <FormControl sx={{ margin: '2px', width: "100%" }}>
                     <Select
                       id="demo-multiple-name"
                       multiple
@@ -171,7 +165,7 @@ const ShareIconPopup = () => {
                 <label htmlFor="">Start Time</label>
 
                 <div>
-                  <Box sx={{ minWidth: 320, margin: '20px' }}>
+                  <Box sx={{ Width: "100%", margin: '20px' }}>
                     <TextField
                       label="Select Time"
                       type="time"
@@ -189,13 +183,12 @@ const ShareIconPopup = () => {
                 </div>
               </div>
 
-
               <div>
                 <label htmlFor="">Expire the share after</label>
               </div>
               <div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                <div className='day-hours' >
+                  <div className='days-hours-share'>
                     <label htmlFor="">Days</label>
                     <Box sx={{ minWidth: 60 }}>
                       <FormControl fullWidth>
@@ -214,7 +207,7 @@ const ShareIconPopup = () => {
                   </div>
 
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                  <div className='days-hours-share' >
                     <label htmlFor="">Hours</label>
                     <Box sx={{ minWidth: 60 }}>
                       <FormControl fullWidth>
@@ -231,23 +224,15 @@ const ShareIconPopup = () => {
                       </FormControl>
                     </Box>
                   </div>
-
-
-
-
-
-
                 </div>
               </div>
-
-
-              <div style={{ display: "flex", gap: "5px" }}>
+              <div className='toggle-share-switch' >
                 <Switch {...label} defaultChecked />
                 <p>
                   Share Only Vehicle Details (Don't share location)</p>
               </div>
 
-              <div style={{ display: "flex", gap: "5px" }}>
+              <div className='toggle-share-switch' >
                 <Switch {...label} />
                 <p>
                   Show Map View Only</p>
@@ -256,10 +241,10 @@ const ShareIconPopup = () => {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus style={{ border: "1px solid #1976d2" }}>
+            <Button autoFocus className='share-border-add'>
               Add
             </Button>
-            <Button autoFocus onClick={handleCloseshare} style={{ color: "red", border: "1px solid red", }}>
+            <Button autoFocus onClick={handleCloseshare} className='share-border-cancel'>
               Cancel
             </Button>
 

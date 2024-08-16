@@ -1,0 +1,150 @@
+.spantext {
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 3px;
+}
+
+.text-color-head {
+    color: #536c79;
+}
+
+
+
+.main-head-hover {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: 55px !important;
+    z-index: 2;
+    width: 100%;
+
+}
+
+.main-head-hover:hover {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: fit-content !important;
+    /* height: 300px !important; */
+    position: absolute;
+    width: 90%;
+    z-index: 999;
+}
+
+.dummy-hover {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    height: 55px !important;
+    overflow: hidden;
+
+}
+
+.dummy-hover:hover {
+    display: flex;
+    justify-content: space-between !important;
+    align-items: baseline;
+    overflow: hidden;
+    /* height: 300px !important; */
+    height: fit-content !important;
+}
+
+
+.hovering-contents {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: baseline;
+    /* padding: 10px; */
+    width: 80%;
+}
+
+
+
+.first-div-realtime {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 30%;
+    padding: 10px;
+}
+
+.second-div-realtime {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: space-between;
+    width: 30%;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+}
+
+.third-div-realtime {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: space-between;
+    width: 30%;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+}
+
+.top-head-section {
+    margin: 0px;
+}
+
+.head-icon-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.icon-division {
+    font-size: 25px;
+    color: #737373;
+}
+
+@media screen and (max-width:630px) {
+
+    .first-div-realtime,
+    .second-div-realtime,
+    .third-div-realtime {
+        width: 100%;
+    }
+
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+
+    .main-head-hover:hover {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        height: fit-content !important;
+        /* height: 300px !important; */
+        position: absolute;
+        width: 86%;
+        z-index: 2;
+    }
+}
+
+
+@media screen and (max-width:817.99px) {
+
+    .first-div-realtime,
+    .second-div-realtime,
+    .third-div-realtime {
+        border: none;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .hovering-contents {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: baseline;
+        padding: 10px;
+        width: 80%;
+    }
+
+}

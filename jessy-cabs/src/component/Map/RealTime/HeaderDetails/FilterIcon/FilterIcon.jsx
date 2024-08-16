@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import { Drawer, IconButton } from '@mui/material';
 import { Select, MenuItem, FormControl } from '@mui/material';
-import {   FormControlLabel, Switch, } from '@mui/material';
-
-
+import { FormControlLabel, Switch, } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { RiFilter2Fill } from "react-icons/ri";
-
-
-
+import "./FilterIcon.css"
 const FilterIcon = () => {
     const [filteropen, setFilteropen] = useState(false);
 
@@ -33,22 +29,16 @@ const FilterIcon = () => {
                 onClose={togglefilterDrawer(false)}
             >
                 <div
-                    style={{
-                        width: 250,
-                        padding: '10px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: '100%',
-                    }}
+                    className='filterIcon-drawer'
                     role="presentation"
                 >
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className='dflex justifyend' >
                         <IconButton onClick={togglefilterDrawer(false)}>
                             <CloseIcon />
                         </IconButton>
                     </div>
-                    <div style={{ padding: '10px' }}>
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                    <div className='filter-content'>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -65,9 +55,9 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <button style={{border:"1px solid #ddd",background:"none", color:"#000000", width:"100%",padding:"10px", marginTop:"10px"}}>Filter by Tags</button>
+                        <button className='filter-by-tags-btn'>Filter by Tags</button>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -84,7 +74,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -101,7 +91,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -118,7 +108,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -135,7 +125,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -152,7 +142,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%' ,padding:"10px"}}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -169,7 +159,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%' ,padding:"10px"}}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -186,7 +176,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -203,7 +193,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -220,7 +210,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -237,7 +227,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%' ,padding:"10px"}}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -254,7 +244,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -271,7 +261,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -288,7 +278,7 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" style={{ width: '100%',padding:"10px" }}>
+                        <FormControl variant="outlined" className='filter-content-select'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -305,9 +295,8 @@ const FilterIcon = () => {
                             </Select>
                         </FormControl>
 
-
-                        <p style={{borderTop:"1px solid #ccc",padding:"10px"}}>Not On Job</p>
-                        <FormControl variant="outlined" style={{ width: '100%' }}>
+                        <p className='not-on-job-filter'>Not On Job</p>
+                        <FormControl variant="outlined" className='width'>
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -323,14 +312,12 @@ const FilterIcon = () => {
                                 <MenuItem value={30}>Option 3</MenuItem>
                             </Select>
                         </FormControl>
-<div style={{borderTop:"1px solid #ccc", display:"grid",marginTop:"10px", padding:"10px"}}>
-<div><FormControlLabel control={<Switch />} label="Current Transporter" /></div>
-                        <div><FormControlLabel control={<Switch />} label=" Vehicle With Critical DTCs" /></div>
-</div>
-                        
-
-                        <p style={{borderTop:"1px solid #ccc",padding:"10px"}}>sort</p>
-                        <FormControl variant="outlined" style={{ width: '100%' }}>
+                        <div className='toggle-switches-filter'>
+                            <div><FormControlLabel control={<Switch />} label="Current Transporter" /></div>
+                            <div><FormControlLabel control={<Switch />} label=" Vehicle With Critical DTCs" /></div>
+                        </div>
+                        <p className='sort-text'>sort</p>
+                        <FormControl variant="outlined" className='width' >
                             <Select
                                 value={selectFiltervalue}
                                 onChange={handleSelectFilterChange}
@@ -346,8 +333,6 @@ const FilterIcon = () => {
                                 <MenuItem value={30}>Option 3</MenuItem>
                             </Select>
                         </FormControl>
-
-                        
                     </div>
                 </div>
             </Drawer>

@@ -1,178 +1,199 @@
-
 /* HEADER CONTAINER */
 .realtime-page-header {
-    margin-top: 0px;
-    margin-bottom: -10px;
-  }
-  
-  .form-container .Title-Name {
-    font-size: 20px;
-    padding-left: 20px;
-    font-weight: 500;
-    position: relative;
+  margin-top: 0px;
+  margin-bottom: -10px;
+}
 
-  }
-  
-  .form-container {
-    width: 100%;
-    overflow-x: hidden;
-    display: flex;
-    border-radius: 10px;
-    flex-direction: column;
-    color: #000;
-  }
+.form-container .Title-Name {
+  font-size: 20px;
+  padding-left: 20px;
+  font-weight: 500;
+  position: relative;
 
- 
-  
+}
+
+.form-container {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+  color: #000;
+}
+
+
+
+.Customer-page-input-field {
+  flex-wrap: wrap;
+}
+
+
+@media screen and (max-width: 768px) {
+
+
   .Customer-page-input-field {
     flex-wrap: wrap;
+    justify-content: center;
   }
-  
-  
-  @media screen and (max-width: 768px) {
-  
-  
-    .Customer-page-input-field {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+}
+
+@media screen and (max-width:769px) {
+  .form-container {
+    width: 97%;
   }
-  
-  @media screen and (max-width:769px) {
-    .form-container {
-      width: 97%;
-    }
-  
-  }
- 
-  .form-container .Title-Name {
-    font-size: 20px;
-    padding-left: 0px;
-    font-weight: 500;
-  }
-  
- 
 
-.main-head-hover{
-    background-color: #ff0000;
-    border: 1px solid grey;
-    height: 45px;
-    overflow: auto;
 }
 
-.main-head-hover::-webkit-scrollbar {
-    width: 2px; 
-  }
-.main-head-hover:hover{
-    background-color: #310000;
-    border: 1px solid grey;
-    height: 800px !important;
-     /* height: fit-content; */
-    /* padding-bottom:50px ;  */
- 
+.form-container .Title-Name {
+  font-size: 18px;
+  padding-left: 0px;
+  font-weight: 400;
+  color: #457cdc;
 }
 
-.hovering-contents{
-    display: flex;
-    justify-content: space-around;
-}
-.first-div-realtime{
-    display: flex;
-    justify-content: space-between;
-    width: 30%;
-    /* border-left: 1px solid grey; */
+
+
+.main-head-hover {
+  background-color: #fff;
+  border: 1px solid grey;
+  height: 55px !important;
+  z-index: 999;
+  width: 100%;
+
 }
 
-.second-div-realtime{
-    display: flex;
-    justify-content: space-between;
-    width: 30%;
-    border-left: 1px solid grey;
-    padding-left: 10px;
+.main-head-hover:hover {
+  background-color: #fff;
+  border: 1px solid grey;
+  height: 300px !important;
+  position: absolute;
+  width: 90%;
+  z-index: 999;
 }
 
-.third-div-realtime{
-    display: flex;
-    justify-content: space-between;
-    width: 30%;
-    border-left: 1px solid grey;
-    padding-left: 10px;
-}
-.spantext{
-    font-size: 18px ;
-    font-weight: 800;
-    
-}
-.orange{
-    color: rgb(255, 72, 0);
-}
-.red{
-    color: red;
-}
-.green{
-    color: green;
-}
-.main-body-container{
-    display: flex;
-    gap:"10px";
-    justify-content: space-between;
+.dummy-hover {
+  height: 55px !important;
+  overflow: hidden;
+
 }
 
-.vehicle-section{
-    width:40%;
+.dummy-hover:hover {
+
+  overflow: hidden;
+  height: 300px !important;
 }
 
-.vehicle-details{ 
-    height: 800px;
-    overflow-y: auto;
+
+.hovering-contents {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+  padding: 10px;
+}
+
+.first-div-realtime {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+}
+
+.second-div-realtime {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  border-left: 1px solid grey;
+  padding-left: 10px;
+}
+
+.third-div-realtime {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  border-left: 1px solid grey;
+  padding-left: 10px;
+}
+
+.spantext {
+  font-size: 18px;
+  font-weight: 800;
+
+}
+
+.orange {
+  color: rgb(255, 72, 0);
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.main-body-container {
+  display: flex;
+  gap: "10px";
+  justify-content: space-between;
+}
+
+.vehicle-section {
+  width: 40%;
+}
+
+.vehicle-details {
+  height: 800px;
+  overflow-y: auto;
 }
 
 .vehicle-details::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
-.flex-class{
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.flex-class {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.heading-three{
-    margin: 0px;
-    font-size: 25px;
-    font-weight: 600;
+.heading-three {
+  margin: 0px;
+  font-size: 25px;
+  font-weight: 600;
 }
 
-.indidual-para{
-    margin: 0px;
-    font-size: 17px;
+.indidual-para {
+  margin: 0px;
+  font-size: 17px;
 }
 
-.driver-para{
-    border-left: 1px solid #536c79 ;
-    padding-left: 5px;
+.driver-para {
+  border-left: 1px solid #536c79;
+  padding-left: 5px;
 }
 
-.last-row-buttons{
+.last-row-buttons {
   border-top: 1px solid #536c79;
   display: flex;
   gap: 10px;
   padding: 10px;
-  
+
 }
 
-.vehicle-indiduals{
+.vehicle-indiduals {
   padding: 10px;
-  border: 1px solid #e3e8ed;;
+  border: 1px solid #e3e8ed;
+  ;
   border-radius: 8px;
   margin-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.text-color{
-  color:#536c79!important;
+
+.text-color {
+  color: #536c79 !important;
 }
 
-.margins{
+.margins {
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -181,7 +202,7 @@
   color: #ffc107 !important;
 }
 
-.vehicle-indiduals-icons{
+.vehicle-indiduals-icons {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -190,7 +211,7 @@
   margin-bottom: 10px;
 }
 
-.icon-right-flex{
+.icon-right-flex {
   display: flex;
   /* justify-content: space-around; */
   flex-direction: column;
@@ -198,7 +219,7 @@
   gap: 20px;
 }
 
-.location-icon{
+.location-icon {
   background-color: #42e442;
   width: 30px;
   height: 30px;
@@ -207,7 +228,8 @@
   justify-content: center;
   align-items: center;
 }
-.call-icon{
+
+.call-icon {
   background-color: gray;
   width: 30px;
   height: 30px;
@@ -216,7 +238,8 @@
   justify-content: center;
   align-items: center;
 }
-.share-icon{
+
+.share-icon {
   background-color: gray;
   width: 30px;
   height: 30px;
@@ -225,7 +248,8 @@
   justify-content: center;
   align-items: center;
 }
-.message-icon{
+
+.message-icon {
   background-color: gray;
   width: 30px;
   height: 30px;
@@ -236,7 +260,7 @@
 }
 
 
-.bottom-buttons{
+.bottom-buttons {
   border-radius: 30px;
 
   padding: 10px 20px;

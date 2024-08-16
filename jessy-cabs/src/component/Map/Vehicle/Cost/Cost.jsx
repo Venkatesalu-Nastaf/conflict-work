@@ -2,6 +2,7 @@ import React from 'react'
 import "./Cost.css";
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
+import Button from "@mui/material/Button";
 
 
 const Cost = () => {
@@ -22,6 +23,17 @@ const Cost = () => {
     ];
     return (
         <div>
+            <div style={{ margin: '25px 0px', display: 'flex', gap: '15px' }}>
+                <Button variant='outlined'>Live</Button>
+                <Button variant='outlined'>History</Button>
+                <Button variant='outlined'>Jobs</Button>
+                <Button variant='outlined'>Alarm</Button>
+                <Button variant='outlined'>DTCs</Button>
+                <Button variant='outlined'>Fuel Entry</Button>
+                <Button variant='outlined'>Service Reminders</Button>
+                <Button variant='outlined'>Renewal Reminders</Button>
+                <Button variant='contained'>View Details</Button>
+            </div>
             <div className='bill-wise-reciept-table'>
                 <Box
                     sx={{

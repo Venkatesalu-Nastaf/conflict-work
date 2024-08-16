@@ -48,14 +48,12 @@
   font-size: 20px;
   padding-left: 0px;
   font-weight: 500;
-  /* color: #457cdc; */
 }
 
 
 
-
 .orange {
-  color:#fe662a;
+  color: #fe662a;
 }
 
 .red {
@@ -63,7 +61,7 @@
 }
 
 .green {
-  color:rgb(14, 194, 14);
+  color: rgb(14, 194, 14);
 }
 
 .main-body-container {
@@ -73,21 +71,15 @@
   justify-content: space-between;
 }
 
-
-@media screen and (max-width:1000px) {
-
-  .vehicle-section {
-
-    width: 100%;
-
-  }
-
-  
-
-}
-
 .vehicle-section {
   width: 40%;
+}
+
+@media screen and (max-width:1000px) {
+  .vehicle-section {
+    width: 100%;
+  }
+  
 }
 
 .vehicle-details {
@@ -123,7 +115,7 @@
 }
 
 .last-row-buttons {
-  border-top: 1px solid #bbc0c2;;
+  border-top: 1px solid #bbc0c2;
   display: flex;
   gap: 10px;
   padding: 10px;

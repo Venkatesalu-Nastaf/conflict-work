@@ -39,7 +39,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     warningMessage,
     handleClick,
     hidePopup,
-    date,
+    // date,
     Billingdate,
     selectedCustomerDatas,
     invoiceno,

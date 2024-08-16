@@ -213,18 +213,20 @@ const useBillWiseReceipt = () => {
     };
 
     const handleAddBillReceive = async () => {
+        // Check if AccountDetails is provided
         if (billWiseReport.AccountDetails === "") {
             setError(true);
             setErrorMessage("Enter Bank Account");
             return;  // Early return to prevent further execution
         }
 
+        // Combine totals and billWiseReport data
         const combinedData = {
             ...totals,
             ...billWiseReport
         };
 
-        // Create a new object with the desired key names
+        // Format data for the API request
         const formattedData = {
             uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
             CustomerName: combinedData.CustomerName,
@@ -241,14 +243,16 @@ const useBillWiseReceipt = () => {
         const BillNo = rows.map(li => li.BillNo);
 
         try {
+            // Post the formatted data
             const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
             console.log(postResponse.data, 'response data');
+
+            await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount, bankname: combinedData.AccountDetails });
             setSuccess(true);
             setSuccessMessage("Successfully Added");
 
             if (postResponse.data) {
                 const deleteResponse = await axios.delete(`${apiUrl}/deleteBillWiseReport`, { data: { BillNo } });
-                console.log(deleteResponse.data, 'delete');
 
                 if (deleteResponse.status === 200) {
                     setBillWiseReport({
@@ -267,7 +271,7 @@ const useBillWiseReceipt = () => {
                         tds: 0,
                         collectedAmount: 0
                     });
-                    setRows([])
+                    setRows([]);
                     setPendingBillRows([]);
                 } else {
                     console.error('Failed to delete bill data');
@@ -275,8 +279,77 @@ const useBillWiseReceipt = () => {
             }
         } catch (error) {
             console.error('Error posting bill amount received or deleting bill data:', error);
+            setError(true);
+            setErrorMessage('An error occurred while processing the request.');
         }
     };
+
+    // const handleAddBillReceive = async () => {
+    //     if (billWiseReport.AccountDetails === "") {
+    //         setError(true);
+    //         setErrorMessage("Enter Bank Account");
+    //         return;  // Early return to prevent further execution
+    //     }
+
+    //     const combinedData = {
+    //         ...totals,
+    //         ...billWiseReport
+    //     };
+
+    //     // Create a new object with the desired key names
+    //     const formattedData = {
+    //         uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
+    //         CustomerName: combinedData.CustomerName,
+    //         Account: combinedData.AccountDetails,
+    //         Amount: combinedData.amount,
+    //         TDS: combinedData.tds,
+    //         Advance: combinedData.recieved,
+    //         TotalAmount: combinedData.totalAmount,
+    //         BillDate: combinedData.Date,
+    //         Collected: combinedData.collectedAmount.toString(),
+    //         TotalBalance: combinedData.totalAmount - combinedData.collectedAmount
+    //     };
+
+    //     const BillNo = rows.map(li => li.BillNo);
+
+    //     try {
+    //         const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
+    //         const collectResponse  = await axios.post(`${apiUrl}/addCollect`)
+    //         console.log(postResponse.data, 'response data');
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully Added");
+
+    //         if (postResponse.data) {
+    //             const deleteResponse = await axios.delete(`${apiUrl}/deleteBillWiseReport`, { data: { BillNo } });
+    //             console.log(deleteResponse.data, 'delete');
+
+    //             if (deleteResponse.status === 200) {
+    //                 setBillWiseReport({
+    //                     CustomerName: "",
+    //                     AccountDetails: "",
+    //                     UniqueID: "",
+    //                 });
+    //                 setTotals({
+    //                     amount: 0,
+    //                     recieved: 0,
+    //                     discount: 0,
+    //                     balance: 0,
+    //                     totalAmount: 0,
+    //                     onAccount: 0,
+    //                     totalBalance: 0,
+    //                     tds: 0,
+    //                     collectedAmount: 0
+    //                 });
+    //                 setRows([])
+    //                 setPendingBillRows([]);
+    //             } else {
+    //                 console.error('Failed to delete bill data');
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Error posting bill amount received or deleting bill data:', error);
+    //     }
+    // };
 
     useEffect(() => {
         if (error || success) {

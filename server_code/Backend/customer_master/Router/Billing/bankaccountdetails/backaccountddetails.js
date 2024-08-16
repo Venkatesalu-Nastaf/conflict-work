@@ -17,8 +17,17 @@ router.get('/getbankdetails', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
-        console.log(result,'rows');
-        
+
+        return res.status(200).json(result);
+    });
+});
+
+router.get('/getCollecedAmount', (req, res) => {
+    db.query('SELECT * FROM BillWiseReceipt', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+        }
+
         return res.status(200).json(result);
     });
 });
@@ -35,10 +44,10 @@ router.get('/bankoptions', (req, res) => {
 
 router.put('/updatebankdetails/:id', (req, res) => {
     const driverid = req.params.id;
-    const { bankname2, netbalance, totalin, totalout } = req.body;
+    const { bankname, capital, totalin, totalout } = req.body;
 
-    const query = 'UPDATE bankaccountdetails SET bankname2 = ?, netbalance = ?, totalin = ?, totalout = ? WHERE id = ?';
-    db.query(query, [bankname2, netbalance, totalin, totalout, driverid], (err, result) => {
+    const query = 'UPDATE bankaccountdetails SET bankname = ?, capital = ?, totalin = ?, totalout = ? WHERE id = ?';
+    db.query(query, [bankname, capital, totalin, totalout, driverid], (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Error updating bank account' });
         } else {
@@ -50,7 +59,6 @@ router.put('/updatebankdetails/:id', (req, res) => {
 //delete bank account
 router.delete('/deletebankdetails/:id', (req, res) => {
     const idToDelete = req.params.id;
-    console.log(idToDelete,"dd")
     const query = 'DELETE FROM bankaccountdetails WHERE id = ?';
     db.query(query, [idToDelete], (err, result) => {
         if (err) {
@@ -68,7 +76,6 @@ router.get('/totalCapital_from_billing', (req, res) => {
         if (err) {
             res.status(500).send('Internal Server Error');
         } else {
-            console.log(result,"totalamount")
             const totalAmount = result[0].total || 0;
             res.json({ totalAmount });
         }

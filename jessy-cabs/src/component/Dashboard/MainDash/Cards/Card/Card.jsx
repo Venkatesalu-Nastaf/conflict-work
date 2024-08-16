@@ -8,6 +8,7 @@ import Chart from "react-apexcharts";
 
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
+
   return (
     <AnimateSharedLayout>
       {expanded ? (
@@ -47,7 +48,7 @@ function CompactCard({ param, setExpanded }) {
           </div>
           <div className="detail">
             <Png />
-            <span>&#8377; {param.value}</span>
+            <span>&#8377; {param.amount}</span>
             <span>Last 24 hours</span>
           </div>
         </motion.div>

@@ -260,7 +260,7 @@ const usePendingBill = () => {
             halign: 'center',
             willDrawCell: function (data) {
                 if (data.row.index === tableRows.length - 1) {
-                    const { cell, row, column } = data;
+                    const { cell, } = data;
                     const { x, y, width, height } = cell;
 
                     doc.setFont('helvetica', 'bold');

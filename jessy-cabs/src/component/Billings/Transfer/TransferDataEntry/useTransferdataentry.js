@@ -386,7 +386,7 @@ const useTransferdataentry = () => {
     //calculate total amount in column
     useEffect(() => {
         const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.totalcalcAmount || 0), 0);
-        const cal = rows.map(li=>li.total)
+        // const cal = rows.map(li=>li.total)
         if (!isNaN(calculatedTotalAmount)) {
             setTotalAmount(calculatedTotalAmount.toFixed(2));
         } else {
@@ -479,7 +479,7 @@ const useTransferdataentry = () => {
         const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0);
         setTripAmount(totalSelectedTripAmount)
 
-        const handleselectTrips = selectedTrips;
+        // const handleselectTrips = selectedTrips;
         setSelectedRow(selectedTrips)
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
@@ -541,66 +541,66 @@ const useTransferdataentry = () => {
 
 
 
-    const handleBillGenerate = async () => {
-        if (rowSelectionModel.length === 0) {
-            setError(true);
-            setErrorMessage('Please select rows before generating the bill.');
-            return;
-        }
+    // const handleBillGenerate = async () => {
+    //     if (rowSelectionModel.length === 0) {
+    //         setError(true);
+    //         setErrorMessage('Please select rows before generating the bill.');
+    //         return;
+    //     }
 
-        try {
-            const tripids = rowSelectionModel;
-            if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
-                setError(true);
-                setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
-                return;
-            }
-            handleAdd();
-            handleButtonClickTripsheet();
-            const response = await axios.post(`${apiUrl}/updateStatus`, {
-                tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
-                status: 'CBilled',
-            });
-            if (response.status === 200) {
-                setSuccess(true);
-                setSuccessMessage('Bill generated successfully!');
-            } else {
-                setError(true);
-                setErrorMessage('Failed to generate bill. Please try again.');
-            }
-        } catch {
-            setError(true);
-            setErrorMessage('An error occurred. Please try again later.');
-        }
+    //     try {
+    //         const tripids = rowSelectionModel;
+    //         if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
+    //             setError(true);
+    //             setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
+    //             return;
+    //         }
+    //         handleAdd();
+    //         handleButtonClickTripsheet();
+    //         const response = await axios.post(`${apiUrl}/updateStatus`, {
+    //             tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
+    //             status: 'CBilled',
+    //         });
+    //         if (response.status === 200) {
+    //             setSuccess(true);
+    //             setSuccessMessage('Bill generated successfully!');
+    //         } else {
+    //             setError(true);
+    //             setErrorMessage('Failed to generate bill. Please try again.');
+    //         }
+    //     } catch {
+    //         setError(true);
+    //         setErrorMessage('An error occurred. Please try again later.');
+    //     }
 
-    };
+    // };
 
 
-    const handleAdd = async () => {
+    // const handleAdd = async () => {
 
-        const selectedRowCount = localStorage.getItem('selectedrowcount');
-        const selectedTripIds = localStorage.getItem('selectedtripsheetid');
-        const firstSelectedRow = rows.find(row => row.id === parseInt(selectedTripIds[0], 10));
-        const guestnameFromFirstRow = firstSelectedRow ? firstSelectedRow.guestname : '';
+    //     const selectedRowCount = localStorage.getItem('selectedrowcount');
+    //     const selectedTripIds = localStorage.getItem('selectedtripsheetid');
+    //     const firstSelectedRow = rows.find(row => row.id === parseInt(selectedTripIds[0], 10));
+    //     const guestnameFromFirstRow = firstSelectedRow ? firstSelectedRow.guestname : '';
 
-        const updatedBook = {
-            ...book,
-            Billingdate: Billingdate || book.Billdate,
-            Invoice_no: invoiceno || book.Invoice_no,
-            customer: customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
-            fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : book.fromdate.format('YYYY-MM-DD'),
-            todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : book.todate.format('YYYY-MM-DD'),
-            station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
-            Totalamount: totalAmount,
-            status: 'Billed',
-            trips: selectedRowCount,
-            guestname: guestnameFromFirstRow,
-        };
-        await axios.post(`${apiUrl}/billing`, updatedBook);
-        setSuccess(true);
-        setSuccessMessage("Successfully Added");
+    //     const updatedBook = {
+    //         ...book,
+    //         Billingdate: Billingdate || book.Billdate,
+    //         Invoice_no: invoiceno || book.Invoice_no,
+    //         customer: customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
+    //         fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : book.fromdate.format('YYYY-MM-DD'),
+    //         todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : book.todate.format('YYYY-MM-DD'),
+    //         station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
+    //         Totalamount: totalAmount,
+    //         status: 'Billed',
+    //         trips: selectedRowCount,
+    //         guestname: guestnameFromFirstRow,
+    //     };
+    //     await axios.post(`${apiUrl}/billing`, updatedBook);
+    //     setSuccess(true);
+    //     setSuccessMessage("Successfully Added");
 
-    };
+    // };
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');

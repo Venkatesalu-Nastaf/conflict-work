@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import './RefPdfParticularData.css'
 import generatePDF from 'react-to-pdf';
 import useGroupbilling from "./useGroupbilling";
-import { APIURL } from "../../../url";
+// import { APIURL } from "../../../url";
 import numWords from 'num-words'
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
 
@@ -19,8 +19,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     const [fullAmount, setFullAmount] = useState('')
     const [totalCgst, setTotalCgst] = useState(0)
     const [fullTotal, setFullTotal] = useState(0)
-    const apiUrl = APIURL;
-    const organisationimage = imagename
+    // const apiUrl = APIURL;
+    // const organisationimage = imagename
     const FromDate = refFromDate
     const ToDate = refToDate
     const refno = referenceno

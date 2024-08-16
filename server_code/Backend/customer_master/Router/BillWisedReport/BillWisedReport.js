@@ -77,6 +77,44 @@ router.post('/addBillAmountReceived', (req, res) => {
     });
 });
 
+
+router.post('/addCollect', (req, res) => {
+    const { collectedAmount, bankname } = req.body;
+
+    if (!bankname || !collectedAmount) {
+        return res.status(400).json({ message: 'Bank name and collected amount are required' });
+    }
+
+    // First, fetch the current totalin value from the database
+    db.query('SELECT totalin,capital FROM bankaccountdetails WHERE bankname = ?', [bankname], (err, rows) => {
+        if (err) {
+            console.error('Error fetching totalin:', err);
+            return res.status(500).json({ message: 'Database error' });
+        }
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Bank account not found' });
+        }
+
+        const currentTotalin = rows[0].totalin;
+        const updatedTotalin = parseInt(currentTotalin) + parseInt(collectedAmount); // Add the collected amount to the current totalin
+        const totalcapital = parseInt(collectedAmount) + parseInt(rows[0].capital)
+
+        // Now, update the totalin value in the database
+        const updateQuery = "UPDATE bankaccountdetails SET totalin = ?,capital=? WHERE bankname = ?";
+        db.query(updateQuery, [updatedTotalin, totalcapital, bankname], (err, result) => {
+            if (err) {
+                console.error('Error updating totalin:', err);
+                return res.status(500).json({ message: 'Database error' });
+            }
+
+            res.status(200).json({ message: 'Totalin value updated successfully', result });
+        });
+    });
+});
+
+
+
 router.delete('/deleteBillWiseReport', (req, res) => {
     const { BillNo } = req.body; // Assumes BillNo is an array
 

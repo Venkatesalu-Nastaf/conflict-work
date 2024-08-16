@@ -47,11 +47,13 @@ const useBankaccount = () => {
         bankname: '',
         capital: '',
         AccountType: '',
-        bankname2: '',
         netbalance: '',
+        enterTotalIn: "",
+        enterTotalOut: '',
         totalin: '',
         totalout: '',
     });
+
 
     const handleCancel = () => {
         setBook((prevBook) => ({
@@ -86,48 +88,74 @@ const useBankaccount = () => {
     };
 
     const handleSaveEdit = async (index, id) => {
-
-
-
         try {
-            if (index >= 0 && index < bankDetails.length) {
-                const updatedBank = bankDetails[index];
+            const updatedBank = bankDetails[index];
 
-                const updateData = {
-                    id: updatedBank.id,
-                    bankname2: book.bankname2 || updatedBank.bankname2,
-                    netbalance: updatedBank.totalin - updatedBank.totalout,
-                    totalin: book.totalin || updatedBank.totalin,
-                    totalout: book.totalout || updatedBank.totalout,
-                };
-                await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
-                setSuccess(true);
-                setSuccessMessage('Successfully Updated');
-                setEditingIndex(null);
+            // Ensure that enterTotalIn is properly defined and is a number
+            const enterTotalIn = parseInt(updatedBank.enterTotalIn) || 0;
+            const enterTotalOut = parseInt(updatedBank.enterTotalOut) || 0
+            const totalin = parseInt(updatedBank.totalin) || 0;
+            const totalout = parseInt(updatedBank.totalout) || 0;
 
-            } else {
-            }
+            const updateData = {
+                id: updatedBank.id,
+                bankname: book.bankname || updatedBank.bankname,
+                capital: parseInt(updatedBank.capital) - enterTotalOut,
+                totalin: (totalin + enterTotalIn),
+                totalout: (totalout + enterTotalOut),
+            };
+
+
+            await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
+            setSuccess(true);
+            setSuccessMessage('Successfully Updated');
+            setEditingIndex(null);
+
         } catch {
             setError(true);
             setErrorMessage('Error updating bank account. Please check your Network Connection.');
         }
-
     };
 
-    const handleChange = (event, index) => {
+
+    const handleChange = (event, index = null) => {
         const { name, value } = event.target;
-        const updatedBankDetails = [...bankDetails];
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: value,
-        }));
 
-        updatedBankDetails[index] = {
-            ...updatedBankDetails[index],
-            [name]: value,
-        };
-        setBankDetails(updatedBankDetails);
+        if (index !== null) {
+            // Update specific bank detail by index
+            setBankDetails(prevDetails =>
+                prevDetails.map((item, i) =>
+                    i === index
+                        ? { ...item, [name]: value }
+                        : item
+                )
+            );
+        } else {
+            // Handle general changes
+            setBook(prevBook => ({
+                ...prevBook,
+                [name]: value
+            }));
+        }
     };
+
+
+    // const handleChange = (event, index) => {
+    //     const { name, value } = event.target;
+    //     console.log(name,value,index,'onc');
+
+    //     const updatedBankDetails = [...bankDetails];
+    //     setBook((prevBook) => ({
+    //         ...prevBook,
+    //         [name]: value,
+    //     }));
+
+    //     updatedBankDetails[index] = {
+    //         ...updatedBankDetails[index],
+    //         [name]: value,
+    //     };
+    //     setBankDetails(updatedBankDetails);
+    // };
 
     const handleAutocompleteChange = (event, newValue, name) => {
         const selectedOption = newValue ? newValue.label : '';
@@ -138,14 +166,14 @@ const useBankaccount = () => {
     };
 
     const handleAdd = async () => {
-         const createdat=dayjs();
+        const createdat = dayjs();
         try {
             const newBank = {
                 bankname: book.bankname,
                 capital: book.capital,
                 AccountType: book.AccountType,
-                created_at:createdat
-                
+                created_at: createdat
+
 
             };
             await axios.post(`${apiUrl}/bankdetails`, newBank);
@@ -159,6 +187,7 @@ const useBankaccount = () => {
 
     };
 
+
     const fetchData = useCallback(async () => {
 
         try {
@@ -166,7 +195,6 @@ const useBankaccount = () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
-                    console.log(data,"accont")
                     setBankDetails(data);
                 } else {
                     setBankDetails([]);
@@ -182,7 +210,7 @@ const useBankaccount = () => {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, success]);
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -227,14 +255,19 @@ const useBankaccount = () => {
             total + (parseInt(bankDetail.totalout, 10) || 0)
         ), 0) || parseInt(book.totalout, 10) || 0;
         setTotalOut(calculatedTotalOut);
-    }, [bankDetails, book]);
+    }, [bankDetails, book, success]);
 
 
     //calculate totalin amount
     useEffect(() => {
         const calculatedTotalIn = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
         setTotalIn(calculatedTotalIn);
-    }, [bankDetails, book]);
+    }, [bankDetails, book, success]);
+
+    useEffect(() => {
+        const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.capital, 10) || parseInt(book.capital, 10) || 0), 0);
+        setTotalCapital(calculatedTotalCapital);
+    }, [bankDetails, book, success]);
 
 
     useEffect(() => {

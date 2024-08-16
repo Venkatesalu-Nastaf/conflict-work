@@ -252,7 +252,7 @@ const BankAccount = () => {
               <div className="addedbanks-Details-BankAccount" key={index}>
                 <div className="input-field input-field-bankaccount input-Field-bank-account">
 
-                  <div className="input input-bankname">
+                  {/* <div className="input input-bankname">
                     <div className="icone">
                       <AiFillBank color="action" />
                     </div>
@@ -261,7 +261,21 @@ const BankAccount = () => {
                       label="Bank Namxxxe"
                       id="bankname02"
                       name="bankname2"
-                      value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
+                      value={editingIndex === index ? bankDetail.bankname : (bankDetail.bankname || book.bankname || '')}
+                      onChange={(event) => handleChange(event, index)}
+                      disabled={editingIndex !== index}
+                    />
+                  </div> */}
+                  <div className="input input-bankname">
+                    <div className="icone">
+                      <AiFillBank color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      label="Bank Namxxxe"
+                      id="bankname02"
+                      name="bankname"
+                      value={bankDetail.bankname || ""}
                       onChange={(event) => handleChange(event, index)}
                       disabled={editingIndex !== index}
                     />
@@ -270,7 +284,7 @@ const BankAccount = () => {
                     <div className="icone">
                       <AiFillBank color="action" />
                     </div>
-                    <TextField
+                    {/* <TextField
                       size="small"
                       label="Net Balance"
                       name="netbalance"
@@ -279,32 +293,62 @@ const BankAccount = () => {
                       value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
                       onChange={(event) => handleChange(event, index)}
                       disabled={editingIndex !== index}
+                    /> */}
+                    <TextField
+                      size="small"
+                      label="Net Balance"
+                      name="capital"
+                      id="netbalance89"
+                      // type="text"
+                      value={bankDetail.capital || ""}
+                      onChange={(event) => handleChange(event, index)}
+                      disabled={editingIndex !== index}
                     />
                   </div>
+                  <div>
                   <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`}>
                     <label htmlFor={`totalin-${index}`}>TotalIn:</label>
                     <input
                       className="bank-amount-input"
                       name="totalin"
-                      type="number"
+                      // type="number"
                       id={`totalin-${index}`}
                       value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
                       onChange={(event) => handleChange(event, index)}
                       disabled={editingIndex !== index}
                     />
+                   
                   </div>
+                  {/* <input    
+                      name="enterTotalIn"
+                      // type="number"
+                      id={`enterTotalIn-${index}`}
+                      value={editingIndex === index ? bankDetail.enterTotalIn : (bankDetail.enterTotalIn || book.enterTotalIn || '')}
+                      onChange={(event) => handleChange(event, index)}
+                      disabled={editingIndex !== index} /> */}
+                      </div>
+                  <div>
                   <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`}>
                     <label htmlFor={`totalout-${index}`}>TotalOut:</label>
                     <input
                       className="bank-amount-input"
                       name="totalout"
-                      type="number"
+                      // type="number"
                       id={`totalout-${index}`}
                       value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
-                      onChange={(event) => handleChange(event, index)}
+                      // onChange={(event) => handleChange(event, index)}
                       disabled={editingIndex !== index}
                     />
+                                        
 
+                  </div>
+                  <input    
+                      name="enterTotalOut"
+                      // type="number"
+                      id={`enterTotalOut-${index}`}
+                      value={editingIndex === index ? bankDetail.enterTotalOut : (bankDetail.enterTotalOut || book.enterTotalOut || '')}
+                      onChange={(event) => handleChange(event, index)}
+                      disabled={editingIndex !== index} />
                   </div>
                   <div className="button-container-bankAccount">
                     <div className="inpt input-bank-account-icon">

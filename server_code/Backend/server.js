@@ -80,7 +80,7 @@ const IndividualBill = require('./customer_master/Router/Individual_Billing/Indi
 const GstReport = require('./customer_master/Router/GstReport/GstReport');
 const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport');
 const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
-
+const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard')
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
 // -----------------------------------------------------------------------------------------------------------
@@ -166,6 +166,8 @@ app.use('/', GstReport);//GstReport
 app.use('/', billWiseReport);//billWiseReport
 // -------------------------------------------------------------------------------------------
 app.use('/', pendingBill);//PendingBill
+// -------------------------------------------------------------------------------------------
+app.use('/',DashBoardBillReport)
 
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;

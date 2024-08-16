@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./Cards.css";
 // import { CardsData } from "./Cards-Data.js";
 import Card from "./Card/Card";
-
 import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
-
+import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
 const apiUrl = APIURL;
@@ -18,10 +17,9 @@ const Cards = () => {
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-  // console.log(lastMonthTotalAmount, "amount ")
-  // console.log(lastMonthTotalPending, "amount pend")
-  // console.log(lastMonthTotalPaid, "amount paid")
-
+   const {totalAmountSum} = useCard();
+   console.log(totalAmountSum,'totalsum');
+   
   function getCurrentMonth() {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth(); // Returns a number between 0 and 11
@@ -29,7 +27,6 @@ const Cards = () => {
   };
 
   const fetchDataFromBackend = async (month) => {
-    // console.log(month,"kkk")
     try {
       const response = await fetch(`${apiUrl}/total_amounts_from_billing?month=${month}`);
       if (!response.ok) {
@@ -69,6 +66,8 @@ const Cards = () => {
     }
   };
 
+  const storedSums = JSON.parse(localStorage.getItem('sumValues'));
+
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
 
@@ -93,12 +92,10 @@ const Cards = () => {
 
   };
   const calculatePercentageChange = (TotalAmount, previousValue) => {
-    // console.log(previousValue,"pre",currentValue)
     if (previousValue === 0 || TotalAmount === 0) {
       return TotalAmount = 0;
     }
     const percentageChange = ((TotalAmount - previousValue) / TotalAmount) * 100
-    // console.log(percentageChange, "pre ")
     return percentageChange.toFixed(1);
   };
 
@@ -125,6 +122,7 @@ const Cards = () => {
       value: lastMonthTotalAmount.toLocaleString(),
       png: FaRupeeSign,
       series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
+      totalamount: storedSums?.totalAmountSum || 0
     },
     {
       title: "Recived",
@@ -136,6 +134,7 @@ const Cards = () => {
       value: lastMonthTotalPaid.toLocaleString(),
       png: FaRegMoneyBillAlt,
       series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
+      totalamount: storedSums?.totalCollectedSum || 0
     },
     {
       title: "Pending",
@@ -147,6 +146,7 @@ const Cards = () => {
       value: lastMonthTotalPending.toLocaleString(),
       png: BiPaste,
       series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
+      totalamount: storedSums?.totalBalanceSum || 0
     },
   ];
 
@@ -194,6 +194,7 @@ const Cards = () => {
               value={card.value}
               png={card.png}
               series={card.series}
+              amount={card.totalamount}
             />
           </div>
         ))}

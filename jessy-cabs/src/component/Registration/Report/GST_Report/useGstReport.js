@@ -256,7 +256,7 @@ const useGstReport = () => {
             willDrawCell: function (data) {
                 // Check if this cell is part of the total row
                 if (data.row.index === tableRows.length - 1) {
-                    const { cell, row, column } = data;
+                    const { cell,  } = data;
                     const { x, y, width, height } = cell;
 
                     // Set bold text and increased font size

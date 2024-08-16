@@ -1,0 +1,11 @@
+.sssssssssssss {
+    display: grid;
+    width: 410px;
+}
+
+.sssssssssssss input {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 10px 5px;
+    border-radius: 5px;
+}

@@ -43,3 +43,8 @@
     border: 1px solid red;
     color: red;
 }
+
+.share-icon-label {
+    font-size: 15px;
+    font-weight: 600;
+}

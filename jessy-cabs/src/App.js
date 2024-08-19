@@ -301,15 +301,18 @@ function App() {
       try {
         const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
         const data = response.data
-        const names = data?.map(res => res.VechicleNames)
+        const names = data.map(res => res.VechicleNames)
+
         setVehicleName(names)
+
+
       }
       catch (error) {
         console.log(error, "error");
       }
     };
     fetchgetvehicleName()
-  }, [apiUrl])
+  }, [apiUrl, vehileName])
 
   return (
     <>

@@ -281,7 +281,7 @@ const useCustomer = () => {
         customer: '',
         customerType: '',
         servicestation: '',
-        date: '',
+        date: dayjs(),
         address1: '',
         // customeremail: '',
         rateType: '',

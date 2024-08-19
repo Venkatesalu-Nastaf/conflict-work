@@ -9,7 +9,7 @@ import Vehicaleinfo from './Vehicale_Info/Vehicaleinfo.jsx';
 import DriverCreation from './DriverCreation/DriverCreation.jsx';
 import "./Suppliers.css"
 const Suppliers = ({ stationName }) => {
-    const [value, setValue] = React.useState("accounting_info");
+    const [value, setValue] = React.useState("driverinfo");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -21,14 +21,15 @@ const Suppliers = ({ stationName }) => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all">
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Accounting Info" className='tab-content' value="accounting_info" />
-                                <Tab label="Vehicle Info" className='tab-content' value="vehicle_info" />
                                 <Tab label="Driver Info" className='tab-content' value="driverinfo" />
+                                <Tab label="Vehicle Info" className='tab-content' value="vehicle_info" />
+                                <Tab label="Accounting Info" className='tab-content' value="accounting_info" />
+
                             </TabList>
                         </Box>
-                        <TabPanel value="accounting_info"><Accountinfo /></TabPanel>
-                        <TabPanel value="vehicle_info"><Vehicaleinfo stationName={stationName} /></TabPanel>
                         <TabPanel value="driverinfo"><DriverCreation stationName={stationName} /></TabPanel>
+                        <TabPanel value="vehicle_info"><Vehicaleinfo stationName={stationName} /></TabPanel>
+                        <TabPanel value="accounting_info"><Accountinfo /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

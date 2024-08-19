@@ -20,7 +20,7 @@ import { APIURL } from '../../../url';
 import dayjs from 'dayjs';
 import { TextField } from '@mui/material';
 import Excel from 'exceljs';
-import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";  
 import jsPDF from "jspdf";
 
 
@@ -37,11 +37,10 @@ const customer_colums = [
 
 
 const VehicleStatement = () => {
-
   const [data, setData] = useState({
     hireTypes: "",
-    startDate: "",
-    endDate: ""
+    startDate: dayjs(),
+    endDate: dayjs()
   })
 
   const [tableData, setTableData] = useState([])
@@ -507,12 +506,15 @@ const VehicleStatement = () => {
                 <DatePicker
                   label="From Date"
                   format="DD/MM/YYYY"
-                  value={data.startDate}
+                  value={data.startDate 
+                    ? dayjs(data.startDate) 
+                    : dayjs()}
                   onChange={(date) => setData(prev => ({ ...prev, startDate: dayjs(date).format('YYYY-MM-DD') }))}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </div>
+
           <div className="input dispatch-input">
             <div className="icone">
               <MdOutlineCalendarMonth color="action" />
@@ -522,15 +524,17 @@ const VehicleStatement = () => {
                 <DatePicker
                   label="To Date"
                   format="DD/MM/YYYY"
-                  value={data.endDate}
+                  value={data.endDate 
+                    ? dayjs(data.endDate) 
+                    : dayjs()}
                   onChange={(date) => setData(prev => ({ ...prev, endDate: dayjs(date).format('YYYY-MM-DD') }))}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </div>
-          <div className='input' style={{gap: '15px'}}>
+
+          <div className='input' style={{ gap: '15px' }}>
             <Button variant="contained" onClick={showList}>List</Button>
-            <Button variant="contained">List All</Button>
           </div>
         </div>
 

@@ -1,0 +1,254 @@
+.HistoryDrawer-head {
+    padding: 0px 30px 30px 30px;
+}
+
+.history-topic {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.HistoryDrawer-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0px 20px 20px 20px;
+}
+
+.history-heading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.history-head-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.history-drawer-report-btn {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #0078d4;
+    border-radius: 10px;
+    border: 1px solid #0078d4;
+    color: #fff;
+    height: 40px;
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.history-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 10px 20px 20px 20px;
+    align-items: center;
+}
+
+.history-tabs-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tab-btn-buttons {
+    display: flex;
+    gap: 4px;
+    padding: 5px 10px;
+    align-items: center;
+    color: #000000;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.history-btn-tab {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+    align-items: initial;
+}
+
+.history-btn-tab-left {
+    width: 48%;
+}
+
+.history-btn-tab-left-content {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.account-summary-division {
+    display: flex;
+    justify-content: space-around;
+}
+
+.account-summary-division-content {
+    display: flex;
+    gap: 2px;
+}
+
+.history-tab-para {
+    margin: 0px;
+}
+
+.fuel-summary-div {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.no-fuel-warning {
+    display: flex;
+    justify-content: center;
+}
+
+.history-table-section {
+    padding: 20px;
+}
+
+.timeline {
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stoppages-border {
+    border: 1px solid #ccc;
+    padding: 10px;
+
+}
+
+.stoppages-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+}
+
+.stoppages-para {
+    margin-top: 0px;
+}
+
+.stoppages-top-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.stoppages-edit {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.stoppages-ischecked {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.no-stop-warning {
+    color: red;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: 18px;
+}
+
+.stoppages-notchecked {
+    padding: 10px;
+}
+
+.speeed-violation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+}
+
+.speeed-violation-content {
+    display: flex;
+    gap: 20px;
+}
+
+.tripsites {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.tripsites-para {
+    margin-top: 0px;
+    width: 100px;
+}
+
+.history-present,
+.history-present,
+.timeline-present,
+.stoppages-present,
+.speedviolation-present,
+.history-present {
+    color: #ffffff;
+    background-color: #0078d4;
+
+}
+
+.history-present,
+.history-present,
+.timeline-present,
+.stoppages-present,
+.speedviolation-present,
+.history-present:hover {
+    color: #ffffff !important;
+    background-color: #0078d4;
+
+}
+
+.tab-btn-buttons:hover {
+    color: #0078d4;
+}
+
+.account-summary-para {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.ac-sum-txt {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.sub-txt {
+    margin-top: 20px;
+}
+
+.history-table-section-topic {
+    font-size: 25px;
+    font-weight: 600;
+
+}
+
+.pad-0 {
+    padding: 0px 20px 20px 20px !important;
+}
+
+.speed-violation {}
+
+@media screen and (max-width:900px) {
+
+    .history-btn-tab-left {
+        width: 100%;
+    }
+}
+
+.table-div-width {
+    width: 100%;
+    overflow-x: auto;
+}

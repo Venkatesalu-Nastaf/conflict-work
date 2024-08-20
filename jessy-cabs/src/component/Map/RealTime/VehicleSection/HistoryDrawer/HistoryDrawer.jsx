@@ -29,9 +29,7 @@ import PropTypes from 'prop-types';
 import Switch from '@mui/material/Switch';
 import Button from "@mui/material/Button";
 import { PermissionContext } from "../../../../context/permissionContext";
-
-
-
+import "./HistoryDrawer.css"
 
 
 //  for historytable
@@ -92,14 +90,6 @@ const columns = [
     width: 150,
     editable: true,
   },
-
-
-
-
-
-
-
-
 
 ];
 
@@ -164,7 +154,6 @@ const columnstimeline = [
     width: 150,
     editable: true,
   }
-
 
 ];
 
@@ -233,9 +222,6 @@ const columnstripsite = [
     width: 350,
     editable: true,
   },
-
-
-
 ];
 
 const rowstripsite = [
@@ -246,8 +232,6 @@ const rowstripsite = [
   { id: 5, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
   { id: 6, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
   { id: 7, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-
-
 ];
 
 
@@ -261,12 +245,10 @@ const rowstripsite = [
 const Historystates = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
   'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
-
 ];
 
 const Historynumbers = [
   51551518445, 4555555555, 5555451211, 5517777,
-
 ];
 
 
@@ -280,14 +262,10 @@ function a11yProps(index) {
 const labelswitch = { inputProps: { 'aria-label': 'Size switch demo' } };
 
 
-
-
-
 // for timeline tab
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -308,22 +286,12 @@ CustomTabPanel.propTypes = {
 };
 
 
-
-
-
-
 const HistoryDrawer = () => {
-  const { openHistoryDrawer, setOpenHistoryDrawer,setHistoryLocation } = useContext(PermissionContext)
-
-
-
-
-
+  const { openHistoryDrawer, setOpenHistoryDrawer, setHistoryLocation } = useContext(PermissionContext)
 
   const handleCloseHistoryDrawer = () => {
     setOpenHistoryDrawer(false);
   };
-
 
   // history state select
   const [selectHistoryState, setSelectHistoryState] = useState('');
@@ -331,7 +299,6 @@ const HistoryDrawer = () => {
   const handleHistoryState = (event) => {
     setSelectHistoryState(event.target.value);
   };
-
 
   // history number select
   const [selectHistorynumber, setSelectHistorynumber] = useState('');
@@ -347,14 +314,14 @@ const HistoryDrawer = () => {
     setSelectedDatehistory(newValue);
   };
 
-
-
   const [timeline, SetTimeline] = useState(false);
   const opentimelineTab = () => {
     SetHistory(false);
     SetTimeline(true);
     SetSpeedviolation(false)
     SetStoppages(false);
+    SetTripsites(false);
+
   }
 
   const [stoppages, SetStoppages] = useState(false);
@@ -362,21 +329,28 @@ const HistoryDrawer = () => {
     SetHistory(false);
     SetTimeline(false);
     SetStoppages(true);
+    SetTripsites(false);
+
   }
 
   // for history
   const [history, SetHistory] = useState(true);
   const openhistoryTab = () => {
     SetHistory(true);
+    SetTimeline(false);
+    SetStoppages(false);
+    SetSpeedviolation(false);
+    SetTripsites(false);
   }
-
 
   const [speedviolation, SetSpeedviolation] = useState(false);
   const openspeedviolationTab = () => {
     SetHistory(false);
     SetTimeline(false);
     SetStoppages(false);
-    SetSpeedviolation(true)
+    SetSpeedviolation(true);
+    SetTripsites(false);
+
   }
 
   const [tripsites, SetTripsites] = useState(false);
@@ -388,15 +362,9 @@ const HistoryDrawer = () => {
     SetTripsites(true);
   }
 
-
-
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-
-
-
-
 
   // for timeline tab
   const [value, setValue] = React.useState(0);
@@ -405,8 +373,6 @@ const HistoryDrawer = () => {
     setValue(newValue);
   };
 
-
-
   // timeline switch
 
   const [isChecked, setIsChecked] = useState(false);
@@ -414,7 +380,6 @@ const HistoryDrawer = () => {
   const handleSwitchChange = (event) => {
     setIsChecked(event.target.checked);
   };
-
 
   // for trip sites dropdown 1
   const [selectedValuetripsites, setSelectedValuetripsites] = useState('');
@@ -430,25 +395,9 @@ const HistoryDrawer = () => {
     setSelectedValuetripsitesSelect(event.target.value);
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <>
       <div>
-
         <Drawer
           anchor="top"
           open={openHistoryDrawer}
@@ -464,15 +413,15 @@ const HistoryDrawer = () => {
           </Box>
           <Box sx={{ p: 3 }}>
             <>
-              <div style={{ padding: "30px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <IoBook />
-                    <h3>Historydddddddddddddddddd</h3>
+              <div className='HistoryDrawer-head'>
+                <div className='HistoryDrawer-top' >
+                  <div className='history-heading'>
+                    <IoBook className='history-topic' />
+                    <h3 className='history-topic'>History</h3>
 
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <FormControl sx={{ m: 1, width: 200 }}>
+                  <div className='history-head-buttons' >
+                    <FormControl sx={{ m: 0, width: 200 }}>
                       <Select
                         value={selectHistoryState}
                         onChange={handleHistoryState}
@@ -496,7 +445,7 @@ const HistoryDrawer = () => {
                       </Select>
                     </FormControl>
 
-                    <FormControl sx={{ m: 1, width: 200 }}>
+                    <FormControl sx={{ m: 0, width: 200 }}>
                       <Select
                         value={selectHistorynumber}
                         onChange={handleHistorynumber}
@@ -522,7 +471,7 @@ const HistoryDrawer = () => {
 
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <Box sx={{ m: 2 }}>
+                      <Box sx={{ m: 0 }}>
                         <DatePicker
                           label="Select Date"
                           value={selectedDatehistory}
@@ -550,92 +499,84 @@ const HistoryDrawer = () => {
                       </Box>
                     </LocalizationProvider>
 
-                    <button style={{ display: 'flex', gap: "5px", alignItems: "center", padding: "5px 10px", backgroundColor: "blue", borderRadius: "10px", border: "1px solid blue", color: "#fff", height: "40px", fontSize: "15px", fontWeight: "500" }}><TbReportSearch />Reports
+                    <button className='history-drawer-report-btn' ><TbReportSearch />Reports
                       <RiArrowDropDownLine />
                     </button>
 
                   </div>
 
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", padding: "10px 20px 20px 20px", }}>
-                  <div style={{ display: "flex" }}>
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={openhistoryTab}>
+                <div className='history-tabs'>
+                  <div className='history-tabs-row'>
+                    <button className={`tab-btn-buttons ${history ? 'history-present' : ''}`} onClick={openhistoryTab}>
                       <FaList />
                       History
                     </button>
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={opentimelineTab}>
+                    <button className={`tab-btn-buttons ${timeline ? 'timeline-present' : ''}`} onClick={opentimelineTab}>
                       <FaBookOpen />
                       Timeline
-
                     </button>
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={openstoppagesTab}>
+                    <button className={`tab-btn-buttons ${stoppages ? 'stoppages-present' : ''}`} onClick={openstoppagesTab}>
                       <IoStop />
-
                       Stoppages
                     </button>
-
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={openspeedviolationTab}>
+                    <button className={`tab-btn-buttons ${speedviolation ? 'speedviolation-present' : ''}`} onClick={openspeedviolationTab}>
                       <IoSpeedometerSharp />
                       speed Violation
                     </button>
 
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={opentripsitesTab}>
+                    <button className={`tab-btn-buttons ${tripsites ? 'history-present' : ''}`} onClick={opentripsitesTab}>
                       <FaRegEye />
-
                       Trips b/w Sites
-
                     </button>
 
-
-                    <button style={{ display: "flex", gap: "4px", padding: "5px 10px", alignItems: "center", color: "#000000", border: "1px solid #ccc", backgroundColor: "#fff" }} onClick={handleOpenhistoryLocation}>
+                    <button className='tab-btn-buttons' onClick={handleOpenhistoryLocation}>
                       <FaHistory />
-
                       Historical Location
-
                     </button>
-
-
                   </div>
                 </div>
                 {history &&
                   <>
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "space-around", alignItems: "initial" }}>
-
-
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Account Summary</p>
-                          <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <div className='history-btn-tab'  >
+                      <div className='history-btn-tab-left'  >
+                        <div className='history-btn-tab-left-content'>
+                          <p className='stoppages-para account-summary-para'>Account Summary</p>
+                          <div className='account-summary-division' >
 
                             <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
+                              <div className='account-summary-division-content' >
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
                                   <BiUpArrowAlt />
                                 </span>
                               </div>
-                              <p style={{ margin: "0px" }}>Runnings</p>
+                              <p className='history-tab-para' >Runnings</p>
 
                             </div>
 
 
                             <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
+                              <div className='account-summary-division-content'>
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
                                   <BiUpArrowAlt />
                                 </span>
                               </div>
-                              <p style={{ margin: "0px" }}>Total Km</p>
+                              <p className='history-tab-para'>Total Km</p>
 
                             </div>
 
 
                             <div>
 
-                              <span>0</span>
+                              <div className='account-summary-division-content'>
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
+                                  <BiUpArrowAlt />
+                                </span>
+                              </div>
 
-                              <p style={{ margin: "0px" }}>Alarms</p>
+                              <p className='history-tab-para'>Alarms</p>
 
                             </div>
 
@@ -645,94 +586,81 @@ const HistoryDrawer = () => {
 
                         </div>
                       </div>
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Fuel Summary
+                      <div className='history-btn-tab-left'>
+                        <div className='fuel-summary-div' >
+                          <p className='stoppages-para'>Fuel Summary
                             (Diesel)</p>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
+                          <div className='no-fuel-warning' >
                             No fuel data available for this period.
-
                           </div>
-
-
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ padding: "20px" }}>
-                      <p>History - 0703 (KA03AD0703)
+                    <div className='history-table-section' >
+                      <p className='history-table-section-topic'>History - 0703 (KA03AD0703)
                       </p>
-
-                      <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                          rows={rows}
-                          columns={columns}
-                          initialState={{
-                            pagination: {
-                              paginationModel: {
-                                pageSize: 5,
+                      <div className='table-div-width'>
+                        <Box sx={{ height: 400, width: '100%' }}>
+                          <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{
+                              pagination: {
+                                paginationModel: {
+                                  pageSize: 5,
+                                },
                               },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          disableRowSelectionOnClick
-                        />
-                      </Box>
+                            }}
+                            pageSizeOptions={[5]}
+                            disableRowSelectionOnClick
+                          />
+                        </Box>
+                      </div>
 
                     </div>
                   </>
                 }
-
                 {timeline &&
                   <>
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "space-around", alignItems: "initial" }}>
-
-
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-                          <p>Account Summary</p>
-                          <div style={{ display: "flex", justifyContent: "space-around" }}>
-
+                    <div className='history-btn-tab'>
+                      <div className='history-btn-tab-left'  >
+                        <div className='history-btn-tab-left-content'>
+                          <p className='stoppages-para account-summary-para'>Account Summary</p>
+                          <div className='account-summary-division' >
                             <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
+                              <div className='account-summary-division-content' >
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
                                   <BiUpArrowAlt />
                                 </span>
                               </div>
-                              <p style={{ margin: "0px" }}>Runnings</p>
+                              <p className='history-tab-para' >Runnings</p>
 
                             </div>
 
-
                             <div>
-                              <div style={{ display: "flex", gap: "2px" }}>
-                                <span>11</span><span>57%</span><span>
+                              <div className='account-summary-division-content'>
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
                                   <BiUpArrowAlt />
                                 </span>
                               </div>
-                              <p style={{ margin: "0px" }}>Total Km</p>
-
+                              <p className='history-tab-para'>Total Km</p>
                             </div>
-
-
                             <div>
 
-                              <span>0</span>
-
-                              <p style={{ margin: "0px" }}>Alarms</p>
-
+                              <div className='account-summary-division-content'>
+                                <span className='ac-sum-txt'>11</span><sub className='sub-txt'>57%</sub><span className='sub-txt'>
+                                  <BiUpArrowAlt />
+                                </span>
+                              </div>
+                              <p className='history-tab-para'>Alarms</p>
                             </div>
-
                           </div>
-
-
 
                         </div>
                       </div>
-                      <div style={{ width: "48%" }}>
-                        <div style={{ border: "1px solid #ccc", padding: "20px" }}>
-
-
+                      <div className='history-btn-tab-left'>
+                        <div className='history-btn-tab-left-content pad-0'>
                           <Box sx={{ width: '100%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                               <Tabs value={value} onChange={handleChangetimelinetab} aria-label="basic tabs example">
@@ -743,22 +671,18 @@ const HistoryDrawer = () => {
                             <CustomTabPanel value={value} index={0}>
                               <p>Fuel Summary
                                 (Diesel)</p>
-                              <div style={{ display: "flex", justifyContent: "center" }}>
+                              <div className='no-fuel-warning'>
                                 No fuel data available for this period.
-
-                              </div>      </CustomTabPanel>
+                              </div>
+                            </CustomTabPanel>
                             <CustomTabPanel value={value} index={1}>
                               Item Two
                             </CustomTabPanel>
-
                           </Box>
-
-
                         </div>
                       </div>
-
                     </div>
-                    <div style={{ border: "1px solid #ccc", display: "flex", justifyContent: "space-between" }}>
+                    <div className='timeline' >
                       <div></div>
                       <div></div>
                     </div>
@@ -767,39 +691,35 @@ const HistoryDrawer = () => {
 
                 {stoppages &&
                   <>
-                    <div style={{ border: "1px solid #ccc" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", padding: "20px", alignItems: "center" }}>
+                    <div className='stoppages-border' >
+                      <div className='stoppages-section' >
                         <div>
-                          <p style={{ marginTop: "0px" }}>Stoppages - 0715 (TN75AL0715)</p>
+                          <p className='stoppages-para history-table-section-topic'>Stoppages - 0715 (TN75AL0715)</p>
                         </div>
-                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                          <p style={{ marginTop: "0px" }}>Only Addressbook Stops</p>
+                        <div className='stoppages-top-head' >
+                          <p className='stoppages-para'>Only Addressbook Stops</p>
                           <Switch {...labelswitch}
                             checked={isChecked}
                             onChange={handleSwitchChange}
                           />
-                          <p style={{ marginTop: "0px" }}>Minimum Stoppage Time</p>
-                          <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
-
-                            <p style={{ marginTop: "0px" }}>0 mins(All Stops)</p>
+                          <p className='stoppages-para'>Minimum Stoppage Time</p>
+                          <div className='stoppages-edit' >
+                            <p className='stoppages-para'>0 mins(All Stops)</p>
                             <AiFillEdit />
-
                           </div>
-
-
                         </div>
                       </div>
 
                       {isChecked ? (
-                        <div style={{ padding: '10px', display: "flex", justifyContent: "center" }}>
-                          <p style={{ color: "red", display: "flex", gap: "5px", alignItems: "center", fontSize: "18px" }}>
+                        <div className='stoppages-ischecked'>
+                          <p className='no-stop-warning' >
                             <IoIosWarning />
                             No Stops available for this duration.
-
                           </p>
                         </div>
                       ) : (
-                        <div style={{ padding: '10px' }}>
+
+                        <div className='stoppages-notchecked table-div-width' >
                           <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
                               rows={rowstimeline}
@@ -817,8 +737,6 @@ const HistoryDrawer = () => {
                           </Box>
                         </div>
                       )}
-
-
                     </div>
                   </>
                 }
@@ -826,23 +744,9 @@ const HistoryDrawer = () => {
                 {speedviolation &&
                   <>
                     <div>
-                      <p>Speeding - 0715 (TN75AL0715)</p>
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <div style={{ display: "flex", gap: "20px" }}>
-                          <p>Speed Limit :</p>
-                          <TextField
-                            type="number"
-                            // value={value}
-                            // onChange={handleChange}
-                            variant="outlined"
-                            placeholder="Enter number"
-                            InputProps={{
-                              inputProps: { min: 0 },
-                            }}
-                            sx={{ width: '70px' }}
-                          />
-                        </div>
-                        <div style={{ display: "flex", gap: "20px" }}>
+                      <p className='history-table-section-topic'>Speeding - 0715 (TN75AL0715)</p>
+                      <div className='speeed-violation'>
+                        <div className='speeed-violation-content'>
                           <p>Speed Limit :</p>
                           <TextField
                             type="number"
@@ -853,14 +757,27 @@ const HistoryDrawer = () => {
                             InputProps={{
                               inputProps: { min: 0 },
                             }}
-                            sx={{ width: '70px' }}
+                            sx={{ width: '90px' }}
                           />
                         </div>
-                        <Button>Submit</Button>
-
+                        <div className='speeed-violation-content'>
+                          <p>Speed Limit :</p>
+                          <TextField
+                            type="number"
+                            // value={value}
+                            // onChange={handleChange}
+                            variant="outlined"
+                            // placeholder="Enter number"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            sx={{ width: '90px' }}
+                          />
+                        </div>
+                        <Button className='speed-violation'>Submit</Button>
                       </div>
-                      <div style={{ padding: '10px', display: "flex", justifyContent: "center" }}>
-                        <p style={{ color: "red", display: "flex", gap: "5px", alignItems: "center", fontSize: "18px" }}>
+                      <div className='stoppages-ischecked' >
+                        <p className='no-stop-warning'>
                           <IoIosWarning />
                           No Stops available for this duration.
 
@@ -873,15 +790,15 @@ const HistoryDrawer = () => {
 
                 {tripsites &&
                   <>
-                    <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <p>Trips b/w Sites - 0715 (TN75AL0715)</p>
+                    <div className='tripsites'>
+                      <div className='speeed-violation'>
+                        <p className='history-table-section-topic'>Trips b/w Sites - 0715 (TN75AL0715)</p>
                         <p style={{ color: "rgb(148 142 142)" }}>View trips between source and destination addresses</p>
                       </div>
                       <div>
-                        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                          <p style={{ marginTop: "0px", width: "100px" }}>Source</p>
-                          <Box sx={{ m: 2, minWidth: 220 }}>
+                        <div className='stoppages-ischecked'>
+                          <p className='tripsites-para'>Source</p>
+                          <Box sx={{ m: 2, width: "100%" }}>
                             <FormControl fullWidth>
                               <Select
                                 value={selectedValuetripsites}
@@ -897,9 +814,9 @@ const HistoryDrawer = () => {
                             </FormControl>
                           </Box>
                         </div>
-                        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                          <p style={{ marginTop: "0px", width: "100px" }}>Destination</p>
-                          <Box sx={{ m: 2, minWidth: 220 }}>
+                        <div className='stoppages-ischecked'>
+                          <p className='tripsites-para'>Destination</p>
+                          <Box sx={{ m: 2, width: "100%" }}>
                             <FormControl fullWidth>
                               <Select
                                 value={selectedValuetripsitesSelect}
@@ -920,25 +837,25 @@ const HistoryDrawer = () => {
 
 
                     </div>
-                    <Box sx={{ height: 400, width: '100%' }}>
-                      <DataGrid
-                        rows={rowstripsite}
-                        columns={columnstripsite}
-                        initialState={{
-                          pagination: {
-                            paginationModel: {
-                              pageSize: 5,
+                    <div className='table-div-width'>
+                      <Box sx={{ height: 400, width: '100%' }}>
+                        <DataGrid
+                          rows={rowstripsite}
+                          columns={columnstripsite}
+                          initialState={{
+                            pagination: {
+                              paginationModel: {
+                                pageSize: 5,
+                              },
                             },
-                          },
-                        }}
-                        pageSizeOptions={[5]}
-                        disableRowSelectionOnClick
-                      />
-                    </Box>
+                          }}
+                          pageSizeOptions={[5]}
+                          disableRowSelectionOnClick
+                        />
+                      </Box>
+                    </div>
                   </>
                 }
-
-
               </div>
             </>
           </Box>

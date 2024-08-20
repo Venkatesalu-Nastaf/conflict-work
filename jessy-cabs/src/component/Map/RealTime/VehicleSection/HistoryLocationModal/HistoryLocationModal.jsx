@@ -14,6 +14,7 @@ import { TextField } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { PermissionContext } from '../../../../context/permissionContext';
+import "./HistoryLocationModal.css"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -27,17 +28,12 @@ const optionshistoryLocation = [
 ];
 
 
-
 const HistoryLocationModal = () => {
   const { historyLocation, setHistoryLocation } = useContext(PermissionContext);
-
-  // const [historyLocation, setHistoryLocation] = React.useState(false);
-
 
   const handleClosehistoryLocation = () => {
     setHistoryLocation(false);
   };
-
 
   const [selecthistoryLocation, setSelecthistoryLocation] = useState('');
 
@@ -45,9 +41,7 @@ const HistoryLocationModal = () => {
     setSelecthistoryLocation(event.target.value);
   };
 
-
   const [selectedDatehistoryLocation, setSelectedDatehistoryLocation] = useState(null);
-
   const handleDateChangehistoryLocation = (newDate) => {
     setSelectedDatehistoryLocation(newDate);
   };
@@ -74,7 +68,7 @@ const HistoryLocationModal = () => {
         >
           <DialogTitle sx={{ m: 0, p: 2 }}>
             Historical Vehicle Location
-            <p style={{ fontSize: "15px", fontWeight: "300", color: "rgb(134 134 134)", marginTop: "3px", }}>View the location and status of any vehicle at any time.</p>
+            <p className='history-location-text' >View the location and status of any vehicle at any time.</p>
             <IconButton
               aria-label="close"
               onClick={handleClosehistoryLocation}
@@ -91,8 +85,8 @@ const HistoryLocationModal = () => {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <>
-                <div style={{ borderTop: "1px solid #ccc" }}>
-                  <div style={{ display: "flex", gap: "5px", padding: "20px", alignItems: "center" }}>
+                <div className='history-location' >
+                  <div className='history-location-content'>
 
                     <FormControl sx={{ m: 1, width: 300 }}>
                       <Select

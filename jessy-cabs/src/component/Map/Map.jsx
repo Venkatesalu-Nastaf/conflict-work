@@ -57,7 +57,7 @@ const Map = () => {
       case "RealTime":
         hasPermission = Maps;
         break;
-        case "Vehicle":
+      case "Vehicle":
         hasPermission = Maps;
         break;
       default:
@@ -77,8 +77,18 @@ const Map = () => {
     catch {
     }
   };
+
+
   //permission --------------
 
+  const myLocation = useLocation();
+  var myTo = '';
+  if (myLocation.pathname === '/home/Map/Vehicle/AddVehicle') {
+    myTo = '/home/Map/Vehicle/AddVehicle';
+  }
+  else {
+    myTo = '/home/Map/Vehicle';
+  }
   return (
 
     <div className="billings-conatiner" id="menu">
@@ -95,13 +105,14 @@ const Map = () => {
           />
           <MenuItem
             label="Vehicle"
-            to={"/home/Map/Vehicle"}
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/Vehicle" && myTo}
             alt="/home/Map/Vehicle"
             menuItemKey="Vehicle"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />
-         
+
         </div>
       </div>
       <div className='alert-popup-main'>

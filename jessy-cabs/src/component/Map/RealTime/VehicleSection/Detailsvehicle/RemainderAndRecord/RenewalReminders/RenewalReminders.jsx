@@ -1,8 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-
-
+import "./RenewalReminders.css"
 //  for historytable
 const renewalcolumns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -25,20 +24,17 @@ const renewalcolumns = [
         editable: true,
     },
 
-
-
-
 ];
 
 const renewalrows = [
     { id: 1, DriverName: 'Snow', DriverNumber: 'Jon', AssignedFrom: 14, AssignedTill: 14, },
-
 ];
 
- const RenewalReminders = () => {
-  return (
-    <>
-    <Box sx={{ height: 400, width: '100%' }}>
+const RenewalReminders = () => {
+    return (
+        <>
+            <div className='RenewalReminders'>
+                <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={renewalrows}
                         columns={renewalcolumns}
@@ -53,7 +49,9 @@ const renewalrows = [
                         disableRowSelectionOnClick
                     />
                 </Box>
-    </>
-  )
+            </div>
+
+        </>
+    )
 }
 export default RenewalReminders;

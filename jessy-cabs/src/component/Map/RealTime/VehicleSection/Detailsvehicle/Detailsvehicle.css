@@ -1,4 +1,4 @@
-.card-report{
+.card-report {
     box-shadow: 2px 0 6px 0 rgba(0, 0, 0, .05);
     border: 1px solid #e3e8ed;
     width: 300px;
@@ -11,13 +11,12 @@
     padding: 20px 0px;
 }
 
-
 .vehicle-stats-box-content-heading {
     font-size: 25px;
-    font-weight: 600;
+    font-weight: 600;
 }
 
-.vehicle-stats-graph-right {
+.vehicle-stats-graph-right-1 {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
@@ -29,3 +28,229 @@
     /* background-color: var(--glass); */
 }
 
+.detail-drawer {
+    padding: 0px 30px 30px 30px;
+}
+
+.detail-drawer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.detail-drawer-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 80px;
+    align-items: center;
+    /* justify-content: space-around; */
+    justify-content: center;
+    /* width: 100%; */
+}
+
+@media screen and (max-width:1141.99px) {
+    .detail-drawer-heading {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 80px;
+        align-items: center;
+        justify-content: space-around;
+        width: 100%;
+    }
+}
+
+.details-drawer-head-para {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.details-drawer-head-para-btn {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.details-drawer-head-btn {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.details-drawer-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    /* gap: 20px; */
+    border-bottom: 1px solid #000000;
+    margin-top: 30px;
+}
+
+.details-drawer-tabs-btn {
+    border: none;
+    background-color: #fff;
+    padding: 10px;
+    color: #000000;
+}
+
+.details-drawer-tabs-btn:hover {
+    border: none;
+    background-color: #fff;
+    padding: 10px;
+    color: #0078d4;
+}
+
+.vehicle-info-active,
+.vehDriverHistory-active,
+.remainderRecord-active,
+.trackingsensor-active{
+    background-color: #0078d4;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.vehicle-info-active:hover,
+.vehDriverHistory-active:hover,
+.remainderRecord-active:hover,
+.trackingsensor-active:hover {
+    background-color: #0078d4;
+    color: #fff;
+    border-radius: 0px;
+
+}
+
+.details-drawer-tabs-content {
+    margin-top: 10px;
+}
+
+.details-drawer-first-tab {
+    padding: 10px;
+    width: 100%;
+}
+
+.details-drawer-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.card-report-running {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-report-indidual {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-report-indidual-p {
+    margin: 0px;
+    text-align: center;
+
+}
+
+.card-report-indidual-h5 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.card-report-alerts-services {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.card-report-alerts-services-indidual {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+
+}
+
+.driver-name-detailsvehicle {
+    display: flex;
+    gap: 5px;
+}
+
+.details-vehicle-cards {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px;
+
+}
+
+.details-vehicle-cards-content {
+    border: 1px solid #ccc;
+    width: 400px;
+    height: 300px;
+}
+
+.details-vehicle-tab-2 {
+    width: 100%;
+}
+
+.details-vehicle-upload-photos {
+    border: 2px dotted #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    cursor: pointer;
+}
+
+.images-section {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+}
+
+.images-section-text {
+    border-bottom: 1px solid #ccc;
+    padding: 5px 5px 5px 15px;
+}
+
+.images-section-img {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.images-section-no-img {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.multiple-img-photos {
+    display: none;
+}
+
+/* .details-drawer-head-btn{
+    display: flex;
+    justify-content: flex-end;
+} */
+
+
+@media screen and (max-width:600px) {
+    .details-vehicle-cards-content{
+        width: 100%;
+    }
+}

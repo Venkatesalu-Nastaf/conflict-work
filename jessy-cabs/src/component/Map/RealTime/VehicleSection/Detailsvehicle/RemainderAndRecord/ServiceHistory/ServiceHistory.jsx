@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-
+import "./ServiceHistory.css"
 
 //  for historytable
 const servicecolumns = [
@@ -72,10 +72,6 @@ const servicecolumns = [
         width: 130,
         editable: true,
     },
-
-
-
-
 ];
 
 const servicerows = [
@@ -83,10 +79,11 @@ const servicerows = [
 
 ];
 
- const ServiceHistory = () => {
-  return (
-    <>
-    <Box sx={{ height: 400, width: '100%' }}>
+const ServiceHistory = () => {
+    return (
+        <>
+            <div className="ServiceHistory">
+                <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={servicerows}
                         columns={servicecolumns}
@@ -101,8 +98,9 @@ const servicerows = [
                         disableRowSelectionOnClick
                     />
                 </Box>
-    </>
-  )
+            </div>
+        </>
+    )
 }
 
 

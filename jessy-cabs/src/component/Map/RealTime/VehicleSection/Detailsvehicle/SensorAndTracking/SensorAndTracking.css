@@ -1,0 +1,37 @@
+.SensorAndTracking-tab-one {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.para-s-s {
+    margin-top: 0px;
+}
+
+.SensorAndTracking-tab-four {
+    padding: 20px;
+    width: 100%;
+}
+
+.SensorAndTracking-tab-four-content {
+    border: 1px solid #91caff;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 20px;
+}
+
+.SensorAndTracking-tab-four-content-para {
+    color: #91caff;
+    margin: 0px;
+}
+
+.SensorAndTracking-tab-five {
+    margin-top: 30px;
+    width: 100%;
+    overflow-x: auto;
+}

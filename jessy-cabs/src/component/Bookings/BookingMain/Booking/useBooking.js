@@ -812,7 +812,7 @@ const useBooking = () => {
       }
     };
     fetchgetvehicleName()
-  }, [apiUrl])
+  }, [apiUrl,])
 
 
   useEffect(() => {
@@ -1097,12 +1097,15 @@ const useBooking = () => {
   }
 
   const handleImagechange2 = (e) => {
-    const file = Array.from(e.target.files);
-    setSelectetImg((previmg) => [...previmg, ...file])
-    if (file.length > 0) {
-      setImageDialogOpen(true)
+    const files = Array.from(e.target.files);
+
+    setSelectetImg((prevImg) => [...prevImg, ...files]);
+
+    if (files.length > 0) {
+      setImageDialogOpen(true);
     }
-  }
+  };
+
 
   const handleCloseImageDialog = () => {
     setImageDialogOpen(false)

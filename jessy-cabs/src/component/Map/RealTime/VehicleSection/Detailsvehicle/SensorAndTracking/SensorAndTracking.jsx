@@ -5,34 +5,34 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { DataGrid } from '@mui/x-data-grid';
-
+import "./SensorAndTracking.css"
 
 //  for historytable
 const sensorcolumns = [
   { field: 'id', headerName: 'ID', width: 150 },
   {
-      field: 'DutyType',
-      headerName: 'Driver Name',
-      width: 300,
-      editable: true,
+    field: 'DutyType',
+    headerName: 'Driver Name',
+    width: 300,
+    editable: true,
   },
   {
-      field: 'DutyDate',
-      headerName: 'Driver Number',
-      width: 300,
-      editable: true,
+    field: 'DutyDate',
+    headerName: 'Driver Number',
+    width: 300,
+    editable: true,
   },
   {
-      field: 'TechnicianName',
-      headerName: 'Assigned From',
-      width: 300,
-      editable: true,
+    field: 'TechnicianName',
+    headerName: 'Assigned From',
+    width: 300,
+    editable: true,
   },
   {
-      field: 'Images',
-      headerName: 'Assigned Till',
-      width: 300,
-      editable: true,
+    field: 'Images',
+    headerName: 'Assigned Till',
+    width: 300,
+    editable: true,
   },
 
 
@@ -71,17 +71,17 @@ const SensorAndTracking = () => {
             </Box>
             <TabPanel value="1" >
               <>
-                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop: "20px" }}>
+                <div className='SensorAndTracking-tab-one'>
                   <p>Device Details</p>
                   <p>Device Install Date</p>
-                  <p style={{ marginTop: "0px" }}>13/07/2024 2:27 PM</p>
+                  <p className='para-s-s'>13/07/2024 2:27 PM</p>
 
                 </div>
               </>
             </TabPanel>
             <TabPanel value="2" >
               <>
-                <div style={{ border: "1px solid #ccc", padding: '20px', width: "100%", marginTop: "20px" }}>
+                <div className='SensorAndTracking-tab-one'>
                   <p>Fuel Sensor Details</p>
                   <p>No Active Fuel Calibration.</p>
 
@@ -94,9 +94,9 @@ const SensorAndTracking = () => {
 
             <TabPanel value="4" >
               <>
-                <div style={{ padding: "20px", width: "100%" }}>
-                  <div style={{ border: "1px solid #91caff", width: "100%", marginTop: "20px", display: "flex", justifyContent: "center", width: "100%", alignContent: "center", alignItems: "center", padding: "20px" }}>
-                    <p style={{ color: "#91caff", margin: "0px" }}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+                <div className='SensorAndTracking-tab-four' >
+                  <div className='SensorAndTracking-tab-four-content'>
+                    <p className='SensorAndTracking-tab-four-content-para'>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
                   </div>
                 </div>
               </>
@@ -104,7 +104,7 @@ const SensorAndTracking = () => {
 
             <TabPanel value="5" >
               <>
-                <div style={{ marginTop: "30px" }}>
+                <div className='SensorAndTracking-tab-five'>
 
 
                   <Box sx={{ height: 400, width: '100%' }}>
@@ -128,10 +128,10 @@ const SensorAndTracking = () => {
 
             <TabPanel value="6" >
               <>
-                <div style={{ padding: "20px", width: "100%" }}>
+                <div className='SensorAndTracking-tab-four'>
                   <p>Device Details History</p>
-                  <div style={{ border: "1px solid #91caff", width: "100%", marginTop: "20px", display: "flex", justifyContent: "center", width: "100%", alignContent: "center", alignItems: "center", padding: "20px" }}>
-                    <p style={{ color: "#91caff", margin: "0px" }}>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
+                  <div className='SensorAndTracking-tab-four-content'>
+                    <p className='SensorAndTracking-tab-four-content-para'>We are improving the fuel module with a modern look and improved analytics. Click here to access. New Fuel Page</p>
                   </div>
                 </div>
               </>

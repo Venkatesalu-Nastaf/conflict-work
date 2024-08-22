@@ -57,7 +57,13 @@ const Map = () => {
       case "RealTime":
         hasPermission = Maps;
         break;
-        case "Vehicle":
+      case "Vehicle":
+        hasPermission = Maps;
+        break;
+      case "Reminders":
+        hasPermission = Maps;
+        break;
+      case "History":
         hasPermission = Maps;
         break;
       default:
@@ -77,8 +83,18 @@ const Map = () => {
     catch {
     }
   };
+
+
   //permission --------------
 
+  const myLocation = useLocation();
+  var myTo = '';
+  if (myLocation.pathname === '/home/Map/Vehicle/AddVehicle') {
+    myTo = '/home/Map/Vehicle/AddVehicle';
+  }
+  else {
+    myTo = '/home/Map/Vehicle';
+  }
   return (
 
     <div className="billings-conatiner" id="menu">
@@ -95,13 +111,32 @@ const Map = () => {
           />
           <MenuItem
             label="Vehicle"
-            to={"/home/Map/Vehicle"}
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/Vehicle" && myTo}
             alt="/home/Map/Vehicle"
             menuItemKey="Vehicle"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />
-         
+          <MenuItem
+            label="History"
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/History"}
+            alt="/home/Map/History"
+            menuItemKey="History"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Reminders"
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/Reminders"}
+            alt="/home/Map/Reminders"
+            menuItemKey="Reminders"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+
         </div>
       </div>
       <div className='alert-popup-main'>

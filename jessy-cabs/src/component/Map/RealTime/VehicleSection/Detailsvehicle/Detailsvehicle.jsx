@@ -15,7 +15,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./Detailsvehicle.css"
 import { Select, MenuItem, FormControl } from '@mui/material';
-
 import VehicleDriverHistory from "./VehicleDriverHistory/VehicleDriverHistory"
 import RemainderAndRecord from "./RemainderAndRecord/RemainderAndRecord"
 import SensorAndTracking from "./SensorAndTracking/SensorAndTracking"
@@ -31,7 +30,6 @@ const Detailsvehicle = () => {
 
   const [selectedValuesdetails, setSelectedValuesdetails] = useState([]);
   const optionsdetails = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-
   const [valuedetailstabs, SetValuedetailstabs] = React.useState('1');
 
   const handleChangedetailstabs = (event, newValue) => {
@@ -48,13 +46,6 @@ const Detailsvehicle = () => {
   const handleChangedocument = (event) => {
     setSelectedValuedocument(event.target.value);
   };
-
-
-
-
-
-
-
 
   const fileInputRef = useRef(null);
   const handleDivClick = () => {
@@ -84,31 +75,29 @@ const Detailsvehicle = () => {
     setVehDriverHistory(false);
     setRemainderRecord(false);
     setTrackingsensor(false);
-
   };
 
   // vehicle drver history
-const [vehDriverHistory, setVehDriverHistory] = useState(false);
-const handlevehDriverHistory = () => {
+  const [vehDriverHistory, setVehDriverHistory] = useState(false);
+  const handlevehDriverHistory = () => {
     setVehDriverHistory(true);
     setVehicleInformation(false);
     setRemainderRecord(false);
     setTrackingsensor(false);
-
   }
 
-// Remainder And Record
-const [remainderRecord, setRemainderRecord] = useState(false);
+  // Remainder And Record
+  const [remainderRecord, setRemainderRecord] = useState(false);
 
-// const handleremainderRecord = () => {
-//   setRemainderRecord(true);
+  // const handleremainderRecord = () => {
+  //   setRemainderRecord(true);
 
-//     setVehDriverHistory(false);
-//     setVehicleInformation(false);
-//     setTrackingsensor(false);
+  //     setVehDriverHistory(false);
+  //     setVehicleInformation(false);
+  //     setTrackingsensor(false);
 
 
-//   }
+  //   }
   const handleremainderRecord = () => {
     setRemainderRecord(true);
     setVehDriverHistory(false);
@@ -117,19 +106,15 @@ const [remainderRecord, setRemainderRecord] = useState(false);
   };
 
 
-// sensor and tracking
-const [trackingsensor, setTrackingsensor] = useState(false);
-const handletrackingsensor = () => {
-  setTrackingsensor(true);
-
+  // sensor and tracking
+  const [trackingsensor, setTrackingsensor] = useState(false);
+  const handletrackingsensor = () => {
+    setTrackingsensor(true);
     setVehDriverHistory(false);
     setVehicleInformation(false);
     setRemainderRecord(false);
 
   }
-
-
-
 
   return (
     <>
@@ -150,13 +135,13 @@ const handletrackingsensor = () => {
           </Box>
           <Box sx={{ p: 3 }}>
             <>
-              <div style={{ padding: "0px 30px 30px 30px" }}>
-                <div style={{ display: "flex", gap: "20px", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", gap: "80px", alignItems: "center", justifyContent: "space-around" }}>
+              <div className='detail-drawer' >
+                <div className='detail-drawer-content' >
+                  <div className='detail-drawer-heading' >
                     <div>
                       <p>0349 (TN07CT0349)</p>
                       <p>2019 TOYOTA ETIOS</p>
-                      <div style={{ display: "flex", gap: "5px" }}>
+                      <div className='driver-name-detailsvehicle' >
                         <p>Driver:</p>
                         <p>SEKAR </p>
                         <p>
@@ -165,34 +150,34 @@ const handletrackingsensor = () => {
                       </div>
                     </div>
                     <div>
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>Status:</span>
                         <span>Active</span>
                       </p>
 
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>Type:</span>
                         <span>Car</span>
                       </p>
 
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>Fuel:</span>
                         <span>Diesel</span>
                       </p>
                     </div>
 
                     <div>
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>Group:</span>
                         <span>Chennai</span>
                       </p>
 
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>Euro Class:</span>
                         <span>BHARAT STAGE IV</span>
                       </p>
 
-                      <p style={{ display: "flex", gap: "5px" }}>
+                      <p className='details-drawer-head-para'>
                         <span>PUCC Expiry Date:</span>
                         <span>2024-03-16</span>
                       </p>
@@ -200,44 +185,51 @@ const handletrackingsensor = () => {
 
 
                   </div>
-                  <div>
-                    <div style={{ display: "flex", gap: "20px", alignItems: "center", justifyContent: "space-around" }}>
-                      <button style={{}}>
+                  <div className='detail-drawer-heading-second'>
+                    <div className='details-drawer-head-btn' >
+                      <button >
                         <FaPlus />
                       </button>
 
-
-                      <button style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                      <button className='details-drawer-head-para-btn'>
                         <IoTimer />
                         Live
                       </button>
 
-
-                      <button style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                      <button className='details-drawer-head-para-btn'>
                         <IoTimer />
                         History
                       </button>
 
-
-                      <button style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                      <button className='details-drawer-head-para-btn'>
                         <IoTimer />
                         Alarms
                       </button>
 
-
-                      <button style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                      <button className='details-drawer-head-para-btn'>
                         <IoTimer />
                         DTCs
                       </button>
 
-
-                      <button style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                      <button className='details-drawer-head-para-btn'>
                         <IoTimer />
                         edit
                       </button>
                     </div>
                     <div>
-                      <Box sx={{ width: 300 }}>
+                      <Box
+                        sx={{
+                          width: {
+                            xs: '100%', // 100% width on extra-small devices (e.g., phones)
+                            sm: '75%',  // 75% width on small devices (e.g., tablets)
+                            md: '50%',  // 50% width on medium devices (e.g., small laptops)
+                            lg: '300px' // 300px width on large devices (e.g., desktops)
+                          },
+                          maxWidth: '100%', // Ensures the box does not exceed the viewport width
+                          // margin: 'auto',  // Centers the Box horizontally
+                          padding: 1 // Adds some padding around the Box
+                        }}
+                      >
                         <Autocomplete
                           multiple
                           options={optionsdetails}
@@ -246,9 +238,12 @@ const handletrackingsensor = () => {
                             setSelectedValuesdetails(newValue);
                           }}
                           renderInput={(params) => (
-                            <TextField {...params}
+                            <TextField
+                              {...params}
                               placeholder="Select Options"
-                              variant="outlined" />
+                              variant="outlined"
+                              fullWidth // Ensures the TextField takes up the full width of the parent Box
+                            />
                           )}
                           renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
@@ -266,22 +261,18 @@ const handletrackingsensor = () => {
                           }
                         />
                       </Box>
+
                     </div>
                   </div>
-
                 </div>
 
-
-                <div style={{ display: "flex", gap: "20px", borderBottom: "1px solid #000000" , marginTop:"30px"}}>
-                 
-                  <button onClick={handlevehicleInformation} style={{border:"none", background:"none"}}>Vehicle Information</button>
-                  <button onClick={handlevehDriverHistory} style={{border:"none", background:"none"}}>Vehicle - Driver History</button>
-                  <button onClick={handleremainderRecord} style={{border:"none", background:"none"}}> Reminders & Records</button>
-                  <button onClick={handletrackingsensor} style={{border:"none", background:"none"}}>Sensors & Tracking</button>
-
+                <div className='details-drawer-tabs' >
+                  <button onClick={handlevehicleInformation} className={`details-drawer-tabs-btn ${vehicleInformation ? 'vehicle-info-active' : ''}`} >Vehicle Information</button>
+                  <button onClick={handlevehDriverHistory} className={`details-drawer-tabs-btn ${vehDriverHistory ? 'vehDriverHistory-active' : ''}`} >Vehicle - Driver History</button>
+                  <button onClick={handleremainderRecord} className={`details-drawer-tabs-btn ${remainderRecord ? 'remainderRecord-active' : ''}`} > Reminders & Records</button>
+                  <button onClick={handletrackingsensor} className={`details-drawer-tabs-btn ${trackingsensor ? 'trackingsensor-active' : ''}`} >Sensors & Tracking</button>
                 </div>
-                <div style={{ marginTop: "10px" }}>
-
+                <div className='details-drawer-tabs-content'  >
                   {vehicleInformation &&
                     <Box sx={{ width: '100%', typography: 'body1' }}>
                       <TabContext value={valuedetailstabs}>
@@ -295,76 +286,64 @@ const handletrackingsensor = () => {
                         </Box>
                         <TabPanel value="1" >
                           <>
-                            <div style={{ padding: "10px", width: "100%" }}>
+                            <div className='details-drawer-first-tab'>
                               <p>Summary</p>
-                              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around" }}>
-
-
+                              <div className='details-drawer-summary' >
                                 <div className='card-report' >
                                   <p>Running</p>
-                                  <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" }}>
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                  <div className='card-report-running'>
+                                    <div className='card-report-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         49.8
                                       </h5>
-                                      <p style={{ margin: "0px" }}>Running in KMs</p>
+                                      <p className='card-report-indidual-p'>Running in KMs</p>
                                     </div>
 
-
-
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                    <div className='card-report-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         13
                                       </h5>
-                                      <p style={{ margin: "0px" }}>Running </p>
+                                      <p className='card-report-indidual-p'>Running </p>
                                     </div>
 
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                    <div className='card-report-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         0
                                       </h5>
-                                      <p style={{ margin: "0px" }}>% Job Utilization</p>
+                                      <p className='card-report-indidual-p'>% Job Utilization</p>
                                     </div>
-
 
                                   </div>
                                 </div>
 
                                 <div className='card-report' >
                                   <p>Alerts & Service</p>
-                                  <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                  <div className='card-report-alerts-services' >
+                                    <div className='card-report-alerts-services-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         0
                                       </h5>
-                                      <p style={{ margin: "0px" }}>Alerts</p>
+                                      <p className='card-report-indidual-p'>Alerts</p>
                                     </div>
 
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                    <div className='card-report-alerts-services-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         0
                                       </h5>
-                                      <p style={{ margin: "0px" }}>
+                                      <p className='card-report-indidual-p'>
                                         DTC's</p>
                                     </div>
 
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "40%" }}>
-                                      <h5 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "0px" }}>
+                                    <div className='card-report-alerts-services-indidual'>
+                                      <h5 className='card-report-indidual-h5'>
                                         0
                                       </h5>
-                                      <p style={{ margin: "0px" }}>Service Cost</p>
+                                      <p className='card-report-indidual-p'>Service Cost</p>
                                     </div>
-
-
                                   </div>
                                 </div>
 
-
-
-
-
-                                <div className='vehicle-stats-graph-right'>
-
+                                <div className='vehicle-stats-graph-right-1'>
                                   <div>
                                     <span className='vehicle-stats-box-content '>
                                       <span className='vehicle-stats-box-content-heading'>0 Km</span>
@@ -387,70 +366,50 @@ const handletrackingsensor = () => {
                                   </div>
                                 </div>
 
-
-                                <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", gap: "15px", margin: "20px" }}>
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                <div className='details-vehicle-cards'>
+                                  <div className='details-vehicle-cards-content' >
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
 
-                                  <div style={{ border: "1px solid #ccc", width: "400px", height: "300px" }}>
+                                  <div className='details-vehicle-cards-content'>
                                     <p>Daily Mileage (km/L)</p>
-
                                   </div>
-
                                 </div>
-
-
-
-
-
-
-
                               </div>
                             </div>
                           </>
                         </TabPanel>
                         <TabPanel value="2" >
                           <>
-                            <div style={{ width: "100%" }}>
+                            <div className='details-vehicle-tab-2'>
                               <FormControl sx={{ minWidth: '100%' }}>
                                 <Select
                                   value={selectedValuephotos}
@@ -459,7 +418,6 @@ const handletrackingsensor = () => {
                                   renderValue={(value) => (value ? value : 'Select an Image tag')} // Placeholder
                                   variant="outlined"
                                   sx={{ minWidth: '100%' }} // Ensures the Select takes up the full width of the FormControl
-
                                 >
 
                                   <MenuItem value="Option 1">Option 1</MenuItem>
@@ -467,18 +425,9 @@ const handletrackingsensor = () => {
                                   <MenuItem value="Option 3">Option 3</MenuItem>
                                 </Select>
                               </FormControl>
-
-
                               <div>
                                 <div
-                                  style={{
-                                    border: "2px dotted #ccc",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    height: "200px",
-                                    cursor: "pointer"
-                                  }}
+                                  className='details-vehicle-upload-photos'
                                   onClick={handleDivClick}
                                 >
                                   <p>Click to Upload your photos</p>
@@ -486,35 +435,30 @@ const handletrackingsensor = () => {
                                 <input
                                   type="file"
                                   ref={fileInputRef}
-                                  style={{ display: "none" }}
+                                  className='multiple-img-photos'
                                   onChange={handleFileChange}
                                   multiple // Allows multiple file uploads
                                 />
                               </div>
 
-
-                              <div style={{ border: "1px solid #ccc", marginTop: "20px" }}>
-                                <div style={{ borderBottom: '1px solid #ccc', padding: "5px 5px 5px 15px" }}>
+                              <div className='images-section'>
+                                <div className='images-section-text'>
                                   <p>Images</p>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-around", gap: "15px" }}>
+                                <div className='images-section-img'>
                                   <img src="" alt="" />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+                                <div className='images-section-no-img'>
                                   <p>No Images Found
                                   </p>
                                 </div>
-
-
-
                               </div>
-
                             </div>
                           </>
                         </TabPanel>
                         <TabPanel value="3" >
                           <>
-                            <div style={{ width: "100%" }}>
+                            <div className='details-vehicle-tab-2'>
                               <FormControl sx={{ minWidth: '100%' }}>
                                 <Select
                                   value={selectedValuedocument}
@@ -529,18 +473,9 @@ const handletrackingsensor = () => {
                                   <MenuItem value="Option 3">Option 3</MenuItem>
                                 </Select>
                               </FormControl>
-
-
                               <div>
                                 <div
-                                  style={{
-                                    border: "2px dotted #ccc",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    height: "200px",
-                                    cursor: "pointer"
-                                  }}
+                                  className='details-vehicle-upload-photos'
                                   onClick={handleDivClickdocument}
                                 >
                                   <p>Click to Upload your Documents</p>
@@ -548,67 +483,43 @@ const handletrackingsensor = () => {
                                 <input
                                   type="file"
                                   ref={fileInputRef}
-                                  style={{ display: "none" }}
+                                  className='multiple-img-photos'
                                   onChange={handleFileChangedocument}
                                   multiple // Allows multiple file uploads
                                 />
                               </div>
-
-
-                              <div style={{ border: "1px solid #ccc", marginTop: "20px" }}>
-                                <div style={{ borderBottom: '1px solid #ccc', padding: "5px 5px 5px 15px" }}>
+                              <div className='images-section'>
+                                <div className='images-section-text'>
                                   <p>Documents</p>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-around", gap: "15px" }}>
+                                <div className='images-section-img'>
                                   <p></p>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+                                <div className='images-section-no-img'>
                                   <p>No Documents Found</p>
                                 </div>
-
-
-
                               </div>
 
                             </div>
                           </>
                         </TabPanel>
-
                       </TabContext>
                     </Box>
                   }
-
                   {vehDriverHistory &&
-                    <VehicleDriverHistory/>
+                    <VehicleDriverHistory />
                   }
 
                   {remainderRecord &&
-                  <RemainderAndRecord/>
+                    <RemainderAndRecord />
                   }
 
-                  {trackingsensor && 
-                     <SensorAndTracking/>
+                  {trackingsensor &&
+                    <SensorAndTracking />
 
                   }
-
-
-
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
-
             </>
           </Box>
         </Drawer>

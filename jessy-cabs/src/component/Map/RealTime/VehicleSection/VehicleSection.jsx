@@ -26,10 +26,7 @@ import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformat
 import "./VehicleSection.css"
 
 
-
-
 // for timeline tab
-
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -56,7 +53,6 @@ CustomTabPanel.propTypes = {
 
 const VehicleSection = () => {
 
-
   const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen } = useContext(PermissionContext)
 
   const [selectedOption, setSelectedOption] = useState('Vehicle');
@@ -77,19 +73,13 @@ const VehicleSection = () => {
     setDropdownValue(event.target.value);
   };
 
-
-
   //vehicle section drawer
-
-
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setOpen(open);
   };
-
-
 
 
   const handleClickOpenDriverModify = () => {
@@ -106,14 +96,10 @@ const VehicleSection = () => {
     setOpenmessage(true);
   };
 
-
-
-
   // details drawer
   const handleOpendetailsDrawer = () => {
     setOpendetailsDrawer(true);
   };
-
 
   // history drawer
   const handleOpenHistoryDrawer = () => {
@@ -181,10 +167,10 @@ const VehicleSection = () => {
               aria-label="text alignment"
               sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}
             >
-              <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "17px", fontWeight: "500", color: "#0078d4 !important" }}>
+              <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
                 Vehicle
               </ToggleButton>
-              <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "17px", fontWeight: "500", color: "#0078d4 !important" }}>
+              <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
                 Location
               </ToggleButton>
             </ToggleButtonGroup>
@@ -192,12 +178,10 @@ const VehicleSection = () => {
         </div>
         {selectedOption === 'Vehicle' && (
           <div className='vehicle-details' onClick={toggleDrawer(true)}>
-
-
             <div className="vehicle-indiduals">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div className='vehicle-indiduals-cards'>
+                <div className='vehicle-indiduals-cards-width' >
+                  <div className='vehicle-indiduals-cards'>
                     <h3 className='heading-three '>1544115144444</h3>
                     <div className='location-icon' >
                       <FaLocationArrow className='white-text' />
@@ -216,9 +200,9 @@ const VehicleSection = () => {
                   </div>
                   <p className='indidual-para margins'> <span><CiLocationOn /></span> <span>5-7, Sholinganallur Main Road, Sholinganallur, Chennai, Kanchipuram, TamilNadu</span></p>
                   <p className='indidual-para margins vehicle-nearest-address' > NEAREST ADDRESS: 21 km from JESSY CABS ( Office )</p>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div className='vehicle-indiduals-cards'>
                     <p className='indidual-para margins' > <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
-                    <div style={{ display: "flex", gap: "20px" }}>
+                    <div className='call-share-message'>
                       <div className="call-icon">
                         <a href="tel:+4733378901"><IoCall className='white-text' /></a>
                       </div>
@@ -248,20 +232,19 @@ const VehicleSection = () => {
 
         )}
         {selectedOption === 'Location' && (
-          <div className='flex-class' style={{ justifyContent: "space-between" }}>
+          <div className='flex-class between' >
             <div>
               <p>KM Radius for</p>
               <p className="Search-Location" >Search Location/Nearby (KM)50</p>
             </div>
             <div className='flex-class'>
-              <input type="number" name="" id="" style={{ width: "50px" }} />
-              <Button style={{ border: "1px solid #1976d2" }}>Apply</Button>
+              <input type="number" name="" id="" className='location-input'  />
+              <Button className='location-button-border' >Apply</Button>
             </div>
           </div>
         )}
 
       </div>
-
       <Detailsvehicle />
       <HistoryDrawer />
       <HistoryLocationModal />
@@ -270,7 +253,6 @@ const VehicleSection = () => {
       <VehicleInformationDrawer />
       <ShareIconPopup />
       <MessageIconPopup />
-
     </>
   )
 }

@@ -385,7 +385,7 @@ app.post('/login', (req, res) => {
   const { username, userpassword } = req.body;
 
   if (!username || !userpassword) {
-    return res.status(400).json({ error: 'Username and userpassword are required.' });
+    return res.status(400).json({ error: 'Username and userpassword are required.' }); 
   }
   db.query('SELECT * FROM usercreation WHERE username = ? AND userpassword = ?', [username, userpassword], (err, result) => {
     if (err) {

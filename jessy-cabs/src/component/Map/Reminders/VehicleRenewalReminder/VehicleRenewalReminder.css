@@ -1,0 +1,30 @@
+.add-vehicle-specification-input {
+    display: grid;
+    width: 300px;
+}
+
+.add-vehicle-specification-input input {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 10px 5px;
+    border-radius: 5px;
+}
+
+.add-vehicle-specification-main-division {
+    width: 100%;
+    padding: 10px 20px 30px 20px;
+}
+
+.add-vehicle-specification-division {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px 20px;
+    flex-wrap: wrap;
+}
+
+.add-vehicle-specification-heading {
+    border-bottom: 1px solid #ccc;
+    font-size: 24px;
+    padding-bottom: 3px;
+    margin: 15px 0px;
+}

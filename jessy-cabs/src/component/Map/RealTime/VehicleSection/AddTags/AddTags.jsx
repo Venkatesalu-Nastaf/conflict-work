@@ -14,7 +14,7 @@ import { MenuItem } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import { Checkbox, ListItemText } from '@mui/material';
 import { PermissionContext } from '../../../../context/permissionContext';
-
+import "./AddTags.css"
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,7 +26,6 @@ const MenuProps = {
     },
   },
 };
-
 const options = [
   'Option 1',
   'Option 2',
@@ -41,15 +40,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const AddTags = () => {
   const { openAddTag, setOpenAddTag } = useContext(PermissionContext);
-
-
   const handleCloseAddTag = () => {
     setOpenAddTag(false);
   };
 
-
   const [selectedOptions, setSelectedOptions] = useState([]);
-
   const handleChangeAddTag = (event) => {
     const { target: { value } } = event;
     setSelectedOptions(
@@ -57,7 +52,6 @@ const AddTags = () => {
       typeof value === 'string' ? value.split(',') : value,
     );
   };
-
 
   return (
     <>
@@ -114,14 +108,13 @@ const AddTags = () => {
                 </Select>
               </FormControl>
 
-
               <p>Existing Tags:</p>
               <i>No Tags</i>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseAddTag} style={{ color: "#00000", border: "1px solid #ccc" }}>Cancel</Button>
-            <Button onClick={handleCloseAddTag} autoFocus style={{ color: "#fff", border: "1px solid #0078d4", backgroundColor: "#0078d4" }}>
+            <Button className='addtag-cancel-btn' onClick={handleCloseAddTag}>Cancel</Button>
+            <Button className='addtag-add-btn' onClick={handleCloseAddTag} autoFocus >
               Add Tag
             </Button>
           </DialogActions>

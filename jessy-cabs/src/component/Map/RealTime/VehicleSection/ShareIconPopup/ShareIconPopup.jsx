@@ -17,6 +17,7 @@ import { TextField } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./ShareIconPopup.css"
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -86,7 +87,6 @@ const ShareIconPopup = () => {
       target: { value },
     } = event;
     setPersonName(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -103,8 +103,6 @@ const ShareIconPopup = () => {
   const handleChangeDay = (event) => {
     setDay(event.target.value);
   };
-
-
 
 
   return (
@@ -133,12 +131,12 @@ const ShareIconPopup = () => {
           <DialogContent dividers>
             <div>
               <div>
-                <label htmlFor="">Share Vehicle's Realtime Tracking*</label>
+                <label htmlFor="" className='share-icon-label'>Share Vehicle's Realtime Tracking*</label>
                 <Textarea name="Outlined" placeholder="Type in here…" variant="outlined" />
 
               </div>
               <div>
-                <label htmlFor="">Select one or more vehicles to share*</label>
+                <label htmlFor="" className='share-icon-label'>Select one or more vehicles to share*</label>
                 <div>
                   <FormControl sx={{ margin: '2px', width: "100%" }}>
                     <Select
@@ -162,7 +160,7 @@ const ShareIconPopup = () => {
                 </div>
               </div>
               <div>
-                <label htmlFor="">Start Time</label>
+                <label className='share-icon-label' htmlFor="">Start Time</label>
 
                 <div>
                   <Box sx={{ Width: "100%", margin: '20px' }}>
@@ -184,7 +182,7 @@ const ShareIconPopup = () => {
               </div>
 
               <div>
-                <label htmlFor="">Expire the share after</label>
+                <label htmlFor="" className='share-icon-label'>Expire the share after</label>
               </div>
               <div>
                 <div className='day-hours' >

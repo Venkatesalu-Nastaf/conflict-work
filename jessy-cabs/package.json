@@ -59,6 +59,7 @@
     "ntd": "^0.0.2",
     "num-words": "^1.2.3",
     "number-to-words": "^1.2.4",
+    "numbro": "^2.5.0",
     "path-browserify": "^1.0.1",
     "pdf-lib": "^1.17.1",
     "react": "^18.2.0",

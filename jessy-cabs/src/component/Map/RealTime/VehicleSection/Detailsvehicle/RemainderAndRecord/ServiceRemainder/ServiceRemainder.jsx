@@ -1,7 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-
+import "./ServiceRemainder.css"
 
 //  for historytable
 const remaindercolumns = [
@@ -30,9 +30,6 @@ const remaindercolumns = [
         width: 350,
         editable: true,
     },
-
-
-
 ];
 
 const remainderrows = [
@@ -40,12 +37,11 @@ const remainderrows = [
 
 ];
 
-
-
- const ServiceRemainder = () => {
-  return (
-    <>
-    <Box sx={{ height: 400, width: '100%' }}>
+const ServiceRemainder = () => {
+    return (
+        <>
+            <div className="ServiceRemainder">
+                <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={remainderrows}
                         columns={remaindercolumns}
@@ -60,8 +56,9 @@ const remainderrows = [
                         disableRowSelectionOnClick
                     />
                 </Box>
-    </>
-  )
+            </div>
+        </>
+    )
 }
 
 

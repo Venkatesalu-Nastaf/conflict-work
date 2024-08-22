@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-
+import "./VehicleDriverHistory.css"
 
 //  for historytable
 const columns = [
@@ -44,9 +44,7 @@ const rows = [
 const VehicleDriverHistory = () => {
     return (
         <>
-            <div style={{ marginTop: "30px" }}>
-
-
+            <div className='VehicleDriverHistory-total'>
                 <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={rows}

@@ -17,7 +17,7 @@ import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { PermissionContext } from '../../../../context/permissionContext';
-
+import "./ModifyDriver.css"
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -32,11 +32,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const ModifyDriver = () => {
   const { openDriverModify, setOpenDriverModify } = useContext(PermissionContext);
 
-  // const [openDriverModify, setOpenDriverModify] = React.useState(false);
-
-  // const handleClickOpenDriverModify = () => {
-  //   setOpenDriverModify(true);
-  // };
   const handleCloseDriverModify = () => {
     setOpenDriverModify(false);
   };
@@ -53,8 +48,6 @@ const ModifyDriver = () => {
   const handleDateChangeDriverAssign = (newValue) => {
     setSelectedDateDriverAssign(newValue);
   };
-
-
 
   const [newDrivercreation, setNewDrivercreation] = React.useState(false);
 
@@ -89,9 +82,6 @@ const ModifyDriver = () => {
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
             Modify Driver
           </DialogTitle>
-          {/* <p> Add, Edit and Delete Driver</p> */}
-
-
 
           <IconButton
             aria-label="close"
@@ -108,22 +98,22 @@ const ModifyDriver = () => {
           <DialogContent dividers>
             <Typography gutterBottom>
               <>
-                <div style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>vehicle:</p>
-                    <p style={{ fontWeight: "700", fontSize: "15px" }}>3125 (KA01AN3125)</p>
+                <div className="total-driver-modify" >
+                  <div className='vehicle-number-section'>
+                    <p className='vehicle-number-section-para'>vehicle:</p>
+                    <p className='vehicle-number-section-number'>3125 (KA01AN3125)</p>
                   </div>
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", borderBottom: "1px solid #ccc" }}>
-                    <p style={{ width: "150px" }}>Drivers Name:</p>
-                    <p style={{ fontWeight: "700", fontSize: "15px" }}>SAGAYARAJ
+                  <div className='drivername-section'>
+                    <p className='vehicle-number-section-para'>Drivers Name:</p>
+                    <p className='drivername-section-name'>SAGAYARAJ
                     </p>
                   </div>
 
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>Change Driver:</p>
-                    <Box sx={{ m: 1, minWidth: 320 }}>
+                  <div className='change-driver-section'>
+                    <p >Change Driver:</p>
+                    <Box sx={{ m: 1, width: '100%' }}>
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Option</InputLabel>
                         <Select
@@ -145,21 +135,21 @@ const ModifyDriver = () => {
                   </div>
 
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>Assigned From:</p>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <Box sx={{ m: 1, minWidth: 300 }}>
+                  <div className='change-driver-section'>
+                    <p >Assigned From:</p>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} >
+                      <Box sx={{ m: 1 }}>
                         <DatePicker
                           label="Select Date"
                           value={selectedDateDriverAssign}
                           onChange={handleDateChangeDriverAssign}
-                          renderInput={(params) => <TextField {...params} />}
+                          renderInput={(params) => <TextField {...params} fullWidth />}
                         />
                       </Box>
                     </LocalizationProvider>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <p style={{ color: "#0078d4" }} onClick={handleDrivercreation}>Add New Driver</p>
+                  <div className='add-new-driver-modify-driver' >
+                    <p onClick={handleDrivercreation}>Add New Driver</p>
                   </div>
 
                 </div>
@@ -168,7 +158,7 @@ const ModifyDriver = () => {
 
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={handleCloseDriverModify} style={{ backgroundColor: "#0078d4", color: "#fff", borderRadius: "8px", border: "1px solid #0078d4", fontWeight: "600" }}>
+            <Button autoFocus onClick={handleCloseDriverModify} className='drivermodify-update-btn'>
               Update driver
             </Button>
           </DialogActions>
@@ -188,8 +178,6 @@ const ModifyDriver = () => {
             Modify Drivers
           </DialogTitle>
 
-
-
           <IconButton
             aria-label="close"
             onClick={handleCloseDrivercreation}
@@ -205,15 +193,15 @@ const ModifyDriver = () => {
           <DialogContent dividers>
             <Typography gutterBottom>
               <>
-                <div style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>vehicle:</p>
-                    <p style={{ fontWeight: "700", fontSize: "15px" }}>3125 (KA01AN3125)</p>
+                <div className='modify-new-driver-section'>
+                  <div className='change-driver-section'>
+                    <p className='modify-new-driver-section-vehicle'>vehicle:</p>
+                    <p className='modify-new-driver-section-vehicle-number' >3125 (KA01AN3125)</p>
                   </div>
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>First Name:</p>
-                    <Box sx={{ m: 1, minWidth: 300 }}>
+                  <div className='modify-new-driver-section-first'>
+                    <label htmlFor="">First Name:</label>
+                    <Box sx={{ m: 1, width: "100%" }}>
                       <TextField
                         id="simple-input"
                         variant="outlined"
@@ -225,9 +213,9 @@ const ModifyDriver = () => {
                     </Box>
                   </div>
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>Last Name:</p>
-                    <Box sx={{ m: 1, minWidth: 300 }}>
+                  <div>
+                    <label htmlFor="">Last Name:</label>
+                    <Box sx={{ m: 1, width: "100%" }}>
                       <TextField
                         id="simple-input"
                         variant="outlined"
@@ -240,9 +228,9 @@ const ModifyDriver = () => {
                   </div>
 
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>Mobile Number:</p>
-                    <Box sx={{ m: 1, minWidth: 300 }}>
+                  <div>
+                    <label htmlFor="">Mobile Number:</label>
+                    <Box sx={{ m: 1, width: "100%" }}>
                       <TextField
                         id="simple-input"
                         variant="outlined"
@@ -255,9 +243,10 @@ const ModifyDriver = () => {
                   </div>
 
 
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <p style={{ width: "150px" }}>Group:</p>
-                    <Box sx={{ m: 1, minWidth: 300 }}>
+                  <div>
+                    <label htmlFor="">Group:</label>
+
+                    <Box sx={{ m: 1, width: "100%" }}>
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Option</InputLabel>
                         <Select
@@ -275,9 +264,6 @@ const ModifyDriver = () => {
                       </FormControl>
                     </Box>
                   </div>
-
-
-
                 </div>
               </>
             </Typography>

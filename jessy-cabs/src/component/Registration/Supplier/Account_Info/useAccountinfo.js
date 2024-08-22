@@ -286,6 +286,7 @@ const handlePdfDownload = () => {
     { field: "id", headerName: "Sno", width: 100 },
     { field: "cperson", headerName: "Supplier_Name", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
+    { field: "Accdate", headerName: "Acc_Date", width: 160 },
     { field: "accountNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
     { field: "phone", headerName: "Phone", width: 160 },
@@ -296,7 +297,7 @@ const handlePdfDownload = () => {
   ];
   // TABLE END
   const [book, setBook] = useState({
-    Accdate: '',
+    Accdate: dayjs()  ,
     travelsname: '',
     address1: '',
     cperson: '',
@@ -370,19 +371,19 @@ const handlePdfDownload = () => {
     }));
   }
   };
-
-  const handleDateChange = (date, name) => {
+  const handleDateChange = (date, field) => {
     const formattedDate = dayjs(date).format('YYYY-MM-DD');
-    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: parsedDate,
+      [field]: formattedDate,
     }));
-    setSelectedCustomerData((prevBook) => ({
-      ...prevBook,
-      [name]: parsedDate,
+    setSelectedCustomerData((prevCustomerData) => ({
+      ...prevCustomerData,
+      [field]: formattedDate,
     }));
   };
+
+
 
   useEffect(()=>{
     const fetchratedata=async()=>{
@@ -450,11 +451,8 @@ const handlePdfDownload = () => {
         }
     }
 
-
-        
-  
+ 
 }
-
 
 
 const handleChangeuniquetravelname=(event)=>{
@@ -470,21 +468,15 @@ const handleChangeuniquetravelname=(event)=>{
         [name]:value,
     }));
 
-
 }
-
   const handleAdd = async () => {
-    const ratetype =book.rateType;
-    const travelsname=book.travelsname;
-    const vehiclinfo=book.vehicleInfo;
-    const datefiled=book.Accdate;
-    const travelsemail=book.travelsemail;
-    const vehRegNo=book.vehRegNo;
-    if (!datefiled) {
-      setWarning(true);
-      setWarningMessage("Fill Date fields");
-      return;
-    }
+    const ratetype = book.rateType;
+    const travelsname = book.travelsname;
+    const vehiclinfo = book.vehicleInfo;
+    const Accdate = book.Accdate || dayjs().format('YYYY-MM-DD');
+    const travelsemail = book.travelsemail;
+    const vehRegNo = book.vehRegNo;    
+ 
     if (!travelsname) {
       setWarning(true);
       setWarningMessage("Fill Vehicle Travels fields");

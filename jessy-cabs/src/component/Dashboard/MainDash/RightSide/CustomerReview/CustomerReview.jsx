@@ -26,7 +26,7 @@ const CustomerReview = ({ station }) => {
   // console.log(todaybooking,"todaycont",viewmonthdata)
 
   // const apiurl = APIURL
-  console.log(station,"datastation")
+  // console.log(station,"datastation")
   const stationarray = station?.map(data => data.Stationname);
   
   // console.log(stationarray,"dattaerrrr")
@@ -115,7 +115,7 @@ const CustomerReview = ({ station }) => {
   // }
 
 
-  console.log(viewmonthdata,"jjjjjj")
+  // console.log(viewmonthdata,"jjjjjj")
   const getData =() => {
     if (viewmonthdata === "monthly") {
       return {

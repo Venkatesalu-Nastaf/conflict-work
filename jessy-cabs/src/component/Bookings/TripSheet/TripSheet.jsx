@@ -190,13 +190,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     selectedCustomerDatas,
     setDriverSMS,
     DriverSMS,
-    calculateTotalDays,
     setStartTime,
     setBook,
     setFormData,
     setSelectedCustomerData,
     setCloseTime,
-    calculateTotalTime,
     organizationdata,
     popupOpen,
     setSmsGuest,
@@ -254,7 +252,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     openEditMapLog,
     handleEditMapDetails,
     selectedMapRow,
-    setSelectedMapRow, CopyEmail, setCopyEmail
+    ratepackage,
+    calculateTotalDay,
+    calculateTotalTimes,
+    setSelectedMapRow, CopyEmail, setCopyEmail,conflictkm
 
 
   } = useTripsheet();
@@ -283,7 +284,8 @@ const TripSheet = ({ stationName, logoImage }) => {
   let startTimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
   let shedInTimeVar = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
-  let closeTimeVar = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime
+  let closeTimeVar = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
+  
 
   // kilometer
   const [kmValue, setKmValue] = useState({
@@ -495,7 +497,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
     driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-
+    requestno:selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
     vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
     mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
 
@@ -537,7 +539,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
 
 
-    //  console.log(data,"copydara")     
   }
 
 
@@ -1374,8 +1375,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <DemoItem>
                     <TextField
                       name="totaldays"
-                      value={calculateTotalDays()}
-                      label="Total Days"
+                      value={calculateTotalDay()}
+                      label="Total Daysss"
                       size="small"
                       type="number"
                       id="totaldays"
@@ -1423,7 +1424,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    {/* {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
+                    {(calculateTotalDay()===0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+
                     <input
                       type="time"
                       id="starttime"
@@ -1452,7 +1455,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
-                    {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
+                    {/* {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>} */}
+                    {calculateTotalDay()=== 0 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
 
                     <input
                       type="time"
@@ -1461,7 +1465,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if (calculateTotalDays() === 1 && (startTimeVar && rTime <= startTimeVar)) {
+                        if (calculateTotalDay() === 0 && (startTimeVar && rTime <= startTimeVar)) {
                           return;
                         } else {
                           setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
@@ -1512,7 +1516,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="totaltime"
-                    value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
+                    value={calculateTotalTimes() ||formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime ||  ''}
                     onChange={handleChange}
                     label="Total Time"
                     id="totaltime"
@@ -1524,8 +1528,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))}
-
+                  {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid &&  ((Number(kmValue.shedOutState ||formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) &&  <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -2047,7 +2051,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <div className="input">
                                 <TextField
                                   name="vendorTotaltime"
-                                  value={calculatevendorTotalTime() || ""}
+                                  value={calculateTotalTimes() || ""}
                                   label="Total Time"
                                   id="pack5"
                                   size="small"
@@ -2354,7 +2358,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TabPanel value={2} sx={{ p: 2 }}>
                           <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                             <div className="input-field">
-                              <div className="input">
+                              {/* <div className="input">
                                 <div className="icone">
                                   <Inventory2Icon color="action" />
                                 </div>
@@ -2362,6 +2366,22 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="pack"
                                   value={calcPackage || formData.calcPackage || ''}
+                                  label="Pack"
+                                  id="pack"
+                                  size="small"
+                                  variant="standard"
+                                  autoComplete="password"
+                                  sx={{ m: 1, width: "60ch" }}
+                                />
+                              </div> */}
+                              <div className="input">
+                                <div className="icone">
+                                  <Inventory2Icon color="action" />
+                                </div>
+
+                                <TextField
+                                  name="pack"
+                                  value={calcPackage || formData.calcPackage ||ratepackage || ''}
                                   label="Pack"
                                   id="pack"
                                   size="small"
@@ -2439,7 +2459,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="exHrs1"
                                   className='customer-bill-input'
-                                  value={extraHR || formData.calcPackage || ''}
+                                  value={extraHR || formData.calcPackage || 0}
                                   label="exHrs1"
                                   id="ex-exHrs1"
                                   size="small"
@@ -2456,7 +2476,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   id="exHrsTHrs2"
                                   name='exHrsTHrs2'
                                   className='customer-bill-input'
-                                  value={extrahr_amount || formData.calcPackage || ''}
+                                  value={extrahr_amount || formData.calcPackage || 0}
                                   variant="standard"
                                 />
 
@@ -2486,7 +2506,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="night1"
                                   className='customer-bill-input'
                                   // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-                                  value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+                                  value={(checkNightBetaEligible() ? nightBta : 0) || 0}
 
                                   onChange={(e) => setNightBeta(e.target.value)}
                                   label="Night"
@@ -2505,7 +2525,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   name='nightThrs2'
                                   id="nightThrs2"
-                                  value={nightCount || ''}
+                                  value={nightCount||calculateTotalDay() || 0}
                                   onChange={(e) => setNightCount(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
@@ -2519,7 +2539,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="amount8"
                                   className='customer-bill-input'
                                   // value={night_totalAmount || 0}
-                                  value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
+                                  value={(checkNightBetaEligible() ? night_totalAmount : 0) || 0}
 
                                   size="small"
                                   autoComplete="password"
@@ -2537,8 +2557,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="driverconvenience1"
                                   className='customer-bill-input'
-                                  // value={driverBeta || formData.driverBeta || ''}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || ''}
+                                  // value={driverBeta || formData.driverBeta || ""}
+                                  value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
                                   onChange={driverBeta_calc}
                                   label="Driver Convenience"
                                   autoComplete="password"
@@ -2557,7 +2577,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   id='dtc2'
                                   className='customer-bill-input'
                                   // value={driverbeta_Count || formData.driverbeta_Count || ''}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
+                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
 
                                   onChange={driverbeta_Count_calc}
                                   variant="standard"
@@ -3040,8 +3060,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
+                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTimes} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTimes} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -4095,7 +4115,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         <TextField
                           name="pack"
-                          value={calcPackage || formData.calcPackage || ''}
+                          value={calcPackage || formData.calcPackage ||ratepackage || ''}
                           label="Pack"
                           id="pack"
                           size="small"
@@ -4110,7 +4130,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="amount5"
-                          value={package_amount || formData.calcPackage || ''}
+                          value={package_amount || formData.calcPackage || 0}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -4126,7 +4146,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="exkm1"
-                          value={extraKM || formData.calcPackage || ''}
+                          value={extraKM || formData.calcPackage || 0}
                           label="Ex.Km"
                           id="ex-km"
                           autoComplete="password"
@@ -4140,7 +4160,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField size="small"
                           name='exkmTkm2'
-                          value={extrakm_amount || formData.calcPackage || ''}
+                          value={extrakm_amount || formData.calcPackage || 0}
                           id="exkmTkm"
                           variant="standard"
                           autoComplete="password"
@@ -4169,7 +4189,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="exHrs1"
-                          value={extraHR || formData.calcPackage || ''}
+                          value={extraHR || formData.calcPackage || 0}
                           label="Ex.Hrs"
                           id="ex-Hrs"
                           size="small"
@@ -4184,7 +4204,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           size="small"
                           name='exHrsTHrs2'
-                          value={extrahr_amount || formData.calcPackage || ''}
+                          value={extrahr_amount || formData.calcPackage || 0}
                           variant="standard"
                         />
 
@@ -4250,7 +4270,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="amount8"
-                          value={(checkNightBetaEligible() ? night_totalAmount : 0) || ''}
+                          value={(checkNightBetaEligible() ? night_totalAmount : 0) || 0}
                           size="small"
                           autoComplete="password"
                           label="Amount"
@@ -4276,7 +4296,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="driverconvenience1"
-                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverBeta || formData.driverBeta || '') : ''}
+                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverBeta || formData.driverBeta || 0) : 0}
                           onChange={driverBeta_calc}
                           label="Driver Convenience"
                           autoComplete="password"
@@ -4300,7 +4320,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           size="small"
                           name='dtc2'
-                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : ""}
+                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || 0) : 0}
                           onChange={driverbeta_Count_calc}
                           variant="standard"
                           autoComplete="password"
@@ -4561,7 +4581,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
-
+{/* 
                     <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
                       PaperProps={{
                         style: {
@@ -4589,6 +4609,76 @@ const TripSheet = ({ stationName, logoImage }) => {
                           Delete
                         </Button>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog> */}
+                    <Dialog
+                      open={imgpopupOpen}
+                      onClose={handleimgPopupClose}
+                      maxWidth="md"
+                      fullWidth
+                      PaperProps={{
+                        style: {
+                          width: 'fit-content',
+                          maxWidth: '90%',
+                          padding: '10px',
+                        },
+                      }}
+                    >
+                      <DialogContent
+                        style={{
+                          padding: '7px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {selectedRow && (
+                          <>
+                            {imageUrl && imageUrl.endsWith('.pdf') ? (
+                              <embed
+                                src={imageUrl}
+                                title="PDF Viewer"
+                                style={{
+                                  maxWidth: '100%',
+                                  maxHeight: '600px',
+                                  width: '100%',
+                                  height: '600px',
+                                  border: 'none',
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={imageUrl}
+                                alt="Embedded Content"
+                                style={{
+                                  maxWidth: '100%',
+                                  maxHeight: '600px',
+                                  objectFit: 'contain',
+                                }}
+                              />
+                            )}
+                          </>
+                        )}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            handleimagedelete(selectedRow);
+                            handleimgPopupClose();
+                            handleRefresh();
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          onClick={handleimgPopupClose}
+                          variant="contained"
+                          color="primary"
+                        >
                           Cancel
                         </Button>
                       </DialogActions>

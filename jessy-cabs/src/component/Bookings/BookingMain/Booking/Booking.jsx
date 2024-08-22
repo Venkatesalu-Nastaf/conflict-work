@@ -2130,55 +2130,59 @@ const Booking = ({ stationName, customerData }) => {
               </div>
             </div>
           )} */}
-
+          
 
             <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
-              <DialogContent>
+              {selectetImg.length > 0 ? (
                 <div
                   style={{
                     display: "flex",
                     overflowX: "auto",
                     backgroundColor: "#E5E5E5",
-                    padding: selectetImg.length > 0 ? "10px" : "0",
+                    padding: "10px",
                   }}
                 >
-                  {selectetImg &&
-                    selectetImg.map((img, index) => (
-                      <div
-                        key={index}
-                        style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}
-                      >
+                  {selectetImg.map((file, index) => (
+                    <div
+                      key={index}
+                      style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}
+                    >
+                      {file.type.startsWith("image/") ? (
                         <img
-                          src={URL.createObjectURL(img)}
-                          alt="img"
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
                           style={{ width: "200px", height: "200px" }}
                         />
-                        <p
-                          style={{
-                            width: "180px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {img.name}
-                        </p>
-                        <button
-                          style={{ cursor: "pointer" }}
-                          onClick={(e) => removeSelectedImage(index, e)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
+                      ) : file.type.startsWith("application/pdf")? (
+                        <iframe
+                          src={URL.createObjectURL(file)}
+                          title={file.name}
+                          style={{ width: "200px", height: "200px" }}
+                        />
+                      ) : (
+                        <p>Unsupported file type</p>
+                      )}
+                      <p
+                        style={{
+                          width: "180px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {file.name}
+                      </p>
+                      <button
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => removeSelectedImage(index, e)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              </DialogContent>
+              ) : null}
             </Dialog>
-
-
-
-
-
             {isEditMode ? (
               <div>
                 <div className="input-dummy">
@@ -2226,24 +2230,24 @@ const Booking = ({ stationName, customerData }) => {
                 }}
                 type="file" multiple onChange={handleImagechange2} /> */}
 
-                <div className="input-dummy">
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    component="label"
-                  >
-                    Attach File
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={handleImagechange2}
-                    />
-                  </Button>
-                </div>
+                  <div className="input-dummy">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      component="label"
+                    >
+                      Attach File
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        // onChange={handleImagechange2}
+                      />
+                    </Button>
+                  </div>
                 <div className="booking-image-attach-view-division">
-                  <Tooltip title={`${selectetImg.length} images selected`} arrow>
+                  {/* <Tooltip title={`${selectetImg.length} images selected`} arrow>
                     <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
-                  </Tooltip>
+                  </Tooltip> */}
                   {/* <span>{selectetImg.length} images selected</span>
                   <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button> */}
                 </div>
@@ -3027,46 +3031,38 @@ const Booking = ({ stationName, customerData }) => {
           </DialogContent>
         </Dialog> */}
 
-
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
-            <div className='vehicle-info-dailog-box-div1' style={{ width: "600px" }}>
-              <Button variant='contained' style={{ margin: "5px" }} onClick={handleSelectAll}>
-                {selectAll ? 'Deselect All' : 'Select All'}
+            <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
+              <Button variant="contained" style={{ margin: "5px" }} onClick={handleSelectAll}>
+                {selectAll ? "Deselect All" : "Select All"}
               </Button>
-              {Array.isArray(allFile) && allFile.map((img, index) => (
-                <div key={index} className='vehicle-info-dailog-box-btn-division' style={{ marginBottom: "10px" }}>
-                  {/* {(img.mimetype === "jpg" || "png") && <img src={`${apiUrl}/images/${img.path}`} alt='vehicle_docimage' style={{ width: "100%", height: "400px", objectFit: "contain" }} />}
-                  {(img.mimetype === "pdf") && <>< embed src={`${apiUrl}/images/${img.path}`} type="application/pdf" style={{ width: "100%", display: "block", height: "600px" }} /> <button>Show</button></>} */}
-
-                   {(img.mimetype === "jpeg" || img.mimetype === "png"||img.mimetype === "jpg") && (
-            <img
-              src={`${apiUrl}/images/${img.path}`}
-              alt='vehicle_docimage'
-              style={{ width: "100%", height: "400px", objectFit: "contain" }}
-            />
-          )}
-          {img.mimetype === "pdf" && (
-            <>
-              <embed
-                src={`${apiUrl}/images/${img.path}`}
-                type="application/pdf"
-                style={{ width: "100%", display: "block", height: "600px" }}
-              />
-             
-            </>
-          )}
-
-
-                  <Checkbox
-                    checked={deletefile.includes(img.path)}
-                    onClick={() => handlecheckbox(img.path)}
-                  />
-                </div>
-              ))}
+              {Array.isArray(allFile) &&
+                allFile.map((img, index) => (
+                  <div key={index} className="vehicle-info-dailog-box-btn-division" style={{ marginBottom: "10px" }}>
+                    {(img.mimetype === "jpeg" || img.mimetype === "png" || img.mimetype === "jpg") && (
+                      <img
+                        src={`${apiUrl}/images/${img.path}`}
+                        alt="vehicle_docimage"
+                        style={{ width: "100%", height: "400px", objectFit: "contain" }}
+                      />
+                    )}
+                    {img.mimetype === "pdf" && (
+                      <embed
+                        src={`${apiUrl}/images/${img.path}`}
+                        type="application/pdf"
+                        style={{ width: "100%", height: "600px", display: "block", border: "none" }}
+                        key={img.path}  // Use key to prevent re-rendering
+                      />
+                    )}
+                    <Checkbox checked={deletefile.includes(img.path)} onClick={() => handlecheckbox(img.path)} />
+                  </div>
+                ))}
             </div>
-            <div className=''>
-              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+            <div>
+              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>
+                Delete
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

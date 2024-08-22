@@ -18,11 +18,11 @@ import { TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { PermissionContext } from '../../../../context/permissionContext';
-
+import "./VehicleInformationDrawer.css"
 const VehicleInformationDrawer = () => {
 
     //vehicle section drawer
-    const { open, setOpen ,setOpenHistoryDrawer,setOpenshare, setHistoryLocation,setOpendetailsDrawer } = useContext(PermissionContext);
+    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer } = useContext(PermissionContext);
     const handleopenHistoryDrawer = () => {
         setOpenHistoryDrawer(true);
     };
@@ -58,14 +58,11 @@ const VehicleInformationDrawer = () => {
         setValuetabs(newValue);
     };
 
-
-
     const [searchTermdirection, setSearchTermdirection] = useState('');
 
     const handleSearchChangedirection = (event) => {
         setSearchTermdirection(event.target.value);
     };
-
 
     const [selectedOptionnearby, setSelectedOptionnearby] = useState('');
 
@@ -78,8 +75,6 @@ const VehicleInformationDrawer = () => {
     const handleNumberChange = (event) => {
         setNumber(event.target.value);
     };
-
-
 
 
     return (
@@ -110,12 +105,12 @@ const VehicleInformationDrawer = () => {
                             </IconButton>
                         </Box>
                         <Box sx={{ flexGrow: 1, p: 2 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div className='vehicle-information-header'>
                                 <div>
-                                    <p>Latest - 1060 (TN09DH1060)
+                                    <p> <span className='hrader-font-latest' >Latest</span>  - 1060 (TN09DH1060)
                                     </p>
                                 </div>
-                                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                                <div className='vehicle-information-header-buttons'>
                                     <div>
                                         <FormControl sx={{ m: 1, minWidth: 180 }}>
                                             <Select
@@ -133,32 +128,31 @@ const VehicleInformationDrawer = () => {
                                         </FormControl>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "3px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }} onClick={handleopenHistoryDrawer}>
+                                    <div className='vehicle-info-button-content' onClick={handleopenHistoryDrawer}>
                                         <MdChangeHistory />
-                                        <p style={{ margin: "0px" }}>History</p>
+                                        <p className='para-mar'>History</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }} onClick={handleopenHistoryLocation}>
+                                    <div className='vehicle-info-button-content' onClick={handleopenHistoryLocation}>
                                         <GoHistory />
-                                        <p style={{ margin: "0px" }}>History Location</p>
+                                        <p className='para-mar'>History Location</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", padding: "10px 20px", height: "11px", borderRadius: "8px" }}onClick={handleopenDetailsDrawer} >
+                                    <div className='vehicle-info-button-content' onClick={handleopenDetailsDrawer} >
                                         <FaCarOn />
-                                        <p style={{ margin: "0px" }}>Details</p>
+                                        <p className='para-mar'>Details</p>
                                     </div>
 
-                                    <div style={{ border: "1px solid #ccc", display: "flex", gap: "5px", alignItems: "center", backgroundColor: "#0078d4", color: "white", borderRadius: "8px", padding: "10px 20px", height: "11px" }} onClick={handleopensharedrawer}y>
+                                    <div className='vehicle-info-button-content-share' onClick={handleopensharedrawer} y>
                                         <FaShare />
 
-                                        <p style={{ margin: "0px" }}>Share Realtime Tracking </p>
+                                        <p className='para-mar'>Share Realtime Tracking </p>
                                     </div>
 
                                 </div>
                             </div>
 
-
-                            <div style={{ display: "flex" }}>
+                            <div className='vehicle-info-content' >
 
                                 <div>
                                     <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -172,139 +166,68 @@ const VehicleInformationDrawer = () => {
                                                 </TabList>
                                             </Box>
                                             <TabPanel value="1" >
-                                                <div style={{ border: "1px solid #ccc", padding: "20px" }}>
+                                                <div className='overview-content-head'>
 
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-                                                            <p>Parked</p>
-                                                            <p>:</p>
-                                                        </span>
+                                                    <div className='overview-content' >
+                                                        <p className='overview-left'>Parked :</p>
                                                         <p style={{ color: 'green' }}>Speed 13km/h</p>
-
                                                     </div>
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-                                                            <span>Current Location</span>
-                                                            <span>:</span>
-                                                        </span>
-
-
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Current Location :</span>
                                                         <span>Patel G Kulappa Road, Ramaswamipalya, Banasawadi, Bengaluru, Bangalore Urban, Karnataka</span>
-
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Model</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Model :</span>
                                                         <span>2016 TOYOTA ETIOS</span>
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid #ccc", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Group</span>
-                                                            <span>:</span>
-
-                                                        </span>
-                                                        <span>Bangalore</span>
-
+                                                    <div className='overview-content-border' >
+                                                        <span className='overview-left'>Group :</span>
                                                     </div>
 
-
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Fuel Type</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Fuel Type :</span>
                                                         <span>Diesel</span>
-
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Distance</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Distance :</span>
                                                         <span>1.2 km</span>
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid #ccc", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Time</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content-border'>
+                                                        <span className='overview-left'>Time :</span>
                                                         <span>25m</span>
-
                                                     </div>
 
-
-
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Start Time</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Start Time :</span>
                                                         <span>06 Aug 24, 11:21 AM</span>
-
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>End Time</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>End Time :</span>
                                                         <span>06 Aug 24, 11:46 AM</span>
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>Start Location</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Start Location :</span>
                                                         <span>Saint Thomas Town, Saint Thomas Town, Kacharakanahalli, Bengaluru, Bangalore Urban, Karnataka</span>
-
                                                     </div>
 
-                                                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "10px", justifyContent: "space-between" }}>
-
-                                                            <span>End Location</span>
-                                                            <span>:</span>
-                                                        </span>
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>End Location :</span>
                                                         <span>Patel G Kulappa Road, Ramaswamipalya, Banasawadi, Bengaluru, Bangalore Urban, Karnataka</span>
-
-
                                                     </div>
-
-
-
-
-
-
                                                 </div>
                                             </TabPanel>
                                             <TabPanel value="2" >
 
                                             </TabPanel>
                                             <TabPanel value="3" >
-                                                <div style={{ padding: "10px" }}>
-
+                                                <div className='directions-vehicle-info' >
                                                     <Box sx={{ m: 1, minWidth: 300 }}>
                                                         <TextField
                                                             id="search-input"
@@ -327,22 +250,16 @@ const VehicleInformationDrawer = () => {
                                                             }}
                                                         />
                                                     </Box>
-                                                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                                        <button style={{ border: "1px solid gray", padding: "10px 20px", color: "#fff", backgroundColor: "gray", borderRadius: "8px" }}>Get Direction</button>
+                                                    <div className='Getdirection' >
+                                                        <button className='Getdirection-btn'>Get Direction</button>
                                                     </div>
                                                 </div>
                                             </TabPanel>
                                             <TabPanel value="4">
-                                                <div style={{ padding: "10px" }}>
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                <div className='directions-vehicle-info'>
+                                                    <div className='direction-content'>
 
-                                                        <span style={{ width: "140px", display: "flex", gap: "3px", justifyContent: 'space-between' }}>
-                                                            <span>Category</span>
-                                                            <span>
-                                                                :
-                                                            </span>
-
-                                                        </span>
+                                                        <span>Category :</span>
                                                         <Box sx={{ m: 1, minWidth: 302 }}>
                                                             <TextField
                                                                 id="select-input"
@@ -364,14 +281,11 @@ const VehicleInformationDrawer = () => {
 
 
                                                     </div>
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <span style={{ width: "140px", display: "flex", gap: "3px", justifyContent: 'space-between' }}>
-                                                            <span>
-                                                                Near By KM
-                                                            </span>
-                                                            <span>:</span>
+                                                    <div className='direction-content'>
+                                                        <span>
+                                                            Near By KM :
                                                         </span>
-                                                        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                                                        <div className='direction-box'>
                                                             <Box sx={{ m: 1, minWidth: 120 }}>
                                                                 <TextField
                                                                     id="number-input"
@@ -383,14 +297,10 @@ const VehicleInformationDrawer = () => {
                                                                     fullWidth
                                                                 />
                                                             </Box>
-
-
-                                                            <button style={{ color: "gray", border: "1px solid gray", borderRadius: "8px", padding: "10px 20px", height: "40px" }}>Apply</button>
-
-
+                                                            <button className='direction-apply-btn' >Apply</button>
                                                         </div>
                                                     </div>
-                                                    <div style={{ borderTop: "1px solid #ccc", display: "flex", justifyContent: "center" }}>
+                                                    <div className='warning-no-petrol' >
                                                         <p>No Petrol pump found.</p>
                                                     </div>
                                                 </div>
@@ -399,7 +309,9 @@ const VehicleInformationDrawer = () => {
                                     </Box>
                                 </div>
 
-
+                                {/* <div>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31097.69417961257!2d80.16538023948671!3d13.022181997639182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5260d2a1750661%3A0xe3a591bb494f9792!2sMIOT%20International!5e0!3m2!1sen!2sin!4v1724053963902!5m2!1sen!2sin" width="600" height="450"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div> */}
 
                             </div>
 

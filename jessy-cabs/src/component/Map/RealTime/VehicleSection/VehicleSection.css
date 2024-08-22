@@ -1,33 +1,63 @@
-.vehicle-inputs{
-display: flex;
-gap: 20px;
-justify-content: space-between;
-align-items: center;
-} 
-.inputs-width{
+.vehicle-inputs {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputs-width {
     width: 70%;
 }
 
-.buttons-width{
+.buttons-width {
     width: 20%;
 }
-.white-text{
-color: #fff;
+
+.white-text {
+    color: #fff;
 }
 
-.vehicle-nearest-address{
-color:rgb(85, 85, 85) ;
-font-weight: 600;
+.vehicle-nearest-address {
+    color: rgb(85, 85, 85);
+    font-weight: 600;
 }
-.not-on-job-vehicle-info{
-color: #0078d4;
-font-weight: 700;
-} 
 
-.Search-Location{
+.not-on-job-vehicle-info {
+    color: #0078d4;
+    font-weight: 700;
+}
+
+.Search-Location {
     margin: 0px;
 }
 
-.white-text{
+.white-text {
     font-size: 20px;
+}
+
+.vehicle-indiduals-cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vehicle-indiduals-cards-width {
+    width: 100%;
+}
+
+.call-share-message {
+    display: flex;
+    gap: 20px;
+}
+
+.between {
+    justify-content: space-between;
+}
+
+.location-input {
+    width: 50px;
+    height: 50px;
+}
+
+.location-button-border {
+    border: 1px solid #1976d2;
 }

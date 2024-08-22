@@ -49,6 +49,7 @@ import { Reports } from "./component/Registration/Report/Reports";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
+import  Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 
@@ -301,15 +302,18 @@ function App() {
       try {
         const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
         const data = response.data
-        const names = data?.map(res => res.VechicleNames)
+        const names = data.map(res => res.VechicleNames)
+
         setVehicleName(names)
+
+
       }
       catch (error) {
         console.log(error, "error");
       }
     };
     fetchgetvehicleName()
-  }, [apiUrl])
+  }, [apiUrl, vehileName])
 
   return (
     <>
@@ -363,6 +367,11 @@ function App() {
                 <Route
                   path="/home/Map/Vehicle"
                   element={Maps !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+
+                <Route
+                  path="/home/Map/Reminders"
+                  element={Maps !== 0 ? <Reminders stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
 
                 <Route

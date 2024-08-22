@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-
+import "./FuelLog.css"
 
 //  for historytable
 const fuellogcolumns = [
@@ -36,7 +36,7 @@ const fuellogcolumns = [
         width: 120,
         editable: true,
     },
-    
+
     {
         field: 'OdometerReading',
         headerName: 'Odometer Reading',
@@ -85,21 +85,19 @@ const fuellogcolumns = [
         width: 120,
         editable: true,
     },
-  
-
-
 
 ];
 
 const fuellogrows = [
-    { id: 1, Status: 'Snow', Vehicle: 'Jon', Vendor: 14, ReferenceNumber: 14,Date: 14,OdometerReading: 14,Volume: 14,Usage: 14,Amount: 14,KmUnit: 14,CostKm: 14,ExpectedKm: 14,Action: 14 },
+    { id: 1, Status: 'Snow', Vehicle: 'Jon', Vendor: 14, ReferenceNumber: 14, Date: 14, OdometerReading: 14, Volume: 14, Usage: 14, Amount: 14, KmUnit: 14, CostKm: 14, ExpectedKm: 14, Action: 14 },
 
 ];
 
- const FuelLog = () => {
-  return (
-    <>
-    <Box sx={{ height: 400, width: '100%' }}>
+const FuelLog = () => {
+    return (
+        <>
+            <div className='FuelLog'>
+                <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={fuellogrows}
                         columns={fuellogcolumns}
@@ -114,8 +112,9 @@ const fuellogrows = [
                         disableRowSelectionOnClick
                     />
                 </Box>
-    </>
-  )
+            </div>
+        </>
+    )
 }
 
 export default FuelLog;

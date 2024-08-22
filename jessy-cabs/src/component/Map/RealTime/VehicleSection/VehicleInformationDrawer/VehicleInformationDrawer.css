@@ -1,0 +1,113 @@
+.vehicle-information-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.hrader-font-latest {
+    font-weight: 600;
+}
+
+.vehicle-information-header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.vehicle-info-button-content {
+    border: 1px solid #ccc;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 20px;
+    height: 11px;
+    border-radius: 8px;
+}
+
+.vehicle-info-button-content-share {
+    border: 1px solid #ccc;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 20px;
+    height: 11px;
+    border-radius: 8px;
+    background-color: #0078d4;
+    color: #fff;
+}
+
+.para-mar {
+    margin: 0px;
+}
+
+.vehicle-info-content {
+    display: flex;
+}
+
+.overview-left {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.overview-content-head {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.overview-content {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.overview-content-border {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.directions-vehicle-info {
+    padding: 10px;
+}
+
+.Getdirection {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Getdirection-btn {
+    border: 1px solid gray;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: gray;
+    border-radius: 8px;
+}
+
+.direction-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.direction-box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.direction-apply-btn {
+    color: gray;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 10px 20px;
+    height: 40px;
+}
+
+.warning-no-petrol {
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,70 @@
+.total-driver-modify {
+    padding: 2px;
+}
+
+.vehicle-number-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.vehicle-number-section-para {
+    width: 150px;
+}
+
+.vehicle-number-section-number {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.drivername-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.drivername-section-name {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.change-driver-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.add-new-driver-modify-driver {
+    display: flex;
+    justify-content: flex-end;
+    color: #0078d4;
+}
+
+.drivermodify-update-btn {
+    background-color: #0078d4;
+    color: #fff;
+    border-radius: 8px;
+    border: 1px solid #0078d4;
+    font-weight: 600;
+}
+
+.modify-new-driver-section {
+    padding: 20px;
+}
+
+.modify-new-driver-section-vehicle {
+    margin-top: 0px;
+    width: 150px;
+}
+
+.modify-new-driver-section-vehicle-number {
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 0px;
+}
+
+.modify-new-driver-section-first {
+    margin-top: 20px;
+}

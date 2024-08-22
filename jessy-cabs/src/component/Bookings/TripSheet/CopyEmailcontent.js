@@ -44,6 +44,12 @@ const CopyEmailHtmlcontent = () => {
                     <td style="padding: 8px;"><strong>Car Sent:</strong></td>
                     <td style="padding: 8px;">${updatdata?.vehType}</td>
                 </tr>
+                 ${updatdata?.requestno ? `
+                      <tr>
+                      <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                       <td style="padding: 8px; color: #000;">${updatdata?.requestno}</td>
+                    </tr>
+                      ` : ''}
                 <tr>
                     <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                     <td style="padding: 8px;">${updatdata?.vehRegNo}</td>
@@ -99,6 +105,12 @@ const CopyEmailHtmlcontent = () => {
                             <td style="padding: 8px;"><strong>Car Sent:</strong></td>
                             <td style="padding: 8px;color: #000"">${updatdata?.vehType}</td>
                         </tr>
+                         ${updatdata?.requestno ? `
+                      <tr>
+                      <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                       <td style="padding: 8px; color: #000;">${updatdata?.requestno}</td>
+                    </tr>
+                      ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                             <td style="padding: 8px;color: #000"">${updatdata?.vehRegNo}</td>

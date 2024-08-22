@@ -1,0 +1,13 @@
+.message-icon-label {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.add-btn-message {
+    border: 1px solid #1976d2;
+}
+
+.cancel-btn-message {
+    color: red;
+    border: 1px solid red;
+}

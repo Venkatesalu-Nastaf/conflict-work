@@ -49,6 +49,7 @@ import { Reports } from "./component/Registration/Report/Reports";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
+import History from "./component/Map/History/History"
 import  Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
@@ -363,6 +364,10 @@ function App() {
                 <Route
                   path="/home/Map/RealTime"
                   element={Maps !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                />
+                  <Route
+                  path="/home/Map/History"
+                  element={Maps !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/Map/Vehicle"

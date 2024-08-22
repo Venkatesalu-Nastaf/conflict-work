@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useLayoutEffect, useState } from "react";
 import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -135,13 +135,12 @@ export default function BasicTable({stationName}) {
      const data2 = response2.data
      setTodayBooking(data2)
      const data=response.data;
-     console.log(data,"ddd")
     
      if(data.length >=1){
       setFilteredData(response.data)
      }
      else{
-      console.log(data.length,"daaa")
+      // console.log(data.length,"daaa")
       setFilteredData([])
      }
      
@@ -156,7 +155,6 @@ export default function BasicTable({stationName}) {
     try{
      const response=await axios.get(`${apiurl}/tripsheet-maindashcuurentdate?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`)
      const data=response.data;
-     console.log(data,"ddd")
     
      if(data.length >=1){
       setFilteredData(response.data)
@@ -247,8 +245,7 @@ export default function BasicTable({stationName}) {
       }
     }
     
-  useEffect(()=>{
-    console.log("useeffectdata")
+  useLayoutEffect(()=>{
     fetchalldata()
     fetchdatachart()
     setViewMonthdata("monthly")
@@ -259,7 +256,7 @@ export default function BasicTable({stationName}) {
     fetchalldata()
     fetchdatachart()
   };
-  console.log(filteredData.length>0?"one":"two","dddd",filteredData,"lenn")
+  // console.log(filteredData.length>0?"one":"two","dddd",filteredData,"lenn")
 
   return (
     <div className="Table">

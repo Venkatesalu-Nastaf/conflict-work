@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './SignatureGenerate.css'
 import { APIURL } from '../../../url';
 import axios from 'axios'
@@ -24,20 +24,16 @@ const SignatureGenerate = () => {
        console.log(data,"dattataaaaaaaaaaaaa")
        setUploadToll(data)
   }
-  useEffect(()=>{
+//   useEffect(()=>{
+//     uploaddata()
+//   })
+  useLayoutEffect(()=>{
     uploaddata()
-  })
+  },[])
 
 
 
     const [fulldetails, setFulltripdetails] = useState([])
-    // const [expired, setExpired] = useState(() => {
-    //     const expiredInSessionStorage =
-    //         sessionStorage.getItem("expiredsign") && localStorage.getItem("expiredsign");
-    //     return expiredInSessionStorage
-    //         ? JSON.parse(expiredInSessionStorage)
-    //         : false;
-    // });
     const [expired, setExpired] = useState(() => {
         const expiredInSessionStorage =
          localStorage.getItem("expiredsign");
@@ -46,8 +42,8 @@ const SignatureGenerate = () => {
             : false;
     });
 
-    const expiredInSessionStorage1 =localStorage.getItem("expiredsign") ? "true": false;
-    console.log(expiredInSessionStorage1,localStorage.getItem("expiredsign"),"erfcdfskdnmcnndnmnmnfdsnndnf")
+    // const expiredInSessionStorage1 =localStorage.getItem("expiredsign") ? "true": false;
+    // console.log(expiredInSessionStorage1,localStorage.getItem("expiredsign"),"erfcdfskdnmcnndnmnmnfdsnndnf")
 
     useEffect(() => {
         const signturedatafullly = async () => {

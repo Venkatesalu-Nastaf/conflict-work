@@ -387,7 +387,7 @@ router.get('/getvehicledatauniquevehicleNames',(req,res)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results,"jjjj")
+    // console.log(results,"jjjj")
     return res.status(200).json(results);
   })
 })

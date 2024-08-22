@@ -7,6 +7,7 @@ import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
 import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
+import numbro from 'numbro';
 const apiUrl = APIURL;
 
 const Cards = () => {
@@ -25,6 +26,17 @@ const Cards = () => {
     const currentMonth = currentDate.getMonth(); // Returns a number between 0 and 11
     return currentMonth.toString(); // Convert to string for comparison with option values
   };
+
+  const formatNumber = (number) => {
+    return numbro(number).format({
+        average: true,
+        totalLength: 3,
+        mantissa: 1, // to keep one decimal place for numbers like 1.7 lakh
+    });
+};
+
+
+
 
   const fetchDataFromBackend = async (month) => {
     try {
@@ -67,7 +79,8 @@ const Cards = () => {
   };
 
   const storedSums = JSON.parse(localStorage.getItem('sumValues'));
-
+  const formattedNumber = formatNumber(storedSums?.totalAmountSum );
+  console.log(formattedNumber,'form');
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
 

@@ -433,13 +433,16 @@ const useTransferreport = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const encoded = localStorage.getItem("usercompany");
-      localStorage.setItem("usercompanyname", encoded);
-      const storedcomanyname = localStorage.getItem("usercompanyname");
-      const organizationname = decodeURIComponent(storedcomanyname);
+      // const encoded = localStorage.getItem("usercompany");
+      // localStorage.setItem("usercompanyname", encoded);
+      // const storedcomanyname = localStorage.getItem("usercompanyname");
+      // const organizationname = decodeURIComponent(storedcomanyname);
       try {
+        // const response = await fetch(
+        //   `${apiUrl}/organizationdata/${organizationname}`
+        // );
         const response = await fetch(
-          `${apiUrl}/organizationdata/${organizationname}`
+          `${apiUrl}/organizationdata`
         );
         if (response.status === 200) {
           const userDataArray = await response.json();

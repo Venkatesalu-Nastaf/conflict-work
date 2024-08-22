@@ -20,7 +20,7 @@ import { useData } from "../Dashboard/MainDash/Sildebar/DataContext2.js";
 
 const Login = () => {
 
-  const { setLogoTrigger} = useData()
+  const { setLogoTrigger} = useData();
 
   const apiUrl = APIURL;
   const navigate = useNavigate();
@@ -60,16 +60,17 @@ const Login = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("auth")) navigate("/");
 
-  });
+  // useEffect(() => {
+  //   if (localStorage.getItem("auth")) navigate("/");
+
+
+  // });
 
   const formSubmitter = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
-      
       if (response.status === 200) {
         setUserdashboard(true) // its for logo trigger
         setLogoTrigger(prev => !prev)
@@ -159,9 +160,9 @@ const Login = () => {
                 )}
               </div>
             </div>
-            <div className="forget-link">
+            {/* <div className="forget-link">
               <a href="/">forget password !</a>
-            </div>
+            </div> */}
             <div className="group button-group">
               <button type="submit" className="signup-btn" onClick={formSubmitter}>
                 Login

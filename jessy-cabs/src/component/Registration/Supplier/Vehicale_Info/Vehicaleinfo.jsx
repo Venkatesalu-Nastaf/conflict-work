@@ -450,9 +450,11 @@ useEffect(()=>{
                 <div>
                 <div>
                   { !isEditMode &&
+                  <>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Vechicle
             </Button>
+            </>
              }
             <Dialog open={isOpenvehcile}  onClose={handleClose}>
                 <DialogContent>

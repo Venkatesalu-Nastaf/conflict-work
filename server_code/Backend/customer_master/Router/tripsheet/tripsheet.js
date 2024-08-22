@@ -1064,7 +1064,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass,requestno } = req.body;
         const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         console.log(formattedFromDate, "date")
 
@@ -1136,6 +1136,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                             <td style="padding: 8px;color: #000"">${vehRegNo}</td>
                         </tr>
+                        ${requestno ? `
+                            <tr>
+                             <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                              <td style="padding: 8px; color: #000;">${requestno}</td>
+                              </tr>
+                               ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
                             <td style="padding: 8px;color: #000"">${driverName} / ${mobileNo}</td>
@@ -1186,7 +1192,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
                             <td style="padding: 8px;">${starttime} Hrs</td>
                         </tr>
                        
-                        <tr>
+                        ${requestno ? `
+                            <tr>
+                             <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                              <td style="padding: 8px; color: #000;">${requestno}</td>
+                              </tr>
+                               ` : ''}
                        
                         <tr>
                         <td style="padding: 8px;"><strong>Car Sent</strong></td>
@@ -1422,7 +1433,6 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
-    console.log(VehicleName,duty,totkm,OrganizationName,totalHours,"ll")
 
 
 
@@ -1446,12 +1456,12 @@ router.get(`/t4hr-pack`, (req, res) => {
     // Execute the query with dynamic parameters 
     db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
         // Check if any rows were returned
-        if (results.length === 0) {
+        if (results.length === 0) {            
             return res.status(404).json({ error: 'No data found' });
         }
 
         // Send the fetched row in the response
-        res.json(results[0]);
+        res.json(results[0]);        
     });
 });
 
@@ -1531,6 +1541,46 @@ router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
     })
 
 })
+
+
+router.get('/tripshedin/:vehregno/:cvalue',(req, res) => {
+    // const { vehregno, cvalue } = req.params;
+    const vehregno =req.params.vehregno; // Get vehregno and cvalue from query parameters
+    const cvalue =req.params.cvalue;
+    console.log(vehregno,cvalue,"ff")
+  
+      // SQL query
+      const sql = `
+        SELECT tripid, shedin, shedout, shedInDate, shedintime, startkm, closekm
+        FROM tripsheet
+        WHERE 
+        vehRegNo = ?
+        AND status != 'Cancelled'
+          AND (
+            (shedin IS NOT NULL AND ? <= shedin AND ? >= shedout)
+            OR (shedin IS NULL AND closekm IS NOT NULL AND ? <= closekm AND ? >= shedout)
+            OR (closekm IS NULL AND ? >= shedout AND ? <= startkm)
+            OR (startkm IS NULL AND ? = shedout)
+          );
+      `;
+  
+      // Execute the query with parameters
+      db.query(sql, [vehregno, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue], (err, result) => {
+                    if (err) {
+                        console.log("err", err)
+                        res.json({ message: "error fetching data", success: false })
+                    }
+                            console.log(result)
+                    
+                           return res.status(200).json(result)
+                })
+                    
+                        
+  
+      // Send the results as a JSON response
+      
+      
+  });
 
 router.get('/tripaccounttravelname', (req, res) => {
     db.query("select * from accountinfo", (err, results) => {

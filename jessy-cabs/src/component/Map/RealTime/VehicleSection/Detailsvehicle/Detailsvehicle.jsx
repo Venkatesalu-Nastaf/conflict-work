@@ -18,6 +18,7 @@ import { Select, MenuItem, FormControl } from '@mui/material';
 import VehicleDriverHistory from "./VehicleDriverHistory/VehicleDriverHistory"
 import RemainderAndRecord from "./RemainderAndRecord/RemainderAndRecord"
 import SensorAndTracking from "./SensorAndTracking/SensorAndTracking"
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -115,7 +116,12 @@ const Detailsvehicle = () => {
     setRemainderRecord(false);
 
   }
+  const navigate = useNavigate();
 
+  const NavigateHistory = () => {
+    navigate("/home/Map/History");
+
+  }
   return (
     <>
       <div>
@@ -196,7 +202,7 @@ const Detailsvehicle = () => {
                         Live
                       </button>
 
-                      <button className='details-drawer-head-para-btn'>
+                      <button className='details-drawer-head-para-btn' onClick={NavigateHistory}>
                         <IoTimer />
                         History
                       </button>

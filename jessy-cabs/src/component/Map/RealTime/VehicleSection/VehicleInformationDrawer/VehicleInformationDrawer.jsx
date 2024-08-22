@@ -19,12 +19,18 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./VehicleInformationDrawer.css"
+import { useNavigate } from 'react-router-dom';
+
 const VehicleInformationDrawer = () => {
 
     //vehicle section drawer
     const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer } = useContext(PermissionContext);
+    const navigate = useNavigate();
+
     const handleopenHistoryDrawer = () => {
-        setOpenHistoryDrawer(true);
+        // setOpenHistoryDrawer(true);
+        navigate("/home/Map/History");
+
     };
 
     const handleopenHistoryLocation = () => {

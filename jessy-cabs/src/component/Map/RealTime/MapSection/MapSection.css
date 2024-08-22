@@ -10,3 +10,45 @@
     
     }
 }
+
+.red-indication{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.status-from{
+    display: flex;
+    gap: 10px;
+}
+.location-near{
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+
+}
+
+.map-popup{
+    padding: 10px;
+    width: fit-content;
+}
+.popup-last-btns{
+    color: black;
+    padding: 10px;
+    background-color: #ede2e2;
+    border: none;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.btns-section{
+    padding: 10px;
+}
+
+.popup-heading {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }

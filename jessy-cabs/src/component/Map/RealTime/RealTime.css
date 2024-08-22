@@ -90,14 +90,7 @@
   width: 40%;
 }
 
-.vehicle-details {
-  height: 800px;
-  overflow-y: auto;
-}
 
-.vehicle-details::-webkit-scrollbar {
-  width: 12px;
-}
 
 .flex-class {
   display: flex;

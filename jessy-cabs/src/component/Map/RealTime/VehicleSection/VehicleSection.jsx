@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext  } from 'react'
 import InputAdornment from '@mui/material/InputAdornment';
 import { ToggleButton, ToggleButtonGroup, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,6 +23,8 @@ import HistoryLocationModal from "./HistoryLocationModal/HistoryLocationModal"
 import AddTags from "./AddTags/AddTags"
 import Detailsvehicle from "./Detailsvehicle/Detailsvehicle"
 import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformationDrawer"
+import { useNavigate } from 'react-router-dom';
+
 import "./VehicleSection.css"
 
 
@@ -102,8 +104,11 @@ const VehicleSection = () => {
   };
 
   // history drawer
+  const navigate = useNavigate();
   const handleOpenHistoryDrawer = () => {
-    setOpenHistoryDrawer(true);
+    // setOpenHistoryDrawer(true);
+    navigate("/home/Map/History");
+
   };
 
   const handleClickOpenAddTag = () => {

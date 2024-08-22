@@ -348,6 +348,7 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
       return res.status(500).json({ error: "there some issue ffetching station name " })
     }
     data = await results[0]?.Stationname;
+    console.log(data,"ddddd")
     //------------------------------------------------------------
 
     if (data && data.toLowerCase() === "all") {
@@ -365,7 +366,8 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
     }
     else if (data) {
       // its for fetch by All
-      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Transfer_Closed" AND department=${data}`, tripid, (err, result) => {
+      // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Transfer_Closed" AND department=${data}`, tripid, (err, result) => {
+        await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Closed" AND department=${data}`, tripid, (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }

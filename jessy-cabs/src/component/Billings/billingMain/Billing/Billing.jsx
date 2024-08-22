@@ -116,7 +116,9 @@ const Billing = () => {
         // organizationgstnumber,
         // GmapimageUrl,
         // mapimageUrl,
-         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount, handleKeyenterBilling, discound_PercentageCalc,
+         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,
+        //   handleKeyenterBilling,
+           discound_PercentageCalc,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,
 
         // ... (other state variables and functions)
@@ -176,7 +178,7 @@ const Billing = () => {
                                     autoComplete="new-password"
                                     value={book.billingno || ''}
                                     onChange={handleChange}
-                                    onKeyDown={handleKeyenterBilling}
+                                    // onKeyDown={handleKeyenterBilling}
                                 />
                             </div>
                             <div className="input">

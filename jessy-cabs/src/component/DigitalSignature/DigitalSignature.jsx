@@ -44,6 +44,9 @@ const DigitalSignature = () => {
    sessionStorage.setItem("expiredsign", false);
    localStorage.setItem("expiredsign",false);
    localStorage.setItem("uploadtollparkdata",true);
+   setExpired(true);
+   sessionStorage.setItem("expired", true);
+    localStorage.setItem("expired", true);
    window.open(data, '_blank');
 
   }

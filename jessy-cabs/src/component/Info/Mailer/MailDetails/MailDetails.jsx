@@ -256,6 +256,11 @@ const MailDetails = () => {
       setErrorMessage("Select the Excel File")
       return
     }
+    if (data.length === 0) {
+      setError(true)
+      setErrorMessage("Enter the Mail In  Excel")
+      return
+    }
     try {
 
       const datatosend = {
@@ -266,6 +271,7 @@ const MailDetails = () => {
         Mailauthpass: organistaionsendmail.EmailApp_Password
 
       }
+    
 
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
@@ -280,6 +286,8 @@ const MailDetails = () => {
     }
     catch (err) {
       console.log(err)
+      setError(true)
+      setErrorMessage("Mail Not send")
     }
   }
 

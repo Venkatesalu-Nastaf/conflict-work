@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect,useMemo } from 'react';
 import axios from 'axios';
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
@@ -50,13 +50,13 @@ const useBilling = () => {
     // for pdf print
     const handleEInvoiceClick = (row) => {
         const tripid = book.tripid;
-        const customer = book.customer;
+        // const customer = book.customer;
         if (!tripid) {
             setError(true);
             setErrorMessage("Please enter TripID");
         } else {
             setParticularRefNo(tripid)
-            localStorage.setItem('selectedcustomerid', customer);
+            // localStorage.setItem('selectedcustomerid', customer);
             setParticularPdf(true);
         }
     };
@@ -309,6 +309,8 @@ const useBilling = () => {
     const handleCancel = () => {
         setBook(emptyBookvalues);
         setSelectedBankAccount('');
+        setCustomerData('')
+        
     }
 
 
@@ -375,7 +377,10 @@ const useBilling = () => {
                 if (tripid) {
                     const response = await axios.get(`${apiUrl}/tripsheet-keydown/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
+                    console.log(bookingDetails,"details")
                     setBook(() => ({ ...bookingDetails, rateType: customerData?.rateType }))
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
                 } else {
                     setError(true)
                     setErrorMessage("Enter TripID")
@@ -389,22 +394,22 @@ const useBilling = () => {
 
 
     // from  Billing
-    const handleKeyenterBilling = useCallback(async (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            try {
-                const response = await axios.get(`${apiUrl}/billing-get/${e.target.value}`);
-                const bilingData = response.data;
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-                setBook(bilingData)
-            }
-            catch (error) {
-                setError(true);
-                setErrorMessage('Error retrieving data from billing ');
-            }
-        }
-    }, [apiUrl])
+    // const handleKeyenterBilling = useCallback(async (e) => {
+    //     if (e.key === "Enter") {
+    //         e.preventDefault();
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/billing-get/${e.target.value}`);
+    //             const bilingData = response.data;
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully listed");
+    //             setBook(bilingData)
+    //         }
+    //         catch (error) {
+    //             setError(true);
+    //             setErrorMessage('Error retrieving data from billing ');
+    //         }
+    //     }
+    // }, [apiUrl])
 
 
 
@@ -446,28 +451,47 @@ const useBilling = () => {
     //     fetchData();
     // }, [apiUrl,book.tripid]);
 
-
     // data fetching from the customer  
-    useEffect(() => {
-        const fetchData = async () => {
-            const customer = localStorage.getItem('selectedcustomerid');
-            if (customer === null) {
-                return;
-            }
-            try {
-                if (customer) {
-                    const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(customer)}`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const customerData = await response.json();
-                    setCustomerData(customerData);
-                }
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const customer = localStorage.getItem('selectedcustomerid');
+    //         if (customer === null) {
+    //             return;
+    //         }
+    //         try {
+    //             if (customer) {
+    //                 const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(customer)}`);
+    //                 if (!response.ok) {
+    //                     throw new Error(`HTTP error! Status: ${response.status}`);
+    //                 }
+    //                 const customerData = await response.json();
+    //                 setCustomerData(customerData);
+    //             }
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl]);
+    const memoizedCustomer = useMemo(() => book.customer, [book.customer]);
+
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      try {
+        if (memoizedCustomer) {
+          const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(memoizedCustomer)}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const customerData = await response.json();
+          setCustomerData(customerData);
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      }
+    };
+
+    fetchCustomerData();
+  }, [memoizedCustomer, apiUrl]);
 
     // fetching signature image
     // useEffect(() => {
@@ -543,13 +567,14 @@ const useBilling = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const encoded = localStorage.getItem('usercompany');
-            localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
+            // const encoded = localStorage.getItem('usercompany');
+            // localStorage.setItem('usercompanyname', encoded);
+            // const storedcomanyname = localStorage.getItem('usercompanyname');
+            // const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                if (organizationname !== "undefined" && organizationname) {
-                    const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                // if (organizationname !== "undefined" && organizationname) {
+                    // const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                    const response = await fetch(`${apiUrl}/organizationdata`);
                     if (response.status === 200) {
                         const userDataArray = await response.json();
                         if (userDataArray.length > 0) {
@@ -559,8 +584,8 @@ const useBilling = () => {
                         const timer = setTimeout(fetchData, 2000);
                         return () => clearTimeout(timer);
                     }
-                }
-                return;
+                // }
+                // return;
             } catch {
             }
         };
@@ -615,7 +640,7 @@ const useBilling = () => {
         handleClick,
         handleChange,
         hidePopup,
-        handleKeyenterBilling,
+        // handleKeyenterBilling,
         handleKeyDown,
         handleDateChange,
         selectedImage,

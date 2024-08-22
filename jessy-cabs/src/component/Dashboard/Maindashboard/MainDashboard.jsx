@@ -430,6 +430,7 @@ useEffect(() => {
             <div className="header-user">
               <div className="avatar-item">
                 <Tooltip title={`Hi ${storedUsername}`} arrow>
+                  <span>
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -441,6 +442,7 @@ useEffect(() => {
                       src={selectedavtar}
                     />
                   </StyledBadge>
+                  </span>
                 </Tooltip>
                 { }
               </div>

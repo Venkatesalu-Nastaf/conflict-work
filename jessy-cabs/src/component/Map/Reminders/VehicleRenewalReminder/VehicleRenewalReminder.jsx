@@ -4,9 +4,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import "./EngineTransmission.css";
+import "./VehicleRenewalReminder.css";
 
-const EngineTransmission = () => {
+const VehicleRenewalReminder = () => {
 
   const [age, setAge] = React.useState('');
 
@@ -206,4 +206,4 @@ const EngineTransmission = () => {
   )
 }
 
-export default EngineTransmission
+export default VehicleRenewalReminder

@@ -1,7 +1,7 @@
 import React from 'react';
-import "./Specification.css";
+import "./EntityReminder.css";
 
-const Specification = () => {
+const EntityReminder = () => {
 
   // const [age, setAge] = React.useState('');
 
@@ -176,4 +176,4 @@ const Specification = () => {
   )
 }
 
-export default Specification
+export default EntityReminder

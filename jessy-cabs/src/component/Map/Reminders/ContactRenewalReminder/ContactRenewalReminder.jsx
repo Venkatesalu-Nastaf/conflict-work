@@ -5,9 +5,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import "./Details.css";
+import "./ContactRenewalReminder.css";
 
-const Details = () => {
+const ContactRenewalReminder = () => {
 
   const [age, setAge] = React.useState('');
 
@@ -463,4 +463,4 @@ const Details = () => {
   )
 }
 
-export default Details
+export default ContactRenewalReminder

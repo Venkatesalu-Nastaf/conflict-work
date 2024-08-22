@@ -60,6 +60,12 @@ const Map = () => {
       case "Vehicle":
         hasPermission = Maps;
         break;
+      case "Reminders":
+        hasPermission = Maps;
+        break;
+      case "History":
+        hasPermission = Maps;
+        break;
       default:
         break;
     }
@@ -109,6 +115,24 @@ const Map = () => {
             to={"/home/Map/Vehicle" && myTo}
             alt="/home/Map/Vehicle"
             menuItemKey="Vehicle"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="History"
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/History"}
+            alt="/home/Map/History"
+            menuItemKey="History"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Reminders"
+            // to={"/home/Map/Vehicle"}
+            to={"/home/Map/Reminders"}
+            alt="/home/Map/Reminders"
+            menuItemKey="Reminders"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />

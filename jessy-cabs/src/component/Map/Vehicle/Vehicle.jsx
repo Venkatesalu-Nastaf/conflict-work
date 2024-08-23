@@ -40,6 +40,8 @@ import Vehicles from './Vehicles/Vehicles';
 
 import { useNavigate, Link, useLocation, } from "react-router-dom";
 
+import { CiFilter } from "react-icons/ci";
+import { IoDownloadOutline } from "react-icons/io5";
 
 
 
@@ -196,11 +198,12 @@ export const Vehicle = () => {
                   </LocalizationProvider>
                 </span>
                 <span>
-                  <Button variant="outlined" onClick={handleClickOpenFilter}>Filters</Button>
+                  <Button variant="outlined" onClick={handleClickOpenFilter}><CiFilter /> Filters</Button>
                 </span>
+                
                 <span>
                   <div>
-                    <Button variant="contained" onClick={openReports}>Reports</Button>
+                    <Button variant="contained" onClick={openReports}><IoDownloadOutline /> Reports</Button>
                     <Menu
                       id="basic-menu"
                       anchorEl={anchorElReoprts}

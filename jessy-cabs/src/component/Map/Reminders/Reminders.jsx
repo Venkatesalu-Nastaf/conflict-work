@@ -30,8 +30,8 @@ const Reminders = () => {
                             </TabList>
                         </Box>
                         <TabPanel value="serviceReminders"><ServiceReminders /></TabPanel>
-                        <TabPanel value="vehicleRenewalReminders"><EntityReminder /></TabPanel>
-                        <TabPanel value="entityReminders"><VehicleRenewalReminder /></TabPanel>
+                        <TabPanel value="vehicleRenewalReminders"><VehicleRenewalReminder /></TabPanel>
+                        <TabPanel value="entityReminders"><EntityReminder /></TabPanel>
                         <TabPanel value="contactRenewalReminders"><ContactRenewalReminder /></TabPanel>
                     </TabContext>
                 </Box>

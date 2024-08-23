@@ -128,14 +128,19 @@ const useDrivercreation = () => {
 
     const handleFileChange = (e) => {
         setBook({
-          ...book,
-          Profile_image: e.target.files[0]
+            ...book,
+            Profile_image: e.target.files[0]
         });
+
         setSelectedCustomerData((prevValues) => ({
             ...prevValues,
             Profile_image: e.target.files[0],
         }));
-      };
+
+        setSuccess(true);
+        setSuccessMessage("Uploaded successfully");
+    };
+
     
 
     const handleExcelDownload=async()=>{
@@ -467,26 +472,30 @@ const useDrivercreation = () => {
     // const user__id = selectedCustomerData?.driverid || book.driverid;
     const [file, setFile] = useState(null);
 
-    // adhar
     const addPdf = async (driveruserid) => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
-            formData.append("created_at",create_atdata)
+            formData.append("created_at", create_atdata); // assuming create_atdata is defined elsewhere
 
             try {
                 await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
-                setFile(null);
-            }
-            catch {
+                setFile(null); // Reset the file after successful upload
+
+                // Set success state and message
+                setSuccess(true);
+                setSuccessMessage("Mail Sent Successfully");
+            } catch (error) {
+                // Log the error and show error message
+                console.error("File upload failed:", error);
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('Something went wrong');
             }
         } else {
-            return
+            return;
         }
-        setFile(null);
-    }
+    };
+    
 
 
 
@@ -512,7 +521,15 @@ const useDrivercreation = () => {
         }
         setFile(null);
     };
+    const handleFileUpload = (e) => {
+        setLicencepdf(e.target.files[0]);
 
+        // If needed, update other states like book or selected customer data
+        // setBook({ ...book, Licencepdf: e.target.files[0] });
+
+        setSuccess(true);  // Assuming you have success state
+        setSuccessMessage("Uploaded successfully");  // Set the success message
+    };
     const [allFile, setAllFile] = useState([]);
 
     const showPdf = (showID) => {
@@ -528,7 +545,7 @@ const useDrivercreation = () => {
             })
             .catch()
     }
-
+        
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
@@ -1095,7 +1112,7 @@ const useDrivercreation = () => {
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
         handleExcelDownload,
-        handleFileChange, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
+        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
         
         // venkat
     };

@@ -185,7 +185,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,vehiclenames,setVehilcNames
+    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,vehiclenames,setVehilcNames
   } = useVehicleinfo();
   const { handleinputchnagevehicle,handleADDvehicledata,vechiclevalue,isOpenvehcile,setIsOpenvehicle,error1,errorMessage1,success1,successMessage1,hidePopup1
   }=VehicleAddData()
@@ -539,15 +539,19 @@ useEffect(()=>{
               />
               <div className='state-permit-copy-tooltip'>
                 <Button size="md" component="label" className='vehicle-info-upload-btn'>
-                  <span class=" vehicle-info-upload-btn-width">
+                  <span class="vehicle-info-upload-btn-width">
                     <span className='upload-icon'>
                       <RiFileUploadLine />
-
-                    </span>                  <input
+                    </span>
+                    <input
                       type="file"
-                      id=" State_Permit "
+                      id="State_Permit"
                       style={{ display: "none" }}
-                      onChange={(e) => setStatePermit(e.target.files[0])}
+                      onChange={(e) => {
+                        setStatePermit(e.target.files[0]);
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e);
+                      }}
                     />
                   </span>
                 </Button>
@@ -647,7 +651,11 @@ useEffect(()=>{
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => setInsurance(e.target.files[0])}
+                      onChange={(e) => {
+                        setInsurance(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e); 
+                      }}   
                     />
                   </span>
                 </Button>
@@ -787,7 +795,12 @@ useEffect(()=>{
                       id="National_permit"
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => setNationalPermit(e.target.files[0])}
+                      onChange={(e) => {
+                        setNationalPermit(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]); 
+                        handleUploadFile(e);
+                      }}
+
                     />
                   </span>
                 </Button>
@@ -911,7 +924,12 @@ useEffect(()=>{
                       id="rc_book"
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => setRcbook(e.target.files[0])}
+                      onChange={(e) => {
+                        setRcbook(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e);
+                      }}
+
                     />
                   </span>
                 </Button>
@@ -952,7 +970,11 @@ useEffect(()=>{
                       id="fc_copy"
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => setFcCopy(e.target.files[0])}
+                      onChange={(e) => {
+                        setFcCopy(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e);
+                      }}
                     />
                   </span>
                 </Button>

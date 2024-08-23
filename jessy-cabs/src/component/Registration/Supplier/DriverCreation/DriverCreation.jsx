@@ -122,7 +122,7 @@ const DriverCreation = ({ stationName }) => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
-        handleFileChange, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
+        handleFileChange,handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
 
     } = useDrivercreation();
 
@@ -420,7 +420,7 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input">
+                            {/* <div className="input driver-input">
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
@@ -454,7 +454,7 @@ const DriverCreation = ({ stationName }) => {
                                 </Tooltip>
 
 
-                            </div>
+                            </div> */}
                             {/* <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     aadhar card
@@ -469,7 +469,7 @@ const DriverCreation = ({ stationName }) => {
 
                             <div className="input driver-input">
                                 <div className="icone">
-                                    <TaxiAlertIcon color="action" />
+                                    <xTaxiAlertIcon color="action" />
                                 </div>
                                 <TextField
                                     size="small"
@@ -486,16 +486,56 @@ const DriverCreation = ({ stationName }) => {
                                     <Button component="label">
                                         <span className='upload-icon'>
                                             <RiFileUploadLine />
-
                                         </span>
                                         <input
                                             type="file"
                                             style={{ display: "none" }}
-                                            onChange={(e) => setLicencepdf(e.target.files[0])}
+                                            onChange={(e) => {
+                                                setLicencepdf(e.target.files[0]); 
+                                                console.log('File selected:', e.target.files[0]);
+                                                handleFileUpload(e);
+                                            }}
                                         />
                                     </Button>
+
                                 </Tooltip>
                             </div>
+
+                            <div className="input driver-input">
+                                <div className="icone">
+                                    <AssignmentIndIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="aadharno"
+                                    className='full-width'
+                                    value={selectedCustomerData?.aadharno || book.aadharno}
+                                    onChange={handleChange}
+                                    label="Aadhar Card No"
+                                    id="aadharno"
+                                />
+
+                                <Tooltip title="Upload Aadhar Card" arrow>
+                                    <Button component="label">
+                                        <span className="upload-icon">
+                                            <RiFileUploadLine />
+                                        </span>
+                                        <input
+                                            type="file"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => {
+                                                if (e.target.files[0]) {
+                                                    setFile(e.target.files[0]);
+                                                    console.log('File selected:', e.target.files[0]);
+                                                    handleFileUpload(e);                                                   
+                                                }
+                                            }}
+                                        />
+
+                                    </Button>
+
+                                </Tooltip>
+                                </div>
 
                             <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">

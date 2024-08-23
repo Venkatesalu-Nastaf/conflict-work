@@ -3,16 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import './googleMapScript';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const MapComponent = () => {
 
     const [address, setAddress] = useState('');
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         window.initMap();
     }, []);
 
-    const handleSelect = async (address) => {        
+    const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();
 
         try {
@@ -36,12 +40,18 @@ const MapComponent = () => {
     };
 
     const handleChange = (newAddress) => {
-        
         setAddress(newAddress);
     };
 
-    const generateStaticMap = () => {        
+    const generateStaticMap = () => {
         window.generateStaticMap();
+        setOpen(true);
+    };
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
     };
 
     return (
@@ -71,7 +81,18 @@ const MapComponent = () => {
             </PlacesAutocomplete>
             <input type="hidden" id="start" />
             <input type="hidden" id="end" />
-            <button onClick={generateStaticMap}>Capture Map View</button>
+            <Button variant="" onClick={generateStaticMap}>
+                Capture Map View
+            </Button>
+            <Snackbar
+                open={open}
+                autoHideDuration={2}
+                onClose={handleClose}
+            >
+                <MuiAlert onClose={handleClose} severity="success" sx={{ width: '100%',marginBottom:"742px", marginLeft:"1200px"}}>
+                    Captured successfully!
+                </MuiAlert>
+            </Snackbar>
             <div id="map" style={{ height: '500px' }}></div>
         </div>
     );

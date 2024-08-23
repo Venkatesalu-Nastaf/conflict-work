@@ -164,14 +164,26 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             {GmapimageUrl !== "" ?
               <img src={GmapimageUrl} alt='mapimage' /> : <></>}
           </div>
-          <div className="tripsheet-RouteSummary">
+          {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
             <ol type="1">
               {routeData.length > 0 && routeData?.map((data, index) => (
                 <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
               ))}
             </ol>
-          </div>
+          </div> */}
+          {routeData.length > 0 && (
+            <div className="tripsheet-RouteSummary">
+              <h2>Route Summary</h2>
+              <ol type="1">
+                {routeData.map((data, index) => (
+                  <li key={index}>
+                    <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           <div className='attached-toll'>
             <ol type="1">
               {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (

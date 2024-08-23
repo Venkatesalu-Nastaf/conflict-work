@@ -2132,7 +2132,7 @@ const Booking = ({ stationName, customerData }) => {
           )} */}
           
 
-            <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
+            {/* <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
               {selectetImg.length > 0 ? (
                 <div
                   style={{
@@ -2182,7 +2182,7 @@ const Booking = ({ stationName, customerData }) => {
                   ))}
                 </div>
               ) : null}
-            </Dialog>
+            </Dialog> */}
             {isEditMode ? (
               <div>
                 <div className="input-dummy">
@@ -2240,7 +2240,7 @@ const Booking = ({ stationName, customerData }) => {
                       <input
                         type="file"
                         style={{ display: "none" }}
-                        // onChange={handleImagechange2}
+                        onChange={handleImagechange2}
                       />
                     </Button>
                   </div>

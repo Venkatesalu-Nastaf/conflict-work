@@ -54,6 +54,10 @@ import update from "../../../../assets/img/update.png";
 import { useThemes } from "../../../UserSettings/Themes/ThemesContext";
 import { useData1 } from "../../Maindashboard/DataContext";
 import { FaMapMarked } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { BiSolidStoreAlt } from "react-icons/bi";
+import { FaCar } from "react-icons/fa";
+import { SiClockify } from "react-icons/si";
 
 
 const MenuItem = ({
@@ -115,6 +119,7 @@ const Sidebar = () => {
 
   const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
   const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
+  const [ismapdropdownclicked, setIsmapdropdownclicked] = useState(false);
   const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
   const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
   const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
@@ -127,8 +132,10 @@ const Sidebar = () => {
     setIsinfodropdownclicked(false);
     setIsbillingdropdownclicked(false);
     setIsbookingdropdownclicked(false);
+    setIsmapdropdownclicked(false);
 
     setSettingsDropdownVisible(false);
+    setMapDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setBillingDropdownVisible(false);
@@ -148,6 +155,7 @@ const Sidebar = () => {
   const { expanded, setExpanded } = useData1()
   const { selectedavtar } = useThemes();
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
+  const [mapDropdownVisible, setMapDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
   const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
   const [billingDropdownVisible, setBillingDropdownVisible] = useState(false);
@@ -183,13 +191,25 @@ const Sidebar = () => {
     return currentPath.includes(itemKey);
   };
 
+  const handleMapClick = () => {
+    setMapDropdownVisible(!mapDropdownVisible);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+    setBookingDropdownVisible(false);
+    setIsmapdropdownclicked((prevExpanded) => !prevExpanded);
+    setBillingDropdownVisible(false)
+  };
+
   const handleSettingsClick = () => {
     setSettingsDropdownVisible(!settingsDropdownVisible);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setBookingDropdownVisible(false);
     setIssettingdropdownclicked((prevExpanded) => !prevExpanded);
-    setBillingDropdownVisible(false)
+    setBillingDropdownVisible(false);
+    setMapDropdownVisible(false);
+
   };
 
   const handleinfoClick = () => {
@@ -199,6 +219,8 @@ const Sidebar = () => {
     setIsinfodropdownclicked((prevExpanded) => !prevExpanded);
     setBillingDropdownVisible(false);
     setBookingDropdownVisible(false);
+    setMapDropdownVisible(false);
+
   }
 
   const handleRegisterClick = () => {
@@ -208,6 +230,8 @@ const Sidebar = () => {
     setIsRegisterdropdownclicked((prevExpanded) => !prevExpanded);
     setBillingDropdownVisible(false);
     setBookingDropdownVisible(false);
+    setMapDropdownVisible(false);
+
   }
 
   const handleBillingClick = () => {
@@ -217,6 +241,8 @@ const Sidebar = () => {
     setInfoDropdownVisible(false)
     setIsbillingdropdownclicked((prevExpanded) => !prevExpanded);
     setBookingDropdownVisible(false);
+    setMapDropdownVisible(false);
+
   }
 
   const handleBookingClick = () => {
@@ -226,6 +252,8 @@ const Sidebar = () => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false)
     setIsbookingdropdownclicked((prevExpanded) => !prevExpanded);
+    setMapDropdownVisible(false);
+
   }
 
   const { permissions } = useContext(PermissionContext)
@@ -441,6 +469,18 @@ const Sidebar = () => {
 
   const infoSubMenu = (path) => {
     if (INFO !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else {
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+  const MapSubMenu = (path) => {
+    if (Maps !== 0) {
       navigate(path);
       closeMenuFunction();
     }
@@ -1397,6 +1437,135 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* {Map_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded==false ? '' : 'Map'}`}
+                to={Maps && ("/home/Map/RealTime")}
+                alt="/home/Map/RealTime"
+                value="/home/Map/"
+                menuItemKey="/home/Map/"
+                name="Maps page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={FaMapMarkerAlt}
+              />
+            </div>} */}
+
+
+
+<motion.div className='mobile-menu-with-dropdown'>
+            <MenuItem
+              label={
+                <span className="sidebar-main-menu">
+                  <span>
+                    Map
+                  </span>
+                  <span className="sidebar-main-menu-arrow">
+                    <FaChevronDown className={ismapdropdownclicked ? 'ismapdropdownclicked' : ''} />
+                  </span>
+                </span>
+              }
+              value="/home/Map/"
+              menuItemKey="/home/Map/"
+              name="Maps page"
+              isActive={isActive}
+              handleMenuItemClick={handleMapClick}
+              icon={FaMapMarkerAlt}
+              dropdownItems={[
+              ]}
+            />
+          </motion.div>
+          {mapDropdownVisible && (
+            <div className="settings-dropdown">
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/RealTime')}>
+                  <span>
+                    <BiSolidStoreAlt />
+                  </span>
+
+                  <span>
+                  RealTime
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Vehicle')}>
+                  <span>
+                    <FaCar />
+                  </span>
+                  <span>
+                  Vehicle
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Reminders')}>
+                  <span>
+                    <SiClockify />
+                  </span>
+                  <span>
+                    Reminders
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           {Info_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem

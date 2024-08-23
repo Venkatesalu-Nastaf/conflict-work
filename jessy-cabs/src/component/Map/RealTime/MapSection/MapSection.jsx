@@ -13,8 +13,8 @@ import "./MapSection.css";
 // Define the container style for the map
 const containerStyle = {
   width: '100%',
-  height: '650px',
-  border: '2px solid black',
+  height: '450px',
+  // border: '2px solid black',
 };
 
 // Set the default map center (Chennai)

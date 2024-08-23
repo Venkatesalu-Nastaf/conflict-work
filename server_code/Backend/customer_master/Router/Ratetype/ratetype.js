@@ -15,9 +15,9 @@ const db = require('../../../db');
 
 router.post('/ratetype', (req, res) => {
   // const bookData = req.body;
-  const { stations,ratetype, ratename, validity, active, starttime, closetime } = req.body
+  const { stations,ratetype, ratename,active, starttime, closetime } = req.body
 
-  db.query('INSERT INTO ratetype(stations,ratetype,ratename,validity,active,starttime,closetime)  values(?,?,?,?,?,?,?)', [stations,ratetype,ratename, validity, active, starttime, closetime], (err, result) => {
+  db.query('INSERT INTO ratetype(stations,ratetype,ratename,active,starttime,closetime)  values(?,?,?,?,?,?)', [stations,ratetype,ratename, active, starttime, closetime], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
     }
@@ -56,9 +56,9 @@ router.delete('/ratetype/:driverid', (req, res) => {
 router.put('/ratetype/:driverid', (req, res) => {
   const driverid = req.params.driverid;
   // const updatedCustomerData = req.body;
-  const { stations,ratetype, ratename, validity, active, starttime, closetime } = req.body
+  const { stations,ratetype, ratename,active, starttime, closetime } = req.body
 
-  db.query('UPDATE ratetype SET stations=?,ratetype=?,ratename=?,validity=?,active=?,starttime=?,closetime=? WHERE driverid = ?', [stations,ratetype,ratename, validity, active, starttime, closetime, driverid], (err, result) => {
+  db.query('UPDATE ratetype SET stations=?,ratetype=?,ratename=?,active=?,starttime=?,closetime=? WHERE driverid = ?', [stations,ratetype,ratename,active, starttime, closetime, driverid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
     }

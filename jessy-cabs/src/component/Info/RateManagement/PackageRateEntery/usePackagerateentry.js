@@ -1,8 +1,9 @@
 
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback,useMemo } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+
 
 // Table START
 const columns = [
@@ -22,7 +23,6 @@ const columns = [
     { field: "AKMS", headerName: "AKMS", width: 70 },
     { field: "NHalt", headerName: "NHalt", width: 70 },
     { field: "Bata", headerName: "Bata", width: 70 },
-    { field: "Validity", headerName: "Validity", width: 80 },
 ];
 // TABLE END
 
@@ -77,22 +77,51 @@ const usePackagerateentry = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     //------------------------------------------------
     const [validitydata, setValiditydata] = useState([])
-    const [datevalidity, setDatevalidity] = useState()
+   
 
+    const memoizedUrl = useMemo(() => {
+        
+        if (!commonData.ratetype || !commonData.OrganizationName) {
+            return null;
+        }
+
+        return `${apiUrl}/ratemanagementdatavalidityfromratetype/${commonData.ratetype}/${commonData.OrganizationName}`;
+    }, [apiUrl, commonData.ratetype, commonData.OrganizationName]);
 
     useEffect(() => {
+
+        if (!memoizedUrl) {
+            console.log("Missing ratetype or OrganizationName, skipping fetch");
+            return; // Exit early if URL is invalid
+        }
         const fetchOrganizationnames = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/ratetype`);
-                const data = response.data
-                setValiditydata(data)
-            }
-            catch (error) {
+                const response = await axios.get(memoizedUrl);
+                const data = response.data;
+                console.log(data, "jjjj");
+                setValiditydata(data);
+            } catch (error) {
                 console.log(error, "error");
             }
         };
-        fetchOrganizationnames()
-    }, [apiUrl])
+        fetchOrganizationnames();
+    }, [memoizedUrl]);
+
+
+    // useEffect(() => {
+    //     const fetchOrganizationnames = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/ratetype/${commonData.ratetype}/${commonData.OrganizationName}`);
+    //             const data = response.data
+    //             console.log(data,"jjjj")
+    //             setValiditydata(data)
+    //         }
+    //         catch (error) {
+    //             console.log(error, "error");
+    //         }
+    //     };
+    //     fetchOrganizationnames()
+    // }, [apiUrl])
 
     useEffect(() => {
         const fetchOrganizationnames = async () => {
@@ -166,10 +195,6 @@ const usePackagerateentry = () => {
                 [name]: selectedOption,
             }));
         }
-        // Additional logic based on name if needed
-        if (name === "pricetag") {
-            getStartEndTimesByRateName(selectedOption);
-        }
     };
 
     //----------------------------------------
@@ -203,16 +228,7 @@ const usePackagerateentry = () => {
 
     // -------------------------------------------------------------
 
-    function getStartEndTimesByRateName(rateName) {
-        const filteredData = validitydata?.filter(item => item.ratename === rateName);
-        const datas = filteredData?.map(item => ({
-            startdate: item.starttime,
-            enddate: item.closetime
-        }));
-
-        setDatevalidity(datas[0])
-    }
-
+    
 
     const handleCancel = () => {
         setFieldSets((prefiled) => ([{
@@ -240,6 +256,7 @@ const usePackagerateentry = () => {
         }))
 
         setIsEditMode(false);
+        setValiditydata([])
     };
 
 
@@ -274,6 +291,29 @@ const usePackagerateentry = () => {
         setIsEditMode(true);
     }, []);
 
+    // const handleList = async () => {
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/ratemanagement`);
+    //         const data = response.data;
+    //         setRows(data);
+    //     } catch(err) {
+    //         console.log(err)
+    //     }
+    // }
+
+    const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/ratemanagement`);
+            const data = response.data;
+            setRows(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [apiUrl]); // Add any dependencies needed inside this array
+
+    useEffect(() => {
+        handleList();
+    }, [handleList]);
 
 
     const handleAdd = async () => {
@@ -287,14 +327,15 @@ const usePackagerateentry = () => {
         }
 
         try {
-            // Combine commonData with each fieldSet
             const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
+            console.log(requestData,"reee")
 
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             // If successful, update state
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             handleCancel()
+            handleList()
         } catch (error) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -302,17 +343,20 @@ const usePackagerateentry = () => {
     };
 
 
-    useEffect(() => {
-        const handleList = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/ratemanagement`);
-                const data = response.data;
-                setRows(data);
-            } catch {
-            }
-        }
-        handleList();
-    }, [apiUrl,rows]);
+    // useEffect(() => {
+    //     const handleList = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/ratemanagement`);
+    //             const data = response.data;
+    //             setRows(data);
+    //         } catch {
+    //         }
+    //     }
+    //     handleList();
+    // }, [apiUrl]);
+ 
+       
+
 
 
     const handleShow = async () => {
@@ -354,6 +398,7 @@ const usePackagerateentry = () => {
             setSuccessMessage("Successfully updated");
             handleCancel();
             setRows([]);
+            handleList()
 
         } catch {
             setError(true);
@@ -439,8 +484,9 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
-        datevalidity, handleShow,
-        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage
+        // datevalidity, 
+        handleShow,
+        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata
 
     };
 };

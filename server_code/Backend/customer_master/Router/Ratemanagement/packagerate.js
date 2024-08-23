@@ -77,6 +77,20 @@ router.get('/ratemanagement', (req, res) => {
     });
 });
 
+
+router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, res) => {
+    const  customer=req.params.customer;
+    const ratetype=req.params.ratetype;
+    console.log(customer,ratetype,"ffff")
+    db.query('SELECT starttime,closetime FROM ratetype where ratetype=? and ratename=?',[customer,ratetype],(err, results) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log(results,"ss")
+        return res.status(200).json(results);
+    });
+});
+
 router.get('/ratemanagement-show', (req, res) => {
     const { rateType, orgName, vehicleType } = req.query
     console.log("data", rateType, orgName, vehicleType)
@@ -104,7 +118,7 @@ router.get('/ratemanagement-show', (req, res) => {
             console.log("error", err)
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        console.log("results", results)
+        // console.log("results", results)
         return res.status(200).json(results);
     });
 });

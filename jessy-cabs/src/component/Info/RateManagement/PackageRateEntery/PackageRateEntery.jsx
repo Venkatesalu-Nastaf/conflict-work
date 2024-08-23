@@ -66,8 +66,9 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
     columns,
     isEditMode,
     handleEdit,
-    datevalidity, handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename
+    // datevalidity,
+     handleShow,
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename,validitydata
 
   } = usePackagerateentry();
 
@@ -79,8 +80,8 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
     }
   }, [actionName, handleClick]);
 
-  const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
-  const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
+  const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
+  const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
   const { permissions } = useContext(PermissionContext)
   const RateManagement_read = permissions[17]?.read;
   const RateManagement_new = permissions[17]?.new;
@@ -180,8 +181,8 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"
-                    value={`datevalidity ? ${startdate}--${enddate} : ''`}
-                    onChange={handleChange}
+                    value={validitydata?.length > 0 ?`datevalidity ? ${startdate}--${enddate} `:""}
+                    // onChange={handleChange}
                     variant="standard"
                   />
                 </div>

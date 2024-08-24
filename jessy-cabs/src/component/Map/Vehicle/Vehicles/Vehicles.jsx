@@ -22,7 +22,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
 import { CiEdit } from "react-icons/ci";
-
+import { MdOutlineSort } from "react-icons/md";
+import { CiClock2 } from "react-icons/ci";
 
 
 import { TextField } from "@mui/material";
@@ -101,7 +102,7 @@ const Vehicles = () => {
             <div className='vehicle-tab-main'>
                 <div className='vehicle-tab-left-main'>
                     <div style={{ marginBottom: '20px' }}>
-                        <Button variant="outlined" onClick={openSortOptionmenu}>Sort Options</Button>
+                        <Button variant="outlined" onClick={openSortOptionmenu}><MdOutlineSort /> Sort Options</Button>
                         <Menu
                             id="basic-menu"
                             anchorEl={anchorElSortOption}
@@ -375,7 +376,7 @@ const Vehicles = () => {
                         <div className='vehicle-tab-right-top-division-box'>
                             <div className='vehicle-details-box-veh-no'>TN22EB3001</div>
                             <div className='vehicle-tab-right-top-division-btn-section'>
-                                <span><Button variant="outlined">Live</Button></span>
+                                <span><Button variant="outlined"><CiClock2 /> Live</Button></span>
                                 <span><Button variant="outlined">History</Button></span>
                                 <span><Button variant="contained">View Details</Button></span>
                             </div>

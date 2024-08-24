@@ -145,6 +145,9 @@ const useExeclpage = () => {
 
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
+    const timeformtdata=(datatime)=>{
+        return dayjs(datatime, 'HH:mm:ss').format('HH:mm');
+     }
 
 
     const handleExcelDownload = async (misformat, invoice, invoicedate) => {
@@ -200,7 +203,10 @@ const useExeclpage = () => {
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["starttime"]=singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
                     singleData["starttime1"] = singleData["starttime"]
+                    singleData["closetime"]=singleData["closetime"] ? timeformtdata(singleData["closetime"]):""
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -291,7 +297,9 @@ const useExeclpage = () => {
                     singleData["VendorName"] = " Jesscy Cabs"
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["starttime"] = singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
                     singleData["totaltime1"] = singleData["totaltime"]
@@ -411,7 +419,10 @@ const useExeclpage = () => {
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["starttime"]=singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
                     singleData["starttime1"] = singleData["starttime"]
+                    singleData["closetime"]=singleData["closetime"] ? timeformtdata(singleData["closetime"]):""
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -495,6 +506,8 @@ const useExeclpage = () => {
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["starttime"] = singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
                     singleData["totaltime1"] = singleData["totaltime"]

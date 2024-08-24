@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './SignatureGenerate.css'
 import { APIURL } from '../../../url';
 import axios from 'axios'
-import {format as datefunsdata} from 'date-fns';
+import {format as datefunsdata,parse} from 'date-fns';
 
 const SignatureGenerate = () => {
     const apiUrl = APIURL;
@@ -134,6 +134,13 @@ const SignatureGenerate = () => {
      }
 
 
+     const timeformtdata=(datatime)=>{
+        const time = parse(datatime, 'HH:mm:ss', new Date());
+
+        // Format to get hours and minutes
+        return datefunsdata(time, 'HH:mm');
+     }
+
     return (
         <div style={{display: 'flex', justifyContent: 'center'}}>
             <div className='top-div signature-generate-main'>
@@ -155,11 +162,12 @@ const SignatureGenerate = () => {
                 </div>
                 <div className='signature-generate-input'>
                     <p>Starting Date :</p>
-                    <input value={fulldetails[0]?.startdate || ""} />
+                    {/* <input value={fulldetails[0]?.startdate?dayjs(fulldetails[0]?.startdate).format("YYYY-MM-DD"): ""} /> */}
+                    <input value={fulldetails[0]?.startdate? datefunsdata(new Date(fulldetails[0].startdate), 'yyyy-MM-dd'): null} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Starting Time :</p>
-                    <input value={fulldetails[0]?.starttime || ""} />
+                    <input value={fulldetails[0]?.starttime ? timeformtdata(fulldetails[0]?.starttime) : null } />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Starting KM : </p>
@@ -167,11 +175,13 @@ const SignatureGenerate = () => {
                 </div>
                 <div className='signature-generate-input'>
                     <p>Closing Date </p>
-                    <input value={fulldetails[0]?.closedate || ""} />
+                    {/* <input value={fulldetails[0]?.closedate ? dayjs(fulldetails[0]?.closedate).format("YYYY-MM-DD") : ""} /> */}
+                    <input value={fulldetails[0]?.closedate? datefunsdata(new Date(fulldetails[0].closedate), 'yyyy-MM-dd'): null} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Closing Time </p>
-                    <input value={fulldetails[0]?.closetime || ""} />
+                    {/* <input value={fulldetails[0]?.closetime  /> */}
+                      <input value={fulldetails[0]?.closetime ? timeformtdata(fulldetails[0]?.closetime) : null} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Closing KM </p>
@@ -179,7 +189,7 @@ const SignatureGenerate = () => {
                 </div>
                 <div className='signature-generate-input'>
                     <p>Toll & Parking </p>
-                    <input value={`${fulldetails[0]?.toll || ""} & ${fulldetails[0]?.parking || ""}`} />
+                    <input value={`${fulldetails[0]?.toll || 0} & ${fulldetails[0]?.parking || 0}`} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Permit</p>

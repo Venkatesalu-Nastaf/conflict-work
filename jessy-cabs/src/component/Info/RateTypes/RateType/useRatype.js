@@ -16,8 +16,8 @@ const columns = [
     { field: "ratetype", headerName: "Rate Type", width: 130 ,headerAlign: 'center'},
     { field: "ratename", headerName: "Ratename", width: 130 ,headerAlign: 'center'},
     { field: "active", headerName: "Active", width: 130 ,headerAlign: 'center'},
-    { field: "starttime", headerName: "Start Date", width: 230 ,headerAlign: 'center'},
-    { field: "closetime", headerName: "Close Date", width: 230,headerAlign: 'center' },
+    { field: "starttime", headerName: "Start Date", width: 230 ,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "closetime", headerName: "Close Date", width: 230,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY')  },
 ];
 
 const useRatype = () => {
@@ -299,7 +299,7 @@ const useRatype = () => {
         stations: '',
         ratetype:'',
         ratename: '',
-        validity: '',
+        // validity: '',
         active: '',
         starttime:dayjs(),
         closetime:dayjs(),
@@ -392,7 +392,7 @@ const useRatype = () => {
             ratetype:'',
             stations: '',
             ratename: '',
-            validity: '',
+            // validity: '',
             active: '',
             starttime:dayjs(),
             closetime:dayjs(),
@@ -443,7 +443,7 @@ const useRatype = () => {
                 stations: book.stations || selectedCustomerData.stations,
                 ratetype:book.ratetype || selectedCustomerData.ratetype,
                 ratename: book.ratename || selectedCustomerData.ratename,
-                validity: book.validity || selectedCustomerData.validity,
+                // validity: book.validity || selectedCustomerData.validity,
                 active: book.active || selectedCustomerData.active,
                 // starttime: book.starttime || selectedCustomerData.starttime,
                 // closetime: book.closetime || selectedCustomerData.closetime
@@ -495,7 +495,7 @@ const useRatype = () => {
             stations: selectedCustomerData.stations,
             ratetype:selectedCustomerData.ratetype,
             ratename: selectedCustomerData.ratename,
-            validity: selectedCustomerData.validity,
+            // validity: selectedCustomerData.validity,
             active: selectedCustomerData.active,
             starttime: selectedCustomerData.starttime,
             closetime: selectedCustomerData.closetime

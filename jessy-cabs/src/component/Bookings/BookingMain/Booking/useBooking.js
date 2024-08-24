@@ -1534,22 +1534,20 @@ const useBooking = () => {
     [handleChange]
   );
   const handleRowClickdriver = (params) => {
-
     setSelectedCustomerdriver(params);
     setRate_name(params.rateType);
-    // setSelectedCustomerDatas(params);
+
     const keys = Object.keys(params);
 
     // Iterate over the keys using forEach
     keys.forEach(key => {
       const value = params[key];
 
-      handleChange({ target: { name: key, value: value } });
+      if (key !== 'address1') {
+        handleChange({ target: { name: key, value: value } });
+      }
     });
-
   }
-
-
 
   const handletableClick = useCallback((params) => {
     // setGuestSms(false)

@@ -35,7 +35,10 @@ export const RealTime = () => {
       <div className="form-container-realtime">
         <div className="main-content-container">
           <div className='main-content-form'>
+            <div style={{position:"relative", height:"55px", width:"100%"}}>
             <HeaderDetails />
+
+            </div>
             <div className='main-body-container'>
               <VehicleSection />
               <MapSection />

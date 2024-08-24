@@ -164,7 +164,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{ marginRight: "100px" }}>
                                     <div className='full-width' style={{ display: 'grid' }}>
                                         <span className='full-width' style={{ display: 'flex' }}>
                                             <div className="icone">
@@ -196,6 +196,10 @@ const RateType = ({ stationName, organizationNames }) => {
                                                 name="ratename"
                                                 value={selectedCustomerData?.ratename || book.ratename}
                                                 onChange={handleChangecredent}
+                                                style={{ 
+                                                    
+                                                
+                                                }}
 
                                             />
                                         </span>
@@ -204,7 +208,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="input">
+                                {/* <div className="input">
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -218,7 +222,8 @@ const RateType = ({ stationName, organizationNames }) => {
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
                                     />
-                                </div>
+                                </div> */}
+                                
 
                                 <div className="input">
                                     <div className='icone'>

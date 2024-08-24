@@ -45,6 +45,8 @@
 
 .vehicle-info-content {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .overview-left {
@@ -110,4 +112,20 @@
     border-top: 1px solid #ccc;
     display: flex;
     justify-content: center;
+}
+
+@media screen and (max-width:1000px) {
+    .vehicle-info-content-info{
+        width: 100% !important ;
+        }
+        .vehicle-info-content-map{
+            width: 100% !important;
+        }
+}
+
+.vehicle-info-content-info{
+width: 48%;
+}
+.vehicle-info-content-map{
+    width: 48%;
 }

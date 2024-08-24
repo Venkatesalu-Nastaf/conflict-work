@@ -1,5 +1,5 @@
 .HistoryDrawer-head {
-    padding: 0px 30px 30px 30px;
+    padding: 0px 10px 10px 10px;
 }
 
 .history-topic {
@@ -11,11 +11,13 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0px 20px 20px 20px;
+    padding: 0px 5px 5px 5px;
 }
 
 .history-heading {
-    display: flex;
+    /* display: flex; */
+    /* display: none; */
+    visibility: hidden;
     align-items: center;
     gap: 5px;
 }
@@ -47,7 +49,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    padding: 10px 20px 20px 20px;
+    padding: 10px 5px 5px 5px;
     align-items: center;
 }
 
@@ -59,7 +61,7 @@
 .tab-btn-buttons {
     display: flex;
     gap: 4px;
-    padding: 5px 10px;
+    padding: 10px 20px;
     align-items: center;
     color: #000000;
     border: 1px solid #ccc;
@@ -172,6 +174,7 @@
     flex-wrap: wrap;
     gap: 10px;
     justify-content: space-around;
+    align-items: baseline;
 }
 
 .speeed-violation-content {

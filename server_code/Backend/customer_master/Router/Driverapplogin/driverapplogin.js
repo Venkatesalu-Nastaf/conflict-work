@@ -349,6 +349,7 @@ router.post('/send-emaildriverdata', async (req, res) => {
         const ownerMailOptions = {
             from:Sendmailauth,
             to:`${Email},${Sendmailauth}`, // Set the owner's email address
+            subject: ` Welcome To JESSY CABS `,
             // text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
             text: `HI WELCOME TO JESSCY CABS,\n UserId:${userid}\n DriverName:${Drivername}\n UserName:${UserName}\n Password:${password}`,
         };

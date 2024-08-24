@@ -736,6 +736,17 @@ const useVehicleinfo = () => {
         setStatePermit(null);
     };
 
+    const handleUploadFile = (e) => {
+        if (e.target.files[0]) {
+            // Additional logic for handling the file upload
+            setSuccess(true);  // Assuming you have success state
+            setSuccessMessage("Uploaded successfully");  // Set the success message
+
+            console.log('File selected:', e.target.files[0]);
+        }
+    };
+
+
     // rcBook copyy---5
     const [rcBook, setRcbook] = useState(null);
     const addRcBook_copy = async (vechicleid) => {
@@ -1161,6 +1172,7 @@ const useVehicleinfo = () => {
         setFcCopy,
         allFile,
         handleCloseDialog,
+        handleUploadFile,
         dialogOpen,
         isEditMode,
         handleEdit,

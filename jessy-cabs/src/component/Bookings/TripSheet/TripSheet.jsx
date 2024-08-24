@@ -1376,7 +1376,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <TextField
                       name="totaldays"
                       value={calculateTotalDay()}
-                      label="Total Daysss"
+                      label="Total Days"
                       size="small"
                       type="number"
                       id="totaldays"
@@ -1516,7 +1516,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="totaltime"
-                    value={calculateTotalTimes() ||formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime ||  ''}
+                    value={book.reporttime!="" || selectedCustomerData.reporttime!="" && book.shedintime!="" || selectedCustomerData.shedintime!="" || selectedCustomerDatas.shedintime!=""? calculateTotalTimes() : ""}
                     onChange={handleChange}
                     label="Total Time"
                     id="totaltime"
@@ -3771,7 +3771,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <MdOutlineAccessTimeFilled />
                         </div> */}
                         <div className='closetime tripsheet-shed-in-time'>
-                          <label>Close Time</label>
+                          <label>Close Timeee</label>
 
                           <input
                             type="time"

@@ -30,6 +30,7 @@ import Switch from '@mui/material/Switch';
 import Button from "@mui/material/Button";
 // import { PermissionContext } from "../../../../context/permissionContext";
 import { PermissionContext } from "../../context/permissionContext";
+import HistoryLocationModal from "../RealTime/VehicleSection/HistoryLocationModal/HistoryLocationModal"
 import './History.css'
 
 
@@ -290,7 +291,7 @@ const columns = [
  const History = () => {
 
 
-    const { openHistoryDrawer, setOpenHistoryDrawer, setHistoryLocation } = useContext(PermissionContext)
+    const { openHistoryDrawer, setOpenHistoryDrawer, setHistoryLocation } = useContext(PermissionContext);
 
   const handleCloseHistoryDrawer = () => {
     setOpenHistoryDrawer(false);
@@ -365,8 +366,9 @@ const columns = [
     SetTripsites(true);
   }
 
-  const handleOpenhistoryLocation = () => {
+  const handleOpenhistoryLocationhistory = () => {
     setHistoryLocation(true);
+    console.log(setHistoryLocation,"setHistoryLocation");
   };
 
   // for timeline tab
@@ -530,7 +532,7 @@ const columns = [
                       Trips b/w Sites
                     </button>
 
-                    <button className='tab-btn-buttons' onClick={handleOpenhistoryLocation}>
+                    <button className='tab-btn-buttons' onClick={handleOpenhistoryLocationhistory}>
                       <FaHistory />
                       Historical Location
                     </button>
@@ -860,6 +862,8 @@ const columns = [
           </div>
         </div>
       </div>
+
+      <HistoryLocationModal/>
     </>
   )
 }

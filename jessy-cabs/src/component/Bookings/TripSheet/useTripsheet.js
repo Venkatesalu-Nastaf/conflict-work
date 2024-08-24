@@ -1964,6 +1964,9 @@ const useTripsheet = () => {
         return '';
     };
 
+    console.log(vendorinfo.vendorshedintime, 'vendor');
+
+
     const calculateTotalTimes = () => {
         const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
         // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
@@ -1972,25 +1975,11 @@ const useTripsheet = () => {
         const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
         const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+
         // const formattedShedOutDate = dayjs(shedoutdate).format('YYYY-MM-DD');
         // const formattedShedInDate = dayjs(shedindate).format('YYYY-MM-DD');
 
 
-        // if(calculateTotalDay() === 0){
-        //  const newTimeString = shedoutTime?.replace(":", ".");
-        // const newTimeStrings= shedinTime?.replace(":", ".");
-        // const a = Number(newTimeStrings) - Number(newTimeString);
-        // const ZeroDays = a.toFixed(2)
-        // console.log(newTimeString,newTimeStrings,a,a.toFixed(2),'fff');
-        //     const totalTime = shedinTime - shedoutTime;
-        //     console.log(totalTime,'totalll');
-        //     const [hours, minutes] = ZeroDays?.toString().split('.').map(Number);
-
-        //     const formattedMinutes = parseInt(minutes, 10);
-
-        //     return `${hours}h ${formattedMinutes}m`;
-
-        // }
 
         let additionalMinutes = 0;
         let additionalHours = 0;
@@ -2024,18 +2013,18 @@ const useTripsheet = () => {
             // Split the time strings into hours and minutes
             const [shedoutHours, shedoutMinutes] = shedoutTime?.split(':').map(Number);
             const [shedinHours, shedinMinutes] = shedinTime?.split(':').map(Number);
+
             // Convert hours to minutes and add minutes
             const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
             const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
             const combinedTotal = (additionalHours * 60) + Number(formattedMinutes);
-
+            const a = Number(shedoutMinutes) + Number(shedinMinutes);
 
             // Calculate the difference in minutes
             let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
 
-            // If the difference is negative, it means the in time is on the next day
             if (minuteDifference < 0) {
-                minuteDifference += 24 * 60; // Add 24 hours worth of minutes
+                minuteDifference += 24 * 60;
             }
 
 
@@ -2050,7 +2039,6 @@ const useTripsheet = () => {
 
 
         if (calculateTotalDay() === 1) {
-            console.log(combinedTime, typeof (combinedTime), 'copp');
 
             const newTimeString = shedoutTime?.replace(":", ".");
             const newTimeStrings = shedinTime?.replace(":", ".");
@@ -2061,8 +2049,14 @@ const useTripsheet = () => {
             const combined = combinedTime;
             const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
             const [hours2, minutes2] = combined.toString().split('.').map(Number);
+
             let totalHours = hours1 + hours2;
             let totalMinutes = minutes1 + minutes2;
+            if (totalMinutes >= 100) {
+                const quotient = Math.floor(totalMinutes / 60); // Get the quotient
+                totalMinutes = totalMinutes % 60; // Get the remainder
+                totalHours += quotient; // Add the quotient to starttotal
+            }
             const formattedTotal = `${totalHours}.${totalMinutes}`;
 
             // const d = 
@@ -2091,7 +2085,7 @@ const useTripsheet = () => {
                 // return `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`;
             }
             if (decimalPart < 60) {
-                const [hours, minutes] = formattedC?.toString().split('.').map(Number);
+                const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                 const formattedMinutes = parseInt(minutes, 10);
 
@@ -2115,21 +2109,36 @@ const useTripsheet = () => {
             const LongHours = LongTripHours.toFixed(2);
 
             const combined = combinedTime;
+
             const startendhours = 23.60 - Number(newTimeString) + Number(newTimeStrings);
 
-            const TotalHoursCalc = startendhours + Number(LongHours);
+            const starthour1 = 23.60 - Number(newTimeString);
+            const starthour = Number(starthour1).toFixed(2)
 
-            const formattedHours = startendhours.toFixed(2);
+            const [startintegerPart, startdecimalPart] = starthour.toString().split('.').map(Number);
+            const [endintegerPart, enddecimalPart] = newTimeStrings.toString().split('.').map(Number);
 
-            const [integerPart, decimalPart] = TotalHoursCalc.toString().split('.').map(Number);
+            let starttotal = Number(startintegerPart) + Number(endintegerPart);
+            let endtotal = Number(startdecimalPart) + Number(enddecimalPart)
+
+            if (endtotal >= 100) {
+                const quotient = Math.floor(endtotal / 60); // Get the quotient
+                endtotal = endtotal % 60; // Get the remainder
+                starttotal += quotient; // Add the quotient to starttotal
+            }
+            const startendhours1 = `${starttotal}.${endtotal}`
+
+            const TotalHoursCalc = Number(startendhours1) + Number(LongHours)
+
+            const formattedHours = Number(TotalHoursCalc).toFixed(2);
+
+            const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
             const [hours2, minutes2] = combined.toString().split('.');
 
 
-            let totalHours = integerPart + Number(hours2);
+            let totalHours = Number(integerPart) + Number(hours2);
             let totalMinutes = Number(decimalPart) + Number(minutes2);
             const formattedTotal = `${totalHours}.${totalMinutes}`
-            console.log(formattedTotal, 'uuuu');
-            console.log(LongTripHours, typeof (LongTripHours), 'suresh');
             const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
 
             if (newdecimalPart >= 60) {
@@ -2143,15 +2152,18 @@ const useTripsheet = () => {
                 //  const newIntegerPart = integerPart + 1;
                 let Decimalvalue;
 
-                // Subtract 60 from the decimal part
-                //  const newDecimalPart = decimalPart - 60;
+
                 const newDecimalPart = newdecimalPart % 60;
+
                 Decimalvalue = Number(`${IntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`)
                 const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
-                // const TotalHours = TotalLongTripHours.toFixed(2)
-                const [hours, minutes] = Decimalvalue?.toString().split('.').map(Number);
+                const formattedDecimalValue = Decimalvalue.toFixed(2);
 
-                const formattedMinutes = parseInt(minutes, 10);
+
+                const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
+
+                const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
+
 
                 return `${hours}h ${formattedMinutes}m`;
 
@@ -2162,12 +2174,14 @@ const useTripsheet = () => {
 
                 //  return `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`;
             }
-            if (decimalPart < 60) {
+            if (newdecimalPart < 60) {
+
                 const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                const a = RemainTotalCalculation.toFixed(2)
 
-                const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
+                const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
-                const formattedMinutes = parseInt(minutes, 10);
+                const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
 
                 return `${hours}h ${formattedMinutes}m`;
 
@@ -2181,6 +2195,10 @@ const useTripsheet = () => {
 
     }
     calculateTotalTimes()
+
+    useEffect(() => {
+        calculateTotalTimes()
+    }, [selectedCustomerData.shedintime, selectedCustomerDatas.shedintime, selectedCustomerData.reporttime, book.reporttime, book.shedintime,])
 
 
     const calculateTotalDays = () => {
@@ -2256,6 +2274,7 @@ const useTripsheet = () => {
     const calculatevendorTotalDays = () => {
         const shedoutdate = vendorinfo?.vendorshedOutDate || "";
         const shedindate = vendorinfo?.vendorshedInDate || ""
+        console.log(shedindate, shedoutdate, 'vendor out');
 
         // if (shedoutdate && shedindate) {
         //     const shedOutDateObj = dayjs(shedoutdate);
@@ -2268,7 +2287,7 @@ const useTripsheet = () => {
         // }
 
         // return "";
-        
+
         if (shedoutdate && shedindate) {
             const shedOutDateObj = dayjs(shedoutdate).startOf('day');
             const shedindateObj = dayjs(shedindate).startOf('day');
@@ -2281,10 +2300,10 @@ const useTripsheet = () => {
                 return 0;
             } else {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-                console.log(totalDays, 'totalDays calculation');
+                console.log(totalDays, 'totalDays calculation vendor');
                 return totalDays;
             }
-        } 
+        }
 
         return '';
     };
@@ -2321,56 +2340,253 @@ const useTripsheet = () => {
         return true;
     };
 
-
-
-
-
+    console.log(calculatevendorTotalDays(), 'ddddddddd');
     const calculatevendorTotalTime = () => {
 
         const shedoutTime = vendorinfo?.vendorreporttime || ""
 
         const shedinTime = vendorinfo?.vendorshedintime || ""
-
-        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
+        // const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
+        const totalDays = calculatevendorTotalDays()
+        console.log(totalDays, "days")
 
 
         if (shedoutTime && shedinTime) {
-            const startTimeObj = dayjs(shedoutTime, 'HH:mm');
-            const closeTimeObj = dayjs(shedinTime, 'HH:mm');
-            let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+            if (calculateTotalDay() === 0) {
+                // Split the time strings into hours and minutes
+                const [shedoutHours, shedoutMinutes] = shedoutTime?.split(':').map(Number);
+                const [shedinHours, shedinMinutes] = shedinTime?.split(':').map(Number);
+                // Convert hours to minutes and add minutes
+                const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
+                const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
 
-            const hours = Math.floor(totalTimeMinutes / 60);
-            const minutes = totalTimeMinutes % 60;
 
-            //-------------converting sheOuttime in to minuts -------------
-            const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
-            const ouHhoursInt = parseInt(ouHhourStr, 10);
-            const outMinutsInt = parseInt(outMinutsStr, 10);
-            const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
 
-            //------converting shedin time to minuts ------------
-            const [inHoursStr, inMinutsStr] = shedinTime.split(':');
-            const inHoursInt = parseInt(inHoursStr, 10);
-            const inMinutsInt = parseInt(inMinutsStr, 10);
-            const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
+                // Calculate the difference in minutes
+                let minuteDifference = totalShedinMinutes - totalShedoutMinutes;
 
-            if (totalDays === 2) {
-                let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
-                const hours = Math.floor(num1 / 60);
-                const minutes = num1 % 60;
-                return `${hours}h ${minutes}m`
+                // If the difference is negative, it means the in time is on the next day
+                if (minuteDifference < 0) {
+                    minuteDifference += 24 * 60; // Add 24 hours worth of minutes
+                }
+
+
+                // Convert the difference back to hours and minutes
+                const hours = Math.floor(minuteDifference / 60);
+                const minutes = minuteDifference % 60;
+
+
+                return `${hours}h ${minutes}m`;
+            }
+            if (totalDays === 1) {
+
+                const newTimeString = shedoutTime?.replace(":", ".");
+                const newTimeStrings = shedinTime?.replace(":", ".");
+                // const a = Number(newTimeStrings) + Number(newTimeString);
+
+                const c = 23.60 - Number(newTimeString) + Number(newTimeStrings);
+                const formattedC = c.toFixed(2);
+                // const combined = combinedTime;
+                const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
+                // const [hours2, minutes2] = combined.toString().split('.').map(Number);
+                console.log(hours1, minutes1, '11');
+
+                let totalHours = hours1
+                let totalMinutes = minutes1
+                if (totalMinutes >= 100) {
+                    const quotient = Math.floor(totalMinutes / 60); // Get the quotient
+                    totalMinutes = totalMinutes % 60; // Get the remainder
+                    totalHours += quotient; // Add the quotient to starttotal
+                }
+                const formattedTotal = `${totalHours}.${totalMinutes}`;
+                console.log(totalHours, typeof (totalHours), totalMinutes, typeof (totalMinutes), formattedTotal, '1122');
+
+                // const d = 
+                const [integerPart, decimalPart] = formattedTotal.toString().split('.').map(Number);
+                console.log(integerPart, decimalPart, "part")
+                if (decimalPart >= 60) {
+                    // Increment the integer part by 1
+
+                    let newIntegerPart = integerPart;
+                    const additionalHours = Math.floor(decimalPart / 60);
+
+                    // Add the additional hours to totalHours
+                    newIntegerPart += additionalHours;
+                    // Subtract 60 from the decimal part
+                    const newDecimalPart = decimalPart % 60;
+
+                    // Return the adjusted time in the format "XX.XX"
+                    const RemainTotalCalculation = `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`
+                    const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
+
+                    const formattedMinutes = parseInt(minutes, 10);
+
+                    return `${hours}h ${formattedMinutes}m`;
+
+
+                    // return ${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')};
+                }
+                if (decimalPart < 60) {
+                    const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+
+                    const formattedMinutes = parseInt(minutes, 10);
+
+                    return `${hours}h ${formattedMinutes}m`;
+                }
+
+            }
+            if (totalDays >= 2) {
+                const newTimeString = shedoutTime?.replace(":", ".");
+                const newTimeStrings = shedinTime?.replace(":", ".");
+                // const totaldays = calculateTotalDay()
+                const LongTripDays = totalDays - 1;
+                const LongTripHours = LongTripDays * 24;
+                const LongHours = LongTripHours.toFixed(2);
+
+                // const combined = combinedTime;
+                console.log(newTimeString, newTimeStrings, LongHours, typeof (LongHours), 'startend1');
+
+                // const startendhours = 23.60 - Number(newTimeString) + Number(newTimeStrings);
+                const starthour1 = 23.60 - Number(newTimeString);
+                const starthour = Number(starthour1).toFixed(2)
+                const [startintegerPart, startdecimalPart] = starthour.toString().split('.').map(Number);
+                console.log(startintegerPart, "ss", startdecimalPart, "ll")
+                const [endintegerPart, enddecimalPart] = newTimeStrings.toString().split('.').map(Number);
+                let starttotal = Number(startintegerPart) + Number(endintegerPart);
+                let endtotal = Number(startdecimalPart) + Number(enddecimalPart)
+                console.log(starttotal, endtotal, 'startend12');
+                if (endtotal >= 100) {
+                    const quotient = Math.floor(endtotal / 60); // Get the quotient
+                    endtotal = endtotal % 60; // Get the remainder
+                    starttotal += quotient; // Add the quotient to starttotal
+                }
+                const startendhours1 = `${starttotal}.${endtotal}`
+                console.log(startendhours1, LongHours, typeof (startendhours1), typeof (LongHours), 'checking1');
+
+                const TotalHoursCalc = Number(startendhours1) + Number(LongHours)
+
+                const formattedHours = Number(TotalHoursCalc).toFixed(2);
+                console.log(typeof (TotalHoursCalc), TotalHoursCalc, 'checking', formattedHours);
+
+                const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
+                // const [hours2, minutes2] = combined.toString().split('.');
+
+
+                let totalHours = Number(integerPart)
+                let totalMinutes = Number(decimalPart)
+                const formattedTotal = `${totalHours}.${totalMinutes}`
+                console.log(formattedTotal, 'uuuu');
+                console.log(LongTripHours, typeof (LongTripHours), 'suresh');
+                const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
+
+                if (newdecimalPart >= 60) {
+                    // Increment the integer part by 1
+
+                    let IntegerPart = integerParts;
+                    const additionalHours = Math.floor(newdecimalPart / 60);
+
+                    // Add the additional hours to totalHours
+                    IntegerPart += additionalHours;
+                    //  const newIntegerPart = integerPart + 1;
+                    let Decimalvalue;
+
+
+                    const newDecimalPart = newdecimalPart % 60;
+                    console.log(newDecimalPart, 'hello55');
+
+                    Decimalvalue = Number(`${IntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`)
+                    const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+                    const formattedDecimalValue = Decimalvalue.toFixed(2);
+
+                    console.log(formattedDecimalValue, 'hellooooo');
+
+                    const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
+                    console.log(hours, minutes, 'helloajay');
+
+                    const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
+                    console.log(`${hours}h ${formattedMinutes}mhello`);
+
+
+                    return `${hours}h ${formattedMinutes}m`;
+
+
+                    // Example usage:
+                    //  const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+
+
+                    //  return ${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')};
+                }
+                if (newdecimalPart < 60) {
+                    console.log(LongTripHours, typeof (LongTripHours), "venkat2", formattedHours, typeof (formattedHours));
+
+                    const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                    const a = RemainTotalCalculation.toFixed(2)
+                    console.log(RemainTotalCalculation, a, 'venkat3');
+
+                    const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+                    console.log(hours, minutes, 'helloww');
+
+                    const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
+                    console.log(`${hours}h ${formattedMinutes}mhello2`);
+
+                    return `${hours}h ${formattedMinutes}m`;
+
+                }
+
+
+
             }
 
-            if ((totalDays) >= 3) {
-                let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
-                const hours = Math.floor(num2 / 60);
-                const minutes = num2 % 60;
-                return `${hours}h ${minutes}m`
-            }
-            return `${hours}h ${minutes}m`;
         }
-        return "";
     }
+
+
+    // const calculatevendorTotalTime = () => {
+
+    //     const shedoutTime = vendorinfo?.vendorreporttime || ""
+
+    //     const shedinTime = vendorinfo?.vendorshedintime || ""
+
+    //     const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
+
+
+    //     if (shedoutTime && shedinTime) {
+    //         const startTimeObj = dayjs(shedoutTime, 'HH:mm');
+    //         const closeTimeObj = dayjs(shedinTime, 'HH:mm');
+    //         let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+
+    //         const hours = Math.floor(totalTimeMinutes / 60);
+    //         const minutes = totalTimeMinutes % 60;
+
+    //         //-------------converting sheOuttime in to minuts -------------
+    //         const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
+    //         const ouHhoursInt = parseInt(ouHhourStr, 10);
+    //         const outMinutsInt = parseInt(outMinutsStr, 10);
+    //         const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
+
+    //         //------converting shedin time to minuts ------------
+    //         const [inHoursStr, inMinutsStr] = shedinTime.split(':');
+    //         const inHoursInt = parseInt(inHoursStr, 10);
+    //         const inMinutsInt = parseInt(inMinutsStr, 10);
+    //         const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
+
+    //         if (totalDays === 2) {
+    //             let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
+    //             const hours = Math.floor(num1 / 60);
+    //             const minutes = num1 % 60;
+    //             return `${hours}h ${minutes}m`
+    //         }
+
+    //         if ((totalDays) >= 3) {
+    //             let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
+    //             const hours = Math.floor(num2 / 60);
+    //             const minutes = num2 % 60;
+    //             return `${hours}h ${minutes}m`
+    //         }
+    //         return `${hours}h ${minutes}m`;
+    //     }
+    //     return "";
+    // }
 
     const calculatevendorTotalKilometers = () => {
         const startKm = vendorinfo?.vendorshedoutkm || "";
@@ -3571,7 +3787,7 @@ const useTripsheet = () => {
             });
             data = response.data;
             const ratepackage = data.package
-            const packages = Number(data.package);
+            // const packages = Number(data.package);
             const Hours = Number(data.Hours);
             const KMS = Number(data.KMS);
             const Rate = Number(data.Rate);
@@ -3610,7 +3826,7 @@ const useTripsheet = () => {
 
             handleClickOpen() // for calc pop up
             setRatePackage(ratepackage)
-            setcalcPackage(packages);
+            setcalcPackage(ratepackage);
             setpackage_amount(Rate);
             setextrakm_amount(extraKMS);
             setextrahr_amount(extraHours);

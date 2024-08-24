@@ -56,7 +56,7 @@ export const PermissionProvider = ({ children }) => {
 
 
     return (
-        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation,openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen}}>
+        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation, openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen}}>
             {children}
         </PermissionContext.Provider>
     )

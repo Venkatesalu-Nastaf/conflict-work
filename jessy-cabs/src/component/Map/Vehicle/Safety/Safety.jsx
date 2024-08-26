@@ -3,7 +3,13 @@ import "./Safety.css";
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
-
+import { CiClock2 } from "react-icons/ci";
+import { LiaNewspaper } from "react-icons/lia";
+import { FaEye } from "react-icons/fa";
+import { FaBriefcase } from "react-icons/fa";
+import { IoAlarm } from "react-icons/io5";
+import { TbEngine } from "react-icons/tb";
+import { FaPlus } from "react-icons/fa";
 
 const Safety = () => {
 
@@ -23,16 +29,16 @@ const Safety = () => {
     ];
     return (
         <div>
-            <div style={{ margin: '25px 0px', display: 'flex', gap: '15px' }}>
-                <Button variant='outlined'>Live</Button>
-                <Button variant='outlined'>History</Button>
-                <Button variant='outlined'>Jobs</Button>
-                <Button variant='outlined'>Alarm</Button>
-                <Button variant='outlined'>DTCs</Button>
-                <Button variant='outlined'>Fuel Entry</Button>
-                <Button variant='outlined'>Service Reminders</Button>
-                <Button variant='outlined'>Renewal Reminders</Button>
-                <Button variant='contained'>View Details</Button>
+           <div style={{ margin: '25px 0px', display: 'flex', gap: '15px' }}>
+                <Button variant='outlined'><LiaNewspaper className='btn-icon' /> History</Button>
+                <Button variant='outlined'><CiClock2 className='btn-icon' /> Live</Button>
+                <Button variant='outlined'><FaBriefcase className='btn-icon' /> Jobs</Button>
+                <Button variant='outlined'><IoAlarm className='btn-icon' /> Alarm</Button>
+                <Button variant='outlined'><TbEngine className='btn-icon' /> DTCs</Button>
+                <Button variant='outlined'><FaPlus className='btn-icon' /> Fuel Entry</Button>
+                <Button variant='outlined'><FaPlus className='btn-icon' /> Service Reminders</Button>
+                <Button variant='outlined'><FaPlus className='btn-icon' /> Renewal Reminders</Button>
+                <Button variant='contained'><FaEye className='btn-icon' /> View Details</Button>
             </div>
             <div className='bill-wise-reciept-table'>
                 <Box

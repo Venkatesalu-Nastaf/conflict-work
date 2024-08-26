@@ -105,17 +105,16 @@ const EntityReminder = () => {
             </Box>
           </div>
           <div>
-            <Button variant='contained' onClick={handleClickOpenFilter}><CiFilter /> Filter</Button>
-          </div>
-
-          <div>
-            <Button variant='outlined'><FaUpload /></Button>
+            <Button variant='contained' onClick={handleClickOpenFilter}><CiFilter className='btn-icon' /> Filter</Button>
           </div>
           <div>
-            <Button variant='contained'><IoDownloadOutline /> Report</Button>
+            <Button variant='outlined'><FaUpload className='btn-icon'/></Button>
           </div>
           <div>
-            <Button variant='contained'><FaPlus /> Add Entity Reminder</Button>
+            <Button variant='contained'><IoDownloadOutline className='btn-icon'/> Report</Button>
+          </div>
+          <div>
+            <Button variant='contained'><FaPlus className='btn-icon'/> Add Contact Renewal Reminder</Button>
           </div>
         </div>
       </div>

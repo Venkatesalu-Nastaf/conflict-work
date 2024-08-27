@@ -249,7 +249,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
-    checkvendorNightBetaEligible, signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp, setWarning, setWarningMessage, setSignImageUrl,
+    signaturelinkcopy, columnssignature, rowsignature, handleTripsignaturedata, signaturelinkwhatsapp, setWarning, setWarningMessage, setSignImageUrl,
     handleCloseMapLog,
     openEditMapLog,
     handleEditMapDetails,
@@ -3066,20 +3066,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Box>
 
                 </div>
-
-
-                {/* 
-                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {(/hcl/i.test(customer))  ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handlePopupClose} variant="contained" color="primary">
-                      Cancel
-                    </Button>
-                  </DialogActions>
-                </Dialog> */}
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>

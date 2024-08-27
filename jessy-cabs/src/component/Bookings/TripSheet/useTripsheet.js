@@ -70,6 +70,7 @@ const useTripsheet = () => {
     const [nightTotalCount, setNightTotalCount] = useState(0)
     const [nightTotalAmount, setNightTotalAmount] = useState(0)
     const [vendornightcount, setVendornightCount] = useState()
+    const [cusnightcount, setcusnightCount] = useState()
 
     //-------------------------calc-------------------
 
@@ -995,7 +996,7 @@ const useTripsheet = () => {
                     // totaldays: calculateTotalDays(),
                     totaldays: calculateTotalDay(),
                     totalkm1: calculateTotalKilometers(),
-                    totaltime: calculateTotalTime(),
+                    totaltime: calculateTotalTimes(),
                     netamount: calculateTotalAmount(),
                     exkm: packageDetails[0]?.extraKMS,
                     exHrs: packageDetails[0]?.extraHours,
@@ -1120,7 +1121,7 @@ const useTripsheet = () => {
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     shedkm: shedKilometers.shedkm,
                     vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
-                    totaldays: calculateTotalDays(),
+                    // totaldays: calculateTotalDays(),
                     totalkm1: calculateTotalKilometers(),
                     totaltime: calculateTotalTimes(),
                     netamount: calculateTotalAmount(),
@@ -1224,7 +1225,7 @@ const useTripsheet = () => {
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                 tripsheetdate: selectedBookingDate,
-                totaldays: calculateTotalDays(),
+                totaldays: calculateTotalDay(),
                 totalkm1: calculateTotalKilometers(),
                 totaltime: calculateTotalTimes(),
                 netamount: calculateTotalAmount(),
@@ -1669,71 +1670,71 @@ const useTripsheet = () => {
     };
 
 
-    const calculateTotalTime = () => {
-        const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
-        // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
-        const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
-        const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        // const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
-        const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+    // const calculateTotalTime = () => {
+    //     const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+    //     // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
+    //     const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
+    //     const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+    //     // const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
+    //     const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
 
 
-        if (shedoutTime && shedinTime) {
-            const startTimeObj = dayjs(shedoutTime, 'HH:mm');
-            const closeTimeObj = dayjs(shedinTime, 'HH:mm');
-            let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-            let additionalMinutes = 0;
+    //     if (shedoutTime && shedinTime) {
+    //         const startTimeObj = dayjs(shedoutTime, 'HH:mm');
+    //         const closeTimeObj = dayjs(shedinTime, 'HH:mm');
+    //         let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+    //         let additionalMinutes = 0;
 
-            // Parse additional time value if available
-            if (additionalTimeValue) {
-                const hoursMatch = additionalTimeValue.match(/(\d+)h/);
-                const minutesMatch = additionalTimeValue.match(/(\d+)m/);
+    //         // Parse additional time value if available
+    //         if (additionalTimeValue) {
+    //             const hoursMatch = additionalTimeValue.match(/(\d+)h/);
+    //             const minutesMatch = additionalTimeValue.match(/(\d+)m/);
 
-                const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
-                const additionalMinutesFromHours = additionalHours * 60;
-                additionalMinutes += additionalMinutesFromHours;
+    //             const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+    //             const additionalMinutesFromHours = additionalHours * 60;
+    //             additionalMinutes += additionalMinutesFromHours;
 
-                const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
-                additionalMinutes += additionalMinutesValue;
-            }
+    //             const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+    //             additionalMinutes += additionalMinutesValue;
+    //         }
 
 
-            totalTimeMinutes += additionalMinutes;
-            const hours = Math.floor(totalTimeMinutes / 60);
-            const minutes = totalTimeMinutes % 60;
+    //         totalTimeMinutes += additionalMinutes;
+    //         const hours = Math.floor(totalTimeMinutes / 60);
+    //         const minutes = totalTimeMinutes % 60;
 
-            //-------------converting sheOuttime in to minuts -------------
-            const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
-            const ouHhoursInt = parseInt(ouHhourStr, 10);
-            const outMinutsInt = parseInt(outMinutsStr, 10);
-            const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
+    //         //-------------converting sheOuttime in to minuts -------------
+    //         const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
+    //         const ouHhoursInt = parseInt(ouHhourStr, 10);
+    //         const outMinutsInt = parseInt(outMinutsStr, 10);
+    //         const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
 
-            //------converting shedin time to minuts ------------
-            const [inHoursStr, inMinutsStr] = shedinTime.split(':');
-            const inHoursInt = parseInt(inHoursStr, 10);
-            const inMinutsInt = parseInt(inMinutsStr, 10);
-            const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
+    //         //------converting shedin time to minuts ------------
+    //         const [inHoursStr, inMinutsStr] = shedinTime.split(':');
+    //         const inHoursInt = parseInt(inHoursStr, 10);
+    //         const inMinutsInt = parseInt(inMinutsStr, 10);
+    //         const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
 
-            if (totalDays === 2) {
-                let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
-                num1 += additionalMinutes;
-                const hours = Math.floor(num1 / 60);
-                const minutes = num1 % 60;
+    //         if (totalDays === 2) {
+    //             let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
+    //             num1 += additionalMinutes;
+    //             const hours = Math.floor(num1 / 60);
+    //             const minutes = num1 % 60;
 
-                return `${hours}h ${minutes}m`
-            }
+    //             return `${hours}h ${minutes}m`
+    //         }
 
-            if ((totalDays) >= 3) {
-                let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
-                num2 += additionalMinutes;
-                const hours = Math.floor(num2 / 60);
-                const minutes = num2 % 60;
-                return `${hours}h ${minutes}m`
-            }
-            return `${hours}h ${minutes}m`;
-        }
-        return '';
-    }
+    //         if ((totalDays) >= 3) {
+    //             let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
+    //             num2 += additionalMinutes;
+    //             const hours = Math.floor(num2 / 60);
+    //             const minutes = num2 % 60;
+    //             return `${hours}h ${minutes}m`
+    //         }
+    //         return `${hours}h ${minutes}m`;
+    //     }
+    //     return '';
+    // }
 
 
 
@@ -2093,37 +2094,6 @@ const useTripsheet = () => {
     }, [selectedCustomerData.shedintime, selectedCustomerDatas.shedintime, selectedCustomerData.reporttime, book.reporttime, book.shedintime,])
 
 
-    const calculateTotalDays = () => {
-        const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
-        const closeDate = selectedCustomerData.closedate || selectedCustomerData.startdate || book.closedate;
-        const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-        const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-
-
-        if (shedoutdate && shedindate) {
-            const shedOutDateObj = dayjs(shedoutdate);
-            const shedindateObj = dayjs(shedindate);
-
-
-            const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-
-            if (totalDays > 0) {
-                return totalDays;
-            }
-            return '';
-        }
-        else if (startDate && closeDate && !shedoutdate && !shedindate) {
-            const startDateObj = dayjs(startDate);
-            const closeDateObj = dayjs(closeDate);
-            const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-            if (totalDays > 0) {
-                return totalDays;
-            }
-            return '';
-        }
-
-        return '';
-    };
 
     const calculateTotalKilometers = () => {
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
@@ -3180,7 +3150,9 @@ const useTripsheet = () => {
                     calcNight = TotalDay;
                 }
             }
-            setNightTotalCount(calcNight);
+            // setNightCount(calcNight);
+            setcusnightCount(calcNight)
+
         };
         // setNightTotalCount(calculateTotalDay())
 
@@ -3219,51 +3191,6 @@ const useTripsheet = () => {
 
     // NightCount()
 
-    const checkNightBetaEligible = () => {
-        const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-        const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
-
-        const totalDays = calculateTotalDays();
-        if (totalDays < 1) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
-
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
-
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
-
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
-
-                // console.log("Night Time Check:", isStartInNight || isEndInNight);
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
-
-
-    useEffect(() => {
-        const calcdata = () => {
-            if (driverBeta && driverbeta_Count > 1) {
-                let driverbetaAmount = Number(driverBeta) * Number(driverbeta_Count)
-                setdriverBeta_amount(Number(driverbetaAmount))
-
-            } else if (driverBeta) {
-                setdriverBeta_amount(Number(driverBeta))
-            } else {
-                setdriverBeta_amount()
-            }
-        }
-        calcdata();
-    }, [driverBeta, driverbeta_Count])
 
 
     //------------total amount calculations 
@@ -3290,7 +3217,7 @@ const useTripsheet = () => {
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
-    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, checkNightBetaEligible,])
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll,])
 
     // extra Amount calculation--------------------------
     useEffect(() => {
@@ -3433,7 +3360,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor, checkvendorNightBetaEligible()])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype;
@@ -3661,12 +3588,12 @@ const useTripsheet = () => {
     useEffect(() => {
         const a = calculateTotalDay()
 
-        const newAmount = nightTotalCount * nightBta;
+        const newAmount = nightCount * nightBta;
         const betaAmount = Number(driverBeta) * driverbeta_Count;
 
         setdriverBeta_amount(betaAmount)
-        setNightTotalAmount(newAmount);
-    }, [nightTotalCount, nightBta, driverBeta, driverbeta_Count]);
+        setnight_totalAmount(newAmount);
+    }, [nightCount, nightBta, driverBeta, driverbeta_Count]);
 
 
     // calc function
@@ -3712,10 +3639,11 @@ const useTripsheet = () => {
             const extraHours = Number(data.extraHours);
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
-            const NHaltAmount = Number(data.NHalt) * nightTotalCount;
-
-
-            setNightTotalAmount(NHaltAmount)
+            const nightHatDays = Number(cusnightcount)
+            const NHaltAmount = Number(data.NHalt) * nightHatDays;
+            setNightCount(nightHatDays);
+            setdriverbeta_Count(calculateTotalDay())
+            setnight_totalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
 
             // if (consvertedTotalHour > Hours) {
@@ -4243,7 +4171,7 @@ const useTripsheet = () => {
         //  signaturePopUpOpen,
         handleSignaturePopUpOpen,
         rows, ClosedTripData,
-        error, checkNightBetaEligible, isHybridCustomer,
+        error, isHybridCustomer,
         success,
         info,
         warning,
@@ -4278,13 +4206,12 @@ const useTripsheet = () => {
         setDriverSMS,
         DriverSMS,
         organizationdata,
-        calculateTotalDays,
         setStartTime,
         setBook,
         setFormData,
         setSelectedCustomerData,
         setCloseTime,
-        calculateTotalTime,
+        // calculateTotalTime,
         popupOpen,
         setSmsGuest,
         // handleKeyEnter,

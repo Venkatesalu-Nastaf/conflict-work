@@ -236,6 +236,7 @@
   padding: 5px;
   border-radius: 10px;
   transition: .1s;
+  display: flex;
 }
 
 .logout-item:hover {
@@ -330,7 +331,7 @@
   padding: 20px;
   border-radius: 5px;
   position: absolute;
-  top: 60px;
+  top: 70px;
   right: 27px;
   z-index: 1;
 }
@@ -373,10 +374,19 @@
   height: auto;
 }
 
-.update-text {
+/* .update-text {
   margin-top: -97px;
+} */
 
+.notification-bell-icon {
+  background-color: #0078d4;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 31px;
 }
+
+
 
 .close-button-container {
   position: absolute;

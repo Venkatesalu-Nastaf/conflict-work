@@ -585,6 +585,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_FULLTotalAmount,
     }
 
+console.log(    driverBeta,
+    driverbeta_Count,
+    driverBeta_amount,'edited');
 
 
 

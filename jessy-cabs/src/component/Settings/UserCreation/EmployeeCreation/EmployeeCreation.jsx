@@ -107,13 +107,14 @@ const EmployeeCreation = ({ stationName }) => {
 
   useEffect(() => {
 
-    console.log("stationName--", stationName)
+    // console.log("stationName--", stationName)
     if (stationName?.length > 1) {
-      // const data = stationName?.map(el => el.map(el => el.Stationname));
-      const data = stationName?.map(el => el.Stationname);
+    //   // const data = stationName?.map(el => el.map(el => el.Stationname));
+    //   const data = stationName?.map(el => el.Stationname);
 
-      setSationNameforUser([...data, "ALL"]);
-    } else {
+    //   setSationNameforUser([...data, "ALL"]);
+    // }
+    //  else {
       const data = stationName.map(el => el.Stationname)
       setSationNameforUser(data); // Set the original array when length is not greater than 1
     }
@@ -424,8 +425,7 @@ const EmployeeCreation = ({ stationName }) => {
                 </div>
               }
             </div>
-            <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "95px", right: "30px", zIndex: '1' }}
-              className="">
+            <Box className='common-speed-dail'>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
                 icon={<SpeedDialIcon />}

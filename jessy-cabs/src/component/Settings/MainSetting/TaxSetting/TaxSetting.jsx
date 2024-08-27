@@ -300,7 +300,7 @@ const TaxSetting = () => {
                     <div className="TaxSetting-table-container-main">
                         <div className="TaxSetting-table-container">
                             <div className="SpeedDial">
-                                <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: '1' }}>
+                                <Box className='common-speed-dail'>
                                     <StyledSpeedDial
                                         ariaLabel="SpeedDial playground example"
                                         icon={<SpeedDialIcon />}

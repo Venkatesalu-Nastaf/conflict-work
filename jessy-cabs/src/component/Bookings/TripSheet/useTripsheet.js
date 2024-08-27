@@ -69,7 +69,8 @@ const useTripsheet = () => {
     const [isHybridCustomer, setIsHybridCustomer] = useState(false)
     const [nightTotalCount, setNightTotalCount] = useState(0)
     const [nightTotalAmount, setNightTotalAmount] = useState(0)
-
+    const [vendornightcount, setVendornightCount] = useState()
+    const [cusnightcount, setcusnightCount] = useState()
 
     //-------------------------calc-------------------
 
@@ -86,15 +87,15 @@ const useTripsheet = () => {
     let [minKM, setMinKM] = useState()
 
     // nighht value --------------------
-    let [nightBta, setNightBeta] = useState('')
-    let [nightCount, setNightCount] = useState('')
-    let [night_totalAmount, setnight_totalAmount] = useState('')
+    let [nightBta, setNightBeta] = useState('0')
+    let [nightCount, setNightCount] = useState('0')
+    let [night_totalAmount, setnight_totalAmount] = useState('0')
 
 
     //driver convinence --------------------------
-    let [driverBeta, setdriverBeta] = useState('')
-    let [driverbeta_Count, setdriverbeta_Count] = useState('')
-    let [driverBeta_amount, setdriverBeta_amount] = useState('')
+    let [driverBeta, setdriverBeta] = useState('0')
+    let [driverbeta_Count, setdriverbeta_Count] = useState('0')
+    let [driverBeta_amount, setdriverBeta_amount] = useState('0')
 
     //--------------------------------------------------------------
 
@@ -301,45 +302,6 @@ const useTripsheet = () => {
 
 
 
-    //generate link
-
-    // const generateLink = async () => {
-    //     try {
-    //         const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-    //         if (!tripidNO) {
-    //             setError(true);
-    //             setErrorMessage("Please enter the tripid");
-    //             return;
-    //         }
-    //         const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-    //         const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
-    //         const data = response.data.link
-    //         setLink(data);
-    //         getSignatureImage()
-    //         // copyToClipboardf(data)
-    //     } catch {
-    //     }
-    // };
-
-
-    // const SignPage = async (event) => {
-    //     event.preventDefault();
-    //     if (link) {
-    //         try {
-    //             await navigator.clipboard.writeText(link);
-    //             setSign(true);
-    //             setTimeout(() => {
-    //                 setSign(false);
-    //             }, 2000);
-    //         } catch (error) {
-    //             console.error("Failed to copy text:", error);
-    //             alert("Failed to copy text to clipboard. Please try again.");
-    //         }
-    //     } else {
-    //         alert("No link data available.");
-    //     }
-    // }
-    // -----------------accountinfo--------------------------------
     useEffect(() => {
         const fetchdataccountinfodata = async () => {
             try {
@@ -355,74 +317,6 @@ const useTripsheet = () => {
     }, [apiUrl])
 
 
-
-
-
-    //---------------------------to copy the link-------------------
-
-    // const hiddenInputRef = useRef(null);
-
-    // const hiddenTextAreaRef = useRef(null);
-
-    // const copyToClipboard = (e) => {
-    //     e.preventDefault()
-    //     if (link) {
-    //         // Create a hidden textarea and append it to the body
-    //         const textArea = document.createElement("textarea");
-    //         textArea.value = link;
-    //         document.body.appendChild(textArea);
-
-    //         // Select the text in the textarea
-    //         textArea.select();
-    //         textArea.setSelectionRange(0, 99999); // For mobile devices
-
-    //         // Execute the copy command
-    //         document.execCommand('copy');
-
-    //         // Remove the textarea from the document
-    //         document.body.removeChild(textArea);
-
-    //         // Set the confirmation message
-    //         setSign(true);
-    //         setTimeout(() => {
-    //             setSign(false);
-    //         }, 2000);
-    //     } else {
-    //         alert("No link data available.");
-    //     }
-    // };
-
-
-    // const copyToClipboardf = (data) => {
-    //     // e.preventDefault()
-    //     if (data) {
-    //         // Create a hidden textarea and append it to the body
-    //         const textArea = document.createElement("textarea");
-    //         textArea.value = data;
-    //         document.body.appendChild(textArea);
-
-    //         // Select the text in the textarea
-    //         textArea.select();
-    //         textArea.setSelectionRange(0, 99999); // For mobile devices
-
-    //         // Execute the copy command
-    //         document.execCommand('copy');
-
-    //         // Remove the textarea from the document
-    //         document.body.removeChild(textArea);
-
-    //         // Set the confirmation message
-    //         setSign(true);
-    //         setTimeout(() => {
-    //             setSign(false);
-    //         }, 2000);
-    //     } else {
-    //         alert("No link data available.");
-    //     }
-    // };
-
-
-    //----------------------------------------------
 
 
 
@@ -823,6 +717,8 @@ const useTripsheet = () => {
         setEscort("No");
         setMinHour();
         setMinKM();
+        setdriverbeta_Count('0')
+        setNightCount('0')
         setTransferreport("No");
         setVendorinfodata({});
         setVendorbilldata({});
@@ -1097,7 +993,8 @@ const useTripsheet = () => {
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
                     vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                     orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
-                    totaldays: calculateTotalDays(),
+                    // totaldays: calculateTotalDays(),
+                    totaldays: calculateTotalDay(),
                     totalkm1: calculateTotalKilometers(),
                     totaltime: calculateTotalTimes(),
                     netamount: calculateTotalAmount(),
@@ -1142,13 +1039,13 @@ const useTripsheet = () => {
                     Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0,
                     Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0,
                     // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
-                    Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0 : 0,
-                    Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0 : 0,
+                    Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0,
+                    Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0,
                     // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
-                    Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
-                    Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0,
-                    Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0 : 0,
-                    Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
+                    Vendor_NightbataTotalAmount: vendornightdatatotalAmount || vendornightdatatotalAmount || 0,
+                    Vendor_Bata: vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0,
+                    Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0,
+                    Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
 
                 };
@@ -1224,7 +1121,7 @@ const useTripsheet = () => {
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     shedkm: shedKilometers.shedkm,
                     vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
-                    totaldays: calculateTotalDays(),
+                    // totaldays: calculateTotalDays(),
                     totalkm1: calculateTotalKilometers(),
                     totaltime: calculateTotalTimes(),
                     netamount: calculateTotalAmount(),
@@ -1328,7 +1225,7 @@ const useTripsheet = () => {
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                 tripsheetdate: selectedBookingDate,
-                totaldays: calculateTotalDays(),
+                totaldays: calculateTotalDay(),
                 totalkm1: calculateTotalKilometers(),
                 totaltime: calculateTotalTimes(),
                 netamount: calculateTotalAmount(),
@@ -1407,13 +1304,13 @@ const useTripsheet = () => {
                 Vendor_ExtraHours: vendorbilldata.Vendor_ExtraHours || 0,
                 Vendor_ExtraAmountHours: vendorbilldata.Vendor_ExtraAmountHours || 0,
                 Vendor_totalAmountHours: vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || 0,
-                Vendor_NightHALT: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || 0 : 0,
-                Vendor_NightBataAmount: checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightBataAmount || 0 : 0,
+                Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
+                Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
 
-                Vendor_NightbataTotalAmount: checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendornightdatatotalAmount || 0 : 0,
-                Vendor_Bata: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || 0 : 0,
-                Vendor_BataAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataAmount || 0 : 0,
-                Vendor_BataTotalAmount: vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || 0 : 0,
+                Vendor_NightbataTotalAmount: vendornightdatatotalAmount || vendornightdatatotalAmount || 0,
+                Vendor_Bata: vendorbilldata.Vendor_Bata || 0,
+                Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
+                Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                 // Vendor_NightHALT: vendorbilldata.Vendor_NightHALT || 0,
                 // Vendor_NightBataAmount: vendorbilldata.Vendor_NightBataAmount || 0,
                 // Vendor_NightbataTotalAmount: vendorbilldata.Vendor_NightbataTotalAmount || vendornightdatatotalAmount,
@@ -1773,71 +1670,71 @@ const useTripsheet = () => {
     };
 
 
-    const calculateTotalTime = () => {
-        const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
-        // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
-        const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
-        const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        // const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
-        const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+    // const calculateTotalTime = () => {
+    //     const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
+    //     // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
+    //     const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
+    //     const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+    //     // const totalDays = formData.totaldays || calculateTotalDays() || book.totaldays;
+    //     const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
 
 
-        if (shedoutTime && shedinTime) {
-            const startTimeObj = dayjs(shedoutTime, 'HH:mm');
-            const closeTimeObj = dayjs(shedinTime, 'HH:mm');
-            let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-            let additionalMinutes = 0;
+    //     if (shedoutTime && shedinTime) {
+    //         const startTimeObj = dayjs(shedoutTime, 'HH:mm');
+    //         const closeTimeObj = dayjs(shedinTime, 'HH:mm');
+    //         let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+    //         let additionalMinutes = 0;
 
-            // Parse additional time value if available
-            if (additionalTimeValue) {
-                const hoursMatch = additionalTimeValue.match(/(\d+)h/);
-                const minutesMatch = additionalTimeValue.match(/(\d+)m/);
+    //         // Parse additional time value if available
+    //         if (additionalTimeValue) {
+    //             const hoursMatch = additionalTimeValue.match(/(\d+)h/);
+    //             const minutesMatch = additionalTimeValue.match(/(\d+)m/);
 
-                const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
-                const additionalMinutesFromHours = additionalHours * 60;
-                additionalMinutes += additionalMinutesFromHours;
+    //             const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+    //             const additionalMinutesFromHours = additionalHours * 60;
+    //             additionalMinutes += additionalMinutesFromHours;
 
-                const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
-                additionalMinutes += additionalMinutesValue;
-            }
+    //             const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+    //             additionalMinutes += additionalMinutesValue;
+    //         }
 
 
-            totalTimeMinutes += additionalMinutes;
-            const hours = Math.floor(totalTimeMinutes / 60);
-            const minutes = totalTimeMinutes % 60;
+    //         totalTimeMinutes += additionalMinutes;
+    //         const hours = Math.floor(totalTimeMinutes / 60);
+    //         const minutes = totalTimeMinutes % 60;
 
-            //-------------converting sheOuttime in to minuts -------------
-            const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
-            const ouHhoursInt = parseInt(ouHhourStr, 10);
-            const outMinutsInt = parseInt(outMinutsStr, 10);
-            const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
+    //         //-------------converting sheOuttime in to minuts -------------
+    //         const [ouHhourStr, outMinutsStr] = shedoutTime.split(':');
+    //         const ouHhoursInt = parseInt(ouHhourStr, 10);
+    //         const outMinutsInt = parseInt(outMinutsStr, 10);
+    //         const shedOutIntValue = (ouHhoursInt * 60) + outMinutsInt;
 
-            //------converting shedin time to minuts ------------
-            const [inHoursStr, inMinutsStr] = shedinTime.split(':');
-            const inHoursInt = parseInt(inHoursStr, 10);
-            const inMinutsInt = parseInt(inMinutsStr, 10);
-            const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
+    //         //------converting shedin time to minuts ------------
+    //         const [inHoursStr, inMinutsStr] = shedinTime.split(':');
+    //         const inHoursInt = parseInt(inHoursStr, 10);
+    //         const inMinutsInt = parseInt(inMinutsStr, 10);
+    //         const shedInIntValue = (inHoursInt * 60) + inMinutsInt;
 
-            if (totalDays === 2) {
-                let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
-                num1 += additionalMinutes;
-                const hours = Math.floor(num1 / 60);
-                const minutes = num1 % 60;
+    //         if (totalDays === 2) {
+    //             let num1 = ((1440 - shedOutIntValue) + shedInIntValue)
+    //             num1 += additionalMinutes;
+    //             const hours = Math.floor(num1 / 60);
+    //             const minutes = num1 % 60;
 
-                return `${hours}h ${minutes}m`
-            }
+    //             return `${hours}h ${minutes}m`
+    //         }
 
-            if ((totalDays) >= 3) {
-                let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
-                num2 += additionalMinutes;
-                const hours = Math.floor(num2 / 60);
-                const minutes = num2 % 60;
-                return `${hours}h ${minutes}m`
-            }
-            return `${hours}h ${minutes}m`;
-        }
-        return '';
-    }
+    //         if ((totalDays) >= 3) {
+    //             let num2 = ((1440 - shedOutIntValue) + shedInIntValue) + ((totalDays - 2) * (24 * 60))
+    //             num2 += additionalMinutes;
+    //             const hours = Math.floor(num2 / 60);
+    //             const minutes = num2 % 60;
+    //             return `${hours}h ${minutes}m`
+    //         }
+    //         return `${hours}h ${minutes}m`;
+    //     }
+    //     return '';
+    // }
 
 
 
@@ -2197,37 +2094,6 @@ const useTripsheet = () => {
     }, [selectedCustomerData.shedintime, selectedCustomerDatas.shedintime, selectedCustomerData.reporttime, book.reporttime, book.shedintime,])
 
 
-    const calculateTotalDays = () => {
-        const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
-        const closeDate = selectedCustomerData.closedate || selectedCustomerData.startdate || book.closedate;
-        const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-        const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-
-
-        if (shedoutdate && shedindate) {
-            const shedOutDateObj = dayjs(shedoutdate);
-            const shedindateObj = dayjs(shedindate);
-
-
-            const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-
-            if (totalDays > 0) {
-                return totalDays;
-            }
-            return '';
-        }
-        else if (startDate && closeDate && !shedoutdate && !shedindate) {
-            const startDateObj = dayjs(startDate);
-            const closeDateObj = dayjs(closeDate);
-            const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-            if (totalDays > 0) {
-                return totalDays;
-            }
-            return '';
-        }
-
-        return '';
-    };
 
     const calculateTotalKilometers = () => {
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
@@ -2271,17 +2137,6 @@ const useTripsheet = () => {
         const shedoutdate = vendorinfo?.vendorshedOutDate || "";
         const shedindate = vendorinfo?.vendorshedInDate || ""
 
-        // if (shedoutdate && shedindate) {
-        //     const shedOutDateObj = dayjs(shedoutdate);
-        //     const shedindateObj = dayjs(shedindate);
-        //     const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
-        //     if (totalDays > 0) {
-        //         return totalDays;
-        //     }
-        //     return "";
-        // }
-
-        // return "";
 
         if (shedoutdate && shedindate) {
             const shedOutDateObj = dayjs(shedoutdate).startOf('day');
@@ -2299,38 +2154,7 @@ const useTripsheet = () => {
 
         return '';
     };
-    const checkvendorNightBetaEligible = () => {
-        const shedOutTime = vendorinfo?.vendorreporttime || ""
 
-        const shedInTime = vendorinfo?.vendorshedintime || ""
-
-        const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
-
-
-
-        if (totalDays < 2) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
-
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
-
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
-
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
-
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const calculatevendorTotalTime = () => {
 
@@ -2457,7 +2281,6 @@ const useTripsheet = () => {
                 let totalHours = Number(integerPart)
                 let totalMinutes = Number(decimalPart)
                 const formattedTotal = `${totalHours}.${totalMinutes}`
-                console.log(LongTripHours, typeof (LongTripHours), 'suresh');
                 const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
 
                 if (newdecimalPart >= 60) {
@@ -2494,17 +2317,14 @@ const useTripsheet = () => {
                     //  return ${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')};
                 }
                 if (newdecimalPart < 60) {
-                    console.log(LongTripHours, typeof (LongTripHours), "venkat2", formattedHours, typeof (formattedHours));
 
                     const RemainTotalCalculation = LongTripHours + Number(formattedHours);
                     const a = RemainTotalCalculation.toFixed(2)
                     console.log(RemainTotalCalculation, a, 'venkat3');
 
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
-                    console.log(hours, minutes, 'helloww');
 
                     const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
-                    console.log(`${hours}h ${formattedMinutes}mhello2`);
 
                     return `${hours}h ${formattedMinutes}m`;
 
@@ -2708,7 +2528,6 @@ const useTripsheet = () => {
 
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
-        console.log(name, value, 'handlechange');
 
 
         setPackageData((prevData) => ({
@@ -2830,7 +2649,6 @@ const useTripsheet = () => {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
-                    console.log(bookingDetails, 'book');
 
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
@@ -3284,7 +3102,6 @@ const useTripsheet = () => {
         const calcdata = () => {
             if (nightBta && nightCount > 1) {
                 let nightTotalAmounts = Number(nightBta) * Number(nightCount)
-                console.log(nightTotalAmounts, 'totalnight');
 
                 setnight_totalAmount(nightTotalAmounts)
             }
@@ -3297,7 +3114,6 @@ const useTripsheet = () => {
         }
         calcdata();
     }, [nightBta, nightCount])
-    console.log(nightBta, nightCount, 'ncount');
 
 
 
@@ -3317,31 +3133,34 @@ const useTripsheet = () => {
             const TotalDay = calculateTotalDay();
             const newTimeString = shedOutTime?.replace(":", ".");
             const newTimeStrings = shedInTime?.replace(":", ".");
-            console.log(shedInTime, shedOutTime, calculateTotalDay(), TotalDay, typeof (TotalDay), 'countdays');
 
             let calcNight = 0;
 
             if (calculateTotalDay() === 0) {
-                if (Number(newTimeStrings) > 22.0) {
+                if (Number(newTimeStrings) > 22.0 || Number(newTimeString) <= 6.00) {
                     calcNight = 1;
-                    console.log(calcNight, 'countdays111111');
-                    // Example logic, adjust as needed
+                }
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
+                    calcNight = 2;
                 }
             } else if (TotalDay > 0) {
-                if (newTimeStrings > 22.0) {
+                if (newTimeStrings >= 22.0) {
                     calcNight = TotalDay + 1;
                 } else {
                     calcNight = TotalDay;
                 }
             }
+            // setNightCount(calcNight);
+            setcusnightCount(calcNight)
 
-            setNightTotalCount(calcNight);
-            console.log(calcNight, 'countdays123456');
         };
+        // setNightTotalCount(calculateTotalDay())
+
 
         NightCount();
     }, [formData, selectedCustomerData, selectedCustomerDatas, book]);
-    console.log(nightTotalCount, 'countdays12345678');
+
+
 
     // const NightCount = ()=>{
     //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
@@ -3372,51 +3191,6 @@ const useTripsheet = () => {
 
     // NightCount()
 
-    const checkNightBetaEligible = () => {
-        const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-        const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
-
-        const totalDays = calculateTotalDays();
-        if (totalDays < 1) {
-            let start = shedOutTime?.split(':').map(Number);
-            let end = shedInTime?.split(':').map(Number);
-
-            if (start && end) {
-                let startMinutes = start[0] * 60 + start[1];
-                let endMinutes = end[0] * 60 + end[1];
-
-                let nightStart = 22 * 60;
-                let nightEnd = 6 * 60;
-                if (startMinutes < nightEnd) startMinutes += 24 * 60;
-                if (endMinutes < nightEnd) endMinutes += 24 * 60;
-                if (startMinutes >= nightStart) startMinutes += 24 * 60;
-
-                const isStartInNight = (startMinutes >= nightStart || startMinutes < nightEnd);
-                const isEndInNight = (endMinutes >= nightStart || endMinutes < nightEnd);
-
-                // console.log("Night Time Check:", isStartInNight || isEndInNight);
-                return isStartInNight || isEndInNight;
-            }
-            return false;
-        }
-        return true;
-    };
-
-
-    useEffect(() => {
-        const calcdata = () => {
-            if (driverBeta && driverbeta_Count > 1) {
-                let driverbetaAmount = Number(driverBeta) * Number(driverbeta_Count)
-                setdriverBeta_amount(Number(driverbetaAmount))
-
-            } else if (driverBeta) {
-                setdriverBeta_amount(Number(driverBeta))
-            } else {
-                setdriverBeta_amount()
-            }
-        }
-        calcdata();
-    }, [driverBeta, driverbeta_Count])
 
 
     //------------total amount calculations 
@@ -3437,19 +3211,20 @@ const useTripsheet = () => {
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
-            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(nightTotalAmount || 0) + (vendorinfo?.vendor_duty === "Outstation" ? Number(driverBeta_amount || 0) : 0) + Number(permit) + Number(parking) + Number(toll);
+            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
-    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, checkNightBetaEligible,])
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll,])
 
     // extra Amount calculation--------------------------
     useEffect(() => {
         const extraClac = () => {
             let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
-            const extarhour = extraAbout_hr.toFixed(2)
+            const extarhour = Math.round(extraAbout_hr)
+            console.log(extarhour, "hr", typeof (extarhour))
 
             setEx_HrAmount(extarhour)
         }
@@ -3470,7 +3245,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const VendorextraClac = () => {
-            let extraAbout_hr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours)
+            let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
             setVendorExtrahrTotaldataAmount(extraAbout_hr)
             // setVendorbilldata({ ...vendorbilldata, Vendor_totalAmountHours: extraAbout_hr })
             setVendorbilldata(prevData => ({
@@ -3502,66 +3277,78 @@ const useTripsheet = () => {
         VendorextraClac();
     }, [vendorbilldata.Vendor_ExtraKms, vendorbilldata.Vendor_ExtraAmountKms, vendorpassvalue.Vendor_ExtraKms, vendorpassvalue.Vendor_ExtraAmountKms])
 
+    const calcNightCount = useMemo(() => {
+        const shedOutTime = vendorinfo?.vendorreporttime || "";
+        const shedInTime = vendorinfo?.vendorshedintime || "";
+        const TotalDay = calculatevendorTotalDays() || vendorinfo?.vendortotaldays;
 
+        const newTimeString = shedOutTime?.replace(":", ".");
+        const newTimeStrings = shedInTime?.replace(":", ".");
 
+        let calcNight = 0;
+
+        if (TotalDay === 0) {
+            if (Number(newTimeStrings) > 22.0 || Number(newTimeString) <= 6.00) {
+                calcNight = 1;
+            }
+            if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
+                calcNight = 2;
+            }
+        } else if (TotalDay > 0) {
+            if (newTimeStrings >= 22.0) {
+                calcNight = TotalDay + 1;
+            } else {
+                calcNight = TotalDay;
+            }
+        }
+
+        return calcNight;
+    }, [vendorinfo, calculatevendorTotalDays]);
+
+    useEffect(() => {
+        setVendornightCount(calcNightCount);
+    }, [calcNightCount]);
 
     useEffect(() => {
         const calcdatavendor = () => {
-            if ((vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) && (vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount) > 1) {
 
-                let vendornightTotalAmounts = Number(vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) * Number(vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount)
-                setVendorNightbhatatotalAmount(vendornightTotalAmounts)
-            }
-            else if (vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT) {
-                const data = vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT
-                setVendorNightbhatatotalAmount(data)
+            const a = vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT
+            const b = vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount
 
 
-                // setVendorbilldata({...vendorbilldata,Vendor_NightbataTotalAmount:Number(vendorbilldata.Vendor_NightHALT)})
-            }
-            else {
+            let vendornightTotalAmounts = Number(a) * Number(b)
+            setVendorNightbhatatotalAmount(vendornightTotalAmounts)
 
-                // setVendorbilldata({...vendorbilldata,Vendor_NightbataTotalAmount:""})
-                setVendorNightbhatatotalAmount('')
 
-            }
         }
         calcdatavendor();
     }, [vendorbilldata.Vendor_NightHALT, vendorbilldata.Vendor_NightBataAmount, vendorbilldata, vendorpassvalue.Vendor_NightHALT, vendorpassvalue.Vendor_NightBataAmount])
 
 
-
     useEffect(() => {
         const calcdatavendor = () => {
-            if ((vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata) && (vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount) > 1) {
 
-                let vendordriverbetaAmount = Number(vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata) * Number(vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount)
-                setVendorbilldata({ ...vendorbilldata, Vendor_BataTotalAmount: Number(vendordriverbetaAmount) })
+            const a = vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata;
+            const b = vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount
 
-            } else if (vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata) {
+            let vendordriverbetaAmount = Number(a) * Number(b)
+            setVendorbilldata({ ...vendorbilldata, Vendor_BataTotalAmount: Number(vendordriverbetaAmount) })
 
-                setVendorbilldata({ ...vendorbilldata, Vendor_BataTotalAmount: Number(vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata) })
-            } else {
-                setVendorbilldata({ ...vendorbilldata, Vendor_BataTotalAmount: "" })
-            }
         }
         calcdatavendor();
     }, [vendorbilldata.Vendor_Bata, vendorbilldata.Vendor_BataAmount, vendorbilldata, vendorpassvalue.Vendor_Bata, vendorpassvalue.Vendor_BataAmount])
-
-
     function calculatevendorTotalAmount() {
 
         const amount = parseFloat(vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount) || 0;
         const amount1 = parseFloat(vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours) || 0;
         const amount2 = parseFloat(vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms) || 0;
-        const amount3 = parseFloat(vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount : 0) || 0;
+        const amount3 = parseFloat(vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0);
         // const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
-        const amount4 = parseFloat(checkvendorNightBetaEligible() ? vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount : 0) || 0;
+        const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0);
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
 
-        console.log(amount, "a", amount1, "a1", amount2, "a2", amount3, "a3", amount4, "abcd", amount5, "vprmit", amount6, "aaa", checkvendorNightBetaEligible())
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
         const fullAmount = totalAmount - amount7;
@@ -3573,7 +3360,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor, checkvendorNightBetaEligible()])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype;
@@ -3604,9 +3391,7 @@ const useTripsheet = () => {
             // }
 
             vendortotalHours = await convertTimeToNumber(vendortothr);
-            console.log(vendortotalHours, "vendortotalhours")
             const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
-            console.log(consvertedTotalHour, "vend")
 
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
@@ -3631,6 +3416,8 @@ const useTripsheet = () => {
             const extraKMS = Number(vendordata.extraKMS);
             const NHalt = Number(vendordata.NHalt);
             const Bata = Number(vendordata.Bata);
+            const nHaltdays = Number(vendornightcount);
+            const batahaltdays = Number(vendornightcount)
             console.log(packages, Hours, KMS, Rate, extraHours, extraKMS, NHalt, Bata)
             let dataextrahous, dataextrakms
 
@@ -3667,7 +3454,8 @@ const useTripsheet = () => {
                 Vendor_NightHALT: NHalt,
                 Vendor_ExtraHours: dataextrahous,
                 Vendor_ExtraKms: dataextrakms,
-
+                Vendor_NightBataAmount: nHaltdays,
+                Vendor_BataAmount: batahaltdays
 
             });
             setSuccess(true)
@@ -3797,9 +3585,16 @@ const useTripsheet = () => {
     }
 
 
+    useEffect(() => {
+        const a = calculateTotalDay()
 
+        const newAmount = nightCount * nightBta;
+        const betaAmount = Number(driverBeta) * driverbeta_Count;
 
-    console.log(nightCount, typeof (nightCount), 'nighttt');
+        setdriverBeta_amount(betaAmount)
+        setnight_totalAmount(newAmount);
+    }, [nightCount, nightBta, driverBeta, driverbeta_Count]);
+
 
     // calc function
 
@@ -3835,7 +3630,6 @@ const useTripsheet = () => {
                 }
             });
             data = response.data;
-            console.log(data, 'dataaa');
 
             const ratepackage = data.package
             // const packages = Number(data.package);
@@ -3845,9 +3639,11 @@ const useTripsheet = () => {
             const extraHours = Number(data.extraHours);
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
-            const NHaltAmount = Number(data.NHalt) * nightTotalCount;
-
-            setNightTotalAmount(NHaltAmount)
+            const nightHatDays = Number(cusnightcount)
+            const NHaltAmount = Number(data.NHalt) * nightHatDays;
+            setNightCount(nightHatDays);
+            setdriverbeta_Count(calculateTotalDay())
+            setnight_totalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
 
             // if (consvertedTotalHour > Hours) {
@@ -4368,14 +4164,14 @@ const useTripsheet = () => {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
         night_totalAmount, driverBeta_calc, driverbeta_Count_calc,
-        driverBeta_amount, totalcalcAmount, driverBeta,
+        driverBeta_amount, totalcalcAmount, driverBeta, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
         selectedCustomerId, nightBta, nightCount, driverbeta_Count,
         vehileNames, handleEscortChange, handleClickOpen, open,
         handleClose,
         //  signaturePopUpOpen,
         handleSignaturePopUpOpen,
         rows, ClosedTripData,
-        error, checkNightBetaEligible, isHybridCustomer,
+        error, isHybridCustomer,
         success,
         info,
         warning,
@@ -4410,13 +4206,12 @@ const useTripsheet = () => {
         setDriverSMS,
         DriverSMS,
         organizationdata,
-        calculateTotalDays,
         setStartTime,
         setBook,
         setFormData,
         setSelectedCustomerData,
         setCloseTime,
-        calculateTotalTime,
+        // calculateTotalTime,
         popupOpen,
         setSmsGuest,
         // handleKeyEnter,
@@ -4476,7 +4271,6 @@ const useTripsheet = () => {
         // calcvendordata,
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
         generateAndCopyLinkdata,
-        checkvendorNightBetaEligible,
         ratepackage,
         calculateTotalDay,
         calculateTotalTimes,

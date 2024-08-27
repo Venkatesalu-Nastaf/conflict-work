@@ -104,15 +104,15 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
 
   // station name All setup
 
-  const [allStationName, setAllStationName] = useState([])
+  // const [allStationName, setAllStationName] = useState([])
 
-  useEffect(() => {
-    if (stationName.length > 1) {
-      setAllStationName([...stationName, { Stationname: "All" }])
-    } else {
-      setAllStationName(stationName)
-    }
-  }, [stationName])
+  // useEffect(() => {
+  //   if (stationName.length > 1) {
+  //     setAllStationName([...stationName, { Stationname: "All" }])
+  //   } else {
+  //     setAllStationName(stationName)
+  //   }
+  // }, [stationName])
 
   const [allCustomer, setAllCustomer] = useState([])
 
@@ -206,7 +206,10 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     id="Department"
                     size="small"
                     value={department}
-                    options={allStationName.map((option) => ({
+                    // options={allStationName.map((option) => ({
+                    //   label: option.Stationname,
+                    // }))}
+                    options={stationName.map((option) => ({
                       label: option.Stationname,
                     }))}
                     isOptionEqualToValue={(option, value) => option.label === value.label}

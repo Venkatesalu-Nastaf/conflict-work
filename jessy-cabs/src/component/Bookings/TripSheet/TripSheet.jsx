@@ -154,7 +154,8 @@ const style = {
 
 const TripSheet = ({ stationName, logoImage }) => {
 
-  const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+  // const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+  const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
   const inputRef = useRef(null);
 
   const {
@@ -233,13 +234,13 @@ const TripSheet = ({ stationName, logoImage }) => {
     // link,
     // isSignatureSubmitted,
     isEditMode,
-    handleEdit, checkCloseKM, checkNightBetaEligible,
+    handleEdit, checkCloseKM,
     driverdetails, ClosedTripData,
     // sign, 
     handleCalc, calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
-    driverbeta_Count_calc, driverBeta_amount,setdriverBeta,setdriverbeta_Count,setdriverBeta_amount,
+    driverbeta_Count_calc, driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
@@ -256,8 +257,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     ratepackage,
     calculateTotalDay,
     calculateTotalTimes,
-    setSelectedMapRow, CopyEmail, setCopyEmail,conflictkm,
-    nightTotalCount,setNightTotalCount,nightTotalAmount,setNightTotalAmount
+    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm,
+    nightTotalCount, setNightTotalCount, nightTotalAmount, setNightTotalAmount
 
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -290,7 +291,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
   let shedInTimeVar = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
   let closeTimeVar = formData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime;
-  
+
 
   // kilometer
   const [kmValue, setKmValue] = useState({
@@ -502,7 +503,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
     driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
-    requestno:selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
+    requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
     vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
     mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
 
@@ -1055,8 +1056,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                    value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                    options={stationName.map((option) => ({
+                    // value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    // options={stationName.map((option) => ({
+                    //   label: option.Stationname,
+                    // }))}
+                    value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    options={stationOptions?.map((option) => ({
                       label: option.Stationname,
                     }))}
                     getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
@@ -1430,7 +1435,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <div className='input-type-grid'>
                     {/* {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
-                    {(calculateTotalDay()===0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
 
                     <input
                       type="time"
@@ -1461,7 +1466,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
                     {/* {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>} */}
-                    {calculateTotalDay()=== 0 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
+                    {calculateTotalDay() === 0 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
 
                     <input
                       type="time"
@@ -1514,39 +1519,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
                 </div>
-                <div style={{padding:"10px"}}>
+                <div style={{ padding: "10px" }}>
 
-                
-                <label>Total Time</label>
 
-                <div className="input">
+                  <label>Total Time</label>
 
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  <div className="input">
+
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+
+                    <TextField
+                      name="totaltime"
+                      // value={ calculateTotalTimes()}
+                      value={
+                        (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                          (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                          ? calculateTotalTimes()
+                          : ""
+                      }
+                      onChange={handleChange}
+                      // label="Total Time"
+                      id="totaltime"
+                      // variant="standard"
+                      size='small'
+                      autoComplete="password"
+                    />
                   </div>
-
-                  <TextField
-                    name="totaltime"
-                    // value={ calculateTotalTimes()}
-                    value={
-                      (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                      (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                        ? calculateTotalTimes()
-                        : ""
-                    }
-                    onChange={handleChange}
-                    // label="Total Time"
-                    id="totaltime"
-                    // variant="standard"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
                 </div>
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid &&  ((Number(kmValue.shedOutState ||formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) &&  <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
+                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -2281,7 +2286,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="Vendor_NightHALT"
                                   // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                                  value={(checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
+                                  value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
                                   onChange={handlevendor_billdata}
                                   label="Night"
                                   id="Vendor_NightHALT"
@@ -2320,7 +2325,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <div className="input">
                                 <TextField
                                   name="Vendor_Bata"
-                                  value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0}
+                                  value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
                                   onChange={handlevendor_billdata}
                                   label="Bata"
                                   id="Vendor_Bata"
@@ -2346,7 +2351,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <TextField
                                   name="Vendor_BataTotalAmount"
-                                  value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
+                                  value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                                   size="small"
                                   label="Amount"
                                   id="Vendor_BataTotalAmount"
@@ -2398,7 +2403,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 <TextField
                                   name="pack"
-                                  value={calcPackage || formData.calcPackage ||ratepackage || ''}
+                                  value={calcPackage || formData.calcPackage || ratepackage || ''}
                                   label="Pack"
                                   id="pack"
                                   size="small"
@@ -2542,8 +2547,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   name='nightThrs2'
                                   id="nightThrs2"
-                                  value={nightTotalCount}
-                                  onChange={(e) => setNightTotalCount(e.target.value)}
+                                  value={nightCount}
+                                  onChange={(e) => setNightCount(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2556,7 +2561,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="amount8"
                                   className='customer-bill-input'
                                   // value={night_totalAmount || 0}
-                                  value={ nightTotalAmount || 0}
+                                  value={night_totalAmount || 0}
 
                                   size="small"
                                   autoComplete="password"
@@ -2576,7 +2581,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   value={driverBeta}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
-                                  onChange={(e)=>setdriverBeta(e.target.value)}
+                                  onChange={(e) => setdriverBeta(e.target.value)}
                                   label="Driver Convenience"
                                   autoComplete="password"
                                   id="driverconvenience1"
@@ -2596,7 +2601,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   value={driverbeta_Count}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
 
-                                  onChange={(e)=>setdriverbeta_Count(e.target.value)}
+                                  onChange={(e) => setdriverbeta_Count(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2610,7 +2615,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   value={driverBeta_amount}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
-                                  onChange={(e)=>setdriverBeta_amount(e.target.value)}
+                                  onChange={(e) => setdriverBeta_amount(e.target.value)}
                                   size="small"
                                   label="Amount"
                                   id="amount9"
@@ -4017,7 +4022,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_totalAmountHours"
                           // value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
-                          value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
+                          value={Math.round(vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0)}
                           size="small"
                           label="Amount"
                           id="Vendor_totalAmountHours"
@@ -4031,7 +4036,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="Vendor_NightHALT"
                           // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                          value={(checkvendorNightBetaEligible() ? vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT : 0) || 0}
+                          value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
                           onChange={handlevendor_billdata}
                           label="Night"
                           id="Vendor_NightHALT"
@@ -4070,7 +4075,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <div className="input">
                         <TextField
                           name="Vendor_Bata"
-                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0 : 0}
+                          value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
                           onChange={handlevendor_billdata}
                           label="Bata"
                           id="Vendor_Bata"
@@ -4096,7 +4101,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="Vendor_BataTotalAmount"
-                          value={vendorinfo?.vendor_duty === "Outstation" ? vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0 : 0}
+                          value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                           size="small"
                           label="Amount"
                           id="Vendor_BataTotalAmount"
@@ -4133,7 +4138,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         <TextField
                           name="pack"
-                          value={calcPackage || formData.calcPackage ||ratepackage || ''}
+                          value={calcPackage || formData.calcPackage || ratepackage || ''}
                           label="Pack"
                           id="pack"
                           size="small"
@@ -4233,7 +4238,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </div>
                         <TextField
                           name="amount7"
-                          value={ex_hrAmount || formData.calcPackage || 0}
+                          value={ex_hrAmount || 0}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -4251,7 +4256,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="night1"
                           // value={nightBta || ''}
-                          value={ nightBta || 0}
+                          value={nightBta || 0}
                           onChange={(e) => setNightBeta(e.target.value)}
                           label="Night"
                           id="night"
@@ -4267,8 +4272,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           size="small"
                           name='nightThrs2'
-                          value={nightTotalCount || ''}
-                          onChange={(e) => setNightTotalCount(e.target.value)}
+                          value={nightCount || ''}
+                          onChange={(e) => setNightCount(e.target.value)}
                           variant="standard"
                           autoComplete="password"
                         />
@@ -4288,7 +4293,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="amount8"
-                          value={nightTotalAmount || 0}
+                          value={night_totalAmount || 0}
                           size="small"
                           autoComplete="password"
                           label="Amount"
@@ -4314,9 +4319,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="driverconvenience1"
-                          value={driverBeta}
+                          value={driverBeta || 0}
                           // onChange={driverBeta_calc}
-                          onChange={(e)=>setdriverBeta(e.target.value)}
+                          onChange={(e) => setdriverBeta(e.target.value)}
 
                           label="Driver Convenience"
                           autoComplete="password"
@@ -4342,7 +4347,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           name='dtc2'
                           value={driverbeta_Count}
                           // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || 0) : 0}
-                          onChange={(e)=>setdriverbeta_Count(e.target.value)}
+                          onChange={(e) => setdriverbeta_Count(e.target.value)}
                           variant="standard"
                           autoComplete="password"
                         />
@@ -4362,8 +4367,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="amount9"
-                          value={driverBeta_amount}
-                          onChange={(e)=>setdriverBeta_amount(e.target.value)}
+                          value={driverBeta_amount || 0}
+                          onChange={(e) => setdriverBeta_amount(e.target.value)}
                           // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                           size="small"
                           label="Amount"
@@ -4604,7 +4609,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         />
                       </div>
                     </div>
-{/* 
+                    {/* 
                     <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
                       PaperProps={{
                         style: {

@@ -113,9 +113,9 @@ const Booking = ({ stationName, customerData }) => {
   const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   // to tranform datas based on 
-  const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+  const stationOptions = stationName?.filter(option => option?.Stationname !== "All").map(option => option?.Stationname)
 
-  // console.log("stationName1", stationName)
+  // console.log(stationOptions,"stationName1", stationName)
 
   const apiUrl = APIURL;
 

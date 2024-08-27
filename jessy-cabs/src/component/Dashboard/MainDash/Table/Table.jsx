@@ -80,7 +80,8 @@ export default function BasicTable({stationName}) {
     
     const {filteredData,setTodayBooking,setViewMonthdata,setFilteredData} = useData1();
 
-    const stationarray = stationName?.map((data) => data.Stationname)
+    const stationarray1 = stationName?.map((data) => data.Stationname)
+    const stationarray =stationarray1?.filter(data=> data !== 'All')
     // const stationarray = stationName?.Stationname.split(',');
   const showDateFunction = () => {
 

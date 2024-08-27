@@ -28,6 +28,7 @@ const CustomerReview = ({ station }) => {
   // const apiurl = APIURL
   // console.log(station,"datastation")
   const stationarray = station?.map(data => data.Stationname);
+  const data1 =stationarray?.filter(data=> data !== 'All')
   
   // console.log(stationarray,"dattaerrrr")
 
@@ -119,19 +120,19 @@ const CustomerReview = ({ station }) => {
   const getData =() => {
     if (viewmonthdata === "monthly") {
       return {
-        categories: stationarray,
+        categories: data1,
         data: todaybook,
       }
     } else if (viewmonthdata === "weekly") {
       return {
-        categories: stationarray,
+        categories:data1,
         data: todaybook,
       };
     }
     else {
       // Yesterday data is already set in state
       return {
-        categories: stationarray,
+        categories:data1,
         data: todaybook,
       };
     }

@@ -86,15 +86,15 @@ const useTripsheet = () => {
     let [minKM, setMinKM] = useState()
 
     // nighht value --------------------
-    let [nightBta, setNightBeta] = useState('')
+    let [nightBta, setNightBeta] = useState('0')
     let [nightCount, setNightCount] = useState('')
     let [night_totalAmount, setnight_totalAmount] = useState('')
 
 
     //driver convinence --------------------------
-    let [driverBeta, setdriverBeta] = useState('')
-    let [driverbeta_Count, setdriverbeta_Count] = useState('')
-    let [driverBeta_amount, setdriverBeta_amount] = useState('')
+    let [driverBeta, setdriverBeta] = useState('0')
+    let [driverbeta_Count, setdriverbeta_Count] = useState('0')
+    let [driverBeta_amount, setdriverBeta_amount] = useState('0')
 
     //--------------------------------------------------------------
 
@@ -2501,10 +2501,10 @@ const useTripsheet = () => {
                     console.log(RemainTotalCalculation, a, 'venkat3');
 
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
-                    console.log(hours, minutes, 'helloww');
+                    // console.log(hours, minutes, 'helloww');
 
                     const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
-                    console.log(`${hours}h ${formattedMinutes}mhello2`);
+                    // console.log(`${hours}h ${formattedMinutes}mhello2`);
 
                     return `${hours}h ${formattedMinutes}m`;
 
@@ -2830,7 +2830,6 @@ const useTripsheet = () => {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
-                    console.log(bookingDetails, 'book');
 
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
@@ -3284,7 +3283,6 @@ const useTripsheet = () => {
         const calcdata = () => {
             if (nightBta && nightCount > 1) {
                 let nightTotalAmounts = Number(nightBta) * Number(nightCount)
-                console.log(nightTotalAmounts, 'totalnight');
 
                 setnight_totalAmount(nightTotalAmounts)
             }
@@ -3297,7 +3295,6 @@ const useTripsheet = () => {
         }
         calcdata();
     }, [nightBta, nightCount])
-    console.log(nightBta, nightCount, 'ncount');
 
 
 
@@ -3317,31 +3314,33 @@ const useTripsheet = () => {
             const TotalDay = calculateTotalDay();
             const newTimeString = shedOutTime?.replace(":", ".");
             const newTimeStrings = shedInTime?.replace(":", ".");
-            console.log(shedInTime, shedOutTime, calculateTotalDay(), TotalDay, typeof (TotalDay), 'countdays');
 
             let calcNight = 0;
 
             if (calculateTotalDay() === 0) {
-                if (Number(newTimeStrings) > 22.0) {
+                if (Number(newTimeStrings) > 22.0 || Number(newTimeString) <= 6.00) {
                     calcNight = 1;
-                    console.log(calcNight, 'countdays111111');
-                    // Example logic, adjust as needed
+                }
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
+                    calcNight = 2;
                 }
             } else if (TotalDay > 0) {
-                if (newTimeStrings > 22.0) {
+                if (newTimeStrings >= 22.0) {
                     calcNight = TotalDay + 1;
                 } else {
                     calcNight = TotalDay;
                 }
             }
-
+            setdriverbeta_Count(calculateTotalDay())
             setNightTotalCount(calcNight);
-            console.log(calcNight, 'countdays123456');
         };
+        // setNightTotalCount(calculateTotalDay())
+
 
         NightCount();
     }, [formData, selectedCustomerData, selectedCustomerDatas, book]);
-    console.log(nightTotalCount, 'countdays12345678');
+
+
 
     // const NightCount = ()=>{
     //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
@@ -3437,7 +3436,7 @@ const useTripsheet = () => {
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
-            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(nightTotalAmount || 0) + (vendorinfo?.vendor_duty === "Outstation" ? Number(driverBeta_amount || 0) : 0) + Number(permit) + Number(parking) + Number(toll);
+            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(nightTotalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
@@ -3561,7 +3560,6 @@ const useTripsheet = () => {
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
 
-        console.log(amount, "a", amount1, "a1", amount2, "a2", amount3, "a3", amount4, "abcd", amount5, "vprmit", amount6, "aaa", checkvendorNightBetaEligible())
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
         const fullAmount = totalAmount - amount7;
@@ -3604,9 +3602,7 @@ const useTripsheet = () => {
             // }
 
             vendortotalHours = await convertTimeToNumber(vendortothr);
-            console.log(vendortotalHours, "vendortotalhours")
             const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
-            console.log(consvertedTotalHour, "vend")
 
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
@@ -3797,9 +3793,16 @@ const useTripsheet = () => {
     }
 
 
+    useEffect(() => {
+        const a = calculateTotalDay()
 
+        const newAmount = nightTotalCount * nightBta;
+        const betaAmount = Number(driverBeta) * driverbeta_Count;
 
-    console.log(nightCount, typeof (nightCount), 'nighttt');
+        setdriverBeta_amount(betaAmount)
+        setNightTotalAmount(newAmount);
+    }, [nightTotalCount, nightBta, driverBeta, driverbeta_Count]);
+
 
     // calc function
 
@@ -3835,7 +3838,6 @@ const useTripsheet = () => {
                 }
             });
             data = response.data;
-            console.log(data, 'dataaa');
 
             const ratepackage = data.package
             // const packages = Number(data.package);
@@ -3846,6 +3848,7 @@ const useTripsheet = () => {
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
             const NHaltAmount = Number(data.NHalt) * nightTotalCount;
+
 
             setNightTotalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
@@ -4368,7 +4371,7 @@ const useTripsheet = () => {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
         night_totalAmount, driverBeta_calc, driverbeta_Count_calc,
-        driverBeta_amount, totalcalcAmount, driverBeta,
+        driverBeta_amount, totalcalcAmount, driverBeta, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
         selectedCustomerId, nightBta, nightCount, driverbeta_Count,
         vehileNames, handleEscortChange, handleClickOpen, open,
         handleClose,

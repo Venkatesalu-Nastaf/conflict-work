@@ -239,7 +239,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleCalc, calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
-    driverbeta_Count_calc, driverBeta_amount,
+    driverbeta_Count_calc, driverBeta_amount,setdriverBeta,setdriverbeta_Count,setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
@@ -2523,7 +2523,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="night1"
                                   className='customer-bill-input'
                                   // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-                                  value={nightBta || 0}
+                                  value={nightBta}
 
                                   onChange={(e) => setNightBeta(e.target.value)}
                                   label="Night"
@@ -2542,8 +2542,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   name='nightThrs2'
                                   id="nightThrs2"
-                                  value={nightTotalCount||calculateTotalDay() || 0}
-                                  onChange={(e) => setNightCount(e.target.value)}
+                                  value={nightTotalCount}
+                                  onChange={(e) => setNightTotalCount(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2574,9 +2574,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="driverconvenience1"
                                   className='customer-bill-input'
-                                  // value={driverBeta || formData.driverBeta || ""}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
-                                  onChange={driverBeta_calc}
+                                  value={driverBeta}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
+                                  onChange={(e)=>setdriverBeta(e.target.value)}
                                   label="Driver Convenience"
                                   autoComplete="password"
                                   id="driverconvenience1"
@@ -2593,10 +2593,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='dtc2'
                                   id='dtc2'
                                   className='customer-bill-input'
-                                  // value={driverbeta_Count || formData.driverbeta_Count || ''}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
+                                  value={driverbeta_Count}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
 
-                                  onChange={driverbeta_Count_calc}
+                                  onChange={(e)=>setdriverbeta_Count(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2608,8 +2608,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <TextField
                                   name="amount9"
                                   className='customer-bill-input'
-                                  // value={driverBeta_amount || 0}
-                                  value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                                  value={driverBeta_amount}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                                  onChange={(e)=>setdriverBeta_amount(e.target.value)}
                                   size="small"
                                   label="Amount"
                                   id="amount9"
@@ -4313,8 +4314,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="driverconvenience1"
-                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverBeta || formData.driverBeta || 0) : 0}
-                          onChange={driverBeta_calc}
+                          value={driverBeta}
+                          // onChange={driverBeta_calc}
+                          onChange={(e)=>setdriverBeta(e.target.value)}
+
                           label="Driver Convenience"
                           autoComplete="password"
                           id="driver-convenience"
@@ -4337,8 +4340,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           size="small"
                           name='dtc2'
-                          value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || 0) : 0}
-                          onChange={driverbeta_Count_calc}
+                          value={driverbeta_Count}
+                          // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || 0) : 0}
+                          onChange={(e)=>setdriverbeta_Count(e.target.value)}
                           variant="standard"
                           autoComplete="password"
                         />
@@ -4358,7 +4362,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="amount9"
-                          value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                          value={driverBeta_amount}
+                          onChange={(e)=>setdriverBeta_amount(e.target.value)}
+                          // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                           size="small"
                           label="Amount"
                           id="amount"

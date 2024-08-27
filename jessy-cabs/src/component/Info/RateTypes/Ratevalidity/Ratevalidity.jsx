@@ -239,7 +239,7 @@ const Ratevalidity = () => {
                         </div>
                     }
                 </div>
-                <Box className="box-mui-icons" sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px" }}>
+                <Box className="common-speed-dail">
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}

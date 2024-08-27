@@ -31,6 +31,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../url";
 import Tooltip from '@mui/material/Tooltip';
+import { BiSolidBellRing } from "react-icons/bi";
 
 
 // import Modal from '@mui/material/Modal';
@@ -374,37 +375,44 @@ const MainDashboard = () => {
 
     // iOS detection
     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return 'iPhone-responsive';
+      return 'iPhone-responsive';
     }
 
     // Android detection
     if (/android/i.test(userAgent)) {
-        return 'Android';
+      return 'Android';
     }
 
     return 'unknown';
-};
+  };
 
-const [deviceType, setDeviceType] = useState('');
+  const [deviceType, setDeviceType] = useState('');
 
-useEffect(() => {
+  useEffect(() => {
     const type = getDeviceType();
     setDeviceType(type);
-}, []);
+  }, []);
 
   return (
     <>
       {isPopupVisible && (
         <div className="popup" onClick={handlePopupmodalClose}>
           <div className="update-card ">
-
             <div className="close-button-container">
               <button className="close-button" onClick={handlePopupmodalClose}>
                 {/* Close icon */}
                 <FaTimes />
               </button>
             </div>
-            <img src={update} alt="update" className="whats-new-image" />
+            {/* <img src={update} alt="update" className="whats-new-image" /> */}
+            <div>
+              <div>
+                <BiSolidBellRing className="notification-bell-icon" />
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: '600' }}>
+                What's New!
+              </div>
+            </div>
             <h3 className="text-black update-text py-3">
               Update for more Features
             </h3>
@@ -431,17 +439,17 @@ useEffect(() => {
               <div className="avatar-item">
                 <Tooltip title={`Hi ${storedUsername}`} arrow>
                   <span>
-                  <StyledBadge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    variant="dot"
-                  >
-                    <Avatar
-                      alt="userimage"
-                      // src={`${apiUrl}/public/user_profile/${selectedImage}`}
-                      src={selectedavtar}
-                    />
-                  </StyledBadge>
+                    <StyledBadge
+                      overlap="circular"
+                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                      variant="dot"
+                    >
+                      <Avatar
+                        alt="userimage"
+                        // src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                        src={selectedavtar}
+                      />
+                    </StyledBadge>
                   </span>
                 </Tooltip>
                 { }

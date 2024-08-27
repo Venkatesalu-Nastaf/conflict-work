@@ -514,7 +514,7 @@ const Accuntinfo = () => {
           }
         </div>
         <div className="SpeedDial account-info-speed-dail">
-          <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "30px", right: "30px", zIndex: "3" }}>
+          <Box className='common-speed-dail'>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}

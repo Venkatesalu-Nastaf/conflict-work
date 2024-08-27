@@ -362,6 +362,7 @@
   position: relative;
   display: inline-block;
   margin-right: 10px;
+  display: flex;
 }
 
 .user-icon-update-dot {

@@ -67,8 +67,8 @@ const useTripsheet = () => {
     const [signaturepopup, setSignaturepopup] = useState(false)
     const [signatureupload, setSignatureupload] = useState(false)
     const [isHybridCustomer, setIsHybridCustomer] = useState(false)
-
-
+    const [nightTotalCount, setNightTotalCount] = useState(0)
+    const [nightTotalAmount, setNightTotalAmount] = useState(0)
 
 
     //-------------------------calc-------------------
@@ -1068,7 +1068,6 @@ const useTripsheet = () => {
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
                 const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
-                console.log(dattasign, "kkkkk")
 
 
                 const updatedCustomer = {
@@ -1943,11 +1942,9 @@ const useTripsheet = () => {
                 console.log('Shed Out Date is greater than Shed In Date');
                 return 'Shed Out Date is greater';
             } else if (shedOutDateObj.isSame(shedindateObj)) {
-                console.log('Shed Out Date is equal to Shed In Date');
                 return 0;
             } else {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-                console.log(totalDays, 'totalDays calculation');
                 return totalDays;
             }
         } else if (startDate && closeDate && !shedoutdate && !shedindate) {
@@ -1964,7 +1961,6 @@ const useTripsheet = () => {
         return '';
     };
 
-    console.log(vendorinfo.vendorshedintime, 'vendor');
 
 
     const calculateTotalTimes = () => {
@@ -2274,7 +2270,6 @@ const useTripsheet = () => {
     const calculatevendorTotalDays = () => {
         const shedoutdate = vendorinfo?.vendorshedOutDate || "";
         const shedindate = vendorinfo?.vendorshedInDate || ""
-        console.log(shedindate, shedoutdate, 'vendor out');
 
         // if (shedoutdate && shedindate) {
         //     const shedOutDateObj = dayjs(shedoutdate);
@@ -2293,14 +2288,11 @@ const useTripsheet = () => {
             const shedindateObj = dayjs(shedindate).startOf('day');
 
             if (shedOutDateObj.isAfter(shedindateObj)) {
-                console.log('Shed Out Date is greater than Shed In Date');
                 return 'Shed Out Date is greater';
             } else if (shedOutDateObj.isSame(shedindateObj)) {
-                console.log('Shed Out Date is equal to Shed In Date');
                 return 0;
             } else {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-                console.log(totalDays, 'totalDays calculation vendor');
                 return totalDays;
             }
         }
@@ -2340,7 +2332,6 @@ const useTripsheet = () => {
         return true;
     };
 
-    console.log(calculatevendorTotalDays(), 'ddddddddd');
     const calculatevendorTotalTime = () => {
 
         const shedoutTime = vendorinfo?.vendorreporttime || ""
@@ -2348,7 +2339,6 @@ const useTripsheet = () => {
         const shedinTime = vendorinfo?.vendorshedintime || ""
         // const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
         const totalDays = calculatevendorTotalDays()
-        console.log(totalDays, "days")
 
 
         if (shedoutTime && shedinTime) {
@@ -2389,7 +2379,6 @@ const useTripsheet = () => {
                 // const combined = combinedTime;
                 const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
                 // const [hours2, minutes2] = combined.toString().split('.').map(Number);
-                console.log(hours1, minutes1, '11');
 
                 let totalHours = hours1
                 let totalMinutes = minutes1
@@ -2399,11 +2388,9 @@ const useTripsheet = () => {
                     totalHours += quotient; // Add the quotient to starttotal
                 }
                 const formattedTotal = `${totalHours}.${totalMinutes}`;
-                console.log(totalHours, typeof (totalHours), totalMinutes, typeof (totalMinutes), formattedTotal, '1122');
 
                 // const d = 
                 const [integerPart, decimalPart] = formattedTotal.toString().split('.').map(Number);
-                console.log(integerPart, decimalPart, "part")
                 if (decimalPart >= 60) {
                     // Increment the integer part by 1
 
@@ -2444,29 +2431,24 @@ const useTripsheet = () => {
                 const LongHours = LongTripHours.toFixed(2);
 
                 // const combined = combinedTime;
-                console.log(newTimeString, newTimeStrings, LongHours, typeof (LongHours), 'startend1');
 
                 // const startendhours = 23.60 - Number(newTimeString) + Number(newTimeStrings);
                 const starthour1 = 23.60 - Number(newTimeString);
                 const starthour = Number(starthour1).toFixed(2)
                 const [startintegerPart, startdecimalPart] = starthour.toString().split('.').map(Number);
-                console.log(startintegerPart, "ss", startdecimalPart, "ll")
                 const [endintegerPart, enddecimalPart] = newTimeStrings.toString().split('.').map(Number);
                 let starttotal = Number(startintegerPart) + Number(endintegerPart);
                 let endtotal = Number(startdecimalPart) + Number(enddecimalPart)
-                console.log(starttotal, endtotal, 'startend12');
                 if (endtotal >= 100) {
                     const quotient = Math.floor(endtotal / 60); // Get the quotient
                     endtotal = endtotal % 60; // Get the remainder
                     starttotal += quotient; // Add the quotient to starttotal
                 }
                 const startendhours1 = `${starttotal}.${endtotal}`
-                console.log(startendhours1, LongHours, typeof (startendhours1), typeof (LongHours), 'checking1');
 
                 const TotalHoursCalc = Number(startendhours1) + Number(LongHours)
 
                 const formattedHours = Number(TotalHoursCalc).toFixed(2);
-                console.log(typeof (TotalHoursCalc), TotalHoursCalc, 'checking', formattedHours);
 
                 const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
                 // const [hours2, minutes2] = combined.toString().split('.');
@@ -2475,7 +2457,6 @@ const useTripsheet = () => {
                 let totalHours = Number(integerPart)
                 let totalMinutes = Number(decimalPart)
                 const formattedTotal = `${totalHours}.${totalMinutes}`
-                console.log(formattedTotal, 'uuuu');
                 console.log(LongTripHours, typeof (LongTripHours), 'suresh');
                 const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
 
@@ -2492,19 +2473,15 @@ const useTripsheet = () => {
 
 
                     const newDecimalPart = newdecimalPart % 60;
-                    console.log(newDecimalPart, 'hello55');
 
                     Decimalvalue = Number(`${IntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`)
                     const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
                     const formattedDecimalValue = Decimalvalue.toFixed(2);
 
-                    console.log(formattedDecimalValue, 'hellooooo');
 
                     const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
-                    console.log(hours, minutes, 'helloajay');
 
                     const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
-                    console.log(`${hours}h ${formattedMinutes}mhello`);
 
 
                     return `${hours}h ${formattedMinutes}m`;
@@ -2731,6 +2708,8 @@ const useTripsheet = () => {
 
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
+        console.log(name, value, 'handlechange');
+
 
         setPackageData((prevData) => ({
             ...prevData,
@@ -2749,6 +2728,10 @@ const useTripsheet = () => {
             [name]: value,
         }));
         setTripSheetData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setSelectedCustomerDatas((prevData) => ({
             ...prevData,
             [name]: value,
         }));
@@ -2847,6 +2830,8 @@ const useTripsheet = () => {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
+                    console.log(bookingDetails, 'book');
+
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
                         if (bookingDetails.status === "Cancelled") {
@@ -3299,6 +3284,8 @@ const useTripsheet = () => {
         const calcdata = () => {
             if (nightBta && nightCount > 1) {
                 let nightTotalAmounts = Number(nightBta) * Number(nightCount)
+                console.log(nightTotalAmounts, 'totalnight');
+
                 setnight_totalAmount(nightTotalAmounts)
             }
             else if (nightBta) {
@@ -3310,6 +3297,8 @@ const useTripsheet = () => {
         }
         calcdata();
     }, [nightBta, nightCount])
+    console.log(nightBta, nightCount, 'ncount');
+
 
 
 
@@ -3320,13 +3309,75 @@ const useTripsheet = () => {
     const driverbeta_Count_calc = (e) => {
         setdriverbeta_Count(e.target.value)
     }
+    let calcNight = 0
+    useEffect(() => {
+        const NightCount = () => {
+            const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+            const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+            const TotalDay = calculateTotalDay();
+            const newTimeString = shedOutTime?.replace(":", ".");
+            const newTimeStrings = shedInTime?.replace(":", ".");
+            console.log(shedInTime, shedOutTime, calculateTotalDay(), TotalDay, typeof (TotalDay), 'countdays');
+
+            let calcNight = 0;
+
+            if (calculateTotalDay() === 0) {
+                if (Number(newTimeStrings) > 22.0) {
+                    calcNight = 1;
+                    console.log(calcNight, 'countdays111111');
+                    // Example logic, adjust as needed
+                }
+            } else if (TotalDay > 0) {
+                if (newTimeStrings > 22.0) {
+                    calcNight = TotalDay + 1;
+                } else {
+                    calcNight = TotalDay;
+                }
+            }
+
+            setNightTotalCount(calcNight);
+            console.log(calcNight, 'countdays123456');
+        };
+
+        NightCount();
+    }, [formData, selectedCustomerData, selectedCustomerDatas, book]);
+    console.log(nightTotalCount, 'countdays12345678');
+
+    // const NightCount = ()=>{
+    //     const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    //     const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+    //     const TotalDay = calculateTotalDay()
+    //     console.log(shedInTime,shedOutTime,calculateTotalDay(),TotalDay,typeof(TotalDay),'countdays');
+    //     if(TotalDay===0){
+    //         if(shedInTime>22.0){
+
+    //         }
+    //     }
+    //     if(TotalDay>0){
+    //         if(shedInTime>22.0){
+    //          calcNight=TotalDay+1;
+    //          setNightTotalCount(calcNight)
+    //         }
+    //         console.log('countdays12');
+
+    //             calcNight=calculateTotalDay()
+    //             setNightTotalCount(calcNight)
+    //     }
+
+    //     console.log(calcNight,'countdays123456');
+
+
+    // }
+    // console.log(calcNight,nightTotalCount,'countdays1234');
+
+    // NightCount()
 
     const checkNightBetaEligible = () => {
         const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
         const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
 
         const totalDays = calculateTotalDays();
-        if (totalDays < 2) {
+        if (totalDays < 1) {
             let start = shedOutTime?.split(':').map(Number);
             let end = shedInTime?.split(':').map(Number);
 
@@ -3386,7 +3437,7 @@ const useTripsheet = () => {
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
-            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + (checkNightBetaEligible() ? Number(night_totalAmount || 0) : 0) + (vendorinfo?.vendor_duty === "Outstation" ? Number(driverBeta_amount || 0) : 0) + Number(permit) + Number(parking) + Number(toll);
+            const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(nightTotalAmount || 0) + (vendorinfo?.vendor_duty === "Outstation" ? Number(driverBeta_amount || 0) : 0) + Number(permit) + Number(parking) + Number(toll);
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
@@ -3397,8 +3448,10 @@ const useTripsheet = () => {
     // extra Amount calculation--------------------------
     useEffect(() => {
         const extraClac = () => {
-            let extraAbout_hr = Number(extraHR) * Number(extrahr_amount)
-            setEx_HrAmount(extraAbout_hr)
+            let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
+            const extarhour = extraAbout_hr.toFixed(2)
+
+            setEx_HrAmount(extarhour)
         }
         extraClac();
     }, [extraHR, extrahr_amount])
@@ -3507,17 +3560,12 @@ const useTripsheet = () => {
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
-        // console.log(amount4,"ammmm",vendorbilldata.Vendor_NightbataTotalAmount,"ff")vendor_toll
-        console.log(vendorinfo.vendor_vpermettovendor, "callaveb", vendorinfo?.vpermettovendor)
-        console.log(amount7, "ammmmmmm", vendorinfo.vendor_advancepaidtovendor, "adavs", vendorinfo?.advancepaidtovendor)
 
         console.log(amount, "a", amount1, "a1", amount2, "a2", amount3, "a3", amount4, "abcd", amount5, "vprmit", amount6, "aaa", checkvendorNightBetaEligible())
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
         const fullAmount = totalAmount - amount7;
         const fullamountdata = Math.ceil(fullAmount);
-        console.log(Math.ceil(fullAmount), "mathhhW32222hh")
-        console.log(totalAmount, "fulltotalamount", typeof (fullAmount), Number(fullAmount), typeof (Number(fullAmount)))
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
     }
@@ -3542,7 +3590,6 @@ const useTripsheet = () => {
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             vendorratetype = vendorinfo.vendor_ratename || ratename || ""
 
-            console.log(vendortotkm, "kkkcc", vendorratetype, vendortothr, "hrr", vendorduty, "duty", vendorvehicleNames, "namorg")
 
 
             if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype) {
@@ -3752,11 +3799,13 @@ const useTripsheet = () => {
 
 
 
+    console.log(nightCount, typeof (nightCount), 'nighttt');
 
     // calc function
 
     let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname, totalamount;
     const handleCalc = async () => {
+
         try {
 
             duty = formData.duty || selectedCustomerData.duty || book.duty;
@@ -3786,6 +3835,8 @@ const useTripsheet = () => {
                 }
             });
             data = response.data;
+            console.log(data, 'dataaa');
+
             const ratepackage = data.package
             // const packages = Number(data.package);
             const Hours = Number(data.Hours);
@@ -3794,6 +3845,9 @@ const useTripsheet = () => {
             const extraHours = Number(data.extraHours);
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
+            const NHaltAmount = Number(data.NHalt) * nightTotalCount;
+
+            setNightTotalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
 
             // if (consvertedTotalHour > Hours) {
@@ -4426,6 +4480,8 @@ const useTripsheet = () => {
         ratepackage,
         calculateTotalDay,
         calculateTotalTimes,
+        nightTotalCount, setNightTotalCount,
+        nightTotalAmount, setNightTotalAmount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm
 
 

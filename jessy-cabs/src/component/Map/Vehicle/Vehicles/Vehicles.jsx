@@ -29,6 +29,12 @@ import { CiClock2 } from "react-icons/ci";
 import { TextField } from "@mui/material";
 
 import Menu from '@mui/material/Menu';
+import { LiaNewspaper } from "react-icons/lia";
+import { FaEye } from "react-icons/fa";
+import { FaBriefcase } from "react-icons/fa";
+import { IoAlarm } from "react-icons/io5";
+import { TbEngine } from "react-icons/tb";
+import { FaPlus } from "react-icons/fa";
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -102,7 +108,7 @@ const Vehicles = () => {
             <div className='vehicle-tab-main'>
                 <div className='vehicle-tab-left-main'>
                     <div style={{ marginBottom: '20px' }}>
-                        <Button variant="outlined" onClick={openSortOptionmenu}><MdOutlineSort /> Sort Options</Button>
+                        <Button variant="outlined" onClick={openSortOptionmenu}><MdOutlineSort className='btn-icon' /> Sort Options</Button>
                         <Menu
                             id="basic-menu"
                             anchorEl={anchorElSortOption}
@@ -376,19 +382,20 @@ const Vehicles = () => {
                         <div className='vehicle-tab-right-top-division-box'>
                             <div className='vehicle-details-box-veh-no'>TN22EB3001</div>
                             <div className='vehicle-tab-right-top-division-btn-section'>
-                                <span><Button variant="outlined"><CiClock2 /> Live</Button></span>
-                                <span><Button variant="outlined">History</Button></span>
-                                <span><Button variant="contained">View Details</Button></span>
+                                <span><Button variant="outlined"><CiClock2 className='btn-icon' /> Live</Button></span>
+                                <span><Button variant="outlined"><LiaNewspaper className='btn-icon' /> History</Button></span>
+                                <span><Button variant="contained"><FaEye className='btn-icon' /> View Details</Button></span>
                             </div>
                         </div>
                         <div className='vehicle-tab-right-top-division-btn-section-2'>
-                            <Button variant="outlined">Jobs</Button>
-                            <Button variant="outlined">Alarms</Button>
-                            <Button variant="outlined">DTCs</Button>
-                            <Button variant="outlined">Fuel Entry</Button>
-                            <Button variant="outlined">Service Reminders</Button>
-                            <Button variant="outlined">Renewable Reminders</Button>
+                            <Button variant="outlined"><FaBriefcase className='btn-icon' /> Jobs</Button>
+                            <Button variant="outlined"><IoAlarm className='btn-icon' /> Alarms</Button>
+                            <Button variant="outlined"><TbEngine className='btn-icon' /> DTCs</Button>
+                            <Button variant="outlined"><FaPlus className='btn-icon' /> Fuel Entry</Button>
+                            <Button variant="outlined"><FaPlus className='btn-icon' /> Service Reminders</Button>
+                            <Button variant="outlined"><FaPlus className='btn-icon' /> Renewable Reminders</Button>
                         </div>
+
                     </div>
                     <div>
                         <h3>Vehicle Cost</h3>

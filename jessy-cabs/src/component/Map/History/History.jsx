@@ -1,4 +1,7 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useCallback } from 'react';
+import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
+import NavigationIcon from '@mui/icons-material/Navigation';
+
 import { Drawer } from '@mui/material';
 import { IoBook } from "react-icons/io5";
 import { TbReportSearch } from "react-icons/tb";
@@ -34,264 +37,281 @@ import HistoryLocationModal from "../RealTime/VehicleSection/HistoryLocationModa
 import './History.css'
 
 
+
+
+
+/* global google */
+// Define the container style for the map
+const containerStyle = {
+  width: '100%',
+  height: '650px',
+  border: '2px solid black',
+};
+
+// Set the default map center (Chennai)
+const center = {
+  lat: 13.0827,
+  lng: 80.2707,
+};
+
 //  for historytable
 const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-      field: 'Vehicle',
-      headerName: 'Vehicle',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'StartTime',
-      headerName: 'Start Time',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'EndTime',
-      headerName: 'End Time',
-      type: 'number',
-      width: 110,
-      editable: true,
-    },
-    {
-      field: 'StartLocation',
-      headerName: 'Start Location',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'EndLocation',
-      headerName: 'End Location',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'Distance',
-      headerName: 'Distance',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'Duration',
-      headerName: 'Duration',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'Mileage',
-      headerName: 'Mileage',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'Fuel',
-      headerName: 'Fuel',
-      width: 150,
-      editable: true,
-    },
-  
-  ];
-  
-  const rows = [
-    { id: 1, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14, },
-    { id: 2, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 3, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 4, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 5, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 6, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 7, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 8, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-    { id: 9, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
-  ];
-  
-  
-  
-  //  for timelinetable
-  const columnstimeline = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-      field: 'Vehicle',
-      headerName: 'Vehicle',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'StartTime',
-      headerName: 'Start Time',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'EndTime',
-      headerName: 'End Time',
-      type: 'number',
-      width: 150,
-      editable: true,
-    },
-  
-    {
-      field: 'Duration',
-      headerName: 'Duration',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'Location',
-      headerName: 'Location',
-      width: 350,
-      editable: true,
-    },
-    {
-      field: 'NearestAddress',
-      headerName: 'Nearest Address',
-      width: 250,
-      editable: true,
-    },
-    {
-      field: 'DistanceTravelled',
-      headerName: 'Distance Travelled',
-      width: 150,
-      editable: true,
-    }
-  
-  ];
-  
-  const rowstimeline = [
-    { id: 1, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-    { id: 2, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-    { id: 3, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-    { id: 4, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-    { id: 5, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-    { id: 6, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
-  
-  ];
-  
-  
-  
-  //  for timelinetable
-  const columnstripsite = [
-    { field: 'id', headerName: 'ID', width: 90 },
-  
-    {
-      field: 'StartTime',
-      headerName: 'Start Time',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'EndTime',
-      headerName: 'End Time',
-      type: 'number',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'RunningTime',
-      headerName: 'Running Time',
-      type: 'number',
-      width: 200,
-      editable: true,
-    },
-  
-    {
-      field: 'stoptime',
-      headerName: 'Stop Time',
-      type: 'number',
-      width: 200,
-      editable: true,
-    },
-  
-    {
-      field: 'totalTime',
-      headerName: 'Total Time',
-      type: 'number',
-      width: 200,
-      editable: true,
-    },
-  
-    {
-      field: 'DistanceTravelled',
-      headerName: 'Distance Travelled',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'fuelcomsumed',
-      headerName: 'Total Fuel consumed',
-      width: 350,
-      editable: true,
-    },
-  ];
-  
-  const rowstripsite = [
-    { id: 1, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 2, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 3, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 4, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 5, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 6, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-    { id: 7, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
-  ];
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  const Historystates = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
-  ];
-  
-  const Historynumbers = [
-    51551518445, 4555555555, 5555451211, 5517777,
-  ];
-  
-  
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'Vehicle',
+    headerName: 'Vehicle',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'StartTime',
+    headerName: 'Start Time',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndTime',
+    headerName: 'End Time',
+    type: 'number',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'StartLocation',
+    headerName: 'Start Location',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndLocation',
+    headerName: 'End Location',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Distance',
+    headerName: 'Distance',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Duration',
+    headerName: 'Duration',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Mileage',
+    headerName: 'Mileage',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Fuel',
+    headerName: 'Fuel',
+    width: 150,
+    editable: true,
+  },
+
+];
+
+const rows = [
+  { id: 1, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14, },
+  { id: 2, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 3, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 4, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 5, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 6, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 7, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 8, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+  { id: 9, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, StartLocation: 14, EndLocation: 14, Distance: 14, Duration: 14, Mileage: 14, Fuel: 14 },
+];
+
+
+
+//  for timelinetable
+const columnstimeline = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'Vehicle',
+    headerName: 'Vehicle',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'StartTime',
+    headerName: 'Start Time',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndTime',
+    headerName: 'End Time',
+    type: 'number',
+    width: 150,
+    editable: true,
+  },
+
+  {
+    field: 'Duration',
+    headerName: 'Duration',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Location',
+    headerName: 'Location',
+    width: 350,
+    editable: true,
+  },
+  {
+    field: 'NearestAddress',
+    headerName: 'Nearest Address',
+    width: 250,
+    editable: true,
+  },
+  {
+    field: 'DistanceTravelled',
+    headerName: 'Distance Travelled',
+    width: 150,
+    editable: true,
   }
-  
-  const labelswitch = { inputProps: { 'aria-label': 'Size switch demo' } };
-  
-  
-  // for timeline tab
-  
-  function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-      </div>
-    );
-  }
-  
-  CustomTabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
+
+];
+
+const rowstimeline = [
+  { id: 1, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 2, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 3, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 4, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 5, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+  { id: 6, Vehicle: 'Snow', StartTime: 'Jon', EndTime: 14, Duration: 14, Location: 14, NearestAddress: 14, DistanceTravelled: 14 },
+
+];
+
+
+
+//  for timelinetable
+const columnstripsite = [
+  { field: 'id', headerName: 'ID', width: 90 },
+
+  {
+    field: 'StartTime',
+    headerName: 'Start Time',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'EndTime',
+    headerName: 'End Time',
+    type: 'number',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'RunningTime',
+    headerName: 'Running Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'stoptime',
+    headerName: 'Stop Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'totalTime',
+    headerName: 'Total Time',
+    type: 'number',
+    width: 200,
+    editable: true,
+  },
+
+  {
+    field: 'DistanceTravelled',
+    headerName: 'Distance Travelled',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'fuelcomsumed',
+    headerName: 'Total Fuel consumed',
+    width: 350,
+    editable: true,
+  },
+];
+
+const rowstripsite = [
+  { id: 1, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 2, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 3, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 4, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 5, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 6, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+  { id: 7, StartTime: 'Jon', EndTime: 14, RunningTime: 14, stoptime: 14, totalTime: 14, DistanceTravelled: 14, fuelcomsumed: 456 },
+];
+
+
+
+
+
+
+
+
+
+const Historystates = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+];
+
+const Historynumbers = [
+  51551518445, 4555555555, 5555451211, 5517777,
+];
+
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
-  
+}
 
- const History = () => {
+const labelswitch = { inputProps: { 'aria-label': 'Size switch demo' } };
 
 
-    const { openHistoryDrawer, setOpenHistoryDrawer, setHistoryLocation } = useContext(PermissionContext);
+// for timeline tab
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+
+const History = () => {
+
+
+  const { openHistoryDrawer, setOpenHistoryDrawer, setHistoryLocation } = useContext(PermissionContext);
 
   const handleCloseHistoryDrawer = () => {
     setOpenHistoryDrawer(false);
@@ -334,6 +354,8 @@ const columns = [
     SetTimeline(false);
     SetStoppages(true);
     SetTripsites(false);
+    SetSpeedviolation(false);
+
 
   }
 
@@ -368,7 +390,7 @@ const columns = [
 
   const handleOpenhistoryLocationhistory = () => {
     setHistoryLocation(true);
-    console.log(setHistoryLocation,"setHistoryLocation");
+    console.log(setHistoryLocation, "setHistoryLocation");
   };
 
   // for timeline tab
@@ -400,19 +422,80 @@ const columns = [
     setSelectedValuetripsitesSelect(event.target.value);
   };
 
+  const [showAddress, SetShowAddress] = useState(false);
+  const handleshowaddress = () => {
+    SetShowAddress(!showAddress);
+  }
+
+
+
+
+
+  // Load the Google Maps script with your API key and necessary libraries
+  const { isLoaded } = useLoadScript({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+    libraries: ['places'], // Add any additional libraries you need
+  });
+
+  // State management for the map, location, directions, popup, etc.
+  const [map, setMap] = useState(null);
+  const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
+  const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
+  const [direction, setDirection] = useState(false);
+  const [directionRendererKey, setDirectionRendererKey] = useState(0);
+  const [directionRoute, setDirectionRoute] = useState(null);
+  const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
+  const [popupPosition, setPopupPosition] = useState(null); // State for popup position
+
+  // Marker location based on latitude and longitude
+  const markerLocation = lat && long ? { lat, lng: long } : null;
+
+  // Map loading handler
+  const onLoad = useCallback((map) => {
+    map.setCenter(center);
+    map.setZoom(16);
+    setMap(map);
+  }, []);
+
+  // Map unmount handler
+  const onUnmount = useCallback(() => {
+    setMap(null);
+  }, []);
+
+  // Center button click handler
+  const handleCenterButtonClick = () => {
+    const zoomLevel = 16;
+    if (map) {
+      map.panTo(markerLocation ? markerLocation : center);
+      map.setZoom(zoomLevel);
+    }
+  };
+
+  // Popup open/close handlers
+  const handleOpenPopup = () => {
+    setPopupPosition(markerLocation); // Open popup at marker location
+    setOpenPopup(true);
+  };
+  const handleClosePopup = () => setOpenPopup(false);
+
+  // Check if Google Maps API is loaded
+  if (!isLoaded) return <div>Loading...</div>;
+
+
 
   return (
     <>
-     <div className="form-container-realtime">
+      <div className="form-container-realtime">
         <div className="main-content-container">
           <p className="head-tab-type-2-all">
             <span className="Title-Name">History</span>
           </p>
           <div className='main-content-form'>
-            
 
 
-          <>
+
+            <>
               <div className='HistoryDrawer-head'>
                 <div className='HistoryDrawer-top' >
                   <div className='history-heading'>
@@ -743,6 +826,196 @@ const columns = [
 
                 {speedviolation &&
                   <>
+
+                    <div>
+                      <div>
+                        <p className='stoppages-para history-table-section-topic'>Stoppages - 0715 (TN75AL0715)</p>
+                        <p className='speesviolation-para'>Speed Limit :  80 km/h </p>
+                      </div>
+                      <div className='content-graph'>
+                        <div className='left-content'>
+                          <div className='left-top'>
+                            <div>191 Speed Violations
+                            </div>
+                            <div>
+                              Max. 94 km/h
+                            </div>
+                          </div>
+
+                          <div className='height-left'>
+
+                          <div className='speedviolation-cons'>
+                            <p className='speesviolation-para'>Speed : 82 km/h
+                            </p>
+                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                            {showAddress &&
+                              <p>
+                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                              </p>
+                            }
+
+                            <div className='last-datetime'>
+                              <p>26 Aug 24, 07:37:37 AM</p>
+                            </div>
+                          </div>
+
+                          <div className='speedviolation-cons'>
+                            <p className='speesviolation-para'>Speed : 82 km/h
+                            </p>
+                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                            {showAddress &&
+                              <p>
+                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                              </p>
+                            }
+
+                            <div className='last-datetime'>
+                              <p>26 Aug 24, 07:37:37 AM</p>
+                            </div>
+                          </div>
+
+                          <div className='speedviolation-cons'>
+                            <p className='speesviolation-para'>Speed : 82 km/h
+                            </p>
+                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                            {showAddress &&
+                              <p>
+                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                              </p>
+                            }
+
+                            <div className='last-datetime'>
+                              <p>26 Aug 24, 07:37:37 AM</p>
+                            </div>
+                          </div>
+
+                          <div className='speedviolation-cons'>
+                            <p className='speesviolation-para'>Speed : 82 km/h
+                            </p>
+                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                            {showAddress &&
+                              <p>
+                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                              </p>
+                            }
+
+                            <div className='last-datetime'>
+                              <p>26 Aug 24, 07:37:37 AM</p>
+                            </div>
+                          </div>
+
+                          <div className='speedviolation-cons'>
+                            <p className='speesviolation-para'>Speed : 82 km/h
+                            </p>
+                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                            {showAddress &&
+                              <p>
+                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                              </p>
+                            }
+
+                            <div className='last-datetime'>
+                              <p>26 Aug 24, 07:37:37 AM</p>
+                            </div>
+                          </div>
+
+                          </div>
+                        
+                        </div>
+                        <div className='right-graph'>
+                          <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            options={{
+                              minZoom: 12,
+                              maxZoom: 18,
+                            }}
+                            center={center}
+                            zoom={10}
+                            onLoad={onLoad}
+                            onUnmount={onUnmount}
+                          >
+                            {markerLocation && (
+                              <MarkerF
+                                position={markerLocation}
+                                icon={{
+                                  anchor: new google.maps.Point(137 / 2, 137 / 2),
+                                  scaledSize: new google.maps.Size(137, 137),
+                                }}
+                                onClick={handleOpenPopup} // Open popup on marker click
+                              />
+                            )}
+
+                            {openPopup && popupPosition && (
+                              <InfoWindow
+                                position={popupPosition}
+                                onCloseClick={handleClosePopup} // Close popup when the close button is clicked
+                              >
+                                <div className='map-popup'>
+                                  <h4>6744TN11BE6744</h4>
+                                  <p>Group: Hyderabad|Driver: Vijayakumar</p>
+                                  <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
+                                  <div className='status-from'>
+                                    <p>Status: Parked</p>
+                                    <p>From: An Hour</p>
+                                  </div>
+                                  <div className='location-near'>
+                                    <p>Location:
+                                      Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
+                                    </p>
+                                    <p>
+                                      Nearest
+                                      Address:
+                                      46.9 km from JESSY CABS ( Office )
+                                    </p>
+                                  </div>
+
+                                  <div className='btns-section'>
+                                    <button className='popup-last-btns'>Nearby</button>
+                                    <button className='popup-last-btns'>Add Address</button>
+                                    <button className='popup-last-btns'>Create Job</button>
+                                    <button className='popup-last-btns'>History</button>
+                                  </div>
+
+                                </div>
+                              </InfoWindow>
+                            )}
+
+
+
+                            {direction && (
+                              <DirectionsRenderer
+                                key={directionRendererKey}
+                                directions={directionRoute}
+                                options={{
+                                  polylineOptions: {
+                                    strokeColor: "#1FA445",
+                                    strokeWeight: 7,
+                                  },
+                                }}
+                              />
+                            )}
+                            {/* <div style={{ zIndex: 1, position: 'absolute', top: '60px', right: '20px' }}>
+          <Button variant="contained" color="primary" onClick={handleOpenPopup}>
+            Open Popup
+          </Button>
+        </div> */}
+
+                            <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
+                              <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
+                                <NavigationIcon />
+                              </IconButton>
+                            </div>
+
+                          </GoogleMap>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+
+
+
                     <div>
                       <p className='history-table-section-topic'>Speeding - 0715 (TN75AL0715)</p>
                       <div className='speeed-violation'>
@@ -858,12 +1131,12 @@ const columns = [
                 }
               </div>
             </>
-          
+
           </div>
         </div>
       </div>
 
-      <HistoryLocationModal/>
+      <HistoryLocationModal />
     </>
   )
 }

@@ -155,6 +155,7 @@ const style = {
 const TripSheet = ({ stationName, logoImage }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
+  const inputRef = useRef(null);
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
@@ -255,12 +256,16 @@ const TripSheet = ({ stationName, logoImage }) => {
     ratepackage,
     calculateTotalDay,
     calculateTotalTimes,
-    setSelectedMapRow, CopyEmail, setCopyEmail,conflictkm
-
+    setSelectedMapRow, CopyEmail, setCopyEmail,conflictkm,
+    nightTotalCount,setNightTotalCount,nightTotalAmount,setNightTotalAmount
 
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
-
+  // useEffect(() => {
+  //   if (inputRef.current) {
+  //     inputRef.current.focus(); // Focus the input field when component mounts
+  //   }
+  // }, [ selectedCustomerData.shedintime ,selectedCustomerDatas.shedintime]);
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -1509,23 +1514,35 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
                 </div>
+                <div style={{padding:"10px"}}>
+
+                
+                <label>Total Time</label>
 
                 <div className="input">
+
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
+
                   <TextField
                     name="totaltime"
-                    value={book.reporttime!="" || selectedCustomerData.reporttime!="" && book.shedintime!="" || selectedCustomerData.shedintime!="" || selectedCustomerDatas.shedintime!=""? calculateTotalTimes() : ""}
+                    // value={ calculateTotalTimes()}
+                    value={
+                      (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                      (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                        ? calculateTotalTimes()
+                        : ""
+                    }
                     onChange={handleChange}
-                    label="Total Time"
+                    // label="Total Time"
                     id="totaltime"
                     // variant="standard"
                     size='small'
                     autoComplete="password"
                   />
                 </div>
-
+                </div>
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
@@ -2506,7 +2523,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="night1"
                                   className='customer-bill-input'
                                   // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-                                  value={(checkNightBetaEligible() ? nightBta : 0) || 0}
+                                  value={nightBta || 0}
 
                                   onChange={(e) => setNightBeta(e.target.value)}
                                   label="Night"
@@ -2525,7 +2542,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   name='nightThrs2'
                                   id="nightThrs2"
-                                  value={nightCount||calculateTotalDay() || 0}
+                                  value={nightTotalCount||calculateTotalDay() || 0}
                                   onChange={(e) => setNightCount(e.target.value)}
                                   variant="standard"
                                   autoComplete="password"
@@ -2539,7 +2556,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="amount8"
                                   className='customer-bill-input'
                                   // value={night_totalAmount || 0}
-                                  value={(checkNightBetaEligible() ? night_totalAmount : 0) || 0}
+                                  value={ nightTotalAmount || 0}
 
                                   size="small"
                                   autoComplete="password"
@@ -4233,7 +4250,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           name="night1"
                           // value={nightBta || ''}
-                          value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+                          value={ nightBta || 0}
                           onChange={(e) => setNightBeta(e.target.value)}
                           label="Night"
                           id="night"
@@ -4249,8 +4266,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TextField
                           size="small"
                           name='nightThrs2'
-                          value={nightCount || ''}
-                          onChange={(e) => setNightCount(e.target.value)}
+                          value={nightTotalCount || ''}
+                          onChange={(e) => setNightTotalCount(e.target.value)}
                           variant="standard"
                           autoComplete="password"
                         />
@@ -4270,7 +4287,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         /> */}
                         <TextField
                           name="amount8"
-                          value={(checkNightBetaEligible() ? night_totalAmount : 0) || 0}
+                          value={nightTotalAmount || 0}
                           size="small"
                           autoComplete="password"
                           label="Amount"

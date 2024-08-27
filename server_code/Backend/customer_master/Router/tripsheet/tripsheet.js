@@ -1435,8 +1435,9 @@ router.get(`/t4hr-pack`, (req, res) => {
     const OrganizationName = req.query.organizationname;
 
 
+console.log(totalHours,VehicleName,duty,totkm,OrganizationName,'rate');
 
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {        
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1461,6 +1462,8 @@ router.get(`/t4hr-pack`, (req, res) => {
         }
 
         // Send the fetched row in the response
+        console.log(results,'resultreate');
+        
         res.json(results[0]);        
     });
 });

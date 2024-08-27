@@ -198,12 +198,12 @@ export const Vehicle = () => {
                   </LocalizationProvider>
                 </span>
                 <span>
-                  <Button variant="outlined" onClick={handleClickOpenFilter}><CiFilter /> Filters</Button>
+                  <Button variant="outlined" onClick={handleClickOpenFilter}><CiFilter className='btn-icon' /> Filters</Button>
                 </span>
                 
                 <span>
                   <div>
-                    <Button variant="contained" onClick={openReports}><IoDownloadOutline /> Reports</Button>
+                    <Button variant="contained" onClick={openReports}><IoDownloadOutline className='btn-icon' /> Reports</Button>
                     <Menu
                       id="basic-menu"
                       anchorEl={anchorElReoprts}

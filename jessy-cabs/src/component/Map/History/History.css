@@ -236,6 +236,7 @@
 .history-table-section-topic {
     font-size: 25px;
     font-weight: 600;
+    margin-top: 3px;
 
 }
 
@@ -255,4 +256,59 @@
 .table-div-width {
     width: 100%;
     overflow-x: auto;
+}
+
+.content-graph{
+    display: flex;
+    gap: 10px;
+}
+
+.left-top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.last-datetime{
+    display: flex;
+    justify-content: end;
+}
+
+.left-content{
+    width: 40%;
+    padding: 10px;
+}
+
+.right-graph{
+    width: 100%;
+}
+.speesviolation-para{
+    margin-top: 0px;
+}
+
+.speedviolation-cons{
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+.speesviolation-show-add{
+    color: #0078d4;
+}
+
+.height-left{
+    height: 300px;
+    overflow-y: auto;
+}
+
+@media screen and (max-width : 1000px){
+
+    .left-content{
+    width: 100%;
+    padding: 10px;
+}
+
+.content-graph{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 }

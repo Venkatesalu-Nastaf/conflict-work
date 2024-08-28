@@ -36,7 +36,7 @@ const VehicleAddData = () => {
   
         if(!vechiclevalue){
             setError1(true)
-            setErrorMessage("Enter the vechcile value")
+            setErrorMessage("Enter the vehicle value")
             return
         }
         

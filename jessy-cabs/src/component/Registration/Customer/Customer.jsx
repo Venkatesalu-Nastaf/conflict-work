@@ -678,7 +678,7 @@ const Customer = ({ stationName }) => {
             <div className="input-field customer-input-feild-add"> */}
                 <div className="input customer-billing-group-input">
                   <div className='customer-billing-group-input-division'>
-                    <FormLabel htmlFor='billinggrouph'>BillingGroup</FormLabel>
+                    <FormLabel htmlFor='billinggrouph'>Billing Group</FormLabel>
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
 
@@ -713,7 +713,7 @@ const Customer = ({ stationName }) => {
                       )}
                       style={{ width: 170 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="BillingGroup" placeholder="Organization" />
+                        <TextField {...params} label="Billing Group" placeholder="Organization" />
                       )}
                     />
                   )}

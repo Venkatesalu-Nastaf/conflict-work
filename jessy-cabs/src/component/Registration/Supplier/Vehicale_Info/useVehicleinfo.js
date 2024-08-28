@@ -794,7 +794,7 @@ const useVehicleinfo = () => {
 
         if (!book.vehicleName) {
             setWarning(true);
-            setWarningMessage("Enter Vehiclename");
+            setWarningMessage("Enter Vehicle Name");
             return;
 
         }

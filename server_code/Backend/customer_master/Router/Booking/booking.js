@@ -330,7 +330,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
             return res.status(404).json({ error: 'Customer not found' });
         }
 
-        console.log(result,"travelanemadata")
+        // console.log(result,"travelanemadata")
         return res.status(200).json(result);
     });
 });

@@ -585,9 +585,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_FULLTotalAmount,
     }
 
-console.log(    driverBeta,
-    driverbeta_Count,
-    driverBeta_amount,'edited');
+    console.log(driverBeta,
+        driverbeta_Count,
+        driverBeta_amount, 'edited');
 
 
 
@@ -976,7 +976,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
             // console.log(data,"adtata")
             // const queryParams = [tripid, data]
             // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (${placeholders})`, queryParams, (err, result) => {
-                await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`,[tripid,arryData], (err, result) => {
+            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                 }
@@ -1067,7 +1067,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass,requestno } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno } = req.body;
         const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         console.log(formattedFromDate, "date")
 
@@ -1385,7 +1385,7 @@ router.get('/getAllGmapdata', (req, res) => {
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL
-    const { time, date,trip_type } = req.body; // Extracting time and date from the request body
+    const { time, date, trip_type } = req.body; // Extracting time and date from the request body
 
     if (!tripid || !time || !date) {
         return res.status(400).json({ error: 'Missing required parameters' });
@@ -1395,7 +1395,7 @@ router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ?';
 
     // Execute the query with the provided parameters
-    db.query(query, [time, date, tripid,trip_type], (err, result) => {
+    db.query(query, [time, date, tripid, trip_type], (err, result) => {
         if (err) {
             console.error('Error updating GPS log:', err);
             return res.status(500).json({ error: 'Database error' });
@@ -1438,9 +1438,9 @@ router.get(`/t4hr-pack`, (req, res) => {
     const OrganizationName = req.query.organizationname;
 
 
-console.log(totalHours,VehicleName,duty,totkm,OrganizationName,'rate');
+    console.log(totalHours, VehicleName, duty, totkm, OrganizationName, 'rate');
 
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {        
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1455,19 +1455,19 @@ console.log(totalHours,VehicleName,duty,totkm,OrganizationName,'rate');
                         AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
                     ORDER BY UptoHours 
                     LIMIT 1;`
-                    
+
 
     // Execute the query with dynamic parameters 
     db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
         // Check if any rows were returned
-        if (results.length === 0) {            
+        if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
         }
 
         // Send the fetched row in the response
-        console.log(results,'resultreate');
-        
-        res.json(results[0]);        
+        console.log(results, 'resultreate');
+
+        res.json(results[0]);
     });
 });
 
@@ -1520,7 +1520,7 @@ router.get(`/ge-tVehicleName`, (req, res) => {
         if (error) {
             return res.status(500).json({ error: "Internal Server Error" })
         }
-       
+
         return res.status(200).json(result)
 
     })
@@ -1548,45 +1548,65 @@ router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
 
 })
 
+router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
+    const vehicleNo = req.params.VehicleNo
+    console.log(vehicleNo, "nooo")
+    // const status = 'Transfer_Closed';
+    // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
 
-router.get('/tripshedin/:vehregno/:cvalue',(req, res) => {
-    // const { vehregno, cvalue } = req.params;
-    const vehregno =req.params.vehregno; // Get vehregno and cvalue from query parameters
-    const cvalue =req.params.cvalue;
-    console.log(vehregno,cvalue,"ff")
-  
-      // SQL query
-      const sql = `
-        SELECT tripid, shedin, shedout, shedInDate, shedintime, startkm, closekm
-        FROM tripsheet
-        WHERE 
-        vehRegNo = ?
-        AND status != 'Cancelled'
-          AND (
-            (shedin IS NOT NULL AND ? <= shedin AND ? >= shedout)
-            OR (shedin IS NULL AND closekm IS NOT NULL AND ? <= closekm AND ? >= shedout)
-            OR (closekm IS NULL AND ? >= shedout AND ? <= startkm)
-            OR (startkm IS NULL AND ? = shedout)
-          );
-      `;
-  
-      // Execute the query with parameters
-      db.query(sql, [vehregno, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue], (err, result) => {
-                    if (err) {
-                        console.log("err", err)
-                        res.json({ message: "error fetching data", success: false })
-                    }
-                            console.log(result)
-                    
-                           return res.status(200).json(result)
-                })
-                    
-                        
-  
-      // Send the results as a JSON response
-      
-      
-  });
+    sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    db.query(sql, [vehicleNo], (err, result) => {
+        if (err) {
+            console.log("err", err)
+            res.json({ message: "error fetching data", success: false })
+        }
+
+        if (result) {
+            res.status(200).json(result)
+        }
+    })
+
+})
+
+
+// router.get('/tripshedin/:vehregno/:cvalue',(req, res) => {
+//     // const { vehregno, cvalue } = req.params;
+//     const vehregno =req.params.vehregno; // Get vehregno and cvalue from query parameters
+//     const cvalue =req.params.cvalue;
+//     console.log(vehregno,cvalue,"ff")
+
+//       // SQL query
+//       const sql = `
+//         SELECT tripid, shedin, shedout, shedInDate, shedintime, startkm, closekm
+//         FROM tripsheet
+//         WHERE 
+//         vehRegNo = ?
+//         AND status != 'Cancelled'
+//           AND (
+//             (shedin IS NOT NULL AND ? <= shedin AND ? >= shedout)
+//             OR (shedin IS NULL AND closekm IS NOT NULL AND ? <= closekm AND ? >= shedout)
+//             OR (closekm IS NULL AND ? >= shedout AND ? <= startkm)
+//             OR (startkm IS NULL AND ? = shedout)
+//           );
+//       `;
+
+//       // Execute the query with parameters
+//       db.query(sql, [vehregno, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue, cvalue], (err, result) => {
+//                     if (err) {
+//                         console.log("err", err)
+//                         res.json({ message: "error fetching data", success: false })
+//                     }
+//                             console.log(result)
+
+//                            return res.status(200).json(result)
+//                 })
+
+
+
+//       // Send the results as a JSON response
+
+
+//   });
 
 router.get('/tripaccounttravelname', (req, res) => {
     db.query("select * from accountinfo", (err, results) => {
@@ -1637,15 +1657,15 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 
 })
 
-router.get('/customerratenamedata/:customerdata',(req,res)=>{
-    const customer=req.params.customerdata;
+router.get('/customerratenamedata/:customerdata', (req, res) => {
+    const customer = req.params.customerdata;
     console.log(customer)
-    db.query('select rateType from customers where customer = ?',[customer],(err,result)=>{
+    db.query('select rateType from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-       
+
         res.status(200).json(result);
     })
 })

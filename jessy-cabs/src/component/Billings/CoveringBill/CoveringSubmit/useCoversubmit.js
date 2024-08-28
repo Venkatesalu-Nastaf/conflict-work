@@ -10,7 +10,7 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "Status", headerName: "Status", width: 130 },
     { field: "ReferenceNo", headerName: "Reference No", width: 130 },
-    { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') },
+    { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "Customer", headerName: "Customer", width: 130 },
     { field: "FromDate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
@@ -151,6 +151,8 @@ const useCoversubmit = () => {
                     },
                 });
             const data = response.data;
+            console.log(data,'data');
+            
             setInvoiceColumn(true)
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({

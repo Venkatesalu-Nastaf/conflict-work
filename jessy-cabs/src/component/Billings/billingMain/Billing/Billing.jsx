@@ -326,7 +326,7 @@ const Billing = () => {
                                     size="small"
                                     sx={{ width: "300px" }}
                                     id="guestname"
-                                    label="Gust Name"
+                                    label="Guest Name"
                                     name="guestname"
                                     autoComplete="new-password"
                                     value={book.guestname || ''}
@@ -502,7 +502,7 @@ const Billing = () => {
                                             value={book.ex_kmAmount || ''}
                                             onChange={handleChange}
                                             size="small"
-                                            label="Amount1"
+                                            label="Amount"
                                             id="ex_kmAmountEX"
                                         // variant="standard"
                                         />
@@ -624,7 +624,7 @@ const Billing = () => {
                                             value={book.ex_hrAmount || ""}
                                             onChange={handleChange}
                                             size="small"
-                                            label="Amount2"
+                                            label="Amount"
                                             id="ex_hrAmount_Amount2"
                                         // variant="standard"
                                         />
@@ -742,7 +742,7 @@ const Billing = () => {
                                             value={total_Nighthalt_Amount() || book.nhamount || ''}
                                             onChange={handleChange}
                                             size="small"
-                                            label="Amount1"
+                                            label="Amount"
                                             id="nhamountNA1"
                                         // variant="standard"
                                         />

@@ -181,7 +181,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"
-                    value={validitydata?.length > 0 ?`datevalidity ? ${startdate}--${enddate} `:""}
+                    value={validitydata?.length > 0 ? ` ${startdate} To${enddate} ` : ""}
                     // onChange={handleChange}
                     variant="standard"
                   />

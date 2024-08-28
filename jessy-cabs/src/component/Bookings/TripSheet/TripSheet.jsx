@@ -257,9 +257,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     ratepackage,
     calculateTotalDay,
     calculateTotalTimes,
+    handleClickOpen,
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm,
-    nightTotalCount, setNightTotalCount, nightTotalAmount, setNightTotalAmount
-
+    maxconflict
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -547,7 +547,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   }
 
-
+  const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -1399,7 +1399,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div className="input time" style={{ display: "grid" }}>
-                  {checkTimeandDateConflict()}
+                  {/* {checkTimeandDateConflict()} */}
 
                   <div style={{ display: "flex", alignItems: 'center' }}>
                     <div className='icone'>
@@ -1434,8 +1434,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {/* {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
-                    {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)}
+                    {/* {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
 
                     <input
                       type="time"
@@ -1495,8 +1495,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
+                    {/* {(calculateTotalDay()  ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>)) || (!closeTimeVar && <label> Shed In Time</label>)} */}
                     {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> Shed In Time</label>)}
-
                     <input
                       type="time"
                       name="shedintime"
@@ -1551,7 +1551,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
+                  <br></br>
+                  {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                    <label className='invalid-km'>
+                      Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
+                    </label>
+
+                  )}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1828,6 +1836,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <Tab>Vendor Info</Tab>
                           <Tab>Vendor Bill</Tab>
                           <Tab>Customer Bill</Tab>
+                          <Tab>GPS Att</Tab>
+                          <Tab>Messages</Tab>
                         </TabList>
 
                         <TabPanel value={0} sx={{ p: 2 }}>
@@ -2073,7 +2083,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <div className="input">
                                 <TextField
                                   name="vendorTotaltime"
-                                  value={calculateTotalTimes() || ""}
+                                  value={calculatevendorTotalTime() || ""}
                                   label="Total Time"
                                   id="pack5"
                                   size="small"
@@ -2643,6 +2653,350 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           </div>
                         </TabPanel>
+                        <TabPanel value={3} sx={{ p: 2 }}>
+                          <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
+                            <div className="input-field">
+                              <div className="input">
+                                <Button>View GPS TripSheet</Button>
+                              </div>
+                              <div className="input">
+                                <Button onClick={handleTripmapClick}>View GPS Map</Button>
+                              </div>
+                              <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                                <DialogContent>
+                                  <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                              <div className="input">
+                                <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
+                              </div>
+                              <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                                <DialogContent>
+                                  <div className="table-customer-lists">
+                                    <DataGrid
+                                      rows={row}
+                                      columns={maplogcolumns}
+                                    />
+                                  </div>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                              <div className="input">
+                                <Button>View Closing</Button>
+                              </div>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+                                </div>
+                                <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="free-solo-demo"
+                                  freeSolo
+                                  sx={{ width: "20ch" }}
+                                  onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                                  value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                  options={DocumentType.map((option) => ({
+                                    label: option.option,
+                                  }))}
+                                  getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
+                                    )
+                                  }
+                                  }
+                                />
+                              </div>
+                              <Modal
+                                open={openEditMapLog}
+                                onClose={handleCloseMapLog}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                              >
+                                <Box sx={style}>
+                                  <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                                    <div>
+                                      <TextField type="date"
+                                        value={selectedMapRow?.date || ''}
+                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                                    </div>
+                                    <div>
+                                      <TextField type="time"
+                                        value={selectedMapRow?.time || ''}
+                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                                    </div>
+                                    <div>
+
+                                      <Button onClick={handleEditMapDetails}>Submit</Button>
+                                    </div>
+                                  </div>
+
+                                </Box>
+                              </Modal>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faFileLines} size="lg" />
+                                </div>
+                                <TextField
+                                  name="on1"
+                                  value={selectedCustomerData.on1 || book.on1 || ''}
+                                  onChange={handleChange}
+                                  size="document-notes"
+                                  label="Document Notes"
+                                  autoComplete="password"
+                                  id="document-notes"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
+                              </div>
+
+
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <MarkChatReadIcon color="action" />
+                                </div>
+                                <TextField
+                                  size="small"
+                                  sx={{ m: 1, width: "300ch" }}
+                                  variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div>
+                              <div className="input">
+                                <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
+                              </div>
+                              <div className="input">
+                                <Button onClick={handlesignatureimages} variant="contained">signature</Button>
+                              </div>
+
+
+
+
+                              <input
+                                ref={fileInputRefdata}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleFileChangesignature}
+                              />
+
+
+                              <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
+                                <DialogContent>
+                                  <div
+                                    style={{
+                                      // display: "flex",
+                                      overflowY: "auto",
+                                      backgroundColor: "#E5E5E5"
+                                    }}
+                                  >
+
+                                    <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
+                                      <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
+                                    </div>
+                                  </div>
+
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                      handlesignaturemageDownload()
+                                    }}
+                                  >
+                                    DOWNLOAD
+                                  </Button>
+                                  <Button variant="contained" onClick={() => {
+                                    handlesignaturemageDelete()
+                                  }} color="primary">
+                                    Delete
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <Button onClick={handleButtonClick}>Manual Marking</Button>
+                              </div>
+                              <div className="input">
+                                <Button>Delete GPS Log</Button>
+                              </div>
+                              <div className="input radio">
+                                <FormControlLabel
+                                  name="reload"
+                                  value="reload"
+                                  control={<Checkbox size="small" />}
+                                  label="Reload"
+                                  autoComplete="new-password"
+                                  onChange={handleChange}
+                                  checked={Boolean(formData.reload || selectedCustomerData?.reload || book.reload)}
+                                />
+                              </div>
+                            </div>
+                            <div className="table-TripSheet">
+                              <div className='tripsheet-booking-table'>
+                                <DataGrid
+                                  rows={rows}
+                                  columns={columns}
+                                  onRowClick={handleTripRowClick}
+                                  pageSize={5}
+                                  checkboxSelection
+                                />
+                              </div>
+                            </div>
+                            {/* 
+                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
+                      PaperProps={{
+                        style: {
+                          width: 'fit-content',
+                          maxWidth: '90%',
+                          padding: '10px'
+                        }
+                      }}
+                    >
+                      <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {selectedRow && (
+                          <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />
+                        )}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            handleimagedelete(selectedRow);
+                            handleimgPopupClose();
+                            handleRefresh();
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog> */}
+                            <Dialog
+                              open={imgpopupOpen}
+                              onClose={handleimgPopupClose}
+                              maxWidth="md"
+                              fullWidth
+                              PaperProps={{
+                                style: {
+                                  width: 'fit-content',
+                                  maxWidth: '90%',
+                                  padding: '10px',
+                                },
+                              }}
+                            >
+                              <DialogContent
+                                style={{
+                                  padding: '7px',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {selectedRow && (
+                                  <>
+                                    {imageUrl && imageUrl.endsWith('.pdf') ? (
+                                      <embed
+                                        src={imageUrl}
+                                        title="PDF Viewer"
+                                        style={{
+                                          maxWidth: '100%',
+                                          maxHeight: '600px',
+                                          width: '100%',
+                                          height: '600px',
+                                          border: 'none',
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={imageUrl}
+                                        alt="Embedded Content"
+                                        style={{
+                                          maxWidth: '100%',
+                                          maxHeight: '600px',
+                                          objectFit: 'contain',
+                                        }}
+                                      />
+                                    )}
+                                  </>
+                                )}
+                              </DialogContent>
+                              <DialogActions>
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => {
+                                    handleimagedelete(selectedRow);
+                                    handleimgPopupClose();
+                                    handleRefresh();
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                                <Button
+                                  onClick={handleimgPopupClose}
+                                  variant="contained"
+                                  color="primary"
+                                >
+                                  Cancel
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+
+                          </div>
+                        </TabPanel>
+                        <TabPanel value={4} sx={{ p: 2 }}>
+                          <div className="Customer-Message-Slider">
+                            <div className="input-field">
+                              <div>
+                                {/* <Button onClick={generateLink}>Generate Link</Button> */}
+                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                }
+
+                                {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
+                              </div>
+                            </div>
+
+                            <div className="table-TripSheet">
+                              <div className='tripsheet-booking-table'>
+
+                                <DataGrid
+                                  rows={rowsignature}
+                                  columns={columnssignature}
+                                  onRowClick={handleTripsignaturedata}
+                                  pageSize={5}
+
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </TabPanel>
 
                       </Tabs>
                       <DialogActions className='tripsheet-cancel-save-btn'>
@@ -2972,8 +3326,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <div className="input tripsheet-calculate-input">
                   <Button variant="contained"
                     onClick={() => {
-                      handleCalc();
-                      // handleClickOpen();
+                      // handleCalc();
+                      handleClickOpen();
                     }}
                   >
                     calculate
@@ -3465,7 +3819,7 @@ const TripSheet = ({ stationName, logoImage }) => {
             </div>
 
             <div>
-              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+              <Box className="common-speed-dail">
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}

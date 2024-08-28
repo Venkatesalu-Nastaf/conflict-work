@@ -452,7 +452,7 @@ useEffect(()=>{
                   { !isEditMode &&
                   <>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add Vechicle
+                Add Vehicle
             </Button>
             </>
              }

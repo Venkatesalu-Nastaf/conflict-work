@@ -258,7 +258,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 format="DD/MM/YYYY"
                                                 id="todate"
                                                 className='full-width'
-                                                label="ToDate"
+                                                label="To Date"
                                                 onChange={(date) => {
                                                     handleDateChange(date, 'todate');
                                                     const formattedDate = dayjs(date).format('YYYY-MM-DD');

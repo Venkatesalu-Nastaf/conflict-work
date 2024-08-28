@@ -291,7 +291,7 @@ const Booking = ({ stationName, customerData }) => {
     email: formValues.email || selectedCustomerData.email || book.email,
     pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
-    starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime|| book.starttime || "",
+    starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || "",
     // starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
     driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
@@ -406,7 +406,7 @@ const Booking = ({ stationName, customerData }) => {
                     id="demo-simple-select"
                     size="small"
                     className="booking-top-section-status-main"
-                    sx={{padding: '0px 30px 0px 10px', fontSize: '14px'}}
+                    sx={{ padding: '0px 30px 0px 10px', fontSize: '14px' }}
                     // value={
                     //   bookingStatus || "pending" ||
                     //   ""
@@ -415,7 +415,7 @@ const Booking = ({ stationName, customerData }) => {
                     //   bookingStatus || 
                     //   ""
                     // }
-                    value={['pending', 'Cancelled',"Opened"].includes(bookingStatus) ? bookingStatus : ''}
+                    value={['pending', 'Cancelled', "Opened"].includes(bookingStatus) ? bookingStatus : ''}
                     // value={['pending', 'Cancelled',].includes(bookingStatus) ? bookingStatus : ''}
                     label="Status"
                     onChange={handleStatusChange}
@@ -424,7 +424,7 @@ const Booking = ({ stationName, customerData }) => {
                     <MenuItem value={'pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
                     <MenuItem value={'Opened'}>Opened</MenuItem>
-              
+
                   </Select>
                 </FormControl>
               </Box>
@@ -482,22 +482,22 @@ const Booking = ({ stationName, customerData }) => {
                 ""} />
             </span>
             {/* <span className="d-grid"> */}
-              {/* <label>Booking Date</label> */}
-              {/* <input
+            {/* <label>Booking Date</label> */}
+            {/* <input
                 type="date"
                 id="date-input"
                 value={selectedDate}
                 // onChange={handleSelectDateChange}
                 onChange={(date) => handleDateChange(date, "bookingdate")}
               /> */}
-              {/* <input type="date" value={
+            {/* <input type="date" value={
                 formData.bookingdate || selectedCustomerData.bookingdate
                   ? dayjs(selectedCustomerData.bookingdate)
                   : null || book.bookingdate
                     ? dayjs(book.bookingdate)
                     : dayjs()
               } /> */}
-              {/* <div className="booking-top-division-date">
+            {/* <div className="booking-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
@@ -607,7 +607,7 @@ const Booking = ({ stationName, customerData }) => {
                   }
                   label="Send Email"
                 />
-                 {isEditMode && !sendEmail && (
+                {isEditMode && !sendEmail && (
                   <>
                     <Button variant="outlined" size="small" onClick={handlecopiedemailcontentbooking}>
                       Copy
@@ -1963,13 +1963,12 @@ const Booking = ({ stationName, customerData }) => {
                     type="time"
                     id="reporttime"
                     name="reporttime"
-                    value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime}
+                    value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ""}
                     onChange={(event) => {
                       setBook({ ...book, reporttime: event.target.value });
                       setreporttime(event.target.value);
                       setFormData({ ...formData, reporttime: event.target.value });
-                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
-
+                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, }); 
                     }}
                   />
                 </div>
@@ -2130,7 +2129,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
             </div>
           )} */}
-          
+
 
             {/* <Dialog open={imageDialogOpen} onClose={handleCloseImageDialog || selectetImg.length === 0}>
               {selectetImg.length > 0 ? (
@@ -2230,20 +2229,20 @@ const Booking = ({ stationName, customerData }) => {
                 }}
                 type="file" multiple onChange={handleImagechange2} /> */}
 
-                  <div className="input-dummy">
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      component="label"
-                    >
-                      Attach File
-                      <input
-                        type="file"
-                        style={{ display: "none" }}
-                        onChange={handleImagechange2}
-                      />
-                    </Button>
-                  </div>
+                <div className="input-dummy">
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    component="label"
+                  >
+                    Attach File
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={handleImagechange2}
+                    />
+                  </Button>
+                </div>
                 <div className="booking-image-attach-view-division">
                   {/* <Tooltip title={`${selectetImg.length} images selected`} arrow>
                     <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
@@ -2363,7 +2362,7 @@ const Booking = ({ stationName, customerData }) => {
             </div> */}
           {/* </div> */}
         </div>
-        <Box sx={{ position: "fixed", mt: 3, height: 320, bottom: "60px", right: "30px", zIndex: '1' }}>
+        <Box className='common-speed-dail'>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}

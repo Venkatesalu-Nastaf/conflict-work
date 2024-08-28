@@ -303,7 +303,7 @@ const TransferReport = ({ stationName }) => {
                     size="small"
                     id="id"
                     className='full-width'
-                    label="GroupTrip Id"
+                    label="Group Trip ID"
                     name="referenceno"
                     autoComplete='off'
                     value={groupTripid}

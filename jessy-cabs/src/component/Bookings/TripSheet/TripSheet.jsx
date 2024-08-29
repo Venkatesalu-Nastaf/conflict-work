@@ -156,7 +156,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   // const stationOptions = stationName?.filter(option => option?.Stationname !== "ALL").map(option => option?.Stationname)
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
-  const inputRef = useRef(null);
+  // const inputRef = useRef(null);
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,

@@ -100,14 +100,16 @@
 
 .heading-three {
   margin: 0px;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .indidual-para {
   margin: 0px;
-  font-size: 17px;
+  font-size: 15px;
   padding-left: 10px;
+  cursor: pointer;
 }
 
 .driver-para {
@@ -166,8 +168,8 @@
 
 .location-icon {
   background-color: #42e442;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -176,8 +178,8 @@
 
 .call-icon {
   background-color: gray;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -186,8 +188,8 @@
 
 .share-icon {
   background-color: gray;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -196,8 +198,8 @@
 
 .message-icon {
   background-color: gray;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   justify-content: center;

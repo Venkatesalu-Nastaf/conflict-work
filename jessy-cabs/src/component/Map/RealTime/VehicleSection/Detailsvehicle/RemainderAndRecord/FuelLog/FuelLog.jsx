@@ -97,7 +97,29 @@ const FuelLog = () => {
     return (
         <>
             <div className='FuelLog'>
-                <Box sx={{ height: 400, width: '100%' }}>
+                <Box
+                    sx={{
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                            '&::-webkit-scrollbar': {
+                                width: '8px', // Adjust the scrollbar width here
+                                height: '8px', // Adjust the scrollbar width here
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#457cdc',
+                                borderRadius: '20px',
+                                minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#3367d6',
+                            },
+                        },
+                    }}
+                >
                     <DataGrid
                         rows={fuellogrows}
                         columns={fuellogcolumns}

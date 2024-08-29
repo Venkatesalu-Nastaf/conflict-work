@@ -1,4 +1,7 @@
 .FuelLog {
     width: 100%;
     overflow-x: auto;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    border-radius: 10px;
 }

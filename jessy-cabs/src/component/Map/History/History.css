@@ -255,7 +255,11 @@
 
 .table-div-width {
     width: 100%;
-    overflow-x: auto;
+    /* overflow-x: auto; */
+    border: 2px solid #ccc;
+    background-color: #fff;
+    border-radius: 10px;
+
 }
 
 .content-graph{
@@ -298,7 +302,7 @@
     overflow-y: auto;
 }
 
-@media screen and (max-width : 1000px){
+@media screen and (max-width : 1000px){history-heading
 
     .left-content{
     width: 100%;
@@ -312,3 +316,8 @@
 }
 
 }
+
+@media screen and (max-width : 969px){
+    .history-heading{
+        display: none;
+    }}

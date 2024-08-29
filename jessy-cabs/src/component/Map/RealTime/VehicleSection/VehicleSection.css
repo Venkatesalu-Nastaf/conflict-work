@@ -39,7 +39,7 @@
 }
 
 .white-text {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .vehicle-indiduals-cards {
@@ -77,3 +77,5 @@
   .vehicle-details::-webkit-scrollbar {
     width: 12px;
   }
+
+  

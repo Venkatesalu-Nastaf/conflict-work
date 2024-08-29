@@ -684,7 +684,29 @@ const History = () => {
                       <p className='history-table-section-topic'>History - 0703 (KA03AD0703)
                       </p>
                       <div className='table-div-width'>
-                        <Box sx={{ height: 400, width: '100%' }}>
+                        <Box
+                          sx={{
+                            height: 400, // Adjust this value to fit your needs
+                            '& .MuiDataGrid-virtualScroller': {
+                              '&::-webkit-scrollbar': {
+                                width: '8px', // Adjust the scrollbar width here
+                                height: '8px', // Adjust the scrollbar width here
+                              },
+                              '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                              },
+                              '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#457cdc',
+                                borderRadius: '20px',
+                                minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                              },
+                              '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#3367d6',
+                              },
+                            },
+                          }}
+                        >
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -802,8 +824,30 @@ const History = () => {
                         </div>
                       ) : (
 
-                        <div className='stoppages-notchecked table-div-width' >
-                          <Box sx={{ height: 400, width: '100%' }}>
+                        <div className=' table-div-width' >
+                          <Box
+                            sx={{
+                              height: 400, // Adjust this value to fit your needs
+                              '& .MuiDataGrid-virtualScroller': {
+                                '&::-webkit-scrollbar': {
+                                  width: '8px', // Adjust the scrollbar width here
+                                  height: '8px', // Adjust the scrollbar width here
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                  backgroundColor: '#f1f1f1',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                  backgroundColor: '#457cdc',
+                                  borderRadius: '20px',
+                                  minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                                },
+                                '&::-webkit-scrollbar-thumb:hover': {
+                                  backgroundColor: '#3367d6',
+                                },
+                              },
+                            }}
+                          >
                             <DataGrid
                               rows={rowstimeline}
                               columns={columnstimeline}
@@ -844,83 +888,83 @@ const History = () => {
 
                           <div className='height-left'>
 
-                          <div className='speedviolation-cons'>
-                            <p className='speesviolation-para'>Speed : 82 km/h
-                            </p>
-                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
-                            {showAddress &&
-                              <p>
-                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                            <div className='speedviolation-cons'>
+                              <p className='speesviolation-para'>Speed : 82 km/h
                               </p>
-                            }
+                              <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                              {showAddress &&
+                                <p>
+                                  Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                                </p>
+                              }
 
-                            <div className='last-datetime'>
-                              <p>26 Aug 24, 07:37:37 AM</p>
+                              <div className='last-datetime'>
+                                <p>26 Aug 24, 07:37:37 AM</p>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className='speedviolation-cons'>
-                            <p className='speesviolation-para'>Speed : 82 km/h
-                            </p>
-                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
-                            {showAddress &&
-                              <p>
-                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                            <div className='speedviolation-cons'>
+                              <p className='speesviolation-para'>Speed : 82 km/h
                               </p>
-                            }
+                              <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                              {showAddress &&
+                                <p>
+                                  Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                                </p>
+                              }
 
-                            <div className='last-datetime'>
-                              <p>26 Aug 24, 07:37:37 AM</p>
+                              <div className='last-datetime'>
+                                <p>26 Aug 24, 07:37:37 AM</p>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className='speedviolation-cons'>
-                            <p className='speesviolation-para'>Speed : 82 km/h
-                            </p>
-                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
-                            {showAddress &&
-                              <p>
-                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                            <div className='speedviolation-cons'>
+                              <p className='speesviolation-para'>Speed : 82 km/h
                               </p>
-                            }
+                              <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                              {showAddress &&
+                                <p>
+                                  Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                                </p>
+                              }
 
-                            <div className='last-datetime'>
-                              <p>26 Aug 24, 07:37:37 AM</p>
+                              <div className='last-datetime'>
+                                <p>26 Aug 24, 07:37:37 AM</p>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className='speedviolation-cons'>
-                            <p className='speesviolation-para'>Speed : 82 km/h
-                            </p>
-                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
-                            {showAddress &&
-                              <p>
-                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                            <div className='speedviolation-cons'>
+                              <p className='speesviolation-para'>Speed : 82 km/h
                               </p>
-                            }
+                              <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                              {showAddress &&
+                                <p>
+                                  Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                                </p>
+                              }
 
-                            <div className='last-datetime'>
-                              <p>26 Aug 24, 07:37:37 AM</p>
+                              <div className='last-datetime'>
+                                <p>26 Aug 24, 07:37:37 AM</p>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className='speedviolation-cons'>
-                            <p className='speesviolation-para'>Speed : 82 km/h
-                            </p>
-                            <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
-                            {showAddress &&
-                              <p>
-                                Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                            <div className='speedviolation-cons'>
+                              <p className='speesviolation-para'>Speed : 82 km/h
                               </p>
-                            }
+                              <p onClick={handleshowaddress} className='speesviolation-show-add speesviolation-para'>Show Address</p>
+                              {showAddress &&
+                                <p>
+                                  Bengaluru - Mysuru - Mangaluru Highway, Bengaluru, Ramanagara, Bangalore Division District, Karnataka
+                                </p>
+                              }
 
-                            <div className='last-datetime'>
-                              <p>26 Aug 24, 07:37:37 AM</p>
+                              <div className='last-datetime'>
+                                <p>26 Aug 24, 07:37:37 AM</p>
+                              </div>
                             </div>
-                          </div>
 
                           </div>
-                        
+
                         </div>
                         <div className='right-graph'>
                           <GoogleMap
@@ -1111,7 +1155,29 @@ const History = () => {
 
                     </div>
                     <div className='table-div-width'>
-                      <Box sx={{ height: 400, width: '100%' }}>
+                      <Box
+                        sx={{
+                          height: 400, // Adjust this value to fit your needs
+                          '& .MuiDataGrid-virtualScroller': {
+                            '&::-webkit-scrollbar': {
+                              width: '8px', // Adjust the scrollbar width here
+                              height: '8px', // Adjust the scrollbar width here
+                            },
+                            '&::-webkit-scrollbar-track': {
+                              backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                              backgroundColor: '#457cdc',
+                              borderRadius: '20px',
+                              minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                              backgroundColor: '#3367d6',
+                            },
+                          },
+                        }}
+                      >
                         <DataGrid
                           rows={rowstripsite}
                           columns={columnstripsite}

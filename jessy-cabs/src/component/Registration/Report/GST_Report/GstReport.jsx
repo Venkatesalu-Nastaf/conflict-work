@@ -194,7 +194,7 @@ export const GstReport = () => {
               size="small"
             />
           </div>
-          <div className="input">
+          {/* <div className="input">
             <TextField
               name="orderByMobileNo"
               autoComplete="new-password"
@@ -214,7 +214,7 @@ export const GstReport = () => {
               margin="normal"
               size="small"
             />
-          </div>
+          </div> */}
           <div className="input">
             <TextField
               name="orderByMobileNo"

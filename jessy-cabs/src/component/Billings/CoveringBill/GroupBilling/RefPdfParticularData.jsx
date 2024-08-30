@@ -190,7 +190,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         </tfoot>
                     </table>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}><h4>Rs .</h4><p style={{ marginLeft: 10 }}>{rupeestext}</p></div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px' }}>{rupeestext}</p></div>
             </div>
             <div className="printdiv">
                 <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>PRINT</button>

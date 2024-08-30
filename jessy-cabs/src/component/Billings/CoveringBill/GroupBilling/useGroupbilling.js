@@ -479,7 +479,7 @@ const useGroupbilling = () => {
                 })
                 .filter((tripid) => tripid !== null)
         )];
-        
+
 
         const PdfSelectedTrips = newSelectionModel
             .filter((selectedId) => selectedId !== null)

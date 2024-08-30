@@ -64,6 +64,9 @@ const Info = () => {
       case "Rate Type":
         hasPermission = INFO;
         break;
+      case "Employee":
+        hasPermission = INFO;
+        break;
       default:
         break;
     }
@@ -129,6 +132,14 @@ const Info = () => {
             to={Fuel_Info && ("/home/info/fuelinfo")}
             alt={"/home/info/fuelinfo"}
             menuItemKey="FuelInfo"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Employee"
+            to={Fuel_Info && ("/home/info/employee")}
+            alt={"/home/info/employee"}
+            menuItemKey="Employee"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />

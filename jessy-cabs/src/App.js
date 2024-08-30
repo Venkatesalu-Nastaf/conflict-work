@@ -19,6 +19,7 @@ import Registration from "./component/Registration/Registration";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
 import Employes from "./component/Registration/Employes/Employes";
+import Employee from "./component/Info/Employes/Employes";
 import Customer from "./component/Registration/Customer/Customer";
 import Suppliers from "./component/Registration/Supplier/Suppliers";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
@@ -423,6 +424,7 @@ function App() {
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
+                <Route path="/home/info/employee" element={INFO_FuelInfo !== 0 ? <Employee /> : <NoPermission />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
 

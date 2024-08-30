@@ -1,0 +1,169 @@
+.css-13xfq8m-MuiTabPanel-root {
+    display: flex;
+    padding: 0px !important;
+}
+
+.detail-container-main {
+    display: flex;
+    width: 90% !important;
+}
+
+.form-container-ratetype .Title-Name {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.form-container-ratetype .ratetype-form {
+    /* height: 100vh; */
+    /* height: fit-content; */
+    /* width: 100vw; */
+    /* overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #000; */
+    /* background-color: var(--glass); */
+}
+
+.form-container-ratetype {
+    display: flex;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* .form-container-ratetype .container-main::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+} */
+
+.table-bookingCopy-RateType {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: var(--glass);
+    /* margin-top: 30px; */
+    width: fit-content;
+}
+
+@media screen and (max-width: 1238px) {
+    .table-bookingCopy-RateType {
+        width: 100%;
+    }
+}
+
+.detail-container-main{
+    margin-bottom: 20px;
+}
+
+/* .form-container-ratetype .container-main::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    outline: 1px solid transparent;
+} */
+
+/* .form-container-ratetype .container-main {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 80vh;
+    width: 81vw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    color: #000;
+    background-color: var(--glass);
+} */
+
+/* @media screen and (min-width:970px) and (max-width:1240px) {
+
+    .side-bar-menu-close .form-container-ratetype .container-main {
+        width: 96vw;
+    }
+
+    .form-container-ratetype .container-main {
+        width: 76vw;
+    }
+} */
+
+/* @media screen and (min-width:769px) and (max-width:969.99px) {
+
+    .side-bar-menu-close .form-container-ratetype .container-main {
+        width: 96vw;
+    }
+
+    .form-container-ratetype .container-main {
+        width: 70vw;
+    }
+} */
+
+/* .ratetype-form .Title-Name {
+    position: relative;
+} */
+
+.copy-title-btn-RateType {
+    width: 100%;
+    /* margin-top: 30px; */
+    /* background-color: var(--glass); */
+    /* padding: 20px 20px; */
+    /* border: 2px solid #ccc;
+    border-radius: 10px; */
+}
+
+/* .ratetype-form .Title-Name::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    border-radius: 20px;
+    height: 3px;
+    background-color: #457cdc;
+} */
+
+.rate-type-inputs {
+    flex-wrap: wrap;
+}
+
+@media only screen and (max-width:1196px) {
+    .rate-type-inputs {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width:500px) {
+    .click-menu-icon {
+        top: 37px !important;
+        left: 29px !important;
+    }
+
+    .copy-title-btn-RateType {
+        margin-top: 0px !important;
+        border: none !important;
+        background-color: transparent;
+    }
+}
+
+/* @media only screen and (min-width:374px) and (max-width:699.9px) {
+    .copy-title-btn-RateType {
+        width: 88% !important;
+    }
+}
+
+@media only screen and (min-width:320px) and (max-width:373.9px) {
+    .copy-title-btn-RateType {
+        width: 84% !important;
+    }
+} */
+
+.ratetype-startdate-icon {
+    padding-top: 20px;
+}
+
+.ratetype-table {
+    height: 400px;
+    width: 100%;
+    /* width: fit-content; */
+}
+
+.add-edit-ratetype{
+    margin-top: 20px;
+}

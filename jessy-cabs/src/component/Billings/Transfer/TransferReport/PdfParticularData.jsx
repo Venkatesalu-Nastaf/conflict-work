@@ -389,7 +389,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
           </div>
           <div className="remarksdiv">
-            <p style={{marginLeft: '10px', marginBottom: '10px'}}><span className="remarks">Remarks :</span> <span className="remarksdata">{remark}</span ></p>
+            <p style={{ marginLeft: '10px', marginBottom: '10px' }}><span className="remarks">Remarks :</span> <span className="remarksdata">{remark}</span ></p>
           </div>
           <div className="tablediv">
             <div className="table">
@@ -445,14 +445,16 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               <h3 style={{ margin: '0px' }}>Guest Signature</h3>
             </div>
           </div>
-          <div style={{paddingTop: '300px'}}>
-            <div className="parkingdiv">
-              <p>Total Parking :{totalparking ? totalparking : 0}</p>
-              <p>Total Permit :{totalpermit ? totalpermit : 0}</p>
-              <p>Total Fastag/Toll:{totaltoll ? totaltoll : 0}</p>
-            </div>
-            <div>
-              {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' /> : <div></div>}
+          <div>
+            <div style={{display: 'flex', alignItems: 'center', paddingTop: '20px'}}>
+              <div>
+                {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' style={{ width: '375px', height: '100%' }} /> : <div></div>}
+              </div>
+              <div className="parkingdiv">
+                <p>Total Parking: {totalparking ? totalparking : 0}</p>
+                <p>Total Permit: {totalpermit ? totalpermit : 0}</p>
+                <p>Total Fastag/Tollssss: {totaltoll ? totaltoll : 0}</p>
+              </div>
             </div>
             <div className="tripsheet-RouteSummary">
               <h2>Route Summary</h2>

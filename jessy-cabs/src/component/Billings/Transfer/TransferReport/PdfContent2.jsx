@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     },
     billtextdatetext: {
         fontSize: '13px',
-        width: '70px'
+        width: '70px',
+        marginTop: '5px'
     },
     clientdiv: {
         borderBottom: '1px solid black',
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
 
     lastdiv: {
         flexDirection: 'row',
+        padding: '10px'
     },
     lastFirstdiv: {
         width: '70%',
@@ -257,11 +259,11 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                             <View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text style={styles.billtext}>Bill No</Text>
+                                    <Text style={styles.billtext}>Bill No:</Text>
                                     <Text style={styles.billtextinvoice}>{invoiceno}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text style={styles.billtextdate}>Bill Date</Text>
+                                    <Text style={styles.billtextdate}>Bill Date:</Text>
                                     <Text style={styles.billtextdatetext}>{invoiceDate}</Text>
                                 </View>
                             </View>

@@ -85,17 +85,16 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     fontWeight: 'extrabold',
     width: '70px',
-
   },
   labelMidContainer: {
     fontSize: '10px',
     fontWeight: 'extrabold',
-    width: '80px',
+    width: '70px',
   },
   clientName: {
     fontSize: '10px',
     color: '#000000',
-    fontWeight: 'extrabold'
+    fontWeight: 'extrabold',
 
   },
   // labeltag1: {
@@ -604,7 +603,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setReportKM(reportkm)
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
- 
+
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
   const remainingItems = routemap.slice(24);
@@ -694,11 +693,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                       <Text style={styles.clientName}> {dropaddress}</Text>
                     </View>
 
-
-                  </View>
-
-
-                  <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Escort Route</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
@@ -715,7 +709,28 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                       <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
                     </View>
 
+
                   </View>
+
+
+                  {/* <View style={{ flexDirection: "column", margin: "5px" }}>
+                    <View style={styles.deatilssection}>
+                      <Text style={styles.labelMidContainer}>Escort Route</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+                      <Text style={styles.clientName}> {escort}</Text>
+                    </View>
+                    <View style={styles.deatilssection}>
+                      <Text style={styles.labelMidContainer}>Airport Transfer</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+                      <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
+                    </View>
+                    <View style={styles.deatilssection}>
+                      <Text style={styles.labelMidContainer}>Ccode</Text>
+                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+                      <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
+                    </View>
+
+                  </View> */}
 
 
                   <View style={{ flexDirection: "column", margin: "5px" }}>
@@ -990,19 +1005,19 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 </View> */}
                 <View style={{ flexDirection: 'row', gap: '10px', marginTop: '3px' }}>
                   {firstSet.length > 0 ?
-                  <View style={{ width: "48%" }}>
-                    {firstSet.map((item, index) => (
-                      <View key={index} style={{ flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                          {index + 1} .
-                        </Text>
-                        <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                          {item.trip_type}, {item.place_name}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                  : <></> }
+                    <View style={{ width: "48%" }}>
+                      {firstSet.map((item, index) => (
+                        <View key={index} style={{ flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                            {index + 1} .
+                          </Text>
+                          <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                            {item.trip_type}, {item.place_name}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                    : <></>}
 
                   {nextSet.length > 0 ?
                     <View style={{ width: "48%" }}>
@@ -1036,25 +1051,25 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
 
                 {/* <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}> */}
-                  {attachedImage && attachedImage.length > 0 ? (
-                    <>
-                      {/* <View style={{ width: "100%" }}> */}
-                      {/* <Text style={styles.atimg}>Attached image</Text> */}
-                      {/* </View> */}
-                      <View style={[styles.addimg, { width: '100%' }]}>
-                        {attachedImage.map((item, index) => (
-                          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
-                            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
-                          </View>
-                        ))}
-                      </View>
-                    </>
-                  ) : (
-                    <></>
-                    // <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
-                    //   <Text style={styles.atimg}>  No Attached image</Text>
-                    // </View>
-                  )}
+                {attachedImage && attachedImage.length > 0 ? (
+                  <>
+                    {/* <View style={{ width: "100%" }}> */}
+                    {/* <Text style={styles.atimg}>Attached image</Text> */}
+                    {/* </View> */}
+                    <View style={[styles.addimg, { width: '100%' }]}>
+                      {attachedImage.map((item, index) => (
+                        <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+                          <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
+                        </View>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  <></>
+                  // <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
+                  //   <Text style={styles.atimg}>  No Attached image</Text>
+                  // </View>
+                )}
                 {/* </View> */}
 
 
@@ -1069,7 +1084,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                         if (dataimgetype !== "pdf") {
                           return (
                             <View key={index} style={{ width: '100%' }}>
-                              <Image src={`${apiUrl}/images/${item.imagees}`}  />
+                              <Image src={`${apiUrl}/images/${item.imagees}`} />
                             </View>
                           );
                         } else {

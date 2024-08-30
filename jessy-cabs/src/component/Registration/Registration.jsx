@@ -62,6 +62,12 @@ const Registration = () => {
 
     switch (label) {
 
+      case "Ratetype":
+        hasPermission = Customer;
+        break;
+      case "Ratemanagement":
+        hasPermission = Customer;
+        break;
       case "Customer":
         hasPermission = Customer;
         break;
@@ -100,6 +106,22 @@ const Registration = () => {
     <div className="Registration-conatiner" id="menu">
       <div className='menu-bar-main'>
         <div className="menu-bar">
+          <MenuItem
+            label="Rate Type"
+            to={Customer && ("/home/registration/ratetype")}
+            alt="/home/registration/ratetype"
+            menuItemKey="Ratetype"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Rate Management"
+            to={Customer && ("/home/registration/ratemanagement")}
+            alt="/home/registration/ratemanagement"
+            menuItemKey="Ratemanagement"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
           <MenuItem
             label="Customer"
             to={Customer && ("/home/registration/customer")}

@@ -171,7 +171,7 @@ const useBillWiseReceipt = () => {
             const totalOnAccount = updatedRows.reduce((acc, row) => acc + (Number(row.onAccount) || 0), 0); // Assuming onAccount is in rows
             const totalTDS = updatedRows.reduce((acc, row) => acc + (Number(row.tds) || 0), 0); // Assuming tds is in rows
             // const collected = updatedRows.reduce((acc,row)=> acc + (Number(row.collectedAmount) || 0), 0)
-            const totBalance = totalAmount - totalRecieved;
+            const totBalance = totalAmount - totalRecieved || 0;
             // const balance = totBalance - collected
             setTotals({
                 amount: totalAmount,
@@ -201,18 +201,23 @@ const useBillWiseReceipt = () => {
     };
 
     const handleCollectedChange = (event) => {
-        const collectedValue = Number(event.target.value) || 0; // Convert to number, default to 0 if necessary
-        const balance = totals.totalAmount - collectedValue;
+        const collectedValue = Number(event.target.value)  // Convert to number, default to 0 if necessary
+        const balance = totals.totalAmount - collectedValue || 0;
 
         // Update only the collectedAmount in the totals state
         setTotals((prevTotals) => ({
             ...prevTotals,
-            collectedAmount: collectedValue,  // Update collectedAmount with the new value
-            totalBalance: balance
+            collectedAmount: collectedValue || 0,  // Update collectedAmount with the new value
+            totalBalance: balance || 0
         }));
     };
 
     const handleAddBillReceive = async () => {
+        if (totals.collectedAmount === undefined || totals.collectedAmount === 0) {
+            setError(true);
+            setErrorMessage("Enter Collected Amount");
+            return
+        }
         // Check if AccountDetails is provided
         if (billWiseReport.AccountDetails === "") {
             setError(true);
@@ -231,13 +236,13 @@ const useBillWiseReceipt = () => {
             uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
             CustomerName: combinedData.CustomerName,
             Account: combinedData.AccountDetails,
-            Amount: combinedData.amount,
+            Amount: combinedData.amount || 0,
             TDS: combinedData.tds,
-            Advance: combinedData.recieved,
-            TotalAmount: combinedData.totalAmount,
+            Advance: combinedData.recieved || 0,
+            TotalAmount: combinedData.totalAmount || 0,
             BillDate: combinedData.Date,
-            Collected: combinedData.collectedAmount.toString(),
-            TotalBalance: combinedData.totalAmount - combinedData.collectedAmount
+            Collected: combinedData.collectedAmount || 0,
+            TotalBalance: combinedData.totalAmount - combinedData.collectedAmount || combinedData.totalAmount
         };
 
         const BillNo = rows.map(li => li.BillNo);
@@ -247,7 +252,7 @@ const useBillWiseReceipt = () => {
             const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
             console.log(postResponse.data, 'response data');
 
-            await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount, bankname: combinedData.AccountDetails });
+            await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount || 0, bankname: combinedData.AccountDetails });
             setSuccess(true);
             setSuccessMessage("Successfully Added");
 

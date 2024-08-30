@@ -1495,26 +1495,43 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {/* {(calculateTotalDay()  ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>)) || (!closeTimeVar && <label> Shed In Time</label>)} */}
-                    {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> Shed In Time</label>)}
+                    {(closeTimeVar && calculateTotalDay() === 0 &&
+                      ((closeTimeVar < shedInTimeVar)
+                        ? (<label>Shed In Time</label>)
+                        : (<label style={{ color: "red" }}>Invalid Time</label>)
+                      ))
+                      || (!closeTimeVar && <label> Shed In Time</label>)
+                    }
+                    {calculateTotalDay() > 0 ? (<label>Shed In Time</label>) : ""}
                     <input
                       type="time"
                       name="shedintime"
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if ((closeTimeVar && rTime <= closeTimeVar)) {
-                          return;
+
+                        // Check if the day difference is 0
+                        if (calculateTotalDay() === 0) {
+                          // Only allow time greater than closeTimeVar
+                          if (closeTimeVar && rTime > closeTimeVar) {
+                            setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                            setBook({ ...book, shedintime: rTime });
+                            setshedintime(rTime);
+                            if (!lockdata) {
+                              setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                            }
+                          }
                         } else {
-                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                          setBook({ ...book, shedintime: event.target.value });
-                          setshedintime(event.target.value);
+                          // Allow any time
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                          setBook({ ...book, shedintime: rTime });
+                          setshedintime(rTime);
                           if (!lockdata) {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
                         }
-
                       }}
                     />
                   </div>

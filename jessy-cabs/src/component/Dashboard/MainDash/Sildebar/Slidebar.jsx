@@ -1302,8 +1302,8 @@ const Sidebar = () => {
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Register'}`}
-                to={REGISTER && ("/home/registration/customer")}
-                alt="/home/registration/customer"
+                to={REGISTER && ("/home/registration/ratetype")}
+                alt="/home/registration/ratetype"
                 value="/home/registration"
                 menuItemKey="/home/registration"
                 name="Register page"
@@ -1313,6 +1313,21 @@ const Sidebar = () => {
               />
             </div>
           }
+
+          {Info_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded == false ? '' : 'Info'}`}
+                to={INFO && ("/home/info/mailer")}
+                alt="/home/info/mailer"
+                value="/home/info"
+                menuItemKey="/home/info"
+                name="Info page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={AiOutlineInfoCircle}
+              />
+            </div>}
 
           {Map_page_permission &&
             <div className='desktop-menu-without-dropdown'>
@@ -1329,22 +1344,6 @@ const Sidebar = () => {
               />
             </div>
           }
-
-          {Info_page_permission &&
-            <div className='desktop-menu-without-dropdown'>
-              <MenuItem
-                label={`${expanded == false ? '' : 'Info'}`}
-                to={INFO && ("/home/info/ratetype")}
-                alt="/home/info/ratetype"
-                value="/home/info"
-                menuItemKey="/home/info"
-                name="Info page"
-                isActive={isActive}
-                handleMenuItemClick={handleMenuItemClick}
-                icon={AiOutlineInfoCircle}
-              />
-            </div>}
-
 
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
@@ -1400,6 +1399,74 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
+          <motion.div className='mobile-menu-with-dropdown'>
+            <MenuItem
+              label={
+                <span className="sidebar-main-menu">
+                  <span>
+                    info
+                  </span>
+                  <span className="sidebar-main-menu-arrow">
+                    <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
+                  </span>
+                </span>
+              }
+              value="/home/info"
+              menuItemKey="/home/info"
+              name="info page"
+              isActive={isActive}
+              handleMenuItemClick={handleinfoClick}
+              icon={AiOutlineInfoCircle}
+              dropdownItems={[
+              ]}
+            />
+          </motion.div>
+          {infoDropdownVisible && (
+            <div className="settings-dropdown">
+              {/* <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
+                  <span>
+                    <GiDuration />
+                  </span>
+                  <span>
+                    Rate Type
+                  </span>
+                </p>
+              </div> */}
+              {/* <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
+                  <span>
+                    <GiReceiveMoney />
+                  </span>
+                  <span>
+                    Rate Management
+                  </span>
+                </p>
+              </div> */}
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
+                  <span>
+                    <SiMinutemailer />
+                  </span>
+                  <span>
+                    Mailer
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
+                  <span>
+                    <BsFillFuelPumpFill />
+                  </span>
+                  <span>
+                    Fuel Info
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1458,72 +1525,7 @@ const Sidebar = () => {
             </div>
           )}
 
-          <motion.div className='mobile-menu-with-dropdown'>
-            <MenuItem
-              label={
-                <span className="sidebar-main-menu">
-                  <span>
-                    info
-                  </span>
-                  <span className="sidebar-main-menu-arrow">
-                    <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
-                  </span>
-                </span>
-              }
-              value="/home/info"
-              menuItemKey="/home/info"
-              name="info page"
-              isActive={isActive}
-              handleMenuItemClick={handleinfoClick}
-              icon={AiOutlineInfoCircle}
-              dropdownItems={[
-              ]}
-            />
-          </motion.div>
-          {infoDropdownVisible && (
-            <div className="settings-dropdown">
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
-                  <span>
-                    <GiDuration />
-                  </span>
-                  <span>
-                    Rate Type
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
-                  <span>
-                    <GiReceiveMoney />
-                  </span>
-                  <span>
-                    Rate Management
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
-                  <span>
-                    <SiMinutemailer />
-                  </span>
-                  <span>
-                    Mailer
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
-                  <span>
-                    <BsFillFuelPumpFill />
-                  </span>
-                  <span>
-                    Fuel Info
-                  </span>
-                </p>
-              </div>
-            </div>
-          )}
+
           {Setting_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem

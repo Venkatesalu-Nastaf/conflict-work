@@ -25,13 +25,13 @@ const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
                         <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Trip Status" value="tripstatus" />
-                                <Tab label="vendor Statement" value="vendorStatement" />
-                                <Tab label="Vehicle Statement" value="VehicleStatement" />
+                                {/* <Tab label="vendor Statement" value="vendorStatement" /> */}
+                                {/* <Tab label="Vehicle Statement" value="VehicleStatement" /> */}
                             </TabList>
                         </Box>
                         <TabPanel value="tripstatus"><TripStatus stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> </TabPanel>
-                        <TabPanel value="vendorStatement"><VendorStatement /></TabPanel>
-                        <TabPanel value="VehicleStatement"><VehicleStatement /></TabPanel>
+                        {/* <TabPanel value="vendorStatement"><VendorStatement /></TabPanel> */}
+                        {/* <TabPanel value="VehicleStatement"><VehicleStatement /></TabPanel> */}
 
                     </TabContext>
                 </Box>

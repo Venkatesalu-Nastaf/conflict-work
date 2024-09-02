@@ -52,18 +52,18 @@ const Info = () => {
     setActiveMenuItem(menuItem);
     let hasPermission = 0;
     switch (menuItem) {
-      case "Rate Management":
-        hasPermission = Rate_Management;
-        break;
+      // case "Rate Management":
+      //   hasPermission = Rate_Management;
+      //   break;
       case "Mailers":
         hasPermission = Mailers;
         break;
       case "Fuel Info":
         hasPermission = Fuel_Info;
         break;
-      case "Rate Type":
-        hasPermission = INFO;
-        break;
+      // case "Rate Type":
+      //   hasPermission = INFO;
+      //   break;
       case "Employee":
         hasPermission = INFO;
         break;
@@ -103,7 +103,7 @@ const Info = () => {
     <div className="Info-conatiner" id="menu">
       <div className="menu-bar-main">
         <div className="menu-bar">
-          <MenuItem
+          {/* <MenuItem
             label="Rate Type"
             to={INFO && ("/home/info/ratetype")}
             alt="/home/info/ratetype"
@@ -118,7 +118,7 @@ const Info = () => {
             menuItemKey="Rate Management"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> */}
           <MenuItem
             label="Mailers"
             to={Mailers && myTo}

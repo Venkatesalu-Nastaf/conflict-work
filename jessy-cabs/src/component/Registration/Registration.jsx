@@ -73,12 +73,12 @@ const Registration = () => {
       case "Supplier":
         hasPermission = Supllier;
         break;
-      case "Employees":
-        hasPermission = Employee;
-        break;
-      case "Reports":
-        hasPermission = Employee;
-        break;
+      // case "Employees":
+      //   hasPermission = Employee;
+      //   break;
+      // case "Reports":
+      //   hasPermission = Employee;
+      //   break;
       default:
         break;
     }
@@ -137,7 +137,7 @@ const Registration = () => {
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />
-          <MenuItem
+          {/* <MenuItem
             label="Employees"
             to={Employee && ("/home/registration/employes")}
             alt="/home/registration/employes"
@@ -153,7 +153,7 @@ const Registration = () => {
             menuItemKey="Reports"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> */}
         </div>
       </div>
       <div className='alert-popup-main'>

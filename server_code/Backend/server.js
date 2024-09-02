@@ -578,12 +578,12 @@ const companyattachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
-app.get('/get-companyimage/:organizationname', (req, res) => {
+app.get('/get-companyimage', (req, res) => {
   const { organizationname } = req.params;
-  const query = 'SELECT * FROM organisation_logo WHERE organisation_name = ?';
+  const query = 'SELECT * FROM from organizationdetails';
   // const query = 'SELECT fileName FROM organisation_logo WHERE organisation_name = ?';
 
-  db.query(query, [organizationname], (err, results) => {
+  db.query(query, (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
     }
@@ -679,17 +679,17 @@ function generateUniqueNumber() {
 
 //company logo-------------------
 
-app.get('/log-imageview/:sharedData', (req, res) => {
-  const imageNAme = req.params.sharedData;
-  if (imageNAme !== "undefined") {
+// app.get('/log-imageview/:sharedData', (req, res) => {
+//   const imageNAme = req.params.sharedData;
+//   if (imageNAme !== "undefined") {
 
-    const sql = 'select * from organisation_logo where organisation_name=?';
-    db.query(sql, [imageNAme], (err, result) => {
-      if (err) return res.json({ Message: "error" })
-      return res.json(result);
-    })
-  }
-})
+//     const sql = 'select * from organisation_logo where organisation_name=?';
+//     db.query(sql, [imageNAme], (err, result) => {
+//       if (err) return res.json({ Message: "error" })
+//       return res.json(result);
+//     })
+//   }
+// })
 
 
 app.get('/use-permissions/:userid', (req, res) => {

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+// const multer = require('multer');
+// const path = require('path');
+// const fs = require('fs');
 const cors = require('cors'); // Import the cors middleware
 
 router.use(cors());
@@ -83,40 +83,40 @@ router.delete('/companydelete/:organizationname', (req, res) => {
 //----------------------------------logo upload
 
 
-router.put('/logo-base64/:organizationname', (req, res) => {
-    const organizationN_Name = req.params.organizationname;
-    const { data } = req.body;
+// router.put('/logo-base64/:organizationname', (req, res) => {
+//     const organizationN_Name = req.params.organizationname;
+//     const { data } = req.body;
 
-    // Check if the user profile already exists
-    const checkIfExistsQuery = `SELECT * FROM organisation_logo WHERE organisation_name = ?`;
-    db.query(checkIfExistsQuery, [organizationN_Name], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ Message: "Error checking profile existence", err });
-        }
+//     // Check if the user profile already exists
+//     const checkIfExistsQuery = `SELECT * FROM organisation_logo WHERE organisation_name = ?`;
+//     db.query(checkIfExistsQuery, [organizationN_Name], (err, rows) => {
+//         if (err) {
+//             return res.status(500).json({ Message: "Error checking profile existence", err });
+//         }
 
-        // Profile already exists, update the record
-        if (rows.length > 0) {
+//         // Profile already exists, update the record
+//         if (rows.length > 0) {
 
 
-            const updateQuery = `UPDATE organisation_logo SET fileName = ? WHERE organisation_name = ?`;
-            db.query(updateQuery, [data, organizationN_Name], (err, result) => {
-                if (err) {
-                    return res.status(500).json({ Message: "Error updating profile picture", err });
-                }
-                return res.status(200).json({ Status: "success" });
-            });
-        } else {
-            // Profile doesn't exist, insert a new record
-            const insertQuery = `INSERT INTO organisation_logo (organisation_name, fileName) VALUES (?, ?)`;
-            db.query(insertQuery, [organizationN_Name, data], (err, result) => {
-                if (err) {
-                    return res.status(500).json({ Message: "Error inserting profile picture", err });
-                }
-                return res.status(200).json({ Status: "success" });
-            });
-        }
-    });
-});
+//             const updateQuery = `UPDATE organisation_logo SET fileName = ? WHERE organisation_name = ?`;
+//             db.query(updateQuery, [data, organizationN_Name], (err, result) => {
+//                 if (err) {
+//                     return res.status(500).json({ Message: "Error updating profile picture", err });
+//                 }
+//                 return res.status(200).json({ Status: "success" });
+//             });
+//         } else {
+//             // Profile doesn't exist, insert a new record
+//             const insertQuery = `INSERT INTO organisation_logo (organisation_name, fileName) VALUES (?, ?)`;
+//             db.query(insertQuery, [organizationN_Name, data], (err, result) => {
+//                 if (err) {
+//                     return res.status(500).json({ Message: "Error inserting profile picture", err });
+//                 }
+//                 return res.status(200).json({ Status: "success" });
+//             });
+//         }
+//     });
+// });
 
 
 
@@ -132,10 +132,9 @@ router.put('/logo-base64/:organizationname', (req, res) => {
 // })
 
 // fetching base64 image 
-router.get("/fetchorg-logo/:organizationname", (req, res) => {
-    const orgName = req.params.organizationname
-    const sql = 'select * from organisation_logo where organisation_name=?';
-    db.query(sql, [orgName], (err, result) => {
+router.get("/fetchorg-logo", (req, res) => {
+    const sql = 'select * from organizationdetails';
+    db.query(sql, (err, result) => {
         if (err) return res.json({ message: "error fetching logo" })
         return res.json(result)
     })

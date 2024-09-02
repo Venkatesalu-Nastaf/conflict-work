@@ -567,13 +567,7 @@ const useBilling = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // const encoded = localStorage.getItem('usercompany');
-            // localStorage.setItem('usercompanyname', encoded);
-            // const storedcomanyname = localStorage.getItem('usercompanyname');
-            // const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                // if (organizationname !== "undefined" && organizationname) {
-                    // const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                     const response = await fetch(`${apiUrl}/organizationdata`);
                     if (response.status === 200) {
                         const userDataArray = await response.json();
@@ -592,31 +586,6 @@ const useBilling = () => {
         fetchData();
     }, [apiUrl]);
 
-    const [selectedImage, setSelectedImage] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const organizationname = localStorage.getItem('usercompany');
-
-                if (organizationname !== "undefined" && organizationname !== undefined && organizationname) {
-                    const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-                        localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-                        setSelectedImage(attachedImageUrls);
-                    } else {
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
-                    }
-                }
-
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl]);
 
     // Empty the book
     useEffect(() => {
@@ -643,7 +612,6 @@ const useBilling = () => {
         // handleKeyenterBilling,
         handleKeyDown,
         handleDateChange,
-        selectedImage,
         organizationdata,
         setSelectedBankAccount,
         handleAutocompleteChange,

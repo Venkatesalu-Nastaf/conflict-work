@@ -37,7 +37,6 @@ const Organization = ({ logoImage }) => {
         infoMessage,
         handleClick,
         handleChange,
-        handleAdd,
         hidePopup,
 
         editMode,
@@ -45,7 +44,6 @@ const Organization = ({ logoImage }) => {
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
-        handleCancel,
     } = useOrganization();
 
     useEffect(() => {

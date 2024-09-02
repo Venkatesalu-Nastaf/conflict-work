@@ -19,7 +19,6 @@ import Registration from "./component/Registration/Registration";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
 import Employes from "./component/Registration/Employes/Employes";
-import Employee from "./component/Info/Employes/Employes";
 import Customer from "./component/Registration/Customer/Customer";
 import Suppliers from "./component/Registration/Supplier/Suppliers";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
@@ -54,6 +53,7 @@ import History from "./component/Map/History/History"
 import  Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
+import Employee from "./component/Info/Employes/Employes";
 
 
 
@@ -165,30 +165,27 @@ function App() {
   const ref = useRef(false)
   const organizationname = orgName || localStorage.getItem('usercompany');
 
-  const fetchOrgLogo = useCallback(async () => {
-    try {
+  // const fetchOrgLogo = useCallback(async () => {
+  //   try {
 
-      console.log("routeData", organizationname)
-      if (!organizationname || organizationname === undefined) return
-      const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+  //     // console.log("routeData", organizationname)
+  //     // if (!organizationname || organizationname === undefined) return
+  //     const response = await axios.get(`${apiUrl}/fetchorg-logo`)
 
-      if (response?.status === 200) {
-        const logoImage = response?.data[0]?.fileName;
-        setLogo(logoImage)
-        setLogoTrigger(false)
-        ref.current = true
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
+  //     if (response?.status === 200) {
+  //       const logoImage = response?.data[0]?.fileName;
+  //       setLogo(logoImage)
+  //       setLogoTrigger(false)
+  //       ref.current = true
+  //     }
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
   useEffect(() => {
     const fetchdata = async () => {
       try {
-
-        console.log("routeData", organizationname)
-        if (!organizationname || organizationname === undefined) return
-        const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+        const response = await axios.get(`${apiUrl}/fetchorg-logo`)
 
         if (response?.status === 200) {
           const logoImage = response?.data[0]?.fileName;
@@ -203,12 +200,12 @@ function App() {
     fetchdata()
   }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
 
-  useEffect(() => {
-    if (!ref.current) {
-      fetchOrgLogo()
-    }
+  // useEffect(() => {
+  //   if (!ref.current) {
+  //     fetchOrgLogo()
+  //   }
 
-  }, [logotrigger, fetchOrgLogo])
+  // }, [logotrigger, fetchOrgLogo])
 
   //--------------------------------------------
   // vehicle No 
@@ -234,35 +231,6 @@ function App() {
   }, [apiUrl])
 
 
-  //---------------------------------------------------------
-
-  // const [orgData, setOrgData] = useState([])
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const organizationname = localStorage.getItem('usercompany');
-
-  //     try {
-  //       if (!organizationname) return
-  //       const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-  //       if (response.status === 200) {
-
-  //         const userDataArray = await response.json();
-  //         console.log("userDataArray", userDataArray)
-
-  //         if (userDataArray.length > 0) {
-  //           setOrgData(userDataArray[0])
-  //           // setBook(prev => ({ ...prev, travelsName: userDataArray[0]?.organizationname, travelseEmail: userDataArray[0]?.contactEmail }))
-  //           // setOrganisationSendEmail(userDataArray[0])
-  //         }
-  //       }
-  //     }
-  //     catch {
-  //     }
-  //   };
-  //   fetchData();
-  // }, [apiUrl]);
-
   const [customerData, setCustomerData] = useState([])
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -284,20 +252,7 @@ function App() {
   //------------fetch vehicle name-------------------------------------------------------------------------------------------------
 
   const [vehileName, setVehicleName] = useState([])
-  // useEffect(() => {
-  //   const fetchgetvehicleName = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
-  //       const data = response.data
-  //       const name = data?.map((res) => res.vehicleName)
-  //       setVehicleName(name)
-  //     }
-  //     catch (error) {
-  //       console.log(error, "error");
-  //     }
-  //   };
-  //   fetchgetvehicleName()
-  // }, [apiUrl])
+
 
   useEffect(() => {
     const fetchgetvehicleName = async () => {

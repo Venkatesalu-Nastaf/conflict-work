@@ -54,9 +54,8 @@ const MainDashboard = () => {
   // const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
   const data1 = localStorage.getItem("useridno")
-  const data2 = localStorage.getItem("usercompany")
   const data4 = localStorage.getItem("username");
-  const data5 = localStorage.getItem("profileimages")
+  // const data5 = localStorage.getItem("profileimages")
   const data6 = localStorage.getItem("organizationimages")
 
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
@@ -278,7 +277,7 @@ const MainDashboard = () => {
         if (routeData) {
           setOrgName(routeData[0]?.organizationname)
           localStorage.setItem("useridno", routeData[0]?.userid);
-          localStorage.setItem("usercompany", routeData[0]?.organizationname);
+          // localStorage.setItem("usercompany", routeData[0]?.organizationname);
           setRouteData(routeData);
         }
 
@@ -291,7 +290,7 @@ const MainDashboard = () => {
   const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
 
   const useridno = routeData[0]?.userid;
-  const usercompany = routeData[0]?.organizationname;
+  // const usercompany = routeData[0]?.organizationname;
   setUser_id(useridno);
 
   // localStorage.setItem("useridno", useridno);
@@ -352,13 +351,13 @@ const MainDashboard = () => {
   }, [apiUrl]);
 
   useEffect(() => {
-    if (permissions.length > 1 && data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null) {
+    if (permissions.length > 1 && data1 !== undefined && data4 !== null  && storedusertheme !== null) {
       setTimeout(() => {
         setUserdashboard(false)
       }, 3000);
 
     }
-  }, [data1, data2, data4, data5, setUserdashboard, data6, storedusertheme, permissions]);
+  }, [data1,data4,setUserdashboard, data6, storedusertheme, permissions]);
 
   const [isPopupVisible, setPopupVisible] = useState(false);
 

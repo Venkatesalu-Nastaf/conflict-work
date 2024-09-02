@@ -1659,16 +1659,46 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
-    console.log(customer)
-    db.query('select rateType from customers where customer = ?', [customer], (err, result) => {
+    // console.log(customer,"cusssssssssssssssssss")
+    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-
+    //   console.log(result,"mm")
         res.status(200).json(result);
     })
 })
+
+// router.get('/regno/:vehino',(req,res)=>{
+//     const customer = req.params.vehino;
+//     console.log(customer)
+    
+//     const sql = `
+//     SELECT 
+//         GREATEST(
+//             MAX(CAST(shedin AS UNSIGNED)),
+//             MAX(CAST(shedout AS UNSIGNED)),
+//             MAX(CAST(startkm AS UNSIGNED)),
+//             MAX(CAST(closekm AS UNSIGNED))
+//         ) AS highest_value
+//     FROM 
+//         tripsheet
+//     WHERE 
+//         vehRegNo = ?;
+// `;
+
+
+//     db.query(sql, [customer], (err, result) => {
+//         if (err) {
+//             res.status(500).json({ message: 'Internal server error' });
+//             return;
+//         }
+
+//         res.status(200).json(result);
+//     })
+
+// })
 
 
 

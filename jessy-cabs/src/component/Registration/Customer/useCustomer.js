@@ -303,7 +303,8 @@ const useCustomer = () => {
         SalesPerson: '',
         salesPercentage: '',
         billingGroup: [],
-        hybrid: false
+        hybrid: false,
+        TimeToggle:false,
     });
 
    
@@ -405,6 +406,7 @@ const useCustomer = () => {
             salesPercentage: '',
             billingGroup: [],
             hybrid: false,
+            TimeToggle:false,
         }));
         setCustomerFieldSets([{
             // dinamic data
@@ -584,8 +586,8 @@ console.log(book,"boooooo")
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
-        setBook(prev => ({ ...prev, hybrid: false }))
-        setSelectedCustomerData(prev => ({ ...prev, hybrid: false }))
+        // setBook(prev => ({ ...prev, hybrid: false,TimeToggle:false }))
+        // setSelectedCustomerData(prev => ({ ...prev, hybrid: false,TimeToggle:false }))
         handleCancel();
         setRows([]);
     };

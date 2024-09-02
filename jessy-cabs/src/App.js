@@ -11,7 +11,8 @@ import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
 import Accounts from "./component/Accounts/Accounts";
 import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
-import RateTypes from "./component/Info/RateTypes/RateTypes";
+// import RateTypes from "./component/Info/RateTypes/RateTypes";
+import RateTypes from "./component/Registration/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Received from "./component/Bookings/Receiveds/Receiveds";
@@ -29,7 +30,8 @@ import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
-import RateManagement from "./component/Info/RateManagement/RateManagement";
+// import RateManagement from "./component/Info/RateManagement/RateManagement";
+import RateManagement from "./component/Registration/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
@@ -45,12 +47,13 @@ import NoPermission from "./component/permissionContext/NoPermission/NoPermissio
 import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
-import { Reports } from "./component/Registration/Report/Reports";
+// import { Reports } from "./component/Registration/Report/Reports";
+import { Reports } from "./component/Billings/Report/Reports";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
 import History from "./component/Map/History/History"
-import  Reminders from "./component/Map/Reminders/Reminders";
+import Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 import Employee from "./component/Info/Employes/Employes";
@@ -321,7 +324,7 @@ function App() {
                   path="/home/Map/RealTime"
                   element={Maps !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
-                  <Route
+                <Route
                   path="/home/Map/History"
                   element={Maps !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
@@ -366,6 +369,16 @@ function App() {
                   element={R_Employee !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
                 />
 
+                <Route
+                  path="/home/registration/ratetype"
+                  element={R_Employee !== 0 ? <RateTypes stationName={stationName} /> : <NoPermission />}
+                />
+
+                <Route
+                  path="/home/registration/ratemanagement"
+                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} /> : <NoPermission />}
+                />
+
                 {/* <Route
                   path="/home/registration/reports"
                   element={<Reports stationName={stationName} /> }
@@ -389,7 +402,9 @@ function App() {
                   path="/home/billing/coveringbill"
                   element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />}
                 />
+                <Route path="/home/billing/reports" element={Billing_Transfer !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
               </Route>
+
               <Route path="/home/accounts" element={<Accounts />}>
 
               </Route>

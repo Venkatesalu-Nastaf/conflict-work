@@ -28,11 +28,11 @@ const Registration = () => {
 
   const { permissions } = useContext(PermissionContext)
 
-
   const Customer = permissions[9]?.read || permissions[8]?.read;
   const Supllier = permissions[10]?.read;
   const Employee = permissions[11]?.read;
-
+  const INFO = permissions[16]?.read;
+  const Rate_Management = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);
 
@@ -54,7 +54,6 @@ const Registration = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 
   const handleMenuItemClick = (label, alt, e) => {
-
     localStorage.setItem('activeMenuItem', label);
     setActiveMenuItem(label);
 
@@ -62,11 +61,11 @@ const Registration = () => {
 
     switch (label) {
 
-      case "Ratetype":
-        hasPermission = Customer;
+      case "Rate Type":
+        hasPermission = INFO;
         break;
-      case "Ratemanagement":
-        hasPermission = Customer;
+      case "Rate Management":
+        hasPermission = Rate_Management;
         break;
       case "Customer":
         hasPermission = Customer;
@@ -108,7 +107,7 @@ const Registration = () => {
         <div className="menu-bar">
           <MenuItem
             label="Rate Type"
-            to={Customer && ("/home/registration/ratetype")}
+            to={INFO && ("/home/registration/ratetype")}
             alt="/home/registration/ratetype"
             menuItemKey="Ratetype"
             activeMenuItem={activeMenuItem}
@@ -116,7 +115,7 @@ const Registration = () => {
           />
           <MenuItem
             label="Rate Management"
-            to={Customer && ("/home/registration/ratemanagement")}
+            to={Rate_Management && ("/home/registration/ratemanagement")}
             alt="/home/registration/ratemanagement"
             menuItemKey="Ratemanagement"
             activeMenuItem={activeMenuItem}
@@ -152,8 +151,6 @@ const Registration = () => {
             // to="/home/registration/reports"
             alt="/home/registration/reports"
             menuItemKey="Reports"
-
-
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />
@@ -164,7 +161,7 @@ const Registration = () => {
           <div className='alert-popup Warning' >
             <div className="popup-icon"> <ErrorOutlineIcon /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-            <p>You do not have Permission ..!</p>
+            <p style={{color: 'black'}}>You do not have Permissionssssssssssssss ..!</p>
           </div>
         }
       </div>

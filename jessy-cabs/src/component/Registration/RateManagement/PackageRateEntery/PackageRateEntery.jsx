@@ -157,8 +157,8 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
-                    value={vehileName.find((option) => option.optionvalue)?.label || commonData?.vehicleName || ''}
-                    options={vehileName.map((option) => ({
+                    value={vehileName?.find((option) => option.optionvalue)?.label || commonData?.vehicleName || ''}
+                    options={vehileName?.map((option) => ({
                       label: option,
                     }))}
                     getOptionLabel={(option) => option.label || commonData?.vehicleName || ''}

@@ -95,6 +95,10 @@ tbody {
   border-bottom: 1px solid gray;
 }
 
-.table-ref{
+.table-ref, .table-ref th{
   border: 1px solid gray;
+}
+
+.table-ref th{
+  border: 1px solid gray !important;
 }

@@ -137,14 +137,15 @@
 }
 
 .BankDetails-mainContainer::-webkit-scrollbar {
-    width: 5px; /* Width of the scrollbar */
+    width: 115px; /* Width of the scrollbar */
     height: 5px;
   }
 
 
   .BankDetails-mainContainer::-webkit-scrollbar-track {
-    background: #1565c0; /* Color of the track */
-    border-radius: 10px; /* Rounded corners of the track */
+    /* background: #1565c0;  */
+    background: #000000 !important; /* Color of the track */
+    border-radius: 1px; /* Rounded corners of the track */
   }
 
 
@@ -280,4 +281,6 @@
     height: 450px;
     overflow: auto;
     margin-top: 20px;
+    padding-right: 10px;
 }
+

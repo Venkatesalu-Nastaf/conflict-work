@@ -8,7 +8,7 @@ import imageToBase64 from '../../../../helper/imagetoBase64';
 const useOrganization = () => {
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [rows] = useState([]);
+    // const [rows] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
@@ -17,7 +17,7 @@ const useOrganization = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
-    const { setLogoTrigger } = useData();
+    const { setLogoTrigger} = useData();
     const [dataclose, setDataclose] = useState(false)
 
     //----------------------popup----
@@ -56,7 +56,8 @@ const useOrganization = () => {
         gstnumber: '',
         telephone: '',
         Sender_Mail: '',
-        EmailApp_Password: ''
+        EmailApp_Password: '',
+        fileName:''
     });
 
 
@@ -77,6 +78,10 @@ const useOrganization = () => {
         }
     }, [apiUrl]);
 
+
+
+    // console.log(book,"orgobook")
+    // console.log(selectedCustomerData,"orgoDta")
     const handleAdd = async () => {
         const name = selectedCustomerData?.organizationname || book.organizationname;
         if (!name) {
@@ -95,18 +100,20 @@ const useOrganization = () => {
         }
     };
 
-    const handleUpdate = async (organizationname) => {
+    const handleUpdate = async () => {
         try {
-            const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            
+            const updatedCustomer = {...selectedCustomerData };
             // const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
             // const encode = companyname;
             // const decode = decodeURIComponent(encode);
-            console.log(updatedCustomer.id, "SELECT ID")
+            console.log(updatedCustomer, "SELECT ID")
             await axios.put(`${apiUrl}/companyupdate/${updatedCustomer.id}`, updatedCustomer);
+            setLogoTrigger(true)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setEditMode((prevEditMode) => !prevEditMode);
+
         }
         catch {
             setError(true);
@@ -172,20 +179,26 @@ const useOrganization = () => {
     };
 
     const handleFileChange = async (event) => {
-        try {
-            const organizationname = localStorage.getItem('usercompany');
+        // try {
+            // const organizationname = localStorage.getItem('usercompany');
+            // const organizationname = selectedCustomerData?.organizationname || book.organizationname;
+
             const file = event.target.files[0];
             if (!file) return;
 
             const base64Format = await imageToBase64(file)
-            const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
+            setSelectedCustomerData((prevBook) => ({
+                ...prevBook,
+                "fileName":base64Format,
+            }))
+        //     const response = await axios.put(`${apiUrl}/logo-base64/${organizationname}`, { data: base64Format }, { headers: { 'Content-Type': "application/json" } })
 
-            if (response.status === 200) {
-                setLogoTrigger(true)
-            }
-        } catch (err) {
-            console.log(err)
-        }
+        //     if (response.status === 200) {
+        //         setLogoTrigger(true)
+        //     }
+        // } catch (err) {
+        //     console.log(err)
+        // }
 
     };
 

@@ -356,7 +356,7 @@ const VendorStatement = () => {
           </Box>
         </div>
 
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", alignItems:"center" }}>
           <div className="Download-btn" style={{ paddingRight: '15px' }}>
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (

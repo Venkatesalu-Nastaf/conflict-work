@@ -11,7 +11,8 @@ import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
 import Accounts from "./component/Accounts/Accounts";
 import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
-import RateTypes from "./component/Info/RateTypes/RateTypes";
+// import RateTypes from "./component/Info/RateTypes/RateTypes";
+import RateTypes from "./component/Registration/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Received from "./component/Bookings/Receiveds/Receiveds";
@@ -29,7 +30,8 @@ import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
-import RateManagement from "./component/Info/RateManagement/RateManagement";
+// import RateManagement from "./component/Info/RateManagement/RateManagement";
+import RateManagement from "./component/Registration/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
@@ -45,14 +47,16 @@ import NoPermission from "./component/permissionContext/NoPermission/NoPermissio
 import { useData } from "./component/Dashboard/MainDash/Sildebar/DataContext2";
 import SignatureGenerate from './component/Bookings/TripSheet/signature/SignatureGenerate';
 import { useData1 } from "./component/Dashboard/Maindashboard/DataContext";
-import { Reports } from "./component/Registration/Report/Reports";
+// import { Reports } from "./component/Registration/Report/Reports";
+import { Reports } from "./component/Billings/Report/Reports";
 import Map from "./component/Map/Map";
 import { RealTime } from "./component/Map/RealTime/RealTime";
 import { Vehicle } from "./component/Map/Vehicle/Vehicle";
 import History from "./component/Map/History/History"
-import  Reminders from "./component/Map/Reminders/Reminders";
+import Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
+import Employee from "./component/Info/Employes/Employes";
 
 
 
@@ -164,30 +168,27 @@ function App() {
   const ref = useRef(false)
   const organizationname = orgName || localStorage.getItem('usercompany');
 
-  const fetchOrgLogo = useCallback(async () => {
-    try {
+  // const fetchOrgLogo = useCallback(async () => {
+  //   try {
 
-      console.log("routeData", organizationname)
-      if (!organizationname || organizationname === undefined) return
-      const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+  //     // console.log("routeData", organizationname)
+  //     // if (!organizationname || organizationname === undefined) return
+  //     const response = await axios.get(`${apiUrl}/fetchorg-logo`)
 
-      if (response?.status === 200) {
-        const logoImage = response?.data[0]?.fileName;
-        setLogo(logoImage)
-        setLogoTrigger(false)
-        ref.current = true
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
+  //     if (response?.status === 200) {
+  //       const logoImage = response?.data[0]?.fileName;
+  //       setLogo(logoImage)
+  //       setLogoTrigger(false)
+  //       ref.current = true
+  //     }
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
   useEffect(() => {
     const fetchdata = async () => {
       try {
-
-        console.log("routeData", organizationname)
-        if (!organizationname || organizationname === undefined) return
-        const response = await axios.get(`${apiUrl}/fetchorg-logo/${organizationname}`)
+        const response = await axios.get(`${apiUrl}/fetchorg-logo`)
 
         if (response?.status === 200) {
           const logoImage = response?.data[0]?.fileName;
@@ -202,12 +203,12 @@ function App() {
     fetchdata()
   }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
 
-  useEffect(() => {
-    if (!ref.current) {
-      fetchOrgLogo()
-    }
+  // useEffect(() => {
+  //   if (!ref.current) {
+  //     fetchOrgLogo()
+  //   }
 
-  }, [logotrigger, fetchOrgLogo])
+  // }, [logotrigger, fetchOrgLogo])
 
   //--------------------------------------------
   // vehicle No 
@@ -233,35 +234,6 @@ function App() {
   }, [apiUrl])
 
 
-  //---------------------------------------------------------
-
-  // const [orgData, setOrgData] = useState([])
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const organizationname = localStorage.getItem('usercompany');
-
-  //     try {
-  //       if (!organizationname) return
-  //       const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-  //       if (response.status === 200) {
-
-  //         const userDataArray = await response.json();
-  //         console.log("userDataArray", userDataArray)
-
-  //         if (userDataArray.length > 0) {
-  //           setOrgData(userDataArray[0])
-  //           // setBook(prev => ({ ...prev, travelsName: userDataArray[0]?.organizationname, travelseEmail: userDataArray[0]?.contactEmail }))
-  //           // setOrganisationSendEmail(userDataArray[0])
-  //         }
-  //       }
-  //     }
-  //     catch {
-  //     }
-  //   };
-  //   fetchData();
-  // }, [apiUrl]);
-
   const [customerData, setCustomerData] = useState([])
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -283,20 +255,7 @@ function App() {
   //------------fetch vehicle name-------------------------------------------------------------------------------------------------
 
   const [vehileName, setVehicleName] = useState([])
-  // useEffect(() => {
-  //   const fetchgetvehicleName = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
-  //       const data = response.data
-  //       const name = data?.map((res) => res.vehicleName)
-  //       setVehicleName(name)
-  //     }
-  //     catch (error) {
-  //       console.log(error, "error");
-  //     }
-  //   };
-  //   fetchgetvehicleName()
-  // }, [apiUrl])
+
 
   useEffect(() => {
     const fetchgetvehicleName = async () => {
@@ -365,7 +324,7 @@ function App() {
                   path="/home/Map/RealTime"
                   element={Maps !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
-                  <Route
+                <Route
                   path="/home/Map/History"
                   element={Maps !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
@@ -410,6 +369,16 @@ function App() {
                   element={R_Employee !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
                 />
 
+                <Route
+                  path="/home/registration/ratetype"
+                  element={R_Employee !== 0 ? <RateTypes stationName={stationName} /> : <NoPermission />}
+                />
+
+                <Route
+                  path="/home/registration/ratemanagement"
+                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} /> : <NoPermission />}
+                />
+
                 {/* <Route
                   path="/home/registration/reports"
                   element={<Reports stationName={stationName} /> }
@@ -423,6 +392,7 @@ function App() {
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
+                <Route path="/home/info/employee" element={INFO_FuelInfo !== 0 ? <Employee /> : <NoPermission />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
 
@@ -432,7 +402,9 @@ function App() {
                   path="/home/billing/coveringbill"
                   element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />}
                 />
+                <Route path="/home/billing/reports" element={Billing_Transfer !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
               </Route>
+
               <Route path="/home/accounts" element={<Accounts />}>
 
               </Route>

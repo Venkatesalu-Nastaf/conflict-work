@@ -263,8 +263,8 @@ const Sidebar = () => {
   const SETTING = permissions[12]?.read || permissions[13]?.read;
   const INFO = permissions[16]?.read;
   const Dashbord_read = permissions[20]?.read;
-   // thsi for map page permisiion
-   const Maps=permissions[21]?.read;
+  // thsi for map page permisiion
+  const Maps = permissions[21]?.read;
 
 
   // its for hiding navigation based on permission 
@@ -274,8 +274,8 @@ const Sidebar = () => {
   const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
   const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
 
-     // thsi for map page permisiion
-     const Map_page_permission=permissions[21]?.read;
+  // thsi for map page permisiion
+  const Map_page_permission = permissions[21]?.read;
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
@@ -304,8 +304,8 @@ const Sidebar = () => {
         hasPermission = Dashbord_read;
         break;
       case "Map page":
-          hasPermission = Maps;
-            break;  
+        hasPermission = Maps;
+        break;
       case "User page":
         hasPermission = 1;
         break;
@@ -1134,7 +1134,7 @@ const Sidebar = () => {
       } */}
       {/* {
         expanded && ( */}
-      <motion.div className={`sidebar mobile-view-sidebar ${expanded==false ? 'side-bar-closed' : ''}`} >
+      <motion.div className={`sidebar mobile-view-sidebar ${expanded == false ? 'side-bar-closed' : ''}`} >
         <div className="logo" onClick={closeMenuFunction}>
           {logo ? (
             <img
@@ -1148,7 +1148,7 @@ const Sidebar = () => {
         </div>
         <div className="menu">
           {Dashbord_read === 1 && <MenuItem
-            label={`${expanded==false ? '' : 'Dashboard'}`}
+            label={`${expanded == false ? '' : 'Dashboard'}`}
             to="/home/dashboard"
             value="/home/dashboard"
             alt="/home/dashboard"
@@ -1160,7 +1160,7 @@ const Sidebar = () => {
           {booking_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded==false ? '' : 'Booking'}`}
+                label={`${expanded == false ? '' : 'Booking'}`}
                 to={BOOKING && ("/home/bookings/booking")}
                 alt="/home/bookings/booking"
                 value="/home/bookings"
@@ -1231,7 +1231,7 @@ const Sidebar = () => {
           {Billing_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded==false ? '' : 'Billing'}`}
+                label={`${expanded == false ? '' : 'Billing'}`}
                 to={BILLING && ("/home/billing/billing")}
                 // to={"/home/billing/billing"}
                 alt="/home/billing/billing"
@@ -1297,12 +1297,13 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
           {Register_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded==false ? '' : 'Register'}`}
-                to={REGISTER && ("/home/registration/customer")}
-                alt="/home/registration/customer"
+                label={`${expanded == false ? '' : 'Register'}`}
+                to={REGISTER && ("/home/registration/ratetype")}
+                alt="/home/registration/ratetype"
                 value="/home/registration"
                 menuItemKey="/home/registration"
                 name="Register page"
@@ -1312,6 +1313,38 @@ const Sidebar = () => {
               />
             </div>
           }
+
+          {Info_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded == false ? '' : 'Info'}`}
+                to={INFO && ("/home/info/mailer")}
+                alt="/home/info/mailer"
+                value="/home/info"
+                menuItemKey="/home/info"
+                name="Info page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={AiOutlineInfoCircle}
+              />
+            </div>}
+
+          {Map_page_permission &&
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded == false ? '' : 'Map'}`}
+                to={Maps && ("/home/Map/RealTime")}
+                alt="/home/Map/RealTime"
+                value="/home/Map"
+                menuItemKey="/home/Map"
+                name="Map page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={FaMapMarked}
+              />
+            </div>
+          }
+
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1366,10 +1399,137 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+
+          <motion.div className='mobile-menu-with-dropdown'>
+            <MenuItem
+              label={
+                <span className="sidebar-main-menu">
+                  <span>
+                    info
+                  </span>
+                  <span className="sidebar-main-menu-arrow">
+                    <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
+                  </span>
+                </span>
+              }
+              value="/home/info"
+              menuItemKey="/home/info"
+              name="info page"
+              isActive={isActive}
+              handleMenuItemClick={handleinfoClick}
+              icon={AiOutlineInfoCircle}
+              dropdownItems={[
+              ]}
+            />
+          </motion.div>
+          {infoDropdownVisible && (
+            <div className="settings-dropdown">
+              {/* <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
+                  <span>
+                    <GiDuration />
+                  </span>
+                  <span>
+                    Rate Type
+                  </span>
+                </p>
+              </div> */}
+              {/* <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
+                  <span>
+                    <GiReceiveMoney />
+                  </span>
+                  <span>
+                    Rate Management
+                  </span>
+                </p>
+              </div> */}
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
+                  <span>
+                    <SiMinutemailer />
+                  </span>
+                  <span>
+                    Mailer
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
+                  <span>
+                    <BsFillFuelPumpFill />
+                  </span>
+                  <span>
+                    Fuel Info
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+
+          <motion.div className='mobile-menu-with-dropdown'>
+            <MenuItem
+              label={
+                <span className="sidebar-main-menu">
+                  <span>
+                    Map
+                  </span>
+                  <span className="sidebar-main-menu-arrow">
+                    <FaChevronDown className={ismapdropdownclicked ? 'ismapdropdownclicked' : ''} />
+                  </span>
+                </span>
+              }
+              value="/home/Map/"
+              menuItemKey="/home/Map/"
+              name="Maps page"
+              isActive={isActive}
+              handleMenuItemClick={handleMapClick}
+              icon={FaMapMarkerAlt}
+              dropdownItems={[
+              ]}
+            />
+          </motion.div>
+          {mapDropdownVisible && (
+            <div className="settings-dropdown">
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/RealTime')}>
+                  <span>
+                    <BiSolidStoreAlt />
+                  </span>
+
+                  <span>
+                    RealTime
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Vehicle')}>
+                  <span>
+                    <FaCar />
+                  </span>
+                  <span>
+                    Vehicle
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Reminders')}>
+                  <span>
+                    <SiClockify />
+                  </span>
+                  <span>
+                    Reminders
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+
+
           {Setting_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded==false ? '' : 'Settings'}`}
+                label={`${expanded == false ? '' : 'Settings'}`}
                 to={SETTING && ("/home/settings/usercreation")}
                 alt="/home/settings/usercreation"
                 value="/home/settings"
@@ -1465,7 +1625,7 @@ const Sidebar = () => {
 
 
 
-{/* {Map_page_permission &&
+          {/* {Map_page_permission &&
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded==false ? '' : 'Map'}`}
@@ -1482,63 +1642,6 @@ const Sidebar = () => {
 
 
 
-<motion.div className='mobile-menu-with-dropdown'>
-            <MenuItem
-              label={
-                <span className="sidebar-main-menu">
-                  <span>
-                    Map
-                  </span>
-                  <span className="sidebar-main-menu-arrow">
-                    <FaChevronDown className={ismapdropdownclicked ? 'ismapdropdownclicked' : ''} />
-                  </span>
-                </span>
-              }
-              value="/home/Map/"
-              menuItemKey="/home/Map/"
-              name="Maps page"
-              isActive={isActive}
-              handleMenuItemClick={handleMapClick}
-              icon={FaMapMarkerAlt}
-              dropdownItems={[
-              ]}
-            />
-          </motion.div>
-          {mapDropdownVisible && (
-            <div className="settings-dropdown">
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/RealTime')}>
-                  <span>
-                    <BiSolidStoreAlt />
-                  </span>
-
-                  <span>
-                  RealTime
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Vehicle')}>
-                  <span>
-                    <FaCar />
-                  </span>
-                  <span>
-                  Vehicle
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Reminders')}>
-                  <span>
-                    <SiClockify />
-                  </span>
-                  <span>
-                    Reminders
-                  </span>
-                </p>
-              </div>
-            </div>
-          )}
 
 
 
@@ -1566,104 +1669,13 @@ const Sidebar = () => {
 
 
 
-          {Info_page_permission &&
-            <div className='desktop-menu-without-dropdown'>
-              <MenuItem
-                label={`${expanded==false ? '' : 'Info'}`}
-                to={INFO && ("/home/info/ratetype")}
-                alt="/home/info/ratetype"
-                value="/home/info"
-                menuItemKey="/home/info"
-                name="Info page"
-                isActive={isActive}
-                handleMenuItemClick={handleMenuItemClick}
-                icon={AiOutlineInfoCircle}
-              />
-            </div>}
-          <motion.div className='mobile-menu-with-dropdown'>
-            <MenuItem
-              label={
-                <span className="sidebar-main-menu">
-                  <span>
-                    info
-                  </span>
-                  <span className="sidebar-main-menu-arrow">
-                    <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
-                  </span>
-                </span>
-              }
-              value="/home/info"
-              menuItemKey="/home/info"
-              name="info page"
-              isActive={isActive}
-              handleMenuItemClick={handleinfoClick}
-              icon={AiOutlineInfoCircle}
-              dropdownItems={[
-              ]}
-            />
-          </motion.div>
-          {infoDropdownVisible && (
-            <div className="settings-dropdown">
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
-                  <span>
-                    <GiDuration />
-                  </span>
-                  <span>
-                    Rate Type
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
-                  <span>
-                    <GiReceiveMoney />
-                  </span>
-                  <span>
-                    Rate Management
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
-                  <span>
-                    <SiMinutemailer />
-                  </span>
-                  <span>
-                    Mailer
-                  </span>
-                </p>
-              </div>
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
-                  <span>
-                    <BsFillFuelPumpFill />
-                  </span>
-                  <span>
-                    Fuel Info
-                  </span>
-                </p>
-              </div>
-            </div>
-          )}
 
-{/* for vehiecle */}
-{/* for vehiecle */}
-{Map_page_permission &&
-            <div className='desktop-menu-without-dropdown'>
-              <MenuItem
-                label={`${expanded==false ? '' : 'Map'}`}
-                to={Maps && ("/home/Map/RealTime")}
-                alt="/home/Map/RealTime"
-                value="/home/Map"
-                menuItemKey="/home/Map"
-                name="Map page"
-                isActive={isActive}
-                handleMenuItemClick={handleMenuItemClick}
-                icon={FaMapMarked}
-              />
-            </div>
-          }
+
+
+
+          {/* for vehiecle */}
+          {/* for vehiecle */}
+
 
 
 
@@ -1683,7 +1695,7 @@ const Sidebar = () => {
 
 
           <MenuItem
-            label={`${expanded==false ? '' : 'User'}`}
+            label={`${expanded == false ? '' : 'User'}`}
             to="/home/usersettings/usersetting"
             alt="/home/usersettings/usersetting"
             value="/home/usersettings"

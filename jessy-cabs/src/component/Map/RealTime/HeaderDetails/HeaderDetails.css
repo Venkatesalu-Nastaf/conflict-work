@@ -91,6 +91,7 @@
 
 .top-head-section {
     margin: 0px;
+    cursor: pointer;
 }
 
 .head-icon-section {
@@ -150,3 +151,29 @@
     }
 
 }
+
+
+/* .top-head-section {
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  } */
+  
+  .top-head-section.clicked {
+    background-color: red;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 8px;
+  }
+
+  .top-head-section-p-click{
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .white{
+    color: #fff;
+  }
+  

@@ -403,13 +403,11 @@ const useTransferreport = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const organizationname = localStorage.getItem("usercompany");
-        if (!organizationname) {
-          return;
-        }
-        const response = await fetch(
-          `${apiUrl}/get-companyimage/${organizationname}`
-        );
+        // const organizationname = localStorage.getItem("usercompany");
+        // if (!organizationname) {
+        //   return;
+        // }
+        const response = await fetch(`${apiUrl}/get-companyimage`);
         if (response.status === 200) {
           const data = await response.json();
           const attachedImageUrls = data.imagePaths.map(

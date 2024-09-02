@@ -56,6 +56,9 @@ const Billings = () => {
       case "Covering Bill":
         hasPermission = Covering_Bill;
         break;
+      case "Reports":
+        hasPermission = Covering_Bill;
+        break;
       default:
         break;
     }
@@ -98,6 +101,14 @@ const Billings = () => {
             to={Covering_Bill && ("/home/billing/coveringbill")}
             alt="/home/billing/coveringbill"
             menuItemKey="Covering Bill"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+          <MenuItem
+            label="Reports"
+            to={Covering_Bill && ("/home/billing/reports")}
+            alt="/home/billing/reports"
+            menuItemKey="Reports"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />

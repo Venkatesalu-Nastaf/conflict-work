@@ -182,31 +182,31 @@ const VehicleSection = () => {
           </div>
         </div>
         {selectedOption === 'Vehicle' && (
-          <div className='vehicle-details' onClick={toggleDrawer(true)}>
+          <div className='vehicle-details' >
             <div className="vehicle-indiduals">
               <div className='vehicle-indiduals-cards'>
                 <div className='vehicle-indiduals-cards-width' >
                   <div className='vehicle-indiduals-cards'>
-                    <h3 className='heading-three '>1544115144444</h3>
-                    <div className='location-icon' >
+                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>1544115144444</h3>
+                    <div className='location-icon'>
                       <FaLocationArrow className='white-text' />
                     </div>
                   </div>
 
                   <div className='flex-class margins'>
-                    <p className='indidual-para text-color'>Group: chennai</p>
-                    <p className='flex-class indidual-para driver-para text-color'> <span>Driver: Sekar</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
+                    <p className='indidual-para text-color' onClick={toggleDrawer(true)}>Group: chennai</p>
+                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: Sekar</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
                   </div>
 
                   <div className='flex-class margins'>
-                    <p className='flex-class indidual-para '> <span>< GoClock /></span><span className='text-warning'>15m</span></p>
-                    <p className='indidual-para driver-para text-warning'>2.5 km</p>
-                    <p className='indidual-para driver-para text-color'>speed: <span className='text-warning'>25 km/h</span></p>
+                    <p className='flex-class indidual-para ' onClick={toggleDrawer(true)}> <span>< GoClock /></span><span className='text-warning'>15m</span></p>
+                    <p className='indidual-para driver-para text-warning' onClick={toggleDrawer(true)}>2.5 km</p>
+                    <p className='indidual-para driver-para text-color' onClick={toggleDrawer(true)}>speed: <span className='text-warning'>25 km/h</span></p>
                   </div>
-                  <p className='indidual-para margins'> <span><CiLocationOn /></span> <span>5-7, Sholinganallur Main Road, Sholinganallur, Chennai, Kanchipuram, TamilNadu</span></p>
-                  <p className='indidual-para margins vehicle-nearest-address' > NEAREST ADDRESS: 21 km from JESSY CABS ( Office )</p>
+                  <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><CiLocationOn /></span> <span>5-7, Sholinganallur Main Road, Sholinganallur, Chennai, Kanchipuram, TamilNadu</span></p>
+                  <p className='indidual-para margins vehicle-nearest-address' onClick={toggleDrawer(true)} > NEAREST ADDRESS: 21 km from JESSY CABS ( Office )</p>
                   <div className='vehicle-indiduals-cards'>
-                    <p className='indidual-para margins' > <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
+                    <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
                     <div className='call-share-message'>
                       <div className="call-icon">
                         <a href="tel:+4733378901"><IoCall className='white-text' /></a>

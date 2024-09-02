@@ -18,7 +18,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent,DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
 
 
@@ -90,14 +90,14 @@ const Customer = ({ stationName }) => {
     handleButtonClick,
     isInputVisible,
     handleExcelDownload,
-    handlePdfDownload, setBook,
+    handlePdfDownload,
     rows,
     columns,
     isEditMode,
     handleEdit,
     customerfieldSets,
     handleChangecustomer, deletedialogbox, setDeletedDialog,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, setSelectedCustomerData, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const Customer = ({ stationName }) => {
     console.log("false")
     setDeletedDialog(false)
   }
-
+ 
 
 
 
@@ -351,19 +351,31 @@ const Customer = ({ stationName }) => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-
                 <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
                   <Switch
                     label='label'
                     id="hybrid"
-                    onChange={(e) => {
-                      const isChecked = e.target.checked;
-                      setBook((prev) => ({ ...prev, hybrid: isChecked }));
-                      setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }));
-                      console.log("book.hybrid", isChecked, selectedCustomerData.hybrid);
-                    }}
+                    name="hybrid"
+                    onChange={handleChange}
+                    // onChange={(e) => {
+                    //   const isChecked = e.target.checked;
+                    //   setBook((prev) => ({ ...prev, hybrid: isChecked }));
+                    //   setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }));
+                    //   console.log("book.hybrid", isChecked, selectedCustomerData.hybrid);
+                    // }}
+
                     checked={book.hybrid || selectedCustomerData.hybrid}
+                  />
+                </div>
+                <div className='customer-billing-group-input-division input'>
+                  <FormLabel htmlFor='TimeToggle'>TimeToggle</FormLabel>
+                   <Switch
+                    label='label'
+                    id="TimeToggle"
+                    name="TimeToggle"
+                    onChange={handleChange}
+                    checked={book.TimeToggle || selectedCustomerData.TimeToggle ||0}
                   />
                 </div>
 

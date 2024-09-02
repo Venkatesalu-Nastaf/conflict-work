@@ -79,8 +79,6 @@ const Login = () => {
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
-        const datatokens=response.data.datatoken
-        localStorage.setItem("tokensdata",datatokens)
     
 
       }

@@ -258,8 +258,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     calculateTotalDay,
     calculateTotalTimes,
     handleClickOpen,
-    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm,
-    maxconflict
+    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm,lockdatavendorbill,setLockDatavendorBill,lockdatacustomerbill,setLockDatacustomerBill,
+    maxconflict,setExtraKM,setextrakm_amount,setExtraHR,setextrahr_amount,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -1495,26 +1495,43 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {/* {(calculateTotalDay()  ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>)) || (!closeTimeVar && <label> Shed In Time</label>)} */}
-                    {(closeTimeVar && ((closeTimeVar < shedInTimeVar) ? (<label>Shed In Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!closeTimeVar && <label> Shed In Time</label>)}
+                    {(closeTimeVar && calculateTotalDay() === 0 &&
+                      ((closeTimeVar < shedInTimeVar)
+                        ? (<label>Shed In Time</label>)
+                        : (<label style={{ color: "red" }}>Invalid Time</label>)
+                      ))
+                      || (!closeTimeVar && <label> Shed In Time</label>)
+                    }
+                    {calculateTotalDay() > 0 ? (<label>Shed In Time</label>) : ""}
                     <input
                       type="time"
                       name="shedintime"
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if ((closeTimeVar && rTime <= closeTimeVar)) {
-                          return;
+
+                        // Check if the day difference is 0
+                        if (calculateTotalDay() === 0) {
+                          // Only allow time greater than closeTimeVar
+                          if (closeTimeVar && rTime > closeTimeVar) {
+                            setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                            setBook({ ...book, shedintime: rTime });
+                            setshedintime(rTime);
+                            if (!lockdata) {
+                              setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                            }
+                          }
                         } else {
-                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                          setBook({ ...book, shedintime: event.target.value });
-                          setshedintime(event.target.value);
+                          // Allow any time
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                          setBook({ ...book, shedintime: rTime });
+                          setshedintime(rTime);
                           if (!lockdata) {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value })
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
                         }
-
                       }}
                     />
                   </div>
@@ -1553,7 +1570,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
-                  <br></br>
+                  {/* <br></br> */}
                   {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
@@ -2208,6 +2225,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 // variant="standard"
                                 />
                               </div>
+                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdatavendorbill}
+                                  onChange={(event) => setLockDatavendorBill(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
                             </div>
 
                             <div className="input-field tripsheet-vendor-bill-amount-input-field">
@@ -2436,6 +2461,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   variant="standard"
                                 />
                               </div>
+                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdatacustomerbill}
+                                  onChange={(event) => setLockDatacustomerBill(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
                             </div>
                             <div className="input-field">
                               <div className="input">
@@ -2446,6 +2479,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="exkm1"
                                   className='customer-bill-input'
                                   value={extraKM || formData.calcPackage || 0}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setExtraKM(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   label="Ex.Km"
                                   id="ex-exkm1"
                                   autoComplete="password"
@@ -2461,6 +2503,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='exkmTkm2'
                                   className='customer-bill-input'
                                   value={extrakm_amount || formData.calcPackage || ''}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setextrakm_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   id="exkmTkm2"
                                   variant="standard"
                                   autoComplete="password"
@@ -2492,6 +2543,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="exHrs1"
                                   className='customer-bill-input'
                                   value={extraHR || formData.calcPackage || 0}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setExtraHR(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   label="exHrs1"
                                   id="ex-exHrs1"
                                   size="small"
@@ -2509,6 +2569,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='exHrsTHrs2'
                                   className='customer-bill-input'
                                   value={extrahr_amount || formData.calcPackage || 0}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setextrahr_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   variant="standard"
                                 />
 
@@ -2540,7 +2609,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
                                   value={nightBta}
 
-                                  onChange={(e) => setNightBeta(e.target.value)}
+                                  // onChange={(e) => setNightBeta(e.target.value)}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setNightBeta(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   label="Night"
                                   id="night1"
                                   autoComplete="password"
@@ -2558,7 +2636,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='nightThrs2'
                                   id="nightThrs2"
                                   value={nightCount}
-                                  onChange={(e) => setNightCount(e.target.value)}
+                                  // onChange={(e) => setNightCount(e.target.value)}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setNightCount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2591,7 +2678,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   value={driverBeta}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
-                                  onChange={(e) => setdriverBeta(e.target.value)}
+                                  // onChange={(e) => setdriverBeta(e.target.value)}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverBeta(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   label="Driver Convenience"
                                   autoComplete="password"
                                   id="driverconvenience1"
@@ -2611,7 +2707,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   value={driverbeta_Count}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
 
-                                  onChange={(e) => setdriverbeta_Count(e.target.value)}
+                                  // onChange={(e) => setdriverbeta_Count(e.target.value)}
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverbeta_Count(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   variant="standard"
                                   autoComplete="password"
                                 />
@@ -2625,7 +2730,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   className='customer-bill-input'
                                   value={driverBeta_amount}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
-                                  onChange={(e) => setdriverBeta_amount(e.target.value)}
+                                  // onChange={(e) => setdriverBeta_amount(e.target.value)}
+
+                                  onChange={(e) =>{
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverBeta_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
                                   size="small"
                                   label="Amount"
                                   id="amount9"

@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "../RealTime.css"
 import "./HeaderDetails.css"
 import ViewIcon from "./ViewIcon/ViewIcon";
 import DownLoadIcon from "./DownLoadIcon/DownLoadIcon";
 import FilterIcon from "./FilterIcon/FilterIcon";
 import ShareIcon from "./ShareIcon/ShareIcon";
+import { AiOutlineClose } from 'react-icons/ai'; // Importing the close icon from react-icons
+
+
 const HeaderDetails = () => {
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleISClick = () => {
+        setIsClicked(!isClicked);
+    };
+
+    const handleISClose = () => {
+        setIsClicked(false);
+    };
+
     return (
         <>
             <div className='main-head-hover'>
@@ -13,7 +26,18 @@ const HeaderDetails = () => {
                     <div className='hovering-contents'>
                         <div className='first-div-realtime'>
                             <div>
-                                <p className='top-head-section'><span className='spantext'>48</span><span className='text-color-head'>vehicle</span> </p>
+                                <p onClick={handleISClick} className={`top-head-section top-head-section-p-click ${isClicked ? 'clicked' : ''}`}>
+                                    <span>
+                                    <span className='spantext'>48</span>
+                                    <span className={`text-color-head ${isClicked ? 'white' : ''}`}>vehicle</span>
+                                    </span>
+                                   <span>
+                                   {isClicked && (
+                                        <AiOutlineClose onClick={handleISClose} />
+                                    )}
+                                   </span>
+                                   
+                                </p>
                                 <p><span className='spantext orange'>7</span><span className='text-color-head'>Idle</span> </p>
                                 <p><span className='spantext red'>3</span><span className='text-color-head'>Dispatched</span> </p>
                             </div>

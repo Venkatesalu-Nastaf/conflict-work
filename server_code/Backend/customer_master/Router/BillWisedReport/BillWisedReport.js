@@ -86,19 +86,19 @@ router.post('/addCollect', (req, res) => {
     }
 
     // First, fetch the current totalin value from the database
-    db.query('SELECT totalin,capital FROM bankaccountdetails WHERE bankname = ?', [bankname], (err, rows) => {
+    db.query('SELECT totalin,capital FROM bankaccountdetails WHERE bankname = ?', [bankname], (err, results) => {
         if (err) {
-            console.error('Error fetching totalin:', err);
+            console.log('Error fetching totalin:', err);
             return res.status(500).json({ message: 'Database error' });
         }
 
-        if (rows.length === 0) {
+        if (results.length === 0) {
             return res.status(404).json({ message: 'Bank account not found' });
         }
 
-        const currentTotalin = rows[0].totalin;
+        const currentTotalin = results[0].totalin;
         const updatedTotalin = parseInt(currentTotalin) + parseInt(collectedAmount); // Add the collected amount to the current totalin
-        const totalcapital = parseInt(collectedAmount) + parseInt(rows[0].capital)
+        const totalcapital = parseInt(collectedAmount) + parseInt(results[0].capital)
 
         // Now, update the totalin value in the database
         const updateQuery = "UPDATE bankaccountdetails SET totalin = ?,capital=? WHERE bankname = ?";

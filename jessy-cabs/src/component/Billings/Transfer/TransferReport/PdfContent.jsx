@@ -56,10 +56,12 @@ const styles = StyleSheet.create({
   },
   text2: {
     fontSize: '12px',
-
   },
   invoicerightside: {
     fontSize: '12px'
+  },
+  invoicerightsideHeading: {
+    width: '200px'
   },
   gstno: {
     fontSize: '13px',
@@ -315,15 +317,15 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
-  console.log(fullAmount,'fulll');
-  
+  console.log(fullAmount, 'fulll');
+
   const cgst = Math.floor(fullAmount * 2.5 / 100);
   const sgst = Math.floor(fullAmount * 2.5 / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
 
-  const parkpermit = park + permitcharge + tollAmount 
+  const parkpermit = park + permitcharge + tollAmount
   const FullAmount = fullAmount + cgst + sgst + parkpermit
   const formattedFullAmount = FullAmount;
 
@@ -390,9 +392,26 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
 
                   <View style={styles.invoicediv}>
-                    <Text style={styles.invoicerightside}>Invoice No : {invoiceno}</Text>
-                    <Text style={styles.invoicerightside}>Invoice Date : {invoiceDate}</Text>
-                    <Text style={styles.invoicerightside}>Group Ref No : {groupTripid}</Text>
+                    {/* <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Invoice No :</Text> {invoiceno}</Text>
+                    <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Invoice Date :</Text> {invoiceDate}</Text>
+                    <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Group Ref No :</Text> {groupTripid}</Text> */}
+
+
+
+                    <View style={styles.grandtotal}>
+
+                      <View >
+                        <Text style={styles.total}>Invoice No: </Text>
+                        <Text style={styles.text2}>Invoice Date:</Text>
+                        <Text style={styles.text2}>Group Ref No:</Text>
+                      </View>
+
+                      <View >
+                        <Text style={styles.invoicerightside}>{invoiceno}</Text>
+                        <Text style={styles.invoicerightside}>{invoiceDate}</Text>
+                        <Text style={styles.invoicerightside}>{groupTripid}</Text>
+                      </View>
+                    </View>
 
                   </View>
                 </View>
@@ -421,7 +440,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
                             <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
-                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{(parseInt(item.permit)|| 0) + (parseInt(item.parking) || 0 ) + (parseInt(item.toll)|| 0) }</Text></View>
+                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}</Text></View>
                             <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
                           </React.Fragment>
                         </View>
@@ -441,11 +460,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 <View style={styles.grandtotal}>
 
                   <View >
-                    <Text style={styles.total}>SUB TOTAL </Text>
-                    <Text style={styles.text2}>CGST 2.5% on {fullAmount}</Text>
-                    <Text style={styles.text2}>SGST 2.5% on {fullAmount}</Text>
-                    <Text style={styles.text2}>Parking & Permit</Text>
-                    <Text style={styles.text2}>Total Amount</Text>
+                    <Text style={styles.total}>SUB TOTAL: </Text>
+                    <Text style={styles.text2}>CGST 2.5% on {fullAmount}:</Text>
+                    <Text style={styles.text2}>SGST 2.5% on {fullAmount}:</Text>
+                    <Text style={styles.text2}>Parking & Permit:</Text>
+                    <Text style={styles.text2}>Total Amount:</Text>
                   </View>
 
                   <View>

@@ -6,7 +6,7 @@ export const ReportData = () => {
 };
 export const ReportProvider = ({ children }) => {
     const [customerName, setCustomerName] = useState('');
-    const [value, setValue] = useState("Monthly Wise");
+    const [value, setValue] = useState("MonthlyWise");
 
     return (
         <ReportContext.Provider value={{ customerName, setCustomerName,value, setValue }}>

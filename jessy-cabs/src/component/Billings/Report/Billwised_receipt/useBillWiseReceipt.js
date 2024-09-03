@@ -6,6 +6,9 @@ import { ReportData } from "../Context/ReportContext";
 
 const useBillWiseReceipt = () => {
     const [organization, setOrganization] = useState([]);
+    const [balanceAmount, setBalanceAmount] = useState(false);
+    const [pendingAmountList, setPendingAmountList] = useState([]);
+    const [selectMatchList, setSelectMatchList] = useState([])
     const [accountDetails, setAccountDetails] = useState([]);
     const [billWiseReport, setBillWiseReport] = useState({
         Date: dayjs().format('YYYY-MM-DD'),
@@ -45,20 +48,29 @@ const useBillWiseReceipt = () => {
         { field: 'Trips', headerName: 'Trip No', width: 130 },
         { field: 'Amount', headerName: 'Bill Amt', width: 130 },
         { field: 'customeradvance', headerName: 'Recieved', width: 130 },
-        { field: 'disAm', headerName: 'Dis Am', width: 130 },
+        // { field: 'disAm', headerName: 'Dis Am', width: 130 },
         { field: 'balance', headerName: 'Balance', width: 130 },
         { field: 'billType', headerName: 'Bill Type', width: 130 },
         { field: 'uniqueId', headerName: 'Unique Id', width: 130 },
     ];
 
+    // const columnsPendingBill = [
+    //     { field: 'sno', headerName: 'Sno', width: 70 },
+    //     {
+    //         field: 'BillNo',
+    //         headerName: 'Bill No',
+    //         type: 'number',
+    //         width: 90,
+    //     },
+    //     { field: 'BillDate', headerName: 'Bill Date', width: 130 },
+    //     { field: 'Amount', headerName: 'Amount', width: 130 },
+    // ];
+
     const columnsPendingBill = [
         { field: 'sno', headerName: 'Sno', width: 70 },
-        {
-            field: 'BillNo',
-            headerName: 'Bill No',
-            type: 'number',
-            width: 90,
-        },
+        balanceAmount
+            ? { field: 'Voucherid', headerName: 'Voucher ID', type: 'number', width: 90 }
+            : { field: 'BillNo', headerName: 'Bill No', type: 'number', width: 90 },
         { field: 'BillDate', headerName: 'Bill Date', width: 130 },
         { field: 'Amount', headerName: 'Amount', width: 130 },
     ];
@@ -97,6 +109,7 @@ const useBillWiseReceipt = () => {
                 const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
                     params: { customer: customerName }
                 });
+                setBalanceAmount(false)
 
                 const { individualBilling = [], groupBilling = [], transferListBilling = [] } = response.data;
 
@@ -128,6 +141,17 @@ const useBillWiseReceipt = () => {
 
                 setPendingBillRows(combinedPendingBillWithSnoAndId);
                 setRows([])
+                setTotals({
+                    amount: 0,
+                    recieved: 0,
+                    discount: 0,
+                    balance: 0,
+                    totalAmount: 0,
+                    onAccount: 0,
+                    totalBalance: 0,
+                    tds: 0,
+                    collectedAmount: 0
+                });
 
             } catch (error) {
                 console.log(error, 'error');
@@ -142,51 +166,85 @@ const useBillWiseReceipt = () => {
     };
 
     const handleApplyBill = async () => {
-        const tripid = selectedBillRow.flatMap((li) => li.Trip_id.split(',').map(Number));
+        if (balanceAmount === false) {
+            const tripid = selectedBillRow.flatMap((li) => li.Trip_id.split(',').map(Number));
 
-        try {
-            const response = await axios.get(`${apiUrl}/getTripAdvance`, {
-                params: { Tripid: tripid }
-            });
-            const tripAdvanceData = response.data;
+            try {
+                const response = await axios.get(`${apiUrl}/getTripAdvance`, {
+                    params: { Tripid: tripid }
+                });
+                const tripAdvanceData = response.data;
 
-            // Map trip advances to the selectedBillRow
-            const updatedRows = selectedBillRow.map((billRow) => {
-                const tripIds = billRow.Trip_id.split(',').map(Number);
-                const customerAdvance = tripIds.reduce((total, tripId) => {
-                    const tripData = tripAdvanceData.find(trip => trip.tripid === tripId);
-                    return total + (tripData ? Number(tripData.customeradvance) : 0);
-                }, 0);
+                // Map trip advances to the selectedBillRow
+                const updatedRows = selectedBillRow.map((billRow) => {
+                    const tripIds = billRow.Trip_id.split(',').map(Number);
+                    const customerAdvance = tripIds.reduce((total, tripId) => {
+                        const tripData = tripAdvanceData.find(trip => trip.tripid === tripId);
+                        return total + (tripData ? Number(tripData.customeradvance) : 0);
+                    }, 0);
 
-                // Calculate balance
-                const balance = Number(billRow.Amount) - customerAdvance;
+                    // Calculate balance
+                    const balance = Number(billRow.Amount) - customerAdvance;
 
-                return { ...billRow, customeradvance: customerAdvance, balance: balance };
-            });
+                    return { ...billRow, customeradvance: customerAdvance, balance: balance };
+                });
+                setRows(updatedRows);
+                const totalAmount = updatedRows.reduce((acc, row) => acc + Number(row.Amount), 0);
+                const totalRecieved = updatedRows.reduce((acc, row) => acc + (Number(row.customeradvance) || 0), 0);
+                const totalDiscount = updatedRows.reduce((acc, row) => acc + (Number(row.disAm) || 0), 0);
+                const totalBalance = updatedRows.reduce((acc, row) => acc + (Number(row.balance) || 0), 0);
+                const totalOnAccount = updatedRows.reduce((acc, row) => acc + (Number(row.onAccount) || 0), 0); // Assuming onAccount is in rows
+                const totalTDS = updatedRows.reduce((acc, row) => acc + (Number(row.tds) || 0), 0); // Assuming tds is in rows
+                // const collected = updatedRows.reduce((acc,row)=> acc + (Number(row.collectedAmount) || 0), 0)
+                const totBalance = totalAmount - totalRecieved || 0;
+                // const balance = totBalance - collected
+                setTotals({
+                    amount: totalAmount,
+                    recieved: totalRecieved,
+                    discount: totalDiscount,
+                    balance: totalBalance,
+                    totalAmount: totBalance,
+                    onAccount: totalOnAccount,
+                    // totalBalance: balance,
+                    tds: totalTDS
+                });
+            } catch (error) {
+                console.log('Error fetching trip advance data:', error);
+            }
+        }
+        else {
+            const selectList = selectedBillRow.map(li => li.Voucherid);
+            console.log(selectList, pendingAmountList, selectedBillRow, 'mat');
+
+            const matchedRows = pendingAmountList.filter(item => selectList.includes(item.voucherID));
+            setSelectMatchList(matchedRows)
+            const updatedRows = matchedRows.map((row) => ({
+                id: row.voucherID,
+                BillNo: row.voucherID,
+                Amount: row.TotalAmount,
+                BillDate: row.BillDate,
+                customeradvance: row.Collected,
+                TotalAmount: row.TotalAmount,
+                balance: row.TotalBalance,
+                uniqueId: row.uniqueid
+            }));
+            const Account = matchedRows.map(li => li.Account)
+            setBillWiseReport(prevState => ({
+                ...prevState,
+                AccountDetails: Account[0] || ""
+            }));
+            const TotalAmount = matchedRows.map(li => Number(li.TotalBalance));
+
+            const totalSum = TotalAmount.reduce((acc, curr) => acc + curr, 0);
+            setTotals(prevState => ({
+                ...prevState,
+                totalAmount: totalSum
+            }));
             setRows(updatedRows);
-            const totalAmount = updatedRows.reduce((acc, row) => acc + Number(row.Amount), 0);
-            const totalRecieved = updatedRows.reduce((acc, row) => acc + (Number(row.customeradvance) || 0), 0);
-            const totalDiscount = updatedRows.reduce((acc, row) => acc + (Number(row.disAm) || 0), 0);
-            const totalBalance = updatedRows.reduce((acc, row) => acc + (Number(row.balance) || 0), 0);
-            const totalOnAccount = updatedRows.reduce((acc, row) => acc + (Number(row.onAccount) || 0), 0); // Assuming onAccount is in rows
-            const totalTDS = updatedRows.reduce((acc, row) => acc + (Number(row.tds) || 0), 0); // Assuming tds is in rows
-            // const collected = updatedRows.reduce((acc,row)=> acc + (Number(row.collectedAmount) || 0), 0)
-            const totBalance = totalAmount - totalRecieved || 0;
-            // const balance = totBalance - collected
-            setTotals({
-                amount: totalAmount,
-                recieved: totalRecieved,
-                discount: totalDiscount,
-                balance: totalBalance,
-                totalAmount: totBalance,
-                onAccount: totalOnAccount,
-                // totalBalance: balance,
-                tds: totalTDS
-            });
-        } catch (error) {
-            console.log('Error fetching trip advance data:', error);
+
         }
     };
+
     const handlechange = (event) => {
         const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
         // Calculate new totalAmount based on the new TDS value
@@ -213,58 +271,19 @@ const useBillWiseReceipt = () => {
     };
 
     const handleAddBillReceive = async () => {
-        if (totals.collectedAmount === undefined || totals.collectedAmount === 0) {
-            setError(true);
-            setErrorMessage("Enter Collected Amount");
-            return
-        }
-        // Check if AccountDetails is provided
-        if (billWiseReport.AccountDetails === "") {
-            setError(true);
-            setErrorMessage("Enter Bank Account");
-            return;  // Early return to prevent further execution
-        }
+        if (balanceAmount === true) {
+            if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
 
-        // Combine totals and billWiseReport data
-        const combinedData = {
-            ...totals,
-            ...billWiseReport
-        };
+                const uniqueVoucherId = selectedBillRow?.map(li => li.Voucherid)
+                const TotalCollectAmount = selectMatchList?.map(li => li.TotalAmount)
+                console.log(uniqueVoucherId, TotalCollectAmount, pendingAmountList, 'uni');
+                console.log(selectMatchList, 'uni1111');
 
-        // Format data for the API request
-        const formattedData = {
-            uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
-            CustomerName: combinedData.CustomerName,
-            Account: combinedData.AccountDetails,
-            Amount: combinedData.amount || 0,
-            TDS: combinedData.tds,
-            Advance: combinedData.recieved || 0,
-            TotalAmount: combinedData.totalAmount || 0,
-            BillDate: combinedData.Date,
-            Collected: combinedData.collectedAmount || 0,
-            TotalBalance: combinedData.totalAmount - combinedData.collectedAmount || combinedData.totalAmount
-        };
-
-        const BillNo = rows.map(li => li.BillNo);
-
-        try {
-            // Post the formatted data
-            const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
-            console.log(postResponse.data, 'response data');
-
-            await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount || 0, bankname: combinedData.AccountDetails });
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
-
-            if (postResponse.data) {
-                const deleteResponse = await axios.delete(`${apiUrl}/deleteBillWiseReport`, { data: { BillNo } });
-
-                if (deleteResponse.status === 200) {
-                    setBillWiseReport({
-                        CustomerName: "",
-                        AccountDetails: "",
-                        UniqueID: "",
-                    });
+                try {
+                    const response = await axios.put(`${apiUrl}/updateBalanceAmount`, { uniqueVoucherId, TotalCollectAmount });
+                    console.log(response.data.message);
+                    setRows([])
+                    setPendingBillRows([])
                     setTotals({
                         amount: 0,
                         recieved: 0,
@@ -276,18 +295,140 @@ const useBillWiseReceipt = () => {
                         tds: 0,
                         collectedAmount: 0
                     });
-                    setRows([]);
-                    setPendingBillRows([]);
-                } else {
-                    console.error('Failed to delete bill data');
+                    setBillWiseReport({
+                        CustomerName: "",
+                        AccountDetails: "",
+                        UniqueID: "",
+                    });
+
+                } catch (error) {
+                    console.error('Failed to update balance amount:', error.response?.data?.error || error.message);
                 }
             }
-        } catch (error) {
-            console.error('Error posting bill amount received or deleting bill data:', error);
-            setError(true);
-            setErrorMessage('An error occurred while processing the request.');
+        }
+        else {
+            if (totals.collectedAmount === undefined || totals.collectedAmount === 0) {
+                setError(true);
+                setErrorMessage("Enter Collected Amount");
+                return
+            }
+            // Check if AccountDetails is provided
+            if (billWiseReport.AccountDetails === "") {
+                setError(true);
+                setErrorMessage("Enter Bank Account");
+                return;  // Early return to prevent further execution
+            }
+
+            // Combine totals and billWiseReport data
+            const combinedData = {
+                ...totals,
+                ...billWiseReport
+            };
+            console.log(combinedData, 'combined');
+
+            // Format data for the API request
+            const formattedData = {
+                uniqueid: combinedData.UniqueID || "", // Replace with actual key if different
+                CustomerName: combinedData.CustomerName,
+                Account: combinedData.AccountDetails,
+                Amount: combinedData.amount || 0,
+                TDS: combinedData.tds,
+                Advance: combinedData.recieved || 0,
+                TotalAmount: combinedData.totalAmount || 0,
+                BillDate: combinedData.Date,
+                Collected: combinedData.collectedAmount || 0,
+                TotalBalance: combinedData.totalAmount - combinedData.collectedAmount || combinedData.totalAmount
+            };
+            console.log(formattedData, 'formateed');
+
+            const BillNo = rows.map(li => li.BillNo);
+
+            try {
+                // Post the formatted data
+                const postResponse = await axios.post(`${apiUrl}/addBillAmountReceived`, formattedData);
+                console.log(postResponse.data, 'response data');
+
+                await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount || 0, bankname: combinedData.AccountDetails });
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+
+                if (postResponse.data) {
+                    const deleteResponse = await axios.delete(`${apiUrl}/deleteBillWiseReport`, { data: { BillNo } });
+
+                    if (deleteResponse.status === 200) {
+                        setBillWiseReport({
+                            CustomerName: "",
+                            AccountDetails: "",
+                            UniqueID: "",
+                        });
+                        setTotals({
+                            amount: 0,
+                            recieved: 0,
+                            discount: 0,
+                            balance: 0,
+                            totalAmount: 0,
+                            onAccount: 0,
+                            totalBalance: 0,
+                            tds: 0,
+                            collectedAmount: 0
+                        });
+                        setRows([]);
+                        setPendingBillRows([]);
+                    } else {
+                        console.error('Failed to delete bill data');
+                    }
+                }
+            } catch (error) {
+                console.error('Error posting bill amount received or deleting bill data:', error);
+                setError(true);
+                setErrorMessage('An error occurred while processing the request.');
+            }
         }
     };
+
+    // Balance Amount Collect
+    const handleBalanceAmount = async () => {
+        setTotals({
+            amount: 0,
+            recieved: 0,
+            discount: 0,
+            balance: 0,
+            totalAmount: 0,
+            onAccount: 0,
+            totalBalance: 0,
+            tds: 0,
+            collectedAmount: 0
+        });
+        setRows([])
+        setBalanceAmount(true)
+        const organization = billWiseReport.CustomerName;
+        console.log(organization, 'customer');
+
+        try {
+            const response = await axios.post(`${apiUrl}/getBalanceAmount`, { organization });
+            console.log(response.data, 'balance amount data');
+            const pendingList = response.data;
+            setPendingAmountList(response.data)
+            const BillNo = pendingList?.map(li => li.voucherID);
+            const BillDate = pendingList?.map(li => li.BillDate);
+            const pendingAmount = pendingList.map(li => li.TotalBalance);
+            console.log(BillNo, BillDate, pendingAmount, 'hiiii');
+            const newPendingBillRows = BillNo.map((voucherID, index) => ({
+                id: index + 1, // Assign a unique ID to each row
+                sno: index + 1, // Assign sequential serial numbers
+                Voucherid: voucherID,
+                BillDate: BillDate[index],
+                Amount: pendingAmount[index],
+            }));
+
+            // Update the state with the new rows
+            setPendingBillRows(newPendingBillRows);
+
+        } catch (error) {
+            console.log(error, 'error fetching balance amount');
+        }
+    };
+
 
     // const handleAddBillReceive = async () => {
     //     if (billWiseReport.AccountDetails === "") {
@@ -397,7 +538,8 @@ const useBillWiseReceipt = () => {
         successMessage,
         hidePopup,
         handlePending,
-        handleCollectedChange
+        handleCollectedChange,
+        handleBalanceAmount
     };
 };
 

@@ -11,7 +11,8 @@ import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/Pd
 import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
 import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
 import { PermissionProvider } from "./component/context/permissionContext";
-import { ReportProvider } from "./component/Registration/Report/Context/ReportContext";
+// import { ReportProvider } from "./component/Registration/Report/Context/ReportContext";
+import { ReportProvider } from "./component/Billings/Report/Context/ReportContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

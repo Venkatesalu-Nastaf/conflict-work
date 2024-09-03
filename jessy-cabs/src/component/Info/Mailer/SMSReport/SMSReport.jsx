@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import "./SMSReport.css";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
@@ -13,6 +13,8 @@ import Excel from 'exceljs';
 import { saveAs } from "file-saver";
 import isBetween from 'dayjs/plugin/isBetween';
 import Box from "@mui/material/Box";
+import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 dayjs.extend(isBetween);
 
@@ -34,24 +36,57 @@ const SMSReport = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [datafilter, setDatafilter] = useState(true)
+  const [info, setInfo] = useState(false);
+  const [infoMessage, setINFOMessage] = useState({});
+  const hidePopup = () => {
+  
+    setInfo(false);
+ 
+};
+useEffect(() => {
+    if (info) {
+        const timer = setTimeout(() => {
+            hidePopup();
+        }, 3000);
+        return () => clearTimeout(timer);
+    }
+}, [info]);
+
+  // useEffect(() => {
+  //   const fetchdata = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiurl}/smsreportdata`)
+  //       const data = response.data
+  //       const rowsWithUniqueId = data.map((row, index) => ({
+  //         ...row,
+  //         id: index + 1,
+  //       }));
+  //       setSmsReport(rowsWithUniqueId)
+  //     }
+  //     catch (err) {
+  //       console.log(err)
+  //     }
+  //   }
+  //   fetchdata()
+  // }, [apiurl])
+
+  const fetchdata = useCallback(async () => {
+    try {
+      const response = await axios.get(`${apiurl}/smsreportdata`);
+      const data = response.data;
+      const rowsWithUniqueId = data.map((row, index) => ({
+        ...row,
+        id: index + 1,
+      }));
+      setSmsReport(rowsWithUniqueId);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [apiurl]); // useCallback dependency array
 
   useEffect(() => {
-    const fetchdata = async () => {
-      try {
-        const response = await axios.get(`${apiurl}/smsreportdata`)
-        const data = response.data
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setSmsReport(rowsWithUniqueId)
-      }
-      catch (err) {
-        console.log(err)
-      }
-    }
-    fetchdata()
-  }, [apiurl])
+    fetchdata();
+  }, [fetchdata]);
 
 
   const filterData = () => {
@@ -67,12 +102,18 @@ const SMSReport = () => {
       return submitDate.isBetween(startDateWithoutTime, endDateWithoutTime, null, '[]');
 
     });
+    if(filtered.length === 0 ){
+      console.log("errr")
+      setInfo(true)
+      setINFOMessage("Data Not Found")
+    }
     setFilteredReport(filtered);
     setDatafilter(false)
   }
 
   const dataall = () => {
     setDatafilter(true)
+    fetchdata()
   }
 
   const handleExcelDownload = async () => {
@@ -206,7 +247,7 @@ const SMSReport = () => {
                     Excel
 
                   </Button>
-                </div>
+                  </div>
                 <div className='input' style={{gap: '15px'}}>
                   <div className="">
                     <Button variant="contained" onClick={filterData}>Show</Button>
@@ -215,7 +256,7 @@ const SMSReport = () => {
                     <Button variant="outlined" onClick={dataall}>Show All</Button>
                   </div>
                 </div>
-
+        
               </div>
             </div>
           </div>
@@ -262,6 +303,15 @@ const SMSReport = () => {
             </Box>
           </div>
         </div>
+        <div className='alert-popup-main'>
+        {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
+          </div>
 
 
       </form>

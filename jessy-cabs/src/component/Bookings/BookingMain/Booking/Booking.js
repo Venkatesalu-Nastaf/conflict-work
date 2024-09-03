@@ -82,7 +82,7 @@ export const Duty = [
     optionvalue: "oneway",
   },
   {
-    Option: "OutStation",
+    Option: "Outstation",
     optionvalue: "outstation",
   },
   {

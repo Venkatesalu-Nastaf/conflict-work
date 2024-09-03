@@ -108,8 +108,9 @@ const SignatureGenerate = () => {
 
 
             const data = response.data.link
-            window.open(data, '_blank');
-            setExpired(true);
+            window.location.href = data;
+            // window.open(data, '_blank');
+            // setExpired(true);
                 sessionStorage.setItem("expiredsign", true);
                 localStorage.setItem("expiredsign", true);
 
@@ -127,8 +128,9 @@ const SignatureGenerate = () => {
         const tripdata=tripId;
          const uploadtollaprk=`http://taaftechnology.com/UploadtollPark?Tripid=${tripdata}`
         // const uploadtollaprk=`http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
-        window.open(uploadtollaprk,'_blank')
-        setExpired(true);
+        // window.open(uploadtollaprk,'_blank')
+        window.location.href = uploadtollaprk;
+        // setExpired(true);
         sessionStorage.setItem("expiredsign", true);
         localStorage.setItem("expiredsign", true);
      }

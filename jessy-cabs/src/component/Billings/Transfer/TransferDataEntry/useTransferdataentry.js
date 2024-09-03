@@ -13,7 +13,7 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
-    { field: "apps", headerName: "apps", width: 130 },
+    { field: "apps", headerName: "Apps", width: 130 },
     { field: "startdate", headerName: "TripDate", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "tripid", headerName: "Trip No", width: 130 },
     { field: "customer", headerName: "Customer", width: 130 },

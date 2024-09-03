@@ -1,7 +1,7 @@
 /* Main Container For User Creation */
-.stationcreation-main .Title-Name {
+/* .stationcreation-main .Title-Name {
   position: relative;
-}
+} */
 
 .stationcreation-main {
   width: 100%;
@@ -12,7 +12,7 @@
   color: #000;
 }
 
-.stationcreation-main .Title-Name::after {
+/* .stationcreation-main .Title-Name::after {
   content: "";
   position: absolute;
   bottom: -10px;
@@ -21,14 +21,14 @@
   border-radius: 20px;
   height: 3px;
   background-color: #1976d2;
-}
+} */
 
-.stationcreation-main .Title-Name {
+/* .stationcreation-main .Title-Name {
   font-size: 18px;
   padding-left: 20px;
   font-weight: 500;
   color: #1976d2;
-}
+} */
 
 /* @media screen and (min-width: 769px) {
   .side-bar-menu-close .stationcreation-main .stationcreation-form-container {

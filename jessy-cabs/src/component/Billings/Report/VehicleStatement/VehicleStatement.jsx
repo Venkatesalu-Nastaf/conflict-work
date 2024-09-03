@@ -27,10 +27,10 @@ import jsPDF from "jspdf";
 const customer_colums = [
   { field: 'id', headerName: 'S.no', width: 70 },
   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
-  { field: 'totalTime', headerName: 'TTime', width: 120 },
+  { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
   { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
-  { field: 'totalcustomeradvance', headerName: 'D.Advance', width: 130 },
+  { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
   { field: 'balance', headerName: 'Balance', width: 130 },
   { field: "betaTotalAmount", headerName: "Beta", with: 100 }
 ]
@@ -558,7 +558,7 @@ const VehicleStatement = () => {
               name="fullTotalKM"
               className='customer-bill-input'
               value={totalValues.fullTotalKM || ''}
-              label="FullTotalKM"
+              label="Full Total KM"
               id="ex-fullTotalKM"
               size="small"
               autoComplete="password"
@@ -571,7 +571,7 @@ const VehicleStatement = () => {
               name="fullTotalHR"
               className='customer-bill-input'
               value={totalValues.fullTotalHR || ''}
-              label="FullTotalHR"
+              label="Full Total HR"
               id="ex-fullTotalHR"
               size="small"
               autoComplete="password"
@@ -584,7 +584,7 @@ const VehicleStatement = () => {
               name="totalAmount"
               className='customer-bill-input'
               value={totalValues.totalAmount || ''}
-              label="totalAmount"
+              label="Total Amount"
               id="ex-totalAmount"
               size="small"
               autoComplete="password"
@@ -596,7 +596,7 @@ const VehicleStatement = () => {
               name="totalAdvance"
               className='customer-bill-input'
               value={totalValues.totalAdvance || ''}
-              label="TotalAdvance"
+              label="Total Advance"
               id="ex-totalAdvance"
               size="small"
               autoComplete="password"
@@ -608,7 +608,7 @@ const VehicleStatement = () => {
               name="totalBalance"
               className='customer-bill-input'
               value={totalValues.totalBalance || ''}
-              label="TotalBalance"
+              label="Total Balance"
               id="ex-totalBalance"
               size="small"
               autoComplete="password"
@@ -620,7 +620,7 @@ const VehicleStatement = () => {
               name="totalBeta"
               className='customer-bill-input'
               value={totalValues.totalBeta || ''}
-              label="TotalBeta"
+              label="Total Beta"
               id="ex-totalBeta"
               size="small"
               autoComplete="password"
@@ -628,8 +628,6 @@ const VehicleStatement = () => {
             />
           </div>
         </div>
-
-
 
         <div className='purchaseSummary-table'>
           <Box

@@ -81,12 +81,12 @@ const useDrivercreation = () => {
                 </Button>
             ),
         },
-        { field: "driverid", headerName: "Driver_ID", width: 100 },
-        { field: "drivername", headerName: "Driver_Name", width: 130 },
-        { field: "username", headerName: "User_Name", width: 130 },
+        { field: "driverid", headerName: "Driver Id", width: 100 },
+        { field: "drivername", headerName: "Driver Name", width: 130 },
+        { field: "username", headerName: "User Name", width: 130 },
         { field: "userpassword", headerName: "Password", width: 130 },
         { field: "stations", headerName: "Stations", width: 130 },
-        { field: "Mobileno", headerName: "Mobileno", width: 130 },
+        { field: "Mobileno", headerName: "Mobile No", width: 130 },
         {
             field: "joiningdate", headerName: "Joining Date", width: 130,
             valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),

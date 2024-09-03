@@ -1823,7 +1823,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="full-width">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="shedOut Date"
+                    label="shed Out Date"
                     id="shedOutDate"
                     className="full-width"
                     value={
@@ -1959,7 +1959,7 @@ const Booking = ({ stationName, customerData }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  <label>ShedOut Time</label>   <input
+                  <label>Shed Out Time</label>   <input
                     type="time"
                     id="reporttime"
                     name="reporttime"

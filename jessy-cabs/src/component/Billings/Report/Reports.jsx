@@ -12,6 +12,7 @@ import MonthlyWise from './Monthly_Wise/MonthlyWise';
 import { PendingBills } from './pendingBills/PendingBills';
 import  VendorStatement  from './VendorStatement/VendorStatement';
 import  VehicleStatement  from './VehicleStatement/VehicleStatement';
+import  LogDetails  from './LogDetails/LogDetails';
 // import zIndex from '@mui/material/styles/zIndex';
 // import { ReportData } from './Context/ReportContext';
 // import { ReportData } from './Context/ReportContext';
@@ -35,6 +36,7 @@ export const Reports = ({ stationName }) => {
                                 <Tab label="Pending Bills" className='tab-content' value="Pendingbills" />
                                 <Tab label="Vendor Statement" className='tab-content' value="VendorStatement" />
                                 <Tab label="Vehicle Statement" className='tab-content' value="VehicleStatement" />
+                                <Tab label="Log Details" className='tab-content' value="logDetails" />
                             </TabList>
                         </Box>
                         {/* <TabPanel value="Reports"></TabPanel> */}
@@ -44,6 +46,7 @@ export const Reports = ({ stationName }) => {
                         <TabPanel value="Pendingbills"><PendingBills /></TabPanel>
                         <TabPanel value="VendorStatement"><VendorStatement /></TabPanel>
                         <TabPanel value="VehicleStatement"><VehicleStatement /></TabPanel>
+                        <TabPanel value="logDetails"><LogDetails /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

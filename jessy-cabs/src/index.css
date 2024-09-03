@@ -670,7 +670,7 @@ body {
   transition: all 0.3s ease;
 }
 
-@media screen and (min-width: 769px) and (max-width:1499px){
+@media screen and (min-width: 769px) and (max-width:1499px) {
   .side-bar-menu-close .main-content-container {
     width: 94vw;
     /* margin: 0px 4px; */
@@ -682,6 +682,7 @@ body {
     width: 100% !important;
     /* margin: 0px 4px; */
   }
+
   .main-content-container {
     border: 2px solid #ccc;
     overflow: scroll;
@@ -747,8 +748,15 @@ body {
   top: 0px;
   z-index: 2;
   background-color: #ffffff;
-  padding: 15px 10px 10px 10px !important;
+  padding: 10px 10px 10px 0px !important;
   margin: 0px;
+}
+
+.head-tab-type-2-all .Title-Name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #457cdc;
+  padding-left: 10px;
 }
 
 .head-tab-type-2-all::after {
@@ -775,7 +783,7 @@ body {
   overflow: auto;
 }
 
-.btn-icon{
+.btn-icon {
   font-size: 23px;
   padding-right: 5px;
 }

@@ -398,28 +398,19 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div> */}
             <div className="radio">
+              <label>Status</label>
               <Box sx={{ width: '100%' }}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                  {/* <InputLabel id="demo-simple-select-label">Status</InputLabel> */}
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     size="small"
                     className="booking-top-section-status-main"
                     sx={{ padding: '0px 30px 0px 10px', fontSize: '14px' }}
-                    // value={
-                    //   bookingStatus || "pending" ||
-                    //   ""
-                    // }
-                    // value={
-                    //   bookingStatus || 
-                    //   ""
-                    // }
                     value={['pending', 'Cancelled', "Opened"].includes(bookingStatus) ? bookingStatus : ''}
-                    // value={['pending', 'Cancelled',].includes(bookingStatus) ? bookingStatus : ''}
                     label="Status"
                     onChange={handleStatusChange}
-                  // onChange={handleChange}
                   >
                     <MenuItem value={'pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
@@ -525,6 +516,7 @@ const Booking = ({ stationName, customerData }) => {
             {/* </span> */}
 
             <span className="d-grid">
+              <label>Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -537,7 +529,7 @@ const Booking = ({ stationName, customerData }) => {
                           : dayjs()
                     }
                     format="DD/MM/YYYY"
-                    label='Booking Date'
+                    // label='Booking Date'
                     onChange={(date) => handleDateChange(date, "bookingdate")}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1968,7 +1960,7 @@ const Booking = ({ stationName, customerData }) => {
                       setBook({ ...book, reporttime: event.target.value });
                       setreporttime(event.target.value);
                       setFormData({ ...formData, reporttime: event.target.value });
-                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, }); 
+                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
                     }}
                   />
                 </div>
@@ -2700,9 +2692,6 @@ const Booking = ({ stationName, customerData }) => {
                 size="small"
               />
             </div>
-
-
-
             <div>
               {
                 edit ?
@@ -2713,9 +2702,7 @@ const Booking = ({ stationName, customerData }) => {
                     Add New</Button> : <></>
               }
             </div>
-
           </div>
-
           <div className="sub-section2-driver">
             <div className="second-table-driver">
               <div className="booking-update-main driver-table">
@@ -2784,8 +2771,6 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           </div>
         </div>
-
-
         <Dialog open={popupOpen} onClose={handlePopupClose}>
           <DialogContent>
             Booking Number:

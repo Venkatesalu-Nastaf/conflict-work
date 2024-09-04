@@ -204,7 +204,6 @@
 }
 
 @media screen and (max-width: 1240px) {
-
   .booking-main-section1,
   .booking-main-section2 {
     display: grid !important;
@@ -383,64 +382,58 @@
   }
 }
 
-@media screen and (max-width:1118px) {
+/* @media screen and (max-width: 1118px) {
   .sub-section1 .first-division,
-  .second-division,
+.second-division,
   .sub-section-second-division,
   .input-feild-vehicle-confirm {
-    /* justify-content: space-evenly !important; */
+    justify-content: space-evenly !important;
   }
-}
+} */
 
-@media screen and (min-width:1244px) and (max-width:1300px) {
-
+@media screen and (min-width: 1244px) and (max-width: 1300px) {
   .sub-section2,
   .sub-section2-driver {
     width: 42% !important;
   }
 }
 
-@media screen and (min-width:1301px) and (max-width:1350px) {
-
+@media screen and (min-width: 1301px) and (max-width: 1350px) {
   .sub-section2,
   .sub-section2-driver {
     width: 44% !important;
   }
 }
 
-@media screen and (min-width:1351px) and (max-width:1400px) {
-
+@media screen and (min-width: 1351px) and (max-width: 1400px) {
   .sub-section2,
   .sub-section2-driver {
     width: 46% !important;
   }
 }
 
-@media screen and (min-width:1401px) and (max-width:1450px) {
-
+@media screen and (min-width: 1401px) and (max-width: 1450px) {
   .sub-section2,
   .sub-section2-driver {
     width: 50% !important;
   }
 }
 
-@media screen and (min-width:1451px) {
-
+@media screen and (min-width: 1451px) {
   .sub-section2,
   .sub-section2-driver {
     width: 40% !important;
   }
 }
 
-@media screen and (min-width:1501px) {
-
+@media screen and (min-width: 1501px) {
   .sub-section2,
   .sub-section2-driver {
     width: 60% !important;
   }
 }
 
-@media screen and (min-width:769px) and (max-width:945px) {
+@media screen and (min-width: 769px) and (max-width: 945px) {
   .first-table-driver {
     width: 80% !important;
   }
@@ -460,9 +453,9 @@
   padding-right: 15px;
 }
 
-.service-station-input {
-  /* margin-top: 9px; */
-}
+/* .service-station-input {
+  margin-top: 9px;
+} */
 
 .booking-update-main-table {
   height: 220px;
@@ -532,7 +525,6 @@
 }
 
 @media screen and (max-width: 828px) {
-
   .booking-date-input-division,
   .booking-time-main-div {
     margin-top: 17px;
@@ -620,24 +612,25 @@
   font-size: 13px;
 }
 
-.booking-top-division label{
+.booking-top-division label {
   font-weight: 500;
   font-size: 13px;
   white-space: nowrap;
 }
 
-.pick-up-address-input{
+.pick-up-address-input {
   width: 513px !important;
 }
 
-.icone-with-margin-top{
+.icone-with-margin-top {
   margin-top: 15px;
 }
 
-.css-1uvydh2{
+.css-1uvydh2 {
   padding: 9.5px 0px 9.5px 14px !important;
 }
 
-.booking-top-section-status-main .css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+.booking-top-section-status-main
+  .css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from "@mui/material/Button";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -7,6 +7,9 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -20,7 +23,7 @@ import { APIURL } from '../../../url';
 import dayjs from 'dayjs';
 import { TextField } from '@mui/material';
 import Excel from 'exceljs';
-import { saveAs } from "file-saver";  
+import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 
 
@@ -39,10 +42,15 @@ const customer_colums = [
 const VehicleStatement = () => {
   const [data, setData] = useState({
     hireTypes: "",
-    startDate: dayjs(),
-    endDate: dayjs()
+    startDate: dayjs().format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD')
   })
-
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [successMessage, setSuccessMessage] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [warningMessage] = useState({});
   const [tableData, setTableData] = useState([])
 
   const [totalValues, setTotalValues] = useState({
@@ -180,8 +188,6 @@ const VehicleStatement = () => {
   }
 
 
-
-
   const [Customerdata, setCustomerData] = useState([])
 
   const showList = async (e) => {
@@ -194,7 +200,13 @@ const VehicleStatement = () => {
       const parseData = transformCustomer(datas)
       const reducedData = reduceFun(parseData)
 
-      if (reducedData) {
+      if (reducedData &&
+        reducedData.totalKilometers !== 0 &&
+        reducedData.totalTime !== 0 &&
+        reducedData.totalPackageAmount !== 0 &&
+        reducedData.totalAdvance !== 0 &&
+        reducedData.totaalBalance !== 0 &&
+        reducedData.totalBeta !== 0) {
         setTotalValues(prev => ({
           ...prev, fullTotalKM: reducedData.totalKilometers,
           fullTotalHR: convertMinutesToTime(reducedData.totalTime),
@@ -203,6 +215,9 @@ const VehicleStatement = () => {
           totalBalance: reducedData.totaalBalance,
           totalBeta: reducedData.totalBeta,
         }))
+
+        setSuccess(true)
+        setSuccessMessage("Successfully Listed")
       } else {
         setTotalValues({})
       }
@@ -213,7 +228,8 @@ const VehicleStatement = () => {
 
       } else {
         setCustomerData([])
-        alert("no Data Found")
+        setError(true)
+        setErrorMessage("No Data Found")
       }
 
     } else if (data.hireTypes === "Attached Vehicle") {
@@ -230,7 +246,8 @@ const VehicleStatement = () => {
             totalBalance: reducedData.totaalBalance,
             totalBeta: reducedData.totalBeta,
           }))
-
+          setSuccess(true)
+          setSuccessMessage("Successfully Listed")
         } else {
           setTotalValues({})
         }
@@ -239,15 +256,16 @@ const VehicleStatement = () => {
         setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }))
       } else {
         setCustomerData([])
-        alert("no Data Found")
+        setError(true)
+        setErrorMessage("No Data Found")
       }
 
     } else {
       setCustomerData([])
-      alert("no Data Found")
+      setError(true)
+      setErrorMessage("Please Fill All Fields")
     }
   }
-
 
   //Excel
 
@@ -465,6 +483,20 @@ const VehicleStatement = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
   };
+  useEffect(() => {
+    if (error || success || warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success, warning]);
+
+  const hidePopup = () => {
+    setError(false);
+    setSuccess(false);
+    setWarning(false);
+  };
 
   return (
 
@@ -506,8 +538,8 @@ const VehicleStatement = () => {
                 <DatePicker
                   label="From Date"
                   format="DD/MM/YYYY"
-                  value={data.startDate 
-                    ? dayjs(data.startDate) 
+                  value={data.startDate
+                    ? dayjs(data.startDate)
                     : dayjs()}
                   onChange={(date) => setData(prev => ({ ...prev, startDate: dayjs(date).format('YYYY-MM-DD') }))}
                 />
@@ -524,8 +556,8 @@ const VehicleStatement = () => {
                 <DatePicker
                   label="To Date"
                   format="DD/MM/YYYY"
-                  value={data.endDate 
-                    ? dayjs(data.endDate) 
+                  value={data.endDate
+                    ? dayjs(data.endDate)
                     : dayjs()}
                   onChange={(date) => setData(prev => ({ ...prev, endDate: dayjs(date).format('YYYY-MM-DD') }))}
                 />
@@ -628,7 +660,29 @@ const VehicleStatement = () => {
             />
           </div>
         </div>
-
+        <div className='alert-popup-main'>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+        </div>
         <div className='purchaseSummary-table'>
           <Box
             sx={{

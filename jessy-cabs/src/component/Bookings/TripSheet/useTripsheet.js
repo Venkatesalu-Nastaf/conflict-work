@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo,useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -195,10 +195,10 @@ const useTripsheet = () => {
         maxTripid: "",
     })
     const [timeToggle, setTimeToggle] = useState('');
-    const [lockdatavendorbill,setLockDatavendorBill]=useState(false)
-    const [lockdatacustomerbill,setLockDatacustomerBill]=useState(false)
-   
- 
+    const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
+    const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
+
+
 
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -1650,18 +1650,18 @@ const useTripsheet = () => {
 
     const handleUpload = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-        
-        if(!tripid){
+
+        if (!tripid) {
             setError(true);
             setErrorMessage("Enter The Tripid.");
             return
         }
-        else{
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
+        else {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.pdf, .jpg, .jpeg, .png';
+            input.onchange = handleFileChange;
+            input.click();
         }
     };
 
@@ -1893,7 +1893,7 @@ const useTripsheet = () => {
     // const fetchdatacustomerTimeToggle = async () => {
 
     //     const customerdata = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
-         
+
     //     if (customerdata) {
 
     //         const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdata}`)
@@ -1916,43 +1916,43 @@ const useTripsheet = () => {
 
     const customerdatatimetoggle = useMemo(() => {
         return (
-          formData.customer ||
-          selectedCustomerData.customer ||
-          book.customer ||
-          packageData.customer ||
-          ''
+            formData.customer ||
+            selectedCustomerData.customer ||
+            book.customer ||
+            packageData.customer ||
+            ''
         );
-      }, [formData.customer, selectedCustomerData.customer, book.customer, packageData.customer]);
-     
-    
+    }, [formData.customer, selectedCustomerData.customer, book.customer, packageData.customer]);
+
+
     const fetchdatacustomerTimeToggle = useCallback(async () => {
         if (customerdatatimetoggle) {
-          try {
-            const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdatatimetoggle}`);
-            const data = response.data;
-            if (data.length > 0) {
-              const res = data[0].TimeToggle;
-              setTimeToggle(res); // Update state with the fetched result
-            } else {
-              setTimeToggle('');
+            try {
+                const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdatatimetoggle}`);
+                const data = response.data;
+                if (data.length > 0) {
+                    const res = data[0].TimeToggle;
+                    setTimeToggle(res); // Update state with the fetched result
+                } else {
+                    setTimeToggle('');
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+                setTimeToggle('');
             }
-          } catch (error) {
-            console.error('Error fetching customer data:', error);
-            setTimeToggle('');
-          }
         } else {
-          setTimeToggle('');
+            setTimeToggle('');
         }
-      }, [apiUrl,customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
-    
-      // Use useEffect to trigger the fetch function only when necessary
-      useEffect(() => {
-        fetchdatacustomerTimeToggle();
-      }, [fetchdatacustomerTimeToggle]);
-    // console.log(fetchdatacustomerTimeToggle(),"time")
-   
+    }, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
 
-    const calculateTotalTimes =() => {
+    // Use useEffect to trigger the fetch function only when necessary
+    useEffect(() => {
+        fetchdatacustomerTimeToggle();
+    }, [fetchdatacustomerTimeToggle]);
+    // console.log(fetchdatacustomerTimeToggle(),"time")
+
+
+    const calculateTotalTimes = () => {
         const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
         // const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
         const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
@@ -1960,7 +1960,7 @@ const useTripsheet = () => {
         const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
         // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         // const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-        const datatimetoggle=timeToggle;
+        const datatimetoggle = timeToggle;
 
         // const formattedShedOutDate = dayjs(shedoutdate).format('YYYY-MM-DD');
         // const formattedShedInDate = dayjs(shedindate).format('YYYY-MM-DD');
@@ -2017,17 +2017,17 @@ const useTripsheet = () => {
                 // Convert the difference back to hours and minutes
                 const hours = Math.floor(minuteDifference / 60);
                 const minutes = minuteDifference % 60;
-            
-             
-              if(datatimetoggle === 0){
-                // console.log(`${hours}h ${minutes}m`,"datamm")
-                const dataminutes=minutes >=30 ? `${hours +1}h `:`${hours}h `;
-                return dataminutes
-              }
-              else{
-                return `${hours}h ${minutes}m`;
+
+
+                if (datatimetoggle === 0) {
+                    // console.log(`${hours}h ${minutes}m`,"datamm")
+                    const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                    return dataminutes
+                }
+                else {
+                    return `${hours}h ${minutes}m`;
+                }
             }
-        }
 
 
 
@@ -2071,13 +2071,13 @@ const useTripsheet = () => {
                     const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
 
                     const formattedMinutes = parseInt(minutes, 10);
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
-                       return `${hours}h ${formattedMinutes}m`;
+                    }
+                    else {
+                        return `${hours}h ${formattedMinutes}m`;
                     }
 
                     // return `${hours}h ${formattedMinutes}m`;
@@ -2089,13 +2089,13 @@ const useTripsheet = () => {
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                     const formattedMinutes = parseInt(minutes, 10);
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
-                       return `${hours}h ${formattedMinutes}m`;
+                    }
+                    else {
+                        return `${hours}h ${formattedMinutes}m`;
                     }
 
                     // return `${hours}h ${formattedMinutes}m`;
@@ -2173,13 +2173,13 @@ const useTripsheet = () => {
 
                     const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
 
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm",datatimetoggle)
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
-                       return `${hours}h ${formattedMinutes}m`;
+                    }
+                    else {
+                        return `${hours}h ${formattedMinutes}m`;
                     }
 
                     // return `${hours}h ${formattedMinutes}m`;
@@ -2199,13 +2199,13 @@ const useTripsheet = () => {
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                     const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm",datatimetoggle)
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
-                       return `${hours}h ${formattedMinutes}m`;
+                    }
+                    else {
+                        return `${hours}h ${formattedMinutes}m`;
                     }
 
                     // return `${hours}h ${formattedMinutes}m`;
@@ -2469,15 +2469,15 @@ const useTripsheet = () => {
     //     }
     // }
 
-    const calculatevendorTotalTime =()=>{
-            const shedoutTime = vendorinfo?.vendorreporttime || ""
+    const calculatevendorTotalTime = () => {
+        const shedoutTime = vendorinfo?.vendorreporttime || ""
 
         const shedinTime = vendorinfo?.vendorshedintime || ""
         // const totalDays = calculatevendorTotalDays() || vendorinfo?.vendortotaldays
         const totalDays = calculatevendorTotalDays()
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        const datatimetoggle=timeToggle
-        
+        const datatimetoggle = timeToggle
+
 
         let additionalMinutes = 0;
         let additionalHours = 0;
@@ -2529,12 +2529,12 @@ const useTripsheet = () => {
                 // Convert the difference back to hours and minutes
                 const hours = Math.floor(minuteDifference / 60);
                 const minutes = minuteDifference % 60;
-                if(datatimetoggle === 0){
+                if (datatimetoggle === 0) {
                     // console.log(`${hours}h ${minutes}m`,"datamm")
-                    const dataminutes=minutes >=30 ? `${hours +1}h`:`${hours}h`;
+                    const dataminutes = minutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                     return dataminutes
-                  }
-                  else{
+                }
+                else {
                     return `${hours}h ${minutes}m`;
                 }
 
@@ -2584,13 +2584,13 @@ const useTripsheet = () => {
                     const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
 
                     const formattedMinutes = parseInt(minutes, 10);
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
-                    //    console.log(`${hours}h ${formattedMinutes}m`,"datamm")
+                    }
+                    else {
+                        //    console.log(`${hours}h ${formattedMinutes}m`,"datamm")
                         return `${hours}h ${formattedMinutes}m`;
                     }
 
@@ -2603,12 +2603,12 @@ const useTripsheet = () => {
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                     const formattedMinutes = parseInt(minutes, 10);
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
+                    }
+                    else {
                         return `${hours}h ${formattedMinutes}m`;
                     }
 
@@ -2686,12 +2686,12 @@ const useTripsheet = () => {
                     const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
 
                     const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
+                    }
+                    else {
                         return `${hours}h ${formattedMinutes}m`;
                     }
 
@@ -2713,12 +2713,12 @@ const useTripsheet = () => {
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                     const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
-                    if(datatimetoggle === 0){
+                    if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes=formattedMinutes >=30 ? `${hours +1}h`:`${hours}h`;
+                        const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
                         return dataminutes
-                      }
-                      else{
+                    }
+                    else {
                         return `${hours}h ${formattedMinutes}m`;
                     }
 
@@ -2734,7 +2734,7 @@ const useTripsheet = () => {
     }
 
 
-   
+
 
     const calculatevendorTotalKilometers = () => {
         const startKm = vendorinfo?.vendorshedoutkm || "";
@@ -2746,7 +2746,7 @@ const useTripsheet = () => {
         //     return totalKm;
         // }
         // return "";
-        
+
         if (startKm !== undefined && closeKm !== undefined) {
             let totalKm = parseInt(closeKm) - parseInt(startKm);
             const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
@@ -2759,7 +2759,7 @@ const useTripsheet = () => {
     };
 
 
-   
+
     const [tripSheetData, setTripSheetData] = useState({
         customer: '',
         address1: '',
@@ -3388,25 +3388,25 @@ const useTripsheet = () => {
         // // Calculate the total hours
         // const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
         // return totalHours;
-        console.log(timeString,"hhh")
+        console.log(timeString, "hhh")
         const [hoursPart, minutesPart] = timeString.split('h');
 
-    // Convert hours to an integer
-    const hours = parseInt(hoursPart);
+        // Convert hours to an integer
+        const hours = parseInt(hoursPart);
 
-    // Extract the numeric value from minutes
-    const minutes = parseInt(minutesPart) || 0;
+        // Extract the numeric value from minutes
+        const minutes = parseInt(minutesPart) || 0;
 
-    // Convert minutes to a decimal format with two digits
-    console.log(minutes,"mmm")
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString();
-    console.log(formattedMinutes,"mmminutes")
+        // Convert minutes to a decimal format with two digits
+        console.log(minutes, "mmm")
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString();
+        console.log(formattedMinutes, "mmminutes")
 
-    // Combine hours and minutes into a single number as a string and convert to a number
-    // const totalHours = parseFloat(`${hours}.${formattedMinutes}`);
-    const totalHours = `${hours}.${formattedMinutes}`;
-    console.log(totalHours,"hooo")
-    return totalHours;
+        // Combine hours and minutes into a single number as a string and convert to a number
+        // const totalHours = parseFloat(`${hours}.${formattedMinutes}`);
+        const totalHours = `${hours}.${formattedMinutes}`;
+        console.log(totalHours, "hooo")
+        return totalHours;
     }
 
 
@@ -3706,7 +3706,7 @@ const useTripsheet = () => {
             vendortotalHours = await convertTimeToNumber(vendortothr);
             // const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
             const consvertedTotalHour = vendortotalHours
-            console.log(consvertedTotalHour,"totalfffffffffffffh")
+            console.log(consvertedTotalHour, "totalfffffffffffffh")
 
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
@@ -3722,7 +3722,7 @@ const useTripsheet = () => {
             vendordata = response.data;
             // console.log(vendordata,"vendorrrrrrrr")
 
-            
+
             const packages = vendordata.package;
             const Hours = Number(vendordata.Hours);
             const KMS = Number(vendordata.KMS);
@@ -3758,13 +3758,13 @@ const useTripsheet = () => {
 
                     // Combine hours and decimal minutes
                     // const decimalTime = parseFloat(`${hours}.${decimalMinutes}`);
-                    
+
 
                     // let time = matches.toFixed(2) - Hours.toFixed(2);
-                    let time = matches- Hours.toFixed(2);
+                    let time = matches - Hours.toFixed(2);
                     const convertedTime = Number(time.toFixed(2))
 
-                console.log(convertedTime ,"totalextra",)
+                    console.log(convertedTime, "totalextra",)
                     dataextrahous = convertedTime
                 }
 
@@ -3776,15 +3776,15 @@ const useTripsheet = () => {
             //     dataextrakms = KM
             // }
 
-          
 
-            if (vendortotkm > KMS && vendorduty !== "Outstation" ) {
+
+            if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
                 dataextrakms = KM
             }
 
-            if(vendorduty === "Outstation"){
+            if (vendorduty === "Outstation") {
                 // console.log(vendorduty,"dutydata")
                 let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
                 dataextrakms = km
@@ -3838,20 +3838,20 @@ const useTripsheet = () => {
 
     const handlevendor_billdata = (event) => {
         const { name, value } = event.target;
-        console.log(name,value)
-        if(lockdatavendorbill){
-        setVendorbilldata((prevBook) => ({
-            ...prevBook,
-            [name]: value,
-        }))
-      }
-      else{
-        setWarning(true);
-        setWarningMessage("IS not locked,locked Enter Again");
-      }
+        console.log(name, value)
+        if (lockdatavendorbill) {
+            setVendorbilldata((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }))
+        }
+        else {
+            setWarning(true);
+            setWarningMessage("IS not locked,locked Enter Again");
+        }
 
     }
-   
+
     const handlevendorinfofata = (event) => {
         const { name, value } = event.target;
         console.log(name, "value", value)
@@ -3927,7 +3927,7 @@ const useTripsheet = () => {
     const fetchdatacustomeraratename = async () => {
 
         const customerdata = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
-         
+
         if (customerdata) {
 
             const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdata}`)
@@ -3935,7 +3935,7 @@ const useTripsheet = () => {
             if (data.length > 0) {
                 console.log(data.length, "eneter")
                 const res = response.data[0].rateType
-                console.log(res,"eneter")
+                console.log(res, "eneter")
                 return res
             }
 
@@ -3980,11 +3980,11 @@ const useTripsheet = () => {
                 setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
                 return;
             }
-          
+
             // totalHours = await convertTimeToNumber(tothr);
-           
+
             // const consvertedTotalHour = parseFloat(totalHours.toFixed(2))
-           
+
             // console.log(tothr,"totalhrccc")
             totalHours = await convertTimeToNumber(tothr);
             // console.log(totalHours,"totalhandcccc")
@@ -4051,12 +4051,12 @@ const useTripsheet = () => {
                 //     setExtraHR(convertedTime);
                 // }
                 const matches = consvertedTotalHour
-                console.log(matches,"atch")
+                console.log(matches, "atch")
                 if (matches) {
 
                     let time = matches - Hours.toFixed(2);
                     const convertedTime = Number(time.toFixed(2))
-                    console.log(convertedTime ,"totalextra")
+                    console.log(convertedTime, "totalextra")
 
                     setExtraHR(convertedTime);
                 }
@@ -4076,13 +4076,13 @@ const useTripsheet = () => {
             if (totkm > KMS && duty !== "Outstation") {
                 let KM = (Number(totkm) - Number(KMS))
                 setExtraKM(KM);
-            } else if (duty === "Outstation"){
-                console.log("duty",duty)
+            } else if (duty === "Outstation") {
+                console.log("duty", duty)
                 let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
                 console.log(km)
                 setExtraKM(km)
             }
-            else{
+            else {
                 setExtraKM("")
             }
 
@@ -4300,7 +4300,7 @@ const useTripsheet = () => {
 
         // }
         // else {
-            setOpen(true);
+        setOpen(true);
         // }
     };
 
@@ -4551,7 +4551,7 @@ const useTripsheet = () => {
         fetchData()
     }, [apiUrl, vehicleRegisterNo, shedoutkm])
 
-    const generateAndCopyLinkdata = async() => {
+    const generateAndCopyLinkdata = async () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
 
@@ -4589,9 +4589,12 @@ const useTripsheet = () => {
         // console.log(tempTextarea,"aree")
         // tempTextarea.select();
         // document.execCommand('copy');
-    
+
         // document.body.removeChild(tempTextarea);
-        await navigator.clipboard.writeText(generatedLinkdata);
+        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata))
+        if (generatedLinkdata) {
+            await navigator.clipboard.writeText(generatedLinkdata);
+        }
         localStorage.setItem("expiredsign", false);
         localStorage.setItem("expired", false);
         localStorage.setItem("uploadtollparkdata", false);
@@ -4788,8 +4791,8 @@ const useTripsheet = () => {
         calculateTotalTimes,
         nightTotalCount, setNightTotalCount,
         nightTotalAmount, setNightTotalAmount,
-        maxconflict,setExtraKM,setextrakm_amount,setExtraHR,setextrahr_amount,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm,lockdatavendorbill,setLockDatavendorBill,lockdatacustomerbill,setLockDatacustomerBill
+        maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill
 
     };
 };

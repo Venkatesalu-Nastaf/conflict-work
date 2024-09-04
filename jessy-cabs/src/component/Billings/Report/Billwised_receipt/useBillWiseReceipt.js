@@ -214,7 +214,6 @@ const useBillWiseReceipt = () => {
         }
         else {
             const selectList = selectedBillRow.map(li => li.Voucherid);
-            console.log(selectList, pendingAmountList, selectedBillRow, 'mat');
 
             const matchedRows = pendingAmountList.filter(item => selectList.includes(item.voucherID));
             setSelectMatchList(matchedRows)
@@ -276,8 +275,6 @@ const useBillWiseReceipt = () => {
 
                 const uniqueVoucherId = selectedBillRow?.map(li => li.Voucherid)
                 const TotalCollectAmount = selectMatchList?.map(li => li.TotalAmount)
-                console.log(uniqueVoucherId, TotalCollectAmount, pendingAmountList, 'uni');
-                console.log(selectMatchList, 'uni1111');
 
                 try {
                     const response = await axios.put(`${apiUrl}/updateBalanceAmount`, { uniqueVoucherId, TotalCollectAmount });
@@ -324,7 +321,6 @@ const useBillWiseReceipt = () => {
                 ...totals,
                 ...billWiseReport
             };
-            console.log(combinedData, 'combined');
 
             // Format data for the API request
             const formattedData = {
@@ -339,7 +335,6 @@ const useBillWiseReceipt = () => {
                 Collected: combinedData.collectedAmount || 0,
                 TotalBalance: combinedData.totalAmount - combinedData.collectedAmount || combinedData.totalAmount
             };
-            console.log(formattedData, 'formateed');
 
             const BillNo = rows.map(li => li.BillNo);
 
@@ -402,17 +397,14 @@ const useBillWiseReceipt = () => {
         setRows([])
         setBalanceAmount(true)
         const organization = billWiseReport.CustomerName;
-        console.log(organization, 'customer');
 
         try {
             const response = await axios.post(`${apiUrl}/getBalanceAmount`, { organization });
-            console.log(response.data, 'balance amount data');
             const pendingList = response.data;
             setPendingAmountList(response.data)
             const BillNo = pendingList?.map(li => li.voucherID);
             const BillDate = pendingList?.map(li => li.BillDate);
             const pendingAmount = pendingList.map(li => li.TotalBalance);
-            console.log(BillNo, BillDate, pendingAmount, 'hiiii');
             const newPendingBillRows = BillNo.map((voucherID, index) => ({
                 id: index + 1, // Assign a unique ID to each row
                 sno: index + 1, // Assign sequential serial numbers

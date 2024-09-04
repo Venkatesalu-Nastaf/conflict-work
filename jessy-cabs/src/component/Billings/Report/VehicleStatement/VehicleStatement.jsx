@@ -200,7 +200,13 @@ const VehicleStatement = () => {
       const parseData = transformCustomer(datas)
       const reducedData = reduceFun(parseData)
 
-      if (reducedData) {
+      if (reducedData &&
+        reducedData.totalKilometers !== 0 &&
+        reducedData.totalTime !== 0 &&
+        reducedData.totalPackageAmount !== 0 &&
+        reducedData.totalAdvance !== 0 &&
+        reducedData.totaalBalance !== 0 &&
+        reducedData.totalBeta !== 0) {
         setTotalValues(prev => ({
           ...prev, fullTotalKM: reducedData.totalKilometers,
           fullTotalHR: convertMinutesToTime(reducedData.totalTime),
@@ -209,6 +215,7 @@ const VehicleStatement = () => {
           totalBalance: reducedData.totaalBalance,
           totalBeta: reducedData.totalBeta,
         }))
+
         setSuccess(true)
         setSuccessMessage("Successfully Listed")
       } else {
@@ -259,7 +266,6 @@ const VehicleStatement = () => {
       setErrorMessage("Please Fill All Fields")
     }
   }
-
 
   //Excel
 

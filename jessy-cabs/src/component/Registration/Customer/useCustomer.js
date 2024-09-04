@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -43,6 +43,7 @@ const useCustomer = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
+    const [searchText, setSearchText] = useState('');
     const [warningMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -490,7 +491,38 @@ const useCustomer = () => {
     }
 
 
+    const handleenterSearch = useCallback(async (e) => {
+        if (e.key === "Enter") {
+            console.log("Search Text:", searchText);
 
+            try {
+                const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(searchText)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        }
+    }, [apiUrl, searchText]);
 
     const addCustomerToObjects = (arr, customerProp) => {
         return arr.map(obj => ({
@@ -650,7 +682,7 @@ console.log(book,"boooooo")
             }
         }
         handleList();
-    }, [apiUrl, rows]);
+    }, [apiUrl]);
 
 
     const handleClick = async (event, actionName, customerId) => {
@@ -728,9 +760,11 @@ console.log(book,"boooooo")
         handleAutocompleteChange,
         handleDateChange,
         handleButtonClick,
+        setSearchText,
         isInputVisible,
         handleExcelDownload,
         handlePdfDownload,
+        handleenterSearch,
         rows,
         columns,
         isEditMode, setSelectedCustomerData,

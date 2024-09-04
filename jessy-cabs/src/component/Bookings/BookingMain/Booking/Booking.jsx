@@ -1852,7 +1852,7 @@ const Booking = ({ stationName, customerData }) => {
                 <div className="full-width">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      label="Start Date"
+                      label="Report Date"
                       id="report_date"
                       className="full-width"
                       value={
@@ -1973,7 +1973,7 @@ const Booking = ({ stationName, customerData }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>)) : <label> Start Time</label>}
+                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>)) : <label> Report Time</label>}
 
                   <input
                     type="time"

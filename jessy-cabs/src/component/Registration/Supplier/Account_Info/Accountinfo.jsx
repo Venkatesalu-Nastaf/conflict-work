@@ -25,6 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { Undergroup, Vehicleinfo } from "./Accountinfo";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import InputAdornment from "@mui/material/InputAdornment";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -61,6 +62,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Accuntinfo = () => {
 
+
+
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -83,10 +86,15 @@ const Accuntinfo = () => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
+    handleRemoveField,
+    handleFieldChange,
+    setSearchText,
+    searchText,
     rows,
     columns,
     isEditMode,
-    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata
+    fields,
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
   } = useAccountinfo();
 
   useEffect(() => {
@@ -374,20 +382,37 @@ const Accuntinfo = () => {
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehRegNo")}
-                  // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
                   value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
-                  // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
                   options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
-
                   getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
-                  renderInput={(params) => {
-                    return (
-                      <TextField {...params} label="Veh Reg No" name="vehRegNo" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                  renderInput={(params) => (
+                    <TextField {...params} label="Veh Reg No" name="vehRegNo" inputRef={params.inputRef} />
+                  )}
                 />
+
               </div>
+              {console.log(fields)}
+              {fields?.map((field, index) => (
+                <Box key={index} display="flex" alignItems="center" mb={2}>
+                  <TextField
+                    value={field}
+                    onChange={(e) => handleFieldChange(index, e)}
+                    label={`Field ${index + 1}`}
+                    variant="outlined"
+                    style={{ marginRight: 8 }}
+                  />
+                  {/* Optional: Button to remove a specific field */}
+                  {fields?.length > 1 && (
+                    <Button variant="contained" color="error" onClick={() => handleRemoveField(index)}>
+                      Remove
+                    </Button>
+                  )}
+                </Box>
+              ))}
+              {/* <Button variant="contained" onClick={handleAddExtra}>
+                Add+
+              </Button> */}
+
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
@@ -483,6 +508,23 @@ const Accuntinfo = () => {
             )}
           </div>
         </div> */}
+        <div className="input">
+          <div className="icone">
+            <AiOutlineFileSearch color="action" />
+          </div>
+          <TextField
+            size="small"
+            id="searchText"
+            className='full-width'
+            label="Search"
+            name="searchText"
+            value={searchText}
+            onKeyDown={handleenterSearch}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+
+
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -565,9 +607,15 @@ const Accuntinfo = () => {
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                <Button
+                  variant="contained"
+                  endIcon={<ExpandCircleDownOutlinedIcon />}
+                  {...bindTrigger(popupState)}
+                  style={{ marginTop: '15px', marginLeft: "20px" }}
+                >
                   Download
                 </Button>
+
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                   <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>

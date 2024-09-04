@@ -59,7 +59,7 @@ router.delete('/customers/:customerId', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
-  console.log(updatedCustomerData,"dddd")
+  console.log(updatedCustomerData, "dddd")
   if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
     updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
   }
@@ -73,6 +73,55 @@ router.put('/customers/:customerId', (req, res) => {
     return res.status(200).json({ message: 'Data updated successfully' });
   });
 });
+
+router.get('/searchCustomer', (req, res) => {
+  const { searchText } = req.query; // Extract searchText from the query
+  let query = 'SELECT * FROM customers WHERE 1=1';
+  let params = [];
+
+  if (searchText) {
+    const columnsToSearch = [
+      'customerId',
+      'name',
+      'customer',
+      'customerType',
+      'date',
+      'address1',
+      'rateType',  // Fixed spacing issue
+      'opBalance',
+      'underGroup',
+      'selectOption',
+      'entity',
+      'state',
+      'servicestation',
+      'gstnumber',
+      'SalesPerson',
+      'SalesPercentage'
+    ];
+
+    // Construct the SQL 'LIKE' conditions
+    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+
+    // Append conditions to the query
+    query += ` AND (${likeConditions})`;
+
+    // Add searchText to params for each column
+    params = columnsToSearch.map(() => `${searchText}%`);
+  }
+
+  // Execute the query using your database connection
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error retrieving data');
+    }
+
+    // Send the results back to the client
+    res.json(results);
+  });
+});
+
+
 
 router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
@@ -284,26 +333,26 @@ router.put('/updatecustomerorderdata', (req, res) => {
     });
 });
 
-router.delete("/deletecustomerorderdatasdata/:id",(req,res)=>{
-  const deleteid=req.params.id;
-  
-  db.query("delete from customerOrderdata where id=?",[deleteid],(err,results)=>{
+router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
+  const deleteid = req.params.id;
+
+  db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
-    
+
     return res.status(200).json("data delete succesfuully")
   })
 
 })
 
-router.get('/ratemanagmentCustomerdata',(req,res)=>{
+router.get('/ratemanagmentCustomerdata', (req, res) => {
   db.query(`SELECT ratename from ratetype where ratetype="Customer"`, (err, results) => {
-      if (err) {
-          return res.status(500).json({ error: "Failed to fetch data from MySQL" });
-      }
-      console.log(results,"hhh")
-      return res.status(200).json(results);
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(results, "hhh")
+    return res.status(200).json(results);
   });
 
 })
@@ -416,10 +465,10 @@ router.get('/getCustomer-hybrid/:customer', (req, res) => {
   })
 })
 
-router.get("/getuniqueCustomerdata/:customer",(req,res)=>{
-  const customer=req.params.customer;
-  console.log(customer,"params")
-  db.query("select customer from customers where customer=?",[customer],(err,results)=>{
+router.get("/getuniqueCustomerdata/:customer", (req, res) => {
+  const customer = req.params.customer;
+  console.log(customer, "params")
+  db.query("select customer from customers where customer=?", [customer], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }

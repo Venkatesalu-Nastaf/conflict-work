@@ -11,6 +11,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -95,6 +96,9 @@ const Customer = ({ stationName }) => {
     columns,
     isEditMode,
     handleEdit,
+    searchText,
+    setSearchText,
+    handleenterSearch,
     customerfieldSets,
     handleChangecustomer, deletedialogbox, setDeletedDialog,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
@@ -777,12 +781,36 @@ const Customer = ({ stationName }) => {
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <AiOutlineFileSearch color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="searchText"
+                    className='full-width'
+                    label="Search"
+                    name="searchText"
+                    value={searchText}
+                    onKeyDown={handleenterSearch}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                </div>
+                <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
-                    <Button variant="contained" disabled={!Customer_new} onClick={handleAdd} >Add</Button>
+                      <Button
+                        variant="contained"
+                        disabled={!Customer_new}
+                        onClick={handleAdd}
+                        style={{ marginRight: "100px" }}
+                      >
+                        Add
+                      </Button>
+
                   )}
                 </div>
+                
               </div>
               <div className='alert-popup-main'>
                 {error &&
@@ -866,6 +894,7 @@ const Customer = ({ stationName }) => {
                 </Box>
               </div>
             </div>
+            
             <div className="customer-list-table-container-download">
               <div className="Download-btn">
                 <PopupState variant="popover" popupId="demo-popup-menu">
@@ -882,6 +911,7 @@ const Customer = ({ stationName }) => {
                   )}
                 </PopupState>
               </div>
+              
               <div className="table-customer-lists">
                 {/* <DataGrid
                 rows={rows}

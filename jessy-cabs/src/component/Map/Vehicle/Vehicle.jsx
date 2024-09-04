@@ -42,6 +42,13 @@ import { useNavigate, Link, useLocation, } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { IoDownloadOutline } from "react-icons/io5";
+import {   Typography } from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+
+
+
 
 
 
@@ -200,7 +207,7 @@ export const Vehicle = () => {
                 <span>
                   <Button variant="outlined" onClick={handleClickOpenFilter}><CiFilter className='btn-icon' /> Filters</Button>
                 </span>
-                
+
                 <span>
                   <div>
                     <Button variant="contained" onClick={openReports}><IoDownloadOutline className='btn-icon' /> Reports</Button>
@@ -432,7 +439,7 @@ export const Vehicle = () => {
               </Dialog>
             </React.Fragment>
 
-            <div>
+            {/* <div>
               <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
@@ -446,467 +453,61 @@ export const Vehicle = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  {/* <div className='vehicle-tab-main'>
-                    <div className='vehicle-tab-left-main'>
-                      <div style={{ marginBottom: '20px' }}>
-                        <Button variant="outlined" onClick={handleClick}>Sort Options</Button>
-                        <Menu
-                          id="basic-menu"
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                          }}
-                        >
-                          <MenuItem onClick={handleClose}>All Summary Vehicles</MenuItem>
-                          <MenuItem onClick={handleClose}>Vehicles Details Report</MenuItem>
-                          <MenuItem onClick={handleClose}>Vehicle PnL Report</MenuItem>
-                          <MenuItem onClick={handleClose}>Vehicle Tag Report</MenuItem>
-                          <MenuItem onClick={handleClose}>Day Wise Report</MenuItem>
-                          <MenuItem onClick={handleClose}>Night Driving</MenuItem>
-                          <MenuItem onClick={handleClose}>Sim Tracking Report</MenuItem>
-                          <MenuItem onClick={handleClose}>Vehicle Performance Report</MenuItem>
-                        </Menu>
-                      </div>
-                      <div className='vehicle-details-section-main Scroll-Style'>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                        <div className='vehicle-details-box'>
-                          <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
-                          <span><span>Group: </span><span>Chennai</span></span>
-                          <span><span>Driver: </span><span>Christopher (+91-8142535698)</span><span onClick={handleClickOpenEditDriver}><CiEdit /></span></span>
-                          <span>2023 mahindra reva | CNG | car</span>
-                          <span><Button>Add Tag</Button></span>
-                        </div>
-                      </div>
-                    </div>
+                  <Vehicles />
 
-                    <React.Fragment>
-                      <Dialog
-                        open={openEditDriver}
-                        TransitionComponent={Transition}
-                        keepMounted
-                        onClose={handleCloseEditDriver}
-                        aria-describedby="alert-dialog-slide-description"
-                      >
-                        <DialogTitle>
-                          <div>Modify Driver</div>
-                          <span>Add, Edit and Delete Driver</span>
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-slide-description">
-                            <div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Vehicle:</span>
-                                <span>0642 (TN11AA0642)</span>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Driver Name:</span>
-                                <span>
-                                  palani (+91-9443011846)
-                                </span>
-                                <span>
-                                  <Button variant='outlined'>Edit</Button>
-                                </span>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Remove Driver:</span>
-                                <span>
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                      <DatePicker label="From Date" />
-                                    </DemoContainer>
-                                  </LocalizationProvider>
-                                </span>
-                                <span>
-                                  <Button variant='contained'>Remove Driver</Button>
-                                </span>
-                              </div>
-
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Change Driver:</span>
-                                <span>
-                                  <Box sx={{ minWidth: 120 }}>
-                                    <FormControl fullWidth>
-                                      <InputLabel id="demo-simple-select-label">Vehicle No</InputLabel>
-                                      <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={vehicleNO}
-                                        label="Vehicle No"
-                                        onChange={handleChange}
-                                      >
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                        <MenuItem value={'TN07CC1234'}>TN07CC1234</MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </Box>
-                                </span>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Assigned From:</span>
-                                <span>
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                      <DatePicker label="From Date" />
-                                    </DemoContainer>
-                                  </LocalizationProvider>
-                                </span>
-                              </div>
-                              <div>
-                                <Button onClick={handleClickOpenAddDriver}>Add Driver</Button>
-                              </div>
-                            </div>
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button variant='contained' onClick={handleCloseEditDriver}>Update</Button>
-                        </DialogActions>
-                      </Dialog>
-                    </React.Fragment>
-
-                    <React.Fragment>
-                      <Dialog
-                        open={openAddDriver}
-                        TransitionComponent={Transition}
-                        keepMounted
-                        onClose={handleCloseAddDriver}
-                        aria-describedby="alert-dialog-slide-description"
-                      >
-                        <DialogTitle>
-                          <div>Modify Driver</div>
-                          <span>Add, Edit and Delete Driver</span>
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-slide-description">
-                            <div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Vehicle:</span>
-                                <span>0642 (TN11AA0642)</span>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>First Name*:</span>
-                                <Box>
-                                  <TextField
-                                    size="small"
-                                    name="advancepaidtovendor"
-                                    className='full-width'
-                                    value=''
-                                    // onChange={handleChange}
-                                    // onChange={(e) => {
-                                    //   handleChange(e)
-                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                                    // }}
-                                    // label="Search Device"
-                                    id="advance-paid-to-vendor"
-                                    autoComplete="password"
-                                  />
-                                </Box>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Last Name:</span>
-                                <Box>
-                                  <TextField
-                                    size="small"
-                                    name="advancepaidtovendor"
-                                    className='full-width'
-                                    value=''
-                                    // onChange={handleChange}
-                                    // onChange={(e) => {
-                                    //   handleChange(e)
-                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                                    // }}
-                                    // label="Search Device"
-                                    id="advance-paid-to-vendor"
-                                    autoComplete="password"
-                                  />
-                                </Box>
-                              </div>
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Mobile No*:</span>
-                                <Box>
-                                  <TextField
-                                    size="small"
-                                    name="advancepaidtovendor"
-                                    className='full-width'
-                                    value=''
-                                    // onChange={handleChange}
-                                    // onChange={(e) => {
-                                    //   handleChange(e)
-                                    //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                                    // }}
-                                    // label="Search Device"
-                                    id="advance-paid-to-vendor"
-                                    autoComplete="password"
-                                  />
-                                </Box>
-                              </div>
-
-
-                              <div className='edit-driver-details-div'>
-                                <span className='edit-driver-heading'>Group:</span>
-                                <span>
-                                  <Box sx={{ minWidth: 162 }}>
-                                    <FormControl fullWidth>
-                                      <InputLabel id="demo-simple-select-label">Select Group</InputLabel>
-                                      <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={vehicleNO}
-                                        label="Vehicle No"
-                                        onChange={handleChange}
-                                      >
-                                        <MenuItem value={'Chennai'}>Chennai</MenuItem>
-                                        <MenuItem value={'Bangalore'}>Bangalore</MenuItem>
-                                        <MenuItem value={'Hyderabad'}>Hyderabad</MenuItem>
-                                        <MenuItem value={'Goa'}>Goa</MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </Box>
-                                </span>
-                              </div>
-
-                              <div>
-                                <Button onClick={handleClickOpenEditDriver}>Select Existing Driver</Button>
-                              </div>
-                            </div>
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button variant='contained' onClick={handleCloseAddDriver}>Update</Button>
-                        </DialogActions>
-                      </Dialog>
-                    </React.Fragment>
-
-                    <div className='vehicle-tab-right-main Scroll-Style'>
-                      <div className='vehicle-tab-right-top-division-main'>
-                        <div className='vehicle-tab-right-top-division-box'>
-                          <div className='vehicle-details-box-veh-no'>TN22EB3001</div>
-                          <div className='vehicle-tab-right-top-division-btn-section'>
-                            <span><Button variant="outlined">Live</Button></span>
-                            <span><Button variant="outlined">History</Button></span>
-                            <span><Button variant="contained">View Details</Button></span>
-                          </div>
-                        </div>
-                        <div className='vehicle-tab-right-top-division-btn-section-2'>
-                          <Button variant="outlined">Jobs</Button>
-                          <Button variant="outlined">Alarms</Button>
-                          <Button variant="outlined">DTCs</Button>
-                          <Button variant="outlined">Fuel Entry</Button>
-                          <Button variant="outlined">Service Reminders</Button>
-                          <Button variant="outlined">Renewable Reminders</Button>
-                        </div>
-                      </div>
-                      <div>
-                        <h3>Vehicle Cost</h3>
-                        <div>
-                          <h2>Vehicle Stats</h2>
-                          <div className='vehicle-stats-main'>
-
-                            <div className='vehicle-stats-box vehicle-stats-box-border'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>0 Min</span>
-                                <span>Running time</span>
-                              </span>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>-</span>
-                                <span>Stoppage time</span>
-                              </span>
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0</span>
-                                <span>Average Speed</span>
-                              </span>
-                            </div>
-
-                            <div className='vehicle-stats-box vehicle-stats-box-border'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>INR 0</span>
-                                <span>Fuel Cost</span>
-                              </span>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>-</span>
-                                <span>Stoppage time</span>
-                              </span>
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0</span>
-                                <span>Average Speed</span>
-                              </span>
-                            </div>
-
-
-                            <div className='vehicle-stats-box'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                <span>Distance</span>
-                              </span>
-
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                <span>Consumption per Hour</span>
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className='vehicle-stats-distance-box'>
-
-                            <div className='vehicle-stats-distance-box-left'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                <span>Distance</span>
-                              </span>
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                <span>Consumption per Hour</span>
-                              </span>
-                            </div>
-
-                            <div className='vehicle-stats-distance-box-right'>
-                              <span style={{ display: 'grid' }}>
-                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Transactions</span>
-                                <span>No data found</span>
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className='vehicle-stats-graph-main'>
-                            <div className='vehicle-stats-graph-left'>
-                              <span style={{ display: 'grid' }}>
-                                <span style={{ fontSize: '25px', fontWeight: '600' }}>Graph</span>
-                                <span>No data found</span>
-                              </span>
-                            </div>
-
-                            <div className='vehicle-stats-graph-right'>
-                              <div>
-                                <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                  <span>Distance</span>
-                                </span>
-                                <span className='vehicle-stats-box-content'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                  <span>Consumption per Hour</span>
-                                </span>
-                              </div>
-                              <div>
-                                <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                  <span>Distance</span>
-                                </span>
-                                <span className='vehicle-stats-box-content'>
-                                  <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                  <span>Consumption per Hour</span>
-                                </span>
-                              </div>
-                            </div>
-
-                          </div>
-
-
-
-                          <div className='vehicle-stats-fuel-cost-main'>
-
-                            <div className='vehicle-stats-fuel-cost-box'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                <span>Distance</span>
-                              </span>
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                <span>Consumption per Hour</span>
-                              </span>
-                            </div>
-
-                            <div className='vehicle-stats-fuel-cost-box'>
-                              <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
-                                <span className='vehicle-stats-box-content-heading'>0 Km</span>
-                                <span>Distance</span>
-                              </span>
-                              <span className='vehicle-stats-box-content'>
-                                <span className='vehicle-stats-box-content-heading'>0 Kg/Hr</span>
-                                <span>Consumption per Hour</span>
-                              </span>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-
-                  <Vehicles></Vehicles>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                  <div>
-                    <Driving></Driving>
-                  </div>
+
+                  <Driving />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  <div>
-                    <Running></Running>
-                  </div>
+
+                  <Running />
+
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
-                  <div>
-                    <Fuel></Fuel>
-                  </div>
+
+                  <Fuel />
+
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={4}>
-                  <div>
-                    <Cost></Cost>
-                  </div>
+
+                  <Cost />
+
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={5}>
-                  <div>
-                    <Safety></Safety>
-                  </div>
+
+                  <Safety />
+
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={6}>
-                  <div>
-                    <VehicleTag></VehicleTag>
-                  </div>
+
+                  <VehicleTag />
+
                 </CustomTabPanel>
               </Box>
-            </div>
+            </div> */}
+
+            <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChangeTabs} aria-label="lab API tabs example">
+            <Tab label="Item One" value="1" />
+            <Tab label="Item Two" value="2" />
+            <Tab label="Item Three" value="3" />
+            <Tab label="Item Three" value="4" />
+            <Tab label="Item Three" value="5" />
+            <Tab label="Item Three" value="6" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">Item One</TabPanel>
+        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="4">Item Three</TabPanel>
+        <TabPanel value="5">Item Three</TabPanel>
+        <TabPanel value="6">Item Three</TabPanel>
+      </TabContext>
+    </Box>
           </div>
         </div>
       </div>

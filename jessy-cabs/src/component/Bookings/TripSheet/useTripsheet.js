@@ -4591,7 +4591,7 @@ const useTripsheet = () => {
         // document.execCommand('copy');
 
         // document.body.removeChild(tempTextarea);
-        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata))
+        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata),"hh")
         if (generatedLinkdata) {
             await navigator.clipboard.writeText(generatedLinkdata);
         }

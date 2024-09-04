@@ -93,7 +93,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                             </table>
                             <table id='table-invoice' className="firstTable">
                                 <tr>
-                                    <th id='table-header'>Log No:</th>
+                                    <th id='table-header'>Trip No:</th>
                                     <td id='table-data'>TS{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid}</td>
                                 </tr>
                                 <tr>
@@ -250,14 +250,20 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                         {GmapimageUrl !== "" ?
                             <img src={GmapimageUrl} alt='mapimage' /> : <></>}
                     </div>
-                    <div className="tripsheet-RouteSummary">
-                        <h2>Route Summary</h2>
-                        <ol type="1">
-                            {routeData.length > 0 && routeData?.map((data, index) => (
-                                <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
-                            ))}
-                        </ol>
-                    </div>
+                    {routeData.length > 0 && (
+                        <div className="tripsheet-RouteSummary">
+                            <h2>Route Summary</h2>
+                            <ol type="1">
+                                {routeData.map((data, index) => (
+                                    <li key={index}>
+                                        <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    )}
+
+
                     <div className='attached-toll'>
                         <ol type="1">
                             {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (

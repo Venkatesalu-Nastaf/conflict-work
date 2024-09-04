@@ -439,7 +439,7 @@ export const Vehicle = () => {
               </Dialog>
             </React.Fragment>
 
-            {/* <div>
+            <div>
               <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
@@ -486,9 +486,9 @@ export const Vehicle = () => {
 
                 </CustomTabPanel>
               </Box>
-            </div> */}
+            </div>
 
-            <Box sx={{ width: '100%', typography: 'body1' }}>
+            {/* <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChangeTabs} aria-label="lab API tabs example">
@@ -507,7 +507,7 @@ export const Vehicle = () => {
         <TabPanel value="5">Item Three</TabPanel>
         <TabPanel value="6">Item Three</TabPanel>
       </TabContext>
-    </Box>
+    </Box> */}
           </div>
         </div>
       </div>

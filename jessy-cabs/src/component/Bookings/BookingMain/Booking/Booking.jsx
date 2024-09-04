@@ -397,7 +397,7 @@ const Booking = ({ stationName, customerData }) => {
                 autoFocus
               />
             </div> */}
-            <div className="radio">
+            <div className="radio booking-top-division-status-div">
               <label>Status</label>
               <Box sx={{ width: '100%' }}>
                 <FormControl fullWidth>
@@ -516,7 +516,7 @@ const Booking = ({ stationName, customerData }) => {
             {/* </span> */}
 
             <span className="d-grid">
-              <label>Booking Date</label>
+              <label className="tripsheet-top-division-date-label">Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -540,7 +540,6 @@ const Booking = ({ stationName, customerData }) => {
                       />
                     )}
                   </DatePicker>
-
                 </LocalizationProvider>
               </div>
             </span>

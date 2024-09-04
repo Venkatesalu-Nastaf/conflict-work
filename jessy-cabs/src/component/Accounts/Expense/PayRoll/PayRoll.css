@@ -24,10 +24,10 @@
     width: 70%;
 }
 
-.form-container-pettycash .Title-Name {
+/* .form-container-pettycash .Title-Name {
     font-size: 20px;
     font-weight: 500;
-}
+} */
 
 .form-container-pettycash .PettyCash-form {
     height: 100vh;
@@ -109,9 +109,9 @@
     background-color: var(--glass);
 }
 
-.PettyCash-form .Title-Name {
+/* .PettyCash-form .Title-Name {
     position: relative;
-}
+} */
 
 .copy-title-btn-PettyCash {
     width: 100%;
@@ -130,7 +130,7 @@
     padding: 25px 20px;
 }
 
-.PettyCash-form .Title-Name::after {
+/* .PettyCash-form .Title-Name::after {
     content: "";
     position: absolute;
     bottom: -10px;
@@ -139,5 +139,4 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
-}
+} */

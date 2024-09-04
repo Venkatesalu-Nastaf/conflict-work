@@ -13,10 +13,10 @@
   /* background-color: var(--glass); */
 }
 
-.form-container .Title-Name {
+/* .form-container .Title-Name {
   font-size: 20px;
   font-weight: 500;
-}
+} */
 
 .form-container {
   display: flex;

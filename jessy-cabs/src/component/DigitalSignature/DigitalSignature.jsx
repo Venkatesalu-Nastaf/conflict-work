@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
 import { APIURL,Apiurltransfer } from "../url";
@@ -44,10 +44,11 @@ const DigitalSignature = () => {
    sessionStorage.setItem("expiredsign", false);
    localStorage.setItem("expiredsign",false);
    localStorage.setItem("uploadtollparkdata",true);
-   setExpired(true);
+  //  setExpired(true);
    sessionStorage.setItem("expired", true);
     localStorage.setItem("expired", true);
-   window.open(data, '_blank');
+    window.location.href = data;
+  //  window.open(data, '_blank');
 
   }
   const handleuploadclose=()=>{

@@ -39,11 +39,11 @@
     background-color: var(--glass);
   }
   
-  .form-container .Title-Name {
+  /* .form-container .Title-Name {
     font-size: 20px;
     padding-left: 20px;
     font-weight: 500;
-  }
+  } */
   
   .form-container {
     width: 100%;
@@ -66,9 +66,9 @@
     overflow-x: hidden;
   } */
   
-  .form-container .Title-Name {
+  /* .form-container .Title-Name {
     position: relative;
-  }
+  } */
   
   /* .form-container .Title-Name::after {
     content: "";

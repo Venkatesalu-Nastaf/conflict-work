@@ -114,6 +114,87 @@ router.post('/addCollect', (req, res) => {
 });
 
 
+// get pending amount in BillWiseReceipt
+router.post('/getBalanceAmount', (req, res) => {
+    const { organization } = req.body; // Extracting from the request body
+    console.log(organization, 'organization');
+
+    // Convert TotalBalance to a numeric type before comparing
+    const query = `
+        SELECT * 
+        FROM BillWiseReceipt 
+        WHERE CustomerName = ? 
+        AND CAST(TotalBalance AS DECIMAL(10, 2)) != 0
+    `;
+
+    db.query(query, [organization], (error, result) => {
+        if (error) {
+            console.log(error, 'error');
+            return res.status(500).json({ error: 'Database query error' });
+        }
+        return res.status(200).json(result);
+    });
+});
+
+// update BillwiseReport to get balance amount
+router.put('/updateBalanceAmount', async (req, res) => {
+    const { uniqueVoucherId, TotalCollectAmount } = req.body;
+
+    // Validate input
+    if (!Array.isArray(uniqueVoucherId) || !Array.isArray(TotalCollectAmount) || uniqueVoucherId.length !== TotalCollectAmount.length) {
+        return res.status(400).json({ error: 'Invalid input data' });
+    }
+
+    // Prepare the query
+    const updateQuery = `
+        UPDATE BillWiseReceipt
+        SET Collected = ?, TotalBalance = ?
+        WHERE voucherID = ?;
+    `;
+
+    try {
+        // Use a transaction to ensure all updates are done together
+        await db.beginTransaction();
+
+        for (let i = 0; i < uniqueVoucherId.length; i++) {
+            const voucherId = uniqueVoucherId[i];
+            const collectedAmount = TotalCollectAmount[i];
+
+            const totalBalance = '0';
+
+            await new Promise((resolve, reject) => {
+                db.query(updateQuery, [collectedAmount, totalBalance, voucherId], (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+        }
+
+        // Commit transaction
+        await db.commit();
+        res.status(200).json({ message: 'Balance amounts updated successfully' });
+    } catch (error) {
+        // Rollback transaction in case of an error
+        await db.rollback();
+        res.status(500).json({ error: 'Failed to update balance amounts', details: error.message });
+    }
+});
+
+// router.put('/updateBalanceAmount',(req,res)=>{
+//     const { uniqueVoucherId,TotalCollectAmount } = req.body;
+//     console.log(uniqueVoucherId,TotalCollectAmount,'ajay');
+//     const TotalBalance = '0';
+//     // db.query("UPDATE BillWiseReceipt SET  Collected,TotalBalance  WHERE voucherID = ?",[uniqueVoucherId],(error,result)=>{
+//     //     if(error){
+//     //         console.log(error,'error');
+
+//     //     }
+//     // })
+
+// })
+
 
 router.delete('/deleteBillWiseReport', (req, res) => {
     const { BillNo } = req.body; // Assumes BillNo is an array

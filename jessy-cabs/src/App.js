@@ -376,7 +376,7 @@ function App() {
 
                 <Route
                   path="/home/registration/ratemanagement"
-                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} /> : <NoPermission />}
+                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName}  /> : <NoPermission />}
                 />
 
                 {/* <Route

@@ -1649,11 +1649,20 @@ const useTripsheet = () => {
 
 
     const handleUpload = () => {
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        
+        if(!tripid){
+            setError(true);
+            setErrorMessage("Enter The Tripid.");
+            return
+        }
+        else{
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.pdf, .jpg, .jpeg, .png';
         input.onchange = handleFileChange;
         input.click();
+        }
     };
 
     const handleFileChange = async (event) => {
@@ -4542,7 +4551,7 @@ const useTripsheet = () => {
         fetchData()
     }, [apiUrl, vehicleRegisterNo, shedoutkm])
 
-    const generateAndCopyLinkdata = () => {
+    const generateAndCopyLinkdata = async() => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
 
@@ -4572,15 +4581,17 @@ const useTripsheet = () => {
         const generatedLinkdata = url.toString();
         setSignatureWhattsapplink(generatedLinkdata)
 
-
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
-        const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = generatedLinkdata;
-        document.body.appendChild(tempTextarea);
-        tempTextarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempTextarea);
+        // const tempTextarea = document.createElement('textarea');
+        // tempTextarea.value = generatedLinkdata;
+        // document.body.appendChild(tempTextarea);
+        // console.log(tempTextarea,"aree")
+        // tempTextarea.select();
+        // document.execCommand('copy');
+    
+        // document.body.removeChild(tempTextarea);
+        await navigator.clipboard.writeText(generatedLinkdata);
         localStorage.setItem("expiredsign", false);
         localStorage.setItem("expired", false);
         localStorage.setItem("uploadtollparkdata", false);

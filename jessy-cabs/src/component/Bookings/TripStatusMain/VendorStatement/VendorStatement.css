@@ -11,10 +11,10 @@ VendorStatement.css
   width: 70%;
 }
 
-.form-container-TripStatus .Title-Name {
+/* .form-container-TripStatus .Title-Name {
   font-size: 20px;
   font-weight: 500;
-}
+} */
 
 .form-container-TripStatus .VehicleStatement-form {
   /* height: 100vh; */
@@ -64,9 +64,9 @@ VendorStatement.css
   background-color: var(--glass);
 }
 
-.VehicleStatement-form .Title-Name {
+/* .VehicleStatement-form .Title-Name {
   position: relative;
-}
+} */
 
 .SearchContainer-VehicleStatement {
   width: 88vw;
@@ -95,7 +95,7 @@ VendorStatement.css
   }
 }
 
-.VehicleStatement-form .Title-Name::after {
+/* .VehicleStatement-form .Title-Name::after {
   content: "";
   position: absolute;
   bottom: -10px;
@@ -104,7 +104,7 @@ VendorStatement.css
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-}
+} */
 
 /* @media screen and (min-width:970px) and (max-width:1240px) {
   .side-bar-menu-close .form-container-TripStatus .container-main {

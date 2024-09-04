@@ -26,7 +26,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 export const BillWiseReceipt = () => {
 
   const { organization,  accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
-    , rows,  pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
+    , rows,  pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,handleBalanceAmount,
     totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange
   } = useBillWiseReceipt();
 
@@ -307,8 +307,9 @@ export const BillWiseReceipt = () => {
                       <label htmlFor="">Collected Amount:</label>
                       <input type="text" value={totals.collectedAmount} onChange={(e) => handleCollectedChange(e)} />
                     </div>
-                    <div className='total-inputs' >
+                    <div className='total-inputsss' style={{display: 'flex', gap: '10px'}}>
                       <Button variant='contained' onClick={handlePending}>Pending </Button>
+                      <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">On A/C:</label>
@@ -362,7 +363,7 @@ export const BillWiseReceipt = () => {
 
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
-                    <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
+                  <Button variant='contained' onClick={handleBalanceAmount}>Balance Amount</Button>
                     <Button variant='contained' onClick={() => handlePendingBills(billWiseReport.CustomerName)}>Show Pending Bills</Button>
                     <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
                   </div>

@@ -158,7 +158,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         getOptionLabel={(option) => option.label || selectedCustomerData?.ratetype || book.ratetype || ""}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
+                                                <TextField {...params} label="Rate Type" name="ratetype" inputRef={params.inputRef} />
                                             )
                                         }
                                         }

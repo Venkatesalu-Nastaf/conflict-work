@@ -31,11 +31,11 @@ const customer_colums = [
   { field: 'logTime', headerName: 'Log Time', width: 120 },
   { field: 'username', headerName: 'Username', width: 120 },
   { field: 'mode', headerName: 'Mode', width: 130 },
-  { field: 'date', headerName: 'Date', width: 130 },
-  { field: 'time', headerName: 'Time', width: 130 },
+  { field: 'date', headerName: 'Date', width: 70 },
+  { field: 'time', headerName: 'Time', width: 70 },
   { field: "guestName", headerName: "Guest Name", with: 100 },
   { field: "mobile", headerName: "Mobile", with: 100 },
-  { field: "rAddress", headerName: "R. Address", with: 100 },
+  { field: "rAddress", headerName: "R. Address", with: 200 },
   { field: "duty", headerName: "Duty", with: 100 },
   { field: "vType", headerName: "V Type", with: 100 },
   { field: "company", headerName: "Company", with: 100 },
@@ -478,14 +478,14 @@ const LogDetails = () => {
 
     <>
       <div className='main-content-form'>
-        <div className='input-field vendor-statement-input-field'>
+        <div className='input-field vendor-statement-input-field' style={{alignItems: 'flex-end'}}>
 
           <div className="input">
             <div className="icone">
               <MdOutlineCalendarMonth color="action" />
             </div>
 
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
+            <FormControl sx={{ minWidth: 200 }}>
               <InputLabel id="demo-simple-select-helper-label">Select Type</InputLabel>
               <Select
                 labelId="demo-simple-select-helper-label"
@@ -507,7 +507,7 @@ const LogDetails = () => {
           <div className="input">
             <div style={{}}>
               <label htmlFor="">Booking No</label>
-              <input type="text" />
+              <input type="text" style={{backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px'}}/>
             </div>
           </div>
 

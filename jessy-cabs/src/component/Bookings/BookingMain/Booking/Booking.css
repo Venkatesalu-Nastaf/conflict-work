@@ -589,8 +589,8 @@
   padding: 4px;
 }
 
-.booking-top-division-status-div .css-q8hpuo-MuiFormControl-root{
-  padding: 6px 35px 6px 5px;
+.booking-top-division-status-div .booking-top-section-status-main{
+  padding: 6px 35px 6px 5px !important;
 }
 
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {

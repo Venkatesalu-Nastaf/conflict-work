@@ -12,26 +12,26 @@ export const Status = [
     Option: "Cancelled",
     optionvalue: "cancelled",
   },
+  {
+    Option: "Billed",
+    optionvalue: "Billed",
+  },
   // {
-  // Option:"Billed",
-  // optionvalue: "Billed",
+  //   Option: "Transfer_Billed",
+  //   optionvalue: "Transfer_Billed"
   // },
-{
-  Option:"Transfer_Billed",
-  optionvalue:"Transfer_Billed"
-},
- {
-  Option:"Transfer_Closed",
-  optionvalue:"Transfer_Closed"
- },
- { 
-  Option:"Covering_Billed",
-  optionvalue:"Covering_Billed"
-},
-{
-  Option:"Covering_Closed",
-  optionvalue:"Covering_Closed"
-}
+  // {
+  //   Option: "Transfer_Closed",
+  //   optionvalue: "Transfer_Closed"
+  // },
+  // {
+  //   Option: "Covering_Billed",
+  //   optionvalue: "Covering_Billed"
+  // },
+  // {
+  //   Option: "Covering_Closed",
+  //   optionvalue: "Covering_Closed"
+  // }
 ];
 
 export const GroupTypes = [
@@ -457,7 +457,7 @@ export const VehicleRate = [
   },
 ];
 // Select
-export const Select=[
+export const Select = [
   {
     option: "Don't Allow",
     optionvalue: "dont-allow",
@@ -489,10 +489,10 @@ export const DocumentType = [
     option: "Permit",
     optionvalue: "permit",
   },
-  {
-    option: "Sign",
-    optionvalue: "sign",
-  },
+  // {
+  //   option: "Sign",
+  //   optionvalue: "sign",
+  // },
 ]
 // Email
 export const Email = [

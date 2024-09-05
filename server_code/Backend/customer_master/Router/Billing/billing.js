@@ -15,14 +15,13 @@ router.post('/billing', (req, res) => {
 });
 
 router.post('/GroupBillingList', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station } = req.body;
-  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station,"group bill");
-  
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station } = req.body;
+
 
   const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
-  const sqlquery1 = "UPDATE tripsheet SET status = 'Covering_Billed' WHERE tripid IN (?)";
+  const sqlquery1 = "UPDATE tripsheet SET status = 'Billed',Billed_Status='Covering_Billed' WHERE tripid IN (?)";
 
-  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','),station], (err, result) => {
+  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }
@@ -220,7 +219,7 @@ router.get('/ParticularLists/:tripno', (req, res) => {
   const tripno = req.params.tripno;
 
   const tripIds = tripno.split(',');
-  const query = `SELECT * FROM tripsheet WHERE status="Covering_Billed" AND tripid IN (?)`;
+  const query = `SELECT * FROM tripsheet WHERE Billed_Status="Covering_Billed" AND tripid IN (?)`;
   db.query(query, [tripIds], (err, result) => {
     if (err) {
       console.error(err);
@@ -277,10 +276,11 @@ router.get('/Transfer-Billing', (req, res) => {
     SELECT * 
     FROM tripsheet 
     WHERE apps = "Closed" 
-      AND status = "Transfer_Closed" 
+      AND status = "Closed" 
       AND customer = ? 
       AND department = ? 
       AND tripsheetdate >= ? 
+      AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
       AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
   `;
 
@@ -314,11 +314,12 @@ router.get('/Group-Billing', (req, res) => {
     SELECT * 
     FROM tripsheet 
     WHERE apps = "Closed" 
-      AND status = "Covering_Closed" 
-      AND customer = ? 
-      AND department = ? 
-      AND tripsheetdate >= ? 
-      AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+    AND status = "Closed" 
+    AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
+    AND customer = ? 
+    AND department = ? 
+    AND tripsheetdate >= ? 
+    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
   `;
 
   // Execute query with parameterized values
@@ -348,26 +349,48 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
       return res.status(500).json({ error: "there some issue ffetching station name " })
     }
     data = await results[0]?.Stationname;
-    console.log(data,"ddddd")
     //------------------------------------------------------------
-
     if (data && data.toLowerCase() === "all") {
-      // its for fetch by All
-      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Closed"`, tripid, (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+      // Fetch by All
+      await db.query(
+        `SELECT * FROM tripsheet 
+         WHERE tripid = ? 
+         AND status = "Closed" 
+         AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))`,
+        [tripid],
+        (err, result) => {
+          if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+          }
+          if (result.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+          }
+
+          const bookingDetails = result[0];
+          return res.status(200).json(bookingDetails);
         }
-        if (result.length === 0) {
-          return res.status(404).json({ error: 'Booking not found' });
-        }
-        const bookingDetails = result[0]; // Assuming there is only one matching booking
-        return res.status(200).json(bookingDetails);
-      });
+      );
     }
+
+    // if (data && data.toLowerCase() === "all") {
+    //   // its for fetch by All
+    //   await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed")`, tripid, (err, result) => {
+    //     if (err) {
+    //       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    //     }
+    //     if (result.length === 0) {
+    //       return res.status(404).json({ error: 'Booking not found' });
+    //     }
+    //     console.log(result,'india');
+
+    //     const bookingDetails = result[0]; // Assuming there is only one matching booking
+    //     return res.status(200).json(bookingDetails);
+    //   });
+    // }
     else if (data) {
       // its for fetch by All
       // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Transfer_Closed" AND department=${data}`, tripid, (err, result) => {
-        await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Closed" AND department=${data}`, tripid, (err, result) => {
+      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed" OR Billed_Status!="Individual_Billed") AND department=${data}`, tripid, (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }

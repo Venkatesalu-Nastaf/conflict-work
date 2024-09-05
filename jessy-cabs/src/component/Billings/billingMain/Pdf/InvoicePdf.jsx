@@ -127,7 +127,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                                             Driver Bata {book.driverbeta_Count} @ Rs . {book.driverBeta} <br />
                                             {book.pickup}
                                         </td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking)}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) || 0}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}</td>
                                     </tr>
                                 </tbody>

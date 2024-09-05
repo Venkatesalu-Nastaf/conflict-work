@@ -259,7 +259,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     calculateTotalTimes,
     handleClickOpen,
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
-    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
+    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -1095,7 +1095,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                   />
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
@@ -1115,7 +1115,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       );
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* <div className="input radio">
                   <FormControlLabel
@@ -1949,6 +1949,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 />
 
                               </div>
+
+                              <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdata}
+                                  onChange={(event) => setLockData(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
                             </div>
                             <div className="input-field" style={{ marginTop: '15px' }}>
                               <div className="input" >
@@ -2023,14 +2032,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   sx={{ width: "100%" }}
                                 />
                               </div>
-                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                <Checkbox
-                                  size="small"
-                                  checked={lockdata}
-                                  onChange={(event) => setLockData(event.target.checked)}
-                                />
-                                <p style={{ margin: "0px" }}>Lock</p>
-                              </div>
+
                             </div>
                             <div className="input-field" style={{ marginBottom: '10px' }}>
 
@@ -2039,7 +2041,7 @@ const TripSheet = ({ stationName, logoImage }) => {
         <MdOutlineAccessTimeFilled />
       </div> */}
                                 <div className='input'>
-                                  <div className='full-width'>
+                                  <div className='full-width' style={{ display: 'grid' }}>
                                     <label>Start Time</label>
                                     <input
                                       type="time"
@@ -2061,7 +2063,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         }
                                       }}
 
-
+                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
                                     // }}
                                     />
                                   </div>
@@ -2109,7 +2111,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       }
                                     }
                                     }
-
+                                    style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
 
                                   />
                                 </div>
@@ -2124,7 +2126,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   id="pack5"
                                   size="small"
                                   // variant="standard"
-                                  sx={{ m: 1, width: "100%" }}
+                                  sx={{ width: "100%" }}
                                 />
                               </div>
 
@@ -2780,21 +2782,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                               variant="standard"
                             />
 
-                            <div className="input-field">
-
-                            </div>
-                            <div className="input-field">
-                            </div>
                           </div>
                         </TabPanel>
                         <TabPanel value={3} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div className="input-field">
                               <div className="input">
-                                <Button>View GPS TripSheet</Button>
+                                <Button variant='outlined' className='full-width'>View GPS TripSheet</Button>
                               </div>
                               <div className="input">
-                                <Button onClick={handleTripmapClick}>View GPS Map</Button>
+                                <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
                               </div>
                               <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
                                 <DialogContent>
@@ -2806,9 +2803,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </Button>
                                 </DialogActions>
                               </Dialog>
-                              <div className="input">
-                                <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
-                              </div>
+                              {/* <div className="input">
+                                <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
+                              </div> */}
                               <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
                                 <DialogContent>
                                   <div className="table-customer-lists">
@@ -2824,11 +2821,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </Button>
                                 </DialogActions>
                               </Dialog>
-                              <div className="input">
-                                <Button>View Closing</Button>
-                              </div>
+                              {/* <div className="input">
+                                <Button variant='outlined' className='full-width'>View Closing</Button>
+                              </div> */}
                             </div>
-                            <div className="input-field">
+                            <div className="input-field" style={{ marginTop: '10px' }}>
                               <div className="input">
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faFolderOpen} size="lg" />
@@ -2879,7 +2876,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 </Box>
                               </Modal>
-                              <div className="input">
+                              {/* <div className="input">
                                 <div className="icone">
                                   <FontAwesomeIcon icon={faFileLines} size="lg" />
                                 </div>
@@ -2893,14 +2890,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   id="document-notes"
                                   variant="standard"
                                 />
-                              </div>
+                              </div> */}
                               <div className="input">
-                                <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
+                                <Button variant="contained" onClick={handleUpload} className='full-width'>Select File & Upload</Button>
                               </div>
-
-
                             </div>
-                            <div className="input-field">
+                            <div className="input-field" style={{ marginTop: '20px' }}>
                               {/* <div className="input">
                                 <div className="icone">
                                   <MarkChatReadIcon color="action" />
@@ -2913,10 +2908,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 />
                               </div> */}
                               <div className="input">
-                                <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
+                                <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                               </div>
                               <div className="input">
-                                <Button onClick={handlesignatureimages} variant="contained">signature</Button>
+                                <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
                               </div>
 
 
@@ -2965,13 +2960,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </DialogActions>
                               </Dialog>
                             </div>
-                            <div className="input-field">
+                            <div className="input-field" style={{ marginTop: '10px' }}>
                               <div className="input">
-                                <Button onClick={handleButtonClick}>Manual Marking</Button>
+                                <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                               </div>
-                              <div className="input">
-                                <Button>Delete GPS Log</Button>
-                              </div>
+                              {/* <div className="input">
+                                <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
+                              </div> */}
                             </div>
                             <div className="table-TripSheet">
                               <div className='tripsheet-booking-table'>
@@ -3116,17 +3111,20 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                               </div>
+                              <div>
+                                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+                                  Refresh
+                                </Button>
+                              </div>
                             </div>
 
-                            <div className="table-TripSheet">
+                            <div className="table-TripSheet" style={{ marginTop: '15px' }}>
                               <div className='tripsheet-booking-table'>
-
                                 <DataGrid
                                   rows={rowsignature}
                                   columns={columnssignature}
                                   onRowClick={handleTripsignaturedata}
                                   pageSize={5}
-
                                 />
                               </div>
                             </div>
@@ -3819,10 +3817,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="free-solo-Groups"
                         freeSolo
                         size="small"
-                        value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
-                        options={GroupTypes?.map((option) => ({
-                          label: option?.Option,
-                        }))}
+                        // value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                        // options={GroupTypes?.map((option) => ({
+                        //   label: option?.Option,
+                        // }))}
+                        value={
+                          selectedCustomerDatas.Groups || formData.Groups ||
+                          selectedCustomerData.Groups ||
+                          book.Groups || ""
+                        }
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
                           return (
@@ -3918,6 +3921,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             {/* <th className="table-head-booking">HireTypes</th> */}
                             {/* <th className="table-head-booking">Grouphs</th> */}
                             {/* <th className="table-head-booking">Active</th> */}
+                            <th className="table-head-booking">Travels Name</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -3936,6 +3940,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 {/* <td>{row.hiretypes}</td> */}
                                 {/* <td>{row.Groups}</td> */}
                                 {/* <td>{row.active}</td> */}
+                                <td>{row.travelsname}</td>
                               </tr>
                             ))
                           )}

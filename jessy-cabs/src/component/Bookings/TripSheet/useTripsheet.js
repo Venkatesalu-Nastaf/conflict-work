@@ -3117,9 +3117,25 @@ const useTripsheet = () => {
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // handleChange({ target: { name: "vehType", value: params.vehType } })
-        handleChange({ target: { name: "vehType", value: params.vehType } })
 
-    };
+
+        // new code..............
+        const keys = Object.keys(params);
+        keys.forEach(key => {
+            const value = params[key];
+            if (key !== "rateType") {
+                handleChange({ target: { name: key, value: value } });
+            }
+
+        });
+        //   ----------------------------------
+
+        // handleChange({ target: { name: "vehType", value: params.vehType } })
+    }
+
+
+
+
 
 
 
@@ -4604,7 +4620,7 @@ const useTripsheet = () => {
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
+
             try {
                 const successful = document.execCommand('copy');
                 const msg = successful ? 'successful' : 'unsuccessful';
@@ -4612,29 +4628,29 @@ const useTripsheet = () => {
             } catch (err) {
                 console.error('Fallback: Oops, unable to copy', err);
             }
-        
+
             document.body.removeChild(textArea);
         }
         // document.body.removeChild(tempTextarea);
         console.log(generatedLinkdata, "grn", typeof (generatedLinkdata), "hh")
         if (navigator.clipboard) {
             console.log(generatedLinkdata, "linkdata");
-        
+
             try {
                 await navigator.clipboard.writeText(generatedLinkdata);
                 console.log("Successfully copied");
                 console.log('Link copied to clipboard!');
-                
+
                 localStorage.setItem("expiredsign", "false");
                 localStorage.setItem("expired", "false");
                 localStorage.setItem("uploadtollparkdata", "false");
                 localStorage.setItem("expireuploadpage", "false");
-        
+
             } catch (error) {
                 console.error("Failed to copy text to clipboard:", error);
                 fallbackCopyText(generatedLinkdata);
             }
-        
+
         } else {
             console.error('Clipboard API not supported');
             fallbackCopyText(generatedLinkdata);
@@ -4724,15 +4740,15 @@ const useTripsheet = () => {
         { field: "logdatetime", headerName: "LogDateTime", width: 200 },
         { field: "startsigntime", headerName: "CTime", width: 130 },
         { field: "Signstatus", headerName: "SignStatus", width: 160 },
-        {
+        // {
 
-            width: 300,
-            renderHeader: () => (
-                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
-                    Refresh
-                </Button>
-            )
-        }
+        //     width: 300,
+        //     renderHeader: () => (
+        //         <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+        //             Refresh
+        //         </Button>
+        //     )
+        // }
     ]
 
     // CUSTOMER GET HYBRID
@@ -4871,7 +4887,7 @@ const useTripsheet = () => {
         nightTotalCount, setNightTotalCount,
         nightTotalAmount, setNightTotalAmount,
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign
 
     };
 };

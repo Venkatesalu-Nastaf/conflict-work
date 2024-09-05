@@ -6,7 +6,7 @@ router.get('/customerBilledDetails', (req, res) => {
     const { customer } = req.query;
 
     const individualBillingPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Individual_Billing WHERE Customer = ?", [customer], (error, result) => {
+        db.query("SELECT * FROM Individual_Billing WHERE Customer = ? AND Status='Billed'", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching individual billing details');
             }
@@ -15,7 +15,7 @@ router.get('/customerBilledDetails', (req, res) => {
     });
 
     const groupBillingPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Group_billing WHERE Customer = ?", [customer], (error, result) => {
+        db.query("SELECT * FROM Group_billing WHERE Customer = ? AND Status='Billed'", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching group billing details');
             }
@@ -24,7 +24,7 @@ router.get('/customerBilledDetails', (req, res) => {
     });
 
     const transferListPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Transfer_list WHERE Organization_name = ?", [customer], (error, result) => {
+        db.query("SELECT * FROM Transfer_list WHERE Organization_name = ? AND Status='Billed'", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching transfer list details');
             }
@@ -117,7 +117,6 @@ router.post('/addCollect', (req, res) => {
 // get pending amount in BillWiseReceipt
 router.post('/getBalanceAmount', (req, res) => {
     const { organization } = req.body; // Extracting from the request body
-    console.log(organization, 'organization');
 
     // Convert TotalBalance to a numeric type before comparing
     const query = `

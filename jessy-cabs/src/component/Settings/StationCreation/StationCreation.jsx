@@ -101,7 +101,7 @@ const StationCreation = () => {
     <div className="stationcreation-main">
       <div className="main-content-container">
         <form action="">
-          <p className="station-creation-heading">
+          <p className="station-creation-heading head-tab-type-2-all">
             <span className="Title-Name ">Station Creation</span>
           </p>
           <div className='main-content-form'>

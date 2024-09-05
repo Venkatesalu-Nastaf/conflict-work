@@ -270,17 +270,63 @@ const useBillWiseReceipt = () => {
     };
 
     const handleAddBillReceive = async () => {
+        // if (balanceAmount === true) {
+        //     if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
+
+        //         const uniqueVoucherId = selectedBillRow?.map(li => li.Voucherid)
+        //         const TotalCollectAmount = selectMatchList?.map(li => li.TotalAmount)
+
+        //         try {
+        //             const response = await axios.put(`${apiUrl}/updateBalanceAmount`, { uniqueVoucherId, TotalCollectAmount });
+        //             await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount || 0, bankname: combinedData.AccountDetails });
+        //             console.log(response.data.message);
+        //             setRows([])
+        //             setPendingBillRows([])
+        //             setTotals({
+        //                 amount: 0,
+        //                 recieved: 0,
+        //                 discount: 0,
+        //                 balance: 0,
+        //                 totalAmount: 0,
+        //                 onAccount: 0,
+        //                 totalBalance: 0,
+        //                 tds: 0,
+        //                 collectedAmount: 0
+        //             });
+        //             setBillWiseReport({
+        //                 CustomerName: "",
+        //                 AccountDetails: "",
+        //                 UniqueID: "",
+        //             });
+
+        //         } catch (error) {
+        //             console.error('Failed to update balance amount:', error.response?.data?.error || error.message);
+        //         }
+        //     }
+        // }
         if (balanceAmount === true) {
             if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
-
-                const uniqueVoucherId = selectedBillRow?.map(li => li.Voucherid)
-                const TotalCollectAmount = selectMatchList?.map(li => li.TotalAmount)
-
+        
+                const uniqueVoucherId = selectedBillRow?.map(li => li.Voucherid);
+                const TotalCollectAmount = selectMatchList?.map(li => li.TotalAmount);
+                const combinedData = {
+                    ...totals,
+                    ...billWiseReport
+                };
+    
+           console.log(combinedData.collectedAmount,combinedData.AccountDetails,'anil');
+           
                 try {
+                    // First, this PUT request will be executed and awaited
                     const response = await axios.put(`${apiUrl}/updateBalanceAmount`, { uniqueVoucherId, TotalCollectAmount });
+        
+                    // Only after the PUT request finishes, this POST request will execute
+                    await axios.post(`${apiUrl}/addCollect`, { collectedAmount: combinedData.collectedAmount || 0, bankname: combinedData.AccountDetails });
+        
+                    // Logging and state updates occur after both requests have completed
                     console.log(response.data.message);
-                    setRows([])
-                    setPendingBillRows([])
+                    setRows([]);
+                    setPendingBillRows([]);
                     setTotals({
                         amount: 0,
                         recieved: 0,
@@ -297,12 +343,13 @@ const useBillWiseReceipt = () => {
                         AccountDetails: "",
                         UniqueID: "",
                     });
-
+        
                 } catch (error) {
                     console.error('Failed to update balance amount:', error.response?.data?.error || error.message);
                 }
             }
         }
+        
         else {
             if (totals.collectedAmount === undefined || totals.collectedAmount === 0) {
                 setError(true);

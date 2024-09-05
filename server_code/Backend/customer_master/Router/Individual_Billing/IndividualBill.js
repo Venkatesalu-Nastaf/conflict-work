@@ -12,7 +12,7 @@ router.post('/IndividualBill', (req, res) => {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         if (result.affectedRows >= 1) {
-            db.query("UPDATE tripsheet SET status = 'Billed' WHERE tripid = ?", [tripid], (err, updateResult) => {
+            db.query("UPDATE tripsheet SET status = 'Billed',Billed_Status='Individual_Billed' WHERE tripid = ?", [tripid], (err, updateResult) => {
                 if (err) {
                     console.log("Failed to update data into MySQL:", err);
                     return res.status(500).json({ error: "Failed to update data into MySQL" });

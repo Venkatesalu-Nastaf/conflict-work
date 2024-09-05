@@ -38,11 +38,11 @@ const ContactRenewalReminder = () => {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'user', headerName: 'User', width: 130 },
-    { field: 'contactRenewalType', headerName: 'Contact Renewal Type', width: 160 },
-    { field: 'dueDate', headerName: 'Due Date', width: 130 },
-    { field: 'subscribers', headerName: 'Subscribers', width: 130 },
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'user', headerName: 'User', width: 250 },
+    { field: 'contactRenewalType', headerName: 'Contact Renewal Type', width: 250 },
+    { field: 'dueDate', headerName: 'Due Date', width: 250 },
+    { field: 'subscribers', headerName: 'Subscribers', width: 250 },
   ];
 
   const rows = [
@@ -65,9 +65,9 @@ const ContactRenewalReminder = () => {
     setOpenFilter(false);
   };
   return (
-    <div style={{ width: '100%', padding: '20px' }}>
+    <div className='ContactRenewalReminder'>
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '20px', marginBottom: '20px',flexWrap:"wrap" }}>
           <div>
             <Box sx={{ minWidth: 150 }}>
               <FormControl fullWidth>
@@ -202,12 +202,12 @@ const ContactRenewalReminder = () => {
           </DialogActions>
         </Dialog>
       </React.Fragment>
-      <div style={{ display: 'flex', gap: '20px', fontSize: '18px', marginBottom: '5px' }}>
+      <div style={{ display: 'flex', gap: '20px', fontSize: '18px', marginBottom: '5px',flexWrap:"wrap" }}>
         <span>Total: <span>11</span></span>
         <span>Overdue: <span>1</span></span>
         <span>Due Soon: <span>0</span></span>
       </div>
-      <div className='bill-wise-reciept-table' style={{ width: 'fit-content' }}>
+      <div className='ContactRenewalReminder-table'>
         <Box
           sx={{
             height: 400,

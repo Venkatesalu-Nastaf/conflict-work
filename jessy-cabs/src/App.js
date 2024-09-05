@@ -57,6 +57,7 @@ import Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 import Employee from "./component/Info/Employes/Employes";
+import { Records } from "./component/Map/Records/Records";
 
 
 
@@ -339,6 +340,11 @@ function App() {
                 />
 
                 <Route
+                  path="/home/Map/Records"
+                  element={Maps !== 0 ? <Records stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                />
+
+                <Route
                   path="/home/Map/Vehicle/AddVehicle"
                   element={Maps !== 0 ? <AddVehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
@@ -376,7 +382,7 @@ function App() {
 
                 <Route
                   path="/home/registration/ratemanagement"
-                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName}  /> : <NoPermission />}
+                  element={R_Employee !== 0 ? <RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
                 />
 
                 {/* <Route

@@ -42,7 +42,7 @@ import { useNavigate, Link, useLocation, } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { IoDownloadOutline } from "react-icons/io5";
-import {   Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -156,6 +156,13 @@ export const Vehicle = () => {
   }
 
 
+  const [valuedetailstabs, SetValuedetailstabs] = React.useState('1');
+
+  const handleChangedetailstabs = (event, newValue) => {
+    SetValuedetailstabs(newValue);
+  };
+
+
   return (
     <>
       <div className="form-container-realtime">
@@ -163,12 +170,12 @@ export const Vehicle = () => {
           <p className="head-tab-type-2-all">
             <span className="Title-Name">Vehicles</span>
           </p>
-          <div className='main-content-form'>
+          <div className='vehicle-main-content-form'>
             <div className='vehicle-main'>
               {/* <div className='vehicle-top-section-left'> <span>Vehicles</span> </div> */}
               <div className='vehicle-top-section-right'>
                 <span>
-                  <Box sx={{ minWidth: 120 }}>
+                  <Box sx={{ minWidth: 200 }}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Vehicle No</InputLabel>
                       <Select
@@ -439,76 +446,106 @@ export const Vehicle = () => {
               </Dialog>
             </React.Fragment>
 
-            <div>
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
-                    <Tab label="Vehicles" {...a11yProps(0)} />
-                    <Tab label="Driving" {...a11yProps(1)} />
-                    <Tab label="Running" {...a11yProps(2)} />
-                    <Tab label="Fuel" {...a11yProps(3)} />
-                    <Tab label="Cost" {...a11yProps(4)} />
-                    <Tab label="Safety" {...a11yProps(5)} />
-                    <Tab label="Vehicle Tag" {...a11yProps(6)} />
-                  </Tabs>
-                </Box>
-                <CustomTabPanel value={value} index={0}>
-                  <Vehicles />
 
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
 
-                  <Driving />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
 
-                  <Running />
-
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={3}>
-
-                  <Fuel />
-
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={4}>
-
-                  <Cost />
-
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={5}>
-
-                  <Safety />
-
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={6}>
-
-                  <VehicleTag />
-
-                </CustomTabPanel>
-              </Box>
-            </div>
-
-            {/* <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChangeTabs} aria-label="lab API tabs example">
-            <Tab label="Item One" value="1" />
-            <Tab label="Item Two" value="2" />
-            <Tab label="Item Three" value="3" />
-            <Tab label="Item Three" value="4" />
-            <Tab label="Item Three" value="5" />
-            <Tab label="Item Three" value="6" />
-          </TabList>
-        </Box>
-        <TabPanel value="1">Item One</TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
-        <TabPanel value="4">Item Three</TabPanel>
-        <TabPanel value="5">Item Three</TabPanel>
-        <TabPanel value="6">Item Three</TabPanel>
-      </TabContext>
-    </Box> */}
           </div>
+
+          {/* <div >
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
+                  <Tab label="Vehicles" {...a11yProps(0)} />
+                  <Tab label="Driving" {...a11yProps(1)} />
+                  <Tab label="Running" {...a11yProps(2)} />
+                  <Tab label="Fuel" {...a11yProps(3)} />
+                  <Tab label="Cost" {...a11yProps(4)} />
+                  <Tab label="Safety" {...a11yProps(5)} />
+                  <Tab label="Vehicle Tag" {...a11yProps(6)} />
+                </Tabs>
+              </Box>
+              <CustomTabPanel value={value} index={0}>
+                <Vehicles />
+
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+
+                <Driving />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={2}>
+
+                <Running />
+
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={3}>
+
+                <Fuel />
+
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={4}>
+
+                <Cost />
+
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={5}>
+
+                <Safety />
+
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={6}>
+
+                <VehicleTag />
+
+              </CustomTabPanel>
+            </Box>
+          </div> */}
+          {/* <div style={{ padding: "20px", zoom: "90%" }}> */}
+            <Box sx={{ width: '100%', typography: 'body1',padding:"20px" }}>
+              <TabContext value={valuedetailstabs}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
+                    <Tab label="Vehicles" value="1" />
+                    <Tab label="Driving" value="2" />
+                    <Tab label="Running" value="3" />
+                    <Tab label="Fuel" value="4" />
+                    <Tab label="Cost" value="5" />
+                    <Tab label="Safety" value="6" />
+                    <Tab label="Vehicle Tag" value="7" />
+                  </TabList>
+                </Box>
+                <TabPanel value="1" >
+                  <Vehicles />
+                </TabPanel>
+
+                <TabPanel value="2" >
+                  <Driving />
+                </TabPanel>
+
+                <TabPanel value="3" >
+                  <Running />
+                </TabPanel>
+
+                <TabPanel value="4" >
+                  <Fuel />
+                </TabPanel>
+
+                <TabPanel value="5" >
+                  <Cost />
+                </TabPanel>
+
+                <TabPanel value="6" >
+                  <Safety />
+                </TabPanel>
+
+                <TabPanel value="7" >
+                  <VehicleTag />
+                </TabPanel>
+
+
+              </TabContext>
+            </Box>
+          {/* </div> */}
+
         </div>
       </div>
     </>

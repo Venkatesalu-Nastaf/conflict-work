@@ -430,7 +430,6 @@ const MailDetails = () => {
             </div>
             <div className="container-right-mailDetails">
               <div className="textbox-mailer">
-
                 <div className="textboxlist-mailer">
                   <div className="textboxlist-customer ">
                     <div className="input-field mailer-search-input-field">

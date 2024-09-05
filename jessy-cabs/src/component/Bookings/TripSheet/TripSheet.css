@@ -574,7 +574,35 @@
 
 @media screen and (min-width: 569px) and (max-width: 867.99px) {
   .tripsheet-vendor-bill-amount-input-field .input {
-    width: 153px !important;
+    width: 124px !important;
+  }
+}
+
+@media screen and (max-width: 568.99px) {
+  .Customer-Customer-Bill-Slider-popup .input-field {
+    display: grid;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 385.99px) {
+  .Customer-Customer-Bill-Slider-popup .input-field .input {
+    width: 180px !important;
+  }
+}
+
+@media screen and (min-width: 569px) and (max-width: 640.99px) {
+
+  .Customer-Customer-Bill-Slider-popup .input-field .input {
+    width: 129px !important;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 867.99px) {
+  .Customer-Customer-Bill-Slider-popup .input-field .input {
+    width: 184px !important;
   }
 }
 

@@ -1,30 +1,57 @@
-.add-vehicle-details-input {
-    display: grid;
-    width: 300px;
-}
-
-.add-vehicle-details-input input {
-    background-color: transparent;
-    border: 1px solid #ccc;
-    padding: 10px 5px;
-    border-radius: 5px;
-}
-
-.add-vehicle-details-main-division {
-    width: 100%;
-    padding: 10px 20px 30px 20px;
-}
-
-.add-vehicle-details-inputfield {
+.ServiceReminder-total {
     display: flex;
-    justify-content: flex-start;
-    gap: 15px 20px;
-    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
 }
 
-.add-vehicle-details-heading {
-    border-bottom: 1px solid #ccc;
-    font-size: 24px;
-    padding-bottom: 3px;
-    margin: 15px 0px;
+.ServiceReminder-section {
+    text-align: center;
+    width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.ServiceReminder-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    /* flex-wrap: wrap; */
+}
+
+@media screen and (min-width:460) and (max-width:662px) {
+    .ServiceReminder-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .ServiceReminder-section {
+        text-align: center;
+        width: 400px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+    }
+}
+@media screen and  (max-width:459.99px) {
+    .ServiceReminder-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .ServiceReminder-section {
+        text-align: center;
+        width: 320px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+    }
 }

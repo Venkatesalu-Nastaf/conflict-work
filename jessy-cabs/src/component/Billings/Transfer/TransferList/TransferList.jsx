@@ -54,6 +54,7 @@ const TransferList = ({ stationName, organizationNames }) => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
+console.log(rows,'data11');
 
     useEffect(() => {
         if (actionName === 'List') {

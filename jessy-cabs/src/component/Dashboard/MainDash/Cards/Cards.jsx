@@ -12,31 +12,21 @@ const apiUrl = APIURL;
 
 const Cards = () => {
 
-  const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
   const [backendmonth, setBackendmonth] = useState([])
   const [billinggraph, setBillingGraph] = useState([])
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-   const {totalAmountSum} = useCard();
-   console.log(totalAmountSum,'totalsum');
-   
-  function getCurrentMonth() {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // Returns a number between 0 and 11
-    return currentMonth.toString(); // Convert to string for comparison with option values
-  };
+  const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
+
 
   const formatNumber = (number) => {
     return numbro(number).format({
-        average: true,
-        totalLength: 3,
-        mantissa: 1, // to keep one decimal place for numbers like 1.7 lakh
+      average: true,
+      totalLength: 3,
+      mantissa: 1, // to keep one decimal place for numbers like 1.7 lakh
     });
-};
-
-
-
+  };
 
   const fetchDataFromBackend = async (month) => {
     try {
@@ -79,8 +69,7 @@ const Cards = () => {
   };
 
   const storedSums = JSON.parse(localStorage.getItem('sumValues'));
-  const formattedNumber = formatNumber(storedSums?.totalAmountSum );
-  console.log(formattedNumber,'form');
+  const formattedNumber = formatNumber(storedSums?.totalAmountSum);
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
 
@@ -182,7 +171,7 @@ const Cards = () => {
     <div className="cards-container">
       <div className="card-filter">
         <label className="card-filter-label" htmlFor="month">Select Month</label>
-        <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
+        {/* <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
           <option value="0">January</option>
           <option value="1">February</option>
           <option value="2">March</option>
@@ -195,6 +184,20 @@ const Cards = () => {
           <option value="9">October</option>
           <option value="10">November</option>
           <option value="11">December</option>
+        </select> */}
+        <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
         </select>
       </div>
       <div className="Cards" >

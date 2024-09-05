@@ -7,7 +7,13 @@ const useCard = () => {
     const [totalAmountSum, setTotalAmountSum] = useState(0);
     const [totalCollectedSum, setTotalCollectedSum] = useState(0);
     const [totalBalanceSum, setTotalBalanceSum] = useState(0);
+    const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
 
+    function getCurrentMonth() {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // Returns a number between 0 and 11
+        return currentMonth.toString(); // Convert to string for comparison with option values
+      };
     const apiUrl = APIURL;
 
     useEffect(() => {
@@ -46,7 +52,9 @@ const useCard = () => {
         billAmount,
         totalAmountSum,
         totalCollectedSum,
-        totalBalanceSum
+        totalBalanceSum,
+        selectedMonth2,
+        setSelectedMonth2
     }
 }
 export default useCard;

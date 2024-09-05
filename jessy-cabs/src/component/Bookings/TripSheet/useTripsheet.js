@@ -3117,9 +3117,25 @@ const useTripsheet = () => {
         // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
         // handleChange({ target: { name: "vehType", value: params.vehType } })
-        handleChange({ target: { name: "vehType", value: params.vehType } })
 
-    };
+
+        // new code..............
+        const keys = Object.keys(params);
+        keys.forEach(key => {
+            const value = params[key];
+            if(key !== "rateType"){
+              handleChange({ target: { name: key, value: value } });
+            }
+            
+          });
+        //   ----------------------------------
+
+           // handleChange({ target: { name: "vehType", value: params.vehType } })
+        }
+       
+      
+
+
 
 
 

@@ -1111,6 +1111,43 @@ const useBooking = () => {
     setImageDialogOpen(false)
   }
 
+const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
+  const logupdatabookdetails=updatebook
+  try{
+   const modedata=isEditMode ? "Edited": "create"
+   console.log(updatebook,"logbook")
+    const updatedBooklogdetails = {
+
+      bookingtime:logupdatabookdetails.bookingtime,
+      bookingdate:logupdatabookdetails.bookingdate,
+      starttime:formData.starttime || selectedCustomerData.starttime || book.starttime ,
+      status:logupdatabookdetails.status,
+      guestname:logupdatabookdetails.guestname,
+      guestmobileno:logupdatabookdetails.guestmobileno,
+      address1:logupdatabookdetails.address1,
+      vehicleName:logupdatabookdetails.vehicleName,
+      startdate:logupdatabookdetails.startdate,
+      duty:logupdatabookdetails.duty,
+      useage:logupdatabookdetails.useage,
+      travelsname:logupdatabookdetails.travelsname,
+      vehRegNo:logupdatabookdetails.vehRegNo,
+      // customer:logupdatabookdetails.customer,
+      customer:formData.customer ||selectedCustomerData.customer ||selectedCustomerDatas.customer ||book.customer,
+      Log_Date:getCurrentTime(),
+      Log_Time:dayjs(),
+      mode:modedata,
+      bookingno:lastBookinglogno,
+      driverName:logupdatabookdetails.driverName,
+      username:logupdatabookdetails.username
+
+    };
+    console.log(updatedBooklogdetails,"boookup")
+    await axios.post(`${apiUrl}/bookinglogDetails`,updatedBooklogdetails)
+  }
+  catch(err){
+    console.log(err,"err")
+  }
+}
 
   //------------------------------------------------------
 
@@ -1138,11 +1175,11 @@ const useBooking = () => {
       setErrorMessage("Enter starting Time")
       return
     }
-    if (!selectedCustomerData.reporttime) {
-      setError(true)
-      setErrorMessage("Enter Report Time")
-      return
-    }
+    // if (!selectedCustomerData.reporttime) {
+    //   setError(true)
+    //   setErrorMessage("Enter Report Time")
+    //   return
+    // }
     if (!selectedCustomerData.guestname) {
       setError(true)
       setErrorMessage("Enter GuestName")
@@ -1153,12 +1190,13 @@ const useBooking = () => {
       setErrorMessage("Enter Address Details");
       return;
     }
-    const customer = book.status;
-    if (customer === "") {
-      setError(true);
-      setErrorMessage("Fill mandatory fields");
-      return;
-    }
+    // const customer = book.status;
+    // console.log(customer,"dtata")
+    // if (customer === "") {
+    //   setError(true);
+    //   setErrorMessage("Fill mandatory fields");
+    //   return;
+    // }
 
     try {
       setDatatrigger(!datatrigger)
@@ -1219,7 +1257,6 @@ const useBooking = () => {
         // orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
       };
-
       // console.log("updatedBook", updatedBook)
 
       setSendmailGuestsms(true)
@@ -1227,7 +1264,7 @@ const useBooking = () => {
 
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-
+     
       //image upload
       await Promise.all(selectetImg?.map(async (img) => {
         const createddata=dayjs().format('YYYY-MM-DD')
@@ -1237,6 +1274,8 @@ const useBooking = () => {
         formImageData.append("created_at",createddata);
         await axios.post(`${apiUrl}/upload-booking-image`, formImageData)
       }))
+      handlebooklogDetails(updatedBook,lastBookingno)
+      
       setImagedata([])
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
@@ -1267,12 +1306,14 @@ const useBooking = () => {
           row.bookingno === selectedCustomerData.bookingno ||
           formData.bookingno
       );
+      
 
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate ||book.bookingdate || dayjs();
       const selectedbookingtime=selectedCustomerData.bookingtime || formData.bookingtime ||book.bookingtime || getCurrentTime();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
+
        
       // let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
@@ -1331,10 +1372,13 @@ const useBooking = () => {
       const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
         updatedCustomer
       )
+      handlebooklogDetails(updatedCustomer,editbookno)
+      
       if (response.data.success) {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
+          
           if (sendEmail) {
             handlecheck(editbookno);
           }
@@ -1511,6 +1555,7 @@ const useBooking = () => {
           `${apiUrl}/drivername-detailsaccountbooking/${event.target.value}`
         );
         const vehicleData = response.data;
+        console.log(vehicleData,"data")
         // const transformedRows = vehicleData.map(transformRow);
 
         // setRowsdriver(transformedRows)
@@ -1743,6 +1788,7 @@ const travelsdatafetch = async (travelsnamedata) => {
   try {
       const response = await axios.get(`${apiUrl}/travelsnamedetailfetchbooking/${travelsnamedata}`)
       const data = response.data
+      console.log(data,"tr")
    
       setRowsdriver(data)
 

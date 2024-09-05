@@ -2738,6 +2738,7 @@ const Booking = ({ stationName, customerData }) => {
                           <th className="table-head-booking table-heading-first">Driver_NAME</th>
                           <th className="table-head-booking">VEHICLE_Name</th>
                           <th className="table-head-booking">VEHICLE NO</th>
+                          <th className="table-head-booking">Travels_Name</th>
                           {/* <th className="table-head-booking">HIRE TYPES</th> */}
                           {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
                         </tr>
@@ -2757,6 +2758,7 @@ const Booking = ({ stationName, customerData }) => {
                               <td>{row.driverName}</td>
                               <td>{row.vehType}</td>
                               <td>{row.vehRegNo}</td>
+                              <td>{row.travelsname}</td>
                               {/* <td>{row.hireTypes}</td> */}
                               {/* <td>{row.active}</td> */}
                             </tr>

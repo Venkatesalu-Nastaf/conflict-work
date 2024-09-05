@@ -370,18 +370,21 @@ const useAccountinfo = () => {
     if (name === "vehRegNo") {
 
       const selectedOrder = vechiledata?.find(option => option?.vehRegNo === value?.label);
+     
       if (selectedOrder) {
 
         setBook(prevState => ({
           ...prevState,
           vehRegNo: value?.label,
-          driverName: selectedOrder.driverName
+          driverName: selectedOrder.driverName,
+          vehicleInfo: selectedOrder.hiretypes
         }));
 
         setSelectedCustomerData(prevState => ({
           ...prevState,
           vehRegNo: value?.label,
-          driverName: selectedOrder.driverName
+          driverName: selectedOrder.driverName,
+          vehicleInfo: selectedOrder.hiretypes
         }));
       }
     }
@@ -550,16 +553,16 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Vehicle info fields");
       return;
     }
-    if (!ratetype) {
-      setWarning(true);
-      setWarningMessage("Fill Rate Type fields");
-      return;
-    }
-    if (!vehRegNo) {
-      setWarning(true);
-      setWarningMessage("Fill VehRegno fields");
-      return;
-    }
+    // if (!ratetype) {
+    //   setWarning(true);
+    //   setWarningMessage("Fill Rate Type fields");
+    //   return;
+    // }
+    // if (!vehRegNo) {
+    //   setWarning(true);
+    //   setWarningMessage("Fill VehRegno fields");
+    //   return;
+    // }
     if (cerendentialdata === true) {
       setWarning(true);
       setWarningMessage(" travelsname Already Exists");

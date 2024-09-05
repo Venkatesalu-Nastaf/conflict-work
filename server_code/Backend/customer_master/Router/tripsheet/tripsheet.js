@@ -1501,13 +1501,14 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
 
     // Execute the query with dynamic parameters 
     db.query(sql, [duty, VehicleName, OrganizationName, ratetype, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
+        console.log(results,"s")
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
         }
 
         // Send the fetched row in the response
-        console.log(results[0])
+        console.log(results[0],"supplier")
         res.json(results[0]);
     });
 });

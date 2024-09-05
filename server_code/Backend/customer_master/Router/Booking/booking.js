@@ -32,25 +32,27 @@ router.post('/booking', async (req, res) => {
         }
     });
 
-    // try {
-    //     const response = await db.query('INSERT INTO booking SET ?', [bookData])
-    //     console.log("res-------------", response)
-    //     res.json({
-    //         message: "Booking successful",
-    //         error: false,
-    //         success: true,
-    //         data: response
-    //     })
-    // } catch (err) {
-    //     console.log("err", err)
-    //     res.status(500).json({
-    //         message: err.message,
-    //         success: false,
-    //         error: true
-    //     })
-    // }
-
 });
+router.post('/bookinglogDetails', async (req, res) => {
+    const bookData = req.body;
+    // console.log(bookData)
+
+    db.query('INSERT INTO BookingLogDetails SET ?', bookData, (err, result) => {
+        if (err) {
+          console.log(err)
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+
+        // Check if the insertion was successful (affectedRows > 0)
+        if (result.affectedRows ===  0) {
+            return res.status(400).json("data not inserted succefully")
+        } 
+        // console.log(result,"log")
+
+            return res.status(200).json("data not inserted succefully")
+        
+    });
+})
 
 // collect details from Booking
 router.get('/booking/:bookingno', (req, res) => {
@@ -127,6 +129,7 @@ router.put('/booking/:bookingno', async (req, res) => {
         if (checkBookingId.length > 0) return res.json({ message: "This Booking dosen't allowed to edit", error: false, success: true })
 
         // Update the booking
+        console.log(updatedCustomerData,"cuuu")
         const updateResult = await query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno])
         if (updateResult.affectedRows === 0) return res.json({ message: "Booking Id not found", error: false, success: true });
 
@@ -278,16 +281,26 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
     console.log("customer", customer);
 
     // Query to perform left joins
+    // const query = `
+    //     SELECT 
+    //         ai.*,
+    //         vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
+    //         dc.Mobileno As mobileNo
+    //     FROM accountinfo ai
+    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+    // `;
     const query = `
-        SELECT 
-            ai.*,
-            vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
-            dc.Mobileno As mobileNo
-        FROM accountinfo ai
-        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-        WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-    `;
+    SELECT 
+        ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
+        vi.Groups,vi.vehicleName As vehicleName2, vi.vehType, 
+        dc.Mobileno As mobileNo
+    FROM accountinfo ai
+    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+`;
 
     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
         if (err) {
@@ -310,10 +323,20 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     console.log("customer", travelname);
 
     // Query to perform left joins
+    // const query = `
+    //     SELECT 
+    //         ai.*,
+    //         vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
+    //         dc.Mobileno As mobileNo
+    //     FROM accountinfo ai
+    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    //     WHERE ai.travelsname=?
+    // `;
     const query = `
         SELECT 
-            ai.*,
-            vi.Groups, vi.hiretypes, vi.vehicleName As vehicleName2, vi.vehType, 
+             ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
+            vi.Groups, vi.vehicleName As vehicleName2, vi.vehType, 
             dc.Mobileno As mobileNo
         FROM accountinfo ai
         LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
@@ -341,6 +364,36 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
 
 // --------------------------------this for booking travelsname------------------------------------------------------------
 
+// router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
+//     const travelname = req.params.travelname;
+//     console.log("customer", travelname);
+
+//     // Query to perform left joins
+//     const query = `
+//         SELECT 
+//             ai.*,
+//             vi.Groups, vi.hiretypes as hireTypes, vi.vehicleName, vi.vehType as vehiclemodule, 
+//             dc.Mobileno As mobileNo
+//         FROM accountinfo ai
+//         LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+//         LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+//         WHERE ai.travelsname=?
+//     `;
+
+//     db.query(query, [travelname], (err, result) => {
+//         if (err) {
+//             console.log(err)
+//             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'Customer not found' });
+//         }
+
+//         console.log(result,"travelanemadata")
+//         return res.status(200).json(result);
+//     });
+// });
+
 router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
     const travelname = req.params.travelname;
     console.log("customer", travelname);
@@ -348,8 +401,8 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
     // Query to perform left joins
     const query = `
         SELECT 
-            ai.*,
-            vi.Groups, vi.hiretypes as hireTypes, vi.vehicleName, vi.vehType as vehiclemodule, 
+            ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+            vi.Groups,vi.vehicleName, vi.vehType as vehiclemodule, 
             dc.Mobileno As mobileNo
         FROM accountinfo ai
         LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
@@ -378,16 +431,26 @@ router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
     console.log("customer", customer);
 
     // Query to perform left joins
+    // const query = `
+    //     SELECT 
+    //         ai.*,
+    //         vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
+    //         dc.Mobileno As mobileNo
+    //     FROM accountinfo ai
+    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+    // `;
     const query = `
-        SELECT 
-            ai.*,
-            vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
-            dc.Mobileno As mobileNo
-        FROM accountinfo ai
-        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-        WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-    `;
+    SELECT 
+         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+        vi.Groups,vi.vehicleName,vi.vehType as vehiclemodule, 
+        dc.Mobileno As mobileNo
+    FROM accountinfo ai
+    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+`;
 
     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
         if (err) {
@@ -856,6 +919,14 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
     });
 });
 
+router.get('/bookinglogdetailsget/:bookno', (req, res) => {
+    const id = req.params.bookno
+    const sql = 'select * from BookingLogDetails where bookingno=?';
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.json({ Message: "error" })
+        return res.json(result);
+    })
+})
 
 
 

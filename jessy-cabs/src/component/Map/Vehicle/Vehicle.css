@@ -217,3 +217,12 @@
     color: #457cdc;
     font-size: 18px;
 } */
+
+.vehicle-main-content-form{
+    /* overflow-x: hidden; */
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 0px 20px;
+    color: #000;
+    zoom: 90%;
+}

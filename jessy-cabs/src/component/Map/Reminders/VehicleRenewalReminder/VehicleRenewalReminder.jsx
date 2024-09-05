@@ -35,12 +35,12 @@ const VehicleRenewalReminder = () => {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'vehicle', headerName: 'Vehicle', width: 130 },
-    { field: 'vehicleRenewalType', headerName: 'Vehicle Renewal Type', width: 160 },
-    { field: 'dueDate', headerName: 'Due Date', width: 130 },
-    { field: 'subscribers', headerName: 'Subscribers', width: 130 },
-    { field: 'actions', headerName: 'Actions', width: 130 },
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'vehicle', headerName: 'Vehicle', width: 250 },
+    { field: 'vehicleRenewalType', headerName: 'Vehicle Renewal Type', width: 250 },
+    { field: 'dueDate', headerName: 'Due Date', width: 250 },
+    { field: 'subscribers', headerName: 'Subscribers', width: 250 },
+    { field: 'actions', headerName: 'Actions', width: 250 },
   ];
 
   const rows = [
@@ -65,9 +65,9 @@ const VehicleRenewalReminder = () => {
     setOpenFilter(false);
   };
   return (
-    <div style={{ width: '100%', padding: '20px' }}>
+    <div className='VehicleRenewalReminder' >
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '20px', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '20px', gap: '20px',flexWrap:"wrap" }}>
           <div>
             <Box sx={{ minWidth: 150 }}>
               <FormControl fullWidth>
@@ -183,12 +183,12 @@ const VehicleRenewalReminder = () => {
           </DialogActions>
         </Dialog>
       </React.Fragment>
-      <div style={{ display: 'flex', gap: '20px', fontSize: '18px', marginBottom: '5px' }}>
+      <div style={{ display: 'flex', gap: '20px', fontSize: '18px', marginBottom: '5px', flexWrap:"wrap"}}>
         <span>Total: <span>11</span></span>
         <span>Overdue: <span>1</span></span>
         <span>Due Soon: <span>0</span></span>
       </div>
-      <div className='bill-wise-reciept-table' style={{ width: 'fit-content' }}>
+      <div className='bill-wise-reciept-table-VehicleRenewal' >
         <Box
           sx={{
             height: 400,

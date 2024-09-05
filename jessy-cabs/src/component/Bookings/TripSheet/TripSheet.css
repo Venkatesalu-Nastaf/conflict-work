@@ -197,8 +197,8 @@
 } */
 
 .time input {
-  margin-top: 10px;
-  margin-bottom: 25px;
+  margin-top: 0px;
+  /* margin-bottom: 25px; */
   background: transparent;
   text-align: inherit;
   border: 1px solid #457cdc;
@@ -476,6 +476,7 @@
   background-color: transparent;
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 5px;
+  padding: 4px;
 }
 
 .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
@@ -488,10 +489,18 @@
 
 .tripsheet-top-division-date input {
   border: none !important;
-  padding: 5px 0px 2px 5px !important;
+  padding: 8px 0px 6px 5px !important;
   width: 84px;
   font-size: 13px;
   border-radius: 0px;
+}
+
+.tripsheet-top-division-dropdown input {
+  padding: 8px 0px 6px 5px !important;
+}
+
+.tripsheet-top-division-date .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+  padding-top: 7px;
 }
 
 .tripsheet-top-division-date button {
@@ -570,40 +579,43 @@
 }
 
 @media screen and (min-width: 992px) {
-  .tripsheet-popup-vendor-bill-vendor-info-main .input-field .input{
+  .tripsheet-popup-vendor-bill-vendor-info-main .input-field .input {
     width: 190px !important;
   }
 
-  .Customer-Customer-Bill-Slider-popup .input-field .input{
+  .Customer-Customer-Bill-Slider-popup .input-field .input {
     width: 190px !important;
   }
 
-  .tripsheet-vendor-info-main-popup .input-field .input{
+  .tripsheet-vendor-info-main-popup .input-field .input {
     width: 165px !important;
   }
 
-  .tripsheet-vendor-info-first-input-field .input{
+  .tripsheet-vendor-info-first-input-field .input {
     width: 200px !important;
   }
 }
 
-.Customer-Customer-Bill-Slider-popup .input-field{
+.Customer-Customer-Bill-Slider-popup .input-field {
   margin-bottom: 10px;
 }
 
-.tripsheet-calculate-popup-main{
+.tripsheet-calculate-popup-main {
   border: none !important;
   box-shadow: none !important;
   padding: 2px;
 }
 
-.llllll .MuiDialog-paperWidthSm{
+.llllll .MuiDialog-paperWidthSm {
   max-width: 1200px !important;
   width: 750px;
 }
 
-.tripsheet-top-division-status-main .MuiOutlinedInput-root.MuiInputBase-sizeSmall{
+.tripsheet-top-division-status-main .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
   padding: 0px !important;
   font-size: 14px;
 }
 
+.icone-margin-adjust {
+  margin-top: 20px;
+}

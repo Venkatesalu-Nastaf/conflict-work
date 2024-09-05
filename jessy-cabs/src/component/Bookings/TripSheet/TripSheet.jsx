@@ -258,8 +258,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     calculateTotalDay,
     calculateTotalTimes,
     handleClickOpen,
-    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm,lockdatavendorbill,setLockDatavendorBill,lockdatacustomerbill,setLockDatacustomerBill,
-    maxconflict,setExtraKM,setextrakm_amount,setExtraHR,setextrahr_amount,
+    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
+    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -425,7 +425,7 @@ const TripSheet = ({ stationName, logoImage }) => {
           }
         }
       } else {
-        return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Fill Date</label>
+        // return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Fill Date</label>
       }
     }
   }
@@ -583,7 +583,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                <span className="d-grid">
+                {/* <span className="d-grid">
                   <div className="tripsheet-top-division-date">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
@@ -598,6 +598,25 @@ const TripSheet = ({ stationName, logoImage }) => {
                         )}
                       </DatePicker>
 
+                    </LocalizationProvider>
+                  </div>
+                </span> */}
+
+                <span className="d-grid">
+                  <label className="tripsheet-top-division-date-label">Tripsheet Date</label>
+                  <div className="tripsheet-top-division-date">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        id="tripsheetdate"
+                        value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                        format="DD/MM/YYYY"
+                        // label='Booking Date'
+                        onChange={(date) => handleDateChange(date, 'tripsheetdate')}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
+                        )}
+                      </DatePicker>
                     </LocalizationProvider>
                   </div>
                 </span>
@@ -1405,7 +1424,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {checkTimeandDateConflict()} */}
 
                   <div style={{ display: "flex", alignItems: 'center' }}>
-                    <div className='icone'>
+                    <div className='icone icone-margin-adjust'>
                       <MdOutlineAccessTimeFilled />
                     </div>
 
@@ -1433,11 +1452,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <div className="input time">
-                  <div className='icone'>
+                  <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
                     {/* {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
 
                     <input
@@ -1464,7 +1483,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div className="input time">
-                  <div className='icone'>
+                  <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
@@ -1494,7 +1513,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div className="input time">
-                  <div className='icone'>
+                  <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
@@ -1539,33 +1558,30 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
                 </div>
-                <div style={{ padding: "10px" }}>
-
-
-                  <label>Total Time</label>
-
-                  <div className="input">
-
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                <div style={{ padding: "10px", display: 'flex', alignItems: 'center' }}>
+                  <div className="icone icone-margin-adjust">
+                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  </div>
+                  <div style={{ display: 'grid', alignItems: 'center' }}>
+                    <label>Total Time</label>
+                    <div className="input">
+                      <TextField
+                        name="totaltime"
+                        // value={ calculateTotalTimes()}
+                        value={
+                          (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                            (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                            ? calculateTotalTimes()
+                            : ""
+                        }
+                        onChange={handleChange}
+                        // label="Total Time"
+                        id="totaltime"
+                        // variant="standard"
+                        size='small'
+                        autoComplete="password"
+                      />
                     </div>
-
-                    <TextField
-                      name="totaltime"
-                      // value={ calculateTotalTimes()}
-                      value={
-                        (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                          (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                          ? calculateTotalTimes()
-                          : ""
-                      }
-                      onChange={handleChange}
-                      // label="Total Time"
-                      id="totaltime"
-                      // variant="standard"
-                      size='small'
-                      autoComplete="password"
-                    />
                   </div>
                 </div>
                 <div className="input" style={{ display: "grid" }} >
@@ -1573,7 +1589,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
-                  <br></br>
+                  {/* <br></br> */}
                   {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
@@ -2482,7 +2498,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="exkm1"
                                   className='customer-bill-input'
                                   value={extraKM || formData.calcPackage || 0}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setExtraKM(e.target.value)
@@ -2506,7 +2522,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='exkmTkm2'
                                   className='customer-bill-input'
                                   value={extrakm_amount || formData.calcPackage || ''}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setextrakm_amount(e.target.value)
@@ -2546,7 +2562,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name="exHrs1"
                                   className='customer-bill-input'
                                   value={extraHR || formData.calcPackage || 0}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setExtraHR(e.target.value)
@@ -2572,7 +2588,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   name='exHrsTHrs2'
                                   className='customer-bill-input'
                                   value={extrahr_amount || formData.calcPackage || 0}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setextrahr_amount(e.target.value)
@@ -2613,7 +2629,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   value={nightBta}
 
                                   // onChange={(e) => setNightBeta(e.target.value)}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setNightBeta(e.target.value)
@@ -2640,7 +2656,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   id="nightThrs2"
                                   value={nightCount}
                                   // onChange={(e) => setNightCount(e.target.value)}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setNightCount(e.target.value)
@@ -2682,7 +2698,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   value={driverBeta}
                                   // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
                                   // onChange={(e) => setdriverBeta(e.target.value)}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setdriverBeta(e.target.value)
@@ -2711,7 +2727,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
 
                                   // onChange={(e) => setdriverbeta_Count(e.target.value)}
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setdriverbeta_Count(e.target.value)
@@ -2735,7 +2751,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
                                   // onChange={(e) => setdriverBeta_amount(e.target.value)}
 
-                                  onChange={(e) =>{
+                                  onChange={(e) => {
 
                                     if (lockdatacustomerbill) {
                                       setdriverBeta_amount(e.target.value)
@@ -3089,17 +3105,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                               </div> */}
                               <div>
-                        {/* <Button onClick={generateLink}>Generate Link</Button> */}
-                        <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                {/* <Button onClick={generateLink}>Generate Link</Button> */}
+                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                        {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
-                          <button>Share on WhatsApp</button>
-                        </WhatsappShareButton>
-                        }
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                }
 
-                        {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
-                      </div>
+                                {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
+                              </div>
                             </div>
 
                             <div className="table-TripSheet">
@@ -3395,7 +3411,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <BackupTableSharpIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     size="small"
                     name="vpermettovendor"
                     value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ""}
@@ -3414,7 +3430,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MinorCrashSharpIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     size="small"
                     name="vendortoll"
                     value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}

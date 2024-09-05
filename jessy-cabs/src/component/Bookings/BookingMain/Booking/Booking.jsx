@@ -397,7 +397,7 @@ const Booking = ({ stationName, customerData }) => {
                 autoFocus
               />
             </div> */}
-            <div className="radio">
+            <div className="radio booking-top-division-status-div">
               <label>Status</label>
               <Box sx={{ width: '100%' }}>
                 <FormControl fullWidth>
@@ -516,7 +516,7 @@ const Booking = ({ stationName, customerData }) => {
             {/* </span> */}
 
             <span className="d-grid">
-              <label>Booking Date</label>
+              <label className="tripsheet-top-division-date-label">Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -540,7 +540,6 @@ const Booking = ({ stationName, customerData }) => {
                       />
                     )}
                   </DatePicker>
-
                 </LocalizationProvider>
               </div>
             </span>
@@ -1973,17 +1972,18 @@ const Booking = ({ stationName, customerData }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>)) : <label> Report Time</label>}
+                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Report time</label>) : (<label>Report Time</label>)) || (!reportTimeVar && <label>Report Time</label>)) : <label> Report Time</label>}
+
 
                   <input
                     type="time"
                     id="starttime"
                     value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
                     onChange={(event) => {
-                      const sTime = event.target.value;
-                      if (reportTimeVar && sTime <= reportTimeVar) {
-                        return;
-                      }
+                      // const sTime = event.target.value;
+                      // if (reportTimeVar && sTime <= reportTimeVar) {
+                      //   return;
+                      // }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });

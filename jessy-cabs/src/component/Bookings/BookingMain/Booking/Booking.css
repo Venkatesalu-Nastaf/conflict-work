@@ -558,6 +558,11 @@
   width: 100%;
 }
 
+.booking-start-time-input{
+  position: relative;
+  top: -12px;
+}
+
 .booking-start-time-input input {
   margin-bottom: 0px !important;
   margin-top: 0px !important;
@@ -581,6 +586,11 @@
   background-color: transparent;
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 5px;
+  padding: 4px;
+}
+
+.booking-top-division-status-div .css-q8hpuo-MuiFormControl-root{
+  padding: 6px 35px 6px 5px;
 }
 
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
@@ -597,6 +607,11 @@
   width: 84px;
   font-size: 13px;
   border-radius: 0px;
+}
+
+.tripsheet-top-division-date-label{
+  position: relative;
+  top: 7px;
 }
 
 .booking-top-division-date button {

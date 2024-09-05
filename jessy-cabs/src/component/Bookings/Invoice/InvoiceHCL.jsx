@@ -105,8 +105,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                     <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}</td>
                                 </tr>
                                 <tr>
-                                    <th id='table-header'>Vehicle Type:</th>
-                                    <td id='table-data'><span>{tripSheetData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType}</span></td>
+                                    <th id='table-header'>Vehicle Name:</th>
+                                    <td id='table-data'><span>{tripSheetData.vehicleName2 || selectedCustomerData.vehicleName2 || selectedCustomerDatas.vehicleName2 || book.vehicleName2}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span >Vehicle No:</span></th>

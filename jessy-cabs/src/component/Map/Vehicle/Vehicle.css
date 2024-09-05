@@ -16,13 +16,14 @@
     width: 100%;
     align-items: center;
     justify-content: flex-end;
-    gap: 0px 20px;
+    gap: 10px 20px;
+    flex-wrap: wrap;
 }
 
-.vehicle-tab-main {
+/* .vehicle-tab-main {
     padding-top: 20px;
     display: flex;
-}
+} */
 
 .vehicle-tab-left-main {
     width: 23%;
@@ -35,26 +36,25 @@
     overflow: auto;
 }
 
-.vehicle-details-section-main {
+/* .vehicle-details-section-main {
     height: 80vh;
     overflow: auto;
-}
+} */
 
-.vehicle-details-box {
+/* .vehicle-details-box {
     display: grid;
     width: fit-content;
     padding: 20px;
-    /* border: 1px solid #ccc; */
     border-radius: 5px;
     margin-bottom: 20px;
     background-color: var(--glass);
     gap: 10px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
+} */
 
-.vehicle-details-box-veh-no {
+/* .vehicle-details-box-veh-no {
     font-weight: 600;
-}
+} */
 
 .vehicle-tab-right-top-division-main {
     border: 1px solid #ccc;
@@ -63,24 +63,24 @@
     background-color: var(--glass);
 }
 
-.vehicle-tab-right-top-division-box {
+/* .vehicle-tab-right-top-division-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+} */
 
 .vehicle-tab-right-top-division-btn-section {
     display: flex;
     gap: 0px 15px;
 }
 
-.vehicle-tab-right-top-division-btn-section-2 {
+/* .vehicle-tab-right-top-division-btn-section-2 {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 0px 15px;
     margin-top: 20px;
-}
+} */
 
 .vehicle-stats-main {
     display: flex;
@@ -124,7 +124,7 @@
     margin-top: 20px;
 }
 
-.vehicle-stats-distance-box-left {
+/* .vehicle-stats-distance-box-left {
     width: 21%;
     border: 1px solid #ccc;
     padding: 20px;
@@ -140,7 +140,7 @@
     padding: 20px;
     border-radius: 10px;
     background-color: var(--glass);
-}
+} */
 
 .vehicle-stats-graph-main {
     display: flex;
@@ -149,7 +149,7 @@
     margin-top: 20px;
 }
 
-.vehicle-stats-graph-left {
+/* .vehicle-stats-graph-left {
     width: 61%;
     border: 1px solid #ccc;
     padding: 20px;
@@ -166,7 +166,7 @@
     gap: 15px;
     text-align: center;
     background-color: var(--glass);
-}
+} */
 
 .vehicle-stats-fuel-cost-main {
     display: flex;
@@ -175,7 +175,7 @@
     margin-top: 20px;
 }
 
-.vehicle-stats-fuel-cost-box {
+/* .vehicle-stats-fuel-cost-box {
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 10px;
@@ -183,7 +183,7 @@
     display: grid;
     text-align: center;
     background-color: var(--glass);
-}
+} */
 
 .edit-driver-details-div{
     display: flex;

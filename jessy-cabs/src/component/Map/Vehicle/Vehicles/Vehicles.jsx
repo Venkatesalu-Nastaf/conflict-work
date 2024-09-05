@@ -128,7 +128,7 @@ const Vehicles = () => {
                             <MenuItem onClick={closeSortOption}>Vehicle Performance Report</MenuItem>
                         </Menu>
                     </div>
-                    <div className='vehicle-details-section-main Scroll-Style'>
+                    <div className='vehicle-details-section-main Scroll-Style-style'>
                         <div className='vehicle-details-box'>
                             <span className='vehicle-details-box-veh-no'>TN22EB3001</span>
                             <span><span>Group: </span><span>Chennai</span></span>

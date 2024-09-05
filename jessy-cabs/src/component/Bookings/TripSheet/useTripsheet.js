@@ -41,6 +41,7 @@ const useTripsheet = () => {
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
     const [additionalTime, setAdditionalTime] = useState('');
+    const [photos, setPhotos] = useState([]);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
@@ -427,6 +428,13 @@ const useTripsheet = () => {
         setimgPopupOpen(true);
         setImageUrl(`${apiUrl}/get-image/${encodedPath}`);
     };
+    // const handleDeletePhoto = (photoToDelete) => {
+    //     setMapImageUrls((prevPhotos) =>
+    //         prevPhotos.filter((photo) => photo !== photoToDelete)
+    //     );
+    //     handleimgPopupClose(); // Close the dialog after deletion
+    // };
+
     const handleimgPopupClose = () => {
         setimgPopupOpen(false);
         setMapimgPopupOpen(false);
@@ -4591,14 +4599,45 @@ const useTripsheet = () => {
         // document.execCommand('copy');
 
         // document.body.removeChild(tempTextarea);
-        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata),"hh")
-        if (generatedLinkdata) {
-            await navigator.clipboard.writeText(generatedLinkdata);
+        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata), "hh")
+        try {
+            // Attempt to use navigator.clipboard.writeText
+            if (navigator.clipboard) {
+                console.log(generatedLinkdata, "linkdata")
+                await navigator.clipboard.writeText(generatedLinkdata);
+                console.log("successfuuly copied")
+                console.log('Link copied to clipboard!');
+                localStorage.setItem("expiredsign", false);
+                localStorage.setItem("expired", false);
+                localStorage.setItem("uploadtollparkdata", false);
+                localStorage.setItem("expireuploadpage", false);
+
+            } else {
+                throw new Error('Clipboard API not supported');
+
+            }
+        } catch (err) {
+            console.error('Failed to copy with Clipboard API, trying fallback:', err);
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = generatedLinkdata;
+            document.body.appendChild(tempTextarea);
+            console.log(tempTextarea, "aree")
+            tempTextarea.select();
+            document.execCommand('copy');
+
+            document.body.removeChild(tempTextarea);
+            localStorage.setItem("expiredsign", false);
+            localStorage.setItem("expired", false);
+            localStorage.setItem("uploadtollparkdata", false);
+            localStorage.setItem("expireuploadpage", false);
         }
-        localStorage.setItem("expiredsign", false);
-        localStorage.setItem("expired", false);
-        localStorage.setItem("uploadtollparkdata", false);
-        localStorage.setItem("expireuploadpage", false);
+        // if (generatedLinkdata) {
+        //     await navigator.clipboard.writeText(generatedLinkdata);
+        // }
+        // localStorage.setItem("expiredsign", false);
+        // localStorage.setItem("expired", false);
+        // localStorage.setItem("uploadtollparkdata", false);
+        // localStorage.setItem("expireuploadpage", false);
 
         setTimeout(() => {
             setSignaturtCopied(false)
@@ -4746,6 +4785,7 @@ const useTripsheet = () => {
         setCloseTime2,
         setStartTime2,
         packageDetails,
+        // handleDeletePhoto,
         calculateExkmAmount,
         calculateExHrsAmount,
         calculateNightAmount,

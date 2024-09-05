@@ -1972,17 +1972,18 @@ const Booking = ({ stationName, customerData }) => {
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Start Time</label>)) || (!reportTimeVar && <label> Start Time</label>)) : <label> Report Time</label>}
+                  {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Report time</label>) : (<label>Report Time</label>)) || (!reportTimeVar && <label>Report Time</label>)) : <label> Report Time</label>}
+
 
                   <input
                     type="time"
                     id="starttime"
                     value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
                     onChange={(event) => {
-                      const sTime = event.target.value;
-                      if (reportTimeVar && sTime <= reportTimeVar) {
-                        return;
-                      }
+                      // const sTime = event.target.value;
+                      // if (reportTimeVar && sTime <= reportTimeVar) {
+                      //   return;
+                      // }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });

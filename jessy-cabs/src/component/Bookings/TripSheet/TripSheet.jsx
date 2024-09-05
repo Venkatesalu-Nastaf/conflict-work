@@ -425,7 +425,7 @@ const TripSheet = ({ stationName, logoImage }) => {
           }
         }
       } else {
-        return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Fill Date</label>
+        // return <label style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Fill Date</label>
       }
     }
   }
@@ -1456,7 +1456,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
                     {/* {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
 
                     <input

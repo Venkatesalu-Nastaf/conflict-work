@@ -60,7 +60,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               </table>
               <table id='table-invoice' className="firstTable">
                 <tr>
-                  <th id='table-header'>Log No:</th>
+                  <th id='table-header'>Trip No:</th>
                   <td id='table-data'>TS{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid}</td>
                 </tr>
                 <tr>
@@ -72,8 +72,8 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}</td>
                 </tr>
                 <tr>
-                  <th id='table-header'>Vehicle Type:</th>
-                  <td id='table-data'><span>{tripSheetData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType}</span></td>
+                  <th id='table-header'>Vehicle Name:</th>
+                  <td id='table-data'><span>{tripSheetData.vehicleName2 || selectedCustomerData.vehicleName2 || selectedCustomerDatas.vehicleName2 || book.vehicleName2}</span></td>
                 </tr>
                 <tr>
                   <th id='table-header'><span >Vehicle No:</span></th>

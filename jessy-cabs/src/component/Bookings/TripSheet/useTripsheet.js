@@ -4597,40 +4597,79 @@ const useTripsheet = () => {
         // console.log(tempTextarea,"aree")
         // tempTextarea.select();
         // document.execCommand('copy');
-
+        function fallbackCopyText(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; // Prevent scrolling to bottom of page in mobile browsers
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Fallback: Copying text command was ' + msg);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+        
+            document.body.removeChild(textArea);
+        }
         // document.body.removeChild(tempTextarea);
         console.log(generatedLinkdata, "grn", typeof (generatedLinkdata), "hh")
-        try {
-            // Attempt to use navigator.clipboard.writeText
-            if (navigator.clipboard) {
-                console.log(generatedLinkdata, "linkdata")
+        if (navigator.clipboard) {
+            console.log(generatedLinkdata, "linkdata");
+        
+            try {
                 await navigator.clipboard.writeText(generatedLinkdata);
-                console.log("successfuuly copied")
+                console.log("Successfully copied");
                 console.log('Link copied to clipboard!');
-                localStorage.setItem("expiredsign", false);
-                localStorage.setItem("expired", false);
-                localStorage.setItem("uploadtollparkdata", false);
-                localStorage.setItem("expireuploadpage", false);
-
-            } else {
-                throw new Error('Clipboard API not supported');
-
+                
+                localStorage.setItem("expiredsign", "false");
+                localStorage.setItem("expired", "false");
+                localStorage.setItem("uploadtollparkdata", "false");
+                localStorage.setItem("expireuploadpage", "false");
+        
+            } catch (error) {
+                console.error("Failed to copy text to clipboard:", error);
+                fallbackCopyText(generatedLinkdata);
             }
-        } catch (err) {
-            console.error('Failed to copy with Clipboard API, trying fallback:', err);
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = generatedLinkdata;
-            document.body.appendChild(tempTextarea);
-            console.log(tempTextarea, "aree")
-            tempTextarea.select();
-            document.execCommand('copy');
-
-            document.body.removeChild(tempTextarea);
-            localStorage.setItem("expiredsign", false);
-            localStorage.setItem("expired", false);
-            localStorage.setItem("uploadtollparkdata", false);
-            localStorage.setItem("expireuploadpage", false);
+        
+        } else {
+            console.error('Clipboard API not supported');
+            fallbackCopyText(generatedLinkdata);
         }
+        // try {
+        //     // Attempt to use navigator.clipboard.writeText
+        //     if (navigator.clipboard) {
+        //         console.log(generatedLinkdata, "linkdata")
+        //         await navigator.clipboard.writeText(generatedLinkdata);
+        //         console.log("successfuuly copied")
+        //         console.log('Link copied to clipboard!');
+        //         localStorage.setItem("expiredsign", false);
+        //         localStorage.setItem("expired", false);
+        //         localStorage.setItem("uploadtollparkdata", false);
+        //         localStorage.setItem("expireuploadpage", false);
+
+        //     } else {
+        //         throw new Error('Clipboard API not supported');
+
+        //     }
+        // } catch (err) {
+        //     console.error('Failed to copy with Clipboard API, trying fallback:', err);
+        //     const tempTextarea = document.createElement('textarea');
+        //     tempTextarea.value = generatedLinkdata;
+        //     document.body.appendChild(tempTextarea);
+        //     console.log(tempTextarea, "aree")
+        //     tempTextarea.select();
+        //     document.execCommand('copy');
+
+        //     document.body.removeChild(tempTextarea);
+        //     localStorage.setItem("expiredsign", false);
+        //     localStorage.setItem("expired", false);
+        //     localStorage.setItem("uploadtollparkdata", false);
+        //     localStorage.setItem("expireuploadpage", false);
+        // }
         // if (generatedLinkdata) {
         //     await navigator.clipboard.writeText(generatedLinkdata);
         // }

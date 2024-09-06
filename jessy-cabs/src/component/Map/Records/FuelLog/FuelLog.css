@@ -1,0 +1,11 @@
+
+.FuelLog-history-btns{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-around;
+}
+.Fuellog-total-history{
+    display: block;
+    width: 100%;
+}

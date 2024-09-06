@@ -1239,7 +1239,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-
+                <div className="input">
+                  <div className="icone">
+                    <RecentActorsIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
+                    onChange={handleChange}
+                    name="employeeno"
+                    label="Employee No"
+                    id="employeeno"
+                    autoComplete="password"
+                  />
+                </div>
 
                 <div className="input">
                   <div className="icone">
@@ -1562,7 +1575,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="icone icone-margin-adjust">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
-                  <div style={{ display: 'grid', alignItems: 'center' }}>
+                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' }}>
                     <label>Total Time</label>
                     <div className="input">
                       <TextField
@@ -2787,9 +2800,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <TabPanel value={3} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div className="input-field">
-                              <div className="input">
+                              {/* <div className="input">
                                 <Button variant='outlined' className='full-width'>View GPS TripSheet</Button>
-                              </div>
+                              </div> */}
                               <div className="input">
                                 <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
                               </div>
@@ -2803,9 +2816,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </Button>
                                 </DialogActions>
                               </Dialog>
-                              {/* <div className="input">
+                              <div className="input">
                                 <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
-                              </div> */}
+                              </div>
                               <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
                                 <DialogContent>
                                   <div className="table-customer-lists">
@@ -3597,20 +3610,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 </div>
 
-                <div className="input">
-                  <div className="icone">
-                    <RecentActorsIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
-                    onChange={handleChange}
-                    name="employeeno"
-                    label="Employee No"
-                    id="employeeno"
-                    autoComplete="password"
-                  />
-                </div>
+
                 <div className="input">
                   <div className="icone">
                     <CurrencyRupeeTwoToneIcon color="action" />

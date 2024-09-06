@@ -647,3 +647,7 @@
 .icone-margin-adjust {
   margin-top: 20px;
 }
+
+.tripsheet-total-time-div input {
+  padding-top: 15px;
+}

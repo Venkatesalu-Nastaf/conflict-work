@@ -11,9 +11,11 @@ const useCard = () => {
 
     function getCurrentMonth() {
         const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Returns a number between 0 and 11
-        return currentMonth.toString(); // Convert to string for comparison with option values
-      };
+
+        const currentMonth = currentDate.getMonth() + 1; // Returns a number between 0 and 11
+
+        return currentMonth.toString();
+    };
     const apiUrl = APIURL;
 
     useEffect(() => {

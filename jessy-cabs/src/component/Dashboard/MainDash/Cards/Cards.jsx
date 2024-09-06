@@ -20,15 +20,85 @@ const Cards = () => {
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
 
 
-  const formatNumber = (number) => {
-    return numbro(number).format({
-      average: true,
-      totalLength: 3,
-      mantissa: 1, // to keep one decimal place for numbers like 1.7 lakh
-    });
+  const TotalNumber = (number) => {
+    const TotalValue = number.toString();
+
+    if (TotalValue.length === 5) {
+      const remove = TotalValue.slice(0, -3) + "K";
+      return remove;
+    }
+
+    if (TotalValue.length === 6) {
+      const lakhValue = (number / 100000).toFixed(2); 
+      const formatted = lakhValue + " Lakh"; 
+      return formatted;
+    }
+    if (TotalValue.length === 7) {
+      const lakhValue = (number / 100000).toFixed(2); // Divide by 1 lakh and keep two decimal places
+      const formatted = lakhValue + " Lakh"; // Append 'Lakh'
+      return formatted;
+    }
+    if(TotalValue.length === 8){
+      const croreValue = (number /10000000).toFixed(2)
+      const formatted = croreValue + " Crore";
+      return formatted
+    }
+
+    return number;
+
   };
 
+
+  const PendingNumber = (number) => {
+    const PendingValue = number.toString();
+
+    if (PendingValue.length === 5) {
+      const remove = PendingValue.slice(0, -3) + "K";
+      return remove;
+    }
+
+    // For numbers in lakhs (6 digits)
+    if (PendingValue.length === 6) {
+      const lakhValue = (number / 100000).toFixed(2); 
+      const formatted = lakhValue + " Lakh"; 
+      return formatted;
+    }
+    if (PendingValue.length === 7) {
+      const lakhValue = (number / 100000).toFixed(2); // Divide by 1 lakh and keep two decimal places
+      const formatted = lakhValue + " Lakh"; // Append 'Lakh'
+      return formatted;
+    }
+
+
+    return number;
+  };
+
+
+  const CollectedNumber = (number) => {
+    const CollectedValue = number.toString();
+
+    if (CollectedValue.length === 5) {
+      const remove = CollectedValue.slice(0, -3) + "K";
+      return remove;
+    }
+
+    // For numbers in lakhs (6 digits)
+    if (CollectedValue.length === 6) {
+      const lakhValue = (number / 100000).toFixed(2); // Divide by 1 lakh and keep two decimal places
+      const formatted = lakhValue + " Lakh"; // Append 'Lakh'
+      return formatted;
+    }
+    if (CollectedValue.length === 7) {
+      const lakhValue = (number / 100000).toFixed(2); // Divide by 1 lakh and keep two decimal places
+      const formatted = lakhValue + " Lakh"; // Append 'Lakh'
+      return formatted;
+    }
+
+    return number;
+  }
+
   const fetchDataFromBackend = async (month) => {
+    
     try {
       const response = await fetch(`${apiUrl}/total_amounts_from_billing?month=${month}`);
       if (!response.ok) {
@@ -50,6 +120,7 @@ const Cards = () => {
   };
 
   const fetchMonthlyDataFromBackend = async (month) => {
+
     try {
       const response = await fetch(`${apiUrl}/monthly_data2?month=${month}`);
       if (!response.ok) {
@@ -69,7 +140,10 @@ const Cards = () => {
   };
 
   const storedSums = JSON.parse(localStorage.getItem('sumValues'));
-  const formattedNumber = formatNumber(storedSums?.totalAmountSum);
+  const TotalValueNumber = TotalNumber(storedSums?.totalAmountSum);
+  const PendingValueNumber = PendingNumber(storedSums?.totalBalanceSum);
+  const CollectedValueNumber = CollectedNumber(storedSums?.totalCollectedSum)
+
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
 
@@ -124,7 +198,7 @@ const Cards = () => {
       value: lastMonthTotalAmount.toLocaleString(),
       png: FaRupeeSign,
       series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
-      totalamount: storedSums?.totalAmountSum || 0
+      totalamount: TotalValueNumber || 0
     },
     {
       title: "Recived",
@@ -136,7 +210,7 @@ const Cards = () => {
       value: lastMonthTotalPaid.toLocaleString(),
       png: FaRegMoneyBillAlt,
       series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
-      totalamount: storedSums?.totalCollectedSum || 0
+      totalamount: CollectedValueNumber || 0
     },
     {
       title: "Pending",
@@ -148,7 +222,7 @@ const Cards = () => {
       value: lastMonthTotalPending.toLocaleString(),
       png: BiPaste,
       series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
-      totalamount: storedSums?.totalBalanceSum || 0
+      totalamount: PendingValueNumber || 0
     },
   ];
 
@@ -186,15 +260,15 @@ const Cards = () => {
           <option value="11">December</option>
         </select> */}
         <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
           <option value="10">October</option>
           <option value="11">November</option>
           <option value="12">December</option>

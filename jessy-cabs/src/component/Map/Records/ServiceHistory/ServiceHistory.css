@@ -1,0 +1,15 @@
+.service-history{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.service-history-btns{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-around;
+}
+.service-total-history{
+    display: block;
+    width: 100%;
+}

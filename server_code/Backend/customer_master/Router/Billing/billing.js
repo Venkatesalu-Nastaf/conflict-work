@@ -332,80 +332,101 @@ router.get('/Group-Billing', (req, res) => {
   });
 });
 
-
-//-----------------------------------------------
 router.get('/tripsheet-keydown/:tripid', async (req, res) => {
   const tripid = req.params.tripid;
-  const username = req.query.loginUserName;
 
-  let data = '';
+  const query = `
+    SELECT * FROM tripsheet 
+    WHERE tripid = ? 
+    AND status = "Closed" 
+    AND (Billed_Status IS NULL 
+    OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed"))
+  `;
 
-  if (!username) {
-    return res.status(500).json({ error: "username is undefined" })
-  }
-
-  db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: "there some issue ffetching station name " })
+  db.query(query, [tripid], (error, result) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Database query failed' });
     }
-    data = await results[0]?.Stationname;
-    //------------------------------------------------------------
-    if (data && data.toLowerCase() === "all") {
-      // Fetch by All
-      await db.query(
-        `SELECT * FROM tripsheet 
-         WHERE tripid = ? 
-         AND status = "Closed" 
-         AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))`,
-        [tripid],
-        (err, result) => {
-          if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-          }
-          if (result.length === 0) {
-            return res.status(404).json({ error: 'Booking not found' });
-          }
-
-          const bookingDetails = result[0];
-          return res.status(200).json(bookingDetails);
-        }
-      );
-    }
-
-    // if (data && data.toLowerCase() === "all") {
-    //   // its for fetch by All
-    //   await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed")`, tripid, (err, result) => {
-    //     if (err) {
-    //       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-    //     }
-    //     if (result.length === 0) {
-    //       return res.status(404).json({ error: 'Booking not found' });
-    //     }
-    //     console.log(result,'india');
-
-    //     const bookingDetails = result[0]; // Assuming there is only one matching booking
-    //     return res.status(200).json(bookingDetails);
-    //   });
-    // }
-    else if (data) {
-      // its for fetch by All
-      // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Transfer_Closed" AND department=${data}`, tripid, (err, result) => {
-      await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed" OR Billed_Status!="Individual_Billed") AND department=${data}`, tripid, (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-        }
-        if (result.length === 0) {
-          return res.status(404).json({ error: 'Booking not found' });
-        }
-        const bookingDetails = result[0]; // Assuming there is only one matching booking
-        return res.status(200).json(bookingDetails);
-      });
-    } else {
-      return res.status(500).json({ error: 'there is some ISSUE ' });
-    }
-    //----------------------------------------------------------
-  })
+    return res.status(200).json(result);
+  });
 });
+
+
+
+//-----------------------------------------------
+// router.get('/tripsheet-keydown/:tripid', async (req, res) => {
+//   const tripid = req.params.tripid;
+//   const username = req.query.loginUserName;
+
+//   let data = '';
+
+//   if (!username) {
+//     return res.status(500).json({ error: "username is undefined" })
+//   }
+
+//   db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+//     if (err) {
+//       return res.status(500).json({ error: "there some issue ffetching station name " })
+//     }
+//     data = await results[0]?.Stationname;
+//     //------------------------------------------------------------
+//     if (data && data.toLowerCase() === "all") {
+//       // Fetch by All
+//       await db.query(
+//         `SELECT * FROM tripsheet 
+//          WHERE tripid = ? 
+//          AND status = "Closed" 
+//          AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))`,
+//         [tripid],
+//         (err, result) => {
+//           if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//           }
+//           if (result.length === 0) {
+//             return res.status(404).json({ error: 'Booking not found' });
+//           }
+
+//           const bookingDetails = result[0];
+//           return res.status(200).json(bookingDetails);
+//         }
+//       );
+//     }
+
+//     if (data && data.toLowerCase() === "all") {
+//       // its for fetch by All
+//       await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed")`, tripid, (err, result) => {
+//         if (err) {
+//           return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//         }
+//         if (result.length === 0) {
+//           return res.status(404).json({ error: 'Booking not found' });
+//         }
+//         console.log(result,'india');
+
+//         const bookingDetails = result[0]; // Assuming there is only one matching booking
+//         return res.status(200).json(bookingDetails);
+//       });
+//     }
+//     else if (data) {
+//       // its for fetch by All
+//       // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Transfer_Closed" AND department=${data}`, tripid, (err, result) => {
+//       await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status ="Closed" AND (Billed_Status IS NULL OR Billed_Status != "Covering_Closed" OR Billed_Status!="Covering_Billed OR Billed_Status != "Transfer_Closed" OR Billed_Status!="Transfer_Billed" OR Billed_Status!="Individual_Billed") `, tripid, (err, result) => {
+//         if (err) {
+//           return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//         }
+//         if (result.length === 0) {
+//           return res.status(404).json({ error: 'Booking not found' });
+//         }
+//         const bookingDetails = result[0]; // Assuming there is only one matching booking
+//         return res.status(200).json(bookingDetails);
+//       });
+//     } else {
+//       return res.status(500).json({ error: 'there is some ISSUE ' });
+//     }
+//     //----------------------------------------------------------
+//   })
+// });
 //--------------------------------------------
 
 

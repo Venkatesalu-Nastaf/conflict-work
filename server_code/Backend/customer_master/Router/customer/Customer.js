@@ -55,6 +55,15 @@ router.delete('/customers/:customerId', (req, res) => {
   });
 });
 
+router.get('/customers', (req, res) => {
+  db.query('SELECT * FROM customers', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
 // Update Customer Master details
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;

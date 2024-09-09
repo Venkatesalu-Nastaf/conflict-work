@@ -795,6 +795,7 @@ const Customer = ({ stationName }) => {
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
+
                 <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>

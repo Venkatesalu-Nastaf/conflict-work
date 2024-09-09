@@ -21,6 +21,9 @@ const Cards = () => {
 
 
   const TotalNumber = (number) => {
+    if (!number || isNaN(number)) {
+      return number; // Return a default or fallback value
+    }
     const TotalValue = number.toString();
 
     if (TotalValue.length === 5) {
@@ -29,8 +32,8 @@ const Cards = () => {
     }
 
     if (TotalValue.length === 6) {
-      const lakhValue = (number / 100000).toFixed(2); 
-      const formatted = lakhValue + " Lakh"; 
+      const lakhValue = (number / 100000).toFixed(2);
+      const formatted = lakhValue + " Lakh";
       return formatted;
     }
     if (TotalValue.length === 7) {
@@ -38,8 +41,8 @@ const Cards = () => {
       const formatted = lakhValue + " Lakh"; // Append 'Lakh'
       return formatted;
     }
-    if(TotalValue.length === 8){
-      const croreValue = (number /10000000).toFixed(2)
+    if (TotalValue.length === 8) {
+      const croreValue = (number / 10000000).toFixed(2)
       const formatted = croreValue + " Crore";
       return formatted
     }
@@ -50,6 +53,9 @@ const Cards = () => {
 
 
   const PendingNumber = (number) => {
+    if (!number || isNaN(number)) {
+      return number; // Return a default or fallback value
+    }
     const PendingValue = number.toString();
 
     if (PendingValue.length === 5) {
@@ -59,8 +65,8 @@ const Cards = () => {
 
     // For numbers in lakhs (6 digits)
     if (PendingValue.length === 6) {
-      const lakhValue = (number / 100000).toFixed(2); 
-      const formatted = lakhValue + " Lakh"; 
+      const lakhValue = (number / 100000).toFixed(2);
+      const formatted = lakhValue + " Lakh";
       return formatted;
     }
     if (PendingValue.length === 7) {
@@ -75,6 +81,9 @@ const Cards = () => {
 
 
   const CollectedNumber = (number) => {
+    if (!number || isNaN(number)) {
+      return number; // Return a default or fallback value
+    }
     const CollectedValue = number.toString();
 
     if (CollectedValue.length === 5) {
@@ -98,7 +107,7 @@ const Cards = () => {
   }
 
   const fetchDataFromBackend = async (month) => {
-    
+
     try {
       const response = await fetch(`${apiUrl}/total_amounts_from_billing?month=${month}`);
       if (!response.ok) {

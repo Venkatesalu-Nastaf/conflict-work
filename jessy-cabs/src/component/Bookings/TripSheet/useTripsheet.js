@@ -198,7 +198,38 @@ const useTripsheet = () => {
     const [timeToggle, setTimeToggle] = useState('');
     const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
-
+   // for invoice page
+   const [signimageUrl, setSignImageUrl] = useState('');
+   const [attachedImage, setAttachedImage] = useState('');
+   const [GmapimageUrl, setGMapImageUrl] = useState('');
+   const [routeData, setRouteData] = useState('');
+   const [tripSheetData, setTripSheetData] = useState({
+    customer: '',
+    address1: '',
+    orderedby: '',
+    employeeno: '',
+    request: '',
+    customercode: '',
+    guestname: '',
+    tripid: '',
+    startdate: '',
+    duty: '',
+    vehType: '',
+    vehRegNo: '',
+    driverName: '',
+    mobileNo: '',
+    closedate: '',
+    starttime: '',
+    startkm: '',
+    closetime: '',
+    closekm: '',
+    totalkm1: '',
+    totaltime: '',
+    totalDays: '',
+    remark: '',
+    parking: '',
+    permit: '',
+});
 
 
     const maplogcolumns = [
@@ -295,17 +326,36 @@ const useTripsheet = () => {
         fetchData()
     }, [openEditMapLog, selectedMapRow, apiUrl])
 
+    // const handleButtonClick = () => {
+    //     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    //     if (!tripid) {
+    //         setError(true);
+    //         setErrorMessage("Please enter the tripid");
+    //     } else {
+    //         localStorage.setItem('selectedTripid', tripid);
+    //         const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+    //         if (newTab) {
+    //             newTab.focus();
+    //         } else {
+    //         }
+    //     }
+    // };
     const handleButtonClick = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime; 
+    const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerData.closetime || formData.closetime;
+    const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+    const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+    
         if (!tripid) {
             setError(true);
             setErrorMessage("Please enter the tripid");
         } else {
             localStorage.setItem('selectedTripid', tripid);
-            const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+            
+            const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}`, '_blank', 'noopener,noreferrer');
             if (newTab) {
                 newTab.focus();
-            } else {
             }
         }
     };
@@ -728,6 +778,7 @@ const useTripsheet = () => {
         setFormValues({});
         setPackageData({});
         setPackageDetails({});
+        setTripSheetData({})
         setIsEditMode(false);
         calcCancel();
         setCalcCheck(false);
@@ -740,6 +791,12 @@ const useTripsheet = () => {
         setVendorinfodata({});
         setVendorbilldata({});
         setIsHybridCustomer(false)
+        // ===---------------
+        setAttachedImage("")
+        setGMapImageUrl("")
+        setRouteData('')
+        setSignImageUrl('')
+        // -----------
         setKmValue({
             shedOutState: '',
             startKMState: '',
@@ -795,8 +852,9 @@ const useTripsheet = () => {
                         // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                         vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
                         mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
-                        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
+                        // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
                         // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+                        vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                         starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
                         startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -2768,33 +2826,33 @@ const useTripsheet = () => {
 
 
 
-    const [tripSheetData, setTripSheetData] = useState({
-        customer: '',
-        address1: '',
-        orderedby: '',
-        employeeno: '',
-        request: '',
-        customercode: '',
-        guestname: '',
-        tripid: '',
-        startdate: '',
-        duty: '',
-        vehType: '',
-        vehRegNo: '',
-        driverName: '',
-        mobileNo: '',
-        closedate: '',
-        starttime: '',
-        startkm: '',
-        closetime: '',
-        closekm: '',
-        totalkm1: '',
-        totaltime: '',
-        totalDays: '',
-        remark: '',
-        parking: '',
-        permit: '',
-    });
+    // const [tripSheetData, setTripSheetData] = useState({
+    //     customer: '',
+    //     address1: '',
+    //     orderedby: '',
+    //     employeeno: '',
+    //     request: '',
+    //     customercode: '',
+    //     guestname: '',
+    //     tripid: '',
+    //     startdate: '',
+    //     duty: '',
+    //     vehType: '',
+    //     vehRegNo: '',
+    //     driverName: '',
+    //     mobileNo: '',
+    //     closedate: '',
+    //     starttime: '',
+    //     startkm: '',
+    //     closetime: '',
+    //     closekm: '',
+    //     totalkm1: '',
+    //     totaltime: '',
+    //     totalDays: '',
+    //     remark: '',
+    //     parking: '',
+    //     permit: '',
+    // });
 
 
     // const handleChange = useCallback((event) => {
@@ -3152,7 +3210,9 @@ const useTripsheet = () => {
                     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
                     // vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
-                    vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
+                    // vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
+                    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
+                    
                     // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     // reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     reporttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || '',
@@ -3219,11 +3279,11 @@ const useTripsheet = () => {
             }
         }
     };
-    // for invoice page
-    const [signimageUrl, setSignImageUrl] = useState('');
-    const [attachedImage, setAttachedImage] = useState('');
-    const [GmapimageUrl, setGMapImageUrl] = useState('');
-    const [routeData, setRouteData] = useState('');
+    // // for invoice page
+    // const [signimageUrl, setSignImageUrl] = useState('');
+    // const [attachedImage, setAttachedImage] = useState('');
+    // const [GmapimageUrl, setGMapImageUrl] = useState('');
+    // const [routeData, setRouteData] = useState('');
 
 
     const invoiceRouteData = async () => {
@@ -3350,6 +3410,7 @@ const useTripsheet = () => {
                     const data = await response.json();
                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
+                    console.log(attachedImageUrls,"datahcl")
                 }
             }
         } catch (error) {

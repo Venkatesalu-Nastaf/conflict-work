@@ -29,6 +29,7 @@ const useRatype = () => {
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
     const [formData] = useState({});
+    const [searchText, setSearchText] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -369,6 +370,45 @@ const useRatype = () => {
             }));
         }
     };
+    const handleenterSearch = useCallback(async (e) => {
+        if (e.key === "Enter") {
+            console.log("Search Text:", searchText);
+
+            try {
+                // Fetching data from the server
+                const response = await fetch(`${apiUrl}/searchRatetype?searchText=${encodeURIComponent(searchText)}`);
+
+                // Checking if the response is not OK
+                if (!response.ok) {
+                    console.error("Network response not OK:", response.statusText);
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log("Fetched data:", data);  // Log the data to ensure it's correct
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId); // Set the fetched rows
+                    setSuccess(true); // Set success state
+                    setSuccessMessage("Successfully listed"); // Show success message
+                } else {
+                    setRows([]); // Clear rows if no data
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error); // Log the error for debugging
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        }
+    }, [apiUrl, searchText]);
+
+
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
@@ -479,7 +519,7 @@ const useRatype = () => {
             }
         }
         handlelist();
-    }, [apiUrl,rows]);
+    }, [apiUrl]);
 
     const handleEdit = async (driverid) => {
 
@@ -594,6 +634,8 @@ const useRatype = () => {
         hidePopup,
         handleAutocompleteChange,
         formData,
+        handleenterSearch,
+        setSearchText,
         setBook,
         handleExcelDownload,
         handlePdfDownload,

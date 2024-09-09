@@ -135,13 +135,13 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                         </div>
                         <div className="total-div">
                             <div >
-                                <h4>CGST 2.5% on {book.totalcalcAmount}</h4>
-                                <h4>SGST 2.5% on {book.totalcalcAmount}</h4>
-                                <h4>Total Amount</h4>
+                                <h4>CGST 2.5% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST 2.5% on {book.totalcalcAmount} :</h4>
+                                <h4>Total Amount :</h4>
                             </div>
                             <div className="amount-div">
-                                <p className="amounttext">{cgst.toFixed(0)}</p>
-                                <p className="amounttext">{sgst.toFixed(0)}</p>
+                                <p className="amounttext" style={{marginTop: '23px'}}>{cgst.toFixed(0)}</p>
+                                <p className="amounttext" style={{marginTop: '23px'}}>{sgst.toFixed(0)}</p>
                                 <h4>{paymentValue.toFixed(0)}</h4>
                             </div>
                         </div>
@@ -150,7 +150,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                                 <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} </p>{'\n'}
                                 <p>Rupees Only</p>
                             </div>
-                            <div>
+                            <div style={{paddingBottom: '10px', paddingRight: '10px'}}>
                                 <p className="sign-text">For JessyCabs</p>
                                 {signimageUrl !== "" ?
                                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}

@@ -1,4 +1,4 @@
-import { useState, useEffect,useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
@@ -28,7 +28,7 @@ const useBilling = () => {
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
-    const { setParticularPdf, setParticularRefNo, individualBilled} = PdfData();
+    const { setParticularPdf, setParticularRefNo, individualBilled } = PdfData();
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -310,7 +310,7 @@ const useBilling = () => {
         setBook(emptyBookvalues);
         setSelectedBankAccount('');
         setCustomerData('')
-        
+
     }
 
 
@@ -376,9 +376,15 @@ const useBilling = () => {
             try {
                 if (tripid) {
                     const response = await axios.get(`${apiUrl}/tripsheet-keydown/${tripid}`, { params: { loginUserName } });
-                    const bookingDetails = response.data;
-                    console.log(bookingDetails,"details")
-                    setBook(() => ({ ...bookingDetails, rateType: customerData?.rateType }))
+                    // const bookingDetails = response.data;
+                    // console.log(bookingDetails,"details")
+                    // setBook(() => ({ ...bookingDetails, rateType: customerData?.rateType }))
+                    // setBook(() =>  bookingDetails)
+                    const bookingDetails = response.data[0];  // Accessing the first item if response.data is an array
+
+
+                    // Update the state with the booking details
+                    setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                 } else {
@@ -474,24 +480,24 @@ const useBilling = () => {
     // }, [apiUrl]);
     const memoizedCustomer = useMemo(() => book.customer, [book.customer]);
 
-  useEffect(() => {
-    const fetchCustomerData = async () => {
-      try {
-        if (memoizedCustomer) {
-          const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(memoizedCustomer)}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const customerData = await response.json();
-          setCustomerData(customerData);
-        }
-      } catch (error) {
-        console.error('Error fetching customer data:', error);
-      }
-    };
+    useEffect(() => {
+        const fetchCustomerData = async () => {
+            try {
+                if (memoizedCustomer) {
+                    const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(memoizedCustomer)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const customerData = await response.json();
+                    setCustomerData(customerData);
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+            }
+        };
 
-    fetchCustomerData();
-  }, [memoizedCustomer, apiUrl]);
+        fetchCustomerData();
+    }, [memoizedCustomer, apiUrl]);
 
     // fetching signature image
     // useEffect(() => {
@@ -568,16 +574,16 @@ const useBilling = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                    const response = await fetch(`${apiUrl}/organizationdata`);
-                    if (response.status === 200) {
-                        const userDataArray = await response.json();
-                        if (userDataArray.length > 0) {
-                            setorganizationData(userDataArray[0]);
-                        }
-                    } else {
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
+                const response = await fetch(`${apiUrl}/organizationdata`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setorganizationData(userDataArray[0]);
                     }
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
                 // }
                 // return;
             } catch {

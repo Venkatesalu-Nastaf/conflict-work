@@ -52,6 +52,7 @@ function initMap() {
                     bounds.extend(place.geometry.location);
                 }
             });
+
             map.fitBounds(bounds);
         });
         window.map = map;
@@ -124,6 +125,7 @@ function getNextWaypointLabel() {
     return String.fromCharCode(nextCharCode);
 }
 function handleMapClick(latLng) {
+
     const geocoder = new google.maps.Geocoder();
     const popupContent = document.createElement('div');
     popupContent.innerHTML = `
@@ -176,7 +178,7 @@ function handleMapClick(latLng) {
 
 // Modify createMarker to set popup.marker
 function createMarker(position, label, date = '', time = '', tripType = '', placeName = '') {
-    
+
     if (markersMap[label]) {
         markersMap[label].setMap(null); // Remove old marker
     }
@@ -216,6 +218,7 @@ function createMarker(position, label, date = '', time = '', tripType = '', plac
             </select><br/>
             <input type="hidden" id="placeName" name="placeName" value="${placeName}" />
             <button id="submitButton">Submit</button>
+            <button id="DeleteButton">Delete</button>
         `;
 
         popup = new google.maps.InfoWindow({
@@ -226,20 +229,34 @@ function createMarker(position, label, date = '', time = '', tripType = '', plac
         popup.open(map);
 
         // const submitButton = document.getElementById('submitButton');
-     
+
 
         const submitButton = popupContent.querySelector('#submitButton');
 
         if (submitButton) {
-            
+
             submitButton.addEventListener('click', () => {
                 submitMapPopup(); // Call the renamed function
             });
         } else {
             console.error("Element with ID 'submitButton' not found in marker popup");
         }
-    
+
+        const deleteButton = popupContent.querySelector('#DeleteButton');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                marker.setMap(null); // Remove the marker from the map
+                delete markersMap[label]; // Remove the marker from the markersMap
+                if (tripType === 'waypoint') {
+                    waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
+                }
+                popup.close(); // Close the popup
+            });
+        }
+
     });
+
+
 
     return marker;
 }

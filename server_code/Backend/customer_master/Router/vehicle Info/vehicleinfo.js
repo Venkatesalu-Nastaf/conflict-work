@@ -110,8 +110,7 @@ router.put('/vehicleinfo/:vehicleId', (req, res) => {
 
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
-console.log(searchText,fromDate,toDate,"dateeeee")
-
+  console.log(searchText, fromDate, toDate, "dateeeee");
 
   let query = 'SELECT * FROM vehicleinfo WHERE 1=1';
   let params = [];
@@ -146,27 +145,25 @@ console.log(searchText,fromDate,toDate,"dateeeee")
       'stations'
     ];
 
-    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
-
-    query += ` AND (${likeConditions})`;
-    params = columnsToSearch.map(() => `${searchText}%`);
+    // If searchText is exactly 4 digits, search for vehRegNo ending with those digits
+    if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {
+      query += ' AND vehRegNo LIKE ?';
+      params.push(`%${searchText}`);
+    } else {
+      // Otherwise, search across all columns
+      const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+      query += ` AND (${likeConditions})`;
+      params = columnsToSearch.map(() => `${searchText}%`);
+    }
   }
 
-
-  // if (fromDate && moment(fromDate, 'DD/MM/YYYY', true).isValid() && toDate && moment(toDate, 'DD/MM/YYYY', true).isValid()) {
-  //   const formattedFromDate = moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
-  //   const formattedToDate = moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
-  //   console.log(formattedToDate,fromDate,"enter condition")
-    if (fromDate && toDate) {
-      // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-      // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-      const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-      const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-
+  if (fromDate && toDate) {
+    const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+    const formattedToDate = moment(toDate).format('YYYY-MM-DD');
     query += ' AND doadate >= DATE_ADD(?, INTERVAL 0 DAY) AND doadate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(formattedFromDate, formattedToDate);
   }
-    
+
   db.query(query, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });

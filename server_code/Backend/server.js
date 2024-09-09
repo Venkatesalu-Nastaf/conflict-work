@@ -167,7 +167,7 @@ app.use('/', billWiseReport);//billWiseReport
 // -------------------------------------------------------------------------------------------
 app.use('/', pendingBill);//PendingBill
 // -------------------------------------------------------------------------------------------
-app.use('/',DashBoardBillReport)
+app.use('/', DashBoardBillReport)
 
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
@@ -260,6 +260,62 @@ app.get('/getmapimages/:tripid', (req, res) => {
     });
   });
 });
+
+
+app.delete('/api/mapimagedelete/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
+  const sql = `SELECT path FROM mapimage WHERE tripid = ?`;
+  db.query(sql, [tripid], (err1, results) => {
+    if (err1) {
+      return res.status(500).json({ message: "Error checking profile existence", error: err1 });
+    }
+
+
+    if (results.length >= 1) {
+      db.query("DELETE FROM mapimage WHERE tripid = ?", [tripid], (err, result) => {
+        if (err) {
+          return res.status(500).json({ error: "Failed to delete data from MySQL" });
+        }
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ error: "data not found" });
+        }
+
+
+
+        const mapimage = results[0].path
+
+        if (mapimage) {
+
+
+          const oldImagePath = path.join('Backend', 'customer_master', 'public', 'map_images');
+
+
+          // Get the complete absolute path
+          const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, mapimage);
+
+
+
+          // Check if the file exists
+          if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+            try {
+              // Delete the file
+              fs.unlinkSync(oldImagePathDirectoryAbsolute);
+              console.log('File deleted successfully:', mapimage);
+            } catch (error) {
+              console.error('Error deleting file:', error);
+            }
+          } else {
+            console.log('File does not exist:', mapimage);
+          }
+        }
+
+      })
+
+      return res.status(200).json({ message: "Data deleted successfully" });
+
+    }
+  })
+})
 
 //file upload in tripsheet
 app.post('/uploads', upload.single('file'), (req, res) => {
@@ -385,7 +441,7 @@ app.post('/login', (req, res) => {
   const { username, userpassword } = req.body;
 
   if (!username || !userpassword) {
-    return res.status(400).json({ error: 'Username and userpassword are required.' }); 
+    return res.status(400).json({ error: 'Username and userpassword are required.' });
   }
   db.query('SELECT * FROM usercreation WHERE username = ? AND userpassword = ?', [username, userpassword], (err, result) => {
     if (err) {

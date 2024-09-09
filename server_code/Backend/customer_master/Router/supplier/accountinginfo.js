@@ -70,9 +70,16 @@ router.get('/searchAccountinginfo', (req, res) => {
             'driverName'
         ];
 
-        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
-        query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `${searchText}%`);
+        if (searchText.length === 4) {
+            // If searchText is 4 characters long, search for vehRegno ending with those 4 digits
+            query += ' AND vehRegno LIKE ?';
+            params.push(`%${searchText}`);
+        } else {
+            // Otherwise, search across all columns
+            const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+            query += ` AND (${likeConditions})`;
+            params = columnsToSearch.map(() => `${searchText}%`);
+        }
     }
 
     db.query(query, params, (err, result) => {
@@ -80,11 +87,11 @@ router.get('/searchAccountinginfo', (req, res) => {
             console.log(err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        console.log(result, 'shhusj')
+        console.log(result, 'shhusj');
         return res.json(result);
-
     });
 });
+
 
 // Collect data for account_info
 router.get('/accountinfo', (req, res) => {

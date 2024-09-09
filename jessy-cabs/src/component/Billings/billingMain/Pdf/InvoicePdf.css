@@ -69,6 +69,10 @@
 .table-div{
     padding-top: 30px;
 }
+
+.table-div table th, .table-div table td{
+    border: 1px solid #000 !important;
+}
 .tabledata{
     font-size: 15px;
     font-weight: 500; 

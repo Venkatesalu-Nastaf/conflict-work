@@ -33,6 +33,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { PermissionContext } from '../../../context/permissionContext.js';
@@ -76,6 +77,9 @@ const RateType = ({ stationName, organizationNames }) => {
         handleAutocompleteChange,
         handleExcelDownload,
         handlePdfDownload,
+        searchText,
+        handleenterSearch,
+        setSearchText,
         columns,
         isEditMode,
         handleEdit,
@@ -354,13 +358,35 @@ const RateType = ({ stationName, organizationNames }) => {
                         </div>
                     }
                 </div>
+                <div className="input">
+                    <div className="icone">
+                        <AiOutlineFileSearch color="action" />
+                    </div>
+                    <TextField
+                        size="small"
+                        id="searchText"
+                        className='full-width'
+                        label="Search"
+                        name="searchText"
+                        value={searchText}
+                        onKeyDown={handleenterSearch}
+                        onChange={(e) => setSearchText(e.target.value)}
+                    />
+                </div>
+                
                 <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>
-                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<ExpandCircleDownOutlinedIcon />}
+                                    {...bindTrigger(popupState)}
+                                    style={{ marginTop: '20px' }} 
+                                >
                                     Download
                                 </Button>
+
                                 <Menu {...bindMenu(popupState)}>
                                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
@@ -369,6 +395,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         )}
                     </PopupState>
                 </div>
+                
                 <Box className="common-speed-dail">
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"

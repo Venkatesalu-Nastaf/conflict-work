@@ -77,6 +77,42 @@ router.get('/ratetype', (req, res) => {
     return res.status(200).json(results);
   });
 });
+//searchbar in Rate Type
+router.get('/searchRatetype', (req, res) => {
+  const { searchText } = req.query; // Get the searchText from the query params
+  let query = 'SELECT * FROM ratetype WHERE 1=1'; // Ensure you query from the correct table
+  let params = [];
+
+  if (searchText) {
+    const columnsToSearch = [
+      'stations',
+      'ratetype',
+      'ratename',
+      'active',
+      'starttime',
+      'closetime'
+    ];
+
+    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+    query += ` AND (${likeConditions})`;
+
+    // Add searchText to params for each column
+    params = columnsToSearch.map(() => `${searchText}%`);
+  }
+
+  // Execute the query
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error("Database query error:", err); // Log the error for debugging
+      return res.status(500).json({ error: 'Error retrieving data' });
+    }
+
+    console.log("Search results:", results); // Log results to verify
+    res.json(results); // Send back the results to the client
+  });
+});
+
+
 
 router.get('/ratetypevendor/:ratetype', (req, res) => {
   const ratetype=req.params.ratetype;

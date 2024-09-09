@@ -4,14 +4,26 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 
-const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
+const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book,Totaltimes,TotalDays,totalkm }) => {
 
     const duty = tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty;
     const date = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
     const shedOutDate = tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate;
     const startDate = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
+   
 
-    console.log("fueltype", fueltype)
+    function removeSeconds(time) {
+        // Split the time string by colon (:)
+        const timeParts = time.split(':');
+      
+        // Check if there are seconds (length 3), return hours:minutes
+        if (timeParts.length === 3) {
+          return `${timeParts[0]}:${timeParts[1]}`;
+        }
+      
+        // If there's only hours:minutes, return it as is
+        return time;
+      }
 
     const targetRef = useRef();
     return (
@@ -104,9 +116,13 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                     <th id='table-header'>Duty Type:</th>
                                     <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <th id='table-header'>Vehicle Name:</th>
                                     <td id='table-data'><span>{tripSheetData.vehicleName2 || selectedCustomerData.vehicleName2 || selectedCustomerDatas.vehicleName2 || book.vehicleName2}</span></td>
+                                </tr> */}
+                                <tr>
+                                    <th id='table-header'>Vehicle Name:</th>
+                                    <td id='table-data'><span>{tripSheetData.vehicleName || selectedCustomerData.vehicleName || selectedCustomerDatas.vehicleName || book.vehicleName}</span></td>
                                 </tr>
                                 <tr>
                                     <th id='table-header'><span >Vehicle No:</span></th>
@@ -164,13 +180,14 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                         <tr>
                                             <td id='table-datas'><span >Starting</span></td>
                                             <td id='table-datas'><span >{dayjs(startDate).format("YYYY-MM-DD")}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td> */}
+                                            <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime ? removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime):""}</span></td>
                                             <td id='table-datas'><span >{tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm}</span></td>
                                         </tr>
                                         <tr>
                                             <td id='table-datas'><span >Closing</span></td>
                                             <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime}</span></td>
+                                            <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime ? removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime) :""}</span></td>
                                             <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
                                         </tr>
                                         <tr>
@@ -181,9 +198,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                         </tr>
                                         <tr>
                                             <td id='table-datas'><span >Total</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
-                                            <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
-                                            <td id='table-datas'><span >{totalhour}</span></td>
+                                            {/* <td id='table-datas'><span >{TotalDays}</span>days</td> */}
+                                            <td id='table-datas'><span >{TotalDays}</span></td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td> */}
+                                            <td id='table-datas'><span >{Totaltimes}</span></td>
+                                            <td id='table-datas'><span >{totalkm}</span></td>
                                         </tr>
                                     </tbody>) : (<tbody>
 
@@ -216,9 +235,12 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
                                         <tr>
                                             <td id='table-datas'><span >Total</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
                                             <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
-                                            <td id='table-datas'><span >{totalhour}</span></td>
+                                            <td id='table-datas'><span >{totalhour}</span></td> */}
+                                                <td id='table-datas'><span >{TotalDays}</span></td>
+                                            <td id='table-datas'><span >{Totaltimes}</span></td>
+                                            <td id='table-datas'><span >{totalkm}</span></td>
                                         </tr>
                                     </tbody>)}
 

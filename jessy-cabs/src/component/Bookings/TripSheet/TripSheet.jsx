@@ -507,7 +507,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
     mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
 
-    vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
+    // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
+    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
     // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
     starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -546,6 +547,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   }
+  
 
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
   return (
@@ -3568,9 +3570,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                  {/* <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                     {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTimes} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTimes} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />)}
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)}
+                  </DialogContent> */}
+                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)}
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handlePopupClose} variant="contained" color="primary">

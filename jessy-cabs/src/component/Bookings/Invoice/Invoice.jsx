@@ -2,8 +2,9 @@ import './invoice.css';
 import { useRef } from 'react';
 import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
+import dayjs from 'dayjs';
 
-const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
+const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book,Totaltimes, totalkm,TotalDays }) => {
 
 
   const targetRef = useRef();
@@ -65,7 +66,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </tr>
                 <tr>
                   <th id='table-header'>Date:</th>
-                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate}</td>
+                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate ? dayjs(tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate).format("YYYY-MM-DD"):""}</td>
                 </tr>
                 <tr>
                   <th id='table-header'>Duty Type:</th>
@@ -107,7 +108,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <tbody>
                     <tr>
                       <td id='table-datas'><span >Starting</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("YYYY-MM-DD"):""}</span></td>
                       <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
                     </tr>
@@ -129,13 +130,17 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                       <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
                     </tr>
+                    
                     <tr>
                       <td id='table-datas'><span >Total</span></td>
-                      <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
-                      <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
-                      <td id='table-datas'><span >{totalhour}</span></td>
+                      {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td> */}
+                      <td id='table-datas'><span >{TotalDays}</span>days</td>
+                      {/* <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData}</span></td> */}
+                      <td id='table-datas'><span >{Totaltimes}</span></td>
+                      <td id='table-datas'><span >{totalkm}</span></td>
                     </tr>
                   </tbody>
+
 
                 </table>
               </div>

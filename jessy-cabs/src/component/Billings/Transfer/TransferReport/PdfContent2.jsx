@@ -314,9 +314,9 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             <View style={styles.lastamount}>
 
                                 <View style={styles.lastsectiontxt}>
-                                    <Text style={styles.text2}>SUB TOTAL </Text>
-                                    <Text style={styles.text2} >CGST 2.5% on {fullAmount} </Text>
-                                    <Text style={styles.text2}>SGST 2.5% on {fullAmount}</Text>
+                                    <Text style={styles.text2}>SUB TOTAL : </Text>
+                                    <Text style={styles.text2} >CGST 2.5% on {fullAmount} :</Text>
+                                    <Text style={styles.text2}>SGST 2.5% on {fullAmount} :</Text>
                                     <Text style={styles.text2}>Net Payable : </Text>
                                 </View>
 

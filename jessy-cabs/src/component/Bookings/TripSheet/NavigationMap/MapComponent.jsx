@@ -15,6 +15,8 @@ const MapComponent = () => {
     useEffect(() => {
         window.initMap();
     }, []);
+    const TripId = localStorage.getItem('selectedTripid')
+    console.log(TripId, 'Tripid');
 
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -89,10 +91,18 @@ const MapComponent = () => {
                 autoHideDuration={2}
                 onClose={handleClose}
             >
-                <MuiAlert onClose={handleClose} severity="success" sx={{ width: '100%',marginBottom:"742px", marginLeft:"1200px"}}>
+                <MuiAlert onClose={handleClose} severity="success" sx={{ width: '100%', marginBottom: "742px", marginLeft: "1200px" }}>
                     Captured successfully!
                 </MuiAlert>
             </Snackbar>
+            <div style={{display:'flex'}}>
+                <label></label>
+                <label></label>
+                <label></label>
+                <label></label>
+                <label></label>
+
+            </div>
             <div id="map" style={{ height: '500px' }}></div>
         </div>
     );

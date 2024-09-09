@@ -6,17 +6,26 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useLocation } from 'react-router-dom';
 
 const MapComponent = () => {
 
     const [address, setAddress] = useState('');
     const [open, setOpen] = useState(false);
-
+    const location = useLocation()
     useEffect(() => {
         window.initMap();
     }, []);
     const TripId = localStorage.getItem('selectedTripid')
-    console.log(TripId, 'Tripid');
+    const searchParams = new URLSearchParams(location.search);
+
+    const tripid = searchParams.get('tripid');
+    const starttime = searchParams.get('starttime');
+    const endtime = searchParams.get('endtime');
+    const startdate = searchParams.get('startdate');
+    const enddate = searchParams.get('closedate')
+    const formattedStartTime = starttime?.slice(0, 5);
+    const formattedEndTime = endtime?.slice(0, 5);
 
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -95,12 +104,12 @@ const MapComponent = () => {
                     Captured successfully!
                 </MuiAlert>
             </Snackbar>
-            <div style={{display:'flex'}}>
-                <label></label>
-                <label></label>
-                <label></label>
-                <label></label>
-                <label></label>
+            <div style={{ display: 'flex', gap: 20 }}>
+                <label>Trip Id : {TripId}</label>
+                <label>Start Date : {startdate}</label>
+                <label>Close Date : {enddate}</label>
+                <label>Start Time : {formattedStartTime}</label>
+                <label>Close Time : {formattedEndTime}</label>
 
             </div>
             <div id="map" style={{ height: '500px' }}></div>

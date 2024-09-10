@@ -1,11 +1,20 @@
 
 .FuelLog-history-btns{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    justify-content: space-around;
+    justify-content: flex-end;
+    padding: 10px;
 }
 .Fuellog-total-history{
     display: block;
     width: 100%;
+}
+
+.outlined-buttons{
+    display: flex;
+    gap:5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }

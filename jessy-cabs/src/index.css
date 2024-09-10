@@ -813,3 +813,14 @@ body {
   width: 210px !important;
 } */
 /* MENUBAR FOR ALL PAGES ENDS*/
+
+
+.overall-table-div-width-records-fuel-log {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: scroll;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+}

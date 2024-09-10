@@ -18,7 +18,7 @@ const Reminders = () => {
     };
     return (
         <div className="form-container-BillingMain">
-            <div className="main-content-container">
+            <div className="main-content-reminder">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider", overflow: 'auto' }} className="head-tab-all">

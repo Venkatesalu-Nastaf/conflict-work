@@ -226,3 +226,102 @@
     color: #000;
     zoom: 90%;
 }
+
+
+
+
+
+
+.main-content-vehicle::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+  }
+  
+  .main-content-vehicle::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .main-content-vehicle::-webkit-scrollbar-thumb {
+    background-color: rgb(217, 212, 212);
+    outline: 1px solid slategrey;
+  }
+  
+  .main-content-vehicle {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 80vh;
+    width: 81vw;
+    margin: 0px 3px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    color: #000;
+    background-color: var(--glass);
+    transition: all 0.3s ease;
+  }
+  
+  @media screen and (min-width: 769px) and (max-width:1499px) {
+    .side-bar-menu-close .main-content-vehicle {
+      width: 92vw;
+      /* margin: 0px 4px; */
+    }
+  }
+  
+  @media screen and (min-width: 1499px) {
+    .side-bar-menu-close .main-content-vehicle {
+      width: 98% !important;
+      /* margin: 0px 4px; */
+    }
+  
+    .main-content-vehicle {
+      border: 2px solid #ccc;
+      overflow: scroll;
+      height: 80vh;
+      width: 98% !important;
+      margin: 0px 3px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 15px;
+      color: #000;
+      background-color: var(--glass);
+      transition: all 0.3s ease;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .main-content-vehicle {
+      width: 96vw;
+      margin-top: 20px;
+      height: 78vh;
+    }
+  
+    .Android .main-content-vehicle {
+      margin-top: -35px;
+    }
+  
+    .iPhone-responsive .main-content-vehicle {
+      height: 86vh;
+    }
+  }
+  
+  @media screen and (min-width:970px) and (max-width:1240px) {
+    .side-bar-menu-close .main-content-vehicle {
+      width: 96%;
+      margin: 0px 3px;
+    }
+  
+    .main-content-vehicle {
+      width: 81vw;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .side-bar-menu-close .main-content-vehicle {
+      width: 90vw;
+    }
+  
+    .main-content-vehicle {
+      width: 79vw;
+    }
+  }

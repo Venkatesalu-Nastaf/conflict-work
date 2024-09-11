@@ -636,11 +636,12 @@ app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-companyimage', (req, res) => {
   const { organizationname } = req.params;
-  const query = 'SELECT * FROM from organizationdetails';
+  const query = 'SELECT * from organizationdetails';
   // const query = 'SELECT fileName FROM organisation_logo WHERE organisation_name = ?';
 
   db.query(query, (err, results) => {
     if (err) {
+      console.log(err)
       return res.status(500).send('Internal Server Error');
     }
 

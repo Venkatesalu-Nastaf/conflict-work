@@ -44,13 +44,13 @@ const useExeclpage = () => {
         { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point / Shed", width: 180 },
         { key: "useage", header: "Drop Point", width: 120 },
-        { key: "starttime1", header: "Shift Timing", width: 150 },
+        { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
 
         { key: "Groups", header: "Vehicle Category", width: 150 },
         { key: "remark", header: "Route Type (Pick/Drop)", width: 180 },
-        { key: "starttime", header: "Garage Initial Time", width: 180 },
+        { key: "starttime1", header: "Garage Initial Time", width: 180 },
         { key: "reporttime", header: "Initial Time", width: 120 },
         { key: "closetime", header: "End Time", width: 120 },
         { key: "shedintime", header: "Garage End Time", width: 150 },
@@ -71,7 +71,7 @@ const useExeclpage = () => {
         { key: "night_totalAmount", header: "Night Charges", width: 150 },
         { key: "driverBeta", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
-        { key: "t", header: "Total Amount", width: 150 },
+        { key: "withoutTaxes", header: "Total Amount", width: 150 },
         { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
         { key: "gstTax", header: "GST%", width: 100 },
         { key: "permit", header: "Permit", width: 120 },
@@ -139,20 +139,39 @@ const useExeclpage = () => {
 
 
     };
+    function addPercentage(amount, percent) {
+        let percentageValue = (amount * percent) / 100;
+        return amount + percentageValue;
+    }
+    function withoutTaxesdata(total,toll,parking,permit) {
+        let withoutaxValue = total-toll-parking-permit;
+        return withoutaxValue;
+    }
 
 
 
 
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-    const timeformtdata=(datatime)=>{
-        return dayjs(datatime, 'HH:mm:ss').format('HH:mm');
-     }
+    
 
+    function removeSeconds(time) {
+        // Split the time string by colon (:)
+        const timeParts = time.split(':');
+      
+        // Check if there are seconds (length 3), return hours:minutes
+        if (timeParts.length === 3) {
+          return `${timeParts[0]}:${timeParts[1]}`;
+        }
+      
+        // If there's only hours:minutes, return it as is
+        return time;
+      }
 
     const handleExcelDownload = async (misformat, invoice, invoicedate) => {
         console.log(misformat, invoice, invoicedate, "zipexcel")
         const data = invoice;
+        const data2 = invoice;
 
 
         if (!misformat) {
@@ -189,7 +208,7 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
-                    console.log(index, "innn")
+                
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -204,9 +223,12 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
-                    singleData["starttime"]=singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
-                    singleData["starttime1"] = singleData["starttime"]
-                    singleData["closetime"]=singleData["closetime"] ? timeformtdata(singleData["closetime"]):""
+                    singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
+                    singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+                    
+                    singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
+                    singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -262,17 +284,18 @@ const useExeclpage = () => {
 
         else if (misformat === "New MIS") {
             try {
+              
 
                 const fileName = `MIS ${dayjs(invoicedate).format(" MMMM D")}`
                 // creating one worksheet in workbook
-                const worksheet = workbook.addWorksheet(workSheetName);
-                worksheet.columns = columns;
+                const worksheet1 = workbook.addWorksheet(workSheetName);
+                worksheet1.columns = columns;
 
                 // updated the font for first row.
-                worksheet.getRow(1).font = { bold: true };
+                worksheet1.getRow(1).font = { bold: true };
 
                 // Set background color for header cells
-                worksheet.getRow(1).eachCell((cell, colNumber) => {
+                worksheet1.getRow(1).eachCell((cell, colNumber) => {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
@@ -281,35 +304,37 @@ const useExeclpage = () => {
                 });
 
 
-                worksheet.getRow(1).height = 30;
+                worksheet1.getRow(1).height = 30;
                 // loop through all of the columns and set the alignment with width.
-                worksheet.columns.forEach((column) => {
+                worksheet1.columns.forEach((column) => {
                     column.width = column.header.length + 5;
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
-                    singleData["SNo"] = index + 1;
-                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
-                    singleData['location'] = location
-                    singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
-                    singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["VendorName"] = " Jesscy Cabs"
-                    singleData["vehType1"] = singleData["vehType"]
-                    singleData["PickupPoint_Shed"] = singleData["pickup"]
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
-                    singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
-                    singleData["starttime"] = singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
-                    singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
-                    singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
-                    singleData["totaltime1"] = singleData["totaltime"]
-                    singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
+                data2.forEach((singleData2, index) => {
+                   
+                    singleData2["SNo"] = index + 1;
+                    const location = `${singleData2.address1}`;
+                    singleData2['location'] = location
+                    singleData2["Gender"] = singleData2["gender"] ? singleData2["gender"] : "N/A"
+                    singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
+                    singleData2["VendorName"] = " Jesscy Cabs"
+                    singleData2["vehType1"] = singleData2["vehType"]
+                    singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
+                    singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
+                    //  singleData2["starttime"] = singleData2["starttime"] 
+                    singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["starttime"] : "00.00"
+                    singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
+                    singleData2["totaltime1"] = singleData2["totaltime"]
+                    singleData2["opsremark"] = singleData2["opsremark"] ? singleData2["Opremark"] : ''
 
-                    worksheet.addRow(singleData);
+                    worksheet1.addRow(singleData2);
 
                     // Adjust column width based on the length of the cell values in the added row
-                    worksheet.columns.forEach((column) => {
-                        const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    worksheet1.columns.forEach((column) => {
+                        const cellValue = singleData2[column.key] || ''; // Get cell value from singleData or use empty string if undefined
                         const cellLength = cellValue.toString().length; // Get length of cell value as a string
                         const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
 
@@ -319,7 +344,7 @@ const useExeclpage = () => {
                 });
 
                 // loop through all of the rows and set the outline style.
-                worksheet.eachRow({ includeEmpty: false }, (row) => {
+                worksheet1.eachRow({ includeEmpty: false }, (row) => {
                     // store each cell to currentCell
                     const currentCell = row._cells;
 
@@ -329,7 +354,7 @@ const useExeclpage = () => {
                         const cellAddress = singleCell._address;
 
                         // apply border
-                        worksheet.getCell(cellAddress).border = {
+                        worksheet1.getCell(cellAddress).border = {
                             top: { style: 'thin' },
                             left: { style: 'thin' },
                             bottom: { style: 'thin' },
@@ -420,9 +445,11 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
-                    singleData["starttime"]=singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
-                    singleData["starttime1"] = singleData["starttime"]
-                    singleData["closetime"]=singleData["closetime"] ? timeformtdata(singleData["closetime"]):""
+                    singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
+                    singleData["starttime1"] = removeSeconds(singleData["starttime"])
+                    singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
+                    singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -507,7 +534,7 @@ const useExeclpage = () => {
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
-                    singleData["starttime"] = singleData["starttime"] ? timeformtdata(singleData["starttime"]):""
+                    singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
                     singleData["totaltime1"] = singleData["totaltime"]

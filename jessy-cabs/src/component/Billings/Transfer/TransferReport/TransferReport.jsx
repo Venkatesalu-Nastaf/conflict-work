@@ -196,11 +196,12 @@ const TransferReport = ({ stationName }) => {
         if (!customer || !tripid) return
 
         const response = await fetch(
-          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
+          `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
+        
         setInvoicedata(tripData)
       }
       catch (err) {
@@ -209,6 +210,7 @@ const TransferReport = ({ stationName }) => {
     }
     fetchData()
   }, [apiUrl])
+
 
   const handleDownloadPdf = async () => {
     if (!pdfBillList) {

@@ -519,7 +519,7 @@ const Booking = ({ stationName, customerData }) => {
               <label className="tripsheet-top-division-date-label">Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
+                  {/* <DatePicker
                     // id="tripsheetdate"
                     value={
                       formData.bookingdate || selectedCustomerData.bookingdate
@@ -530,7 +530,7 @@ const Booking = ({ stationName, customerData }) => {
                     }
                     format="DD/MM/YYYY"
                     // label='Booking Date'
-                    onChange={(date) => handleDateChange(date, "bookingdate")}
+                    // onChange={(date) => handleDateChange(date, "bookingdate")}
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField
@@ -539,7 +539,31 @@ const Booking = ({ stationName, customerData }) => {
                         value={selectedCustomerData?.bookingdate}
                       />
                     )}
-                  </DatePicker>
+                  </DatePicker> */}
+                   <DatePicker
+                    // id="tripsheetdate"
+                    value={
+                      formData.bookingdate || selectedCustomerData.bookingdate
+                        ? dayjs(selectedCustomerData.bookingdate)
+                        : null || book.bookingdate
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
+                    }
+                    format="DD/MM/YYYY"
+                    readOnly
+                    // label='Booking Date'
+                    // onChange={(date) => handleDateChange(date, "bookingdate")}
+                    
+                    // disabled={true} // Disables the DatePicker to prevent changes
+                    // renderInput={(params) => (
+                    //   <TextField
+                    //     {...params}
+                    //     InputProps={{
+                    //       readOnly: true, // Makes the input read-only
+                    //     }}
+                    //   />
+                    // )}
+                  />
                 </LocalizationProvider>
               </div>
             </span>
@@ -556,14 +580,14 @@ const Booking = ({ stationName, customerData }) => {
                   getCurrentTime() ||
                   ""
                 }
-                onChange={(event) => {
-                  setBook({ ...book, bookingtime: event.target.value });
-                  setSelectedCustomerData({
-                    ...selectedCustomerData,
-                    bookingtime: event.target.value,
-                  });
-                  setBookingTime(event.target.value);
-                }}
+                // onChange={(event) => {
+                //   setBook({ ...book, bookingtime: event.target.value });
+                //   setSelectedCustomerData({
+                //     ...selectedCustomerData,
+                //     bookingtime: event.target.value,
+                //   });
+                //   setBookingTime(event.target.value);
+                // }}
               />
             </span>
             {/* <span className="d-grid">

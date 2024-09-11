@@ -79,7 +79,7 @@ const useBooking = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [reporttime, setreporttime] = useState("");
   const [starttime, setStartTime] = useState("");
-  const [bookingtime, setBookingTime] = useState("");
+  // const [bookingtime, setBookingTime] = useState("");
   const location = useLocation();
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
@@ -172,9 +172,11 @@ const useBooking = () => {
     const dispath = params.get("dispatchcheck");
     if(dispath){
       setSendEmail(false)
+      
     }
     // setSendEmail(false)
     setIsEditMode(dispath)
+    setEdit(dispath)
     const formData = {};
 
     const parameterKeys = [
@@ -246,6 +248,7 @@ const useBooking = () => {
 
     setBook(formData);
     setFormData(formData);
+    
   }, [location]);
  
 
@@ -1151,6 +1154,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
   //------------------------------------------------------
 
+  // console.log(dayjs().format("YYYY-MM-DD"),"date")
   
   const handleAdd = async () => {
 
@@ -1200,7 +1204,8 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
     try {
       setDatatrigger(!datatrigger)
-      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+      // const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+      const selectedBookingDate = dayjs().format("YYYY-MM-DD");
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
@@ -1209,7 +1214,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
       const updatedBook = {
 
-        bookingtime: bookingtime || getCurrentTime(),
+        bookingtime:getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
         status:bookingStatus,
@@ -1594,15 +1599,15 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
     });
   }
 
-  const handletableClick = useCallback((params) => {
-    // setGuestSms(false)
-    setSendEmail(false)
-    setEdit(true)
-    const customerData = params.row;
-    setSelectedCustomerData(customerData);
-    setSelectedCustomerId(params.row.customerId);
-    setIsEditMode(true);
-  }, []);
+  // const handletableClick = useCallback((params) => {
+  //   // setGuestSms(false)
+  //   setSendEmail(false)
+  //   setEdit(true)
+  //   const customerData = params.row;
+  //   setSelectedCustomerData(customerData);
+  //   setSelectedCustomerId(params.row.customerId);
+  //   setIsEditMode(true);
+  // }, []);
 
   const reversedRows = [...row].reverse();
   // const reversedRows1 = [...row]
@@ -1842,7 +1847,7 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     error,
     success,
     info,
-    warning,
+    // warning,
     successMessage,
     errorMessage,
     // warningMessage,
@@ -1860,7 +1865,7 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     getCurrentTime,
     setBook,
     setSelectedCustomerData,
-    setBookingTime,
+    // setBookingTime,
     selectedCustomerDatas,
     handleKeyEnter,
     formValues,
@@ -1892,7 +1897,7 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     handlePdfDownload,
     reversedRows,
     columns,
-    handletableClick,
+    // handletableClick,
     setFile,
     dialogOpen,
     handleCloseDialog,

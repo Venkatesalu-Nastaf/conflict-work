@@ -33,7 +33,7 @@ export const RealTime = () => {
   return (
     <>
       <div className="form-container-realtime">
-        <div className="main-content-container">
+        <div className="main-content-realtime">
           <div className='main-content-form'>
             <div style={{position:"relative", height:"55px", width:"100%"}}>
             <HeaderDetails />

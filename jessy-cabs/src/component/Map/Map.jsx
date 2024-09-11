@@ -124,7 +124,7 @@ const Map = () => {
           <MenuItem
             label="History"
             // to={"/home/Map/Vehicle"}
-            to={"/home/Map/History"}
+            to={"/home/Map/History" }
             alt="/home/Map/History"
             menuItemKey="History"
             activeMenuItem={activeMenuItem}

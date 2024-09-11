@@ -88,8 +88,8 @@ const columnstimeline = [
  const PendingServiceHistory = () => {
   return (
     <>
-    <div className='overall-overall'>
-        <div className='total-overall'>
+    <div className='PendingServiceHistory-overall'>
+        <div className='total-overall-pending'>
             <div className='summary-div'>
                 <p className='summary-text'>Summary</p>
                 <div className='summary-con'>

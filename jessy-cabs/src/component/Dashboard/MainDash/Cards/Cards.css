@@ -15,7 +15,7 @@
 
 @media screen and (min-width:769px) and (max-width: 815px) {
   .cards-container {
-    width: 84%;
+    width: 97%;
   }
 
   .cards-dashboard {
@@ -26,7 +26,7 @@
 
 @media screen and (min-width:815.99px) and (max-width: 881px) {
   .cards-container {
-    width: 89%;
+    width: 94%;
   }
 
   .cards-dashboard {

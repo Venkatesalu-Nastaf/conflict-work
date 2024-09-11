@@ -4,6 +4,7 @@
     width:100% ;
     gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
     
 }
 .summary-con{
@@ -36,7 +37,7 @@
 .graph-data{
     display: flex;
     justify-content: center;
-    width: 60%;
+    width: 55%;
     padding: 45px;
     align-items: center;
     background-color: #fff;
@@ -47,7 +48,7 @@
 .overall-overall{
     display: block;
     padding: 10px;
-    width: 100%;
+    width: 97%;
 }
 
 .overall-table-div-width{
@@ -61,4 +62,26 @@
 .summary-text{
     padding: 8px;
     font-size: 17px;
+}
+@media screen and (max-width:768px) {
+    .graph-data{
+        display: flex;
+        justify-content: center;
+        width: 100% !important;
+        padding: 45px;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 9px;
+        border: 1px solid #ccc;
+    
+    }
+
+    .summary-div{
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 9px;
+        padding: 10px;
+        width: 100% !important;
+    
+    }
 }

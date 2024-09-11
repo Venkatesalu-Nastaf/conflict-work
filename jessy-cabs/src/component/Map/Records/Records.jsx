@@ -6,6 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ServiceHistory from "./ServiceHistory/ServiceHistory";
 import FuelLog from "./FuelLog/FuelLog";
+import "./Records.css"
 
 export const Records = () => {
     const [value, setValue] = React.useState('1');
@@ -16,8 +17,8 @@ export const Records = () => {
     return (
         <>
             <div className="form-container-realtime">
-                <div className="main-content-container">
-                    {/* <div className='main-content-form'> */}
+                <div className="main-content-records">
+                    {/* <div ='main-content-form'> */}
 
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={value}>
@@ -25,7 +26,6 @@ export const Records = () => {
                                     <TabList onChange={handleChange} aria-label="lab API tabs example">
                                         <Tab label="Service History" value="1" />
                                         <Tab label="Fuel Log" value="2" />
-                                        {/* <Tab label="Item Three" value="3" /> */}
                                     </TabList>
                                 </Box>
                                 <TabPanel value="1">
@@ -36,10 +36,8 @@ export const Records = () => {
                                 <TabPanel value="2">
                                     <><FuelLog /></>
                                 </TabPanel>
-                                {/* <TabPanel value="3">Item Three</TabPanel> */}
                             </TabContext>
                         </Box>
-                    {/* </div> */}
                 </div>
             </div>
         </>

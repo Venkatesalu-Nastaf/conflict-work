@@ -1,4 +1,4 @@
-.total-overall{
+.total-overall-pending{
     display: flex;
     align-items: center;
     width:100% ;
@@ -44,7 +44,7 @@
     border: 1px solid #ccc;
 
 }
-.overall-overall{
+.PendingServiceHistory-overall{
     display: block;
     padding: 10px;
     width: 100%;

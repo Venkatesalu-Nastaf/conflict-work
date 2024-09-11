@@ -89,6 +89,8 @@ const columnstimeline = [
 export const OverallTable = () => {
   return (
     <>
+    <div className='overall-table-div-width-records-fuel-log' >
+ 
     <Box
                             sx={{
                               height: 400, // Adjust this value to fit your needs
@@ -126,6 +128,7 @@ export const OverallTable = () => {
                               disableRowSelectionOnClick
                             />
                           </Box>
+                          </div>
     </>
   )
 }

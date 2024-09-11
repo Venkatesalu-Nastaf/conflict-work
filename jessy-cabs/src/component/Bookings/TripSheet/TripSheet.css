@@ -248,6 +248,14 @@
   }
 }
 
+@media screen and (min-width: 1557px) {
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 90%;
+  }
+}
+
 .tripsheet-division1,
 .tripsheet-division3 {
   display: flex;

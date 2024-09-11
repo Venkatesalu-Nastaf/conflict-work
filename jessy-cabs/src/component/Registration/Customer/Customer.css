@@ -158,8 +158,20 @@
   flex-wrap: wrap;
 }
 
+@media screen and (min-width: 1557px) {
+  .customer-input-feild {
+    width: 94%;
+  }
+}
+
 .Customer-page-input-field {
   flex-wrap: wrap;
+}
+
+@media screen and (min-width: 1557px) {
+  .Customer-page-input-field {
+    width: 94%;
+  }
 }
 
 .Customer-page-input-field-addbtn {

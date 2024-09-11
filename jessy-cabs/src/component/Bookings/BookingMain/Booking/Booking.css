@@ -204,6 +204,7 @@
 }
 
 @media screen and (max-width: 1240px) {
+
   .booking-main-section1,
   .booking-main-section2 {
     display: grid !important;
@@ -373,10 +374,12 @@
   .vehicle-confirm {
     flex-wrap: wrap;
   }
+
   .input-feild-vehicle-confirm {
     justify-content: center;
     margin-bottom: 10px;
   }
+
   .input-feild-vehicle-confirm .input {
     margin-top: 3px;
   }
@@ -392,6 +395,7 @@
 } */
 
 @media screen and (min-width: 1244px) and (max-width: 1300px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 42% !important;
@@ -399,6 +403,7 @@
 }
 
 @media screen and (min-width: 1301px) and (max-width: 1350px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 44% !important;
@@ -406,6 +411,7 @@
 }
 
 @media screen and (min-width: 1351px) and (max-width: 1400px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 46% !important;
@@ -413,6 +419,7 @@
 }
 
 @media screen and (min-width: 1401px) and (max-width: 1450px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 50% !important;
@@ -420,6 +427,7 @@
 }
 
 @media screen and (min-width: 1451px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 40% !important;
@@ -427,6 +435,7 @@
 }
 
 @media screen and (min-width: 1501px) {
+
   .sub-section2,
   .sub-section2-driver {
     width: 60% !important;
@@ -478,6 +487,12 @@
   margin-top: 10px;
 }
 
+@media screen and (min-width: 1557px) {
+  .second-division-booking {
+    width: 94%;
+  }
+}
+
 .input-dummy {
   display: inline;
 }
@@ -525,6 +540,7 @@
 }
 
 @media screen and (max-width: 828px) {
+
   .booking-date-input-division,
   .booking-time-main-div {
     margin-top: 17px;
@@ -558,7 +574,7 @@
   width: 100%;
 }
 
-.booking-start-time-input{
+.booking-start-time-input {
   position: relative;
   top: -12px;
 }
@@ -589,7 +605,7 @@
   padding: 4px;
 }
 
-.booking-top-division-status-div .booking-top-section-status-main{
+.booking-top-division-status-div .booking-top-section-status-main {
   padding: 6px 35px 6px 5px !important;
 }
 
@@ -609,7 +625,7 @@
   border-radius: 0px;
 }
 
-.tripsheet-top-division-date-label{
+.tripsheet-top-division-date-label {
   position: relative;
   top: 7px;
 }
@@ -645,7 +661,6 @@
   padding: 9.5px 0px 9.5px 14px !important;
 }
 
-.booking-top-section-status-main
-  .css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+.booking-top-section-status-main .css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
 }

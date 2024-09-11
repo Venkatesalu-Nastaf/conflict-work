@@ -137,6 +137,12 @@
   /* justify-content: space-evenly; */
 }
 
+@media screen and (min-width: 1557px) {
+  .employee-input-feilds {
+    width: 94%;
+  }
+}
+
 @media screen and (max-width:768px) {
   .employee-input-feilds {
     justify-content: center;

@@ -13,20 +13,24 @@ const MapComponent = () => {
     const [address, setAddress] = useState('');
     const [open, setOpen] = useState(false);
     const location = useLocation()
-    useEffect(() => {
-        window.initMap();
-    }, []);
+
     const TripId = localStorage.getItem('selectedTripid')
     const searchParams = new URLSearchParams(location.search);
+    const urlParams = new URLSearchParams(window.location.search);
 
     const tripid = searchParams.get('tripid');
     const starttime = searchParams.get('starttime');
     const endtime = searchParams.get('endtime');
     const startdate = searchParams.get('startdate');
-    const enddate = searchParams.get('closedate')
-    const formattedStartTime = starttime?.slice(0, 5);
+    const enddate = searchParams.get('closedate');
+    const latitude = JSON.parse(decodeURIComponent(urlParams.get('latitude')));
+    const longitude = JSON.parse(decodeURIComponent(urlParams.get('longitude')));
+    const row = JSON.parse(decodeURIComponent(urlParams.get('row')));   
+     const formattedStartTime = starttime?.slice(0, 5);
     const formattedEndTime = endtime?.slice(0, 5);
-
+    useEffect(() => {
+        window.initMap({ lat: latitude, lng: longitude,row:row });
+    }, []);
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();
 

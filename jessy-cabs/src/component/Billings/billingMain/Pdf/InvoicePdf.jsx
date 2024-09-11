@@ -32,7 +32,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
     const cgst = totalAmount * 2.5 / 100 || 0;
     const sgst = totalAmount * 2.5 / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst || 0;
-    const AmountInWords = numWords(parseInt(paymentValue));
+    const AmountInWords = numWords(parseInt(paymentValue)) || 0;
 
     // setting the Billed details
     useEffect(() => {

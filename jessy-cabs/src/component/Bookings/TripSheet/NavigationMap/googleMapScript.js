@@ -12,11 +12,23 @@ let endMarker;
 let searchBox;
 let popup;
 let waypoints = [];
+let latitude = [];
+let longitude = [];
 
 const apiUrl = APIURL;
 
-function initMap() {
+function initMap(lat) {
+    console.log(lat, 'latlng');
+    lat.lat.forEach((latValue, index) => {
+        latitude.push(latValue);
+        longitude.push(lat.lng[index]);
+    });
+    console.log(latitude.length, longitude, 'value');
+
+
+
     try {
+
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 10,
             center: { lat: 13.0827, lng: 80.2707 },
@@ -60,6 +72,85 @@ function initMap() {
         console.error('Error initializing map:', error);
     }
 }
+// async function initMap(lat, lng, row) {
+//     console.log(lat, lng, row, 'latlng');
+
+//     try {
+//         // Load the Maps API
+//         const { Map, Marker } = await google.maps.importLibrary("maps");
+
+//         // Initialize the map
+//         const map = new Map(document.getElementById('map'), {
+//             zoom: 10,
+//             center: { lat: lat[0] || 13.0827, lng: lng[0] || 80.2707 },  // Centering on the first lat/lng or default
+//         });
+
+//         // Initialize Directions Service and Renderer
+//         const directionsService = new google.maps.DirectionsService();
+//         const directionsRenderer = new google.maps.DirectionsRenderer();
+//         directionsRenderer.setMap(map);
+
+//         // Add a click listener on the map
+//         map.addListener('click', (event) => {
+//             handleMapClick(event.latLng);
+//         });
+
+//         // Create search box input
+//         const input = document.getElementById('pac-input');
+//         const searchBox = new google.maps.places.SearchBox(input);
+//         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+//         // Bias the SearchBox results towards the current map's viewport
+//         map.addListener('bounds_changed', function () {
+//             searchBox.setBounds(map.getBounds());
+//         });
+
+//         // Handle the places changed event from search box
+//         searchBox.addListener('places_changed', function () {
+//             const places = searchBox.getPlaces();
+//             if (places.length === 0) return;
+
+//             const bounds = new google.maps.LatLngBounds();
+//             places.forEach(function (place) {
+//                 if (!place.geometry) {
+//                     console.log('Returned place contains no geometry');
+//                     return;
+//                 }
+//                 createMarker(place.geometry.location, place.name);  // Add marker for each place
+//                 if (place.geometry.viewport) {
+//                     bounds.union(place.geometry.viewport);
+//                 } else {
+//                     bounds.extend(place.geometry.location);
+//                 }
+//             });
+
+//             map.fitBounds(bounds);
+//         });
+
+//         // Render markers for each lat/lng
+//         for (let i = 0; i < lat.length; i++) {
+//             const latValue = lat[i];
+//             const lngValue = lng[i];
+//             const position = new google.maps.LatLng(latValue, lngValue);
+//             console.log(`Lat: ${latValue}, Lng: ${lngValue}`);
+
+//             // Create a marker for each lat/lng pair using the new syntax
+//             new Marker({
+//                 position: position,
+//                 map: map,
+//                 title: row[i]?.placeName || 'Unknown Place'
+//             });
+//         }
+
+//         window.Map = map;  // Make map accessible globally if needed
+
+//     } catch (error) {
+//         console.error('Error initializing map:', error);
+//     }
+// }
+
+
+
 
 function submitMapPopup() {
     const date = document.getElementById('date').value;
@@ -67,6 +158,10 @@ function submitMapPopup() {
     const tripTypeElement = document.getElementById('tripType');
     const placeName = document.getElementById('placeName').value;
     const tripid = localStorage.getItem('selectedTripid');
+    const lat = document.getElementById('lat').value;
+    const long = document.getElementById('lng').value;
+    const latitude = parseFloat(lat)
+    const longitude = parseFloat(long)
 
     if (!date || !time || !tripTypeElement) {
         alert('Please fill in all required fields.');
@@ -80,7 +175,7 @@ function submitMapPopup() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid }),
+        body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
     })
         .then(response => response.json())
         .then(data => {
@@ -140,6 +235,8 @@ function handleMapClick(latLng) {
             <option value="waypoint">Waypoint</option>
         </select><br/>
         <input type="hidden" id="placeName" name="placeName" value="" disabled />
+         <input type="hidden" id="lat" name="lat" value="${latLng.lat()}" />
+        <input type="hidden" id="lng" name="lng" value="${latLng.lng()}" />
         <button id="submitButton">Submit</button>
     `;
 
@@ -174,6 +271,15 @@ function handleMapClick(latLng) {
     });
 }
 
+console.log(latitude.length, longitude, latitude, 'value22');
+
+const newMarker = () => {
+    console.log(latitude, longitude, 'value11');
+
+}
+if (latitude.length > 0) {
+    newMarker()
+}
 
 
 // Modify createMarker to set popup.marker
@@ -236,7 +342,7 @@ function createMarker(position, label, date = '', time = '', tripType = '', plac
         if (submitButton) {
 
             submitButton.addEventListener('click', () => {
-                submitMapPopup(); // Call the renamed function
+                submitMapPopup();
             });
         } else {
             console.error("Element with ID 'submitButton' not found in marker popup");

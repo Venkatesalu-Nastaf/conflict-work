@@ -72,6 +72,7 @@ const useTripsheet = () => {
     const [nightTotalAmount, setNightTotalAmount] = useState(0)
     const [vendornightcount, setVendornightCount] = useState()
     const [cusnightcount, setcusnightCount] = useState()
+    const [EditMap,setEditMap] = useState(false)
 
     //-------------------------calc-------------------
 
@@ -198,38 +199,38 @@ const useTripsheet = () => {
     const [timeToggle, setTimeToggle] = useState('');
     const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
-   // for invoice page
-   const [signimageUrl, setSignImageUrl] = useState('');
-   const [attachedImage, setAttachedImage] = useState('');
-   const [GmapimageUrl, setGMapImageUrl] = useState('');
-   const [routeData, setRouteData] = useState('');
-   const [tripSheetData, setTripSheetData] = useState({
-    customer: '',
-    address1: '',
-    orderedby: '',
-    employeeno: '',
-    request: '',
-    customercode: '',
-    guestname: '',
-    tripid: '',
-    startdate: '',
-    duty: '',
-    vehType: '',
-    vehRegNo: '',
-    driverName: '',
-    mobileNo: '',
-    closedate: '',
-    starttime: '',
-    startkm: '',
-    closetime: '',
-    closekm: '',
-    totalkm1: '',
-    totaltime: '',
-    totalDays: '',
-    remark: '',
-    parking: '',
-    permit: '',
-});
+    // for invoice page
+    const [signimageUrl, setSignImageUrl] = useState('');
+    const [attachedImage, setAttachedImage] = useState('');
+    const [GmapimageUrl, setGMapImageUrl] = useState('');
+    const [routeData, setRouteData] = useState('');
+    const [tripSheetData, setTripSheetData] = useState({
+        customer: '',
+        address1: '',
+        orderedby: '',
+        employeeno: '',
+        request: '',
+        customercode: '',
+        guestname: '',
+        tripid: '',
+        startdate: '',
+        duty: '',
+        vehType: '',
+        vehRegNo: '',
+        driverName: '',
+        mobileNo: '',
+        closedate: '',
+        starttime: '',
+        startkm: '',
+        closetime: '',
+        closekm: '',
+        totalkm1: '',
+        totaltime: '',
+        totalDays: '',
+        remark: '',
+        parking: '',
+        permit: '',
+    });
 
 
     const maplogcolumns = [
@@ -326,6 +327,7 @@ const useTripsheet = () => {
         fetchData()
     }, [openEditMapLog, selectedMapRow, apiUrl])
 
+
     // const handleButtonClick = () => {
     //     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
     //     if (!tripid) {
@@ -342,17 +344,17 @@ const useTripsheet = () => {
     // };
     const handleButtonClick = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-    const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime; 
-    const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerData.closetime || formData.closetime;
-    const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
-    const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
-    
+        const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+        const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerData.closetime || formData.closetime;
+        const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+        const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+
         if (!tripid) {
             setError(true);
             setErrorMessage("Please enter the tripid");
         } else {
             localStorage.setItem('selectedTripid', tripid);
-            
+
             const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}`, '_blank', 'noopener,noreferrer');
             if (newTab) {
                 newTab.focus();
@@ -854,7 +856,7 @@ const useTripsheet = () => {
                         mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
                         // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
                         // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
-                        vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
+                        vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                         starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
                         startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -3211,8 +3213,8 @@ const useTripsheet = () => {
                     // vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
                     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                     // vehType: selectedCustomerData.vehType || book.vehType || formValues.vehType || formData.vehType,
-                    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
-                    
+                    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+
                     // vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
                     // reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
                     reporttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || '',
@@ -3410,7 +3412,7 @@ const useTripsheet = () => {
                     const data = await response.json();
                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
-                    console.log(attachedImageUrls,"datahcl")
+                    console.log(attachedImageUrls, "datahcl")
                 }
             }
         } catch (error) {
@@ -4829,7 +4831,98 @@ const useTripsheet = () => {
         handleHybridCheck()
     }, [customer, tripID, apiUrl])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tripId = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
 
+                if (!tripId) {
+                    console.error('Trip ID is not defined');
+                    return; // Exit early if tripId is not defined
+                }
+
+                const tripid = tripId.toString(); // Convert to string if defined
+
+                const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
+                const data = response.data;
+                setRow(data);
+            } catch (error) {
+                console.error('Error fetching map data:', error);
+            }
+        };
+
+        fetchData();
+    }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
+    
+
+    const handleEditMap = () => {
+        // setEditMap(!EditMap);
+    
+        // Get the trip, time, and date details
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+        const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
+        const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+        const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+        
+        // Get latitude and longitude arrays from 'row'
+        const latitude = row.map(li => li.Latitude);
+        const longitude = row.map(li => li.Longitude);
+        
+    
+        // Check if tripid is valid
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the tripid");
+        } else {
+            // Store the tripid in local storage
+            localStorage.setItem('selectedTripid', tripid);
+    
+            // Serialize latitude and longitude arrays for the URL
+            const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
+            const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
+            const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
+
+    
+            // Open new tab with serialized latitude and longitude arrays
+            const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}`, '_blank', 'noopener,noreferrer');
+            if (newTab) {
+                newTab.focus();
+            }
+        }
+    };
+    
+
+    // const handleEditMap = () => {
+   
+      
+    //     setEditMap(!EditMap)
+    //     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    //     const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+    //     const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerData.closetime || formData.closetime;
+    //     const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+    //     const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+    //     const latitude = row.map(li=>li.Latitude)
+    //     const longitude = row.map(li=>li.Longitude)
+    //     console.log(latitude,longitude,'vvv');
+        
+    //     if (!tripid) {
+    //         setError(true);
+    //         setErrorMessage("Please enter the tripid");
+    //     } else {
+    //         localStorage.setItem('selectedTripid', tripid);
+
+    //         const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${latitude}&longitude=${longitude}`, '_blank', 'noopener,noreferrer');
+    //         if (newTab) {
+    //             newTab.focus();
+    //         }
+    //     }
+
+    // }
+
+    const handleDeleteMap = () => {
+
+    }
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -4948,7 +5041,9 @@ const useTripsheet = () => {
         nightTotalCount, setNightTotalCount,
         nightTotalAmount, setNightTotalAmount,
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
+        handleEditMap,
+        handleDeleteMap
 
     };
 };

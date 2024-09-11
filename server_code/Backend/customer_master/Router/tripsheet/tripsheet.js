@@ -1322,6 +1322,9 @@ router.post('/gmap-submitForm', (req, res) => {
     const tripType = req.body.tripType;
     const placeName = req.body.placeName;
     const tripid = req.body.tripid;
+    const latitude = req.body.latitude;
+    const longitude = req.body.longitude;
+console.log(latitude,longitude,'latt');
 
     // Query to check if the tripid and trip_type exist
     const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
@@ -1340,8 +1343,8 @@ router.post('/gmap-submitForm', (req, res) => {
                 }
 
                 // Insert the new row
-                const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid) VALUES (?, ?, ?, ?, ?)";
-                db.query(insertQuery, [date, time, tripType, placeName, tripid], (err, insertResults) => {
+                const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
+                db.query(insertQuery, [date, time, tripType, placeName, tripid,latitude,longitude], (err, insertResults) => {
                     if (err) {
                         return res.status(500).json({ error: 'Internal Server Error' });
                     }
@@ -1350,8 +1353,8 @@ router.post('/gmap-submitForm', (req, res) => {
             });
         } else {
             // Trip ID and trip type do not exist, insert the new row directly
-            const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid) VALUES (?, ?, ?, ?, ?)";
-            db.query(insertQuery, [date, time, tripType, placeName, tripid], (err, insertResults) => {
+            const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
+            db.query(insertQuery, [date, time, tripType, placeName, tripid,latitude,longitude], (err, insertResults) => {
                 if (err) {
                     return res.status(500).json({ error: 'Internal Server Error' });
                 }

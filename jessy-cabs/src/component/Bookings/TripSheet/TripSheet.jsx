@@ -259,7 +259,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     calculateTotalTimes,
     handleClickOpen,
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
-    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign
+    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign,
+    handleEditMap,
+    handleDeleteMap
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -2978,6 +2980,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <div className="input-field" style={{ marginTop: '10px' }}>
                               <div className="input">
                                 <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
+                            
+                              </div>
+                              <div>
+                              <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                              <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
                               </div>
                               {/* <div className="input">
                                 <Button variant='outlined' className='full-width'>Delete GPS Log</Button>

@@ -494,6 +494,7 @@ const useRatype = () => {
 
             await axios.post(`${apiUrl}/ratetype`, updatedBook);
             handleCancel();
+            
 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
@@ -503,9 +504,8 @@ const useRatype = () => {
         }
     };
 
-
-    useEffect(() => {
-        const handlelist = async () => {
+    const handlelist = useCallback(async () => {
+        try {
             const response = await axios.get(`${apiUrl}/ratetype`);
             const data = response.data;
             if (data.length > 0) {
@@ -517,9 +517,15 @@ const useRatype = () => {
             } else {
                 setRows([]);
             }
+        } catch (err) {
+            console.log(err);
         }
-        handlelist();
     }, [apiUrl]);
+
+    useEffect(() => {
+        handlelist();
+    }, [handlelist]);
+
 
     const handleEdit = async (driverid) => {
 

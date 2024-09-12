@@ -84,19 +84,20 @@ router.put('/customers/:customerId', (req, res) => {
 });
 
 router.get('/searchCustomer', (req, res) => {
-  const { searchText } = req.query; // Extract searchText from the query
-  let query = 'SELECT * FROM customers WHERE 1=1';
+  const { searchText, fromDate, toDate } = req.query; // Extract searchText, fromDate, and toDate from the query
+  let query = 'SELECT * FROM customers WHERE 1=1'; // Base query
   let params = [];
 
+  // Filter by search text
   if (searchText) {
     const columnsToSearch = [
       'customerId',
       'name',
       'customer',
       'customerType',
-      'date',
+      'date', // The date column
       'address1',
-      'rateType',  // Fixed spacing issue
+      'rateType',
       'opBalance',
       'underGroup',
       'selectOption',
@@ -108,14 +109,18 @@ router.get('/searchCustomer', (req, res) => {
       'SalesPercentage'
     ];
 
-    // Construct the SQL 'LIKE' conditions
+    // Construct the SQL 'LIKE' conditions for the searchText
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
-
-    // Append conditions to the query
     query += ` AND (${likeConditions})`;
-
-    // Add searchText to params for each column
     params = columnsToSearch.map(() => `${searchText}%`);
+  }
+
+  // Filter by date range if fromDate and toDate are provided
+  if (fromDate && toDate) {
+    const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+    const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+    query += ' AND date >= DATE_ADD(?, INTERVAL 0 DAY) AND date <= DATE_ADD(?, INTERVAL 1 DAY)';
+    params.push(formattedFromDate, formattedToDate);
   }
 
   // Execute the query using your database connection

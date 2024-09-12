@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment'); // or import dayjs from 'dayjs';
 const db = require('../../../db');
 
 // Supplier Master Database:
@@ -49,10 +50,11 @@ router.put('/accountinfo/:accountNo', (req, res) => {
 
 // Search vehicle info
 router.get('/searchAccountinginfo', (req, res) => {
-    const { searchText } = req.query; // Extract searchText from the query
-    let query = 'SELECT * FROM accountinfo WHERE 1=1';
+    const { searchText, fromDate, toDate } = req.query; // Extract searchText, fromDate, and toDate from the query
+    let query = 'SELECT * FROM accountinfo WHERE 1=1'; // Base query
     let params = [];
 
+    // Filter by search text
     if (searchText) {
         const columnsToSearch = [
             'Accdate',
@@ -70,27 +72,37 @@ router.get('/searchAccountinginfo', (req, res) => {
             'driverName'
         ];
 
-        if (searchText.length === 4) {
-            // If searchText is 4 characters long, search for vehRegno ending with those 4 digits
+        if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {
+            // If searchText is 4 digits, search for vehRegno ending with those 4 digits
             query += ' AND vehRegno LIKE ?';
             params.push(`%${searchText}`);
         } else {
             // Otherwise, search across all columns
             const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
             query += ` AND (${likeConditions})`;
-            params = columnsToSearch.map(() => `${searchText}%`);
+            params = [...params, ...columnsToSearch.map(() => `${searchText}%`)];
         }
     }
 
+    // Filter by date range (Accdate) if both fromDate and toDate are provided
+    if (fromDate && toDate) {
+        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+        query += ' AND Accdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Accdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        params.push(formattedFromDate, formattedToDate);
+    }
+
+    // Execute the query
     db.query(query, params, (err, result) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        console.log(result, 'shhusj');
+        console.log(result, 'resultData'); // Debugging
         return res.json(result);
     });
 });
+
 
 
 // Collect data for account_info

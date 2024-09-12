@@ -37,6 +37,8 @@ const useCustomer = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
+    const [toDate, setToDate] = useState(dayjs());
+    const [fromDate, setFromDate] = useState(dayjs());
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState(false);
     const [info, setInfo] = useState(false);
@@ -490,6 +492,32 @@ const useCustomer = () => {
         setIsEditMode(true);
     }
 
+    //search with date
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/searchCustomer?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+            const data = await response.json();
+            console.log(data, "typedata")
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSelectedCustomerData(rowsWithUniqueId)
+                setSuccess(true);
+                setSuccessMessage("Successfully listed")
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("No data found")
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection")
+        }
+    };
+
 
     const handleenterSearch = useCallback(async (e) => {
         if (e.key === "Enter") {
@@ -579,6 +607,7 @@ console.log(book,"boooooo")
                 handleCancel();
                 setTriggerCustomerAdd(prev => !prev)
                 setRows([]);
+                handleList();
                 setSuccess(true);
                 setSuccessMessage(response.data.message);
                 setCredentialData()
@@ -622,6 +651,7 @@ console.log(book,"boooooo")
         // setSelectedCustomerData(prev => ({ ...prev, hybrid: false,TimeToggle:false }))
         handleCancel();
         setRows([]);
+        handleList();
     };
     const deletedatecustomerorder=async(id)=>{
         console.log(id,"iddddd")
@@ -667,22 +697,23 @@ console.log(book,"boooooo")
 
     
 
-    useEffect(() => {
-        const handleList = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/customersgroup`);
-                const data = response.data;
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-
-                setRows(rowsWithUniqueId);
-            } catch {
-            }
+    const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/customersgroup`);
+            const data = response.data;
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+        } catch (err) {
+            console.log(err);
         }
-        handleList();
-    }, [apiUrl]);
+    }, [apiUrl]); // Add dependencies like apiUrl
+
+    useEffect(() => {
+        handleList(); // Call the handleList function
+    }, [handleList]); // Use handleList as a dependency
 
 
     const handleClick = async (event, actionName, customerId) => {
@@ -755,7 +786,12 @@ console.log(book,"boooooo")
         handleClick,
         handleChange,
         handleRowClick,
+        setToDate,
+        toDate,
+        setFromDate,
+        fromDate,
         handleAdd,
+        handleSearch,
         hidePopup,
         handleAutocompleteChange,
         handleDateChange,

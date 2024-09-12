@@ -1,22 +1,17 @@
-.purchaseSummary-table {
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  height: 400px;
-  width: 100%;
-  background-color: var(--glass);
-}
 
-.download-btn-purchase {
-  margin-top: 10px;
-  overflow: auto;
-}
 
-.vendor-statement-input-field {
-  flex-wrap: wrap;
-}
+.top-cards{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-around;
+align-items: center;
+padding: 10px;
 
-@media screen and (max-width: 837px) {
-  .vendor-statement-input-field {
-    justify-content: center;
-  }
+}
+.top-cards-hidden{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  gap: 10px;
 }

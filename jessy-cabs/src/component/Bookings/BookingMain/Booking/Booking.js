@@ -83,13 +83,14 @@ export const Duty = [
   },
   {
     Option: "Outstation",
-    optionvalue: "outstation",
+    optionvalue: "Outstation",
   },
   {
     Option: "Transfer",
     optionvalue: "transfer",
   },
 ];
+
 
 // hire type
 

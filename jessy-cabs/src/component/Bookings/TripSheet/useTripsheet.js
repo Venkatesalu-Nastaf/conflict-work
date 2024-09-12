@@ -72,7 +72,7 @@ const useTripsheet = () => {
     const [nightTotalAmount, setNightTotalAmount] = useState(0)
     const [vendornightcount, setVendornightCount] = useState()
     const [cusnightcount, setcusnightCount] = useState()
-    const [EditMap,setEditMap] = useState(false)
+    const [EditMap, setEditMap] = useState(false)
 
     //-------------------------calc-------------------
 
@@ -169,6 +169,7 @@ const useTripsheet = () => {
     const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
     const [selectedMapRow, setSelectedMapRow] = useState("");
     const [CopyEmail, setCopyEmail] = useState(false);
+    const [copydatalink,setCopyDataLink]=useState(false)
 
     const [kmValue, setKmValue] = useState({
         shedOutState: '',
@@ -799,6 +800,8 @@ const useTripsheet = () => {
         setRouteData('')
         setSignImageUrl('')
         // -----------
+        setSignatureWhattsapplink()
+        setCopyDataLink(false)
         setKmValue({
             shedOutState: '',
             startKMState: '',
@@ -825,6 +828,7 @@ const useTripsheet = () => {
             maxTripid: "",
         })
         setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
+        
 
         localStorage.removeItem('selectedTripid');
     };
@@ -3864,7 +3868,6 @@ const useTripsheet = () => {
             // }
 
 
-
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
@@ -4638,6 +4641,132 @@ const useTripsheet = () => {
         fetchData()
     }, [apiUrl, vehicleRegisterNo, shedoutkm])
 
+    // const generateAndCopyLinkdata = async () => {
+    //     const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
+    //     console.log(appsstatus, "sttt")
+
+    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //     if (!tripid) {
+    //         setWarning(true)
+    //         setWarningMessage("Enter the tripid")
+    //         return
+    //     }
+    //     if (appsstatus === "Closed") {
+    //         setInfo(true)
+    //         setINFOMessage("Signature already uploaded")
+    //         return
+    //     }
+
+    //     const paramsdata = {
+    //         tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
+    //     };
+
+    //     // Create the URL with the JSON string as a single query parameter
+    //     const url = new URL(signatureurlinkurl);
+    //     Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
+
+
+
+    //     // 
+    //     const generatedLinkdata = url.toString();
+    //     setSignatureWhattsapplink(generatedLinkdata)
+
+    //     // Create a temporary textarea element to copy the link
+    //     setSignaturtCopied(true)
+    //     // const tempTextarea = document.createElement('textarea');
+    //     // tempTextarea.value = generatedLinkdata;
+    //     // document.body.appendChild(tempTextarea);
+    //     // console.log(tempTextarea,"aree")
+    //     // tempTextarea.select();
+    //     // document.execCommand('copy');
+
+    //     function fallbackCopyText(text) {
+    //         const textArea = document.createElement("textarea");
+    //         textArea.value = text;
+    //         textArea.style.position = "fixed"; // Prevent scrolling to bottom of page in mobile browsers
+    //         document.body.appendChild(textArea);
+    //         textArea.focus();
+    //         textArea.select();
+
+    //         try {
+    //             const successful = document.execCommand('copy');
+    //             const msg = successful ? 'successful' : 'unsuccessful';
+    //             console.log('Fallback: Copying text command was ' + msg);
+    //         } catch (err) {
+    //             console.error('Fallback: Oops, unable to copy', err);
+    //         }
+
+    //         document.body.removeChild(textArea);
+    //     }
+    //     // document.body.removeChild(tempTextarea);
+    //     console.log(generatedLinkdata, "grn", typeof (generatedLinkdata), "hh")
+    //     if (navigator.clipboard) {
+    //         console.log(generatedLinkdata, "linkdata");
+
+    //         try {
+    //             await navigator.clipboard.writeText(generatedLinkdata);
+    //             console.log("Successfully copied");
+    //             console.log('Link copied to clipboard!');
+
+    //             localStorage.setItem("expiredsign", "false");
+    //             localStorage.setItem("expired", "false");
+    //             localStorage.setItem("uploadtollparkdata", "false");
+    //             localStorage.setItem("expireuploadpage", "false");
+
+    //         } catch (error) {
+    //             console.error("Failed to copy text to clipboard:", error);
+    //             fallbackCopyText(generatedLinkdata);
+    //         }
+
+    //     } else {
+    //         console.error('Clipboard API not supported');
+    //         fallbackCopyText(generatedLinkdata);
+    //     }
+    //     // try {
+    //     //     // Attempt to use navigator.clipboard.writeText
+    //     //     if (navigator.clipboard) {
+    //     //         console.log(generatedLinkdata, "linkdata")
+    //     //         await navigator.clipboard.writeText(generatedLinkdata);
+    //     //         console.log("successfuuly copied")
+    //     //         console.log('Link copied to clipboard!');
+    //     //         localStorage.setItem("expiredsign", false);
+    //     //         localStorage.setItem("expired", false);
+    //     //         localStorage.setItem("uploadtollparkdata", false);
+    //     //         localStorage.setItem("expireuploadpage", false);
+
+    //     //     } else {
+    //     //         throw new Error('Clipboard API not supported');
+
+    //     //     }
+    //     // } catch (err) {
+    //     //     console.error('Failed to copy with Clipboard API, trying fallback:', err);
+    //     //     const tempTextarea = document.createElement('textarea');
+    //     //     tempTextarea.value = generatedLinkdata;
+    //     //     document.body.appendChild(tempTextarea);
+    //     //     console.log(tempTextarea, "aree")
+    //     //     tempTextarea.select();
+    //     //     document.execCommand('copy');
+
+    //     //     document.body.removeChild(tempTextarea);
+    //     //     localStorage.setItem("expiredsign", false);
+    //     //     localStorage.setItem("expired", false);
+    //     //     localStorage.setItem("uploadtollparkdata", false);
+    //     //     localStorage.setItem("expireuploadpage", false);
+    //     // }
+    //     // if (generatedLinkdata) {
+    //     //     await navigator.clipboard.writeText(generatedLinkdata);
+    //     // }
+    //     // localStorage.setItem("expiredsign", false);
+    //     // localStorage.setItem("expired", false);
+    //     // localStorage.setItem("uploadtollparkdata", false);
+    //     // localStorage.setItem("expireuploadpage", false);
+
+    //     setTimeout(() => {
+    //         setSignaturtCopied(false)
+    //     }, 2000)
+
+    // }
+
     const generateAndCopyLinkdata = async () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
         console.log(appsstatus, "sttt")
@@ -4670,92 +4799,12 @@ const useTripsheet = () => {
 
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
-        // const tempTextarea = document.createElement('textarea');
-        // tempTextarea.value = generatedLinkdata;
-        // document.body.appendChild(tempTextarea);
-        // console.log(tempTextarea,"aree")
-        // tempTextarea.select();
-        // document.execCommand('copy');
-        function fallbackCopyText(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; // Prevent scrolling to bottom of page in mobile browsers
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-                const successful = document.execCommand('copy');
-                const msg = successful ? 'successful' : 'unsuccessful';
-                console.log('Fallback: Copying text command was ' + msg);
-            } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
-            }
-
-            document.body.removeChild(textArea);
-        }
-        // document.body.removeChild(tempTextarea);
-        console.log(generatedLinkdata, "grn", typeof (generatedLinkdata), "hh")
-        if (navigator.clipboard) {
-            console.log(generatedLinkdata, "linkdata");
-
-            try {
-                await navigator.clipboard.writeText(generatedLinkdata);
-                console.log("Successfully copied");
-                console.log('Link copied to clipboard!');
-
-                localStorage.setItem("expiredsign", "false");
-                localStorage.setItem("expired", "false");
-                localStorage.setItem("uploadtollparkdata", "false");
-                localStorage.setItem("expireuploadpage", "false");
-
-            } catch (error) {
-                console.error("Failed to copy text to clipboard:", error);
-                fallbackCopyText(generatedLinkdata);
-            }
-
-        } else {
-            console.error('Clipboard API not supported');
-            fallbackCopyText(generatedLinkdata);
-        }
-        // try {
-        //     // Attempt to use navigator.clipboard.writeText
-        //     if (navigator.clipboard) {
-        //         console.log(generatedLinkdata, "linkdata")
-        //         await navigator.clipboard.writeText(generatedLinkdata);
-        //         console.log("successfuuly copied")
-        //         console.log('Link copied to clipboard!');
-        //         localStorage.setItem("expiredsign", false);
-        //         localStorage.setItem("expired", false);
-        //         localStorage.setItem("uploadtollparkdata", false);
-        //         localStorage.setItem("expireuploadpage", false);
-
-        //     } else {
-        //         throw new Error('Clipboard API not supported');
-
-        //     }
-        // } catch (err) {
-        //     console.error('Failed to copy with Clipboard API, trying fallback:', err);
-        //     const tempTextarea = document.createElement('textarea');
-        //     tempTextarea.value = generatedLinkdata;
-        //     document.body.appendChild(tempTextarea);
-        //     console.log(tempTextarea, "aree")
-        //     tempTextarea.select();
-        //     document.execCommand('copy');
-
-        //     document.body.removeChild(tempTextarea);
-        //     localStorage.setItem("expiredsign", false);
-        //     localStorage.setItem("expired", false);
-        //     localStorage.setItem("uploadtollparkdata", false);
-        //     localStorage.setItem("expireuploadpage", false);
-        // }
-        // if (generatedLinkdata) {
-        //     await navigator.clipboard.writeText(generatedLinkdata);
-        // }
-        // localStorage.setItem("expiredsign", false);
-        // localStorage.setItem("expired", false);
-        // localStorage.setItem("uploadtollparkdata", false);
-        // localStorage.setItem("expireuploadpage", false);
+        setCopyDataLink(true)
+        // Get the div element by its ID
+        localStorage.setItem("expiredsign", "false");
+        localStorage.setItem("expired", "false");
+        localStorage.setItem("uploadtollparkdata", "false");
+        localStorage.setItem("expireuploadpage", "false");
 
         setTimeout(() => {
             setSignaturtCopied(false)
@@ -4837,7 +4886,6 @@ const useTripsheet = () => {
                 const tripId = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
 
                 if (!tripId) {
-                    console.error('Trip ID is not defined');
                     return; // Exit early if tripId is not defined
                 }
 
@@ -4853,23 +4901,23 @@ const useTripsheet = () => {
 
         fetchData();
     }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
-    
+
 
     const handleEditMap = () => {
         // setEditMap(!EditMap);
-    
+
         // Get the trip, time, and date details
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
         const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
         const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
         const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
-        
+
         // Get latitude and longitude arrays from 'row'
         const latitude = row.map(li => li.Latitude);
         const longitude = row.map(li => li.Longitude);
-        
-    
+
+
         // Check if tripid is valid
         if (!tripid) {
             setError(true);
@@ -4877,13 +4925,13 @@ const useTripsheet = () => {
         } else {
             // Store the tripid in local storage
             localStorage.setItem('selectedTripid', tripid);
-    
+
             // Serialize latitude and longitude arrays for the URL
             const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
             const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
             const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
 
-    
+
             // Open new tab with serialized latitude and longitude arrays
             const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}`, '_blank', 'noopener,noreferrer');
             if (newTab) {
@@ -4891,11 +4939,11 @@ const useTripsheet = () => {
             }
         }
     };
-    
+
 
     // const handleEditMap = () => {
-   
-      
+
+
     //     setEditMap(!EditMap)
     //     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
     //     const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
@@ -4905,7 +4953,7 @@ const useTripsheet = () => {
     //     const latitude = row.map(li=>li.Latitude)
     //     const longitude = row.map(li=>li.Longitude)
     //     console.log(latitude,longitude,'vvv');
-        
+
     //     if (!tripid) {
     //         setError(true);
     //         setErrorMessage("Please enter the tripid");
@@ -5043,7 +5091,7 @@ const useTripsheet = () => {
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
-        handleDeleteMap
+        handleDeleteMap,copydatalink,setCopyDataLink
 
     };
 };

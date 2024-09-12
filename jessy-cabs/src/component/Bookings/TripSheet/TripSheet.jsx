@@ -1,6 +1,5 @@
-
-
 import React, { useEffect, useContext, useState, useRef } from 'react';
+import { CopyField } from '@eisberg-labs/mui-copy-field';
 import "./TripSheet.css";
 import {
   Apps,
@@ -261,7 +260,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign,
     handleEditMap,
-    handleDeleteMap
+    handleDeleteMap, copydatalink, setCopyDataLink
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   // useEffect(() => {
@@ -510,7 +509,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
 
     // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || formValues.vehType,
-    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ,
+    vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
     // starttime: formData.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
     starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -549,7 +548,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   }
-  
+
 
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
   return (
@@ -571,7 +570,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="bookingno"
                     name="bookingno"
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                   />
                 </span>
 
@@ -581,7 +580,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="billingno"
                     name="billingno"
                     value={formData.billingno || selectedCustomerData.billingno || book.billingno || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                   />
                 </span>
 
@@ -615,12 +614,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                         value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
                         format="DD/MM/YYYY"
                         // label='Booking Date'
+                        // onChange={(date) => handleDateChange(date, 'tripsheetdate')}
+                        readOnly
+                      
+                     
+                      />
+                      {/* <DatePicker
+                        id="tripsheetdate"
+                        value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                        format="DD/MM/YYYY"
+                        // label='Booking Date'
                         onChange={(date) => handleDateChange(date, 'tripsheetdate')}
                       >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
-                        )}
-                      </DatePicker>
+                        
+                      </DatePicker> */}
                     </LocalizationProvider>
                   </div>
                 </span>
@@ -2980,11 +2987,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <div className="input-field" style={{ marginTop: '10px' }}>
                               <div className="input">
                                 <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
-                            
+
                               </div>
                               <div>
-                              <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
-                              <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
+                                <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                                <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
                               </div>
                               {/* <div className="input">
                                 <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
@@ -3121,24 +3128,38 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                               </div> */}
-                              <div>
+                              <div style={{display:"flex", alignItems:"center",gap:"10px"}}>
                                 {/* <Button onClick={generateLink}>Generate Link</Button> */}
-                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                <div style={{display:"blocks"}}>
 
+                                
+                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
+                                </div>
                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
                                   <button>Share on WhatsApp</button>
                                 </WhatsappShareButton>
                                 }
+                                {copydatalink && signaturelinkwhatsapp &&
+                                  <CopyField
+                                  
+                                    value={signaturelinkwhatsapp}
+                                    onCopySuccess={() => setCopyDataLink(false)}
+                                   
+                                  />
+                                
+                                }
 
-                                {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                               </div>
                               <div>
                                 <Button variant="contained" color="primary" onClick={handleRefreshsign}>
                                   Refresh
                                 </Button>
                               </div>
+
                             </div>
+                              {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>}
 
                             <div className="table-TripSheet" style={{ marginTop: '15px' }}>
                               <div className='tripsheet-booking-table'>

@@ -89,4 +89,6 @@ npm i react-toastify -> for message popup
 
  npm install crypto-js -> both installed in front-end and back-end 
  npm install numbro --->for installed in front-end
+ npm install @eisberg-labs/mui-copy-field  ---> for copy the link in frontend
+ 
  

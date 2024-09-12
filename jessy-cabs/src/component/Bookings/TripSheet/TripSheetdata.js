@@ -506,18 +506,37 @@ export const Email = [
   },
 ];
 // Duty
+// export const Duty = [
+//   {
+//     option: "Local",
+//     optionvalue: "local",
+//   },
+//   {
+//     option: "ONE WAY",
+//     optionvalue: "ONEWAY",
+//   },
+//   {
+//     option: "Outstation",
+//     optionvalue: "Outstation",
+//   },
+//   {
+//     option: "Transfer",
+//     optionvalue: "transfer",
+//   },
+// ];
+
 export const Duty = [
   {
     option: "Local",
     optionvalue: "local",
   },
   {
-    option: "ONE WAY",
-    optionvalue: "ONEWAY",
+    option: "OneWay",
+    optionvalue: "oneway",
   },
   {
     option: "Outstation",
-    optionvalue: "outstation",
+    optionvalue: "Outstation",
   },
   {
     option: "Transfer",

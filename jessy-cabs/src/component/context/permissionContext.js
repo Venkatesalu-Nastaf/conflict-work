@@ -7,7 +7,8 @@ const apiurl = APIURL;
 export const PermissionContext = createContext();
 
 export const PermissionProvider = ({ children }) => {
-    
+      const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
     const [open, setOpen] = useState(false);
     const [openAddTag, setOpenAddTag] = React.useState(false);
     const [opendetailsDrawer, setOpendetailsDrawer] = useState(false);
@@ -56,7 +57,7 @@ export const PermissionProvider = ({ children }) => {
 
 
     return (
-        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation, openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen}}>
+        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation, openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen, isDrawerOpen, setIsDrawerOpen}}>
             {children}
         </PermissionContext.Provider>
     )

@@ -168,7 +168,7 @@ export const Vehicle = () => {
       <div className="form-container-realtime">
         <div className="main-content-vehicle">
           <p className="head-tab-type-2-all">
-            <span className="Title-Name">Vehicles</span>
+            <span className="Title-Name">VEHICLES</span>
           </p>
           <div className='vehicle-main-content-form'>
             <div className='vehicle-main'>

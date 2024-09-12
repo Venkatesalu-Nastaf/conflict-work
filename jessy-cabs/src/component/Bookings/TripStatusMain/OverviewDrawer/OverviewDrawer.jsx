@@ -1,49 +1,54 @@
-import React from 'react';
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
+import React, { useState , useContext } from 'react';
+import { Drawer, IconButton, Box, Button, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { PermissionContext } from "../../../context/permissionContext";
 
-const MyDrawer = ({ open, toggleDrawer }) => {
+
+const OverviewDrawer = () => {
+  const {isDrawerOpen, setIsDrawerOpen} = useContext(PermissionContext)
+
+  // Open the drawer
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  // Close the drawer
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
   return (
-    <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
-      <Box sx={{ width: '100%' }} role="presentation">
-        {/* Close Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
-          <IconButton onClick={toggleDrawer(false)}>
+    <>
+    <div>
+      {/* <Button variant="contained" onClick={openDrawer}>
+        Open Full-Page Drawer
+      </Button> */}
+
+      {/* Full-page Drawer */}
+      <Drawer
+        anchor="left"
+        open={isDrawerOpen}
+        onClose={closeDrawer}
+        PaperProps={{
+          sx: { width: '100%' }, // Full width
+        }}
+      >
+        {/* Drawer content */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+          <Typography variant="h6">Full-Page Drawer</Typography>
+
+          {/* Close button */}
+          <IconButton onClick={closeDrawer}>
             <CloseIcon />
           </IconButton>
         </Box>
 
-        {/* List Items */}
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Drawer>
-  );
-};
-
-export default MyDrawer;
+        <Box sx={{ padding: '16px' }}>
+          <Typography variant="body1">This is the content inside the full-page drawer.</Typography>
+        </Box>
+      </Drawer>
+    </div>
+    </>
+  )
+}
+export default OverviewDrawer;

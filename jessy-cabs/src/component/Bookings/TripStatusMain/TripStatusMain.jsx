@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useContext } from 'react';
 import './TripStatusMain.css';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -9,35 +9,40 @@ import TripStatus from './TripStatus/TripStatus';
 import OverviewDrawer from './OverviewDrawer/OverviewDrawer';
 import Button from "@mui/material/Button";
 // import Box from '@mui/material/Box';
+import { PermissionContext } from "../../context/permissionContext";
 
 
 // import VendorStatement from './VendorStatement/VendorStatement';
 // import VehicleStatement from './VehicleStatement/VehicleStatement';
 
 const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
+    const {isDrawerOpen, setIsDrawerOpen} = useContext(PermissionContext)
+
     const [value, setValue] = React.useState("tripstatus");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const [drawerOpen, setDrawerOpen] = useState(false);
-
-    const toggleDrawer = (open) => () => {
-        setDrawerOpen(open);
-    };
-
-
+   
+const handleopendrawer= ()=>{
+    setIsDrawerOpen(true);
+}
 
     return (
+        <>
+            <div>
+                <OverviewDrawer />
+            </div>
         <div className="form-container-TripStatus">
+            
             <div className="main-content-container">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
                         <Box className='head-tab-all' sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Trip Status" value="tripstatus" />
-                                <Button onClick={toggleDrawer(true)}>Overview</Button>
+                                <Button onClick={handleopendrawer} style={{color:"#746b6b"}}>Overview</Button>
                                 {/* <Tab label="Vehicle Statement" value="VehicleStatement" /> */}
                             </TabList>
                         </Box>
@@ -48,10 +53,10 @@ const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
                     </TabContext>
                 </Box>
             </div>
-            <div>
-                <OverviewDrawer open={drawerOpen} toggleDrawer={toggleDrawer} />
-            </div>
+            
         </div >
+        </>
+        
     )
 }
 

@@ -680,10 +680,9 @@ body {
 @media screen and (min-width: 1499px) {
   .side-bar-menu-close .main-content-container {
     width: 100% !important;
-    /* margin: 0px 4px; */
   }
 
-  .main-content-container {
+  .main-content-container {     
     border: 2px solid #ccc;
     overflow: scroll;
     height: 80vh;
@@ -753,7 +752,7 @@ body {
 }
 
 .head-tab-type-2-all .Title-Name {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
   color: #457cdc;
   padding-left: 10px;

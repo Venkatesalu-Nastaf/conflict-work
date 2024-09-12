@@ -144,7 +144,7 @@ const Customer = ({ stationName }) => {
       <div className="main-content-container">
         <form onSubmit={handleClick}>
           <p className="head-tab-type-2-all">
-            <span className="Title-Name">Customer</span>
+            <span className="Title-Name" style={{padding:'12px 16px'}}>CUSTOMER</span>
           </p>
           <div className='main-content-form'>
             <div className="Customer-page-header">

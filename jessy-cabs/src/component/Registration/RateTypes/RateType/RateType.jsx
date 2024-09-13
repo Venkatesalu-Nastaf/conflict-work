@@ -168,7 +168,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{ marginRight: "100px" }}>
+                                <div className="input">
                                     <div className='full-width' style={{ display: 'grid' }}>
                                         <span className='full-width' style={{ display: 'flex' }}>
                                             <div className="icone">
@@ -200,9 +200,9 @@ const RateType = ({ stationName, organizationNames }) => {
                                                 name="ratename"
                                                 value={selectedCustomerData?.ratename || book.ratename}
                                                 onChange={handleChangecredent}
-                                                style={{ 
-                                                    
-                                                
+                                                style={{
+
+
                                                 }}
 
                                             />
@@ -227,65 +227,72 @@ const RateType = ({ stationName, organizationNames }) => {
                                         onChange={handleChange}
                                     />
                                 </div> */}
-                                
+
 
                                 <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="Start Date">
-                                            <DatePicker
-                                                id="startDate"
-                                                value={
-                                                    selectedCustomerData.starttime
-                                                        ? dayjs(selectedCustomerData.starttime)
-                                                        : null || book.starttime
-                                                            ? dayjs(book.starttime)
-                                                            : dayjs()
-                                                }
-                                                format="DD/MM/YYYY"
-                                                onChange={(date) => handleDateChange(date, "starttime")}
-                                            >
-                                                {({ inputProps, inputRef }) => (
-                                                    <TextField
-                                                        {...inputProps}
-                                                        inputRef={inputRef}
-                                                        value={selectedCustomerData?.starttime}
-                                                    />
-                                                )}
-                                            </DatePicker>
-                                        </DemoItem>
-                                    </LocalizationProvider>
+                                    <div>
+                                        <label>Start Date</label>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoItem>
+                                                <DatePicker
+                                                    id="startDate"
+                                                    value={
+                                                        selectedCustomerData.starttime
+                                                            ? dayjs(selectedCustomerData.starttime)
+                                                            : null || book.starttime
+                                                                ? dayjs(book.starttime)
+                                                                : dayjs()
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    onChange={(date) => handleDateChange(date, "starttime")}
+                                                >
+                                                    {({ inputProps, inputRef }) => (
+                                                        <TextField
+                                                            {...inputProps}
+                                                            inputRef={inputRef}
+                                                            value={selectedCustomerData?.starttime}
+                                                        />
+                                                    )}
+                                                </DatePicker>
+                                            </DemoItem>
+                                        </LocalizationProvider>
+                                    </div>
                                 </div>
                                 <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="Close Date">
-                                            <DatePicker
-                                                id="startDate2"
-                                                value={
-                                                    selectedCustomerData.closetime
-                                                        ? dayjs(selectedCustomerData.closetime)
-                                                        : null || book.closetime
-                                                            ? dayjs(book.closetime)
-                                                            : dayjs()
-                                                }
-                                                format="DD/MM/YYYY"
-                                                onChange={(date) => handleDateChange(date, "closetime")}
-                                            >
-                                                {({ inputProps, inputRef }) => (
-                                                    <TextField
-                                                        {...inputProps}
-                                                        inputRef={inputRef}
-                                                        value={selectedCustomerData?.closetime}
-                                                    />
-                                                )}
-                                            </DatePicker>
-                                        </DemoItem>
-                                    </LocalizationProvider>
+                                    <div>
+                                        <label>Close Date</label>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoItem>
+                                                <DatePicker
+                                                    id="startDate2"
+                                                    value={
+                                                        selectedCustomerData.closetime
+                                                            ? dayjs(selectedCustomerData.closetime)
+                                                            : null || book.closetime
+                                                                ? dayjs(book.closetime)
+                                                                : dayjs()
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    onChange={(date) => handleDateChange(date, "closetime")}
+                                                >
+                                                    {({ inputProps, inputRef }) => (
+                                                        <TextField
+                                                            {...inputProps}
+                                                            inputRef={inputRef}
+                                                            value={selectedCustomerData?.closetime}
+                                                        />
+                                                    )}
+                                                </DatePicker>
+                                            </DemoItem>
+                                        </LocalizationProvider>
+                                    </div>
+
                                 </div>
                                 <div className="input radio">
                                     <FormControl>
@@ -373,7 +380,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         onChange={(e) => setSearchText(e.target.value)}
                     />
                 </div>
-                
+
                 <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
@@ -382,7 +389,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                     variant="contained"
                                     endIcon={<ExpandCircleDownOutlinedIcon />}
                                     {...bindTrigger(popupState)}
-                                    style={{ marginTop: '20px' }} 
+                                    style={{ marginTop: '20px' }}
                                 >
                                     Download
                                 </Button>
@@ -395,7 +402,7 @@ const RateType = ({ stationName, organizationNames }) => {
                         )}
                     </PopupState>
                 </div>
-                
+
                 <Box className="common-speed-dail">
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"

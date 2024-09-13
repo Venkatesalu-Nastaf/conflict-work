@@ -107,6 +107,12 @@
   flex-wrap: wrap;
 }
 
+@media screen and (min-width: 1557px) {
+  .TripStatus-input-feilds {
+    width: 94%;
+  }
+}
+
 .TripStatus-input-feilds .input {
   width: fit-content;
   justify-content: center;

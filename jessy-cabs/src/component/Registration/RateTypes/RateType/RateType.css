@@ -120,6 +120,7 @@
 
 .rate-type-inputs {
     flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 @media only screen and (max-width:1196px) {

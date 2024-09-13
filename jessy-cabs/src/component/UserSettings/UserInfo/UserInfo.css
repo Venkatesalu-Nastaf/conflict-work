@@ -195,6 +195,12 @@
     justify-content: space-around;
 }
 
+@media screen and (min-width: 1446px) {
+    .userInfo-inputs-feilds {
+        justify-content: flex-start;
+    }
+}
+
 .avatar-list {
     display: flex;
     justify-content: center;
@@ -244,6 +250,6 @@
     z-index: 1;
 }
 
-.user-info-edit-input-field{
+.user-info-edit-input-field {
     flex-wrap: wrap;
 }

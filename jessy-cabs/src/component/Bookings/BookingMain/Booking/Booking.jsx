@@ -2759,10 +2759,10 @@ const Booking = ({ stationName, customerData }) => {
                     <table>
                       <thead id="update-header">
                         <tr>
-                          <th className="table-head-booking table-heading-first">Driver_NAME</th>
-                          <th className="table-head-booking">VEHICLE_Name</th>
+                          <th className="table-head-booking table-heading-first">Driver NAME</th>
+                          <th className="table-head-booking">VEHICLE Name</th>
                           <th className="table-head-booking">VEHICLE NO</th>
-                          <th className="table-head-booking">Travels_Name</th>
+                          <th className="table-head-booking">Travels Name</th>
                           {/* <th className="table-head-booking">HIRE TYPES</th> */}
                           {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
                         </tr>

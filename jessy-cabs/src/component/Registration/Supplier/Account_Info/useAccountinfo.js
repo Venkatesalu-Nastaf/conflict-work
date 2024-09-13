@@ -17,6 +17,8 @@ const useAccountinfo = () => {
   const [actionName] = useState('');
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
+  const [toDate, setToDate] = useState(dayjs());
+  const [fromDate, setFromDate] = useState(dayjs());
   const [warning, setWarning] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [success, setSuccess] = useState(false);
@@ -402,6 +404,32 @@ const useAccountinfo = () => {
     }
   };
 
+  //search funtion
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      const data = await response.json();
+      console.log(data, "typedata")
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSelectedCustomerData(rowsWithUniqueId)
+        setSuccess(true);
+        setSuccessMessage("Successfully listed")
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found")
+      }
+    } catch {
+      setError(true);
+      setErrorMessage("Check your Network Connection")
+    }
+  };
+
 
   const handleenterSearch = useCallback(async (e) => {
     if (e.key === "Enter") {
@@ -463,7 +491,7 @@ const useAccountinfo = () => {
     setBook((prevBook) => ({
       ...prevBook,
 
-      Accdate: '',
+      Accdate: dayjs(),
       travelsname: '',
       address1: '',
       travelsemail: '',
@@ -575,6 +603,8 @@ const useAccountinfo = () => {
       handleCancel();
       // setRows([]);
       setSuccess(true);
+      handleList()
+      setRows([]);
       setSuccessMessage("Successfully Added");
     } catch {
       setError(true);
@@ -599,6 +629,7 @@ const useAccountinfo = () => {
       setSuccessMessage("Successfully updated");
       handleCancel();
       setRows([]);
+      handleList()
     } catch (err) {
       console.log(err)
       setError(true);
@@ -606,21 +637,25 @@ const useAccountinfo = () => {
     }
   };
 
-  useEffect(() => {
-    const handleList = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/accountinfo`);
-        const data = response.data;
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setRows(rowsWithUniqueId);
-      } catch {
-      }
+  const handleList = useCallback(async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/accountinfo`);
+      const data = response.data;
+      const rowsWithUniqueId = data.map((row, index) => ({
+        ...row,
+        id: index + 1,
+      }));
+      setRows(rowsWithUniqueId);
+    } catch (err) {
+      console.log(err);
     }
+  }, [apiUrl]); // Add dependencies like apiUrl
+
+  useEffect(() => {
     handleList();
-  }, [apiUrl]);
+  }, [handleList]); // Run when handleList changes
+
+  
 
   useEffect(() => {
     const fetchdatafromvehcileinfo = async () => {
@@ -714,9 +749,14 @@ const useAccountinfo = () => {
     handleClick,
     handleChange,
     handleRowClick,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
     handleAdd,
     // handleAddExtra,
     handleenterSearch,
+    handleSearch,
     hidePopup,
     setSearchText,
     searchText,

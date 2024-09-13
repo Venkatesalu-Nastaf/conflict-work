@@ -81,6 +81,12 @@
     margin-bottom: 5px;
 }
 
+@media screen and (min-width: 1557px) {
+    .inputfeild-group-billing {
+        width: 94%;
+    }
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
@@ -136,7 +142,7 @@
     width: 100%;
 }
 
-.download-container-groupbilling{
+.download-container-groupbilling {
     display: flex;
     align-items: center;
     justify-content: flex-start;

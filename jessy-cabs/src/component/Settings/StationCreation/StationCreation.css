@@ -148,6 +148,12 @@
   flex-wrap: wrap !important;
 }
 
+@media screen and (min-width: 1557px) {
+  .station-creation-inputfeilds {
+    width: 94%;
+  }
+}
+
 @media screen and (max-width:880px) {
   .station-creation-inputfeilds {
     flex-wrap: wrap !important;

@@ -210,7 +210,7 @@ const History = () => {
       <div className="form-container-realtime">
         <div className="main-content-history">
           <p className="head-tab-type-2-all">
-            <span className="Title-Name">History</span>
+            <span className="Title-Name">HISTORY</span>
           </p>
           <div className='main-content-form'>
 
@@ -221,7 +221,7 @@ const History = () => {
                 <div className='HistoryDrawer-top' >
                   <div className='history-heading'>
                     <IoBook className='history-topic' />
-                    <h3 className='history-topic'>History</h3>
+                    <h3 className='history-topic'>HISTORY</h3>
 
                   </div>
                   <div className='history-head-buttons' >

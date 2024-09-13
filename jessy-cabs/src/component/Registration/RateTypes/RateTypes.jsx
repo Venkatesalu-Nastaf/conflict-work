@@ -25,13 +25,13 @@ const RateTypes = ({ stationName, organizationNames }) => {
             <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-all">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="RateType" value="ratetype" />
-                <Tab label="Ratevalidity" value="ratevalidity" />
-                <Tab label="Division" value="division" />
+                {/* <Tab label="Ratevalidity" value="ratevalidity" />
+                <Tab label="Division" value="division" /> */}
               </TabList>
             </Box>
             <TabPanel value="ratetype"><RateType stationName={stationName} organizationNames={organizationNames} /></TabPanel>
-            <TabPanel value="ratevalidity"><Ratevalidity /></TabPanel>
-            <TabPanel value="division"><Division /></TabPanel>
+            {/* <TabPanel value="ratevalidity"><Ratevalidity /></TabPanel>
+            <TabPanel value="division"><Division /></TabPanel> */}
           </TabContext>
         </Box>
       </div>

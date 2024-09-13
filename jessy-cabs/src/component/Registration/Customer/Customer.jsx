@@ -32,6 +32,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -86,6 +87,10 @@ const Customer = ({ stationName }) => {
     handleRowClick,
     handleAdd,
     hidePopup,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
     handleAutocompleteChange,
     handleDateChange,
     handleButtonClick,
@@ -96,6 +101,7 @@ const Customer = ({ stationName }) => {
     columns,
     isEditMode,
     handleEdit,
+    handleSearch,
     searchText,
     setSearchText,
     handleenterSearch,
@@ -138,7 +144,7 @@ const Customer = ({ stationName }) => {
       <div className="main-content-container">
         <form onSubmit={handleClick}>
           <p className="head-tab-type-2-all">
-            <span className="Title-Name">Customer</span>
+            <span className="Title-Name" style={{padding:'12px 16px'}}>CUSTOMER</span>
           </p>
           <div className='main-content-form'>
             <div className="Customer-page-header">
@@ -780,21 +786,7 @@ const Customer = ({ stationName }) => {
                     size='small'
                   />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <AiOutlineFileSearch color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="searchText"
-                    className='full-width'
-                    label="Search"
-                    name="searchText"
-                    value={searchText}
-                    onKeyDown={handleenterSearch}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                </div>
+                
 
                 <div className="input">
                   {isEditMode ? (
@@ -812,6 +804,65 @@ const Customer = ({ stationName }) => {
                   )}
                 </div>
                 
+              </div>
+
+              <div className="detail-container-main">
+                <div className="container-left">
+                  <div className="">
+                    <div className="input-field vehicle-info-search-input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <AiOutlineFileSearch color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          id="searchText"
+                          className='full-width'
+                          label="Search"
+                          name="searchText"
+                          value={searchText}
+                          onKeyDown={handleenterSearch}
+                          onChange={(e) => setSearchText(e.target.value)}
+                        />
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <div className="icone">
+                            <DateRangeIcon color="action" />
+                          </div>
+                          <DatePicker
+                            id="fromDate"
+                            className='full-width'
+                            label="From Date"
+                            format="DD/MM/YYYY"
+                            name='fromDate'
+                            value={fromDate}
+                            onChange={(date) => setFromDate(date)}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <div className="icone">
+                            <DateRangeIcon color="action" />
+                          </div>
+                          <DatePicker
+                            id="toDate"
+                            className='full-width'
+                            label="To Date"
+                            format="DD/MM/YYYY"
+                            name="toDate"
+                            value={toDate}
+                            onChange={(date) => setToDate(date)}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <Button variant="contained" onClick={handleSearch}>Search</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className='alert-popup-main'>
                 {error &&

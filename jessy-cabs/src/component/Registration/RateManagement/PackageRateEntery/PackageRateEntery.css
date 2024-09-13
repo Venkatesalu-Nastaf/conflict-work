@@ -154,6 +154,12 @@
     /* margin-top: 20px; */
 }
 
+@media screen and (min-width: 1557px) {
+    .feild-inputs {
+      width: 94%;
+    }
+  }
+
 @media screen and (max-width:1122px) {
     .feild-inputs {
         display: flex;

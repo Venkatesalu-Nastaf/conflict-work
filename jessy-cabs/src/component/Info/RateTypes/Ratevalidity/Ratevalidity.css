@@ -5,7 +5,7 @@
 
 .detail-container-main-ratevalidity {
     display: flex;
-    width: 100% ;
+    width: 100%;
 }
 
 /* .form-container-ratetype .Title-Name {
@@ -91,6 +91,12 @@
     /* border-radius: 10px; */
 }
 
+@media screen and (min-width: 1557px) {
+    .copy-title-btn-RateValidity {
+        width: 94%;
+    }
+}
+
 @media screen and (max-width: 375px) {
     .detail-container-main-ratevalidity .container-left {
         position: relative;
@@ -143,7 +149,7 @@
 
 }
 
-.RateValidity-table{
+.RateValidity-table {
     display: flex;
     justify-content: center;
 }

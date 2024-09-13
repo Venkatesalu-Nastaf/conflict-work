@@ -1,0 +1,17 @@
+
+
+.top-cards{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-around;
+align-items: center;
+padding: 10px;
+
+}
+.top-cards-hidden{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  gap: 10px;
+}

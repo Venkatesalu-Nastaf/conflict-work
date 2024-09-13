@@ -142,6 +142,12 @@
   flex-wrap: wrap;
 }
 
+@media screen and (min-width: 1557px) {
+  .account-info-input-feild {
+    width: 94%;
+  }
+}
+
 .account-info-label {
   flex-wrap: wrap;
 }

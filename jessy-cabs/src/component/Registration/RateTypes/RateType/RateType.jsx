@@ -17,7 +17,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
+// import FactCheckIcon from '@mui/icons-material/FactCheck';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -365,42 +365,44 @@ const RateType = ({ stationName, organizationNames }) => {
                         </div>
                     }
                 </div>
-                <div className="input">
-                    <div className="icone">
-                        <AiOutlineFileSearch color="action" />
+                <div style={{ display: "flex", gap: "20px", alignItems:"center", flexWrap:"wrap" }}>
+                    <div className="Download-btn">
+                        <PopupState variant="popover" popupId="demo-popup-menu">
+                            {(popupState) => (
+                                <React.Fragment>
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<ExpandCircleDownOutlinedIcon />}
+                                        {...bindTrigger(popupState)}
+                                        style={{ marginTop: '20px' }}
+                                    >
+                                        Download
+                                    </Button>
+
+                                    <Menu {...bindMenu(popupState)}>
+                                        <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                        <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                    </Menu>
+                                </React.Fragment>
+                            )}
+                        </PopupState>
                     </div>
-                    <TextField
-                        size="small"
-                        id="searchText"
-                        className='full-width'
-                        label="Search"
-                        name="searchText"
-                        value={searchText}
-                        onKeyDown={handleenterSearch}
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                </div>
 
-                <div className="Download-btn">
-                    <PopupState variant="popover" popupId="demo-popup-menu">
-                        {(popupState) => (
-                            <React.Fragment>
-                                <Button
-                                    variant="contained"
-                                    endIcon={<ExpandCircleDownOutlinedIcon />}
-                                    {...bindTrigger(popupState)}
-                                    style={{ marginTop: '20px' }}
-                                >
-                                    Download
-                                </Button>
-
-                                <Menu {...bindMenu(popupState)}>
-                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                                </Menu>
-                            </React.Fragment>
-                        )}
-                    </PopupState>
+                    <div className="input-search-ratetype">
+                        <div className="icone">
+                            <AiOutlineFileSearch color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="searchText"
+                            className='full-width'
+                            label="Search"
+                            name="searchText"
+                            value={searchText}
+                            onKeyDown={handleenterSearch}
+                            onChange={(e) => setSearchText(e.target.value)}
+                        />
+                    </div>
                 </div>
 
                 <Box className="common-speed-dail">

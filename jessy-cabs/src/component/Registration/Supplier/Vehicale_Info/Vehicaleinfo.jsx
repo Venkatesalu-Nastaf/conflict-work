@@ -1105,6 +1105,72 @@ useEffect(()=>{
           }
         </div>
 
+       
+        <Box className='common-speed-dail'>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {Supllier_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List")}
+              />
+            )}
+            {Supllier_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit")}
+              />
+            )}
+            {Supllier_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete")}
+              />
+            )}
+            {edit ? "" : (Supllier_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add")}
+              />
+            ))}
+            <SpeedDialAction
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel")}
+            />
+          </StyledSpeedDial>
+        </Box>
+        <div style={{display:"flex", gap:"20px", alignItems:"center", flexWrap:"wrap"}}>
+
+        
+        <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
+
         <div className="detail-container-main">
           <div className="container-left">
             <div className="">
@@ -1163,66 +1229,7 @@ useEffect(()=>{
             </div>
           </div>
         </div>
-        <Box className='common-speed-dail'>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-            direction="left"
-          >
-            {Supllier_read === 1 && (
-              <SpeedDialAction
-                key="list"
-                icon={<ChecklistIcon />}
-                tooltipTitle="List"
-                onClick={(event) => handleClick(event, "List")}
-              />
-            )}
-            {Supllier_modify === 1 && (
-              <SpeedDialAction
-                key="edit"
-                icon={<ModeEditIcon />}
-                tooltipTitle="Edit"
-                onClick={(event) => handleClick(event, "Edit")}
-              />
-            )}
-            {Supllier_delete === 1 && (
-              <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
-              />
-            )}
-            {edit ? "" : (Supllier_new === 1 && (
-              <SpeedDialAction
-                key="Add"
-                icon={<BookmarkAddedIcon />}
-                tooltipTitle="Add"
-                onClick={(event) => handleClick(event, "Add")}
-              />
-            ))}
-            <SpeedDialAction
-              key="Cancel"
-              icon={<CancelPresentationIcon />}
-              tooltipTitle="Cancel"
-              onClick={(event) => handleClick(event, "Cancel")}
-            />
-          </StyledSpeedDial>
-        </Box>
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+
         </div>
         <div className="table-bookingCopy-Booking">
           <div className='vehicle-info-main-table'>

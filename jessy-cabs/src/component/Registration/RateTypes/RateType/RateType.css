@@ -168,3 +168,10 @@
 .add-edit-ratetype{
     margin-top: 20px;
 }
+
+.input-search-ratetype {
+    width: 344px !important;
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
+}

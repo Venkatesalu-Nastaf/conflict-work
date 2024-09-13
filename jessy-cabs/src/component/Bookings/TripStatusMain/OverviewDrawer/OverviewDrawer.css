@@ -15,3 +15,9 @@ padding: 10px;
   font-size: 30px;
   gap: 10px;
 }
+.table-top-buttons{
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}

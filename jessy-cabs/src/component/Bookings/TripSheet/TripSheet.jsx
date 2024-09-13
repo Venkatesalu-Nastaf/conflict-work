@@ -1612,8 +1612,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)}
+                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* <br></br> */}
+                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && (
+                    (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
+                      <label className='invalid-km' style={{ paddingBottom: '18px' }}>
+                        Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
+                      </label>
+                    )
+                  )}
                   {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
@@ -1782,7 +1789,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="additionaltime"
                     value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
                     onChange={handleChange}
-                    label="Additional Time"
+                    label="Add Time"
                     id="additionaltime"
                     // variant="standard"
                     size='small'
@@ -3461,7 +3468,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e)
                       setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
                     }}
-                    label="V permet To Vendor"
+                    label="Vendor permet"
                     id="vpermettovendor"
                     autoComplete="password"
                   />
@@ -3494,7 +3501,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="customeradvance"
                     value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
                     onChange={handleChange}
-                    label="Customer Customer Advance"
+                    label="Customer Advance"
                     id="customer-advance"
                     autoComplete="password"
                   />
@@ -3851,21 +3858,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="free-solo-Groups"
                         freeSolo
                         size="small"
-                        // value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
-                        // options={GroupTypes?.map((option) => ({
-                        //   label: option?.Option,
-                        // }))}
                         value={
-                          selectedCustomerDatas.Groups || formData.Groups ||
+                          selectedCustomerDatas.Groups ||
+                          formData.Groups ||
                           selectedCustomerData.Groups ||
                           book.Groups || ""
                         }
+                        options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} label="Groups" inputRef={params.inputRef} />
                           );
                         }}
+
                       />
                     </div>
 

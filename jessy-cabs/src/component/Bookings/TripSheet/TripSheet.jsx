@@ -1512,7 +1512,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
                     {/* {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>} */}
-                    {calculateTotalDay() === 0 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
+                    {calculateTotalDay() === 1 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
 
                     <input
                       type="time"
@@ -1521,7 +1521,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if (calculateTotalDay() === 0 && (startTimeVar && rTime <= startTimeVar)) {
+                        if (calculateTotalDay() === 1 && (startTimeVar && rTime <= startTimeVar)) {
                           return;
                         } else {
                           setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
@@ -1541,14 +1541,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(closeTimeVar && calculateTotalDay() === 0 &&
+                    {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
                       || (!closeTimeVar && <label> Shed In Time</label>)
                     }
-                    {calculateTotalDay() > 0 ? (<label>Shed In Time</label>) : ""}
+                    {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""}
                     <input
                       type="time"
                       name="shedintime"
@@ -1557,7 +1557,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         const rTime = event.target.value;
 
                         // Check if the day difference is 0
-                        if (calculateTotalDay() === 0) {
+                        if (calculateTotalDay() === 1) {
                           // Only allow time greater than closeTimeVar
                           if (closeTimeVar && rTime > closeTimeVar) {
                             setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
@@ -4402,7 +4402,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="remark"
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      if (!lockdata) {
+                        setVendorinfodata((vendorinfo) => ({...vendorinfo,vendorRemarks: e.target.value,
+                        }));
+                      }
+                    }}
                     label="Remark"
                     id="remark"
                     multiline

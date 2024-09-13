@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback,useMemo } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -42,6 +42,7 @@ const useCustomer = () => {
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState(false);
     const [info, setInfo] = useState(false);
+    const [infoMessage, setInfoMessage] = useState({});
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
@@ -53,6 +54,7 @@ const useCustomer = () => {
     const [customerratetype,setCustomerRatetype]=useState([])
     const [cerendentialdata,setCredentialData]=useState()
     const [deletedialogbox,setDeletedDialog]=useState(false)
+    const [cerendentialdataforstations,setCredentialDataforstations]=useState()
     
 
 
@@ -337,18 +339,106 @@ const useCustomer = () => {
         }
     };
 
-    const handleAutocompleteChange = (event, newValue, name) => {
+    // const  fetchdataratemanganmentstations=async(stations)=>{
+    //     // console.log(customerdataname,"namee")
+    //     const ratetype=selectedCustomerData?.rateType || book.rateType 
+    //     const ratename="Customer"
+    //     if(stations){
+    //         const response=await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`)
+    //         const responsedata=response.data;
+            
+    //         console.log(response,"data")
+    //         console.log(responsedata?.length,"reeee")
+           
+    //         if(responsedata?.length ===0){
+    //             setInfo(true)
+    //             setInfoMessage("ratetype stations not regitsered")
+                
+    //             setCredentialDataforstations(true)
+    //         }
+    //         else{
+    //             setSuccess(true)
+    //             setSuccessMessage("Ratetype stations registered")
+    //             setCredentialDataforstations(false)
+    //             // return false;
+    //         }
+    //     }
+    // }
+    // const ratetypedata=selectedCustomerData?.rateType || book.rateType 
+    
+
+const memoizedFetchStations = useMemo(() => {
+    return async (stations) => {
+        const ratetype = selectedCustomerData?.rateType || book.rateType;
+        const ratename = "Customer";
+       
+
+        if (stations) {
+            try {
+                const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
+                const responsedata = response.data;
+
+                if (responsedata?.length === 0) {
+                    setInfo(true);
+                    setInfoMessage("Ratetype stations not registered");
+                    setCredentialDataforstations(true);
+                } else {
+                    setSuccess(true);
+                    setSuccessMessage("Ratetype stations registered");
+                    setCredentialDataforstations(false);
+                }
+            } catch (error) {
+                console.error("Error fetching data", error);
+                // Handle the error as needed
+            }
+        }
+    };
+}, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
+
+const handleAutocompleteChangestations=async(event, newValue, name) => {
+    const selectedOption = newValue ? newValue.label : '';
+    if(name === "servicestation"){
+       
+            // const datacrendital= fetchdataratemanganmentstations(selectedOption);
+            await memoizedFetchStations(selectedOption)
+            // console.log(datacrendital,"datacred")
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: selectedOption,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: selectedOption,
+            }));
+        }
+    }
+
+    const handleAutocompleteChange = async(event, newValue, name) => {
         const selectedOption = newValue ? newValue.label : '';
-
-
-        setBook((prevBook) => ({
+        if(name === "rateType"){
+        
+                setBook((prevBook) => ({
+                    ...prevBook,
+                    servicestation: '', // Clear the servicestation
+                    [name]: selectedOption, // Update the ratetype
+                }));
+                setSelectedCustomerData((prevData) => ({
+                    ...prevData,
+                    servicestation: '', // Clear the servicestation
+                    [name]: selectedOption, // Update the ratetype
+                }));
+               
+            }
+        else{
+           setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            [name]: selectedOption,
+             [name]: selectedOption,
         }));
+    }
     };
     const handleAutocompleteChangebilling = (event, newValue, name) => {
 
@@ -458,6 +548,8 @@ const useCustomer = () => {
             
       
     }
+  
+   
 
 
    
@@ -561,7 +653,7 @@ const useCustomer = () => {
 
     // Call the function to add customer property to each object
     // console.log("")
-console.log(book,"boooooo")
+
     const handleAdd = async () => {
 
         const hasEmptyFields = customerfieldSets.some(fieldSet =>
@@ -590,6 +682,11 @@ console.log(book,"boooooo")
             setErrorMessage('customer aldrreay exist.');
             return;
         }
+        if(cerendentialdataforstations === true){
+            setError(true);
+            setErrorMessage('RateType stations not registered ');
+            return;
+        }
 
         try {
             console.log(cerendentialdata,"credddatattaatta")
@@ -611,6 +708,7 @@ console.log(book,"boooooo")
                 setSuccess(true);
                 setSuccessMessage(response.data.message);
                 setCredentialData()
+                setCredentialDataforstations()
             } else {
                 setError(true);
                 setErrorMessage(response.data.message);
@@ -632,6 +730,11 @@ console.log(book,"boooooo")
             setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
             return;
         }
+        if(cerendentialdataforstations === true){
+            setError(true);
+            setErrorMessage('RateType stations not registered ');
+            return;
+        }
 
         const { id, orderByEmail, orderedby, orderByMobileNo,customerId, ...restselectedcustomerdata } = selectedCustomerData
         const updatedCustomer = {
@@ -642,13 +745,12 @@ console.log(book,"boooooo")
         };
 
         const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
-        console.log(datasets,"hhhhh")
+        console.log(datasets,"hhhhh",updatedCustomer)
         await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
-        // setBook(prev => ({ ...prev, hybrid: false,TimeToggle:false }))
-        // setSelectedCustomerData(prev => ({ ...prev, hybrid: false,TimeToggle:false }))
+      
         handleCancel();
         setRows([]);
         handleList();
@@ -781,7 +883,7 @@ console.log(book,"boooooo")
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
+        infoMessage,
         book,
         handleClick,
         handleChange,
@@ -805,7 +907,7 @@ console.log(book,"boooooo")
         columns,
         isEditMode, setSelectedCustomerData,
         handleEdit,
-        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,
+        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,handleAutocompleteChangestations,
         handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove,customerratetype,handleChangeuniquecustomer,cerendentialdata
     };
 };

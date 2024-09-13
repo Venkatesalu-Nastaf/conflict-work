@@ -1,6 +1,6 @@
 
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback,useMemo } from 'react';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
@@ -25,11 +25,13 @@ const useAccountinfo = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage, setWarningMessage] = useState({});
-  // const [infoMessage, setInfoMessage] = useState({});
+  const [infoMessage, setInfoMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [suppilerrate, setSupplierRatetpe] = useState([])
   const [vechiledata, setVehicleData] = useState([]);
   const [cerendentialdata, setCredentialData] = useState()
+  const [cerendentialdataforstations, setCredentialDataforstations] = useState()
+
 
   //----------popup----------------------
 
@@ -293,6 +295,7 @@ const useAccountinfo = () => {
     { field: "id", headerName: "Sno", width: 100 },
     { field: "cperson", headerName: "Supplier_Name", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
+    { field: "stations", headerName: "Stations", width: 160 },
     { field: "Accdate", headerName: "Acc_Date", width: 160 },
     { field: "accountNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
@@ -317,7 +320,8 @@ const useAccountinfo = () => {
     acType: '',
     vehicleInfo: '',
     driverName: "",
-    vehRegNo: ""
+    vehRegNo: "",
+    stations: ""
 
   });
 
@@ -367,12 +371,14 @@ const useAccountinfo = () => {
     }
   };
 
+
+
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     if (name === "vehRegNo") {
 
       const selectedOrder = vechiledata?.find(option => option?.vehRegNo === value?.label);
-     
+
       if (selectedOrder) {
 
         setBook(prevState => ({
@@ -389,6 +395,20 @@ const useAccountinfo = () => {
           vehicleInfo: selectedOrder.hiretypes
         }));
       }
+    }
+    else if(name === "rateType") {
+
+
+      setBook((prevBook) => ({
+        ...prevBook,
+        stations: '', // Clear the servicestation
+        [name]: selectedOption,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        stations: '', // Clear the servicestation
+        [name]: selectedOption,
+      }));
     }
     else {
 
@@ -504,7 +524,8 @@ const useAccountinfo = () => {
       vehicleInfo: '',
       cperson: '',
       driverName: "",
-      vehRegNo: ""
+      vehRegNo: "",
+      stations: ""
 
 
     }));
@@ -543,11 +564,56 @@ const useAccountinfo = () => {
 
   }
 
+  const memoizedFetchStations = useMemo(() => {
+    return async (stations) => {
+        const ratetype = selectedCustomerData?.rateType || book.rateType
+    const ratename = "Supplier"
+       
+
+        if (stations) {
+            try {
+                const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
+                const responsedata = response.data;
+
+                if (responsedata?.length === 0) {
+                    setInfo(true);
+                    setInfoMessage("Ratetype stations not registered");
+                    setCredentialDataforstations(true);
+                } else {
+                    setSuccess(true);
+                    setSuccessMessage("Ratetype stations registered");
+                    setCredentialDataforstations(false);
+                }
+            } catch (error) {
+                console.error("Error fetching data", error);
+                // Handle the error as needed
+            }
+        }
+    };
+}, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
+
+ 
+  const handleAutocompleteChangestations = async(event, value, name) => {
+    const selectedOption = value ? value.label : '';
+   
+   await memoizedFetchStations(selectedOption)
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: selectedOption,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: selectedOption,
+      }));
+    }
+
+  
+
 
   const handleChangeuniquetravelname = (event) => {
     const { name, value } = event.target;
     const datacrendital = uniquetravellname(value);
-    console.log(datacrendital, "cred")
+    
     setBook((prevBook) => ({
       ...prevBook,
       [name]: value,
@@ -562,9 +628,10 @@ const useAccountinfo = () => {
     const ratetype = book.rateType;
     const travelsname = book.travelsname;
     const vehiclinfo = book.vehicleInfo;
-    const Accdate = book.Accdate || dayjs().format('YYYY-MM-DD');
+    // const Accdate = book.Accdate || dayjs().format('YYYY-MM-DD');
     const travelsemail = book.travelsemail;
-    const vehRegNo = book.vehRegNo;
+    // const vehRegNo = book.vehRegNo;
+    const stations = book.stations;
 
     if (!travelsname) {
       setWarning(true);
@@ -581,21 +648,26 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Vehicle info fields");
       return;
     }
-    // if (!ratetype) {
-    //   setWarning(true);
-    //   setWarningMessage("Fill Rate Type fields");
-    //   return;
-    // }
-    // if (!vehRegNo) {
-    //   setWarning(true);
-    //   setWarningMessage("Fill VehRegno fields");
-    //   return;
-    // }
+    if (!ratetype) {
+      setWarning(true);
+      setWarningMessage("Fill Rate Type fields");
+      return;
+    }
+    if (!stations) {
+      setWarning(true);
+      setWarningMessage("Fill stations fields");
+      return;
+    }
     if (cerendentialdata === true) {
       setWarning(true);
       setWarningMessage(" travelsname Already Exists");
       return;
     }
+    if(cerendentialdataforstations === true){
+      setError(true);
+      setErrorMessage('RateType stations not registered ');
+      return;
+  }
 
     try {
       console.log(book, "datata")
@@ -606,6 +678,8 @@ const useAccountinfo = () => {
       handleList()
       setRows([]);
       setSuccessMessage("Successfully Added");
+      setCredentialData()
+      setCredentialDataforstations()
     } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -618,6 +692,11 @@ const useAccountinfo = () => {
       setWarningMessage(" travelsname Already Exists");
       return;
     }
+    if(cerendentialdataforstations === true){
+      setError(true);
+      setErrorMessage('RateType stations not registered ');
+      return;
+  }
     try {
       // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
       const { id, ...restselectedcustomer } = selectedCustomerData
@@ -628,6 +707,8 @@ const useAccountinfo = () => {
       setSuccess(true);
       setSuccessMessage("Successfully updated");
       handleCancel();
+      setCredentialData()
+      setCredentialDataforstations()
       setRows([]);
       handleList()
     } catch (err) {
@@ -655,7 +736,7 @@ const useAccountinfo = () => {
     handleList();
   }, [handleList]); // Run when handleList changes
 
-  
+
 
   useEffect(() => {
     const fetchdatafromvehcileinfo = async () => {
@@ -769,7 +850,7 @@ const useAccountinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, handleAutocompleteChangestations, infoMessage
   };
 };
 

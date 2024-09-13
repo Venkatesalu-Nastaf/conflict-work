@@ -30,6 +30,7 @@ import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
 import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -43,7 +44,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const PackageRateEntery = ({ organizationNames, vehileName }) => {
+const PackageRateEntery = ({ organizationNames, vehileName,stationname }) => {
 
   const {
     selectedCustomerId,
@@ -79,6 +80,7 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  console.log(stationname,"name")
 
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
   const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
@@ -170,6 +172,29 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     }
                   />
                 </div>
+                         <div className="input">
+                                    <div className="icone">
+                                        <WarehouseIcon color="action" />
+                                    </div>
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="stations"
+                                        freeSolo
+                                        onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
+                                        value={stationname.find((option) => option.Option)?.label || commonData?.stations || ''}
+                                        options={stationname.map((option) => ({
+                                            label: option.Stationname,
+                                        }))}
+                                        getOptionLabel={(option) => option.label || commonData?.stations || ''}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
+                                            )
+                                        }
+                                        }
+                                    />
+                                </div>
                 <div className=" PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />

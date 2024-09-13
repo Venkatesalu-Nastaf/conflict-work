@@ -69,7 +69,8 @@ router.get('/searchAccountinginfo', (req, res) => {
             'acType',
             'vehicleInfo',
             'vehRegno',
-            'driverName'
+            'driverName',
+            'stations'
         ];
 
         if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {

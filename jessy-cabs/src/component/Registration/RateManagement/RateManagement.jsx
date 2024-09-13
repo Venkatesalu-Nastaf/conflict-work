@@ -27,7 +27,7 @@ const RateManagement = ({ stationName, organizationNames, vehileName }) => {
                 <Tab label="Driver Bata Rate" value="driverbatarate" />
               </TabList>
             </Box>
-            <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} vehileName={vehileName} /></TabPanel>
+            <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} vehileName={vehileName} stationname={stationName}/></TabPanel>
             <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel>
           </TabContext>
         </Box>

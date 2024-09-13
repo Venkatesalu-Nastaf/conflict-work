@@ -491,6 +491,21 @@ router.get("/getuniqueCustomerdata/:customer", (req, res) => {
 
   })
 })
+router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
+  const ratetype = req.params.ratetype;
+  const stations=req.params.stations;
+  const ratename=req.params.ratename;
+  console.log(ratetype, "params",stations,ratename)
+  db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype,ratename,stations], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+    }
+    console.log(results.length,"dddd")
+    return res.status(200).json(results);
+
+  })
+})
+
 
 
 module.exports = router;

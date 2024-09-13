@@ -1439,29 +1439,38 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
+    const stations = req.query.stations;
 
+    console.log(totalHours, VehicleName, duty, totkm, OrganizationName,stations, 'rate');
 
-    console.log(totalHours, VehicleName, duty, totkm, OrganizationName, 'rate');
-
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName) {
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
 
 
 
+    // const sql = `SELECT * 
+    //                 FROM ratemanagement
+    //                 WHERE duty = ?
+    //                     AND VehicleName = ?
+    //                     AND OrganizationName =?
+    //                     AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? ))
+    //                 ORDER BY UptoHours 
+    //                 LIMIT 1;`
+
     const sql = `SELECT * 
                     FROM ratemanagement
                     WHERE duty = ?
                         AND VehicleName = ?
                         AND OrganizationName =?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
+                        AND stations = ?
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? ))
                     ORDER BY UptoHours 
                     LIMIT 1;`
 
-
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
+    db.query(sql, [duty, VehicleName, OrganizationName,stations, totalHours, totkm, duty, VehicleName, OrganizationName,stations], (error, results) => {
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
@@ -1483,11 +1492,12 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
+    const stations = req.query.stations;
 
-    console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan")
+    console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan",stations)
 
 
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype) {
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype || !stations) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
@@ -1498,20 +1508,21 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                         AND VehicleName = ?
                         AND OrganizationName =?
                         AND ratetype = ?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =?))
+                        AND stations = ?
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ?))
                     ORDER BY UptoHours 
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, ratetype, totalHours, totkm, duty, VehicleName, OrganizationName], (error, results) => {
-        console.log(results,"s")
+    db.query(sql, [duty, VehicleName, OrganizationName, ratetype,stations, totalHours, totkm, duty, VehicleName, OrganizationName,stations], (error, results) => {
+    
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
         }
 
         // Send the fetched row in the response
-        console.log(results[0],"supplier")
+        console.log(results[0],"supplier",results)
         res.json(results[0]);
     });
 });
@@ -1559,6 +1570,25 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
 
     sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    db.query(sql, [vehicleNo], (err, result) => {
+        if (err) {
+            console.log("err", err)
+            res.json({ message: "error fetching data", success: false })
+        }
+
+        if (result) {
+            res.status(200).json(result)
+        }
+    })
+
+})
+router.get('/getvehciledateandtimeconflict/:VehicleNo', (req, res) => {
+    const vehicleNo = req.params.VehicleNo
+    console.log(vehicleNo, "nooo")
+    // const status = 'Transfer_Closed';
+    // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
+
+    sql = `SELECT * FROM tripsheet WHERE vehRegNo = ? ORDER BY shedInDate DESC, tripid DESC LIMIT 1`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
@@ -1663,13 +1693,26 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
-    // console.log(customer,"cusssssssssssssssssss")
-    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
+    console.log(customer,"cusssssssssssssssssss")
+    db.query('select rateType,TimeToggle,servicestation from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-    //   console.log(result,"mm")
+      console.log(result,"mm")
+        res.status(200).json(result);
+    })
+})
+
+router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
+    const supplier = req.params.supplierdata;
+    console.log(supplier,"cusssssssssssssssssss")
+    db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal server error' });
+            return;
+        }
+      console.log(result,"mm")
         res.status(200).json(result);
     })
 })

@@ -503,7 +503,7 @@
 
 .sub-section2-driver .booking-driver-table {
   height: 220px;
-  /* overflow: scroll; */
+  overflow: scroll;
 }
 
 .booking-driver-table .table-heading-first {

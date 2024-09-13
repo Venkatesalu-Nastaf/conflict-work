@@ -8,20 +8,26 @@ import EtripSheetSignature from './EtripSheetSignature/EtripSheetSignature';
 import "./OverviewDrawer.css"
 import { CiNoWaitingSign } from "react-icons/ci";
 import EtripSheetTable from './EtripSheetTable/EtripSheetTable';
-
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import { SiStatuspal } from "react-icons/si";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 import { GiMatterStates } from "react-icons/gi";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Button from "@mui/material/Button";
+import useTripStatus from '../TripStatus/useTripStatus';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
+
 
 
 
@@ -37,8 +43,18 @@ const OverviewDrawer = () => {
   const handleShowCards = () => {
     SetShowCards(!showCards);
   }
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+
+  const {
+    popupOpen,
+    handlePopupClose,
+    selectedRow,
+    handleBookingClick,
+    handleTripsheetClick,
+    handleButtonClick,
+  } = useTripStatus();
 
   return (
     <>
@@ -60,7 +76,7 @@ const OverviewDrawer = () => {
             </IconButton>
           </Box>
 
-          <div className='input-field' style={{ padding: '20px' }}>
+          <div className='input-field' style={{ padding: '20px', flexWrap: "wrap" }}>
 
             <div className="input">
               <div className="icone">
@@ -211,10 +227,33 @@ const OverviewDrawer = () => {
                 <p style={{ margin: '0px' }}>No data to show</p>
               </div>
             }
+            <div className='table-top-buttons'>
+              <Button variant="outlined">Cancel</Button>
+              <Button variant="contained">Verified</Button>
+              {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
+              <Button onClick={handleButtonClick}>Shdow</Button>
+            </div>
             <EtripSheetTable />
           </Box>
         </Drawer>
       </div>
+
+      <Dialog open={popupOpen} onClose={handlePopupClose}>
+        <DialogTitle>Select an Option</DialogTitle>
+        <DialogContent>
+          {selectedRow && (
+            <div>
+              <Button onClick={handleBookingClick}>Booking</Button>
+              <Button onClick={handleTripsheetClick}>Tripsheet</Button>
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePopupClose} variant="contained" color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

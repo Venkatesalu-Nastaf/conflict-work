@@ -10,6 +10,7 @@ const columns = [
     { field: "id", headerName: "ID", width: 60 },
     { field: "ratetype", headerName: "Rate Type", width: 120 },
     { field: "duty", headerName: "Duty", width: 100 },
+    { field: "stations", headerName: "Stations", width: 100 },
     { field: "OrganizationName", headerName: "Organization Name", width: 150 },
     { field: "vehicleName", headerName: "vehicle Type", width: 110 },
     { field: "package", headerName: "Package", width: 80 },
@@ -52,6 +53,7 @@ const usePackagerateentry = () => {
         // vehicleType: '',
         vehicleName: '',
         Validity: '',
+        stations:'',
     });
 
     const [ratename, setRatename] = useState([])
@@ -253,6 +255,7 @@ const usePackagerateentry = () => {
             OrganizationName: '',
             vehicleName: '',
             Validity: '',
+            stations:''
         }))
 
         setIsEditMode(false);
@@ -280,12 +283,13 @@ const usePackagerateentry = () => {
         }]);
 
         // Extract relevant properties for commonData
-        const { ratetype, OrganizationName, vehicleName, Validity } = customerData;
+        const { ratetype, OrganizationName, vehicleName, Validity,stations} = customerData;
         setCommonData({
             ratetype,
             OrganizationName,
             vehicleName,
             Validity,
+            stations
         });
         setSelectedCustomerId(params.row.id);
         setIsEditMode(true);
@@ -364,7 +368,8 @@ const usePackagerateentry = () => {
             const rateType = commonData?.ratetype;
             const orgName = commonData?.OrganizationName || '';
             const vehicleType = commonData?.vehicleName || '';
-            const payload = { rateType, orgName, vehicleType }
+            const stations=commonData?.stations || '';
+            const payload = { rateType, orgName, vehicleType,stations }
             const response = await axios.get(`${apiUrl}/ratemanagement-show`, { params: payload });
             const data = response.data;
             console.log("data", data)

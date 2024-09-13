@@ -119,7 +119,10 @@ const TransferReport = ({ stationName }) => {
     // rowzip,
     rowSelectionModel,
     setRowSelectionModel,
-    pdfzipdata
+    pdfzipdata,
+    handleKeyDown,
+    handleChange,
+    tripID
   } = useTransferreport();
   const {
     handleExcelDownload, error1, errormessage1,
@@ -132,7 +135,8 @@ const TransferReport = ({ stationName }) => {
   const [particularPdf, setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
-  const { pdfPrint, setPdfPrint } = PdfData()
+  const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
+  const [billId, setBillId] = useState()
   // useEffect(() => {
   //   setSelectedImageorganisation(sharedData)
   // }, [sharedData])
@@ -191,26 +195,32 @@ const TransferReport = ({ stationName }) => {
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
-        const customer = decodeURIComponent(storedCustomer);
+        // const customer = decodeURIComponent(storedCustomer);
+        // const trip = tripID?.join(',')
 
-        if (!customer || !tripid) return
+        // if (!customer || !tripid) return
 
         const response = await fetch(
-          `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
+          `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripID}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
-        
+        setBillId(tripData)
         setInvoicedata(tripData)
       }
       catch (err) {
-        console.log(err);
+        console.log(err, 'error');
       }
     }
     fetchData()
-  }, [apiUrl])
+  }, [apiUrl, billGenerate])
 
+  useEffect(() => {
+    if (pdfBillList === "PDF 1" || pdfBillList === "PDF 2") {
+      setBillGenerate(!billGenerate)
+    }
+  }, [pdfBillList])
 
   const handleDownloadPdf = async () => {
     if (!pdfBillList) {
@@ -321,6 +331,8 @@ const TransferReport = ({ stationName }) => {
                     className='full-width'
                     label="Invoice No"
                     value={invoiceno}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleChange}
                     name="invoiceno"
                     autoComplete='off'
                   />

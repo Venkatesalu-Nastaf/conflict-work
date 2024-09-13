@@ -7,6 +7,7 @@ import numWords from 'num-words'
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
 
 const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno }) => {
+
     const { handlePopup } = useGroupbilling()
     const targetRef = useRef()
     const [orgname, setOrgname] = useState('')
@@ -51,8 +52,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 address = li.address1
                 customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
-                totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
-                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100
+                totalcgst += parseInt(li.totalcalcAmount) * gst / 100
+                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * gst / 100 + parseInt(li.totalcalcAmount) * gst / 100
             })
         }
 
@@ -167,10 +168,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <td className="tdata">{li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
                                     <td className="tdata">{li.totalcalcAmount}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}</td>
                                     <td className="tdata">
-                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}
+                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * gst / 100 + parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}
                                     </td>
                                 </tr>
                             ))}
@@ -190,7 +191,16 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         </tfoot>
                     </table>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px' }}>{rupeestext}</p></div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px', fontWeight: 600 }}>{rupeestext}</p></div>
+                {gst === 0 ?
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <h4 style={{ fontWeight: 600, marginRight: '5px' }}>NOTE:</h4>
+                        <h4 style={{ padding: 2, wordSpacing: 3 }}>
+                            IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recepient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                        </h4>
+                    </div> : ""
+                }
+
             </div>
             <div className="printdiv">
                 <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>PRINT</button>

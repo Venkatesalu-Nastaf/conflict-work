@@ -19,7 +19,7 @@ const apiUrl = APIURL;
 
 function initMap(lat) {
     console.log(lat, 'latlng');
-    lat.lat.forEach((latValue, index) => {
+    lat?.lat?.forEach((latValue, index) => {
         latitude.push(latValue);
         longitude.push(lat.lng[index]);
     });
@@ -271,7 +271,6 @@ function handleMapClick(latLng) {
     });
 }
 
-console.log(latitude.length, longitude, latitude, 'value22');
 
 const newMarker = () => {
     console.log(latitude, longitude, 'value11');

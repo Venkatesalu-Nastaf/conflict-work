@@ -92,7 +92,7 @@ router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, 
 });
 
 router.get('/ratemanagement-show', (req, res) => {
-    const { rateType, orgName, vehicleType } = req.query
+    const { rateType, orgName, vehicleType,stations } = req.query
     console.log("data", rateType, orgName, vehicleType)
     let sql = 'SELECT * FROM ratemanagement where 1=1'
     let params = []
@@ -110,6 +110,10 @@ router.get('/ratemanagement-show', (req, res) => {
     if (vehicleType) {
         sql += ' and vehicleName=?'
         params.push(vehicleType)
+    }
+    if (stations) {
+        sql += ' and stations=?'
+        params.push(stations)
     }
 
 

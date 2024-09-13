@@ -159,6 +159,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const [parking, setParking] = useState('')
     const [permit, setPermit] = useState('')
     const [gst, setGst] = useState('')
+    const [gstAmount, setGstAmount] = useState(0)
     const apiUrl = APIURL;
     const organisationdetailfill = organisationname
     const organisationimage = imagename
@@ -168,17 +169,20 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             let parkingamount = 0
             let permitamount = 0
             let exkmamount = 0
+            let gstamount = 0
             invdata?.map((li) => {
                 totalamount += parseInt(li.totalcalcAmount || 0)
                 parkingamount += parseInt(li.parking || 0)
                 permitamount += parseInt(li.permit || 0)
                 exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
+                gstamount = parseInt(li.gstTax)
                 return null
             })
             setTotalAmount(totalamount)
             setParking(parkingamount)
             setPermit(permitamount)
             setExtraKmAmount(exkmamount)
+            setGstAmount(gstamount)
         }
     }, [apiUrl, invdata])
 
@@ -198,8 +202,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     }, [apiUrl, customeraddress])
 
     const fullAmount = parseInt(totalAmount)
-    const cgst = fullAmount * 2.5 / 100
-    const sgst = fullAmount * 2.5 / 100
+    const cgst = fullAmount * gstAmount / 100
+    const sgst = fullAmount * gstAmount / 100
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
     // const parkpermit = park + permitcharge
@@ -315,8 +319,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                 <View style={styles.lastsectiontxt}>
                                     <Text style={styles.text2}>SUB TOTAL : </Text>
-                                    <Text style={styles.text2} >CGST 2.5% on {fullAmount} :</Text>
-                                    <Text style={styles.text2}>SGST 2.5% on {fullAmount} :</Text>
+                                    <Text style={styles.text2} >CGST {gstAmount} on {fullAmount} :</Text>
+                                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount} :</Text>
                                     <Text style={styles.text2}>Net Payable : </Text>
                                 </View>
 
@@ -324,6 +328,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                     <Text style={{ fontSize: '12px', padding: '5px' }}>{fullAmount}</Text>
                                     <Text style={styles.text2}>{cgst.toFixed(0)}</Text>
                                     <Text style={styles.textgst}>{sgst.toFixed(0)}</Text>
+
                                     <Text style={styles.text3}>{formattedFullAmount}</Text>
                                 </View>
                             </View>
@@ -332,11 +337,19 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                         </View>
 
-
                     </View>
 
 
-
+                    <View style={styles.totalsuminitial}>
+                        {gstAmount === 0 ? (
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
+                                <Text style={{ fontSize: 11, }}>NOTE:</Text>
+                                <Text style={{ fontSize: 10, marginTop: 5 }}>
+                                    IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                                </Text>
+                            </View>
+                        ) : null}
+                    </View>
                 </View>
             </Page>
         </PDFDocument>

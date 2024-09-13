@@ -257,6 +257,82 @@ router.delete('/deleteGroup/:groupid', (req, res) => {
   });
 });
 
+// get particularTripsheetDatas
+router.get('/getParticularTripsheet', (req, res) => {
+  const { tripID } = req.query;
+
+  if (!tripID) {
+    return res.status(400).json({ error: 'TripID is required' });
+  }
+
+  const tripIDs = Array.isArray(tripID) ? tripID : [tripID];
+  console.log(tripID, tripIDs, 'tripid');
+
+  const query = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
+  db.query(query, [tripIDs], (error, result) => {
+    if (error) {
+      console.error('Failed to retrieve tripsheet data:', error);
+      return res.status(500).json({ error: 'Failed to retrieve tripsheet data' });
+    }
+    console.log(result, 'trip res');
+
+    return res.status(200).json(result);
+  });
+});
+
+
+
+router.get('/getParticularInvoiceDetails', (req, res) => {
+  const { InvoiceNo } = req.query;
+  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? AND Status = "Billed" `;
+
+  db.query(query, [InvoiceNo], (err, result) => {
+    if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    console.log(result, 'Billed Result');
+
+    return res.status(200).json(result);
+  });
+});
+
+
+
+router.get('/All-Transfer-Billing', (req, res) => {
+  const { customer, fromDate, toDate } = req.query;
+
+  // Decode the URL-encoded query parameters
+  const decodedCustomer = decodeURIComponent(customer);
+
+
+  // Validate required parameters
+  if (!decodedCustomer || !fromDate || !toDate) {
+    return res.status(400).json({ error: 'Missing required query parameters' });
+  }
+
+  // SQL query
+  const query = `
+    SELECT * 
+    FROM tripsheet 
+    WHERE apps = "Closed" 
+      AND status = "Closed" 
+      AND customer = ? 
+      AND tripsheetdate >= ? 
+      AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
+      AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  `;
+
+  // Execute query with parameterized values
+  db.query(query, [decodedCustomer, fromDate, toDate], (err, result) => {
+    if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
 
 //cover billing
 router.get('/Transfer-Billing', (req, res) => {
@@ -294,7 +370,41 @@ router.get('/Transfer-Billing', (req, res) => {
   });
 });
 
+// get all groupbilling values
+router.get('/allGroup-Billing', (req, res) => {
+  const { customer, fromDate, toDate } = req.query;
 
+  // Decode the URL-encoded query parameters
+  const decodedCustomer = decodeURIComponent(customer);
+  // const decodedServiceStation = decodeURIComponent(servicestation);
+
+  // Validate required parameters
+  if (!decodedCustomer || !fromDate || !toDate) {
+    return res.status(400).json({ error: 'Missing required query parameters' });
+  }
+
+  // SQL query
+  const query = `
+    SELECT * 
+    FROM tripsheet 
+    WHERE apps = "Closed" 
+    AND status = "Closed" 
+    AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
+    AND customer = ? 
+    AND tripsheetdate >= ? 
+    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  `;
+
+  // Execute query with parameterized values
+  db.query(query, [decodedCustomer, fromDate, toDate], (err, result) => {
+    if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+
+    return res.status(200).json(result);
+  });
+})
 
 
 router.get('/Group-Billing', (req, res) => {

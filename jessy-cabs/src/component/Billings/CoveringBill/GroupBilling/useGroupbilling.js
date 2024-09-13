@@ -275,50 +275,104 @@ const useGroupbilling = () => {
         // No cleanup function needed in this case
     }, [particularId, apiUrl, groupInvoice, refInvDate, refInvNo]);
 
-
     const handleShow = useCallback(async () => {
-        setGroupInvoice(false)
-        try {
-            const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
-            const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-            const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
-            const response = await axios.get(`${apiUrl}/Group-Billing`, {
-                params: {
-                    customer: customerValue,
-                    fromDate: fromDateValue,
-                    toDate: toDateValue,
-                    servicestation: servicestationValue
-                },
-            });
-            const data = response.data;
-            if (Array.isArray(data) && data.length > 0) {
-                setRows(data);
-                const netAmountSum = calculateNetAmountSum(data);
-                setTotalValue(netAmountSum);
+        setGroupInvoice(false);
 
-                const roundedGrossAmount = Math.ceil(netAmountSum);
-                const roundOff = roundedGrossAmount - netAmountSum;
-                const roundOffValue = roundOff.toFixed(2);
-                setRoundedAmount(roundOffValue);
+        const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
 
-                const sumTotalAndRounded = netAmountSum + parseFloat(roundOffValue);
-                setSumTotalAndRounded(sumTotalAndRounded);
+        // Corrected condition
+        if (servicestation !== "" && servicestation !== "All") {
 
-                setTripData(data);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-            } else {
+            // Call the Group-Billing API
+            try {
+                const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
+                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+
+                const response = await axios.get(`${apiUrl}/Group-Billing`, {
+                    params: {
+                        customer: customerValue,
+                        fromDate: fromDateValue,
+                        toDate: toDateValue,
+                        servicestation: servicestationValue
+                    },
+                });
+
+                const data = response.data;
+
+                if (Array.isArray(data) && data.length > 0) {
+                    setRows(data);
+                    const netAmountSum = calculateNetAmountSum(data);
+                    setTotalValue(netAmountSum);
+
+                    const roundedGrossAmount = Math.ceil(netAmountSum);
+                    const roundOff = roundedGrossAmount - netAmountSum;
+                    const roundOffValue = roundOff.toFixed(2);
+                    setRoundedAmount(roundOffValue);
+
+                    const sumTotalAndRounded = netAmountSum + parseFloat(roundOffValue);
+                    setSumTotalAndRounded(sumTotalAndRounded);
+
+                    setTripData(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch {
                 setRows([]);
                 setError(true);
-                setErrorMessage("No data found");
+                setErrorMessage("Please fill All Fields");
             }
-        } catch {
-            setRows([]);
-            setError(true);
-            setErrorMessage("Please fill All Fields");
+        } else if (servicestation === "" || servicestation === "All") {
+
+            // Call the allGroup-Billing API
+            try {
+                const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
+                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+
+                const response = await axios.get(`${apiUrl}/allGroup-Billing`, {
+                    params: {
+                        customer: customerValue,
+                        fromDate: fromDateValue,
+                        toDate: toDateValue,
+                    },
+                });
+
+                const data = response.data;
+
+                if (Array.isArray(data) && data.length > 0) {
+                    setRows(data);
+                    const netAmountSum = calculateNetAmountSum(data);
+                    setTotalValue(netAmountSum);
+
+                    const roundedGrossAmount = Math.ceil(netAmountSum);
+                    const roundOff = roundedGrossAmount - netAmountSum;
+                    const roundOffValue = roundOff.toFixed(2);
+                    setRoundedAmount(roundOffValue);
+
+                    const sumTotalAndRounded = netAmountSum + parseFloat(roundOffValue);
+                    setSumTotalAndRounded(sumTotalAndRounded);
+
+                    setTripData(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch {
+                setRows([]);
+                setError(true);
+                setErrorMessage("Please fill All Fields");
+            }
         }
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
+
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();

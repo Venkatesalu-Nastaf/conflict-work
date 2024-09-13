@@ -29,8 +29,9 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
     const startDate = dayjs(book.startdate);
     const billingdate = startDate.format('YYYY-MM-DD');
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
-    const cgst = totalAmount * 2.5 / 100 || 0;
-    const sgst = totalAmount * 2.5 / 100 || 0;
+    const gstAmount = customerData?.gstTax
+    const cgst = totalAmount * gstAmount / 100 || 0;
+    const sgst = totalAmount * gstAmount / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst || 0;
     const AmountInWords = numWords(parseInt(paymentValue)) || 0;
 
@@ -135,32 +136,45 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                         </div>
                         <div className="total-div">
                             <div >
-                                <h4>CGST 2.5% on {book.totalcalcAmount} :</h4>
-                                <h4>SGST 2.5% on {book.totalcalcAmount} :</h4>
+                                <h4>CGST {customerData.gstTax}% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST {customerData.gstTax}% on {book.totalcalcAmount} :</h4>
                                 <h4>Total Amount :</h4>
                             </div>
                             <div className="amount-div">
-                                <p className="amounttext" style={{marginTop: '23px'}}>{cgst.toFixed(0)}</p>
-                                <p className="amounttext" style={{marginTop: '23px'}}>{sgst.toFixed(0)}</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}</p>
                                 <h4>{paymentValue.toFixed(0)}</h4>
                             </div>
                         </div>
                         <div className="sign-div">
-                            <div>
-                                <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} </p>{'\n'}
-                                <p>Rupees Only</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', width: "70%" }}>
+                                <div>
+                                    <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} </p>{'\n'}
+                                    <p>Rupees Only</p>
+                                </div>
+                                <div>
+                                    {gstAmount === 0 ?
+                                        <div >
+                                            <h4 style={{ fontWeight: 600, margin: "2px" }}>NOTE:</h4>
+                                            <h4 style={{ padding: 2, wordSpacing: 3, margin: "2px" }}>
+                                                IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recepient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                                            </h4>
+                                        </div> : ""
+                                    }
+                                </div>
                             </div>
-                            <div style={{paddingBottom: '10px', paddingRight: '10px'}}>
-                                <p className="sign-text">For JessyCabs</p>
+
+                            <div style={{ paddingBottom: '10px', paddingRight: '10px', width: "30%", }}>
+                                <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>For JessyCabs</p>
                                 {signimageUrl !== "" ?
                                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-                                <p className="sign-text">Authorised Signature</p>
+                                <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
                             </div>
 
                         </div>
                         <div className="google-map">
                             <div>
-                                <h4 className="map-text">Map Image</h4>
+                                {/* <h4 className="map-text">Map Image</h4> */}
                                 {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' /> : <div></div>}
 
                             </div>
@@ -174,7 +188,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                             </div>
                         </div>
                         <div>
-                            {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : <p className="attachtext"> No Attached Image</p>}
+                            {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : ""}
                             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
                                 attachedImage.map((image, index) => (
                                     <img key={index} src={image} alt='' className="attachimage" />

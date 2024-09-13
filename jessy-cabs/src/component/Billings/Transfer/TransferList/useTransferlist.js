@@ -6,7 +6,6 @@ import { saveAs } from "file-saver";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
-
 const useTransferlist = () => {
   const apiUrl = APIURL;
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -22,7 +21,6 @@ const useTransferlist = () => {
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
-
 
 
 
@@ -338,7 +336,7 @@ const useTransferlist = () => {
     const data = params.row;
     localStorage.setItem("selectedtripsheetid", data.Trip_id);
     const customer = encodeURIComponent(data.Organization_name)
-    localStorage.setItem("selectedcustomerdata", customer)    
+    localStorage.setItem("selectedcustomerdata", customer)
     if (data.Status === "notbilled") {
       const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&billingsheet=true`
       window.location.href = billingPageUrl

@@ -29,7 +29,7 @@ const Suppliers = ({ stationName }) => {
                         </Box>
                         <TabPanel value="driverinfo"><DriverCreation stationName={stationName} /></TabPanel>
                         <TabPanel value="vehicle_info"><Vehicaleinfo stationName={stationName} /></TabPanel>
-                        <TabPanel value="accounting_info"><Accountinfo /></TabPanel>
+                        <TabPanel value="accounting_info"><Accountinfo  stationName={stationName}/></TabPanel>
                     </TabContext>
                 </Box>
             </div>

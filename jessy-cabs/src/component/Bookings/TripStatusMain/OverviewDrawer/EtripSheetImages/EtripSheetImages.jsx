@@ -1,12 +1,15 @@
 import React from 'react';
 import "./EtripSheetImages.css"
 
- const EtripSheetImages = () => {
+const EtripSheetImages = () => {
   return (
     <>
-    <div className='EtripSheetImages-card'>
+      <div>
+        <p>Images</p>
+        <div className='EtripSheetImages-card'>
 
-    </div>
+        </div>
+      </div>
     </>
   )
 }

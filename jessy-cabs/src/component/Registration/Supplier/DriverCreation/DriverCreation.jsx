@@ -122,7 +122,7 @@ const DriverCreation = ({ stationName }) => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
-        handleFileChange,handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
+        handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
 
     } = useDrivercreation();
 
@@ -491,7 +491,7 @@ const DriverCreation = ({ stationName }) => {
                                             type="file"
                                             style={{ display: "none" }}
                                             onChange={(e) => {
-                                                setLicencepdf(e.target.files[0]); 
+                                                setLicencepdf(e.target.files[0]);
                                                 console.log('File selected:', e.target.files[0]);
                                                 handleFileUpload(e);
                                             }}
@@ -527,7 +527,7 @@ const DriverCreation = ({ stationName }) => {
                                                 if (e.target.files[0]) {
                                                     setFile(e.target.files[0]);
                                                     console.log('File selected:', e.target.files[0]);
-                                                    handleFileUpload(e);                                                   
+                                                    handleFileUpload(e);
                                                 }
                                             }}
                                         />
@@ -535,7 +535,7 @@ const DriverCreation = ({ stationName }) => {
                                     </Button>
 
                                 </Tooltip>
-                                </div>
+                            </div>
 
                             <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
@@ -592,70 +592,7 @@ const DriverCreation = ({ stationName }) => {
                                 )}
                             </div>
                         </div>
-                        <div className="detail-container-main detail-container-main-crivercreation">
-                            <div className="container-left">
-                                <div className="">
-                                    <div className="input-field driver-creation-input-field">
-                                        <div className="input">
-                                            <div className="icone">
-                                                <AiOutlineFileSearch
-                                                    color="action"
-                                                />
-                                            </div>
-                                            <TextField
-                                                size="small"
-                                                id="searchText"
-                                                className='full-width'
-                                                label="Search"
-                                                name="searchText"
-                                                value={searchText || ""}
-                                                onKeyDown={handleenterSearch}
-                                                onChange={(e) => setSearchText(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="input">
-                                            <div className='icone'>
-                                                <CalendarMonthIcon />
-                                            </div>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <DatePicker
-                                                    id="date5"
-                                                    className='full-width'
-                                                    label="From Date"
-                                                    name="fromDate"
-                                                    format="DD/MM/YYYY"
-                                                    value={fromDate}
-                                                    onChange={(date) => setFromDate(date)}
-                                                />
-                                            </LocalizationProvider>
-                                        </div>
-                                        <div className="input">
-                                            <div className='icone'>
-                                                <CalendarMonthIcon />
-                                            </div>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <DatePicker
-                                                    id="date6"
-                                                    className='full-width'
-                                                    label="To Date"
-                                                    name="toDate"
-                                                    format="DD/MM/YYYY"
-                                                    value={toDate}
-                                                    onChange={(date) => setToDate(date)}
-                                                />
-                                            </LocalizationProvider>
-                                        </div>
-                                        <div className="input">
-                                            <Button variant="contained"
-                                                onClick={handleShowAll}
-                                            >
-                                                Search
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         {/* <div className="Download-btn">
                            <PopupState variant="popover" popupId="demo-popup-menu">
                                  {(popupState) => (
@@ -752,20 +689,87 @@ const DriverCreation = ({ stationName }) => {
                     </Box>
 
                     <div className="DriverCreation-table-container">
-                        <div className="Download-btn-drivercreation">
-                            <PopupState variant="popover" popupId="demo-popup-menu">
-                                {(popupState) => (
-                                    <React.Fragment>
-                                        <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                                            Download
-                                        </Button>
-                                        <Menu {...bindMenu(popupState)}>
-                                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                                        </Menu>
-                                    </React.Fragment>
-                                )}
-                            </PopupState>
+                        <div style={{display:"flex", gap:"20px", alignItems:"center",padding:"10px"}}>
+                            <div className="Download-btn-drivercreation">
+                                <PopupState variant="popover" popupId="demo-popup-menu">
+                                    {(popupState) => (
+                                        <React.Fragment>
+                                            <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                                Download
+                                            </Button>
+                                            <Menu {...bindMenu(popupState)}>
+                                                <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                                <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                            </Menu>
+                                        </React.Fragment>
+                                    )}
+                                </PopupState>
+                            </div>
+
+                            <div className="detail-container-main detail-container-main-crivercreation">
+                                <div className="container-left">
+                                    <div className="">
+                                        <div className="input-field driver-creation-input-field">
+                                            <div className="input">
+                                                <div className="icone">
+                                                    <AiOutlineFileSearch
+                                                        color="action"
+                                                    />
+                                                </div>
+                                                <TextField
+                                                    size="small"
+                                                    id="searchText"
+                                                    className='full-width'
+                                                    label="Search"
+                                                    name="searchText"
+                                                    value={searchText || ""}
+                                                    onKeyDown={handleenterSearch}
+                                                    onChange={(e) => setSearchText(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="input">
+                                                <div className='icone'>
+                                                    <CalendarMonthIcon />
+                                                </div>
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <DatePicker
+                                                        id="date5"
+                                                        className='full-width'
+                                                        label="From Date"
+                                                        name="fromDate"
+                                                        format="DD/MM/YYYY"
+                                                        value={fromDate}
+                                                        onChange={(date) => setFromDate(date)}
+                                                    />
+                                                </LocalizationProvider>
+                                            </div>
+                                            <div className="input">
+                                                <div className='icone'>
+                                                    <CalendarMonthIcon />
+                                                </div>
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <DatePicker
+                                                        id="date6"
+                                                        className='full-width'
+                                                        label="To Date"
+                                                        name="toDate"
+                                                        format="DD/MM/YYYY"
+                                                        value={toDate}
+                                                        onChange={(date) => setToDate(date)}
+                                                    />
+                                                </LocalizationProvider>
+                                            </div>
+                                            <div className="input">
+                                                <Button variant="contained"
+                                                    onClick={handleShowAll}
+                                                >
+                                                    Search
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="table-DriverCreations">
                             {/* <DataGrid

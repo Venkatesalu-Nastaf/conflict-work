@@ -17,6 +17,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
+import DomainAddIcon from "@mui/icons-material/DomainAdd";
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -61,7 +62,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Accuntinfo = () => {
+const Accuntinfo = ({stationName}) => {
 
 
 
@@ -99,7 +100,7 @@ const Accuntinfo = () => {
     rows,
     columns,
     isEditMode,
-    fields,
+    fields,handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
   } = useAccountinfo();
 
@@ -378,6 +379,30 @@ const Accuntinfo = () => {
                 />
               </div>
               <div className="input">
+                  <div className="icone">
+                    <DomainAddIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="servicestation"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChangestations(event, value, "stations")}
+                    value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.stations || book.stations || ''}
+                    options={stationName?.map((option) => ({
+                      label: option.Stationname,
+                    }))}
+                    getOptionLabel={(option) => option.label || selectedCustomerData.stations || book.stations || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Station" name="stations" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+              <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
                 </div>
@@ -390,14 +415,14 @@ const Accuntinfo = () => {
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehRegNo")}
                   value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
                   options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
-                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                  // getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
                   renderInput={(params) => (
                     <TextField {...params} label="Veh Reg No" name="vehRegNo" inputRef={params.inputRef} />
                   )}
                 />
 
               </div>
-              {console.log(fields)}
+           
               {fields?.map((field, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={2}>
                   <TextField

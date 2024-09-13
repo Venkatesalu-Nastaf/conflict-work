@@ -19,7 +19,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent,DialogTitle } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
 
 
@@ -106,8 +106,8 @@ const Customer = ({ stationName }) => {
     setSearchText,
     handleenterSearch,
     customerfieldSets,
-    handleChangecustomer, deletedialogbox, setDeletedDialog,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
+    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations,
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const Customer = ({ stationName }) => {
     console.log("false")
     setDeletedDialog(false)
   }
- 
+
 
 
 
@@ -144,7 +144,7 @@ const Customer = ({ stationName }) => {
       <div className="main-content-container">
         <form onSubmit={handleClick}>
           <p className="head-tab-type-2-all">
-            <span className="Title-Name" style={{padding:'12px 16px'}}>CUSTOMER</span>
+            <span className="Title-Name" style={{ padding: '12px 16px' }}>CUSTOMER</span>
           </p>
           <div className='main-content-form'>
             <div className="Customer-page-header">
@@ -380,12 +380,12 @@ const Customer = ({ stationName }) => {
                 </div>
                 <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='TimeToggle'>TimeToggle</FormLabel>
-                   <Switch
+                  <Switch
                     label='label'
                     id="TimeToggle"
                     name="TimeToggle"
                     onChange={handleChange}
-                    checked={book.TimeToggle || selectedCustomerData.TimeToggle ||0}
+                    checked={book.TimeToggle || selectedCustomerData.TimeToggle || 0}
                   />
                 </div>
 
@@ -585,7 +585,7 @@ const Customer = ({ stationName }) => {
                     id="servicestation"
                     freeSolo
                     sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+                    onChange={(event, value) => handleAutocompleteChangestations(event, value, "servicestation")}
                     value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
                     options={stationName?.map((option) => ({
                       label: option.Stationname,
@@ -786,84 +786,27 @@ const Customer = ({ stationName }) => {
                     size='small'
                   />
                 </div>
-                
+
 
                 <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
-                      <Button
-                        variant="contained"
-                        disabled={!Customer_new}
-                        onClick={handleAdd}
-                        style={{ marginRight: "100px" }}
-                      >
-                        Add
-                      </Button>
+                    <Button
+                      variant="contained"
+                      disabled={!Customer_new}
+                      onClick={handleAdd}
+                      style={{ marginRight: "100px" }}
+                    >
+                      Add
+                    </Button>
 
                   )}
                 </div>
-                
+
               </div>
 
-              <div className="detail-container-main">
-                <div className="container-left">
-                  <div className="">
-                    <div className="input-field vehicle-info-search-input-field">
-                      <div className="input">
-                        <div className="icone">
-                          <AiOutlineFileSearch color="action" />
-                        </div>
-                        <TextField
-                          size="small"
-                          id="searchText"
-                          className='full-width'
-                          label="Search"
-                          name="searchText"
-                          value={searchText}
-                          onKeyDown={handleenterSearch}
-                          onChange={(e) => setSearchText(e.target.value)}
-                        />
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="fromDate"
-                            className='full-width'
-                            label="From Date"
-                            format="DD/MM/YYYY"
-                            name='fromDate'
-                            value={fromDate}
-                            onChange={(date) => setFromDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="toDate"
-                            className='full-width'
-                            label="To Date"
-                            format="DD/MM/YYYY"
-                            name="toDate"
-                            value={toDate}
-                            onChange={(date) => setToDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <Button variant="contained" onClick={handleSearch}>Search</Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -946,24 +889,87 @@ const Customer = ({ stationName }) => {
                 </Box>
               </div>
             </div>
-            
+
             <div className="customer-list-table-container-download">
-              <div className="Download-btn">
-                <PopupState variant="popover" popupId="demo-popup-menu">
-                  {(popupState) => (
-                    <React.Fragment>
-                      <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                        Download
-                      </Button>
-                      <Menu {...bindMenu(popupState)}>
-                        <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                        <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                </PopupState>
+              <div style={{display:"flex",gap:"20px", alignItems:"center", flexWrap:"wrap"}}>
+                <div className="Download-btn">
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                          Download
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                          <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+
+                <div className="detail-container-main">
+                <div className="container-left">
+                  <div className="">
+                    <div className="input-field vehicle-info-search-input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <AiOutlineFileSearch color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          id="searchText"
+                          className='full-width'
+                          label="Search"
+                          name="searchText"
+                          value={searchText}
+                          onKeyDown={handleenterSearch}
+                          onChange={(e) => setSearchText(e.target.value)}
+                        />
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <div className="icone">
+                            <DateRangeIcon color="action" />
+                          </div>
+                          <DatePicker
+                            id="fromDate"
+                            className='full-width'
+                            label="From Date"
+                            format="DD/MM/YYYY"
+                            name='fromDate'
+                            value={fromDate}
+                            onChange={(date) => setFromDate(date)}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <div className="icone">
+                            <DateRangeIcon color="action" />
+                          </div>
+                          <DatePicker
+                            id="toDate"
+                            className='full-width'
+                            label="To Date"
+                            format="DD/MM/YYYY"
+                            name="toDate"
+                            value={toDate}
+                            onChange={(date) => setToDate(date)}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <Button variant="contained" onClick={handleSearch}>Search</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
+
+              </div>
+
+
               <div className="table-customer-lists">
                 {/* <DataGrid
                 rows={rows}

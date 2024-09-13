@@ -540,7 +540,7 @@ const Booking = ({ stationName, customerData }) => {
                       />
                     )}
                   </DatePicker> */}
-                   <DatePicker
+                  <DatePicker
                     // id="tripsheetdate"
                     value={
                       formData.bookingdate || selectedCustomerData.bookingdate
@@ -551,18 +551,18 @@ const Booking = ({ stationName, customerData }) => {
                     }
                     format="DD/MM/YYYY"
                     readOnly
-                    // label='Booking Date'
-                    // onChange={(date) => handleDateChange(date, "bookingdate")}
-                    
-                    // disabled={true} // Disables the DatePicker to prevent changes
-                    // renderInput={(params) => (
-                    //   <TextField
-                    //     {...params}
-                    //     InputProps={{
-                    //       readOnly: true, // Makes the input read-only
-                    //     }}
-                    //   />
-                    // )}
+                  // label='Booking Date'
+                  // onChange={(date) => handleDateChange(date, "bookingdate")}
+
+                  // disabled={true} // Disables the DatePicker to prevent changes
+                  // renderInput={(params) => (
+                  //   <TextField
+                  //     {...params}
+                  //     InputProps={{
+                  //       readOnly: true, // Makes the input read-only
+                  //     }}
+                  //   />
+                  // )}
                   />
                 </LocalizationProvider>
               </div>
@@ -580,14 +580,14 @@ const Booking = ({ stationName, customerData }) => {
                   getCurrentTime() ||
                   ""
                 }
-                // onChange={(event) => {
-                //   setBook({ ...book, bookingtime: event.target.value });
-                //   setSelectedCustomerData({
-                //     ...selectedCustomerData,
-                //     bookingtime: event.target.value,
-                //   });
-                //   setBookingTime(event.target.value);
-                // }}
+              // onChange={(event) => {
+              //   setBook({ ...book, bookingtime: event.target.value });
+              //   setSelectedCustomerData({
+              //     ...selectedCustomerData,
+              //     bookingtime: event.target.value,
+              //   });
+              //   setBookingTime(event.target.value);
+              // }}
               />
             </span>
             {/* <span className="d-grid">
@@ -1452,6 +1452,50 @@ const Booking = ({ stationName, customerData }) => {
               /> */}
 
             </div>
+
+            <div className="input booking-payment-type-input">
+              <div className="icone">
+                <AccountBalanceWalletTwoToneIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="paymenttype"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "paymenttype")
+                }
+                value={
+                  PayType.find((option) => option.Option)?.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                options={PayType.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Payment Type"
+                      name="paymenttype"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+
             <div className="input">
               <div className="icone">
                 <AccountCircleTwoToneIcon color="action" />
@@ -2045,48 +2089,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-            <div className="input booking-payment-type-input">
-              <div className="icone">
-                <AccountBalanceWalletTwoToneIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="paymenttype"
-                freeSolo
-                sx={{ width: "100%" }}
-                onChange={(event, value) =>
-                  handleAutocompleteChange(event, value, "paymenttype")
-                }
-                value={
-                  PayType.find((option) => option.Option)?.label ||
-                  formData.paymenttype ||
-                  selectedCustomerData.paymenttype ||
-                  book.paymenttype ||
-                  ""
-                }
-                options={PayType.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) =>
-                  option.label ||
-                  formData.paymenttype ||
-                  selectedCustomerData.paymenttype ||
-                  book.paymenttype ||
-                  ""
-                }
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label="Payment Type"
-                      name="paymenttype"
-                      inputRef={params.inputRef}
-                    />
-                  );
-                }}
-              />
-            </div>
+
 
 
             {/* </div> */}
@@ -2733,7 +2736,7 @@ const Booking = ({ stationName, customerData }) => {
                 <div className="booking-update">
                   {/* <div className="booking-driver-table"> */}
                   <Box
-                    className="booking-driver-table"
+                    className="booking-driver-table Scroll-Style"
                     sx={{
                       height: 400, // Adjust this value to fit your needs
                       '& .MuiDataGrid-virtualScroller': {

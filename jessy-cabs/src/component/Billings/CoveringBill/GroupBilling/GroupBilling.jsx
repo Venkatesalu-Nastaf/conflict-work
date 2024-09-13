@@ -283,7 +283,8 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         className='full-width'
                                         freeSolo
                                         size="small"
-                                        value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
+                                        // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
+                                        value={servicestation || selectedCustomerDatas.station || ''}
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,
                                         }))}

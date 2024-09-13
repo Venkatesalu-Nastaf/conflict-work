@@ -18,7 +18,7 @@
   /* background: var(--glass); */
   padding: 0px;
   margin-bottom: -10px;
-  zoom: 90%;
+  /* zoom: 90%; */
 }
 
 .detail-container-main-Tripsheet {
@@ -537,7 +537,7 @@
 }
 
 .tripsheet-remarks-division {
-  width: 513px !important;
+  width: 475px !important;
 }
 
 .tripsheet-calculate-input button,

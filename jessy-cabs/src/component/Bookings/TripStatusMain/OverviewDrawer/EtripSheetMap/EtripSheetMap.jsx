@@ -1,12 +1,16 @@
 import React from 'react';
 import "./EtripSheetMap.css"
 
- const EtripSheetMap = () => {
+const EtripSheetMap = () => {
   return (
     <>
-    <div className='EtripSheetMap-card'>
+      <div>
+        <p>Map</p>
 
-    </div>
+        <div className='EtripSheetMap-card'>
+
+        </div>
+      </div>
     </>
   )
 }

@@ -6,6 +6,7 @@ import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData"
 import { APIURL } from "../../../url";
 import { useLocation } from "react-router-dom";
 import { PdfData } from "./PdfContext";
+import axios from 'axios';
 
 
 const useTransferreport = () => {
@@ -34,8 +35,8 @@ const useTransferreport = () => {
   const [warningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
   const [misformat, setMisformat] = useState('')
-  const [pdfBillList, setPdfBillList] = useState('')
-
+  const [pdfBillList, setPdfBillList] = useState('');
+  const [tripID, setTripID] = useState();
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [pdfzipdata, setPdfzipdata] = useState([])
   const location = useLocation()
@@ -60,6 +61,7 @@ const useTransferreport = () => {
     setInvoiceno(formData.Invoice_no)
     setInvoiceDate(formData.BillDate)
     setTransferReport(formData.TransferReport)
+    setTripID(formData.TripId)
   }, [location, setTransferReport])
 
   window.addEventListener('click', (event) => {
@@ -296,7 +298,8 @@ const useTransferreport = () => {
   useEffect(() => {
     //this is for getting organization details
     const fetchData = async () => {
-      const customer = localStorage.getItem("selectedcustomerdata");
+      // const customer = localStorage.getItem("selectedcustomerdata");
+
       try {
 
         if (!customer) return
@@ -478,14 +481,20 @@ const useTransferreport = () => {
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
-        const customer = decodeURIComponent(storedCustomer);
+        // const customer = decodeURIComponent(storedCustomer);
 
         if (tripid.length >= 1) {
+
+          // const response = await fetch(
+          //   `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
+          //     customer
+          //   )}/${tripid}`
+          // );
 
           const response = await fetch(
             `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
               customer
-            )}/${tripid}`
+            )}/${tripID}`
           );
 
           if (!response.ok) {
@@ -502,7 +511,88 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);  
+  }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
+
+  const handleChange = (event) => {
+    setInvoiceno(event.target.value)
+  }
+
+  // get Tripsheetdetails by enter InvoiceNo
+  useEffect(() => {
+    const fetchData = async () => {
+      let formattedTripID = tripID;
+
+      if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
+        formattedTripID = tripID[0].split(',').map(id => id.trim());
+      }
+
+      localStorage.setItem("selectedcustomer", customer[0]);
+
+      try {
+        const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
+          params: { tripID: formattedTripID }
+        });
+        console.log(response.data, 'trip response');
+        const tripData = response.data
+        const tripsheetNumbers = tripData.map((row, index) => ({
+          id: index + 1,
+          guestname: row.guestname,
+          tripid: row.tripid,
+          status: row.status,
+          customer: row.customer
+        }));
+        if (tripsheetNumbers.length > 0) {
+          const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+
+          setRows(rowsWithUniqueId);
+        }
+      } catch (error) {
+        console.error('Error fetching trip data:', error);
+      }
+    };
+
+    fetchData();
+  }, [tripID, apiUrl]);
+
+
+  const handleKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const InvoiceNo = event.target.value;
+
+      try {
+        const response = await axios.get(`${apiUrl}/getParticularInvoiceDetails`, {
+          params: {
+            InvoiceNo: InvoiceNo
+          }
+        });
+
+        const Result = response.data;
+        const fromdate = Result?.map(li => li.FromDate);
+        setFromDate(fromdate)
+        const enddate = Result?.map(li => li.EndDate);
+        setEndDate(enddate)
+        const organization = Result?.map(li => li.Organization_name);
+
+        setCustomer(organization[0])
+        const InvoiceDate = Result?.map(li => li.Billdate)
+        setInvoiceDate(InvoiceDate)
+        const groupTripid = Result?.map(li => li.Grouptrip_id)
+        setGroupTripid(groupTripid)
+        // const tripid = Result?.map(li =>li.Trip_id)
+        const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
+
+        setTripID(tripid)
+      } catch (error) {
+        console.log(error, 'error');
+      }
+    }
+  };
+
+
   return {
     rows,
     error,
@@ -560,8 +650,10 @@ const useTransferreport = () => {
     rowSelectionModel,
 
     setRowSelectionModel,
-    pdfzipdata
-
+    pdfzipdata,
+    handleKeyDown,
+    handleChange,
+    tripID
   };
 };
 

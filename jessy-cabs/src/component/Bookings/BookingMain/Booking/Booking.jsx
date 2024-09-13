@@ -1495,7 +1495,7 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
             </div>
-            
+
             <div className="input">
               <div className="icone">
                 <AccountCircleTwoToneIcon color="action" />
@@ -2736,7 +2736,7 @@ const Booking = ({ stationName, customerData }) => {
                 <div className="booking-update">
                   {/* <div className="booking-driver-table"> */}
                   <Box
-                    className="booking-driver-table"
+                    className="booking-driver-table Scroll-Style"
                     sx={{
                       height: 400, // Adjust this value to fit your needs
                       '& .MuiDataGrid-virtualScroller': {

@@ -1152,7 +1152,7 @@ useEffect(()=>{
             />
           </StyledSpeedDial>
         </Box>
-        <div style={{display:"flex", gap:"20px", alignItems:"center", flexWrap:"wrap"}}>
+        <div style={{display:"flex", gap:"20px", alignItems:"center"}}>
 
         
         <div className="Download-btn">

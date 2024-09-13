@@ -659,3 +659,18 @@
 .tripsheet-total-time-div input {
   padding-top: 15px;
 }
+
+.bill-section{
+  /* width: 100%; */
+  zoom: 70%;
+}
+.bill-topics{
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.bill-section-second,
+.bill-section-third{
+  border-right: 1px solid #ccc;
+  padding-right: 15px;
+}

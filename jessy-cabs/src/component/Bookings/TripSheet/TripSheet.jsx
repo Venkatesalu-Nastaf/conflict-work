@@ -1852,10 +1852,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                     aria-describedby="alert-dialog-description"
                     PaperProps={{
                       style: {
-                        width: '750px', // Adjust width here
-                        maxWidth: '90%' // Ensure it doesn't exceed viewport width
+                        width: '1400px', // Adjust width here
+                        maxWidth: 'none' // Disable maxWidth constraint
                       }
                     }}
+                    maxWidth={false} // Remove any default max width constraint
+                    fullWidth // Ensure the dialog takes full width of the viewport
                   >
                     <div className="Tipsheet-content-table-main">
                       <Tabs
@@ -1900,15 +1902,1250 @@ const TripSheet = ({ stationName, logoImage }) => {
                             },
                           }}
                         >
-                          <Tab>Vendor Info</Tab>
+                          {/* <Tab>Vendor Info</Tab>
                           <Tab>Vendor Bill</Tab>
-                          <Tab>Customer Bill</Tab>
-                          <Tab>GPS Att</Tab>
+                          <Tab>Customer Bill</Tab> */}
+                          <Tab>Bill</Tab>
+                          <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
 
-                        <TabPanel value={0} sx={{ p: 2 }}>
+                        {/* <TabPanel value={0} sx={{ p: 2 }}>
                           <div className="Customer-Customer-Bill-Slider tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+                            <div className="input-field tripsheet-vendor-info-first-input-field">
+                              <div className="input">
+                 
+                                <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="free-solo-vendor_vehicle"
+                                  freeSolo
+                                  // sx={{ minWidth: 200 }}
+                                  // onChange={(event, value) =>
+                                  //    handleAutocompleteVendor(event, value, "vendor_vehicle")
+                                  //  }
+                                  onChange={(event, value) => {
+                                    if (lockdata) {
+                                      handleAutocompleteVendor(event, value, "vendor_vehicle");
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+
+
+                                  // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
+                                  // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
+                                  value={vendorinfo?.vendor_vehicle}
+                                  // value={vendorinfo?.vehicleName||vendorinfo?.vendor_vehicle}
+                                  options={vehileNames?.map((option) => ({
+                                    label: option,
+                                  }))}
+                                  // options={lockdata ? vehileNames.map((option) => ({
+                                  //   label: option,
+                                  // })) : []} 
+                                  renderInput={(params) => (
+                                    <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
+                                  )}
+                                />
+                              </div>
+                              <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="free-solo-duty"
+                                  freeSolo
+                                  sx={{ width: "100%" }}
+                                  onChange={(event, value) => {
+                                    if (lockdata) {
+                                      handleAutocompleteVendor(event, value, "vendor_duty")
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+
+                                  }}
+
+                                  // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
+                                  value={vendorinfo?.vendor_duty}
+                                  options={Duty.map((option) => ({
+                                    label: option.option,
+                                  }))}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
+                                    )
+                                  }
+                                  }
+                                />
+
+                              </div>
+
+                              <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdata}
+                                  onChange={(event) => setLockData(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
+                            </div>
+                            <div className="input-field" style={{ marginTop: '15px' }}>
+                              <div className="input" >
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    label="StartDate"
+                                    id="vendorshedOutDate"
+                                    // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                    value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                    format="DD/MM/YYYY"
+                                    // onChange={(date) => {
+
+                                    //   handleDatevendorChange(date, 'vendorshedOutDate')
+                                    // }}
+                                    onChange={(date) => {
+                                      if (lockdata) {
+                                        handleDatevendorChange(date, 'vendorshedOutDate')
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                  >
+                                    {({ inputProps, inputRef }) => (
+                                      <TextField {...inputProps} inputRef={inputRef} />
+                                    )}
+                                  </DatePicker>
+                                </LocalizationProvider>
+
+                              </div>
+                              <div className="input">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                  <DatePicker
+                                    label="CloseDate"
+                                    id="vendorshedInDate"
+
+
+                                    // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                    value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                    format="DD/MM/YYYY"
+                                    // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                                    onChange={(date) => {
+                                      if (lockdata) {
+                                        handleDatevendorChange(date, 'vendorshedInDate')
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                  >
+                                    {({ inputProps, inputRef }) => (
+                                      <TextField {...inputProps} inputRef={inputRef} />
+                                    )}
+                                  </DatePicker>
+                                </LocalizationProvider>
+
+
+                              </div>
+
+
+
+                              <div className="input">
+                                <TextField
+                                  name="vendortotaldays"
+                                  value={calculatevendorTotalDays()}
+                                  label="Total Days"
+                                  size="small"
+                                  type="number"
+                                  id="totaldays"
+                                  // variant="standard"
+                                  sx={{ width: "100%" }}
+                                />
+                              </div>
+
+                            </div>
+                            <div className="input-field" style={{ marginBottom: '10px' }}>
+
+                              <div className="input">
+             
+                                <div className='input'>
+                                  <div className='full-width' style={{ display: 'grid' }}>
+                                    <label>Start Time</label>
+                                    <input
+                                      type="time"
+                                      name="venodrreporttime"
+
+                                      // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                                      value={vendorinfo?.vendorreporttime}
+                                      // onChange={(event) => {
+                                      //   if (lockdata) {
+                                      //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                      //   }
+
+                                      onChange={(event) => {
+                                        if (lockdata) {
+                                          setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                        } else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
+                                      }}
+
+                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                                    // }}
+                                    />
+                                  </div>
+                                </div>
+
+
+                              </div>
+
+                              <div className="input">
+                               
+                                <div className='closetime tripsheet-shed-in-time'>
+                                  <label>Close Time</label>
+
+                                  <input
+                                    type="time"
+                                    name="vendorshedintime"
+
+                                    // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
+                                    value={vendorinfo?.vendorshedintime}
+                                    onChange={(event) => {
+                                      if (lockdata) {
+
+                                        setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                      }
+                                      else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }
+                                    }
+                                    style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+
+                                  />
+                                </div>
+                              </div>
+
+
+                              <div className="input">
+                                <TextField
+                                  name="vendorTotaltime"
+                                  value={calculatevendorTotalTime() || ""}
+                                  label="Total Time"
+                                  id="pack5"
+                                  size="small"
+                                  // variant="standard"
+                                  sx={{ width: "100%" }}
+                                />
+                              </div>
+
+                            </div>
+
+                            <div className="input-field">
+
+
+                              <div className="input" >
+                                <TextField
+                                  name="vendorshedoutkm"
+
+                                  // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
+                                  value={vendorinfo?.vendorshedoutkm || ""}
+
+                                  onChange={handlevendorinfofata}
+                                  label="starting Kilometers"
+                                  id="vendorshedoutkm"
+                                  size="small"
+                                  sx={{ my: 1, width: "100%" }}
+                                />
+                              </div>
+
+
+                              <div className="input" >
+                                <TextField
+                                  name="vendorshedinkm"
+
+                                  // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
+                                  value={vendorinfo?.vendorshedinkm || ""}
+
+
+
+                                  label="closing Kilometers"
+
+                                  // onChange={(e)=>{
+
+                                  //   setVendorinfodata({...vendorinfo,vendorshedin:e.target.value})
+                                  // }}
+                                  onChange={handlevendorinfofata}
+                                  id="vendorshedinkm"
+                                  size="small"
+                                  sx={{ my: 1, width: "100%" }}
+                                />
+                              </div>
+
+
+
+                              <div className="input" >
+                                <TextField
+                                  name="vendortotalkm"
+                                  value={calculatevendorTotalKilometers() || ''}
+                                  label="Total kilometers"
+                                  id="vendortotalkm"
+                                  size="small"
+                                  sx={{ my: 1, width: "100%" }}
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field">
+
+
+
+                              <div className="input">
+                                <TextField
+                                  name="vendorRemarks"
+                                  // value={calcPackage || formData.calcPackage || ''}
+                                  value={vendorinfo?.vendorRemarks || ""}
+                                  // value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
+                                  onChange={handlevendorinfofata}
+                                  label="Remarks"
+                                  id="vendorRemarks"
+                                  size="small"
+                                  // variant="standard"
+
+                                  sx={{ my: 1, width: "100%" }}
+                                />
+
+                              </div>
+
+
+                              <div className="input">
+                                <Button
+                                  variant='contained'
+                                  onClick={handleVendorcalc}
+                                >
+                                  Update
+                                </Button>
+                              </div>
+                            </div>
+
+                          </div>
+                        </TabPanel> */}
+
+                        {/* <TabPanel value={1} sx={{ p: 2 }}>
+                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                            <div className="input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_Calcpackage"
+                                  value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                  label="Package"
+                                  id="Vendor_Calcpackage"
+                                  size="small"
+                                  // variant="standard"
+                                  sx={{ m: 1, width: "100%" }}
+                                />
+                              </div>
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_rateAmount"
+                                  value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
+                                  size="small"
+                                  label="Amount"
+                                  autoComplete="password"
+                                  id="Vendor_rateAmount"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdatavendorbill}
+                                  onChange={(event) => setLockDatavendorBill(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
+                            </div>
+
+                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_ExtraKms"
+                                  value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
+                                  label="Ex.Km"
+                                  id="Vendor_ExtraKms"
+                                  onChange={handlevendor_billdata}
+
+                                  size="small"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <span>@</span>
+                                <TextField size="small"
+                                  name='Vendor_ExtraAmountKms'
+                                  value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
+                                  onChange={handlevendor_billdata}
+                                  id="Vendor_ExtraAmountKms"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="Vendor_totalAmountKms"
+                                  // value={ vendorExtarkmTotalAmount||vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
+                                  value={vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms || 0}
+                                  size="small"
+                                  label="Amount"
+                                  id="Vendor_totalAmountKms"
+                                // variant="standard"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_ExtraHours"
+                                  value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
+                                  label="Ex.Hrs"
+                                  onChange={handlevendor_billdata}
+                                  id="Vendor_ExtraHours"
+                                  size="small"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <span>@</span>
+                                <TextField
+                                  size="small"
+                                  name='Vendor_ExtraAmountHours'
+                                  value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
+                                  onChange={handlevendor_billdata}
+                                  // variant="standard
+                                  id="Vendor_ExtraAmountHours"
+                                />
+
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="Vendor_totalAmountHours"
+                                  // value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
+                                  value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
+                                  size="small"
+                                  label="Amount"
+                                  id="Vendor_totalAmountHours"
+                                // variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_NightHALT"
+                                  // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                                  value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                                  onChange={handlevendor_billdata}
+                                  label="Night"
+                                  id="Vendor_NightHALT"
+                                  size="small"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <span>@</span>
+                                <TextField
+                                  size="small"
+                                  name='Vendor_NightBataAmount'
+                                  value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
+                                  onChange={handlevendor_billdata}
+                                  id="Vendor_NightBataAmount"
+                                  // variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="Vendor_NightbataTotalAmount"
+                                  value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
+                                  size="small"
+                                  label="Amount"
+                                  id="Vendor_NightbataTotalAmount"
+                                // variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_Bata"
+                                  value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                                  onChange={handlevendor_billdata}
+                                  label="Bata"
+                                  id="Vendor_Bata"
+                                  autoComplete="password"
+                                  size="small"
+                                // variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <span>@</span>
+                                <TextField
+                                  size="small"
+                                  name='Vendor_BataAmount'
+                                  value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
+                                  onChange={handlevendor_billdata}
+                                  // variant="standard"
+                                  id="Vendor_BataAmount"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="Vendor_BataTotalAmount"
+                                  value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
+                                  size="small"
+                                  label="Amount"
+                                  id="Vendor_BataTotalAmount"
+                                // variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <TextField
+                                  name="Vendor_FULLTotalAmount"
+                                  value={vendorbilldata.Vendor_FULLTotalAmount || 0}
+                                  size="small"
+
+                                  label="Net Amount"
+                                  id="Vendor_FULLTotalAmount"
+                                // variant="standard"
+                                />
+
+                              </div>
+                            </div>
+
+                          </div>
+                        </TabPanel> */}
+
+                        {/* <TabPanel value={2} sx={{ p: 2 }}>
+                          <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
+                            <div className="input-field">
+                              
+                              <div className="input">
+                                <div className="icone">
+                                  <Inventory2Icon color="action" />
+                                </div>
+
+                                <TextField
+                                  name="pack"
+                                  value={calcPackage || formData.calcPackage || ratepackage || ''}
+                                  label="Pack"
+                                  id="pack"
+                                  size="small"
+                                  variant="standard"
+                                  autoComplete="password"
+                                  sx={{ m: 1, width: "60ch" }}
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="amount5"
+                                  value={package_amount || formData.calcPackage || ''}
+                                  size="small"
+                                  label="Amount"
+                                  autoComplete="password"
+                                  id="amount5"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={lockdatacustomerbill}
+                                  onChange={(event) => setLockDatacustomerBill(event.target.checked)}
+                                />
+                                <p style={{ margin: "0px" }}>Lock</p>
+                              </div>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faRoad} />
+                                </div>
+                                <TextField
+                                  name="exkm1"
+                                  className='customer-bill-input'
+                                  value={extraKM || formData.calcPackage || 0}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setExtraKM(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  label="Ex.Km"
+                                  id="ex-exkm1"
+                                  autoComplete="password"
+                                  size="small"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <TollTwoToneIcon color="action" />
+                                </div>
+                                <TextField size="small"
+                                  name='exkmTkm2'
+                                  className='customer-bill-input'
+                                  value={extrakm_amount || formData.calcPackage || ''}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setextrakm_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  id="exkmTkm2"
+                                  variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="amount6"
+                                  className='customer-bill-input'
+                                  value={ex_kmAmount || formData.calcPackage || 0}
+                                  size="small"
+                                  label="Amount"
+                                  autoComplete="password"
+                                  id="amount6"
+                                  variant="standard"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faStopwatch} />
+                                </div>
+                                <TextField
+                                  name="exHrs1"
+                                  className='customer-bill-input'
+                                  value={extraHR || formData.calcPackage || 0}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setExtraHR(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  label="exHrs1"
+                                  id="ex-exHrs1"
+                                  size="small"
+                                  autoComplete="password"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <TollTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                  size="small"
+                                  id="exHrsTHrs2"
+                                  name='exHrsTHrs2'
+                                  className='customer-bill-input'
+                                  value={extrahr_amount || formData.calcPackage || 0}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setextrahr_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  variant="standard"
+                                />
+
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="amount7"
+                                  className='customer-bill-input'
+                                  value={ex_hrAmount || formData.calcPackage || 0}
+                                  size="small"
+                                  label="Amount"
+                                  autoComplete="password"
+                                  id="amouamount7"
+                                  variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faCloudMoon} />
+                                </div>
+                                <TextField
+                                  name="night1"
+                                  className='customer-bill-input'
+                                  // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+                                  value={nightBta}
+
+                                  // onChange={(e) => setNightBeta(e.target.value)}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setNightBeta(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  label="Night"
+                                  id="night1"
+                                  autoComplete="password"
+                                  size="small"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <TollTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                  size="small"
+                                  className='customer-bill-input'
+                                  name='nightThrs2'
+                                  id="nightThrs2"
+                                  value={nightCount}
+                                  // onChange={(e) => setNightCount(e.target.value)}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setNightCount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="amount8"
+                                  className='customer-bill-input'
+                                  // value={night_totalAmount || 0}
+                                  value={night_totalAmount || 0}
+
+                                  size="small"
+                                  autoComplete="password"
+                                  label="Amount"
+                                  id="amount8"
+                                  variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                </div>
+                                <TextField
+                                  name="driverconvenience1"
+                                  className='customer-bill-input'
+                                  value={driverBeta}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
+                                  // onChange={(e) => setdriverBeta(e.target.value)}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverBeta(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  label="Driver Convenience"
+                                  autoComplete="password"
+                                  id="driverconvenience1"
+                                  size="small"
+                                  variant="standard"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <TollTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                  size="small"
+                                  name='dtc2'
+                                  id='dtc2'
+                                  className='customer-bill-input'
+                                  value={driverbeta_Count}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
+
+                                  // onChange={(e) => setdriverbeta_Count(e.target.value)}
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverbeta_Count(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <TextField
+                                  name="amount9"
+                                  className='customer-bill-input'
+                                  value={driverBeta_amount}
+                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                                  // onChange={(e) => setdriverBeta_amount(e.target.value)}
+
+                                  onChange={(e) => {
+
+                                    if (lockdatacustomerbill) {
+                                      setdriverBeta_amount(e.target.value)
+                                    } else {
+                                      setWarning(true);
+                                      setWarningMessage("IS not locked,locked Enter Again");
+                                    }
+                                  }}
+                                  size="small"
+                                  label="Amount"
+                                  id="amount9"
+                                  autoComplete="password"
+                                  variant="standard"
+                                />
+                              </div>
+                            </div>
+
+                            <TextField
+                              name="amount9"
+                              className='total-amount-textfield'
+                              value={totalcalcAmount || 0}
+                              size="small"
+                              label="Total Amount"
+                              id="amount-amount9"
+                              autoComplete="password"
+                              variant="standard"
+                            />
+
+                          </div>
+                        </TabPanel> */}
+                        <TabPanel value={1} sx={{ p: 2 }}>
+                          <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
+                            <div className="input-field">
+                              {/* <div className="input">
+                                <Button variant='outlined' className='full-width'>View GPS TripSheet</Button>
+                              </div> */}
+                              <div className="input">
+                                <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
+                              </div>
+                              <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                                <DialogContent>
+                                  <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                              <div className="input">
+                                <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
+                              </div>
+                              <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                                <DialogContent>
+                                  <div className="table-customer-lists">
+                                    <DataGrid
+                                      rows={row}
+                                      columns={maplogcolumns}
+                                    />
+                                  </div>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                              {/* <div className="input">
+                                <Button variant='outlined' className='full-width'>View Closing</Button>
+                              </div> */}
+                            </div>
+                            <div className="input-field" style={{ marginTop: '10px' }}>
+                              <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+                                </div>
+                                <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="free-solo-demo"
+                                  freeSolo
+                                  sx={{ width: "20ch" }}
+                                  onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                                  value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                  options={DocumentType.map((option) => ({
+                                    label: option.option,
+                                  }))}
+                                  getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
+                                    )
+                                  }
+                                  }
+                                />
+                              </div>
+                              <Modal
+                                open={openEditMapLog}
+                                onClose={handleCloseMapLog}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                              >
+                                <Box sx={style}>
+                                  <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                                    <div>
+                                      <TextField type="date"
+                                        value={selectedMapRow?.date || ''}
+                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                                    </div>
+                                    <div>
+                                      <TextField type="time"
+                                        value={selectedMapRow?.time || ''}
+                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                                    </div>
+                                    <div>
+
+                                      <Button onClick={handleEditMapDetails}>Submit</Button>
+                                    </div>
+                                  </div>
+
+                                </Box>
+                              </Modal>
+                              {/* <div className="input">
+                                <div className="icone">
+                                  <FontAwesomeIcon icon={faFileLines} size="lg" />
+                                </div>
+                                <TextField
+                                  name="on1"
+                                  value={selectedCustomerData.on1 || book.on1 || ''}
+                                  onChange={handleChange}
+                                  size="document-notes"
+                                  label="Document Notes"
+                                  autoComplete="password"
+                                  id="document-notes"
+                                  variant="standard"
+                                />
+                              </div> */}
+                              <div className="input">
+                                <Button variant="contained" onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                              </div>
+                            </div>
+                            <div className="input-field" style={{ marginTop: '20px' }}>
+                              {/* <div className="input">
+                                <div className="icone">
+                                  <MarkChatReadIcon color="action" />
+                                </div>
+                                <TextField
+                                  size="small"
+                                  sx={{ m: 1, width: "300ch" }}
+                                  variant="standard"
+                                  autoComplete="password"
+                                />
+                              </div> */}
+                              <div className="input">
+                                <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
+                              </div>
+                              <div className="input">
+                                <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                              </div>
+
+
+
+
+                              <input
+                                ref={fileInputRefdata}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleFileChangesignature}
+                              />
+
+
+                              <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
+                                <DialogContent>
+                                  <div
+                                    style={{
+                                      // display: "flex",
+                                      overflowY: "auto",
+                                      backgroundColor: "#E5E5E5"
+                                    }}
+                                  >
+
+                                    <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
+                                      <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
+                                    </div>
+                                  </div>
+
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                      handlesignaturemageDownload()
+                                    }}
+                                  >
+                                    DOWNLOAD
+                                  </Button>
+                                  <Button variant="contained" onClick={() => {
+                                    handlesignaturemageDelete()
+                                  }} color="primary">
+                                    Delete
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                            </div>
+                            <div className="input-field" style={{ marginTop: '10px' }}>
+                              <div className="input">
+                                <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
+
+                              </div>
+                              <div>
+                                <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                                <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
+                              </div>
+                              {/* <div className="input">
+                                <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
+                              </div> */}
+                            </div>
+                            <div className="table-TripSheet">
+                              <div className='tripsheet-booking-table'>
+                                <DataGrid
+                                  rows={rows}
+                                  columns={columns}
+                                  onRowClick={handleTripRowClick}
+                                  pageSize={5}
+                                  checkboxSelection
+                                />
+                              </div>
+                            </div>
+                            {/* 
+                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
+                      PaperProps={{
+                        style: {
+                          width: 'fit-content',
+                          maxWidth: '90%',
+                          padding: '10px'
+                        }
+                      }}
+                    >
+                      <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {selectedRow && (
+                          <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />
+                        )}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            handleimagedelete(selectedRow);
+                            handleimgPopupClose();
+                            handleRefresh();
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog> */}
+                            <Dialog
+                              open={imgpopupOpen}
+                              onClose={handleimgPopupClose}
+                              maxWidth="md"
+                              fullWidth
+                              PaperProps={{
+                                style: {
+                                  width: 'fit-content',
+                                  maxWidth: '90%',
+                                  padding: '10px',
+                                },
+                              }}
+                            >
+                              <DialogContent
+                                style={{
+                                  padding: '7px',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {selectedRow && (
+                                  <>
+                                    {imageUrl && imageUrl.endsWith('.pdf') ? (
+                                      <embed
+                                        src={imageUrl}
+                                        title="PDF Viewer"
+                                        style={{
+                                          maxWidth: '100%',
+                                          maxHeight: '600px',
+                                          width: '100%',
+                                          height: '600px',
+                                          border: 'none',
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={imageUrl}
+                                        alt="Embedded Content"
+                                        style={{
+                                          maxWidth: '100%',
+                                          maxHeight: '600px',
+                                          objectFit: 'contain',
+                                        }}
+                                      />
+                                    )}
+                                  </>
+                                )}
+                              </DialogContent>
+                              <DialogActions>
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => {
+                                    handleimagedelete(selectedRow);
+                                    handleimgPopupClose();
+                                    handleRefresh();
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                                <Button
+                                  onClick={handleimgPopupClose}
+                                  variant="contained"
+                                  color="primary"
+                                >
+                                  Cancel
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+
+                          </div>
+                        </TabPanel>
+                        <TabPanel value={2} sx={{ p: 2 }}>
+                          <div className="Customer-Message-Slider">
+                            <div className="input-field">
+                              {/* <div>
+                              
+                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                }
+
+                                {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
+                              </div> */}
+                              <div style={{display:"flex", alignItems:"center",gap:"10px"}}>
+                                {/* <Button onClick={generateLink}>Generate Link</Button> */}
+                                <div style={{display:"blocks"}}>
+
+                                
+                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
+                                </div>
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                }
+                                {copydatalink && signaturelinkwhatsapp &&
+                                  <CopyField
+                                  
+                                    value={signaturelinkwhatsapp}
+                                    onCopySuccess={() => setCopyDataLink(false)}
+                                   
+                                  />
+                                
+                                }
+
+                              </div>
+                              <div>
+                                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
+                                  Refresh
+                                </Button>
+                              </div>
+
+                            </div>
+                              {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>}
+
+                            <div className="table-TripSheet" style={{ marginTop: '15px' }}>
+                              <div className='tripsheet-booking-table'>
+                                <DataGrid
+                                  rows={rowsignature}
+                                  columns={columnssignature}
+                                  onRowClick={handleTripsignaturedata}
+                                  pageSize={5}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </TabPanel>
+                        <TabPanel value={0} sx={{ p: 2 }}>
+                          <div style={{display:"flex", justifyContent:"space-around",flexWrap:"wrap" }}>
+                          <div className="Customer-Customer-Bill-Slider bill-section bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+                           <p className='bill-topics'>Vendor Info</p>
                             <div className="input-field tripsheet-vendor-info-first-input-field">
                               <div className="input">
                                 {/* <div className="icone">
@@ -2250,10 +3487,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
 
                           </div>
-                        </TabPanel>
-
-                        <TabPanel value={1} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                          <div className="Customer-Customer-Bill-Slider bill-section bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                          <p  className='bill-topics'>Vendor Bill</p>
                             <div className="input-field">
                               <div className="input">
                                 <TextField
@@ -2462,10 +3697,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
 
                           </div>
-                        </TabPanel>
-
-                        <TabPanel value={2} sx={{ p: 2 }}>
-                          <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
+                          <div className="Customer-Customer-Bill-Slider bill-section  Customer-Customer-Bill-Slider-popup">
+                          <p  className='bill-topics'>Customer Bill</p>
                             <div className="input-field">
                               {/* <div className="input">
                                 <div className="icone">
@@ -2814,372 +4047,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                             />
 
                           </div>
-                        </TabPanel>
-                        <TabPanel value={3} sx={{ p: 2 }}>
-                          <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
-                            <div className="input-field">
-                              {/* <div className="input">
-                                <Button variant='outlined' className='full-width'>View GPS TripSheet</Button>
-                              </div> */}
-                              <div className="input">
-                                <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
-                              </div>
-                              <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
-                                <DialogContent>
-                                  <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                                    Cancel
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                              <div className="input">
-                                <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
-                              </div>
-                              <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
-                                <DialogContent>
-                                  <div className="table-customer-lists">
-                                    <DataGrid
-                                      rows={row}
-                                      columns={maplogcolumns}
-                                    />
-                                  </div>
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                                    Cancel
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                              {/* <div className="input">
-                                <Button variant='outlined' className='full-width'>View Closing</Button>
-                              </div> */}
-                            </div>
-                            <div className="input-field" style={{ marginTop: '10px' }}>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faFolderOpen} size="lg" />
-                                </div>
-                                <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="free-solo-demo"
-                                  freeSolo
-                                  sx={{ width: "20ch" }}
-                                  onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                                  value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                                  options={DocumentType.map((option) => ({
-                                    label: option.option,
-                                  }))}
-                                  getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                                  renderInput={(params) => {
-                                    return (
-                                      <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
-                                    )
-                                  }
-                                  }
-                                />
-                              </div>
-                              <Modal
-                                open={openEditMapLog}
-                                onClose={handleCloseMapLog}
-                                aria-labelledby="modal-modal-title"
-                                aria-describedby="modal-modal-description"
-                              >
-                                <Box sx={style}>
-                                  <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-                                    <div>
-                                      <TextField type="date"
-                                        value={selectedMapRow?.date || ''}
-                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
-                                    </div>
-                                    <div>
-                                      <TextField type="time"
-                                        value={selectedMapRow?.time || ''}
-                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
-                                    </div>
-                                    <div>
-
-                                      <Button onClick={handleEditMapDetails}>Submit</Button>
-                                    </div>
-                                  </div>
-
-                                </Box>
-                              </Modal>
-                              {/* <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faFileLines} size="lg" />
-                                </div>
-                                <TextField
-                                  name="on1"
-                                  value={selectedCustomerData.on1 || book.on1 || ''}
-                                  onChange={handleChange}
-                                  size="document-notes"
-                                  label="Document Notes"
-                                  autoComplete="password"
-                                  id="document-notes"
-                                  variant="standard"
-                                />
-                              </div> */}
-                              <div className="input">
-                                <Button variant="contained" onClick={handleUpload} className='full-width'>Select File & Upload</Button>
-                              </div>
-                            </div>
-                            <div className="input-field" style={{ marginTop: '20px' }}>
-                              {/* <div className="input">
-                                <div className="icone">
-                                  <MarkChatReadIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  sx={{ m: 1, width: "300ch" }}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div> */}
-                              <div className="input">
-                                <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
-                              </div>
-                              <div className="input">
-                                <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
-                              </div>
-
-
-
-
-                              <input
-                                ref={fileInputRefdata}
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleFileChangesignature}
-                              />
-
-
-                              <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
-                                <DialogContent>
-                                  <div
-                                    style={{
-                                      // display: "flex",
-                                      overflowY: "auto",
-                                      backgroundColor: "#E5E5E5"
-                                    }}
-                                  >
-
-                                    <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
-                                      <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
-                                    </div>
-                                  </div>
-
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => {
-                                      handlesignaturemageDownload()
-                                    }}
-                                  >
-                                    DOWNLOAD
-                                  </Button>
-                                  <Button variant="contained" onClick={() => {
-                                    handlesignaturemageDelete()
-                                  }} color="primary">
-                                    Delete
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                            </div>
-                            <div className="input-field" style={{ marginTop: '10px' }}>
-                              <div className="input">
-                                <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
-
-                              </div>
-                              <div>
-                                <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
-                                <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
-                              </div>
-                              {/* <div className="input">
-                                <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
-                              </div> */}
-                            </div>
-                            <div className="table-TripSheet">
-                              <div className='tripsheet-booking-table'>
-                                <DataGrid
-                                  rows={rows}
-                                  columns={columns}
-                                  onRowClick={handleTripRowClick}
-                                  pageSize={5}
-                                  checkboxSelection
-                                />
-                              </div>
-                            </div>
-                            {/* 
-                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
-                      PaperProps={{
-                        style: {
-                          width: 'fit-content',
-                          maxWidth: '90%',
-                          padding: '10px'
-                        }
-                      }}
-                    >
-                      <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {selectedRow && (
-                          <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />
-                        )}
-                      </DialogContent>
-                      <DialogActions>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            handleimagedelete(selectedRow);
-                            handleimgPopupClose();
-                            handleRefresh();
-                          }}
-                        >
-                          Delete
-                        </Button>
-                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                      </DialogActions>
-                    </Dialog> */}
-                            <Dialog
-                              open={imgpopupOpen}
-                              onClose={handleimgPopupClose}
-                              maxWidth="md"
-                              fullWidth
-                              PaperProps={{
-                                style: {
-                                  width: 'fit-content',
-                                  maxWidth: '90%',
-                                  padding: '10px',
-                                },
-                              }}
-                            >
-                              <DialogContent
-                                style={{
-                                  padding: '7px',
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                {selectedRow && (
-                                  <>
-                                    {imageUrl && imageUrl.endsWith('.pdf') ? (
-                                      <embed
-                                        src={imageUrl}
-                                        title="PDF Viewer"
-                                        style={{
-                                          maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          width: '100%',
-                                          height: '600px',
-                                          border: 'none',
-                                        }}
-                                      />
-                                    ) : (
-                                      <img
-                                        src={imageUrl}
-                                        alt="Embedded Content"
-                                        style={{
-                                          maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          objectFit: 'contain',
-                                        }}
-                                      />
-                                    )}
-                                  </>
-                                )}
-                              </DialogContent>
-                              <DialogActions>
-                                <Button
-                                  variant="contained"
-                                  color="secondary"
-                                  onClick={() => {
-                                    handleimagedelete(selectedRow);
-                                    handleimgPopupClose();
-                                    handleRefresh();
-                                  }}
-                                >
-                                  Delete
-                                </Button>
-                                <Button
-                                  onClick={handleimgPopupClose}
-                                  variant="contained"
-                                  color="primary"
-                                >
-                                  Cancel
-                                </Button>
-                              </DialogActions>
-                            </Dialog>
 
                           </div>
+                          
                         </TabPanel>
-                        <TabPanel value={4} sx={{ p: 2 }}>
-                          <div className="Customer-Message-Slider">
-                            <div className="input-field">
-                              {/* <div>
-                              
-                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
 
-                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
-
-                                  <button>Share on WhatsApp</button>
-                                </WhatsappShareButton>
-                                }
-
-                                {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
-                              </div> */}
-                              <div style={{display:"flex", alignItems:"center",gap:"10px"}}>
-                                {/* <Button onClick={generateLink}>Generate Link</Button> */}
-                                <div style={{display:"blocks"}}>
-
-                                
-                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
-                                </div>
-                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
-
-                                  <button>Share on WhatsApp</button>
-                                </WhatsappShareButton>
-                                }
-                                {copydatalink && signaturelinkwhatsapp &&
-                                  <CopyField
-                                  
-                                    value={signaturelinkwhatsapp}
-                                    onCopySuccess={() => setCopyDataLink(false)}
-                                   
-                                  />
-                                
-                                }
-
-                              </div>
-                              <div>
-                                <Button variant="contained" color="primary" onClick={handleRefreshsign}>
-                                  Refresh
-                                </Button>
-                              </div>
-
-                            </div>
-                              {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>}
-
-                            <div className="table-TripSheet" style={{ marginTop: '15px' }}>
-                              <div className='tripsheet-booking-table'>
-                                <DataGrid
-                                  rows={rowsignature}
-                                  columns={columnssignature}
-                                  onRowClick={handleTripsignaturedata}
-                                  pageSize={5}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </TabPanel>
 
                       </Tabs>
                       <DialogActions className='tripsheet-cancel-save-btn'>

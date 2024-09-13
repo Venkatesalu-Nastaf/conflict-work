@@ -612,7 +612,7 @@ body {
 }
 
 .input {
-  width: 244px !important;
+  width: 218px !important;
   display: flex;
   align-items: center;
   padding-right: 15px;
@@ -784,6 +784,18 @@ body {
   zoom: 90%;
 }
 
+@media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+  .main-content-form {
+    zoom: 82%;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+  .main-content-form {
+    zoom: 77%;
+  }
+}
+
 .head-tab-all .css-k008qs {
   overflow: auto;
 }
@@ -834,4 +846,14 @@ body {
   .common-speed-dail {
     top: -22px;
   }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1424.99px) {
+  .common-speed-dail {
+    top: -22px;
+  }
+}
+
+.css-160unip > .MuiTextField-root {
+  min-width: auto !important;
 }

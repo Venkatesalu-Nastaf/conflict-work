@@ -249,6 +249,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [vendortoll, setVendortoll] = useState('')
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
+  const [gstAmount, setGstAmount] = useState(0)
   const organizationname = customer
   const organisationdetailfill = organisationdetails
   const organisationimage = images
@@ -266,6 +267,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       let vendortollamount = 0
       let nightAmount = 0
       let driverBeta = 0
+      let gstamount = 0
       invdata?.map((li) => {
         totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
@@ -277,6 +279,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
         vendortollamount += parseInt(li.vendortoll || 0)
         nightAmount += parseInt(li.night_totalAmount || 0)
         driverBeta += parseInt(li.driverBeta_amount || 0)
+        gstamount = parseInt(li.gstTax)
         return null
       })
       setTotalAmount(totalamount)
@@ -289,6 +292,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       setVendortoll(vendortollamount)
       setNightTotalAmount(nightAmount)
       setDriverBetaAmount(driverBeta)
+      setGstAmount(gstamount)
     }
   }, [apiUrl, invdata])
 
@@ -317,16 +321,15 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
-  console.log(fullAmount, 'fulll');
 
-  const cgst = Math.floor(fullAmount * 2.5 / 100);
-  const sgst = Math.floor(fullAmount * 2.5 / 100);
+  const cgst = Math.floor(fullAmount * gstAmount / 100);
+  const sgst = Math.floor(fullAmount * gstAmount / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
 
   const parkpermit = park + permitcharge + tollAmount
-  const FullAmount = fullAmount + cgst + sgst + parkpermit
+  const FullAmount = fullAmount + gstAmount + gstAmount + parkpermit
   const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
@@ -455,14 +458,24 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
               </View>
 
               <View style={styles.totalsum}>
-                <View style={styles.totalsuminitial}></View>
+                <View style={styles.totalsuminitial}>
+                  {gstAmount === 0 ? (
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
+                      <Text style={{ fontSize: 11, }}>NOTE:</Text>
+                      <Text style={{ fontSize: 10 }}>
+                        IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                      </Text>
+                    </View>
+                  ) : null}
+                </View>
 
                 <View style={styles.grandtotal}>
 
+
                   <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
-                    <Text style={styles.text2}>CGST 2.5% on {fullAmount}:</Text>
-                    <Text style={styles.text2}>SGST 2.5% on {fullAmount}:</Text>
+                    <Text style={styles.text2}>CGST {gstAmount} on {fullAmount}:</Text>
+                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount}:</Text>
                     <Text style={styles.text2}>Parking & Permit:</Text>
                     <Text style={styles.text2}>Total Amount:</Text>
                   </View>

@@ -815,39 +815,76 @@ const useTransferdataentry = () => {
     }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     const handleShow = async () => {
+        const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-        try {
-            const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-            const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-            const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-            const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
-                params: {
-                    customer: customerValue,
-                    fromDate: fromDateValue,
-                    toDate: toDateValue,
-                    servicestation: servicestationValue
-                },
-            });
-            const data = response.data;
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("successfully listed")
-            } else {
+        if (servicestationValue !== "" && servicestationValue !== "All") {
+            try {
+                const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+                const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+
+                const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
+                    params: {
+                        customer: customerValue,
+                        fromDate: fromDateValue,
+                        toDate: toDateValue,
+                        servicestation: servicestationValue
+                    },
+                });
+                const data = response.data;
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed")
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found")
+                }
+            } catch {
                 setRows([]);
                 setError(true);
-                setErrorMessage("no data found")
+                setErrorMessage("Check your Network Connection");
             }
-        } catch {
-            setRows([]);
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+        }
+        else if (servicestationValue === "All" || servicestationValue === "") {
+            try {
+                const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+
+                const response = await axios.get(`${apiUrl}/All-Transfer-Billing`, {
+                    params: {
+                        customer: customerValue,
+                        fromDate: fromDateValue,
+                        toDate: toDateValue,
+                    },
+                });
+                const data = response.data;
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed")
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found")
+                }
+            } catch {
+                setRows([]);
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
         }
 
     };

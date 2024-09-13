@@ -16,6 +16,7 @@ export const PdfDataProvider = ({ children }) => {
     const [particularPdf, setParticularPdf] = useState(false);
     const [individualBilled, setIndividualBilled] = useState(true)
     const [particularRefNo, setParticularRefNo] = useState('');
+    const [billGenerate,setBillGenerate] = useState(false);
     const [organizationDetail, setOrganizationDetail] = useState({
         organizationname: '',
         addressLine1: '',
@@ -56,7 +57,7 @@ export const PdfDataProvider = ({ children }) => {
 
     return (
         <DataContext.Provider value={{
-            pdfPrint, setPdfPrint, billingPage, setBillingPage, individualBilled, setIndividualBilled,
+            pdfPrint, setPdfPrint, billingPage, setBillingPage, individualBilled, setIndividualBilled,billGenerate,setBillGenerate,
             transferReport, setTransferReport, particularPdf, setParticularPdf, organizationDetail, particularRefNo, setParticularRefNo
         }}>
             {children}

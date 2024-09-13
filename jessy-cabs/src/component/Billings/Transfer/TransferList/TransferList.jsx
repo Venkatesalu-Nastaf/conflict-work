@@ -12,7 +12,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Box } from '@mui/material';
-
+import { PdfData } from '../TransferReport/PdfContext';
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
@@ -54,7 +54,7 @@ const TransferList = ({ stationName, organizationNames }) => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
-console.log(rows,'data11');
+
 
     useEffect(() => {
         if (actionName === 'List') {

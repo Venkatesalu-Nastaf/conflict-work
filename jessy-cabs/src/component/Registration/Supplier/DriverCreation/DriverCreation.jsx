@@ -44,6 +44,8 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import ClearIcon from '@mui/icons-material/Clear';
+import { TbLicense } from "react-icons/tb";
+
 // import ListAltIcon from "@mui/icons-material/ListAlt";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -467,9 +469,9 @@ const DriverCreation = ({ stationName }) => {
                             </div> */}
 
 
-                            <div className="input driver-input">
+                            <div className="input-adhar driver-input">
                                 <div className="icone">
-                                    <xTaxiAlertIcon color="action" />
+                                    <TbLicense color="action" />
                                 </div>
                                 <TextField
                                     size="small"
@@ -480,28 +482,26 @@ const DriverCreation = ({ stationName }) => {
                                     label="License No"
                                     id="licenseno"
                                 />
-
-                                <Tooltip title="upload License" arrow>
-
-                                    <Button component="label">
-                                        <span className='upload-icon'>
-                                            <RiFileUploadLine />
-                                        </span>
-                                        <input
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => {
-                                                setLicencepdf(e.target.files[0]);
-                                                console.log('File selected:', e.target.files[0]);
-                                                handleFileUpload(e);
-                                            }}
-                                        />
-                                    </Button>
-
-                                </Tooltip>
+                                <Tooltip title="upload License" arrow >
+                                <Button component="label" >
+                                    <span className='upload-icon'>
+                                        <RiFileUploadLine />
+                                    </span>
+                                    <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => {
+                                            setLicencepdf(e.target.files[0]);
+                                            console.log('File selected:', e.target.files[0]);
+                                            handleFileUpload(e);
+                                        }}
+                                    />
+                                </Button>
+                            </Tooltip>
                             </div>
+                            
 
-                            <div className="input driver-input">
+                            <div className="input-adhar driver-input">
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
@@ -516,7 +516,7 @@ const DriverCreation = ({ stationName }) => {
                                 />
 
                                 <Tooltip title="Upload Aadhar Card" arrow>
-                                    <Button component="label">
+                                    <Button component="label" >
                                         <span className="upload-icon">
                                             <RiFileUploadLine />
                                         </span>
@@ -536,6 +536,8 @@ const DriverCreation = ({ stationName }) => {
 
                                 </Tooltip>
                             </div>
+
+
 
                             <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
@@ -689,7 +691,7 @@ const DriverCreation = ({ stationName }) => {
                     </Box>
 
                     <div className="DriverCreation-table-container">
-                        <div style={{display:"flex", gap:"20px", alignItems:"center",padding:"10px"}}>
+                        <div style={{ display: "flex", gap: "20px", alignItems: "center", padding: "10px", flexWrap: "wrap" , marginTop:"20px"}}>
                             <div className="Download-btn-drivercreation">
                                 <PopupState variant="popover" popupId="demo-popup-menu">
                                     {(popupState) => (
@@ -706,7 +708,7 @@ const DriverCreation = ({ stationName }) => {
                                 </PopupState>
                             </div>
 
-                            <div className="detail-container-main detail-container-main-crivercreation">
+                            <div className="detail-container-driver detail-container-main-crivercreation">
                                 <div className="container-left">
                                     <div className="">
                                         <div className="input-field driver-creation-input-field">

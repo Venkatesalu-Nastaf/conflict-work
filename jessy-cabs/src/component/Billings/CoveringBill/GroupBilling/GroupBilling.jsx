@@ -164,19 +164,19 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-ReferenceNo"
-                                        className='full-width'
+                                        className="full-width"
                                         freeSolo
                                         size="small"
                                         value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
                                         options={referenceNo || []}
+                                        onInputChange={(event, newInputValue) => setInvoiceno(newInputValue)}
+                                        onChange={(event, newValue) => setInvoiceno(newValue || '')}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Reference No" name="ReferenceNo" inputRef={params.inputRef} />
+                                        )}
                                         onKeyDown={handleKeyDown}
-                                        onChange={(event, value) => setInvoiceno(value)}
-                                        renderInput={(params) => {
-                                            return (
-                                                <TextField {...params} label="Reference No" name='ReferenceNo' inputRef={params.inputRef} />
-                                            );
-                                        }}
                                     />
+
                                 </div>
                                 <div className="input">
                                     <div className="icone">

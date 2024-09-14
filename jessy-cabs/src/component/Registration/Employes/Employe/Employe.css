@@ -105,7 +105,7 @@
 
 .Employe-search-container {
   /* margin-top: 30px; */
-  padding: 10px;
+  padding: 10px 10px 15px 10px !important;
   border-radius: 15px;
   /* width: 100%; */
   display: flex;
@@ -152,7 +152,7 @@
 .Employe-search-input {
   /* margin-top: 30px; */
   /* background-color: var(--glass); */
-  padding: 10px;
+  padding: 10px 10px 15px 10px !important;
   /* border: 2px solid #ccc; */
   /* border-radius: 15px; */
 }

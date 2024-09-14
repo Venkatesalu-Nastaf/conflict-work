@@ -45,14 +45,14 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 // TABLE START
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "stationid", headerName: "Station_Id", width: 130 },
+  { field: "id", headerName: "Sno", width: 50 },
+  { field: "stationid", headerName: "Station_Id", width: 80 },
   { field: "gstno", headerName: "GST No", width: 130 },
-  { field: "Stationname", headerName: "Station_Name", width: 140 },
-  { field: "active", headerName: "Active", width: 80 },
-  { field: "shortname", headerName: "Station", width: 130 },
-  { field: "ownbranch", headerName: "Own_Branch", width: 130 },
-  { field: "address", headerName: "address", width: 130 },
+  { field: "Stationname", headerName: "Station_Name", width: 120 },
+  { field: "active", headerName: "Active", width: 60 },
+  { field: "shortname", headerName: "Station", width: 100 },
+  { field: "ownbranch", headerName: "Own Branch", width: 100 },
+  { field: "address", headerName: "address", width: 230 },
 
 ];
 // TABLE END

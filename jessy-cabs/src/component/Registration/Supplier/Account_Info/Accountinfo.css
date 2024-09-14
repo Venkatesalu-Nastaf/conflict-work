@@ -169,8 +169,19 @@
   padding-top: 96px;
 } */
 
-/* .Download-btn-account-info{
- margin-top: 3px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-} */
+.Download-btn-account-info{
+    padding-bottom: 15px;
+    padding-right: 20px;
+}
+
+.download-search-account{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 25px;
+}
+.detail-container-account{
+  display: flex;
+padding-bottom: 15px;
+}

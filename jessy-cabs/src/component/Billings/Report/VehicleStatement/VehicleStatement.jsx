@@ -51,7 +51,7 @@ const VehicleStatement = () => {
   const [success, setSuccess] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
-  const [tableData, setTableData] = useState([])
+  const [ setTableData] = useState([])
 
   const [totalValues, setTotalValues] = useState({
     fullTotalKM: '',
@@ -390,8 +390,6 @@ const VehicleStatement = () => {
     });
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'normal');
-    // pdf.text("VehicleStatement", 10, 10);
-    //  const header = Object.keys(row[0]);
     const text = "VehicleStatement";
 
     // Get page width
@@ -434,7 +432,6 @@ const VehicleStatement = () => {
       startY: 20,
 
       headStyles: {
-        // fontSize: 5,
         fontSize: 12,
         cellPadding: 1.5, // Decrease padding in header
 

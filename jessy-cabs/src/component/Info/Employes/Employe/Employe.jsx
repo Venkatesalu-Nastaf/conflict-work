@@ -382,7 +382,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input">
+              <div className="input-licence">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
@@ -416,27 +416,9 @@ const Employe = () => {
                   )}
                 </div>
 
-                {/* <div className="employee-file-upload-division">
-                  {selectedCustomerData?.empid || book.empid ? (
-                    <Button component="label">
-                      <UploadFileIcon />
-                      <input
-                        id="empid_file"
-                        type="file"
-                        style={{ display: "none" }}
-                        onChange={(e) => setFile(e.target.files[0])}
-                      />
-                    </Button>
-                  ) : (
-                    <Button color="primary" variant="contained" onClick={() => {
-                      setError(true);
-                      setErrorMessage("Please Enter Booking No");
-                    }}>
-                      <UploadFileIcon />
-                    </Button>
-                  )}
-                </div> */}
+               
               </div>
+            
 
 
               <div className="input">

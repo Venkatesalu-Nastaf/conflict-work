@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import "./SMSReport.css";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
@@ -19,12 +19,12 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 dayjs.extend(isBetween);
 
 const columns = [
-  { field: "id", headerName: "Sno", width: 100 },
-  { field: "MobileNumber", headerName: "MobileNO", width: 200 },
-  { field: "Message", headerName: "Message", width: 450 },
-  { field: "SubmitDate", headerName: "Submit Date", width: 200 },
-  { field: "DoneDate", headerName: "Done Date", width: 200 },
-  { field: "Status", headerName: "Status", width: 200 },
+  { field: "id", headerName: "Sno", width: 50 },
+  { field: "MobileNumber", headerName: "Number", width: 120 },
+  { field: "Message", headerName: "Message", width: 550 },
+  { field: "SubmitDate", headerName: "Submit Date", width: 160 },
+  { field: "DoneDate", headerName: "Done Date", width: 160 },
+  { field: "Status", headerName: "Status", width: 110 },
 ];
 
 
@@ -32,43 +32,24 @@ const SMSReport = () => {
   const apiurl = APIURL
   const [smsreport, setSmsReport] = useState([])
   const [filteredReport, setFilteredReport] = useState([]);
-
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [datafilter, setDatafilter] = useState(true)
   const [info, setInfo] = useState(false);
   const [infoMessage, setINFOMessage] = useState({});
   const hidePopup = () => {
-  
-    setInfo(false);
- 
-};
-useEffect(() => {
-    if (info) {
-        const timer = setTimeout(() => {
-            hidePopup();
-        }, 3000);
-        return () => clearTimeout(timer);
-    }
-}, [info]);
 
-  // useEffect(() => {
-  //   const fetchdata = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiurl}/smsreportdata`)
-  //       const data = response.data
-  //       const rowsWithUniqueId = data.map((row, index) => ({
-  //         ...row,
-  //         id: index + 1,
-  //       }));
-  //       setSmsReport(rowsWithUniqueId)
-  //     }
-  //     catch (err) {
-  //       console.log(err)
-  //     }
-  //   }
-  //   fetchdata()
-  // }, [apiurl])
+    setInfo(false);
+
+  };
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [info]);
 
   const fetchdata = useCallback(async () => {
     try {
@@ -95,14 +76,14 @@ useEffect(() => {
     const filtered = smsreport.filter(report => {
 
 
-      const submitDate = dayjs(report.SubmitDate, 'DD MMM YYYY HH:mm:ss');
+      const submitDate = dayjs(report.SubmitDate, 'DD MMM YYYY');
       const startDateWithoutTime = fromDate.startOf('day'); // Start of the day for fromDate
       const endDateWithoutTime = toDate.endOf('day');
 
       return submitDate.isBetween(startDateWithoutTime, endDateWithoutTime, null, '[]');
 
     });
-    if(filtered.length === 0 ){
+    if (filtered.length === 0) {
       console.log("errr")
       setInfo(true)
       setINFOMessage("Data Not Found")
@@ -189,23 +170,16 @@ useEffect(() => {
           };
         });
       });
-      // write the content using writeBuffer
       const buf = await workbook.xlsx.writeBuffer();
 
-      // download the processed file
       saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
       console.error('<<<ERRROR>>>', error);
       console.error('Something Went Wrong', error.message);
     } finally {
-      // removing worksheet's instance to create new one
       workbook.removeWorksheet(workSheetName);
     }
-
-
   }
-
-
   return (
     <div className="smsreport-form main-content-form Scroll-Style-hide">
       <form action="">
@@ -214,7 +188,6 @@ useEffect(() => {
             <div className="copy-title-btn-SMSReport">
               <div className="input-field sms-report-inputfeild">
                 <div className="input">
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       id="from-date"
@@ -247,8 +220,8 @@ useEffect(() => {
                     Excel
 
                   </Button>
-                  </div>
-                <div className='input' style={{gap: '15px'}}>
+                </div>
+                <div className='input' style={{ gap: '15px' }}>
                   <div className="">
                     <Button variant="contained" onClick={filterData}>Show</Button>
                   </div>
@@ -256,20 +229,13 @@ useEffect(() => {
                     <Button variant="outlined" onClick={dataall}>Show All</Button>
                   </div>
                 </div>
-        
+
               </div>
             </div>
           </div>
         </div>
         <div className="table-bookingCopy-SMSReport">
           <div className='sms-report-table'>
-            {/* <DataGrid
-              rows={datafilter ? smsreport : filteredReport}
-              columns={columns}
-              pageSize={5}
-            // checkboxSelection
-            /> */}
-
 
             <Box
               sx={{
@@ -298,22 +264,19 @@ useEffect(() => {
                 rows={datafilter ? smsreport : filteredReport}
                 columns={columns}
                 pageSize={5}
-              // checkboxSelection
               />
             </Box>
           </div>
         </div>
         <div className='alert-popup-main'>
-        {info &&
-              <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{infoMessage}</p>
-              </div>
-            }
-          </div>
-
-
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
+        </div>
       </form>
     </div>
   )

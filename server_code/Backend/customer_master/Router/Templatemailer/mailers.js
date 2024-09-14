@@ -26,9 +26,6 @@ const uploadattachement = multer({ storage: storage });
 router.post('/templateattachmentimage/:templateid', uploadattachement.array('imagestemplate'), (req, res) => {
     const templateid = req.params.templateid
     const imagedata = req.files
-    // console.log(templateid)
-    // console.log(imagedata,"reqfile")
-    // Other fields from the form
     if (!imagedata || imagedata.length === 0) {
         return res.status(500).json("No images provided ");
     }
@@ -39,8 +36,6 @@ router.post('/templateattachmentimage/:templateid', uploadattachement.array('ima
         const { filename, mimetype } = image;
         db.query(insertQuery, [templateid, filename, mimetype], (err, result) => {
             if (err) {
-                //    console.error('Error inserting data into MySQL:', err);
-                // If an error occurs for any image, return a response with the error
                 return res.status(500).json({ error: 'Failed to insert data into MySQL' });
             }
 
@@ -54,22 +49,6 @@ router.post('/templateattachmentimage/:templateid', uploadattachement.array('ima
         });
     });
 });
-
-// Send response
-
-
-
-
-// db.query('Insert into Templateattachment set ?',[],(err,result)=>{
-//     if(err){
-//         console.log(err)
-//         return res.status(500).json({ error: "Failed to insert data into MySQL" });
-//     }
-//     console.log(result)
-//     return res.status(200).json({ message: "Data inserted successfully" });
-// })
-// })
-
 
 router.get('/lasttemplateid', (req, res) => {
     db.query('SELECT   Templateid  FROM  TemplateMessage ORDER BY  Templateid DESC LIMIT    1', (err, result) => {
@@ -86,14 +65,12 @@ router.get('/lasttemplateid', (req, res) => {
 
 router.post('/templatedatainsert', (req, res) => {
     const template = req.body;
-    // console.log(template)
     db.query('insert into TemplateMessage  SET ?', [template], (err, result) => {
         if (err) {
             console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
 
         }
-        // console.log(result)
         return res.status(200).json({ message: "Data inserted successfully" });
 
     })
@@ -411,28 +388,8 @@ router.get('/tabletemplateseatch', (req, res) => {
 
 })
 
-// router.get('/smsreportdata',(req,res)=>{
-
-//     const apiKey = 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=';
-//     const clientId = 'a5b891d0-9e91-442b-921b-3f2547a96c8e';
-
-//     db.query('select * from SmsReport',(err,results)=>{
-//         if (err) {
-//             return res.status(500).json({ error: 'Failed to retrieve sms reportdetails from MySQL' });
-//         }
-//         console.log(results)
-//         results.map((data)=>{
-//         const statusApiUrl = axios.get(`https://smsssl.dial4sms.com/api/v2/MessageStatus?ApiKey=${apiKey}&ClientId=${clientId}&MessageId=${data.SmsMessageid}`);
-//         console.log(statusApiUrl.response)
-//         })
-//     })
-//     // const statusApiUrl = `https://smsssl.dial4sms.com/api/v2/MessageStatus?ApiKey=${apiKey}&ClientId=${clientId}&MessageId=${messageId}`;
-
-// })
 
 router.get('/smsreportdata', async (req, res) => {
-    // const apiKey = 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=';
-    // const clientId = 'a5b891d0-9e91-442b-921b-3f2547a96c8e';
     const apiKey = process.env.SMS_ApiKey;
     const clientId = process.env.SMS_ClientId;
 
@@ -450,8 +407,6 @@ router.get('/smsreportdata', async (req, res) => {
                     return {
                         ...data,
                         ...response.data.Data,
-                        // statusErrorCode: response.data.ErrorCode,
-                        // statusErrorDescription: response.data.ErrorDescription,
                     };
                 } catch (apiError) {
                     console.error(`Error fetching SMS status for MessageId ${data.SmsMessageid}:`, apiError.message);

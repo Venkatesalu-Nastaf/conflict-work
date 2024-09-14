@@ -891,8 +891,8 @@ const Customer = ({ stationName }) => {
             </div>
 
             <div className="customer-list-table-container-download">
-              <div style={{display:"flex",gap:"20px", alignItems:"center", flexWrap:"wrap"}}>
-                <div className="Download-btn">
+              <div className='down-search-portion'>
+                <div className="Download-btn-customer">
                   <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (
                       <React.Fragment>
@@ -908,7 +908,7 @@ const Customer = ({ stationName }) => {
                   </PopupState>
                 </div>
 
-                <div className="detail-container-main">
+                <div className="detail-container">
                 <div className="container-left">
                   <div className="">
                     <div className="input-field vehicle-info-search-input-field">

@@ -284,7 +284,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 97vw;
+    /* width: 97vw; */
   }
 }
 
@@ -293,7 +293,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 97vw;
+    /* width: 97vw; */
   }
 }
 
@@ -537,7 +537,7 @@
 }
 
 .tripsheet-remarks-division {
-  width: 475px !important;
+  width: 450px !important;
 }
 
 .tripsheet-calculate-input button,

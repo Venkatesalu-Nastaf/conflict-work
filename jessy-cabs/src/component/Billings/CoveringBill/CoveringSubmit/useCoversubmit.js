@@ -140,37 +140,73 @@ const useCoversubmit = () => {
     const handleShow = async () => {
         const startDate = dayjs(fromDate).format('YYYY-MM-DD')
         const endDate = dayjs(toDate).format('YYYY-MM-DD')
+        if (servicestation === "" || servicestation === "All") {
+            try {
+                const response = await axios.get(`${apiUrl}/ListDetails`,
+                    {
+                        params: {
+                            Customer: customer,
+                            FromDate: startDate,
+                            ToDate: endDate,
+                        },
+                    });
+                const data = response.data;
+                console.log(data, 'data');
 
-        try {
-            const response = await axios.get(`${apiUrl}/ListDetails`,
-                {
-                    params: {
-                        Customer: customer,
-                        FromDate: startDate,
-                        ToDate: endDate,
-                    },
-                });
-            const data = response.data;
-            console.log(data,'data');
-            
-            setInvoiceColumn(true)
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-            } else {
-                setRows([]);
-                setError(true);
-                setErrorMessage("No data found");
+                setInvoiceColumn(true)
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setServiceStation("All")
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            }
+
+            catch (err) {
+                console.log(err, 'error');
             }
         }
+        else if (servicestation !== "" && servicestation !== "All") {
+            try {
+                const response = await axios.get(`${apiUrl}/ListDetailsWithStation`,
+                    {
+                        params: {
+                            Customer: customer,
+                            FromDate: startDate,
+                            ToDate: endDate,
+                            station: servicestation
+                        },
+                    });
+                const data = response.data;
+                console.log(data, 'data');
 
-        catch (err) {
-            console.log(err, 'error');
+                setInvoiceColumn(true)
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            }
+
+            catch (err) {
+                console.log(err, 'error');
+            }
         }
     }
 

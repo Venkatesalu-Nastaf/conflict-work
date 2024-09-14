@@ -1,7 +1,6 @@
 import React from 'react';
 import "./MonthlyWise.css"
 import Box from "@mui/material/Box";
-import { APIURL } from "../../../url";
 import { TextField } from "@mui/material";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import Button from "@mui/material/Button";
@@ -19,41 +18,10 @@ import Menu from '@mui/material/Menu';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MenuItem from '@mui/material/MenuItem';
-// import Dialog from '@mui/material/Dialog';
-// import Checkbox from '@mui/material/Checkbox';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import ClearIcon from '@mui/icons-material/Clear';
-// import DialogContent from '@mui/material/DialogContent';
 import Autocomplete from "@mui/material/Autocomplete";
 import { Customertype } from "../../../Registration/Customer/Customerdata";
-
-
-// const columns = [
-//     { field: 'id5', headerName: 'Sno', width: 20 },
-//     {
-//         field: 'billingno',
-//         headerName: 'Bill No',
-//         type: 'number',
-//         width: 90,
-//     },
-//     { field: 'customer', headerName: 'Customer Name', width: 180 },
-//     { field: 'totalAmount', headerName: 'Amount', width: 130 },
-//     { field: 'orderbyemail', headerName: 'Email', width: 180 },
-//     { field: 'customertype', headerName: 'CustomerType', width: 130 },
-//     { field: 'customerId', headerName: 'CID', width: 70 },
-
-// ];
-
-// const rows = [
-//     { id: 2, billNo: 35, customerName: 'Zoho', amount: '2450', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-//     { id: 1, billNo: 35, customerName: 'Dhan Lakshmi Bank', amount: '3420', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-//     { id: 3, billNo: 35, customerName: 'IDFC Bank', amount: '20345', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-//     { id: 4, billNo: 35, customerName: 'Kottak Bank', amount: '34240', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-//     { id: 5, billNo: 35, customerName: 'NASTAF Technologies', amount: '2130', email: 'fahad@nastaf.com', customertype: 'Corporate', cid: '213' },
-// ];
 const MonthlyWise = () => {
-    // const apiUrl = APIURL;
     const {
         successMessage,
         errorMessage,
@@ -79,7 +47,7 @@ const MonthlyWise = () => {
         <div className="MonthlyWise-main">
             <form >
                 <div className='main-content-form'>
-                    <div className='input-field' style={{flexWrap: 'wrap'}}>
+                    <div className='input-field' style={{ flexWrap: 'wrap' }}>
                         <div className="input">
                             <div className="icone">
                                 <MdOutlineCalendarMonth color="action" />
@@ -126,7 +94,6 @@ const MonthlyWise = () => {
                                 options={Customertype.map((option) => ({
                                     label: option.Option,
                                 }))}
-                                //   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
                                 renderInput={(params) => {
                                     return (
                                         <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />

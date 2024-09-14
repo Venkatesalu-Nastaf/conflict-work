@@ -17,8 +17,6 @@ import useGstReport from './useGstReport';
 import { Autocomplete } from "@mui/material";
 import dayjs from 'dayjs';
 
-
-
 export const GstReport = () => {
   const { organization, gstReport, setGstReport, department, handleShow, rows, columns, taxReport, handleDownloadPdf, handleDownloadExcel } = useGstReport();
 
@@ -77,7 +75,6 @@ export const GstReport = () => {
               </DemoContainer>
             </LocalizationProvider>
           </div>
-
           <div className="input">
             <div className="icone">
               <GiMatterStates color="action" />
@@ -95,7 +92,6 @@ export const GstReport = () => {
               )}
             />
           </div>
-
           <div className="input">
             <div className="icone">
               <GiMatterStates color="action" />
@@ -117,9 +113,7 @@ export const GstReport = () => {
                 />
               )}
             />
-
           </div>
-
           <div className='input'>
             <div className="input" >
               <Button onClick={handleShow} variant="outlined">Show</Button>
@@ -129,7 +123,6 @@ export const GstReport = () => {
             </div>
           </div>
         </div>
-
         <div className='input-field'>
           <div className="input">
             <TextField
@@ -137,17 +130,8 @@ export const GstReport = () => {
               autoComplete="new-password"
               className="full-width"
               value={taxReport.TaxableValue}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
               label="Taxable Value"
               id="customer"
-              // variant="standard"
               margin="normal"
               size="small"
             />
@@ -158,17 +142,8 @@ export const GstReport = () => {
               autoComplete="new-password"
               className="full-width"
               value={taxReport.cgst}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
               label="CGST"
               id="customer"
-              // variant="standard"
               margin="normal"
               size="small"
             />
@@ -179,59 +154,20 @@ export const GstReport = () => {
               autoComplete="new-password"
               className="full-width"
               value={taxReport.sgst}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
               label="SGST"
               id="customer"
-              // variant="standard"
               margin="normal"
               size="small"
             />
           </div>
-          {/* <div className="input">
-            <TextField
-              name="orderByMobileNo"
-              autoComplete="new-password"
-              className="full-width"
-              value={taxReport.igst}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
-              label="IGST"
-              id="customer"
-              // variant="standard"
-              margin="normal"
-              size="small"
-            />
-          </div> */}
           <div className="input">
             <TextField
               name="orderByMobileNo"
               autoComplete="new-password"
               className="full-width"
               value={taxReport.totalGST}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
               label="TOT.GST"
               id="customer"
-              // variant="standard"
               margin="normal"
               size="small"
             />
@@ -242,17 +178,8 @@ export const GstReport = () => {
               autoComplete="new-password"
               className="full-width"
               value={taxReport.totalAmount}
-              // value={
-              //   formData.orderByMobileNo ||
-              //   selectedCustomerData.orderByMobileNo ||
-              //   selectedCustomerDatas.orderByMobileNo ||
-              //   book.orderByMobileNo ||
-              //   ""
-              // }
-              // onChange={handleChange}
               label="Total Amount"
               id="customer"
-              // variant="standard"
               margin="normal"
               size="small"
             />
@@ -273,7 +200,6 @@ export const GstReport = () => {
             </PopupState>
           </div>
         </div>
-
         <div className='gst-report-table'>
           <Box
             sx={{
@@ -308,7 +234,6 @@ export const GstReport = () => {
                 },
               }}
               pageSizeOptions={[5, 10]}
-            // checkboxSelection
             />
           </Box>
         </div>

@@ -559,7 +559,7 @@ const TripSheet = ({ stationName, logoImage }) => {
           <p className="head-tab-type-2-all">
             <span className="Title-Name">Trip Sheet</span>
           </p>
-          <div className="Tripsheet-header">
+          <div className="Tripsheet-header main-content-form">
 
             <div>
               <div className='tripsheet-top-division'>
@@ -570,7 +570,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="bookingno"
                     name="bookingno"
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
-                    // onChange={handleChange}
+                  // onChange={handleChange}
                   />
                 </span>
 
@@ -580,7 +580,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="billingno"
                     name="billingno"
                     value={formData.billingno || selectedCustomerData.billingno || book.billingno || ''}
-                    // onChange={handleChange}
+                  // onChange={handleChange}
                   />
                 </span>
 
@@ -616,8 +616,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         // label='Booking Date'
                         // onChange={(date) => handleDateChange(date, 'tripsheetdate')}
                         readOnly
-                      
-                     
+
+
                       />
                       {/* <DatePicker
                         id="tripsheetdate"
@@ -945,6 +945,35 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 <div className="input">
                   <div className="icone">
+                    <StoreIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-department"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
+                    // value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    // options={stationName.map((option) => ({
+                    //   label: option.Stationname,
+                    // }))}
+                    value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    options={stationOptions?.map((option) => ({
+                      label: option.Stationname,
+                    }))}
+                    getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Service Station" autoComplete="password" name="department" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
                     <AssignmentIndIcon color="action" />
                   </div>
                   <TextField
@@ -1008,15 +1037,31 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-              </div>
+                <div className="input">
+                  <div className="icone">
+                    <DataUsageIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="useage"
+                    value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
+                    onChange={handleChange}
+                    label="Usage"
+                    id="useage"
+                    autoComplete="password"
+                  />
+                </div>
+
+                {/* </div>
 
 
 
 
 
-              <div className='tripsheet-division2'>
-                <div>
-                  {/* <div className="input">
+              <div className='tripsheet-division2'> */}
+                {/* <div> */}
+                {/* <div className="input">
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
@@ -1033,10 +1078,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={handleChange}
                     />
                   </div> */}
-                </div>
+                {/* </div> */}
 
-                <div>
-                  {/* <div>
+                {/* <div> */}
+                {/* <div>
                     <div className="Scroll-Style tripsheet-table1">
                       <thead>
                         <tr>
@@ -1072,40 +1117,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </tbody>
                     </div>
                   </div> */}
-                </div>
-              </div>
+                {/* </div> */}
+                {/* </div> */}
 
-              {/* {showVehicleDetails && ( */}
-              <div className='tripsheet-division3'>
+                {/* {showVehicleDetails && ( */}
+                {/* <div className='tripsheet-division3'> */}
 
-                <div className="input">
-                  <div className="icone">
-                    <StoreIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-department"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                    // value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                    // options={stationName.map((option) => ({
-                    //   label: option.Stationname,
-                    // }))}
-                    value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                    options={stationOptions?.map((option) => ({
-                      label: option.Stationname,
-                    }))}
-                    getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Service Station" autoComplete="password" name="department" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
-                </div>
+
                 {/* <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />
@@ -1197,6 +1215,22 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                   />
                 </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <StreamIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="request"
+                    value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
+                    onChange={handleChange}
+                    label="Request"
+                    id="request"
+                    autoComplete="password"
+                  />
+
+                </div>
                 {/* <div className="input">
                     <div className="icone">
                       <AirlineStopsIcon color="action" />
@@ -1219,21 +1253,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={handleChange}
                     />
                   </div> */}
-                <div className="input">
-                  <div className="icone">
-                    <DataUsageIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    name="useage"
-                    value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
-                    onChange={handleChange}
-                    label="Usage"
-                    id="useage"
-                    autoComplete="password"
-                  />
-                </div>
+
 
                 <div className="input">
                   <div className="icone">
@@ -1582,13 +1602,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
                 </div>
-                <div style={{ padding: "10px", display: 'flex', alignItems: 'center' }}>
+                <div className="input">
                   <div className="icone icone-margin-adjust">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
                   <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' }}>
                     <label>Total Time</label>
-                    <div className="input">
+                    <div>
                       <TextField
                         name="totaltime"
                         // value={ calculateTotalTimes()}
@@ -1608,6 +1628,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
                 </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  </div>
+                  <TextField
+                    name="additionaltime"
+                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
+                    onChange={handleChange}
+                    label="Add Time"
+                    id="additionaltime"
+                    // variant="standard"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
@@ -1781,21 +1818,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
 
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <TextField
-                    name="additionaltime"
-                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
-                    onChange={handleChange}
-                    label="Add Time"
-                    id="additionaltime"
-                    // variant="standard"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
+
 
                 <div className="input">
                   <div className="icone">
@@ -3097,13 +3120,13 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 {signaturelinkcopy ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                               </div> */}
-                              <div style={{display:"flex", alignItems:"center",gap:"10px"}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 {/* <Button onClick={generateLink}>Generate Link</Button> */}
-                                <div style={{display:"blocks"}}>
+                                <div style={{ display: "blocks" }}>
 
-                                
-                                <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
+
+                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                  {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
                                 </div>
                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
 
@@ -3112,12 +3135,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 }
                                 {copydatalink && signaturelinkwhatsapp &&
                                   <CopyField
-                                  
+
                                     value={signaturelinkwhatsapp}
                                     onCopySuccess={() => setCopyDataLink(false)}
-                                   
+
                                   />
-                                
+
                                 }
 
                               </div>
@@ -3128,7 +3151,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
                             </div>
-                              {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>}
+                            {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>}
 
                             <div className="table-TripSheet" style={{ marginTop: '15px' }}>
                               <div className='tripsheet-booking-table'>
@@ -3143,205 +3166,205 @@ const TripSheet = ({ stationName, logoImage }) => {
                           </div>
                         </TabPanel>
                         <TabPanel value={0} sx={{ p: 2 }}>
-                          <div style={{display:"flex", justifyContent:"space-around",flexWrap:"wrap" }}>
-                          <div className="Customer-Customer-Bill-Slider bill-section bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
-                           <p className='bill-topics'>Vendor Info</p>
-                            <div className="input-field tripsheet-vendor-info-first-input-field">
-                              <div className="input">
-                                {/* <div className="icone">
+                          <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
+                            <div className="Customer-Customer-Bill-Slider bill-section bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+                              <p className='bill-topics'>Vendor Info</p>
+                              <div className="input-field tripsheet-vendor-info-first-input-field">
+                                <div className="input">
+                                  {/* <div className="icone">
         <NoCrashIcon color="action" />
       </div> */}
-                                <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="free-solo-vendor_vehicle"
-                                  freeSolo
-                                  // sx={{ minWidth: 200 }}
-                                  // onChange={(event, value) =>
-                                  //    handleAutocompleteVendor(event, value, "vendor_vehicle")
-                                  //  }
-                                  onChange={(event, value) => {
-                                    if (lockdata) {
-                                      handleAutocompleteVendor(event, value, "vendor_vehicle");
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-
-
-                                  // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
-                                  // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
-                                  value={vendorinfo?.vendor_vehicle}
-                                  // value={vendorinfo?.vehicleName||vendorinfo?.vendor_vehicle}
-                                  options={vehileNames?.map((option) => ({
-                                    label: option,
-                                  }))}
-                                  // options={lockdata ? vehileNames.map((option) => ({
-                                  //   label: option,
-                                  // })) : []} 
-                                  renderInput={(params) => (
-                                    <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
-                                  )}
-                                />
-                              </div>
-                              <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                {/* <p style={{ margin: "0px" }}>Duty</p> */}
-                                <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="free-solo-duty"
-                                  freeSolo
-                                  sx={{ width: "100%" }}
-                                  onChange={(event, value) => {
-                                    if (lockdata) {
-                                      handleAutocompleteVendor(event, value, "vendor_duty")
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-
-                                  }}
-
-                                  // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
-                                  value={vendorinfo?.vendor_duty}
-                                  options={Duty.map((option) => ({
-                                    label: option.option,
-                                  }))}
-                                  renderInput={(params) => {
-                                    return (
-                                      <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
-                                    )
-                                  }
-                                  }
-                                />
-
-                              </div>
-
-                              <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                <Checkbox
-                                  size="small"
-                                  checked={lockdata}
-                                  onChange={(event) => setLockData(event.target.checked)}
-                                />
-                                <p style={{ margin: "0px" }}>Lock</p>
-                              </div>
-                            </div>
-                            <div className="input-field" style={{ marginTop: '15px' }}>
-                              <div className="input" >
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DatePicker
-                                    label="StartDate"
-                                    id="vendorshedOutDate"
-                                    // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                    value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                    format="DD/MM/YYYY"
-                                    // onChange={(date) => {
-
-                                    //   handleDatevendorChange(date, 'vendorshedOutDate')
-                                    // }}
-                                    onChange={(date) => {
+                                  <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    id="free-solo-vendor_vehicle"
+                                    freeSolo
+                                    // sx={{ minWidth: 200 }}
+                                    // onChange={(event, value) =>
+                                    //    handleAutocompleteVendor(event, value, "vendor_vehicle")
+                                    //  }
+                                    onChange={(event, value) => {
                                       if (lockdata) {
-                                        handleDatevendorChange(date, 'vendorshedOutDate')
+                                        handleAutocompleteVendor(event, value, "vendor_vehicle");
                                       } else {
                                         setWarning(true);
                                         setWarningMessage("IS not locked,locked Enter Again");
                                       }
                                     }}
-                                  >
-                                    {({ inputProps, inputRef }) => (
-                                      <TextField {...inputProps} inputRef={inputRef} />
+
+
+                                    // value={selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName ||vendorinfo.vendor_vehicle ||''}
+                                    // value={vendorinfo?.vendor_vehicle || vendorinfo?.vehicleName}
+                                    value={vendorinfo?.vendor_vehicle}
+                                    // value={vendorinfo?.vehicleName||vendorinfo?.vendor_vehicle}
+                                    options={vehileNames?.map((option) => ({
+                                      label: option,
+                                    }))}
+                                    // options={lockdata ? vehileNames.map((option) => ({
+                                    //   label: option,
+                                    // })) : []} 
+                                    renderInput={(params) => (
+                                      <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
                                     )}
-                                  </DatePicker>
-                                </LocalizationProvider>
-
-                              </div>
-                              <div className="input">
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                  <DatePicker
-                                    label="CloseDate"
-                                    id="vendorshedInDate"
-
-
-                                    // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                    value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                    format="DD/MM/YYYY"
-                                    // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
-                                    onChange={(date) => {
+                                  />
+                                </div>
+                                <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  {/* <p style={{ margin: "0px" }}>Duty</p> */}
+                                  <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    id="free-solo-duty"
+                                    freeSolo
+                                    sx={{ width: "100%" }}
+                                    onChange={(event, value) => {
                                       if (lockdata) {
-                                        handleDatevendorChange(date, 'vendorshedInDate')
+                                        handleAutocompleteVendor(event, value, "vendor_duty")
                                       } else {
                                         setWarning(true);
                                         setWarningMessage("IS not locked,locked Enter Again");
                                       }
+
                                     }}
-                                  >
-                                    {({ inputProps, inputRef }) => (
-                                      <TextField {...inputProps} inputRef={inputRef} />
-                                    )}
-                                  </DatePicker>
-                                </LocalizationProvider>
 
+                                    // value={vendorinfo?.vendor_duty || vendorinfo?.duty || ""}
+                                    value={vendorinfo?.vendor_duty}
+                                    options={Duty.map((option) => ({
+                                      label: option.option,
+                                    }))}
+                                    renderInput={(params) => {
+                                      return (
+                                        <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
+                                      )
+                                    }
+                                    }
+                                  />
 
+                                </div>
+
+                                <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  <Checkbox
+                                    size="small"
+                                    checked={lockdata}
+                                    onChange={(event) => setLockData(event.target.checked)}
+                                  />
+                                  <p style={{ margin: "0px" }}>Lock</p>
+                                </div>
                               </div>
+                              <div className="input-field" style={{ marginTop: '15px' }}>
+                                <div className="input" >
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                      label="StartDate"
+                                      id="vendorshedOutDate"
+                                      // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                      value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                      format="DD/MM/YYYY"
+                                      // onChange={(date) => {
 
-
-
-                              <div className="input">
-                                <TextField
-                                  name="vendortotaldays"
-                                  value={calculatevendorTotalDays()}
-                                  label="Total Days"
-                                  size="small"
-                                  type="number"
-                                  id="totaldays"
-                                  // variant="standard"
-                                  sx={{ width: "100%" }}
-                                />
-                              </div>
-
-                            </div>
-                            <div className="input-field" style={{ marginBottom: '10px' }}>
-
-                              <div className="input">
-                                {/* <div className='icone'>
-        <MdOutlineAccessTimeFilled />
-      </div> */}
-                                <div className='input'>
-                                  <div className='full-width' style={{ display: 'grid' }}>
-                                    <label>Start Time</label>
-                                    <input
-                                      type="time"
-                                      name="venodrreporttime"
-
-                                      // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
-                                      value={vendorinfo?.vendorreporttime}
-                                      // onChange={(event) => {
-                                      //   if (lockdata) {
-                                      //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
-                                      //   }
-
-                                      onChange={(event) => {
+                                      //   handleDatevendorChange(date, 'vendorshedOutDate')
+                                      // }}
+                                      onChange={(date) => {
                                         if (lockdata) {
-                                          setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                          handleDatevendorChange(date, 'vendorshedOutDate')
                                         } else {
                                           setWarning(true);
                                           setWarningMessage("IS not locked,locked Enter Again");
                                         }
                                       }}
+                                    >
+                                      {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} />
+                                      )}
+                                    </DatePicker>
+                                  </LocalizationProvider>
 
-                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
-                                    // }}
-                                    />
-                                  </div>
+                                </div>
+                                <div className="input">
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                      label="CloseDate"
+                                      id="vendorshedInDate"
+
+
+                                      // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                      value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                      format="DD/MM/YYYY"
+                                      // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                                      onChange={(date) => {
+                                        if (lockdata) {
+                                          handleDatevendorChange(date, 'vendorshedInDate')
+                                        } else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
+                                      }}
+                                    >
+                                      {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} />
+                                      )}
+                                    </DatePicker>
+                                  </LocalizationProvider>
+
+
                                 </div>
 
 
-                              </div>
 
-                              <div className="input">
-                                {/* 
+                                <div className="input">
+                                  <TextField
+                                    name="vendortotaldays"
+                                    value={calculatevendorTotalDays()}
+                                    label="Total Days"
+                                    size="small"
+                                    type="number"
+                                    id="totaldays"
+                                    // variant="standard"
+                                    sx={{ width: "100%" }}
+                                  />
+                                </div>
+
+                              </div>
+                              <div className="input-field" style={{ marginBottom: '10px' }}>
+
+                                <div className="input">
+                                  {/* <div className='icone'>
+        <MdOutlineAccessTimeFilled />
+      </div> */}
+                                  <div className='input'>
+                                    <div className='full-width' style={{ display: 'grid' }}>
+                                      <label>Start Time</label>
+                                      <input
+                                        type="time"
+                                        name="venodrreporttime"
+
+                                        // value={vendorinfo?.vendorreporttime || vendorinfo?.reporttime}
+                                        value={vendorinfo?.vendorreporttime}
+                                        // onChange={(event) => {
+                                        //   if (lockdata) {
+                                        //     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                        //   }
+
+                                        onChange={(event) => {
+                                          if (lockdata) {
+                                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+
+                                        style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                                      // }}
+                                      />
+                                    </div>
+                                  </div>
+
+
+                                </div>
+
+                                <div className="input">
+                                  {/* 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer
           components={[
@@ -3356,351 +3379,351 @@ const TripSheet = ({ stationName, logoImage }) => {
 
         </DemoContainer>
       </LocalizationProvider> */}
-                                {/* <div className='icone'>
+                                  {/* <div className='icone'>
         <MdOutlineAccessTimeFilled />
       </div> */}
-                                <div className='closetime tripsheet-shed-in-time'>
-                                  <label>Close Time</label>
+                                  <div className='closetime tripsheet-shed-in-time'>
+                                    <label>Close Time</label>
 
-                                  <input
-                                    type="time"
-                                    name="vendorshedintime"
+                                    <input
+                                      type="time"
+                                      name="vendorshedintime"
 
-                                    // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
-                                    value={vendorinfo?.vendorshedintime}
-                                    onChange={(event) => {
-                                      if (lockdata) {
+                                      // value={vendorinfo?.vendorshedintime || vendorinfo?.shedintime}
+                                      value={vendorinfo?.vendorshedintime}
+                                      onChange={(event) => {
+                                        if (lockdata) {
 
-                                        setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                          setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                        }
+                                        else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
                                       }
-                                      else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
                                       }
-                                    }
-                                    }
-                                    style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
 
+                                    />
+                                  </div>
+                                </div>
+
+
+                                <div className="input">
+                                  <TextField
+                                    name="vendorTotaltime"
+                                    value={calculatevendorTotalTime() || ""}
+                                    label="Total Time"
+                                    id="pack5"
+                                    size="small"
+                                    // variant="standard"
+                                    sx={{ width: "100%" }}
+                                  />
+                                </div>
+
+                              </div>
+
+                              <div className="input-field">
+
+
+                                <div className="input" >
+                                  <TextField
+                                    name="vendorshedoutkm"
+
+                                    // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
+                                    value={vendorinfo?.vendorshedoutkm || ""}
+
+                                    onChange={handlevendorinfofata}
+                                    label="starting Kilometers"
+                                    id="vendorshedoutkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+
+
+                                <div className="input" >
+                                  <TextField
+                                    name="vendorshedinkm"
+
+                                    // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
+                                    value={vendorinfo?.vendorshedinkm || ""}
+
+
+
+                                    label="closing Kilometers"
+
+                                    // onChange={(e)=>{
+
+                                    //   setVendorinfodata({...vendorinfo,vendorshedin:e.target.value})
+                                    // }}
+                                    onChange={handlevendorinfofata}
+                                    id="vendorshedinkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+
+
+
+                                <div className="input" >
+                                  <TextField
+                                    name="vendortotalkm"
+                                    value={calculatevendorTotalKilometers() || ''}
+                                    label="Total kilometers"
+                                    id="vendortotalkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="input-field">
+
+
+
+                                <div className="input">
+                                  <TextField
+                                    name="vendorRemarks"
+                                    // value={calcPackage || formData.calcPackage || ''}
+                                    value={vendorinfo?.vendorRemarks || ""}
+                                    // value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
+                                    onChange={handlevendorinfofata}
+                                    label="Remarks"
+                                    id="vendorRemarks"
+                                    size="small"
+                                    // variant="standard"
+
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+
+                                </div>
+
+
+                                <div className="input">
+                                  <Button
+                                    variant='contained'
+                                    onClick={handleVendorcalc}
+                                  >
+                                    Update
+                                  </Button>
+                                </div>
+                              </div>
+
+                            </div>
+                            <div className="Customer-Customer-Bill-Slider bill-section bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                              <p className='bill-topics'>Vendor Bill</p>
+                              <div className="input-field">
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_Calcpackage"
+                                    value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    label="Package"
+                                    id="Vendor_Calcpackage"
+                                    size="small"
+                                    // variant="standard"
+                                    sx={{ m: 1, width: "100%" }}
+                                  />
+                                </div>
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_rateAmount"
+                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
+                                    size="small"
+                                    label="Amount"
+                                    autoComplete="password"
+                                    id="Vendor_rateAmount"
+                                  // variant="standard"
+                                  />
+                                </div>
+                                <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  <Checkbox
+                                    size="small"
+                                    checked={lockdatavendorbill}
+                                    onChange={(event) => setLockDatavendorBill(event.target.checked)}
+                                  />
+                                  <p style={{ margin: "0px" }}>Lock</p>
+                                </div>
+                              </div>
+
+                              <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                                {/* <span>Ex.Km</span> */}
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_ExtraKms"
+                                    value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
+                                    label="Ex.Km"
+                                    id="Vendor_ExtraKms"
+                                    onChange={handlevendor_billdata}
+
+                                    size="small"
+                                  // variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <span>@</span>
+                                  <TextField size="small"
+                                    name='Vendor_ExtraAmountKms'
+                                    value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
+                                    onChange={handlevendor_billdata}
+                                    id="Vendor_ExtraAmountKms"
+                                  // variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="Vendor_totalAmountKms"
+                                    // value={ vendorExtarkmTotalAmount||vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
+                                    value={vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms || 0}
+                                    size="small"
+                                    label="Amount"
+                                    id="Vendor_totalAmountKms"
+                                  // variant="standard"
                                   />
                                 </div>
                               </div>
 
-
-                              <div className="input">
-                                <TextField
-                                  name="vendorTotaltime"
-                                  value={calculatevendorTotalTime() || ""}
-                                  label="Total Time"
-                                  id="pack5"
-                                  size="small"
+                              <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                                {/* <span>Ex.Hr</span> */}
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_ExtraHours"
+                                    value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
+                                    label="Ex.Hrs"
+                                    onChange={handlevendor_billdata}
+                                    id="Vendor_ExtraHours"
+                                    size="small"
                                   // variant="standard"
-                                  sx={{ width: "100%" }}
-                                />
-                              </div>
-
-                            </div>
-
-                            <div className="input-field">
-
-
-                              <div className="input" >
-                                <TextField
-                                  name="vendorshedoutkm"
-
-                                  // value={vendorinfo?.vendorshedoutkm || vendorinfo?.shedout || ""}
-                                  value={vendorinfo?.vendorshedoutkm || ""}
-
-                                  onChange={handlevendorinfofata}
-                                  label="starting Kilometers"
-                                  id="vendorshedoutkm"
-                                  size="small"
-                                  sx={{ my: 1, width: "100%" }}
-                                />
-                              </div>
-
-
-                              <div className="input" >
-                                <TextField
-                                  name="vendorshedinkm"
-
-                                  // value={vendorinfo?.vendorshedinkm || vendorinfo?.shedin || ""}
-                                  value={vendorinfo?.vendorshedinkm || ""}
-
-
-
-                                  label="closing Kilometers"
-
-                                  // onChange={(e)=>{
-
-                                  //   setVendorinfodata({...vendorinfo,vendorshedin:e.target.value})
-                                  // }}
-                                  onChange={handlevendorinfofata}
-                                  id="vendorshedinkm"
-                                  size="small"
-                                  sx={{ my: 1, width: "100%" }}
-                                />
-                              </div>
-
-
-
-                              <div className="input" >
-                                <TextField
-                                  name="vendortotalkm"
-                                  value={calculatevendorTotalKilometers() || ''}
-                                  label="Total kilometers"
-                                  id="vendortotalkm"
-                                  size="small"
-                                  sx={{ my: 1, width: "100%" }}
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field">
-
-
-
-                              <div className="input">
-                                <TextField
-                                  name="vendorRemarks"
-                                  // value={calcPackage || formData.calcPackage || ''}
-                                  value={vendorinfo?.vendorRemarks || ""}
-                                  // value={vendorinfo?.vendorRemarks || vendorinfo?.remark || ""}
-                                  onChange={handlevendorinfofata}
-                                  label="Remarks"
-                                  id="vendorRemarks"
-                                  size="small"
-                                  // variant="standard"
-
-                                  sx={{ my: 1, width: "100%" }}
-                                />
-
-                              </div>
-
-
-                              <div className="input">
-                                <Button
-                                  variant='contained'
-                                  onClick={handleVendorcalc}
-                                >
-                                  Update
-                                </Button>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div className="Customer-Customer-Bill-Slider bill-section bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
-                          <p  className='bill-topics'>Vendor Bill</p>
-                            <div className="input-field">
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_Calcpackage"
-                                  value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
-                                  label="Package"
-                                  id="Vendor_Calcpackage"
-                                  size="small"
-                                  // variant="standard"
-                                  sx={{ m: 1, width: "100%" }}
-                                />
-                              </div>
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_rateAmount"
-                                  value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="Vendor_rateAmount"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                <Checkbox
-                                  size="small"
-                                  checked={lockdatavendorbill}
-                                  onChange={(event) => setLockDatavendorBill(event.target.checked)}
-                                />
-                                <p style={{ margin: "0px" }}>Lock</p>
-                              </div>
-                            </div>
-
-                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
-                              {/* <span>Ex.Km</span> */}
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_ExtraKms"
-                                  value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
-                                  label="Ex.Km"
-                                  id="Vendor_ExtraKms"
-                                  onChange={handlevendor_billdata}
-
-                                  size="small"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <span>@</span>
-                                <TextField size="small"
-                                  name='Vendor_ExtraAmountKms'
-                                  value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
-                                  onChange={handlevendor_billdata}
-                                  id="Vendor_ExtraAmountKms"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
+                                  />
                                 </div>
-                                <TextField
-                                  name="Vendor_totalAmountKms"
-                                  // value={ vendorExtarkmTotalAmount||vendorbilldata.Vendor_totalAmountKms || vendorExtarkmTotalAmount || vendorpassvalue.Vendor_totalAmountKms || 0}
-                                  value={vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms || 0}
-                                  size="small"
-                                  label="Amount"
-                                  id="Vendor_totalAmountKms"
-                                // variant="standard"
-                                />
-                              </div>
-                            </div>
+                                <div className="input">
+                                  <span>@</span>
+                                  <TextField
+                                    size="small"
+                                    name='Vendor_ExtraAmountHours'
+                                    value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
+                                    onChange={handlevendor_billdata}
+                                    // variant="standard
+                                    id="Vendor_ExtraAmountHours"
+                                  />
 
-                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
-                              {/* <span>Ex.Hr</span> */}
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_ExtraHours"
-                                  value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
-                                  label="Ex.Hrs"
-                                  onChange={handlevendor_billdata}
-                                  id="Vendor_ExtraHours"
-                                  size="small"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <span>@</span>
-                                <TextField
-                                  size="small"
-                                  name='Vendor_ExtraAmountHours'
-                                  value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
-                                  onChange={handlevendor_billdata}
-                                  // variant="standard
-                                  id="Vendor_ExtraAmountHours"
-                                />
-
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
                                 </div>
-                                <TextField
-                                  name="Vendor_totalAmountHours"
-                                  // value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
-                                  value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
-                                  size="small"
-                                  label="Amount"
-                                  id="Vendor_totalAmountHours"
-                                // variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
-                              {/* <span>Night</span> */}
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_NightHALT"
-                                  // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                                  value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
-                                  onChange={handlevendor_billdata}
-                                  label="Night"
-                                  id="Vendor_NightHALT"
-                                  size="small"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <span>@</span>
-                                <TextField
-                                  size="small"
-                                  name='Vendor_NightBataAmount'
-                                  value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
-                                  onChange={handlevendor_billdata}
-                                  id="Vendor_NightBataAmount"
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="Vendor_totalAmountHours"
+                                    // value={vendorbilldata.Vendor_totalAmountHours || vendorExtrahrTotalAmount || vendorpassvalue.Vendor_totalAmountHours || 0}
+                                    value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
+                                    size="small"
+                                    label="Amount"
+                                    id="Vendor_totalAmountHours"
                                   // variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
+                                  />
                                 </div>
-                                <TextField
-                                  name="Vendor_NightbataTotalAmount"
-                                  value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
-                                  size="small"
-                                  label="Amount"
-                                  id="Vendor_NightbataTotalAmount"
-                                // variant="standard"
-                                />
                               </div>
-                            </div>
-                            <div className="input-field tripsheet-vendor-bill-amount-input-field">
-                              {/* <span>Bata</span> */}
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_Bata"
-                                  value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
-                                  onChange={handlevendor_billdata}
-                                  label="Bata"
-                                  id="Vendor_Bata"
-                                  autoComplete="password"
-                                  size="small"
-                                // variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <span>@</span>
-                                <TextField
-                                  size="small"
-                                  name='Vendor_BataAmount'
-                                  value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
-                                  onChange={handlevendor_billdata}
+                              <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                                {/* <span>Night</span> */}
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_NightHALT"
+                                    // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                                    value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
+                                    onChange={handlevendor_billdata}
+                                    label="Night"
+                                    id="Vendor_NightHALT"
+                                    size="small"
                                   // variant="standard"
-                                  id="Vendor_BataAmount"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
+                                  />
                                 </div>
-                                <TextField
-                                  name="Vendor_BataTotalAmount"
-                                  value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
-                                  size="small"
-                                  label="Amount"
-                                  id="Vendor_BataTotalAmount"
-                                // variant="standard"
-                                />
+                                <div className="input">
+                                  <span>@</span>
+                                  <TextField
+                                    size="small"
+                                    name='Vendor_NightBataAmount'
+                                    value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
+                                    onChange={handlevendor_billdata}
+                                    id="Vendor_NightBataAmount"
+                                    // variant="standard"
+                                    autoComplete="password"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="Vendor_NightbataTotalAmount"
+                                    value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
+                                    size="small"
+                                    label="Amount"
+                                    id="Vendor_NightbataTotalAmount"
+                                  // variant="standard"
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <TextField
-                                  name="Vendor_FULLTotalAmount"
-                                  value={vendorbilldata.Vendor_FULLTotalAmount || 0}
-                                  size="small"
-
-                                  label="Net Amount"
-                                  id="Vendor_FULLTotalAmount"
-                                // variant="standard"
-                                />
-
+                              <div className="input-field tripsheet-vendor-bill-amount-input-field">
+                                {/* <span>Bata</span> */}
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_Bata"
+                                    value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
+                                    onChange={handlevendor_billdata}
+                                    label="Bata"
+                                    id="Vendor_Bata"
+                                    autoComplete="password"
+                                    size="small"
+                                  // variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <span>@</span>
+                                  <TextField
+                                    size="small"
+                                    name='Vendor_BataAmount'
+                                    value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
+                                    onChange={handlevendor_billdata}
+                                    // variant="standard"
+                                    id="Vendor_BataAmount"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="Vendor_BataTotalAmount"
+                                    value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
+                                    size="small"
+                                    label="Amount"
+                                    id="Vendor_BataTotalAmount"
+                                  // variant="standard"
+                                  />
+                                </div>
                               </div>
-                            </div>
+                              <div className="input-field">
+                                <div className="input">
+                                  <TextField
+                                    name="Vendor_FULLTotalAmount"
+                                    value={vendorbilldata.Vendor_FULLTotalAmount || 0}
+                                    size="small"
 
-                          </div>
-                          <div className="Customer-Customer-Bill-Slider bill-section  Customer-Customer-Bill-Slider-popup">
-                          <p  className='bill-topics'>Customer Bill</p>
-                            <div className="input-field">
-                              {/* <div className="input">
+                                    label="Net Amount"
+                                    id="Vendor_FULLTotalAmount"
+                                  // variant="standard"
+                                  />
+
+                                </div>
+                              </div>
+
+                            </div>
+                            <div className="Customer-Customer-Bill-Slider bill-section  Customer-Customer-Bill-Slider-popup">
+                              <p className='bill-topics'>Customer Bill</p>
+                              <div className="input-field">
+                                {/* <div className="input">
                                 <div className="icone">
                                   <Inventory2Icon color="action" />
                                 </div>
@@ -3716,340 +3739,340 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   sx={{ m: 1, width: "60ch" }}
                                 />
                               </div> */}
-                              <div className="input">
-                                <div className="icone">
-                                  <Inventory2Icon color="action" />
-                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <Inventory2Icon color="action" />
+                                  </div>
 
-                                <TextField
-                                  name="pack"
-                                  value={calcPackage || formData.calcPackage || ratepackage || ''}
-                                  label="Pack"
-                                  id="pack"
-                                  size="small"
-                                  variant="standard"
-                                  autoComplete="password"
-                                  sx={{ m: 1, width: "60ch" }}
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
+                                  <TextField
+                                    name="pack"
+                                    value={calcPackage || formData.calcPackage || ratepackage || ''}
+                                    label="Pack"
+                                    id="pack"
+                                    size="small"
+                                    variant="standard"
+                                    autoComplete="password"
+                                    sx={{ m: 1, width: "60ch" }}
+                                  />
                                 </div>
-                                <TextField
-                                  name="amount5"
-                                  value={package_amount || formData.calcPackage || ''}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amount5"
-                                  variant="standard"
-                                />
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="amount5"
+                                    value={package_amount || formData.calcPackage || ''}
+                                    size="small"
+                                    label="Amount"
+                                    autoComplete="password"
+                                    id="amount5"
+                                    variant="standard"
+                                  />
+                                </div>
+                                <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  <Checkbox
+                                    size="small"
+                                    checked={lockdatacustomerbill}
+                                    onChange={(event) => setLockDatacustomerBill(event.target.checked)}
+                                  />
+                                  <p style={{ margin: "0px" }}>Lock</p>
+                                </div>
                               </div>
-                              <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                <Checkbox
-                                  size="small"
-                                  checked={lockdatacustomerbill}
-                                  onChange={(event) => setLockDatacustomerBill(event.target.checked)}
-                                />
-                                <p style={{ margin: "0px" }}>Lock</p>
+                              <div className="input-field">
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faRoad} />
+                                  </div>
+                                  <TextField
+                                    name="exkm1"
+                                    className='customer-bill-input'
+                                    value={extraKM || formData.calcPackage || 0}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setExtraKM(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    label="Ex.Km"
+                                    id="ex-exkm1"
+                                    autoComplete="password"
+                                    size="small"
+                                    variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <TollTwoToneIcon color="action" />
+                                  </div>
+                                  <TextField size="small"
+                                    name='exkmTkm2'
+                                    className='customer-bill-input'
+                                    value={extrakm_amount || formData.calcPackage || ''}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setextrakm_amount(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    id="exkmTkm2"
+                                    variant="standard"
+                                    autoComplete="password"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="amount6"
+                                    className='customer-bill-input'
+                                    value={ex_kmAmount || formData.calcPackage || 0}
+                                    size="small"
+                                    label="Amount"
+                                    autoComplete="password"
+                                    id="amount6"
+                                    variant="standard"
+                                  />
+                                </div>
                               </div>
+
+                              <div className="input-field">
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faStopwatch} />
+                                  </div>
+                                  <TextField
+                                    name="exHrs1"
+                                    className='customer-bill-input'
+                                    value={extraHR || formData.calcPackage || 0}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setExtraHR(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    label="exHrs1"
+                                    id="ex-exHrs1"
+                                    size="small"
+                                    autoComplete="password"
+                                    variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <TollTwoToneIcon color="action" />
+                                  </div>
+                                  <TextField
+                                    size="small"
+                                    id="exHrsTHrs2"
+                                    name='exHrsTHrs2'
+                                    className='customer-bill-input'
+                                    value={extrahr_amount || formData.calcPackage || 0}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setextrahr_amount(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    variant="standard"
+                                  />
+
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="amount7"
+                                    className='customer-bill-input'
+                                    value={ex_hrAmount || formData.calcPackage || 0}
+                                    size="small"
+                                    label="Amount"
+                                    autoComplete="password"
+                                    id="amouamount7"
+                                    variant="standard"
+                                  />
+                                </div>
+                              </div>
+                              <div className="input-field">
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faCloudMoon} />
+                                  </div>
+                                  <TextField
+                                    name="night1"
+                                    className='customer-bill-input'
+                                    // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
+                                    value={nightBta}
+
+                                    // onChange={(e) => setNightBeta(e.target.value)}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setNightBeta(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    label="Night"
+                                    id="night1"
+                                    autoComplete="password"
+                                    size="small"
+                                    variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <TollTwoToneIcon color="action" />
+                                  </div>
+                                  <TextField
+                                    size="small"
+                                    className='customer-bill-input'
+                                    name='nightThrs2'
+                                    id="nightThrs2"
+                                    value={nightCount}
+                                    // onChange={(e) => setNightCount(e.target.value)}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setNightCount(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    variant="standard"
+                                    autoComplete="password"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="amount8"
+                                    className='customer-bill-input'
+                                    // value={night_totalAmount || 0}
+                                    value={night_totalAmount || 0}
+
+                                    size="small"
+                                    autoComplete="password"
+                                    label="Amount"
+                                    id="amount8"
+                                    variant="standard"
+                                  />
+                                </div>
+                              </div>
+                              <div className="input-field">
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                  </div>
+                                  <TextField
+                                    name="driverconvenience1"
+                                    className='customer-bill-input'
+                                    value={driverBeta}
+                                    // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
+                                    // onChange={(e) => setdriverBeta(e.target.value)}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setdriverBeta(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    label="Driver Convenience"
+                                    autoComplete="password"
+                                    id="driverconvenience1"
+                                    size="small"
+                                    variant="standard"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <TollTwoToneIcon color="action" />
+                                  </div>
+                                  <TextField
+                                    size="small"
+                                    name='dtc2'
+                                    id='dtc2'
+                                    className='customer-bill-input'
+                                    value={driverbeta_Count}
+                                    // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
+
+                                    // onChange={(e) => setdriverbeta_Count(e.target.value)}
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setdriverbeta_Count(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    variant="standard"
+                                    autoComplete="password"
+                                  />
+                                </div>
+                                <div className="input">
+                                  <div className="icone">
+                                    <FontAwesomeIcon icon={faEquals} />
+                                  </div>
+                                  <TextField
+                                    name="amount9"
+                                    className='customer-bill-input'
+                                    value={driverBeta_amount}
+                                    // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
+                                    // onChange={(e) => setdriverBeta_amount(e.target.value)}
+
+                                    onChange={(e) => {
+
+                                      if (lockdatacustomerbill) {
+                                        setdriverBeta_amount(e.target.value)
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    size="small"
+                                    label="Amount"
+                                    id="amount9"
+                                    autoComplete="password"
+                                    variant="standard"
+                                  />
+                                </div>
+                              </div>
+
+                              <TextField
+                                name="amount9"
+                                className='total-amount-textfield'
+                                value={totalcalcAmount || 0}
+                                size="small"
+                                label="Total Amount"
+                                id="amount-amount9"
+                                autoComplete="password"
+                                variant="standard"
+                              />
+
                             </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faRoad} />
-                                </div>
-                                <TextField
-                                  name="exkm1"
-                                  className='customer-bill-input'
-                                  value={extraKM || formData.calcPackage || 0}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setExtraKM(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  label="Ex.Km"
-                                  id="ex-exkm1"
-                                  autoComplete="password"
-                                  size="small"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField size="small"
-                                  name='exkmTkm2'
-                                  className='customer-bill-input'
-                                  value={extrakm_amount || formData.calcPackage || ''}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setextrakm_amount(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  id="exkmTkm2"
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount6"
-                                  className='customer-bill-input'
-                                  value={ex_kmAmount || formData.calcPackage || 0}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amount6"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faStopwatch} />
-                                </div>
-                                <TextField
-                                  name="exHrs1"
-                                  className='customer-bill-input'
-                                  value={extraHR || formData.calcPackage || 0}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setExtraHR(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  label="exHrs1"
-                                  id="ex-exHrs1"
-                                  size="small"
-                                  autoComplete="password"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  id="exHrsTHrs2"
-                                  name='exHrsTHrs2'
-                                  className='customer-bill-input'
-                                  value={extrahr_amount || formData.calcPackage || 0}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setextrahr_amount(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  variant="standard"
-                                />
-
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount7"
-                                  className='customer-bill-input'
-                                  value={ex_hrAmount || formData.calcPackage || 0}
-                                  size="small"
-                                  label="Amount"
-                                  autoComplete="password"
-                                  id="amouamount7"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faCloudMoon} />
-                                </div>
-                                <TextField
-                                  name="night1"
-                                  className='customer-bill-input'
-                                  // value={(checkNightBetaEligible() ? nightBta : 0) || ''}
-                                  value={nightBta}
-
-                                  // onChange={(e) => setNightBeta(e.target.value)}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setNightBeta(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  label="Night"
-                                  id="night1"
-                                  autoComplete="password"
-                                  size="small"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  className='customer-bill-input'
-                                  name='nightThrs2'
-                                  id="nightThrs2"
-                                  value={nightCount}
-                                  // onChange={(e) => setNightCount(e.target.value)}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setNightCount(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount8"
-                                  className='customer-bill-input'
-                                  // value={night_totalAmount || 0}
-                                  value={night_totalAmount || 0}
-
-                                  size="small"
-                                  autoComplete="password"
-                                  label="Amount"
-                                  id="amount8"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faMoneyBill1Wave} />
-                                </div>
-                                <TextField
-                                  name="driverconvenience1"
-                                  className='customer-bill-input'
-                                  value={driverBeta}
-                                  // value={(vendorinfo?.vendor_duty === "Outstation") && driverBeta || formData.driverBeta || 0}
-                                  // onChange={(e) => setdriverBeta(e.target.value)}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setdriverBeta(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  label="Driver Convenience"
-                                  autoComplete="password"
-                                  id="driverconvenience1"
-                                  size="small"
-                                  variant="standard"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <TollTwoToneIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  name='dtc2'
-                                  id='dtc2'
-                                  className='customer-bill-input'
-                                  value={driverbeta_Count}
-                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? (driverbeta_Count || formData.driverbeta_Count || '') : 0}
-
-                                  // onChange={(e) => setdriverbeta_Count(e.target.value)}
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setdriverbeta_Count(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faEquals} />
-                                </div>
-                                <TextField
-                                  name="amount9"
-                                  className='customer-bill-input'
-                                  value={driverBeta_amount}
-                                  // value={(vendorinfo?.vendor_duty === "Outstation") ? driverBeta_amount : 0}
-                                  // onChange={(e) => setdriverBeta_amount(e.target.value)}
-
-                                  onChange={(e) => {
-
-                                    if (lockdatacustomerbill) {
-                                      setdriverBeta_amount(e.target.value)
-                                    } else {
-                                      setWarning(true);
-                                      setWarningMessage("IS not locked,locked Enter Again");
-                                    }
-                                  }}
-                                  size="small"
-                                  label="Amount"
-                                  id="amount9"
-                                  autoComplete="password"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-
-                            <TextField
-                              name="amount9"
-                              className='total-amount-textfield'
-                              value={totalcalcAmount || 0}
-                              size="small"
-                              label="Total Amount"
-                              id="amount-amount9"
-                              autoComplete="password"
-                              variant="standard"
-                            />
 
                           </div>
 
-                          </div>
-                          
                         </TabPanel>
 
 
@@ -4405,7 +4428,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={(e) => {
                       handleChange(e);
                       if (!lockdata) {
-                        setVendorinfodata((vendorinfo) => ({...vendorinfo,vendorRemarks: e.target.value,
+                        setVendorinfodata((vendorinfo) => ({
+                          ...vendorinfo, vendorRemarks: e.target.value,
                         }));
                       }
                     }}
@@ -4513,21 +4537,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                <div className="input">
-                  <div className="icone">
-                    <StreamIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="request"
-                    value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
-                    onChange={handleChange}
-                    label="Request"
-                    id="request"
-                    autoComplete="password"
-                  />
 
-                </div>
 
 
                 <div className="input">
@@ -4544,7 +4554,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e)
                       setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
                     }}
-                    label="Advance Paid To Vendor"
+                    label="Vendor Advance"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
                   />

@@ -332,9 +332,9 @@
 .fc-copy-tooltip:hover .fc-copy-tooltiptext {
   visibility: visible;
 }
-/* .Download-btn-vehiecleinfo{
-  padding: 10px 20px 20px 0px;
-} */
+.Download-btn-vehiecleinfo{
+  padding: 0px 20px 15px 0px;
+}
 
 .upload-icon{
 

@@ -623,7 +623,7 @@ const Accuntinfo = ({ stationName }) => {
         </div>
         <div className='download-search-account'>
 
-          <div className="Download-btn">
+          <div className="Download-btn-account-info">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
@@ -631,7 +631,7 @@ const Accuntinfo = ({ stationName }) => {
                     variant="contained"
                     endIcon={<ExpandCircleDownOutlinedIcon />}
                     {...bindTrigger(popupState)}
-                    style={{ marginTop: '15px', marginLeft: "20px" }}
+                    style={{  marginLeft: "20px" }}
                   >
                     Download
                   </Button>

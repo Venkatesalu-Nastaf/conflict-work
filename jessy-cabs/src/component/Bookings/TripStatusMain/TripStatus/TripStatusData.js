@@ -10,6 +10,10 @@ export const Status = [
     optionvalue: "Closed",
   },
   {
+    option: "Temporary Closed",
+    optionvalue: "Temporary Closed",
+  },
+  {
     option: "Cancelled",
     optionvalue: "Cancelled",
   },

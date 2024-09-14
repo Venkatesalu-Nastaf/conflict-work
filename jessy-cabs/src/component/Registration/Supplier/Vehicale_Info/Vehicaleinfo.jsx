@@ -676,6 +676,11 @@ const Vehicaleinfo = ({ stationName }) => {
                   format="DD/MM/YYYY"
                   value={selectedCustomerData?.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
                   onChange={(date) => handleDateChange(date, 'insduedate')}
+                  sx={{
+                    '& .MuiInputLabel-root': {
+                      fontSize: '14px', // Adjust the size as needed
+                    },
+                  }}
                 >
                   {({ inputProps, inputRef }) => (
                     <TextField {...inputProps} inputRef={inputRef} name='insduedate' value={selectedCustomerData.insduedate} />
@@ -764,6 +769,11 @@ const Vehicaleinfo = ({ stationName }) => {
                         : null
                   }
                   onChange={(date) => handleDateChange(date, 'npdate')}
+                  sx={{
+                    '& .MuiInputLabel-root': {
+                      fontSize: '14px', // Adjust the size as needed
+                    },
+                  }}
                 >
                   {({ inputProps, inputRef }) => (
                     <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData?.npdate} />

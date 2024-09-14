@@ -679,7 +679,7 @@ body {
 
 @media screen and (min-width: 1499px) {
   .side-bar-menu-close .main-content-container {
-    width: 100% !important;
+    width: 99% !important;
   }
 
   .main-content-container {     

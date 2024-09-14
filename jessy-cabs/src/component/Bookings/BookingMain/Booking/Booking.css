@@ -503,7 +503,7 @@
 
 .sub-section2-driver .booking-driver-table {
   height: 220px;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 .booking-driver-table .table-heading-first {
@@ -667,4 +667,37 @@
 
 .booking-top-section-status-main .css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
+}
+
+
+.gridtable tbody {
+  display: block;
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
+.gridtable thead,
+.gridtable tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.gridtable thead {
+  width: calc(100% - 1.1em);
+}
+
+.gridtable thead {
+  position: relative;
+}
+
+.gridtable thead th:last-child:after {
+  content: ' ';
+  position: absolute;
+  background-color: #337ab7;
+  width: 1.3em;
+  height: 38px;
+  right: -1.3em;
+  top: 0;
+  border-bottom: 2px solid #ddd;
 }

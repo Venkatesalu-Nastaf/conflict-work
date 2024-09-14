@@ -674,3 +674,11 @@
   border-right: 1px solid #ccc;
   padding-right: 15px;
 }
+
+.tripsheet-division1 .input {
+  transition: transform 0.3s ease;
+}
+
+.tripsheet-division1 .input:hover {
+  transform: translateY(-5px) scale(1.05);
+}

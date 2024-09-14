@@ -68,14 +68,14 @@ const MailDetails = () => {
   const fileInputRef = useRef(null);
 
   const columns = [
-    { field: "idno", headerName: "Sno", width: 100 },
-    { field: "Templateid", headerName: "Templateid", width: 200 },
-    { field: "TemplateName", headerName: "Template Name", width: 200 },
-    { field: "TemplateSubject", headerName: "Template Subject", width: 200 },
+    { field: "idno", headerName: "Sno", width: 50 },
+    { field: "Templateid", headerName: "Templateid", width: 90 },
+    { field: "TemplateName", headerName: "Template Name", width: 150 },
+    { field: "TemplateSubject", headerName: "Template Subject", width: 170 },
     {
       field: 'TemplateMessageData',
       headerName: 'Template Message',
-      width: 300,
+      width: 450,
       renderCell: (params) => {
         return (
           <span>{convertToPlain(params.value)}</span>
@@ -85,12 +85,11 @@ const MailDetails = () => {
     {
       field: 'Edit',
       headerName: 'Edit',
-      width: 130,
+      width: 90,
       renderCell: (params) => (
         <Button
           onClick={() => handleButtonEditClick(params)}
           aria-label="edit"
-          // variant="contained"
           sx={{ color: '#1976d2' }}
         >
           <ModeEditIcon />
@@ -100,12 +99,11 @@ const MailDetails = () => {
     {
       field: 'Delete',
       headerName: 'Delete',
-      width: 130,
+      width: 90,
       renderCell: (params) => (
         <Button
           onClick={() => handleButtondeleteClick(params)}
           aria-label="delete"
-          // variant="contained"
           sx={{ color: 'red' }}
         >
           <DeleteIcon />
@@ -176,7 +174,7 @@ const MailDetails = () => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       let indexToRemove = 0;
       jsonData.splice(indexToRemove, 1);
-     
+
       let objects = jsonData.map(sublist => {
         return {
           Email: sublist[0],
@@ -197,7 +195,6 @@ const MailDetails = () => {
       await axios.delete(`${apiurl}/templatedatadelete/${Templateid}`)
       setSelectedData([])
 
-      // setTemplateData((prevData) => prevData.filter(template => template.Templateid !== Templateid));
       await axios.delete(`${apiurl}/templatedeleteimageedata/${Templateid}`)
     }
     catch (err) {
@@ -215,7 +212,6 @@ const MailDetails = () => {
   }
 
   const handleIconClick = () => {
-    // document.getElementById('fileInput_upload').click();
 
     fileInputRef.current.click();
   };
@@ -245,7 +241,6 @@ const MailDetails = () => {
   }
 
   const handlesendbulkemail = async () => {
-    // const datatemplate=selecteddata
     if (selecteddata.length === 0) {
       setError(true)
       setErrorMessage("Select the Data")
@@ -271,7 +266,7 @@ const MailDetails = () => {
         Mailauthpass: organistaionsendmail.EmailApp_Password
 
       }
-    
+
 
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       console.log(response)
@@ -301,15 +296,7 @@ const MailDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // const organizationname = localStorage.getItem('usercompany');
-
-
       try {
-        // if(organizationname !== undefined || organizationname !== "undefined" || organizationname !== null) 
-        //   {
-        //     return
-        //   }
-        // else{
         const response = await fetch(`${apiurl}/organizationdata`);
         if (response.status === 200) {
 
@@ -317,15 +304,11 @@ const MailDetails = () => {
           if (userDataArray.length > 0) {
             setOrganisationSendEmail(userDataArray[0])
             setDataTrigger(!datatrigger)
-
-
-
           } else {
             setErrorMessage('User data not found.');
             setError(true);
           }
         }
-        // }
       }
       catch {
       }
@@ -333,7 +316,6 @@ const MailDetails = () => {
     fetchData();
   }, [apiurl, selecteddata, file, datatrigger]);
   const handleShowdata = async () => {
-
     try {
       const response = await fetch(
         `${apiurl}/tabletemplateseatch?searchText=${searchname}`
@@ -344,7 +326,6 @@ const MailDetails = () => {
           ...row,
           id: index + 1,
         }));
-
         setTemplateData(rowsWithUniqueId)
         setSuccess(true);
         setSuccessMessage("successfully listed");
@@ -357,7 +338,6 @@ const MailDetails = () => {
       setError(true);
       setErrorMessage("sorry");
     }
-
   };
 
   return (
@@ -458,39 +438,29 @@ const MailDetails = () => {
                         </div>
                       </div>
                     </div>
-
-
                     <div className="table-bookingCopy-mailer">
                       <div className="mail-details-table">
-                        {/* <DataGrid
-                          rows={templatedata}
-                          columns={columns}
-                          onRowClick={handletableClick}
-                        /> */}
-
-
-
                         <Box
-                            sx={{
-                              height: 400, // Adjust this value to fit your needs
-                              '& .MuiDataGrid-virtualScroller': {
-                                  '&::-webkit-scrollbar': {
-                                      width: '8px', // Adjust the scrollbar width here
-                                      height: '8px', // Adjust the scrollbar width here
-                                  },
-                                  '&::-webkit-scrollbar-track': {
-                                      backgroundColor: '#f1f1f1',
-                                  },
-                                  '&::-webkit-scrollbar-thumb': {
-                                      backgroundColor: '#457cdc',
-                                      borderRadius: '20px',
-                                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
-                                  },
-                                  '&::-webkit-scrollbar-thumb:hover': {
-                                      backgroundColor: '#3367d6',
-                                  },
+                          sx={{
+                            height: 400, // Adjust this value to fit your needs
+                            '& .MuiDataGrid-virtualScroller': {
+                              '&::-webkit-scrollbar': {
+                                width: '8px', // Adjust the scrollbar width here
+                                height: '8px', // Adjust the scrollbar width here
                               },
+                              '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                              },
+                              '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#457cdc',
+                                borderRadius: '20px',
+                                minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                              },
+                              '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#3367d6',
+                              },
+                            },
                           }}
                         >
                           <DataGrid

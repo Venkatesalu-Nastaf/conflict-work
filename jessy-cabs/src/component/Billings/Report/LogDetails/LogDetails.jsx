@@ -5,54 +5,42 @@ import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import Menu from '@mui/material/Menu';
 import InputLabel from '@mui/material/InputLabel';
 import Box from "@mui/material/Box";
 import "./LogDetails.css";
 import axios from 'axios'
 import { APIURL } from '../../../url'
 
-
-
-
-
-
 const LogDetails = () => {
-  const apiurl=APIURL
-  const [logdetails,setLogDetails]=useState([])
-  const [selecteddata,setSelectedData]=useState('')
-  const [selectbooking,setSelectedBooking]=useState()
-  const [selectcolumns,setSelectedColumns]=useState([{}])
+  const apiurl = APIURL
+  const [logdetails, setLogDetails] = useState([])
+  const [selecteddata, setSelectedData] = useState('')
+  const [selectbooking, setSelectedBooking] = useState()
+  const [selectcolumns, setSelectedColumns] = useState([{}])
 
-  const handlecolumnvalues=(data)=>{
-    // const logDetails = []; // Empty array
+  const handlecolumnvalues = (data) => {
     const headers = Object.keys(data[0]);
-    const columns = headers.map(key => ({ field:key, headerName: key,width:150 }));
-// Extract unique keys
+    const columns = headers.map(key => ({ field: key, headerName: key, width: 150 }));
 
-
-setSelectedColumns(columns)
-// console.log(uniqueKeys);
+    setSelectedColumns(columns)
   }
 
-  const handleshowdetails=async()=>{
-    
-    try{
-      const response=await axios.get(`${apiurl}/bookinglogdetailsget/${selectbooking}`);
-      const data=response.data;
-      console.log(data,"ff")
-      if(data.length >0){
+  const handleshowdetails = async () => {
 
-    
-      setLogDetails(data)
-      handlecolumnvalues(data)
+    try {
+      const response = await axios.get(`${apiurl}/bookinglogdetailsget/${selectbooking}`);
+      const data = response.data;
+      console.log(data, "ff")
+      if (data.length > 0) {
+
+
+        setLogDetails(data)
+        handlecolumnvalues(data)
       }
-      else{
+      else {
         setLogDetails([])
       }
-    } catch(err){
+    } catch (err) {
       console.log(err)
     }
   }
@@ -63,7 +51,7 @@ setSelectedColumns(columns)
 
     <>
       <div className='main-content-form'>
-        <div className='input-field vendor-statement-input-field' style={{alignItems: 'flex-end'}}>
+        <div className='input-field vendor-statement-input-field' style={{ alignItems: 'flex-end' }}>
 
           <div className="input">
             <div className="icone">
@@ -88,40 +76,18 @@ setSelectedColumns(columns)
             </FormControl>
           </div>
 
-
           <div className="input">
             <div style={{}}>
               <label htmlFor="">Id</label>
-              <input type="text" value={selectbooking}style={{backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px'}}
-              onChange={(e)=>setSelectedBooking(e.target.value)}
+              <input type="text" value={selectbooking} style={{ backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px' }}
+                onChange={(e) => setSelectedBooking(e.target.value)}
               />
             </div>
           </div>
-
           <div className="input">
             <Button variant='contained' onClick={handleshowdetails}>Search</Button>
           </div>
-          
         </div>
-
-        <div className="Download-btn download-btn-purchase" style={{ display: "flex", gap: "15px" }}>
-          <></>
-          {/* <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState> */}
-          
-        </div>
-
         <div className='purchaseSummary-table'>
           <Box
             sx={{
@@ -155,7 +121,6 @@ setSelectedColumns(columns)
                 },
               }}
               pageSizeOptions={[5, 10]}
-            // checkboxSelection
             />
           </Box>
         </div>

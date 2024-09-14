@@ -63,8 +63,6 @@ export const BillWiseReceipt = () => {
                     label="Voucher ID"
                     name="VoucherId"
                     autoComplete="new-password"
-                  // onChange={handleInputChange}
-
                   />
                 </div>
                 <div className="input">
@@ -165,8 +163,6 @@ export const BillWiseReceipt = () => {
                     </Select>
                   </FormControl>
                 </div>
-                {/* </div>
-              <div className="input-field " style={{ marginTop: "30px" }}> */}
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -176,7 +172,6 @@ export const BillWiseReceipt = () => {
                     id="voucher ID"
                     className="full-width"
                     label="Voucher ID"
-                    // name="voucher ID"
                     autoComplete="new-password"
                   />
                 </div>
@@ -193,78 +188,6 @@ export const BillWiseReceipt = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                {/* <div className="input">
-                  <div className="icone">
-                    <FaIndianRupeeSign color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Bill Amount"
-                    className="full-width"
-                    label="Bill Amount"
-                    name="Bill Amount"
-                  />
-                </div> */}
-                {/* <div className="input">
-                  <div className="icone">
-                    <BadgeIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Advanced"
-                    className="full-width"
-                    label="Advanced"
-                    name="Advanced"
-                  />
-                </div> */}
-                {/* <div className="input">
-                  <div className="icone">
-                    <FaIndianRupeeSign color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Paid"
-                    className="full-width"
-                    label="Paid"
-                    name="Paid"
-                  />
-                </div> */}
-                {/* <div className="input">
-                  <div className="icone">
-                    <FaIndianRupeeSign color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Received"
-                    className="full-width"
-                    label="Received"
-                    name="Received"
-                  />
-                </div> */}
-                {/* <div className="input">
-                  <div className="icone">
-                    <FaIndianRupeeSign color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Discount"
-                    className="full-width"
-                    label="Discount"
-                    name="Discount"
-                  />
-                </div> */}
-                {/* <div className="input">
-                  <div className="icone">
-                    <FaIndianRupeeSign color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="Balance"
-                    className="full-width"
-                    label="Balance"
-                    name="Balance"
-                  />
-                </div> */}
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -275,8 +198,6 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Unique Id"
                     name="UniqueID"
-                  // onChange={handleInputChange}
-                  // value={billWiseReport.UniqueID}
                   />
                 </div>
               </div>
@@ -355,7 +276,6 @@ export const BillWiseReceipt = () => {
                           },
                         }}
                         pageSizeOptions={[5, 10]}
-                      // checkboxSelection
                       />
                     </Box>
                   </div>
@@ -407,16 +327,6 @@ export const BillWiseReceipt = () => {
                         }} />
                     </Box>
                   </div>
-                  {/* <div style={{display: 'flex', paddingTop: '15px'}}>
-                    <div className='total-inputs' style={{display: 'flex'}}>
-                      <label htmlFor="">Amount:</label>
-                      <input type="text" />
-                    </div>
-                    <div className='total-inputs' style={{display: 'flex'}}>
-                      <label htmlFor="">Recieved:</label>
-                      <input type="text" />
-                    </div>
-                  </div> */}
                 </div>
 
               </div>
@@ -433,18 +343,6 @@ export const BillWiseReceipt = () => {
                     <p>{errorMessage}</p>
                   </div>
                 )}
-
-                {/* {info && (
-                        <div className="alert-popup Info">
-                            <div className="popup-icon">
-                                <BsInfo />
-                            </div>
-                            <span className="cancel-btn" onClick={hidePopup}>
-                                <ClearIcon color="action" />
-                            </span>
-                            <p>{infoMessage}</p>
-                        </div>
-                    )} */}
                 {success && (
                   <div className="alert-popup Success">
                     <div className="popup-icon">

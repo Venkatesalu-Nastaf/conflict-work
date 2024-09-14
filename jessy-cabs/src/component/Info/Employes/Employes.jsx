@@ -6,7 +6,6 @@ import TabList from "@mui/lab/TabList";
 import Employe from './Employe/Employe';
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-// import zIndex from '@mui/material/styles/zIndex';
 
 const Employes = () => {
     const [value, setValue] = React.useState("employes");

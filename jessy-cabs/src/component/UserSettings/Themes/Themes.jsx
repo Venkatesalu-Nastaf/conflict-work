@@ -8,8 +8,7 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 const Themes = () => {
   const apiUrl = APIURL;
   const { setSelectedTheme ,selectedTheme} = useThemes();
-  // const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
-// const [storedusertheme,setStoredusertheme]=useState(JSON.parse(localStorage.getItem("selectedusertheme")))
+
   const [themeOne, setThemeOne] = useState(false);
   const [themeTwo, setThemeTwo] = useState(false);
   const [themeThree, setThemeThree] = useState(false);
@@ -18,12 +17,7 @@ const Themes = () => {
   const [themeSix, setThemeSix] = useState(false);
   const [themeSeven, setThemeSeven] = useState(false);
   const [themeEight, setThemeEight] = useState(false);
-  console.log('sssss',typeof(selectedTheme));
-  // useEffect(()=>{
-  //   setStoredusertheme(JSON.parse(localStorage.getItem("selectedusertheme")));
-
-  // },[selectedTheme])
-
+  // console.log('sssss',typeof(selectedTheme));
 
 
   const handleThemeChange = async (theme, themeNo) => {

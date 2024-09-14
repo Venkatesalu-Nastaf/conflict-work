@@ -74,8 +74,6 @@ export const PendingBills = () => {
                                     name='fromDate'
                                     onChange={handleFromDateChange}
                                     value={dayjs(pendingBill.fromDate)}
-                                // value={fromDate}
-                                // onChange={(date) => setFromDate(date)}
                                 />
                             </DemoContainer>
                         </LocalizationProvider>
@@ -92,8 +90,6 @@ export const PendingBills = () => {
                                     name='toDate'
                                     onChange={handleToDateChange}
                                     value={dayjs(pendingBill.toDate)}
-                                // value={toDate}
-                                // onChange={(date) => setToDate(date)}
                                 />
                             </DemoContainer>
                         </LocalizationProvider>
@@ -169,18 +165,6 @@ export const PendingBills = () => {
                             <p>{errorMessage}</p>
                         </div>
                     )}
-
-                    {/* {info && (
-                        <div className="alert-popup Info">
-                            <div className="popup-icon">
-                                <BsInfo />
-                            </div>
-                            <span className="cancel-btn" onClick={hidePopup}>
-                                <ClearIcon color="action" />
-                            </span>
-                            <p>{infoMessage}</p>
-                        </div>
-                    )} */}
                     {success && (
                         <div className="alert-popup Success">
                             <div className="popup-icon">
@@ -226,7 +210,6 @@ export const PendingBills = () => {
                                 },
                             }}
                             pageSizeOptions={[5, 10]}
-                        // checkboxSelection
                         />
                     </Box>
                 </div>

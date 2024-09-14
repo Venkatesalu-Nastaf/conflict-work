@@ -40,6 +40,20 @@ router.post('/GroupBillingList', (req, res) => {
   });
 });
 
+router.get('/ListDetailsWithStation', (req, res) => {
+  const { Customer, FromDate, ToDate, station } = req.query;
+
+  const sqlquery = "SELECT * FROM Group_billing WHERE Customer=? AND station=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 0 DAY)";
+
+  db.query(sqlquery, [Customer, station, FromDate, ToDate], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: 'Database query error' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
 
 router.get('/ListDetails', (req, res) => {
   const { Customer, FromDate, ToDate } = req.query;

@@ -1285,6 +1285,70 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
+                <div className='input d-grid'>
+
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Escort</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        // value={bookingStatus}
+                        value={escort}
+                        // label="Status"
+                        onChange={handleEscortChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  {/* <label>Escort</label>
+                  <span>
+                    <label>
+                      <input
+                        id="radioNo"
+                        type="radio"
+                        value="Yes"
+                        checked={escort === "Yes"}
+                        onChange={handleEscortChange}
+                      />
+                      Yes
+                    </label>
+                    <label>
+                      <input
+                        id="radioyes"
+                        type="radio"
+                        value="No"
+                        checked={escort === "No"}
+                        onChange={handleEscortChange}
+                      />
+                      No
+                    </label>
+                  </span> */}
+                </div>
+
+                <div className='input d-grid'>
+
+                  <Box sx={{ minWidth: '100%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        value={transferreport}
+                        // label="Status"
+                        onChange={handleTransferChange}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                </div>
+
                 <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -1462,6 +1526,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </DemoItem>
                 </div>
 
+                <div className="input tripsheet-e-tripsheet-input">
+                  <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
+                    E-Tripsheet
+                  </Button>
+                </div>
+
 
 
                 <div className="input time" style={{ display: "grid" }}>
@@ -1608,7 +1678,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' }}>
                     <label>Total Time</label>
-                    <div>
+                    <div style={{ position: 'relative', top: '-4px' }}>
                       <TextField
                         name="totaltime"
                         // value={ calculateTotalTimes()}
@@ -1629,7 +1699,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                 </div>
 
-                <div className="input">
+                <div className="input" style={{ position: 'relative', top: '10px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
@@ -4401,22 +4471,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input tripsheet-calculate-input">
-                  <Button variant="contained"
-                    onClick={() => {
-                      // handleCalc();
-                      handleClickOpen();
-                    }}
-                  >
-                    calculate
-                  </Button>
-                </div>
-                <div className="input tripsheet-e-tripsheet-input">
-                  <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
-                    E-Tripsheet
-                  </Button>
-                </div>
-
                 <div className="input tripsheet-remarks-division">
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
@@ -4442,69 +4496,41 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div className='input d-grid'>
-
-                  <Box sx={{ minWidth: '100%' }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Escort</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-labelescort"
-                        id="demo-simple-select"
-                        // value={bookingStatus}
-                        value={escort}
-                        // label="Status"
-                        onChange={handleEscortChange}
-                      >
-                        <MenuItem value={'Yes'}>Yes</MenuItem>
-                        <MenuItem value={'No'}>No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-
-                  {/* <label>Escort</label>
-                  <span>
-                    <label>
-                      <input
-                        id="radioNo"
-                        type="radio"
-                        value="Yes"
-                        checked={escort === "Yes"}
-                        onChange={handleEscortChange}
-                      />
-                      Yes
-                    </label>
-                    <label>
-                      <input
-                        id="radioyes"
-                        type="radio"
-                        value="No"
-                        checked={escort === "No"}
-                        onChange={handleEscortChange}
-                      />
-                      No
-                    </label>
-                  </span> */}
+                <div className="input">
+                  <div className="icone">
+                    <CurrencyRupeeTwoToneIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    name="advancepaidtovendor"
+                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                    }}
+                    label="Vendor Advance"
+                    id="advance-paid-to-vendor"
+                    autoComplete="password"
+                  />
                 </div>
 
-                <div className='input d-grid'>
-
-                  <Box sx={{ minWidth: '100%' }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Airport Transfer</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-labelescort"
-                        id="demo-simple-select"
-                        value={transferreport}
-                        // label="Status"
-                        onChange={handleTransferChange}
-                      >
-                        <MenuItem value={'Yes'}>Yes</MenuItem>
-                        <MenuItem value={'No'}>No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-
+                <div className="input tripsheet-calculate-input">
+                  <Button variant="contained"
+                    onClick={() => {
+                      // handleCalc();
+                      handleClickOpen();
+                    }}
+                  >
+                    calculate
+                  </Button>
                 </div>
+
+
+
+
+
 
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   {/* <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
@@ -4540,25 +4566,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                <div className="input">
-                  <div className="icone">
-                    <CurrencyRupeeTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    name="advancepaidtovendor"
-                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                    }}
-                    label="Vendor Advance"
-                    id="advance-paid-to-vendor"
-                    autoComplete="password"
-                  />
-                </div>
+
 
                 <div className="vehicle-confirm-tripsheet">
                   <div className="input-field input-feild-vehicle-confirm">
@@ -4836,7 +4844,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
                   <div>
-                    <div className="Scroll-Styles tripsheet-table1">
+                    <div className="Scroll-Style tripsheet-table1">
                       <table>
 
                         <thead>

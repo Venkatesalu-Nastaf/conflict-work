@@ -2735,36 +2735,13 @@ const Booking = ({ stationName, customerData }) => {
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
                   {/* <div className="booking-driver-table"> */}
-                  <Box
-                    className="booking-driver-table Scroll-Style"
-                    sx={{
-                      height: 400, // Adjust this value to fit your needs
-                      '& .MuiDataGrid-virtualScroller': {
-                        '&::-webkit-scrollbar': {
-                          width: '8px', // Adjust the scrollbar width here
-                          height: '8px', // Adjust the scrollbar width here
-                        },
-                        '&::-webkit-scrollbar-track': {
-                          backgroundColor: '#f1f1f1',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          backgroundColor: '#457cdc',
-                          borderRadius: '20px',
-                          minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                          backgroundColor: '#3367d6',
-                        },
-                      },
-                    }}
-                  >
+                  <div className="booking-driver-table Scroll-Style">
                     <table>
                       <thead id="update-header">
                         <tr>
                           <th className="table-head-booking table-heading-first">Driver NAME</th>
-                          <th className="table-head-booking">VEHICLE Name</th>
-                          <th className="table-head-booking">VEHICLE NO</th>
+                          <th className="table-head-booking">Vehicle Name</th>
+                          <th className="table-head-booking">Vehicle NO</th>
                           <th className="table-head-booking">Travels Name</th>
                           {/* <th className="table-head-booking">HIRE TYPES</th> */}
                           {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
@@ -2793,11 +2770,12 @@ const Booking = ({ stationName, customerData }) => {
                         )}
                       </tbody>
                     </table>
-                  </Box>
+                  </div>
                   {/* </div> */}
                 </div>
               </div>
             </div>
+
           </div>
         </div>
         <Dialog open={popupOpen} onClose={handlePopupClose}>

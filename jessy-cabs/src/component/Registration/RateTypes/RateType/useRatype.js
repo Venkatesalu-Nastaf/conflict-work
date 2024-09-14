@@ -11,13 +11,13 @@ import Excel from 'exceljs';
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 ,headerAlign: 'center' },
-    { field: "driverid", headerName: "Driver ID", width: 130 ,headerAlign: 'center'},
-    { field: "stations", headerName: "Station", width: 130 ,headerAlign: 'center'},
-    { field: "ratetype", headerName: "Rate Type", width: 130 ,headerAlign: 'center'},
-    { field: "ratename", headerName: "Ratename", width: 130 ,headerAlign: 'center'},
-    { field: "active", headerName: "Active", width: 130 ,headerAlign: 'center'},
-    { field: "starttime", headerName: "Start Date", width: 230 ,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "closetime", headerName: "Close Date", width: 230,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY')  },
+    { field: "driverid", headerName: "Driver ID", width: 180 ,headerAlign: 'center'},
+    { field: "stations", headerName: "Station", width: 180 ,headerAlign: 'center'},
+    { field: "ratetype", headerName: "Rate Type", width: 180 ,headerAlign: 'center'},
+    { field: "ratename", headerName: "Ratename", width: 180 ,headerAlign: 'center'},
+    { field: "active", headerName: "Active", width: 180 ,headerAlign: 'center'},
+    { field: "starttime", headerName: "Start Date", width: 190 ,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "closetime", headerName: "Close Date", width: 190,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY')  },
 ];
 
 const useRatype = () => {

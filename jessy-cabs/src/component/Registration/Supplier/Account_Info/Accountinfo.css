@@ -174,3 +174,15 @@
     padding-bottom: 10px;
     padding-left: 20px;
 } */
+
+.download-search-account{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 15px;
+}
+.detail-container-account{
+  display: flex;
+padding-bottom: 15px;
+}

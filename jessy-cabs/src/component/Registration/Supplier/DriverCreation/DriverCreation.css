@@ -174,11 +174,18 @@
 
 
 .upload-icon{
-
   font-size: 30px;
   color: #1976d2;
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  }
+
+
+
+  .input-adhar{
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }

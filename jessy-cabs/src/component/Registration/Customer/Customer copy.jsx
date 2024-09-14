@@ -106,7 +106,7 @@ const Customer = ({ stationName }) => {
     setSearchText,
     handleenterSearch,
     customerfieldSets,
-    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations,
+    handleChangecustomer, deletedialogbox, setDeletedDialog,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
@@ -585,7 +585,7 @@ const Customer = ({ stationName }) => {
                     id="servicestation"
                     freeSolo
                     sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChangestations(event, value, "servicestation")}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
                     value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
                     options={stationName?.map((option) => ({
                       label: option.Stationname,
@@ -806,7 +806,7 @@ const Customer = ({ stationName }) => {
 
               </div>
 
-              
+
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -892,6 +892,7 @@ const Customer = ({ stationName }) => {
 
             <div className="customer-list-table-container-download">
               <div className='down-search-portion'>
+
                 <div className="Download-btn">
                   <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (
@@ -909,66 +910,66 @@ const Customer = ({ stationName }) => {
                 </div>
 
                 <div className="detail-container">
-                <div className="container-left">
-                  <div className="">
-                    <div className="input-field vehicle-info-search-input-field">
-                      <div className="input">
-                        <div className="icone">
-                          <AiOutlineFileSearch color="action" />
+                  <div className="container-left">
+                    <div className="">
+                      <div className="input-field vehicle-info-search-input-field">
+                        <div className="input">
+                          <div className="icone">
+                            <AiOutlineFileSearch color="action" />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="searchText"
+                            className='full-width'
+                            label="Search"
+                            name="searchText"
+                            value={searchText}
+                            onKeyDown={handleenterSearch}
+                            onChange={(e) => setSearchText(e.target.value)}
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="searchText"
-                          className='full-width'
-                          label="Search"
-                          name="searchText"
-                          value={searchText}
-                          onKeyDown={handleenterSearch}
-                          onChange={(e) => setSearchText(e.target.value)}
-                        />
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="fromDate"
-                            className='full-width'
-                            label="From Date"
-                            format="DD/MM/YYYY"
-                            name='fromDate'
-                            value={fromDate}
-                            onChange={(date) => setFromDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="toDate"
-                            className='full-width'
-                            label="To Date"
-                            format="DD/MM/YYYY"
-                            name="toDate"
-                            value={toDate}
-                            onChange={(date) => setToDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <Button variant="contained" onClick={handleSearch}>Search</Button>
+                        <div className="input">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="icone">
+                              <DateRangeIcon color="action" />
+                            </div>
+                            <DatePicker
+                              id="fromDate"
+                              className='full-width'
+                              label="From Date"
+                              format="DD/MM/YYYY"
+                              name='fromDate'
+                              value={fromDate}
+                              onChange={(date) => setFromDate(date)}
+                            />
+                          </LocalizationProvider>
+                        </div>
+                        <div className="input">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="icone">
+                              <DateRangeIcon color="action" />
+                            </div>
+                            <DatePicker
+                              id="toDate"
+                              className='full-width'
+                              label="To Date"
+                              format="DD/MM/YYYY"
+                              name="toDate"
+                              value={toDate}
+                              onChange={(date) => setToDate(date)}
+                            />
+                          </LocalizationProvider>
+                        </div>
+                        <div className="input">
+                          <Button variant="contained" onClick={handleSearch}>Search</Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+
 
               </div>
-
 
               <div className="table-customer-lists">
                 {/* <DataGrid

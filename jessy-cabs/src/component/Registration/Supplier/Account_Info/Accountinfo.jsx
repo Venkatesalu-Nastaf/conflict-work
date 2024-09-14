@@ -62,7 +62,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Accuntinfo = ({stationName}) => {
+const Accuntinfo = ({ stationName }) => {
 
 
 
@@ -100,7 +100,7 @@ const Accuntinfo = ({stationName}) => {
     rows,
     columns,
     isEditMode,
-    fields,handleAutocompleteChangestations,
+    fields, handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
   } = useAccountinfo();
 
@@ -379,29 +379,29 @@ const Accuntinfo = ({stationName}) => {
                 />
               </div>
               <div className="input">
-                  <div className="icone">
-                    <DomainAddIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="servicestation"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChangestations(event, value, "stations")}
-                    value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.stations || book.stations || ''}
-                    options={stationName?.map((option) => ({
-                      label: option.Stationname,
-                    }))}
-                    getOptionLabel={(option) => option.label || selectedCustomerData.stations || book.stations || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Station" name="stations" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
+                <div className="icone">
+                  <DomainAddIcon color="action" />
                 </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="servicestation"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChangestations(event, value, "stations")}
+                  value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.stations || book.stations || ''}
+                  options={stationName?.map((option) => ({
+                    label: option.Stationname,
+                  }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData.stations || book.stations || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Station" name="stations" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
@@ -422,7 +422,7 @@ const Accuntinfo = ({stationName}) => {
                 />
 
               </div>
-           
+
               {fields?.map((field, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={2}>
                   <TextField
@@ -539,65 +539,8 @@ const Accuntinfo = ({stationName}) => {
             )}
           </div>
         </div> */}
-        
-        <div className="detail-container-main">
-          <div className="container-left">
-            <div className="">
-              <div className="input-field vehicle-info-search-input-field">
-                <div className="input">
-                  <div className="icone">
-                    <AiOutlineFileSearch color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="searchText"
-                    className='full-width'
-                    label="Search"
-                    name="searchText"
-                    value={searchText}
-                    onKeyDown={handleenterSearch}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <div className="icone">
-                      <DateRangeIcon color="action" />
-                    </div>
-                    <DatePicker
-                      id="fromDate"
-                      className='full-width'
-                      label="From Date"
-                      format="DD/MM/YYYY"
-                      name='fromDate'
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <div className="icone">
-                      <DateRangeIcon color="action" />
-                    </div>
-                    <DatePicker
-                      id="toDate"
-                      className='full-width'
-                      label="To Date"
-                      format="DD/MM/YYYY"
-                      name="toDate"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <Button variant="contained" onClick={handleSearch}>Search</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+
 
 
         <div className='alert-popup-main'>
@@ -678,27 +621,94 @@ const Accuntinfo = ({stationName}) => {
             </StyledSpeedDial>
           </Box>
         </div>
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  endIcon={<ExpandCircleDownOutlinedIcon />}
-                  {...bindTrigger(popupState)}
-                  style={{ marginTop: '15px', marginLeft: "20px" }}
-                >
-                  Download
-                </Button>
+        <div className='download-search-account'>
 
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+          <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button
+                    variant="contained"
+                    endIcon={<ExpandCircleDownOutlinedIcon />}
+                    {...bindTrigger(popupState)}
+                    style={{ marginTop: '15px', marginLeft: "20px" }}
+                  >
+                    Download
+                  </Button>
+
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
+
+
+          <div className="detail-container-account">
+            <div className="container-left">
+              <div className="">
+                <div className="input-field vehicle-info-search-input-field">
+                  <div className="input">
+                    <div className="icone">
+                      <AiOutlineFileSearch color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      id="searchText"
+                      className='full-width'
+                      label="Search"
+                      name="searchText"
+                      value={searchText}
+                      onKeyDown={handleenterSearch}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
+                  <div className="input">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <div className="icone">
+                        <DateRangeIcon color="action" />
+                      </div>
+                      <DatePicker
+                        id="fromDate"
+                        className='full-width'
+                        label="From Date"
+                        format="DD/MM/YYYY"
+                        name='fromDate'
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                  <div className="input">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <div className="icone">
+                        <DateRangeIcon color="action" />
+                      </div>
+                      <DatePicker
+                        id="toDate"
+                        className='full-width'
+                        label="To Date"
+                        format="DD/MM/YYYY"
+                        name="toDate"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                  <div className="input">
+                    <Button variant="contained" onClick={handleSearch}>Search</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+
+
         <div className="table-customer-lists">
           {/* <DataGrid
             rows={rows}

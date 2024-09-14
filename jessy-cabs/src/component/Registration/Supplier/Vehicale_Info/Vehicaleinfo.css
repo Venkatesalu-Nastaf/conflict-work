@@ -345,3 +345,10 @@ justify-content: center;
 align-items: center;
 
 }
+
+.input-permit-no{
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

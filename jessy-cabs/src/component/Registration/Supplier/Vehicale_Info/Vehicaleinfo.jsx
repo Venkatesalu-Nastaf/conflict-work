@@ -1,4 +1,4 @@
-import React, { useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import dayjs from "dayjs";
 import "./Vehicaleinfo.css";
 import Box from "@mui/material/Box";
@@ -185,10 +185,10 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,vehiclenames,setVehilcNames
+    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames
   } = useVehicleinfo();
-  const { handleinputchnagevehicle,handleADDvehicledata,vechiclevalue,isOpenvehcile,setIsOpenvehicle,error1,errorMessage1,success1,successMessage1,hidePopup1
-  }=VehicleAddData()
+  const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
+  } = VehicleAddData()
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -196,32 +196,32 @@ const Vehicaleinfo = ({ stationName }) => {
     }
   }, [actionName, handleClick]);
 
- 
-  
-const handleClickOpen=()=>{
-  setIsOpenvehicle(true)
-}
-const handleClose=()=>{
-  setIsOpenvehicle(false)
-}
 
-useEffect(()=>{
-  const fetchgetvehicleNames = async () => {
+
+  const handleClickOpen = () => {
+    setIsOpenvehicle(true)
+  }
+  const handleClose = () => {
+    setIsOpenvehicle(false)
+  }
+
+  useEffect(() => {
+    const fetchgetvehicleNames = async () => {
       try {
-          const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
-          const data = response.data
-          const names = data.map(res => res.VechicleNames)
+        const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+        const data = response.data
+        const names = data.map(res => res.VechicleNames)
 
-          setVehilcNames(names)
+        setVehilcNames(names)
 
 
       }
       catch (error) {
-          console.log(error, "error");
+        console.log(error, "error");
       }
-  };
-  fetchgetvehicleNames()
-},[apiUrl,isOpenvehcile,setVehilcNames])
+    };
+    fetchgetvehicleNames()
+  }, [apiUrl, isOpenvehcile, setVehilcNames])
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
@@ -271,25 +271,25 @@ useEffect(()=>{
                   // variant="standard"
                   /> */}
 
-<Autocomplete
-                fullWidth
-                size="small"
-               id="vehicleName"
-                freeSolo
-                sx={{ width: "100%" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
-                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
-                value={book.vehicleName || selectedCustomerData?.vehicleName || ""}
-                 // value={selectedCustomerData?.driverName || book.selectedCustomerData || ""}
-                options={vehiclenames?.map((option) => ({ label: option }))} // Use organizationName here
-                getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleName || ''}
-                renderInput={(params) => {
-                  return (
-                    <TextField {...params}    label="Vehicle Name" name="vehicleName" onKeyDown={handleKeyEnter} inputRef={params.inputRef} />
-                  )
-                }
-                }
-              />
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="vehicleName"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName")}
+                    // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                    value={book.vehicleName || selectedCustomerData?.vehicleName || ""}
+                    // value={selectedCustomerData?.driverName || book.selectedCustomerData || ""}
+                    options={vehiclenames?.map((option) => ({ label: option }))} // Use organizationName here
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleName || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Vehicle Name" name="vehicleName" onKeyDown={handleKeyEnter} inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -448,33 +448,33 @@ useEffect(()=>{
                   />
                 </div>
                 <div>
-                <div>
-                  { !isEditMode &&
-                  <>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Add Vehicle
-            </Button>
-            </>
-             }
-            <Dialog open={isOpenvehcile}  onClose={handleClose}>
-                <DialogContent>
-                    <TextField
-                      
-                        id="name"
-                        label="Vehicle Name"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={vechiclevalue ||""}
-                        onChange={handleinputchnagevehicle}
-                    />
-                </DialogContent>
-              
-                    <Button onClick={handleADDvehicledata}>Done</Button>
-            
-            </Dialog>
-        </div>
-        </div>
+                  <div>
+                    {!isEditMode &&
+                      <>
+                        <Button variant="outlined" onClick={handleClickOpen}>
+                          Add Vehicle
+                        </Button>
+                      </>
+                    }
+                    <Dialog open={isOpenvehcile} onClose={handleClose}>
+                      <DialogContent>
+                        <TextField
+
+                          id="name"
+                          label="Vehicle Name"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          value={vechiclevalue || ""}
+                          onChange={handleinputchnagevehicle}
+                        />
+                      </DialogContent>
+
+                      <Button onClick={handleADDvehicledata}>Done</Button>
+
+                    </Dialog>
+                  </div>
+                </div>
               </div>
               <div className="vehicaleinfo-container-right">
                 <div className="vehicaleinfo-update-main">
@@ -523,7 +523,7 @@ useEffect(()=>{
             </div>
           </div>
           <div className="input-field vehicleinfo-inputfeild">
-            <div className="input">
+            <div className="input-permit-no">
               <div className="icone">
                 <DocumentScannerIcon color="action" />
               </div>
@@ -627,7 +627,7 @@ useEffect(()=>{
               />
             </div>
 
-            <div className="input">
+            <div className="input-permit-no">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
               </div>
@@ -654,8 +654,8 @@ useEffect(()=>{
                       onChange={(e) => {
                         setInsurance(e.target.files[0])
                         console.log('File selected:', e.target.files[0]);
-                        handleUploadFile(e); 
-                      }}   
+                        handleUploadFile(e);
+                      }}
                     />
                   </span>
                 </Button>
@@ -771,7 +771,7 @@ useEffect(()=>{
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input">
+            <div className="input-permit-no">
               <div className="icone">
                 <DocumentScannerIcon color="action" />
               </div>
@@ -797,7 +797,7 @@ useEffect(()=>{
                       style={{ display: "none" }}
                       onChange={(e) => {
                         setNationalPermit(e.target.files[0])
-                        console.log('File selected:', e.target.files[0]); 
+                        console.log('File selected:', e.target.files[0]);
                         handleUploadFile(e);
                       }}
 
@@ -900,7 +900,7 @@ useEffect(()=>{
                 label="Year Model"
               />
             </div>
-            <div className="input">
+            <div className="input-permit-no">
               <div className="icone">
                 <HistoryEduIcon color="action" />
               </div>
@@ -920,7 +920,8 @@ useEffect(()=>{
                     <span className='upload-icon'>
                       <RiFileUploadLine />
 
-                    </span>                  <input
+                    </span>
+                    <input
                       id="rc_book"
                       type="file"
                       style={{ display: "none" }}
@@ -936,7 +937,7 @@ useEffect(()=>{
                 <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
               </div>
             </div>
-            <div className="input">
+            <div className="input-permit-no">
               <div className='icone'>
                 <CalendarMonthIcon />
               </div>
@@ -1096,7 +1097,7 @@ useEffect(()=>{
               <p>{successMessage}</p>
             </div>
           }
-            {success1 &&
+          {success1 &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <ClearIcon /> </div>
               <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' /> </span>
@@ -1105,7 +1106,7 @@ useEffect(()=>{
           }
         </div>
 
-       
+
         <Box className='common-speed-dail'>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -1152,83 +1153,83 @@ useEffect(()=>{
             />
           </StyledSpeedDial>
         </Box>
-        <div style={{display:"flex", gap:"20px", alignItems:"center"}}>
+        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap" }}>
 
-        
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
 
-        <div className="detail-container-main">
-          <div className="container-left">
-            <div className="">
-              <div className="input-field vehicle-info-search-input-field">
-                <div className="input">
-                  <div className="icone">
-                    <AiOutlineFileSearch color="action" />
+          <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
+
+          <div className="detail-container-vehicle-info">
+            <div className="container-left">
+              <div className="">
+                <div className="input-field vehicle-info-search-input-field">
+                  <div className="input">
+                    <div className="icone">
+                      <AiOutlineFileSearch color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      id="searchText"
+                      className='full-width'
+                      label="Search"
+                      name="searchText"
+                      value={searchText}
+                      onKeyDown={handleenterSearch}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
                   </div>
-                  <TextField
-                    size="small"
-                    id="searchText"
-                    className='full-width'
-                    label="Search"
-                    name="searchText"
-                    value={searchText}
-                    onKeyDown={handleenterSearch}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <div className="icone">
-                      <DateRangeIcon color="action" />
-                    </div>
-                    <DatePicker
-                      id="fromDate"
-                      className='full-width'
-                      label="From Date"
-                      format="DD/MM/YYYY"
-                      name='fromDate'
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <div className="icone">
-                      <DateRangeIcon color="action" />
-                    </div>
-                    <DatePicker
-                      id="toDate"
-                      className='full-width'
-                      label="To Date"
-                      format="DD/MM/YYYY"
-                      name="toDate"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <Button variant="contained" onClick={handleSearch}>Search</Button>
+                  <div className="input">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <div className="icone">
+                        <DateRangeIcon color="action" />
+                      </div>
+                      <DatePicker
+                        id="fromDate"
+                        className='full-width'
+                        label="From Date"
+                        format="DD/MM/YYYY"
+                        name='fromDate'
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                  <div className="input">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <div className="icone">
+                        <DateRangeIcon color="action" />
+                      </div>
+                      <DatePicker
+                        id="toDate"
+                        className='full-width'
+                        label="To Date"
+                        format="DD/MM/YYYY"
+                        name="toDate"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                  <div className="input">
+                    <Button variant="contained" onClick={handleSearch}>Search</Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
         </div>
         <div className="table-bookingCopy-Booking">

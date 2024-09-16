@@ -260,7 +260,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink,conflictenddate
+    handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   useEffect(() => {
@@ -550,15 +550,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     const shedOutDate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
 
-    const isEqual = ( 
+    const isEqual = (
       isEditMode &&
       conflictenddate?.maxShedInDate !== null &&
       conflictenddate?.TripIdconflictdate !== null &&
       conflictenddate?.TripIdconflictdate !== tripID &&
-      !shedindate&&
+      !shedindate &&
       reportTime <= conflictenddate?.conflictTimer &&
-      shedOutDate === conflictenddate?.maxShedInDate 
-      
+      shedOutDate === conflictenddate?.maxShedInDate
+
     )
 
     const isLessThan = (
@@ -567,14 +567,14 @@ const TripSheet = ({ stationName, logoImage }) => {
       conflictenddate?.TripIdconflictdate !== null &&
       conflictenddate?.TripIdconflictdate !== tripID &&
       !shedindate &&
-      shedOutDate < conflictenddate?.maxShedInDate 
-       // Check if shedOutDate is less than conflictenddate
+      shedOutDate < conflictenddate?.maxShedInDate
+      // Check if shedOutDate is less than conflictenddate
     );
 
     return isEqual || isLessThan;
   };
- 
-  
+
+
 
 
 
@@ -1376,40 +1376,40 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Box>
 
                 </div>
-          
 
-                     {/* {checkForConflict()&& <label className='invalid-km' style={{ paddingBottom: '18px' }}>
+
+                {/* {checkForConflict()&& <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                         Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
                       </label>} */}
 
                 <div className="input" style={{ display: "grid" }}>
-                {checkForConflict()&& <label className='invalid-km' style={{ paddingBottom: '5px' }}>
-                        Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
-                      </label>}
-                      <div style={{ display: "flex" }}>
-                  <div className="icone" >
-                    <CalendarMonthIcon color="action" />
+                  {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                    Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
+                  </label>}
+                  <div style={{ display: "flex" }}>
+                    <div className="icone" >
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Shed Out Date"
+                        id="shedOutDate"
+                        value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                        format="DD/MM/YYYY"
+                        onChange={(date) => {
+                          setKmValue((prev) => ({ ...prev, shedOutDate: date }));
+                          handleDateChange(date, 'shedOutDate')
+                          // if(!lockdata){
+                          // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
+                          // }
+                        }}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                        )}
+                      </DatePicker>
+                    </LocalizationProvider>
                   </div>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Shed Out Date"
-                      id="shedOutDate"
-                      value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
-                      format="DD/MM/YYYY"
-                      onChange={(date) => {
-                        setKmValue((prev) => ({ ...prev, shedOutDate: date }));
-                        handleDateChange(date, 'shedOutDate')
-                        // if(!lockdata){
-                        // setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: date }))
-                        // }
-                      }}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
-                      )}
-                    </DatePicker>
-                  </LocalizationProvider>
-                </div>
                 </div>
 
 
@@ -3233,7 +3233,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div style={{ display: "blocks" }}>
 
 
-                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>  
+                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
                                   {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
                                 </div>
                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
@@ -4882,10 +4882,50 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
                   <div>
-                 <div className="Scroll-Style tripsheet-table1">
+                    {/* <div className="Scroll-Style tripsheet-table1">
                       <table>
 
                         <thead>
+                          <tr>
+                            <th className="table-head-booking table-heading-1"> Driver name</th> */}
+                            {/* <th className="table-head-booking">Driver phone</th> */}
+                            {/* <th className="table-head-booking">Vehicle Name</th> */}
+                            {/* <th className="table-head-booking">Vehicle Type</th> */}
+                            {/* <th className="table-head-booking">Vehicle Reg No</th> */}
+                            {/* <th className="table-head-booking">HireTypes</th> */}
+                            {/* <th className="table-head-booking">Grouphs</th> */}
+                            {/* <th className="table-head-booking">Active</th> */}
+                            {/* <th className="table-head-booking">Travels Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {driverdetails.length === 0 ? (
+                            <tr>
+                              <td colSpan={7}>No data available.</td>
+                            </tr>
+                          ) : (
+                            driverdetails.map((row) => (
+                              <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                <td>{row.driverName}</td> */}
+                                {/* <td>{row.mobileNo}</td> */}
+                                {/* <td>{row.vehicleName}</td> */}
+                                {/* <td>{row.vechtype}</td> */}
+                                {/* <td>{row.vehRegNo}</td> */}
+                                {/* <td>{row.hiretypes}</td> */}
+                                {/* <td>{row.Groups}</td> */}
+                                {/* <td>{row.active}</td> */}
+                                {/* <td>{row.travelsname}</td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+
+                    </div> */}
+
+                    <div class="tripsheet-table1">
+                      <table class="table-condensed table-striped fixed_header">
+                        <thead class="BI_tablehead">
                           <tr>
                             <th className="table-head-booking table-heading-1"> Driver name</th>
                             {/* <th className="table-head-booking">Driver phone</th> */}
@@ -4898,7 +4938,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <th className="table-head-booking">Travels Name</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="BI_tablebody Scroll-Style">
                           {driverdetails.length === 0 ? (
                             <tr>
                               <td colSpan={7}>No data available.</td>
@@ -4920,7 +4960,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                           )}
                         </tbody>
                       </table>
-
                     </div>
                   </div>
                 </div>

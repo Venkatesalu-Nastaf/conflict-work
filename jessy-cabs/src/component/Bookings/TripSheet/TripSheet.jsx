@@ -260,14 +260,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink
+    handleDeleteMap, copydatalink, setCopyDataLink,conflictenddate
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
-  // useEffect(() => {
-  //   if (inputRef.current) {
-  //     inputRef.current.focus(); // Focus the input field when component mounts
-  //   }
-  // }, [ selectedCustomerData.shedintime ,selectedCustomerDatas.shedintime]);
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -548,6 +543,39 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   }
+
+
+  const checkForConflict = () => {
+    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    const shedOutDate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+
+    const isEqual = ( 
+      isEditMode &&
+      conflictenddate?.maxShedInDate !== null &&
+      conflictenddate?.TripIdconflictdate !== null &&
+      conflictenddate?.TripIdconflictdate !== tripID &&
+      !shedindate&&
+      reportTime <= conflictenddate?.conflictTimer &&
+      shedOutDate === conflictenddate?.maxShedInDate 
+      
+    )
+
+    const isLessThan = (
+      isEditMode &&
+      conflictenddate?.maxShedInDate !== null &&
+      conflictenddate?.TripIdconflictdate !== null &&
+      conflictenddate?.TripIdconflictdate !== tripID &&
+      !shedindate &&
+      shedOutDate < conflictenddate?.maxShedInDate 
+       // Check if shedOutDate is less than conflictenddate
+    );
+
+    return isEqual || isLessThan;
+  };
+ 
+  
+
 
 
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
@@ -1348,9 +1376,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Box>
 
                 </div>
+          
 
-                <div className="input">
-                  <div className="icone">
+                     {/* {checkForConflict()&& <label className='invalid-km' style={{ paddingBottom: '18px' }}>
+                        Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
+                      </label>} */}
+
+                <div className="input" style={{ display: "grid" }}>
+                {checkForConflict()&& <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                        Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
+                      </label>}
+                      <div style={{ display: "flex" }}>
+                  <div className="icone" >
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1372,6 +1409,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       )}
                     </DatePicker>
                   </LocalizationProvider>
+                </div>
                 </div>
 
 
@@ -3195,7 +3233,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div style={{ display: "blocks" }}>
 
 
-                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>  
                                   {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
                                 </div>
                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
@@ -4844,7 +4882,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
                   <div>
-                    <div className="Scroll-Style tripsheet-table1">
+                 <div className="Scroll-Style tripsheet-table1">
                       <table>
 
                         <thead>

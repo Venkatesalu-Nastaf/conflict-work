@@ -1146,7 +1146,7 @@ const Sidebar = () => {
 
           {/* </div> */}
         </div>
-        <div className="menu">
+        <div className="menu menu-section-scroll">
           {Dashbord_read === 1 && <MenuItem
             label={`${expanded == false ? '' : 'Dashboard'}`}
             to="/home/dashboard"

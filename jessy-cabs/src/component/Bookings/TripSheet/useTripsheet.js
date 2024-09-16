@@ -232,6 +232,9 @@ const useTripsheet = () => {
         parking: '',
         permit: '',
     });
+    const [conflictenddate,setConflictEndDate]=useState({
+    maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null
+})
 
 
     const maplogcolumns = [
@@ -828,6 +831,7 @@ const useTripsheet = () => {
             maxTripid: "",
         })
         setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
+        setConflictEndDate({ maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null})
         
 
         localStorage.removeItem('selectedTripid');
@@ -1930,7 +1934,6 @@ const useTripsheet = () => {
         const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
     
-
         // const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
         // const formattedCloseDate = dayjs(closeDate).format('YYYY-MM-DD');
         // const formattedShedOutDate = dayjs(shedoutdate).format('YYYY-MM-DD');
@@ -4590,37 +4593,88 @@ const useTripsheet = () => {
         fetchData()
     }, [apiUrl, vehicleRegisterNo])
 
-    // New KM CONFLICT
-    // const shedoutkm2 = useMemo(() => {
-    //     return Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
-    // }, [formData.shedout, book.shedout, selectedCustomerDatas.shedout, selectedCustomerData.shedout]);
-    // useEffect(() => {
 
-    //     const fetchData = async () => {
-    //         if (!vehicleRegisterNo) return
-    //         // const shedoutkm1=Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout ||'');
-    //         const shedoutkm1 = shedoutkm2
-    //         console.log(shedoutkm1, "km")
+function removeSeconds(time) {
+    // Split the time string by colon (:)
+    const timeParts = time.split(':');
+  
+    // Check if there are seconds (length 3), return hours:minutes
+    if (timeParts.length === 3) {
+      return `${timeParts[0]}:${timeParts[1]}`;
+    }
+  
+    // If there's only hours:minutes, return it as is
+    return time;
+  }
 
-    //         const data = await axios.get(`${apiUrl}/tripshedin/${vehicleRegisterNo}/${shedoutkm1}`)
+    const transformFunconflict = (data) => {
+        // const hybridcheck = hybridCheckCus.find((el) => customer === el.customer)
 
-    //         // const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun1)
-    //         const mapdata = data.data;
-    //         if (mapdata.length > 0) {
+        // if (/hcl/i.test(data.customer)) {
+        // if (hybridcheck && hybridcheck.hybrid) {
+        //     return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+        
+        return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate||null, shedintime: data.shedintime||data.closetime||null }
+    }
+   
+    const dateconflict = useMemo(() => {
+        return dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("YYYY-MM-DD");
+      }, [formData.shedOutDate, selectedCustomerData.shedOutDate, book.shedOutDate]);
+       
+    
+    useEffect(() => {
 
-    //             setConflictKMData({ maximumkm: mapdata[0].shedin || mapdata[0].closekm || mapdata[0].startkm || mapdata[0].shedout || 0, maxtripid: mapdata[0].tripid })
-    //         }
-    //         else {
-    //             setConflictKMData({ maximumkm: 0, maxtripid: null })
-    //         }
-    //     }
+        const fetchData = async () => {
+            if (!vehicleRegisterNo) return
+            try {
+            const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
+            
 
-    //     // }
+            const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict )
+          
+    
+        if (mapdata.length > 0) {
+            // console.log(mapdata,"kkkk",mapdata[0])
+            const firstTrip = mapdata[0];
+          
+            // Check if shedInDate matches the dateconflict
+            if (firstTrip?.shedInDate === dateconflict) {
+              setConflictEndDate({
+                maxShedInDate: firstTrip.shedInDate,
+                TripIdconflictdate: firstTrip.tripid,
+                conflictTimer: removeSeconds(firstTrip.shedintime),
+              });
+            }
+          else if  (dateconflict  < firstTrip?.shedInDate) {
+            // No data or no matching conflict, reset the conflict state
+            setConflictEndDate({
+                maxShedInDate: firstTrip.shedInDate,
+                TripIdconflictdate: firstTrip.tripid,
+                conflictTimer: removeSeconds(firstTrip.shedintime),
+              });
+          }
+        }
+        else{
+            setConflictEndDate({ maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null})
+        }
+    }
+        catch (error) {
+            console.error("Error fetching trip data", error);
+            // Handle error (optional)
+          }
+           
+          
 
+           
+        }
 
+        fetchData()
+    }, [apiUrl, vehicleRegisterNo,dateconflict])
+  
+      
 
-    //     fetchData()
-    // }, [apiUrl, vehicleRegisterNo, shedoutkm2])
+    
+
     const transformFun1 = (data) => {
 
         return { shedout: data.shedout || null, shedin: data.shedin || null, tripid: data.tripid, closekm: data.closekm || null, startkm: data.startkm || null }
@@ -5173,7 +5227,7 @@ const useTripsheet = () => {
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
-        handleDeleteMap,copydatalink,setCopyDataLink
+        handleDeleteMap,copydatalink,setCopyDataLink,conflictenddate
 
     };
 };

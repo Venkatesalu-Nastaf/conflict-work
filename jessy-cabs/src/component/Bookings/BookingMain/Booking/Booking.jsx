@@ -15,6 +15,7 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import AlertPopup from "../../../AlertPopup/AlertPopup";
 // import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 // import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import {
@@ -34,6 +35,9 @@ import {
   // RadioGroup,
   Checkbox,
 } from "@mui/material";
+
+
+
 
 // ICONS
 import { PiCarSimpleFill } from "react-icons/pi";
@@ -2735,17 +2739,17 @@ const Booking = ({ stationName, customerData }) => {
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
                   {/* <div className="booking-driver-table"> */}
-                  <div className="booking-driver-table Scroll-Style">
+                  {/* <div className="booking-driver-table Scroll-Style">
                     <table>
                       <thead id="update-header">
                         <tr>
                           <th className="table-head-booking table-heading-first">Driver NAME</th>
                           <th className="table-head-booking">Vehicle Name</th>
                           <th className="table-head-booking">Vehicle NO</th>
-                          <th className="table-head-booking">Travels Name</th>
+                          <th className="table-head-booking">Travels Name</th> */}
                           {/* <th className="table-head-booking">HIRE TYPES</th> */}
                           {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
-                        </tr>
+                        {/* </tr>
                       </thead>
                       <tbody>
                         {rowdriver?.length === 0 ? (
@@ -2762,20 +2766,58 @@ const Booking = ({ stationName, customerData }) => {
                               <td>{row.driverName}</td>
                               <td>{row.vehType}</td>
                               <td>{row.vehRegNo}</td>
-                              <td>{row.travelsname}</td>
+                              <td>{row.travelsname}</td> */}
                               {/* <td>{row.hireTypes}</td> */}
                               {/* <td>{row.active}</td> */}
-                            </tr>
+                            {/* </tr>
                           ))
                         )}
                       </tbody>
                     </table>
-                  </div>
+                  </div> */}
                   {/* </div> */}
+
+
                 </div>
               </div>
             </div>
 
+            <div class="booking-table-new">
+              <table class="table-condensed table-striped fixed_header">
+                <thead class="BI_tablehead">
+                  <tr>
+                    <th className="table-head-booking table-heading-first">Driver NAME</th>
+                    <th className="table-head-booking">Vehicle Name</th>
+                    <th className="table-head-booking">Vehicle NO</th>
+                    <th className="table-head-booking">Travels Name</th>
+                    {/* <th className="table-head-booking">HIRE TYPES</th> */}
+                    {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
+                  </tr>
+                </thead>
+                <tbody class="BI_tablebody Scroll-Style">
+                  {rowdriver?.length === 0 ? (
+                    <tr>
+                      <td colSpan={6}>No data available.</td>
+                    </tr>
+                  ) : (
+                    rowdriver?.map((row) => (
+                      <tr
+                        id="update-row"
+                        key={row.id}
+                        onClick={() => handleRowClickdriver(row)}
+                      >
+                        <td>{row.driverName}</td>
+                        <td>{row.vehType}</td>
+                        <td>{row.vehRegNo}</td>
+                        <td>{row.travelsname}</td>
+                        {/* <td>{row.hireTypes}</td> */}
+                        {/* <td>{row.active}</td> */}
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <Dialog open={popupOpen} onClose={handlePopupClose}>
@@ -2793,7 +2835,7 @@ const Booking = ({ stationName, customerData }) => {
             </Button>
           </DialogActions>
         </Dialog>
-        <div className="alert-popup-main">
+        {/* <div className="alert-popup-main">
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
@@ -2836,7 +2878,9 @@ const Booking = ({ stationName, customerData }) => {
               <p>{warningMessage}</p>
             </div>
           }
-        </div>
+        </div> */}
+
+        <AlertPopup/>
         {/* <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">

@@ -108,9 +108,13 @@ const DigitalSignature = () => {
     const now = new Date();
     const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
     const formattedTime = datefunsdata(now, 'HH:mm:ss');
+    const formatteddate=datefunsdata(now,"yyyy-MM-dd")
+    const formattedtimes=datefunsdata(now,"HH:mm")
     return {
       dateTime: formattedDateTime,
-      time: formattedTime
+      time: formattedTime,
+      dates:formatteddate,
+      timesdata:formattedtimes
     };
   };
 
@@ -120,11 +124,14 @@ const DigitalSignature = () => {
     const datadate=Date.now().toString();
     const tripId = decryptdata(tripIddata)
     const uniquenodata = decryptunique(uniqueno)
-    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const { dateTime, time ,dates,timesdata} = getCurrentDateTimeFormatted();
     const signtauretimes={
         status:status,
         datesignature:dateTime,
-        signtime:time            }
+        signtime:time,          
+        updateclosedate:dates,
+        updateclosetime:timesdata
+       }
       const signaturedata={
         dataurlsign:dataUrl
       }

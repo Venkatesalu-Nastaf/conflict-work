@@ -175,7 +175,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                 parkingamount += parseInt(li.parking || 0)
                 permitamount += parseInt(li.permit || 0)
                 exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
-                gstamount = parseInt(li.gstTax)
+                gstamount = parseInt(li.gstTax || 0)
                 return null
             })
             setTotalAmount(totalamount)
@@ -200,10 +200,10 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             setGst(gstno)
         }
     }, [apiUrl, customeraddress])
-
+    const calgst = gstAmount/2;
     const fullAmount = parseInt(totalAmount)
-    const cgst = fullAmount * gstAmount / 100
-    const sgst = fullAmount * gstAmount / 100
+    const cgst = fullAmount * calgst / 100
+    const sgst = fullAmount * calgst / 100
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
     // const parkpermit = park + permitcharge
@@ -319,8 +319,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                 <View style={styles.lastsectiontxt}>
                                     <Text style={styles.text2}>SUB TOTAL : </Text>
-                                    <Text style={styles.text2} >CGST {gstAmount} on {fullAmount} :</Text>
-                                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount} :</Text>
+                                    <Text style={styles.text2} >CGST {calgst}% on {fullAmount} :</Text>
+                                    <Text style={styles.text2}>SGST {calgst}% on {fullAmount} :</Text>
                                     <Text style={styles.text2}>Net Payable : </Text>
                                 </View>
 

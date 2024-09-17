@@ -78,6 +78,7 @@ const useBooking = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [reporttime, setreporttime] = useState("");
+  const [drivername, setDrivername] = useState([]);
   const [starttime, setStartTime] = useState("");
   // const [bookingtime, setBookingTime] = useState("");
   const location = useLocation();
@@ -412,6 +413,24 @@ const useBooking = () => {
     }
 
   }
+
+  useEffect(() => {
+    const fetchOrganizationnames = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/drivernamevechicleinfo`);
+        const data = response.data
+        const names = data.map(res => res.drivername)
+
+        setDrivername(names)
+
+
+      }
+      catch (error) {
+        console.log(error, "error");
+      }
+    };
+    fetchOrganizationnames()
+  }, [apiUrl])
 
 
   const handlePdfDownload = () => {
@@ -759,6 +778,28 @@ const useBooking = () => {
     fetchcustomerData()
   }, [custmorName, apiUrl])
 
+
+  const handleDriverChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+
+    if (name === "driverName") {
+      const selectedOrder = drivername?.find(option => option?.label === value?.label); // Check driver name
+
+      if (selectedOrder) {
+        setBook(prevState => ({
+          ...prevState,
+          driverName: value?.label,
+          mobileNo: selectedOrder.mobileNo, // Set mobileNo from the drivername object
+        }));
+
+        setSelectedCustomerData(prevState => ({
+          ...prevState,
+          driverName: value?.label,
+          mobileNo: selectedOrder.mobileNo, // Set mobileNo from the drivername object
+        }));
+      }
+    }
+  };
 
 
 
@@ -1902,6 +1943,7 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     dialogOpen,
     handleCloseDialog,
     allFile,
+    handleDriverChange,
     handleButtonClick,
     isEditMode,
     handleEdit,
@@ -1912,6 +1954,8 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     setErrorMessage,
     setError,
     handleenterSearch,
+    drivername,
+    setDrivername,
     edit,
     setEdit,
     reporttime,

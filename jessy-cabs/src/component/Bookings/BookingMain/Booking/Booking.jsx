@@ -68,6 +68,7 @@ import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
@@ -158,6 +159,8 @@ const Booking = ({ stationName, customerData }) => {
     setFormData,
     setStartTime,
     handleChangeFile,
+    handleDriverChange, 
+    drivername,
     sendEmail,
     setSendEmail,
     lastBookingNo,
@@ -2654,7 +2657,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-            <div className="input">
+            {/* <div className="input">
               <div className="icone">
                 <NoCrashIcon color="action" />
               </div>
@@ -2675,6 +2678,30 @@ const Booking = ({ stationName, customerData }) => {
                 // variant="standard"
                 margin="normal"
                 size="small"
+              />
+            </div> */}
+            <div className="input">
+              <div className="icone">
+                <AirlineSeatReclineExtraIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="driverName"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                onKeyDown={handleKeyEnterdriver}
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={selectedCustomerData?.driverName || book.selectedCustomerData || ""}
+                options={drivername?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) => option.label || selectedCustomerData?.driverName || ''}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="Driver Name" name="driverName" inputRef={params.inputRef} />
+                  )
+                }
+                }
               />
             </div>
 

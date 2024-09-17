@@ -718,7 +718,6 @@ const useTransferdataentry = () => {
         const ActualAmount = parseInt(totalAmount) - totalPrice
         const Trips = rows.length - selectedRow.length;
         const selectId = selectedRow?.map(row => row.id)
-        console.log(ActualAmount, totalPrice, Trips, groupId, latestTripNo, 'update');
 
         const TransferUpdate = {
             Trip_id: tripid,
@@ -729,7 +728,8 @@ const useTransferdataentry = () => {
         try {
             const resultresponse = await axios.put(`${apiUrl}/updateList`, TransferUpdate)
             const updatedRows = rows.filter(row => !selectId.includes(row.id));
-
+            setSuccess(true)
+            setSuccessMessage("Successfully Removed")
             setRows(updatedRows);
             setSelectedRow([]);
             const responsedata = resultresponse.data
@@ -767,7 +767,6 @@ const useTransferdataentry = () => {
         const updatedRows = rows.filter(row => !selectId.includes(row.id));
         const totalPrice = selectedRow.reduce((sum, li) => sum + li.totalcalcAmount, 0);
         const ActualAmount = parseInt(totalAmount) - totalPrice
-        console.log(ActualAmount, totalPrice, tripid, 'update');
 
         if (rowSelectionModel.length === 0) {
             setError(true);
@@ -939,7 +938,6 @@ const useTransferdataentry = () => {
     };
 
     const handleAddGroup = async () => {
-        console.log(groupId, 'grouptrip88');
 
         if (rowSelectionModel.length === 0) {
             setError(true)
@@ -977,7 +975,6 @@ const useTransferdataentry = () => {
                     Amount: tripAmount,
 
                 }
-                console.log(transferlist, rows, rowSelectionModel, 'transferlist');
                 setMisGroupTripId(rowSelectionModel)
                 await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
                 setSuccess(true);
@@ -1000,9 +997,9 @@ const useTransferdataentry = () => {
                     throw new Error("Rows data is empty");
                 }
 
-                const fromdate = rows[0]?.startdate;
+                const fromdate2 = rows[0]?.startdate;
                 const enddate = rows[rows.length - 1]?.startdate;
-                const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+                const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');
                 const EndDate = dayjs(enddate).format('YYYY-MM-DD');
 
                 const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
@@ -1012,27 +1009,46 @@ const useTransferdataentry = () => {
                 const Trips = rowSelectionModel.length;
                 const billstatus = "notbilled";
                 const grouptripid = parseInt(groupId)
-                console.log(grouptripid, 'grouptrip77');
 
+
+                const response = await axios.get(`${apiUrl}/getParticularTransferListDetails`, {
+                    params: {
+                        groupId: grouptripid
+                    }
+                });
+
+                const amount = response.data[0].Amount;
+                const trips = response.data[0].Trips;
+                const tripid = response.data[0].Trip_id;
+                const fullTotalAmount = parseInt(amount) + parseInt(tripAmount)
+                const TotalTrips = parseInt(trips) + parseInt(Trips)
+                // Ensure rowSelectionModel is an array of strings
+                const rowSelectionModelAsStrings = rowSelectionModel.map(String); // Converts [1358] to ["1358"]
+
+                // Combine rowSelectionModelAsStrings and tripid into a new array
+                const combinedArray = [...rowSelectionModelAsStrings, tripid]; // Results in ["1358", "1358"]
+                const todate = toDate.format('YYYY-MM-DD')
+                const totalamount = fullTotalAmount.toString()
+                const tripscount = TotalTrips.toString()
                 const transferlist = {
-                    Status: billstatus,
                     Billdate: billDate,
                     Organization_name: OrganizationName,
-                    Trip_id: rowSelectionModel,
+                    Trip_id: combinedArray,
                     FromDate: fromDate,
-                    EndDate: EndDate,
-                    Trips: Trips,
-                    Amount: tripAmount,
+                    EndDate: todate,
+                    Trips: tripscount,
+                    Amount: totalamount,
                     grouptripid: grouptripid
-
                 }
-                console.log(transferlist, 'grouptripid88');
+                const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
+                setSuccess(true)
+                setSuccessMessage("Successfully Added")
 
-                console.log(transferlist, rows, rowSelectionModel, 'transferlist');
-                setMisGroupTripId(rowSelectionModel)
-                await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
-                setSuccess(true);
-                setSuccessMessage("Successfully added");
+                // console.log(transferlist, rows, rowSelectionModel, 'transferlist');
+                // setMisGroupTripId(rowSelectionModel)
+                // await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
+                // setSuccess(true);
+                // setSuccessMessage("Successfully added");
                 // setRows([])
                 // const billingPageUrl = `/home/billing/transfer`
                 // window.location.href = billingPageUrl
@@ -1045,7 +1061,6 @@ const useTransferdataentry = () => {
             }
         }
     }
-    console.log(misGroupTripId[0], typeof (misGroupTripId[0]), 'transferlist11');
     useEffect(() => {
         const fetchdata = async () => {
             try {
@@ -1086,14 +1101,21 @@ const useTransferdataentry = () => {
                     }
                 });
 
-                console.log(response.data, 'response');
-
                 if (response.data && response.data.length > 0) {
-                    // Extract Trip_id from the first API response
                     const transferTripId = response.data[0].Trip_id;
-                    console.log(transferTripId, 'tripid');
+                    const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
+                    const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
 
-                    // Second API call to get tripsheet details using Trip_id
+                    setFromDate(fromDate);
+                    setToDate(toDate);
+
+                    console.log(transferTripId, 'tripid');
+                    setToDate(dayjs(response.data[0].EndDate).format('YYYY-MM-DD'));
+                    setFromDate(response.data[0].FromDate)
+                    setCustomer(response.data[0].Organization_name)
+                    setInvoiceno(response.data[0].Invoice_no)
+                    setBillingdate(response.data[0].Billdate)
+
                     const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
                         params: {
                             transferTripId: transferTripId

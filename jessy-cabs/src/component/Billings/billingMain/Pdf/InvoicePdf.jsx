@@ -29,7 +29,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
     const startDate = dayjs(book.startdate);
     const billingdate = startDate.format('YYYY-MM-DD');
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
-    const gstAmount = customerData?.gstTax
+    const gstAmount = customerData?.gstTax / 2
     const cgst = totalAmount * gstAmount / 100 || 0;
     const sgst = totalAmount * gstAmount / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst || 0;
@@ -117,7 +117,7 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                                         <td className="tabledata" style={{ textAlign: '' }}>{billingdate}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.tripid}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>
-                                            {book.orderedby} <br />
+                                            {book.guestname} <br />
                                             {book.vehRegNo} /
                                             {book.duty} /
                                             T Kms: {book.totalkm1} <br />
@@ -136,8 +136,8 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                         </div>
                         <div className="total-div">
                             <div >
-                                <h4>CGST {customerData.gstTax}% on {book.totalcalcAmount} :</h4>
-                                <h4>SGST {customerData.gstTax}% on {book.totalcalcAmount} :</h4>
+                                <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>Total Amount :</h4>
                             </div>
                             <div className="amount-div">

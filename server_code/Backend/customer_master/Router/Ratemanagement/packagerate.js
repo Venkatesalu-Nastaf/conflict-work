@@ -91,32 +91,61 @@ router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, 
     });
 });
 
+// router.get('/ratemanagement-show', (req, res) => {
+//     const { rateType, orgName, vehicleType,stations } = req.query
+//     console.log("data", rateType, orgName, vehicleType)
+//     let sql = 'SELECT * FROM ratemanagement where 1=1'
+//     let params = []
+
+//     if (rateType) {
+//         sql += ' and ratetype=?'
+//         params.push(rateType)
+//     }
+
+//     if (orgName) {
+//         sql += ' and OrganizationName=?'
+//         params.push(orgName)
+//     }
+
+//     if (vehicleType) {
+//         sql += ' and vehicleName=?'
+//         params.push(vehicleType)
+//     }
+//     if (stations) {
+//         sql += ' and stations=?'
+//         params.push(stations)
+//     }
+
 router.get('/ratemanagement-show', (req, res) => {
-    const { rateType, orgName, vehicleType,stations } = req.query
-    console.log("data", rateType, orgName, vehicleType)
-    let sql = 'SELECT * FROM ratemanagement where 1=1'
-    let params = []
+    const { rateType, orgName, vehicleType, stations } = req.query;
+    console.log("data", rateType, orgName, vehicleType);
+
+    let sql = 'SELECT * FROM ratemanagement WHERE 1=1';
+    let params = [];
 
     if (rateType) {
-        sql += ' and ratetype=?'
-        params.push(rateType)
+        sql += ' AND ratetype=?';
+        params.push(rateType);
     }
 
     if (orgName) {
-        sql += ' and OrganizationName=?'
-        params.push(orgName)
+        sql += ' AND OrganizationName=?';
+        params.push(orgName);
     }
 
     if (vehicleType) {
-        sql += ' and vehicleName=?'
-        params.push(vehicleType)
-    }
-    if (stations) {
-        sql += ' and stations=?'
-        params.push(stations)
+        sql += ' AND vehicleName=?';
+        params.push(vehicleType);
     }
 
-
+    if (stations === 'All') {
+    
+        sql += ''; 
+    } else if (stations) {
+        // If specific stations are provided, filter by those stations
+        sql += ' AND stations=?';
+        params.push(stations);
+    }
     db.query(sql, params, (err, results) => {
         if (err) {
             console.log("error", err)

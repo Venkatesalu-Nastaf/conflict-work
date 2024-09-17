@@ -562,7 +562,8 @@ const useTransferreport = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const InvoiceNo = event.target.value;
-
+      console.log(InvoiceNo,'Invoice');
+      
       try {
         const response = await axios.get(`${apiUrl}/getParticularInvoiceDetails`, {
           params: {

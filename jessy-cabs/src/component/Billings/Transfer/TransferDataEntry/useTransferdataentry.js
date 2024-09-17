@@ -74,6 +74,8 @@ const useTransferdataentry = () => {
     const [latestTripNo, setLatestTripNo] = useState([])
     const [latestGroupNo, setLatestGroupNo] = useState(0)
     const [lengthCheck, setLengthCheck] = useState()
+    const [misGroupTripId, setMisGroupTripId] = useState([])
+    const [removeTransferRow, setRemoveTransferRow] = useState(false)
     // const [formData, setFormData] = useState({})
     const { billingPage, setBillingPage } = PdfData()
 
@@ -696,7 +698,9 @@ const useTransferdataentry = () => {
                 const trip = response?.map(li => li.Trip_id);
                 const tripString = trip.join(','); // Join the trip IDs with commas
                 const a = tripString.split(','); // Split the string into an array
-                const b = a.map((li) => parseInt(li))
+                const b = a.map((li) => parseInt(li)) || ""
+                console.log(b, 'update34');
+
                 setLatestTripNo(b)
                 const groupid = response?.map(li => li.Grouptrip_id)[0];
                 const groupTripid = parseInt(groupid)
@@ -705,7 +709,49 @@ const useTransferdataentry = () => {
             }
         }
         fetchData()
-    }, [apiUrl, groupId])
+    }, [apiUrl, groupId, removeTransferRow])
+    console.log(selectedRow, 'update22');
+
+    const handleRemove = async () => {
+        const tripid = selectedRow?.map(row => row.tripid.toString());
+        const totalPrice = selectedRow.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+        const ActualAmount = parseInt(totalAmount) - totalPrice
+        const Trips = rows.length - selectedRow.length;
+        const selectId = selectedRow?.map(row => row.id)
+        console.log(ActualAmount, totalPrice, Trips, groupId, latestTripNo, 'update');
+
+        const TransferUpdate = {
+            Trip_id: tripid,
+            Amount: ActualAmount,
+            Trips: Trips,
+
+        }
+        try {
+            const resultresponse = await axios.put(`${apiUrl}/updateList`, TransferUpdate)
+            const updatedRows = rows.filter(row => !selectId.includes(row.id));
+
+            setRows(updatedRows);
+            setSelectedRow([]);
+            const responsedata = resultresponse.data
+            if (responsedata.affectedRows > 0) {
+                const updatedRows = rows.filter(row => !selectId.includes(row.id));
+                setRemoveTransferRow(!removeTransferRow)
+
+                setRows(updatedRows);
+                setSelectedRow([]);
+                console.log(latestTripNo, 'update');
+
+
+            }
+
+        }
+        catch (err) {
+            console.log(err, 'error');
+        }
+
+    }
+    console.log(latestTripNo, 'update');
+
 
 
     const handleBillRemove = async () => {
@@ -713,12 +759,15 @@ const useTransferdataentry = () => {
         // const tripid = selectedRow?.map((li)=>li.tripid.toString())
         const selectId = selectedRow?.map(row => row.id)
         const Amount = selectedRow?.map(li => li.netamount.split(',')).flat();
-        const trips = transferId.length - tripid.length
+        const trips = transferId.length - tripid?.length
         const Trips = trips.toString()
         const totalAmount = Amount.reduce((acc, curr) => acc + parseFloat(curr), 0);
         const amount = totalValue - totalAmount
         const TotalAmount = amount.toString()
         const updatedRows = rows.filter(row => !selectId.includes(row.id));
+        const totalPrice = selectedRow.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+        const ActualAmount = parseInt(totalAmount) - totalPrice
+        console.log(ActualAmount, totalPrice, tripid, 'update');
 
         if (rowSelectionModel.length === 0) {
             setError(true);
@@ -889,6 +938,186 @@ const useTransferdataentry = () => {
 
     };
 
+    const handleAddGroup = async () => {
+        console.log(groupId, 'grouptrip88');
+
+        if (rowSelectionModel.length === 0) {
+            setError(true)
+            setErrorMessage("Please select the Row")
+            return
+        }
+        if (groupId === "") {
+
+            try {
+                if (!rows || rows.length === 0) {
+                    throw new Error("Rows data is empty");
+                }
+
+                const fromdate = rows[0]?.startdate;
+                const enddate = rows[rows.length - 1]?.startdate;
+                const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+                const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+                const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+                const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+                const OrganizationName = selectedCustomerDatas.customer || customer;
+                const Trips = rowSelectionModel.length;
+                const billstatus = "notbilled";
+
+
+                const transferlist = {
+                    Status: billstatus,
+                    Billdate: billDate,
+                    Organization_name: OrganizationName,
+                    Trip_id: rowSelectionModel,
+                    FromDate: fromDate,
+                    EndDate: EndDate,
+                    Trips: Trips,
+                    Amount: tripAmount,
+
+                }
+                console.log(transferlist, rows, rowSelectionModel, 'transferlist');
+                setMisGroupTripId(rowSelectionModel)
+                await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+                setSuccess(true);
+                setSuccessMessage("Successfully added");
+                // setRows([])
+                // const billingPageUrl = `/home/billing/transfer`
+                // window.location.href = billingPageUrl
+
+
+
+            } catch (error) {
+                console.error("Error occurred:", error);
+                setErrorMessage("Failed to add organization: " + error.message);
+            }
+        }
+        else if (groupId !== "") {
+            // updateTransferListTrip'
+            try {
+                if (!rows || rows.length === 0) {
+                    throw new Error("Rows data is empty");
+                }
+
+                const fromdate = rows[0]?.startdate;
+                const enddate = rows[rows.length - 1]?.startdate;
+                const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+                const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+                const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+                const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+                const OrganizationName = selectedCustomerDatas.customer || customer;
+                const Trips = rowSelectionModel.length;
+                const billstatus = "notbilled";
+                const grouptripid = parseInt(groupId)
+                console.log(grouptripid, 'grouptrip77');
+
+                const transferlist = {
+                    Status: billstatus,
+                    Billdate: billDate,
+                    Organization_name: OrganizationName,
+                    Trip_id: rowSelectionModel,
+                    FromDate: fromDate,
+                    EndDate: EndDate,
+                    Trips: Trips,
+                    Amount: tripAmount,
+                    grouptripid: grouptripid
+
+                }
+                console.log(transferlist, 'grouptripid88');
+
+                console.log(transferlist, rows, rowSelectionModel, 'transferlist');
+                setMisGroupTripId(rowSelectionModel)
+                await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
+                setSuccess(true);
+                setSuccessMessage("Successfully added");
+                // setRows([])
+                // const billingPageUrl = `/home/billing/transfer`
+                // window.location.href = billingPageUrl
+
+
+
+            } catch (error) {
+                console.error("Error occurred:", error);
+                setErrorMessage("Failed to add organization: " + error.message);
+            }
+        }
+    }
+    console.log(misGroupTripId[0], typeof (misGroupTripId[0]), 'transferlist11');
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                // Assuming `tripid` is the value you want to pass
+                const tripid = misGroupTripId;  // Use your actual `tripid` or state variable
+                console.log(tripid, 'transferlist33');
+
+                // Pass tripid as query parameter in the GET request
+                const response = await axios.get(`${apiUrl}/getparticulartransfer_list`, {
+                    params: {
+                        tripid: tripid,  // Send `tripid` as query param
+                    },
+                });
+                const data = response.data;
+                console.log(data[0].Grouptrip_id, data, 'transferlist22');
+                setGroupId(data[0].Grouptrip_id)
+
+            } catch (error) {
+                // Handle error
+                console.error(error);
+            }
+        };
+
+        fetchdata();
+    }, [apiUrl, misGroupTripId]);
+
+    const handleKeyDown = async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const GroupTripId = event.target.value;
+            console.log(GroupTripId, 'groupid');
+
+            try {
+                // First API call to get Trip_id from GroupTripId
+                const response = await axios.get(`${apiUrl}/getTripIdFromTransferList`, {
+                    params: {
+                        groupid: GroupTripId
+                    }
+                });
+
+                console.log(response.data, 'response');
+
+                if (response.data && response.data.length > 0) {
+                    // Extract Trip_id from the first API response
+                    const transferTripId = response.data[0].Trip_id;
+                    console.log(transferTripId, 'tripid');
+
+                    // Second API call to get tripsheet details using Trip_id
+                    const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
+                        params: {
+                            transferTripId: transferTripId
+                        }
+                    });
+                    const data = tripsheetResponse.data;
+                    if (data.length > 0) {
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
+                    }
+                    console.log(tripsheetResponse.data, 'tripsheet details');
+                } else {
+                    console.log('No Trip_id found for the given GroupTripId');
+                }
+            } catch (error) {
+                console.log(error, 'error');
+            }
+        }
+    };
+
+
     // const handleShow = useCallback(async () => {
 
     //     try {
@@ -971,7 +1200,10 @@ const useTransferdataentry = () => {
         handleRowSelection,
         handlechnageinvoice,
         groupId,
-        setGroupId
+        setGroupId,
+        handleAddGroup,
+        handleKeyDown,
+        handleRemove
     };
 };
 

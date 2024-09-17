@@ -52,8 +52,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 address = li.address1
                 customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
-                totalcgst += parseInt(li.totalcalcAmount) * gst / 100
-                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * gst / 100 + parseInt(li.totalcalcAmount) * gst / 100
+                totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
+                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100
             })
         }
 
@@ -168,10 +168,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <td className="tdata">{li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
                                     <td className="tdata">{li.totalcalcAmount}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
+                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
                                     <td className="tdata">
-                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * gst / 100 + parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}
+                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}
                                     </td>
                                 </tr>
                             ))}

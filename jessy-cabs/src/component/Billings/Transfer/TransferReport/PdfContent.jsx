@@ -321,17 +321,19 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
+console.log(gstAmount,gstAmount/2,'gst');
+const calgst = gstAmount/2;
 
-  const cgst = Math.floor(fullAmount * gstAmount / 100);
-  const sgst = Math.floor(fullAmount * gstAmount / 100);
+  const cgst = Math.floor(fullAmount * calgst / 100);
+  const sgst = Math.floor(fullAmount * calgst / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
 
   const parkpermit = park + permitcharge + tollAmount
-  const FullAmount = fullAmount + gstAmount + gstAmount + parkpermit
+  const FullAmount = fullAmount + sgst + cgst + parkpermit
   const formattedFullAmount = FullAmount;
-
+  
   const rupeestext = numWords(parseInt(formattedFullAmount));
   return (
     <>
@@ -441,7 +443,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
-                            <View style={styles.tablecellparticular}><Text>{item.orderedby} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
+                            <View style={styles.tablecellparticular}><Text>{item.guestname} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}><Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}</Text></View>
                             <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
@@ -474,8 +476,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                   <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
-                    <Text style={styles.text2}>CGST {gstAmount} on {fullAmount}:</Text>
-                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount}:</Text>
+                    <Text style={styles.text2}>CGST {calgst}% on {fullAmount}:</Text>
+                    <Text style={styles.text2}>SGST {calgst}% on {fullAmount}:</Text>
                     <Text style={styles.text2}>Parking & Permit:</Text>
                     <Text style={styles.text2}>Total Amount:</Text>
                   </View>

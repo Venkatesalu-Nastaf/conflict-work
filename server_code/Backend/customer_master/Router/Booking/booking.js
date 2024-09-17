@@ -69,7 +69,16 @@ router.get('/booking/:bookingno', (req, res) => {
     });
 });
 
+router.get('/drivernamevechicleinfo', (req, res) => {
+    const sql = 'select * from drivercreation'
+    db.query(sql, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
 
+        return res.status(200).json(result);
+    })
+})
 
 router.get('/last-booking-no', (req, res) => {
     db.query('SELECT * FROM booking ORDER BY bookingno DESC LIMIT 1', (err, result) => {

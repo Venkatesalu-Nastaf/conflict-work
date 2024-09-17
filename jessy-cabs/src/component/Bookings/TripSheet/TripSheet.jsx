@@ -1611,7 +1611,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
                     {/* {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
 
-                    <input
+                    {/* <input
                       type="time"
                       id="starttime"
                       name='starttime'
@@ -1620,6 +1620,31 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         const rTime = event.target.value;
                         if ((reportTimeVar && rTime <= reportTimeVar)) {
+                          return;
+                        } else {
+
+                          setBook({ ...book, starttime: event.target.value });
+                          setStartTime(event.target.value);
+                          setFormData({ ...formData, starttime: event.target.value });
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                        }
+                      }}
+                        
+                    /> */}
+                    <input
+                      type="time"
+                      id="starttime"
+                      name='starttime'
+                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
+                      onChange={(event) => {
+
+                        const rTime = event.target.value;
+
+                       // console.log("Current reportTimeVar:", reportTimeVar);
+                       // console.log("Current book:", book);
+                       // console.log("Current formData:", formData);
+                       // console.log("Current selectedCustomerData:", selectedCustomerData);
+                        if ((reportTimeVar && rTime >= reportTimeVar)) {
                           return;
                         } else {
 

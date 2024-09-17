@@ -72,7 +72,10 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     formDataTransfer,
     handlechnageinvoice,
     groupId,
-    setGroupId
+    setGroupId,
+    handleAddGroup,
+    handleKeyDown,
+    handleRemove
     // ... (other state variables and functions)
   } = useTransferdataentry();
 
@@ -106,6 +109,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       label="Group Trip ID"
                       name="tripid"
                       value={groupId || ''}
+                      onKeyDown={handleKeyDown}
                       onChange={(e) => setGroupId(e.target.value)}
                       autoComplete='off'
                     />
@@ -262,6 +266,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   <div className="input">
                     <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
+                  <div className="input">
+                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -288,7 +295,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
             </div>
             <div className="total-inputs">
-              <Button variant="outlined" onClick={handleBillRemove} >Remove Selected</Button>
+              <Button variant="outlined" onClick={handleRemove} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>

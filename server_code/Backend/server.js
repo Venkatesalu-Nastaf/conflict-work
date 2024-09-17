@@ -830,15 +830,24 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
   const {
     status,
     datesignature,
-    signtime } = req.body;
-  console.log(tripid, status, datesignature, signtime, "jjjjjjj")
+    signtime,
+    updateclosedate,
+    updateclosetime } = req.body;
+  console.log(tripid, status, datesignature, signtime,updateclosedate,updateclosetime, "jjjjjjj")
+   const sql2=" UPDATE tripsheet set closedate=? , closetime = ? where  tripid = ?"
 
   db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
-    console.log(results)
-    return res.status(200).json("data insert successfully")
+    db.query(sql2,[updateclosedate,updateclosetime,tripid],(err,results1)=>{
+      if (err) {
+        return res.status(400).json(err)
+      }
+      console.log(results)
+      return res.status(200).json("data insert successfully")
+    })
+    
   })
 })
 

@@ -1544,13 +1544,32 @@ router.get(`/ge-tVehicleName`, (req, res) => {
 
 
 // to fetch cancel tripsheet data
+// router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
+//     const vehicleNo = req.params.VehicleNo
+//     const status = 'Transfer_Closed';
+//     // sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
+
+//     sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
+//     db.query(sql, [vehicleNo, status], (err, result) => {
+//         if (err) {
+//             console.log("err", err)
+//             res.json({ message: "error fetching data", success: false })
+//         }
+
+//         if (result) {
+//             res.status(200).json(result)
+//         }
+//     })
+
+// })
 router.get(`/get-CancelTripData/:VehicleNo`, (req, res) => {
     const vehicleNo = req.params.VehicleNo
-    const status = 'Transfer_Closed';
+    console.log(vehicleNo)
+    // const status = 'Transfer_Closed';
     // sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
 
-    sql = `select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')`
-    db.query(sql, [vehicleNo, status], (err, result) => {
+    sql = `select * from tripsheet where vehRegNo=? and status != "Cancelled"`
+    db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
             res.json({ message: "error fetching data", success: false })
@@ -1582,6 +1601,144 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
     })
 
 })
+
+
+
+// Route handler
+// router.get('/trip-data/:vehregno', async (req, res) => {
+//   const vehregno = req.params.vehregno;
+
+//   const sql1=`
+//       SELECT tripid AS shedInDateTripid, shedInDate, shedintime 
+//       FROM tripsheet 
+//       WHERE vehregno = ? 
+//         AND shedInDate IS NOT NULL 
+//         AND shedInDate != '' 
+//       ORDER BY shedInDate DESC, tripid DESC 
+//       LIMIT 1
+//     `
+// const sq12=`
+//       SELECT tripid AS closeDateTripid, closedate, closetime 
+//       FROM tripsheet 
+//       WHERE vehregno = ? 
+//         AND closedate IS NOT NULL 
+//         AND closedate != '' 
+//       ORDER BY closedate DESC, tripid DESC 
+//       LIMIT 1
+//     `
+
+//     // Fetch the latest closeda
+//     db.query(sql1,[vehregno],(err,results1)=>{
+//         if(err){
+//             return res.status(404).json({ message: 'No data found for the given vehicle registration number.' });
+//         }
+//         db.query(sql1,[vehregno],(err,results2)=>{
+//             if(err){
+//                 console.log(err)
+//                 return res.status(404).json({ message: 'No data found for the given vehicle registration number.' });
+//             }
+//             if(results1.length === 0 && results2.length === 0){
+//                 return res.json([]);
+//             }
+//             else if(results2.length > 0 && results1.length === 0){
+//                 return res.json(results2);
+//             }
+//             else if(results1.length > 0 && results2.length === 0){
+//                 return res.json(results2)
+//             }
+//             else if(results1.length > 0 && results2.length > 0){
+//                 if(results1[0].shedInDateTripid === results2[0].closeDateTripid){
+//                     return res.json(results1)
+//                 }
+//                   if(results1[0].shedInDate > results2[0].closedate){
+//                     return res.json(results1)
+//                   }
+//                   if(results2[0].closedate > results1[0].shedInDate){
+//                     return res.json(results2)
+//                   }
+//             }
+
+    
+//         })
+
+//     })
+    
+   
+
+  
+// });
+
+router.get('/trip-data/:vehregno', async (req, res) => {
+    const vehregno = req.params.vehregno;
+    console.log(vehregno,"veh")
+  
+    const sql1 = `
+      SELECT tripid AS shedInDateTripid, shedInDate, shedintime 
+      FROM tripsheet 
+      WHERE vehregno = ? 
+        AND shedInDate IS NOT NULL 
+        AND shedInDate != '' 
+      ORDER BY shedInDate DESC, tripid DESC 
+      LIMIT 1
+    `;
+  
+    const sql2 = `
+      SELECT tripid AS closeDateTripid, closedate, closetime 
+      FROM tripsheet 
+      WHERE vehregno = ? 
+        AND closedate IS NOT NULL 
+        AND closedate != '' 
+      ORDER BY closedate DESC, tripid DESC 
+      LIMIT 1
+    `;
+  
+    try {
+      // Execute both queries in parallel
+      const [results1, results2] = await Promise.all([
+        new Promise((resolve, reject) => db.query(sql1, [vehregno], (err, results) => err ? reject(err) : resolve(results))),
+        new Promise((resolve, reject) => db.query(sql2, [vehregno], (err, results) => err ? reject(err) : resolve(results)))
+      ]);
+      console.log(results1,"shed")
+      console.log(results2,"close")
+  
+      // If no results are found
+      if (results1.length === 0 && results2.length === 0) {
+        return res.json([]);
+      }
+  
+      // If only results2 has data (closeDate)
+      if (results1.length === 0 && results2.length > 0) {
+        return res.json(results2);
+      }
+  
+      // If only results1 has data (shedInDate)
+      if (results1.length > 0 && results2.length === 0) {
+        return res.json(results1);
+      }
+  
+      // If both results1 and results2 have data
+      if (results1.length > 0 && results2.length > 0) {
+        // Check if the trip IDs are the same
+        if (results1[0].shedInDateTripid === results2[0].closeDateTripid) {
+          return res.json(results1);  // You can choose either, they are the same trip
+        }
+  
+        // Compare dates to return the more recent one
+        if (new Date(results1[0].shedInDate) > new Date(results2[0].closedate)) {
+          return res.json(results1);
+        } else {
+          return res.json(results2);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error fetching trip data.' });
+    }
+  });
+  
+
+
+
 router.get('/getvehciledateandtimeconflict/:VehicleNo', (req, res) => {
     const vehicleNo = req.params.VehicleNo
     console.log(vehicleNo, "nooo")

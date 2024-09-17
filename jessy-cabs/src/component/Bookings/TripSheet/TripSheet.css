@@ -225,7 +225,7 @@
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid #ccc;
-  height: 250px;
+  height: 260px;
   /* overflow: scroll; */
 }
 
@@ -249,6 +249,7 @@
 }
 
 @media screen and (min-width: 1557px) {
+
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
@@ -660,17 +661,18 @@
   padding-top: 15px;
 }
 
-.bill-section{
+.bill-section {
   /* width: 100%; */
   zoom: 70%;
 }
-.bill-topics{
+
+.bill-topics {
   font-size: 20px;
   font-weight: 700;
 }
 
 .bill-section-second,
-.bill-section-third{
+.bill-section-third {
   border-right: 1px solid #ccc;
   padding-right: 15px;
 }
@@ -681,4 +683,74 @@
 
 .tripsheet-division1 .input:hover {
   transform: translateY(-5px) scale(1.05);
+}
+
+.booking-table-new {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.table.table-condensed.table-striped {
+  margin-bottom: 0px;
+}
+
+.BI_tablehead {
+  /* background-color: #5e5e60; */
+  color: #fff;
+}
+
+.table-condensed>thead.BI_tablehead>tr>th {
+  padding: 20px 10px 20px 20px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 14px;
+  border: none;
+}
+
+/* .table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #f6f6f6;
+} */
+
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+  border-top: none;
+  border-bottom: 2px solid #fff;
+}
+
+.table-condensed>tbody.BI_tablebody>tr>td {
+  padding: 15px 10px 15px 20px;
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 14px;
+  color: #4d4d4f;
+}
+
+.fixed_header {
+  table-layout: fixed;
+  border-collapse: collapse;
+  /* border: 2px solid #ccc;
+  border-radius: 10px; */
+}
+
+.fixed_header tbody {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  min-height: 200px;
+  max-height: 200px;
+}
+
+.fixed_header thead tr {
+  display: block;
+}
+
+.fixed_header th,
+.fixed_header td {
+  padding: 5px;
+  text-align: left;
+  width: 200px;
 }

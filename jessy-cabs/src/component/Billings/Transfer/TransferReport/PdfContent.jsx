@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '130px',
+    gap: '0px 130px',
 
   },
   seconddivision: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     width: '200px'
   },
   gstno: {
-    fontSize: '13px',
+    fontSize: '11px',
     fontWeight: 'bold'
   },
   customername: {
@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   logo: {
-    height: 80,
-    width: 80
+    height: 60,
+    width: 60
   },
   headingsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 75
+    // height: 75
   },
   logodiv: {
     marginBottom: 10
@@ -321,19 +321,17 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
-console.log(gstAmount,gstAmount/2,'gst');
-const calgst = gstAmount/2;
 
-  const cgst = Math.floor(fullAmount * calgst / 100);
-  const sgst = Math.floor(fullAmount * calgst / 100);
+  const cgst = Math.floor(fullAmount * gstAmount / 100);
+  const sgst = Math.floor(fullAmount * gstAmount / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
 
   const parkpermit = park + permitcharge + tollAmount
-  const FullAmount = fullAmount + sgst + cgst + parkpermit
+  const FullAmount = fullAmount + gstAmount + gstAmount + parkpermit
   const formattedFullAmount = FullAmount;
-  
+
   const rupeestext = numWords(parseInt(formattedFullAmount));
   return (
     <>
@@ -348,9 +346,9 @@ const calgst = gstAmount/2;
                     <Text style={styles.text2}> No:8/7, 11th Street,Nandanam(Extn.)</Text>
                     <Text style={styles.text2}> Nadanam,Chennai-600 035</Text>
                     <Text style={styles.text2}> booking@jessycabs.in</Text> */}
-                    <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
-                    <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-                    <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
+                    <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+                    <Text style={styles.text2}>{organisationdetailfill[0].addressLine1}</Text>
+                    <Text style={styles.text2}>{organisationdetailfill[0].location}</Text>
                     <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
                   </View>
                   <View style={styles.logodiv}>
@@ -362,7 +360,7 @@ const calgst = gstAmount/2;
                 <View style={styles.gst}>
                   <View>
                     {/* <Text style={styles.text2}>Tel:044-24354247,Mob:9841505689 </Text> */}
-                    <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone},Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
+                    <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone}, Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
 
                   </View>
                   <View>
@@ -474,10 +472,10 @@ const calgst = gstAmount/2;
                 <View style={styles.grandtotal}>
 
 
-                  <View >
+                  {/* <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
-                    <Text style={styles.text2}>CGST {calgst}% on {fullAmount}:</Text>
-                    <Text style={styles.text2}>SGST {calgst}% on {fullAmount}:</Text>
+                    <Text style={styles.text2}>CGST {gstAmount} on {fullAmount}:</Text>
+                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount}:</Text>
                     <Text style={styles.text2}>Parking & Permit:</Text>
                     <Text style={styles.text2}>Total Amount:</Text>
                   </View>
@@ -488,8 +486,38 @@ const calgst = gstAmount/2;
                     <Text style={styles.text2}>{sgst}</Text>
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
+                  </View> */}
+
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                      <Text style={{ width: '100px', fontSize: '11px' }}>SUB TOTAL: </Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                      <Text style={{ width: '100px', fontSize: '11px' }}>CGST {gstAmount} on {fullAmount}:</Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                      <Text style={{ width: '100px', fontSize: '11px' }}>SGST {gstAmount} on {fullAmount}:</Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                      <Text style={{ width: '100px', fontSize: '11px' }}>Parking & Permit:</Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{parkpermit}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                      <Text style={{ width: '100px', fontSize: '11px' }}>Total Amount:</Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
+                    </View>
                   </View>
                 </View>
+
+
+
 
               </View>
 

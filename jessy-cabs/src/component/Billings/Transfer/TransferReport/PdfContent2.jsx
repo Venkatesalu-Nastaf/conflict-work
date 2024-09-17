@@ -11,9 +11,8 @@ const styles = StyleSheet.create({
     headingsection: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        gap: '170px',
-        padding: 5,
-
+        gap: '0px',
+        padding: 0,
     },
     heading: {
         border: '2px solid #000000',
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
     },
     clientext: {
         fontSize: '13px',
+        width: '100px'
 
     },
     clientsubtext: {
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     lastsectiontxt: {
     },
     lastsectionamount: {
+        textAlign: 'right'
     },
     lasttxt: {
         backgroundColor: 'red'
@@ -125,20 +126,21 @@ const styles = StyleSheet.create({
     lastFirstdiv: {
         width: '70%',
         flexDirection: 'column',
-        marginLeft: '10px'
+        marginLeft: '0px',
+        textAlign: 'left'
     },
     logo: {
-        height: 80,
-        width: 80,
+        height: 60,
+        width: 60,
     },
     gstno: {
-        fontSize: '15px',
+        fontSize: '11px',
         fontWeight: 'bold',
-        marginRight: '40px'
+        marginRight: '0px'
     },
     text2: {
-        fontSize: '13px',
-        padding: 5
+        fontSize: '11px',
+        paddingTop: 5,
     },
     text3: {
         fontSize: '12px',
@@ -147,8 +149,8 @@ const styles = StyleSheet.create({
     },
     textgst: {
         fontSize: '12px',
-        padding: 5,
-        borderBottom: '1px solid #000000'
+        // padding: 5,
+        borderBottom: '1px solid #000000',
     }
 })
 
@@ -175,7 +177,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                 parkingamount += parseInt(li.parking || 0)
                 permitamount += parseInt(li.permit || 0)
                 exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
-                gstamount = parseInt(li.gstTax || 0)
+                gstamount = parseInt(li.gstTax)
                 return null
             })
             setTotalAmount(totalamount)
@@ -200,8 +202,9 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             setGst(gstno)
         }
     }, [apiUrl, customeraddress])
-    const calgst = gstAmount/2;
+
     const fullAmount = parseInt(totalAmount)
+    const calgst = gstAmount/2;
     const cgst = fullAmount * calgst / 100
     const sgst = fullAmount * calgst / 100
     const park = parseInt(parking)
@@ -219,25 +222,25 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                         <Text style={styles.headtext}>Tax Invoice</Text>
                     </View>
                     <View style={styles.headingsection}>
-                        <View>
+                        <View style={{ marginBottom: '5px' }}>
                             {/* <Text style={styles.text1}>JESSY CABS</Text>
                             <Text style={styles.text2}>No:8/7, 11th Street,Nandanam(Extn.)</Text>
                             <Text style={styles.text2}>Nadanam,Chennai-600 035</Text>
                             <Text style={styles.text2}>booking@jessycabs.in</Text>
                             <Text style={styles.text2}>Tel:044-24354247,Mob:9841505689 </Text> */}
-                            <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
-                            <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-                            <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
+                            <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+                            <Text style={styles.text2}>{organisationdetailfill[0].addressLine1}</Text>
+                            <Text style={styles.text2}>{organisationdetailfill[0].location}</Text>
                             <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
-                            <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone},Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
+                            <Text style={styles.text2}>Tel: {organisationdetailfill[0].telephone}, Mob: {organisationdetailfill[0].contactPhoneNumber} </Text>
 
                         </View>
                         <View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', position: 'relative', top: '-20px' }}>
                                 <Image src={logo} style={styles.logo} />
                                 {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
                             </View>
-                            <View style={{ flexDirection: 'row', marginRight: '70px' }}>
+                            <View style={{ flexDirection: 'row', marginRight: '0px', position: 'relative', top: '15px' }}>
                                 {/* <Text style={styles.gstno}>GSTIN  :  33AALCCn0190M1ZK</Text> */}
                                 <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text>
                             </View>
@@ -309,18 +312,17 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                             <View style={styles.lastFirstdiv}>
                                 <Text style={{ fontSize: '12px' }} >Amount in Words :-</Text>
-                                <Text style={{ fontSize: '14px', padding: 5 }}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
-                                <Text style={{ fontSize: '13px' }}>For JESSY CABS</Text>
-                                <Text style={{ padding: 20 }}></Text>
-                                <Text style={{ fontSize: '13px' }}>Authorised Signature</Text>
+                                <Text style={{ fontSize: '14px', paddingTop: 5 }}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
+                                <Text style={{ fontSize: '13px', paddingTop: 10 }}>For JESSY CABS</Text>
+                                {/* <Text style={{ padding: 20 }}></Text> */}
+                                <Text style={{ fontSize: '13px', paddingTop: 30 }}>Authorised Signature</Text>
                             </View>
 
-                            <View style={styles.lastamount}>
-
+                            {/* <View style={styles.lastamount}>
                                 <View style={styles.lastsectiontxt}>
                                     <Text style={styles.text2}>SUB TOTAL : </Text>
-                                    <Text style={styles.text2} >CGST {calgst}% on {fullAmount} :</Text>
-                                    <Text style={styles.text2}>SGST {calgst}% on {fullAmount} :</Text>
+                                    <Text style={styles.text2} >CGST {gstAmount} on {fullAmount} :</Text>
+                                    <Text style={styles.text2}>SGST {gstAmount} on {fullAmount} :</Text>
                                     <Text style={styles.text2}>Net Payable : </Text>
                                 </View>
 
@@ -331,7 +333,31 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                     <Text style={styles.text3}>{formattedFullAmount}</Text>
                                 </View>
+                            </View> */}
+
+                            <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                                    <Text style={{ width: '100px', fontSize: '11px' }}>SUB TOTAL: </Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                                    <Text style={{ width: '100px', fontSize: '11px' }}>CGST {calgst}% on {fullAmount}: </Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst.toFixed(0)}</Text>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                                    <Text style={{ width: '100px', fontSize: '11px' }}>SGST {calgst}% on {fullAmount}:</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst.toFixed(0)}</Text>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                                    <Text style={{ width: '100px', fontSize: '11px' }}>Net Payable:</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
+                                </View>
                             </View>
+
+
 
 
 
@@ -342,7 +368,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                     <View style={styles.totalsuminitial}>
                         {gstAmount === 0 ? (
-                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 15 }}>
                                 <Text style={{ fontSize: 11, }}>NOTE:</Text>
                                 <Text style={{ fontSize: 10, marginTop: 5 }}>
                                     IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019

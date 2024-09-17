@@ -58,7 +58,7 @@ const OverviewDrawer = () => {
 
   return (
     <>
-      <div>
+      <div className=''>
         <Drawer
           anchor="left"
           open={isDrawerOpen}
@@ -76,7 +76,7 @@ const OverviewDrawer = () => {
             </IconButton>
           </Box>
 
-          <div className='input-field' style={{ padding: '20px', flexWrap: "wrap" }}>
+          <div className='input-field main-content-overview' style={{ padding: '20px', flexWrap: "wrap" }}>
 
             <div className="input">
               <div className="icone">
@@ -212,7 +212,7 @@ const OverviewDrawer = () => {
 
           </div>
 
-          <Box sx={{ padding: '16px' }}>
+          <Box sx={{ padding: '16px' }} className="main-content-overview">
             {/* <Typography variant="body1">This is the content inside the full-page drawer.</Typography> */}
             <p onClick={handleShowCards}>Show Cards</p>
             {showCards ?

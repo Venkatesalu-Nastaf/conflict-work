@@ -201,7 +201,7 @@ export const BillWiseReceipt = () => {
                   />
                 </div>
               </div>
-              <div className='bill-wise-reciept-table-main' style={{ display: 'flex' }}>
+              <div className='bill-wise-reciept-table-main' style={{ display: 'flex', gap:"20px", }}>
                 <div className='bill-wise-reciept-table-first'>
                   <div className='amount-calculator'>
                     <div className='total-inputs' >

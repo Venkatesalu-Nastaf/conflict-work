@@ -168,13 +168,24 @@ body {
   transition: transform 0.3s ease;
 }
 
+.input-field .input-g {
+  transition: transform 0.3s ease;
+}
+
 .input-field .input:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+.input-field .input-g:hover {
   transform: translateY(-5px) scale(1.05);
 }
 
 /* CSS animation for the icon */
 
 .input-field .input .icone {
+  transition: transform 0.3s ease;
+}
+
+.input-field .input-g .icone {
   transition: transform 0.3s ease;
 }
 
@@ -205,6 +216,10 @@ body {
 /* Apply the zigzag animation on hover */
 
 .input-field .input .icone:hover {
+  animation: zigzag 0.5s ease;
+}
+
+.input-field .input-g .icone:hover {
   animation: zigzag 0.5s ease;
 }
 
@@ -363,6 +378,14 @@ body {
   /* margin-top: 20px; */
 }
 
+.input-field .input-g {
+  width: 244px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 20px; */
+}
+
 .css-1tl47u6,
 .css-3igl15 {
   margin: 0px 0px 8px !important;
@@ -390,6 +413,15 @@ body {
 }
 
 .input-field .input .icone {
+  padding: 10px 8px 0 0 !important;
+  color: #6c6868;
+}
+
+.input-field .input-g option {
+  text-transform: uppercase;
+}
+
+.input-field .input-g .icone {
   padding: 10px 8px 0 0 !important;
   color: #6c6868;
 }
@@ -433,6 +465,14 @@ body {
     margin-top: 5px;
   }
 
+  .input-field .input-g {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+  }
+
   .input-field .radio {
     font-size: 20px !important;
   }
@@ -455,6 +495,14 @@ body {
   }
 
   .input-field .input .icone {
+    padding: 10px 10px 0px;
+  }
+
+  .input-field .input-g option {
+    text-transform: uppercase;
+  }
+
+  .input-field .input-g .icone {
     padding: 10px 10px 0px;
   }
 
@@ -612,6 +660,13 @@ body {
 }
 
 .input {
+  width: 212px !important;
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.input-g {
   width: 212px !important;
   display: flex;
   align-items: center;

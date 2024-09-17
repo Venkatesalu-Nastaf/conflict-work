@@ -1640,10 +1640,10 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         const rTime = event.target.value;
 
-                       // console.log("Current reportTimeVar:", reportTimeVar);
-                       // console.log("Current book:", book);
-                       // console.log("Current formData:", formData);
-                       // console.log("Current selectedCustomerData:", selectedCustomerData);
+                        // console.log("Current reportTimeVar:", reportTimeVar);
+                        // console.log("Current book:", book);
+                        // console.log("Current formData:", formData);
+                        // console.log("Current selectedCustomerData:", selectedCustomerData);
                         if ((reportTimeVar && rTime >= reportTimeVar)) {
                           return;
                         } else {
@@ -2009,6 +2009,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     PaperProps={{
                       style: {
                         width: '1400px', // Adjust width here
+                        // height: '675px', // Adjust width here
                         maxWidth: 'none' // Disable maxWidth constraint
                       }
                     }}
@@ -2022,7 +2023,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         defaultValue={0}
                         sx={(theme) => ({
                           width: "100%",
-                          height: "330px",
+                          height: "430px",
                           "--Tabs-gap": "0px",
                           borderRadius: "lg",
                           boxShadow: "sm",
@@ -2935,236 +2936,193 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabPanel> */}
                         <TabPanel value={1} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
-                            <div className="input-field">
-                              {/* <div className="input">
-                                <Button variant='outlined' className='full-width'>View GPS TripSheet</Button>
-                              </div> */}
-                              <div className="input">
-                                <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
-                              </div>
-                              <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
-                                <DialogContent>
-                                  <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                                    Cancel
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                              <div className="input">
-                                <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
-                              </div>
-                              <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
-                                <DialogContent>
-                                  <div className="table-customer-lists">
-                                    <DataGrid
-                                      rows={row}
-                                      columns={maplogcolumns}
+                            <div style={{ display: "flex",alignItems:"baseline",flexWrap:"wrap" }}>
+
+
+                              <div className='left-buttons'>
+                                <div className="in-feild">
+
+                                  <div className="input">
+                                    <Button onClick={handleTripmapClick} variant='outlined' className='full-width'>View GPS Map</Button>
+                                  </div>
+                                  <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                                    <DialogContent>
+                                      <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                        Cancel
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
+                                  <div className="input">
+                                    <Button onClick={handleTripmaplogClick} variant='outlined' className='full-width'>View GPS Log</Button>
+                                  </div>
+                                  <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                                    <DialogContent>
+                                      <div className="table-customer-lists">
+                                        <DataGrid
+                                          rows={row}
+                                          columns={maplogcolumns}
+                                        />
+                                      </div>
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                                        Cancel
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
+
+                                </div>
+                                <div className="in-feild" style={{ marginTop: '10px' }}>
+                                  <div className="input">
+                                    <Autocomplete
+                                      fullWidth
+                                      size="small"
+                                      id="free-solo-demo"
+                                      freeSolo
+                                      sx={{ width: "20ch" }}
+                                      onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                                      value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                      options={DocumentType.map((option) => ({
+                                        label: option.option,
+                                      }))}
+                                      getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                                      renderInput={(params) => {
+                                        return (
+                                          <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
+                                        )
+                                      }
+                                      }
                                     />
                                   </div>
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                                    Cancel
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                              {/* <div className="input">
-                                <Button variant='outlined' className='full-width'>View Closing</Button>
-                              </div> */}
-                            </div>
-                            <div className="input-field" style={{ marginTop: '10px' }}>
-                              <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faFolderOpen} size="lg" />
-                                </div>
-                                <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="free-solo-demo"
-                                  freeSolo
-                                  sx={{ width: "20ch" }}
-                                  onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                                  value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                                  options={DocumentType.map((option) => ({
-                                    label: option.option,
-                                  }))}
-                                  getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                                  renderInput={(params) => {
-                                    return (
-                                      <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
-                                    )
-                                  }
-                                  }
-                                />
-                              </div>
-                              <Modal
-                                open={openEditMapLog}
-                                onClose={handleCloseMapLog}
-                                aria-labelledby="modal-modal-title"
-                                aria-describedby="modal-modal-description"
-                              >
-                                <Box sx={style}>
-                                  <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-                                    <div>
-                                      <TextField type="date"
-                                        value={selectedMapRow?.date || ''}
-                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
-                                    </div>
-                                    <div>
-                                      <TextField type="time"
-                                        value={selectedMapRow?.time || ''}
-                                        onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
-                                    </div>
-                                    <div>
+                                  <Modal
+                                    open={openEditMapLog}
+                                    onClose={handleCloseMapLog}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                  >
+                                    <Box sx={style}>
+                                      <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                                        <div>
+                                          <TextField type="date"
+                                            value={selectedMapRow?.date || ''}
+                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                                        </div>
+                                        <div>
+                                          <TextField type="time"
+                                            value={selectedMapRow?.time || ''}
+                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                                        </div>
+                                        <div>
 
-                                      <Button onClick={handleEditMapDetails}>Submit</Button>
-                                    </div>
+                                          <Button onClick={handleEditMapDetails}>Submit</Button>
+                                        </div>
+                                      </div>
+
+                                    </Box>
+                                  </Modal>
+
+                                  <div className="input">
+                                    <Button variant="contained" onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                  </div>
+                                </div>
+                                <div className="in-feild" style={{ marginTop: '20px' }}>
+
+                                  <div className="input">
+                                    <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
+                                  </div>
+                                  <div className="input">
+                                    <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
                                   </div>
 
-                                </Box>
-                              </Modal>
-                              {/* <div className="input">
-                                <div className="icone">
-                                  <FontAwesomeIcon icon={faFileLines} size="lg" />
+
+
+
+                                  <input
+                                    ref={fileInputRefdata}
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChangesignature}
+                                  />
+
+
+                                  <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
+                                    <DialogContent>
+                                      <div
+                                        style={{
+                                          // display: "flex",
+                                          overflowY: "auto",
+                                          backgroundColor: "#E5E5E5"
+                                        }}
+                                      >
+
+                                        <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
+                                          <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
+                                        </div>
+                                      </div>
+
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => {
+                                          handlesignaturemageDownload()
+                                        }}
+                                      >
+                                        DOWNLOAD
+                                      </Button>
+                                      <Button variant="contained" onClick={() => {
+                                        handlesignaturemageDelete()
+                                      }} color="primary">
+                                        Delete
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
                                 </div>
-                                <TextField
-                                  name="on1"
-                                  value={selectedCustomerData.on1 || book.on1 || ''}
-                                  onChange={handleChange}
-                                  size="document-notes"
-                                  label="Document Notes"
-                                  autoComplete="password"
-                                  id="document-notes"
-                                  variant="standard"
-                                />
-                              </div> */}
-                              <div className="input">
-                                <Button variant="contained" onClick={handleUpload} className='full-width'>Upload Doc</Button>
-                              </div>
-                            </div>
-                            <div className="input-field" style={{ marginTop: '20px' }}>
-                              {/* <div className="input">
-                                <div className="icone">
-                                  <MarkChatReadIcon color="action" />
-                                </div>
-                                <TextField
-                                  size="small"
-                                  sx={{ m: 1, width: "300ch" }}
-                                  variant="standard"
-                                  autoComplete="password"
-                                />
-                              </div> */}
-                              <div className="input">
-                                <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
-                              </div>
-                              <div className="input">
-                                <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
-                              </div>
 
-
-
-
-                              <input
-                                ref={fileInputRefdata}
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleFileChangesignature}
-                              />
-
-
-                              <Dialog open={signaturepopup} onClose={siganturediaglogclose}>
-                                <DialogContent>
-                                  <div
-                                    style={{
-                                      // display: "flex",
-                                      overflowY: "auto",
-                                      backgroundColor: "#E5E5E5"
-                                    }}
-                                  >
-
-                                    <div style={{ marginLeft: "10px", backgroundColor: "#EAEAEA" }}>
-                                      <img src={signimageUrl} alt="Embedded Content" style={{ width: "200px", height: "200px", border: '1px solid grey' }} />
-                                    </div>
+                                <div className="in-feild" style={{ marginTop: '10px' }}>
+                                  <div className="input">
+                                    <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
+                                  </div>
+                                  <div className="input">
+                                    <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
                                   </div>
 
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => {
-                                      handlesignaturemageDownload()
-                                    }}
-                                  >
-                                    DOWNLOAD
-                                  </Button>
-                                  <Button variant="contained" onClick={() => {
-                                    handlesignaturemageDelete()
-                                  }} color="primary">
-                                    Delete
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
-                            </div>
-                            <div className="input-field" style={{ marginTop: '10px' }}>
-                              <div className="input">
-                                <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
-
-                              </div>
-                              <div>
-                                <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
-                                <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
-                              </div>
-                              {/* <div className="input">
+                                  {/* <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
+                                    <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                                    <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
+                                  </div> */}
+                                  {/* <div className="input">
                                 <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
                               </div> */}
-                            </div>
-                            <div className="table-TripSheet">
-                              <div className='tripsheet-booking-table'>
-                                <DataGrid
-                                  rows={rows}
-                                  columns={columns}
-                                  onRowClick={handleTripRowClick}
-                                  pageSize={5}
-                                  checkboxSelection
-                                />
+                                </div>
+                                <div className="in-feild" style={{ marginTop: '10px' }}>
+                                  <div className="input">
+                                    <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="table-TripSheet right-buttons">
+                                <div className='tripsheet-booking-table'>
+                                  <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    onRowClick={handleTripRowClick}
+                                    pageSize={5}
+                                    checkboxSelection
+                                  />
+                                </div>
                               </div>
                             </div>
-                            {/* 
-                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose} maxWidth="md" fullWidth
-                      PaperProps={{
-                        style: {
-                          width: 'fit-content',
-                          maxWidth: '90%',
-                          padding: '10px'
-                        }
-                      }}
-                    >
-                      <DialogContent style={{ padding: '7px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {selectedRow && (
-                          <img src={imageUrl} alt="Embedded Content" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }} />
-                        )}
-                      </DialogContent>
-                      <DialogActions>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            handleimagedelete(selectedRow);
-                            handleimgPopupClose();
-                            handleRefresh();
-                          }}
-                        >
-                          Delete
-                        </Button>
-                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                      </DialogActions>
-                    </Dialog> */}
+
+
+
+
                             <Dialog
                               open={imgpopupOpen}
                               onClose={handleimgPopupClose}
@@ -3299,11 +3257,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           </div>
                         </TabPanel>
                         <TabPanel value={0} sx={{ p: 2 }}>
-                          <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-                            <div className="Customer-Customer-Bill-Slider bill-section bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+                          <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
+                            <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
                               <p className='bill-topics'>Vendor Info</p>
                               <div className="input-field tripsheet-vendor-info-first-input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   {/* <div className="icone">
         <NoCrashIcon color="action" />
       </div> */}
@@ -3341,7 +3299,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     )}
                                   />
                                 </div>
-                                <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
                                   {/* <p style={{ margin: "0px" }}>Duty</p> */}
                                   <Autocomplete
                                     fullWidth
@@ -3374,7 +3332,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 </div>
 
-                                <div className="input" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
                                   <Checkbox
                                     size="small"
                                     checked={lockdata}
@@ -3384,7 +3342,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                               <div className="input-field" style={{ marginTop: '15px' }}>
-                                <div className="input" >
+                                <div className="input-g" >
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                       label="StartDate"
@@ -3412,7 +3370,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </LocalizationProvider>
 
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                                     <DatePicker
@@ -3444,7 +3402,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="vendortotaldays"
                                     value={calculatevendorTotalDays()}
@@ -3460,11 +3418,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
                               <div className="input-field" style={{ marginBottom: '10px' }}>
 
-                                <div className="input">
+                                <div className="input-g">
                                   {/* <div className='icone'>
         <MdOutlineAccessTimeFilled />
       </div> */}
-                                  <div className='input'>
+                                  <div className='input-g'>
                                     <div className='full-width' style={{ display: 'grid' }}>
                                       <label>Start Time</label>
                                       <input
@@ -3496,7 +3454,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 </div>
 
-                                <div className="input">
+                                <div className="input-g">
                                   {/* 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer
@@ -3542,7 +3500,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
 
 
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="vendorTotaltime"
                                     value={calculatevendorTotalTime() || ""}
@@ -3559,7 +3517,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <div className="input-field">
 
 
-                                <div className="input" >
+                                <div className="input-g" >
                                   <TextField
                                     name="vendorshedoutkm"
 
@@ -3575,7 +3533,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
 
 
-                                <div className="input" >
+                                <div className="input-g" >
                                   <TextField
                                     name="vendorshedinkm"
 
@@ -3599,7 +3557,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                                <div className="input" >
+                                <div className="input-g" >
                                   <TextField
                                     name="vendortotalkm"
                                     value={calculatevendorTotalKilometers() || ''}
@@ -3614,7 +3572,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
 
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="vendorRemarks"
                                     // value={calcPackage || formData.calcPackage || ''}
@@ -3632,7 +3590,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
 
 
-                                <div className="input">
+                                <div className="input-g">
                                   <Button
                                     variant='contained'
                                     onClick={handleVendorcalc}
@@ -3643,10 +3601,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
                             </div>
-                            <div className="Customer-Customer-Bill-Slider bill-section bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                            <div className="Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
                               <p className='bill-topics'>Vendor Bill</p>
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_Calcpackage"
                                     value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
@@ -3657,7 +3615,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     sx={{ m: 1, width: "100%" }}
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_rateAmount"
                                     value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
@@ -3680,7 +3638,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 {/* <span>Ex.Km</span> */}
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_ExtraKms"
                                     value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
@@ -3692,7 +3650,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <span>@</span>
                                   <TextField size="small"
                                     name='Vendor_ExtraAmountKms'
@@ -3702,7 +3660,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3720,7 +3678,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 {/* <span>Ex.Hr</span> */}
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_ExtraHours"
                                     value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
@@ -3731,7 +3689,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <span>@</span>
                                   <TextField
                                     size="small"
@@ -3743,7 +3701,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   />
 
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3760,7 +3718,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 {/* <span>Night</span> */}
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_NightHALT"
                                     // value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
@@ -3772,7 +3730,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <span>@</span>
                                   <TextField
                                     size="small"
@@ -3784,7 +3742,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     autoComplete="password"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3800,7 +3758,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 {/* <span>Bata</span> */}
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_Bata"
                                     value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
@@ -3812,7 +3770,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   // variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <span>@</span>
                                   <TextField
                                     size="small"
@@ -3823,7 +3781,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     id="Vendor_BataAmount"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3838,7 +3796,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <TextField
                                     name="Vendor_FULLTotalAmount"
                                     value={vendorbilldata.Vendor_FULLTotalAmount || 0}
@@ -3853,7 +3811,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
                             </div>
-                            <div className="Customer-Customer-Bill-Slider bill-section  Customer-Customer-Bill-Slider-popup">
+                            <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                               <p className='bill-topics'>Customer Bill</p>
                               <div className="input-field">
                                 {/* <div className="input">
@@ -3872,7 +3830,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   sx={{ m: 1, width: "60ch" }}
                                 />
                               </div> */}
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <Inventory2Icon color="action" />
                                   </div>
@@ -3888,7 +3846,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     sx={{ m: 1, width: "60ch" }}
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3912,7 +3870,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faRoad} />
                                   </div>
@@ -3936,7 +3894,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <TollTwoToneIcon color="action" />
                                   </div>
@@ -3958,7 +3916,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     autoComplete="password"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -3976,7 +3934,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faStopwatch} />
                                   </div>
@@ -4000,7 +3958,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <TollTwoToneIcon color="action" />
                                   </div>
@@ -4023,7 +3981,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   />
 
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -4040,7 +3998,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faCloudMoon} />
                                   </div>
@@ -4067,7 +4025,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <TollTwoToneIcon color="action" />
                                   </div>
@@ -4091,7 +4049,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     autoComplete="password"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -4110,7 +4068,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                               <div className="input-field">
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faMoneyBill1Wave} />
                                   </div>
@@ -4136,7 +4094,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     variant="standard"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <TollTwoToneIcon color="action" />
                                   </div>
@@ -4162,7 +4120,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     autoComplete="password"
                                   />
                                 </div>
-                                <div className="input">
+                                <div className="input-g">
                                   <div className="icone">
                                     <FontAwesomeIcon icon={faEquals} />
                                   </div>
@@ -4913,14 +4871,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <thead>
                           <tr>
                             <th className="table-head-booking table-heading-1"> Driver name</th> */}
-                            {/* <th className="table-head-booking">Driver phone</th> */}
-                            {/* <th className="table-head-booking">Vehicle Name</th> */}
-                            {/* <th className="table-head-booking">Vehicle Type</th> */}
-                            {/* <th className="table-head-booking">Vehicle Reg No</th> */}
-                            {/* <th className="table-head-booking">HireTypes</th> */}
-                            {/* <th className="table-head-booking">Grouphs</th> */}
-                            {/* <th className="table-head-booking">Active</th> */}
-                            {/* <th className="table-head-booking">Travels Name</th>
+                    {/* <th className="table-head-booking">Driver phone</th> */}
+                    {/* <th className="table-head-booking">Vehicle Name</th> */}
+                    {/* <th className="table-head-booking">Vehicle Type</th> */}
+                    {/* <th className="table-head-booking">Vehicle Reg No</th> */}
+                    {/* <th className="table-head-booking">HireTypes</th> */}
+                    {/* <th className="table-head-booking">Grouphs</th> */}
+                    {/* <th className="table-head-booking">Active</th> */}
+                    {/* <th className="table-head-booking">Travels Name</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -4932,14 +4890,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                             driverdetails.map((row) => (
                               <tr key={row.id} onClick={() => handleRowClick(row)}>
                                 <td>{row.driverName}</td> */}
-                                {/* <td>{row.mobileNo}</td> */}
-                                {/* <td>{row.vehicleName}</td> */}
-                                {/* <td>{row.vechtype}</td> */}
-                                {/* <td>{row.vehRegNo}</td> */}
-                                {/* <td>{row.hiretypes}</td> */}
-                                {/* <td>{row.Groups}</td> */}
-                                {/* <td>{row.active}</td> */}
-                                {/* <td>{row.travelsname}</td>
+                    {/* <td>{row.mobileNo}</td> */}
+                    {/* <td>{row.vehicleName}</td> */}
+                    {/* <td>{row.vechtype}</td> */}
+                    {/* <td>{row.vehRegNo}</td> */}
+                    {/* <td>{row.hiretypes}</td> */}
+                    {/* <td>{row.Groups}</td> */}
+                    {/* <td>{row.active}</td> */}
+                    {/* <td>{row.travelsname}</td>
                               </tr>
                             ))
                           )}

@@ -307,11 +307,62 @@ router.get('/Get-Billing', (req, res) => {
 
 // });
 
+// update TransferList Particular Tripid
+router.post('/updateParticularTransferList', (req, res) => {
+  const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid } = req.body;
+  const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
+  console.log(Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, grouptripid, 'updatetransfer');
+
+  if (!grouptripid) {
+    return res.status(400).json({ error: 'grouptripid is required' });
+  }
+
+  const updateQuery = `
+    UPDATE Transfer_list 
+    SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?
+    WHERE Grouptrip_id = ?`;
+
+  db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, grouptripid], (error, result) => {
+    if (error) {
+      console.error('Database query error:', error);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'No record found with the provided grouptripid' });
+    }
+
+    res.status(200).json({ message: 'Transfer list updated successfully' });
+  });
+});
+
+// get transferList Where GroupTripId
+router.get('/getParticularTransferListDetails', (req, res) => {
+  const { groupId } = req.query;
+  console.log(groupId, 'groupid');
+
+  if (!groupId) {
+    return res.status(400).json({ error: 'groupId is required' });
+  }
+
+  db.query('SELECT * FROM Transfer_list WHERE Grouptrip_id = ?', [groupId], (error, result) => {
+    if (error) {
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'No transfer list found for the provided groupId' });
+    }
+
+    res.status(200).json(result);
+  });
+});
+
 router.post('/insertTransferListTrip', (req, res) => {
   const { Status, Billdate, Organization_name, FromDate, EndDate, grouptripid, Trips, Amount, Trip_id } = req.body;
 
   const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
-console.log( Status, Billdate, Organization_name, FromDate, EndDate, grouptripid, Trips, Amount, tripIdString,'transfer');
+  console.log(Status, Billdate, Organization_name, FromDate, EndDate, grouptripid, Trips, Amount, tripIdString, 'transfer');
 
   // Check if grouptripid exists
   const checkGroupTripIdQuery = 'SELECT Grouptrip_id FROM Transfer_list WHERE Grouptrip_id = ?';
@@ -444,7 +495,7 @@ router.get('/getTripIdFromTransferList', (req, res) => {
   if (!groupid) {
     return res.status(400).json({ error: 'Group ID is required' });
   }
-  const sqlquery = `SELECT Trip_id FROM Transfer_list WHERE Grouptrip_id = ?`;
+  const sqlquery = `SELECT Trip_id,Organization_name,Invoice_no,Billdate,FromDate,EndDate FROM Transfer_list WHERE Grouptrip_id = ?`;
 
   db.query(sqlquery, [groupid], (error, result) => {
     if (error) {
@@ -480,14 +531,12 @@ router.get('/EmptyRowDelete', (req, res) => {
       console.error('Error fetching Grouptrip_id:', error);
       return res.status(500).json({ error: 'Database query error' });
     }
-    console.log(result);
 
     if (result.length === 0) {
       return res.status(404).json({ error: 'No Grouptrip_id found with empty Trip_id' });
     }
 
     const grouptripId = result[0].Grouptrip_id;
-    console.log(grouptripId, typeof (grouptripId), 'groupid');
 
     db.query('DELETE FROM Transfer_list WHERE Grouptrip_id = ?', [grouptripId], (deleteError, deleteResult) => {
       if (deleteError) {
@@ -508,7 +557,6 @@ router.get('/EmptyRowDelete', (req, res) => {
 router.put('/updateList', async (req, res) => {
   try {
     const { Trip_id, Trips, Amount } = req.body;
-    console.log(typeof (Trip_id), Trip_id, Trips, Amount, 'response');
 
     const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
 
@@ -519,7 +567,6 @@ router.put('/updateList', async (req, res) => {
             // console.log(err, 'error');
             reject(err);
           } else {
-            // console.log(updateGroupBillingResult, 'result');
             if (updateGroupBillingResult.affectedRows > 0) {
               resolve(updateGroupBillingResult);
             } else {
@@ -542,7 +589,6 @@ router.put('/updateList', async (req, res) => {
 
 router.post('/tripsheetUpdate', (req, res) => {
   const { tripids, status } = req.body;
-  // console.log(tripids, status, 'rrrrrrrrrr');
   const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
@@ -615,7 +661,6 @@ router.get('/updateTransferListdata/:groupId', (req, res) => {
 
 router.delete('/deleteTransfer/:groupid', (req, res) => {
   const groupid = req.params.groupid;
-  console.log(groupid, 'idddd');
   const sql = "DELETE FROM Transfer_list WHERE Grouptrip_id = ?";
 
   db.query(sql, [groupid], (err, result) => {

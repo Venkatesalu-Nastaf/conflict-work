@@ -140,7 +140,7 @@ const Billing = () => {
     const { particularPdf, organizationDetail } = PdfData()
 
     return (
-        <div className="form-container form-container-billing">
+        <div className="form-container form-container-billing main-content-billing">
 
             <div className="Billing-form">
                 <form onSubmit={handleClick}>

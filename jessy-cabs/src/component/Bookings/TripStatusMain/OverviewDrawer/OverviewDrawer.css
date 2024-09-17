@@ -21,3 +21,20 @@ padding: 10px;
   gap: 20px;
   flex-wrap: wrap;
 }
+
+.main-content-overview {
+  
+  zoom: 90%;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+  .main-content-overview {
+    zoom: 82%;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+  .main-content-overview {
+    zoom: 77%;
+  }
+}

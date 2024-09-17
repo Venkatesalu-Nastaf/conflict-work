@@ -189,3 +189,21 @@
     align-items: center;
     justify-content: center;
   }
+
+
+  .DriverCreation-table-container {
+   
+    zoom: 90%;
+  }
+  
+  @media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+    .DriverCreation-table-container {
+      zoom: 82%;
+    }
+  }
+  
+  @media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+    .DriverCreation-table-container {
+      zoom: 77%;
+    }
+  }

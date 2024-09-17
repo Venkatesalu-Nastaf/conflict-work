@@ -193,7 +193,8 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                           label="From Date"
                           id="fromDate"
                           className='full-width'
-                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
+                          // value={fromDate}
+                          value={fromDate || selectedCustomerDatas.fromdate ? dayjs(fromDate || selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'fromdate');
@@ -203,7 +204,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                           }}
                         >
                           {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.fromdate} />
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.fromdate || fromDate} />
                           )}
                         </DatePicker>
                       </DemoContainer>
@@ -219,7 +220,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                           label="To Date"
                           id="toDate"
                           className='full-width'
-                          value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
+                          value={toDate || selectedCustomerDatas.todate ? dayjs(toDate || selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'todate');
@@ -229,7 +230,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                           }}
                         >
                           {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.todate} />
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.todate || toDate} />
                           )}
                         </DatePicker>
                       </DemoContainer>
@@ -327,24 +328,24 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               sx={{
                 height: 400, // Adjust this value to fit your needs
                 '& .MuiDataGrid-virtualScroller': {
-                    '&::-webkit-scrollbar': {
-                        width: '8px', // Adjust the scrollbar width here
-                        height: '8px', // Adjust the scrollbar width here
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: '#f1f1f1',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#457cdc',
-                        borderRadius: '20px',
-                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
 
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#3367d6',
-                    },
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
                 },
-            }}
+              }}
             >
               <DataGrid
                 rows={rows}

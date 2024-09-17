@@ -60,11 +60,11 @@ const useBillWiseReceipt = () => {
           field: "Voucherid",
           headerName: "Voucher ID",
           type: "number",
-          width: 90,
+          width: 100,
         }
-      : { field: "BillNo", headerName: "Bill No", type: "number", width: 90 },
-    { field: "BillDate", headerName: "Bill Date", width: 130 },
-    { field: "Amount", headerName: "Amount", width: 130 },
+      : { field: "BillNo", headerName: "Bill No", type: "number", width: 120 },
+    { field: "BillDate", headerName: "Bill Date", width: 120 },
+    { field: "Amount", headerName: "Amount", width: 120 },
   ];
 
   // Fetch all customers

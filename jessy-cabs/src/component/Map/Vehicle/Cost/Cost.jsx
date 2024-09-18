@@ -31,7 +31,7 @@ const Cost = () => {
     ];
     return (
         <div>
-            <div style={{ margin: '25px 0px', display: 'flex', gap: '15px',flexWrap:"wrap" }}>
+            <div className='main-content-vehicle-cost'>
                 <Button variant='outlined'><LiaNewspaper className='btn-icon' /> History</Button>
                 <Button variant='outlined'><CiClock2 className='btn-icon' /> Live</Button>
                 <Button variant='outlined'><FaBriefcase className='btn-icon' /> Jobs</Button>

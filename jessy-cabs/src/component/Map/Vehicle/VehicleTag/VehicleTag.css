@@ -1,0 +1,19 @@
+.main-content-vehicle-tag {
+    zoom: 90%;
+    margin: 25px 0px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  @media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+    .main-content-vehicle-tag {
+      zoom: 82%;
+    }
+  }
+  
+  @media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+    .main-content-vehicle-tag {
+      zoom: 77%;
+    }
+}

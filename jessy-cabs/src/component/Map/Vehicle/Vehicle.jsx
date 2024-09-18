@@ -4,45 +4,34 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from "@mui/material/Button";
 import { FaPlus } from "react-icons/fa";
-
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import "./Vehicle.css";
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-
-
 import Driving from "./Driving/Driving";
 import Running from "./Running/Running";
 import Fuel from "./Fuel/Fuel";
 import Cost from './Cost/Cost';
 import Safety from './Safety/Safety';
 import VehicleTag from './VehicleTag/VehicleTag';
-
 import { TextField } from "@mui/material";
 import Switch from '@mui/material/Switch';
-
 import Menu from '@mui/material/Menu';
 import Vehicles from './Vehicles/Vehicles';
-
-import { useNavigate, Link, useLocation, } from "react-router-dom";
-
+import { useNavigate,  } from "react-router-dom";
 import { CiFilter } from "react-icons/ci";
 import { IoDownloadOutline } from "react-icons/io5";
-import { Typography } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -74,12 +63,6 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -92,13 +75,6 @@ export const Vehicle = () => {
   const handleChange = (event) => {
     setVehicleNO(event.target.value);
   };
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChangeTabs = (event, newValue) => {
-    setValue(newValue);
-  };
-
 
   const [openFilter, setOpenFilter] = React.useState(false);
 
@@ -170,9 +146,8 @@ export const Vehicle = () => {
           <p className="head-tab-type-2-all">
             <span className="Title-Name">VEHICLES</span>
           </p>
-          <div className='vehicle-main-content-form'>
+          <div className='vehicle-main-content-form main-content-vehicle-vehicle'>
             <div className='vehicle-main'>
-              {/* <div className='vehicle-top-section-left'> <span>Vehicles</span> </div> */}
               <div className='vehicle-top-section-right'>
                 <span>
                   <Box sx={{ minWidth: 200 }}>
@@ -351,11 +326,7 @@ export const Vehicle = () => {
                             name="advancepaidtovendor"
                             className='full-width'
                             value=''
-                            // onChange={handleChange}
-                            // onChange={(e) => {
-                            //   handleChange(e)
-                            //   setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                            // }}
+
                             label="Search Device"
                             id="advance-paid-to-vendor"
                             autoComplete="password"
@@ -451,100 +422,50 @@ export const Vehicle = () => {
 
           </div>
 
-          {/* <div >
-            <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: '100%', typography: 'body1', padding: "20px" }}>
+            <TabContext value={valuedetailstabs}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
-                  <Tab label="Vehicles" {...a11yProps(0)} />
-                  <Tab label="Driving" {...a11yProps(1)} />
-                  <Tab label="Running" {...a11yProps(2)} />
-                  <Tab label="Fuel" {...a11yProps(3)} />
-                  <Tab label="Cost" {...a11yProps(4)} />
-                  <Tab label="Safety" {...a11yProps(5)} />
-                  <Tab label="Vehicle Tag" {...a11yProps(6)} />
-                </Tabs>
+                <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
+                  <Tab label="Vehicles" value="1" />
+                  <Tab label="Driving" value="2" />
+                  <Tab label="Running" value="3" />
+                  <Tab label="Fuel" value="4" />
+                  <Tab label="Cost" value="5" />
+                  <Tab label="Safety" value="6" />
+                  <Tab label="Vehicle Tag" value="7" />
+                </TabList>
               </Box>
-              <CustomTabPanel value={value} index={0}>
+              <TabPanel value="1" >
                 <Vehicles />
+              </TabPanel>
 
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={1}>
-
+              <TabPanel value="2" >
                 <Driving />
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={2}>
+              </TabPanel>
 
+              <TabPanel value="3" >
                 <Running />
+              </TabPanel>
 
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={3}>
-
+              <TabPanel value="4" >
                 <Fuel />
+              </TabPanel>
 
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={4}>
-
+              <TabPanel value="5" >
                 <Cost />
+              </TabPanel>
 
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={5}>
-
+              <TabPanel value="6" >
                 <Safety />
+              </TabPanel>
 
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={6}>
-
+              <TabPanel value="7" >
                 <VehicleTag />
-
-              </CustomTabPanel>
-            </Box>
-          </div> */}
-          {/* <div style={{ padding: "20px", zoom: "90%" }}> */}
-            <Box sx={{ width: '100%', typography: 'body1',padding:"20px" }}>
-              <TabContext value={valuedetailstabs}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
-                    <Tab label="Vehicles" value="1" />
-                    <Tab label="Driving" value="2" />
-                    <Tab label="Running" value="3" />
-                    <Tab label="Fuel" value="4" />
-                    <Tab label="Cost" value="5" />
-                    <Tab label="Safety" value="6" />
-                    <Tab label="Vehicle Tag" value="7" />
-                  </TabList>
-                </Box>
-                <TabPanel value="1" >
-                  <Vehicles />
-                </TabPanel>
-
-                <TabPanel value="2" >
-                  <Driving />
-                </TabPanel>
-
-                <TabPanel value="3" >
-                  <Running />
-                </TabPanel>
-
-                <TabPanel value="4" >
-                  <Fuel />
-                </TabPanel>
-
-                <TabPanel value="5" >
-                  <Cost />
-                </TabPanel>
-
-                <TabPanel value="6" >
-                  <Safety />
-                </TabPanel>
-
-                <TabPanel value="7" >
-                  <VehicleTag />
-                </TabPanel>
+              </TabPanel>
 
 
-              </TabContext>
-            </Box>
-          {/* </div> */}
+            </TabContext>
+          </Box>
 
         </div>
       </div>

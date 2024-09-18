@@ -325,3 +325,20 @@
       width: 79vw;
     }
   }
+
+  
+.main-content-vehicle-vehicle {
+  zoom: 90%;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+  .main-content-vehicle-vehicle {
+    zoom: 82%;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+  .main-content-vehicle-vehicle {
+    zoom: 77%;
+  }
+}

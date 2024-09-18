@@ -53,7 +53,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const RateType = ({ stationName, organizationNames }) => {
+const RateType = ({ stationName}) => {
 
     const {
         selectedCustomerData,

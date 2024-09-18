@@ -31,7 +31,7 @@ import BillingMain from "./component/Billings/billingMain/billingMain";
 import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 // import RateManagement from "./component/Info/RateManagement/RateManagement";
-import RateManagement from "./component/Registration/RateManagement/RateManagement";
+// import RateManagement from "./component/Registration/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
@@ -377,13 +377,17 @@ function App() {
 
                 <Route
                   path="/home/registration/ratetype"
-                  element={R_Employee !== 0 ? <RateTypes stationName={stationName} /> : <NoPermission />}
+                  element={R_Employee !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
+                />
+                 <Route
+                  path="/home/registration/stationcreation"
+                  element={Station_Creation !== 0 ? <StationCreation /> : <NoPermission />}
                 />
 
-                <Route
+                {/* <Route
                   path="/home/registration/ratemanagement"
                   element={R_Employee !== 0 ? <RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
-                />
+                /> */}
 
                 {/* <Route
                   path="/home/registration/reports"
@@ -392,8 +396,8 @@ function App() {
               </Route>
 
               <Route path="/home/info" element={<Info />}>
-                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} />
-                <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} />
+                {/* <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} /> */}
+                {/* <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} /> */}
                 <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
@@ -419,10 +423,10 @@ function App() {
                   path="/home/settings/usercreation"
                   element={SETTING !== 0 ? <UserCreation stationName={stationName} /> : <NoPermission />}
                 />
-                <Route
+                {/* <Route
                   path="/home/settings/stationcreation"
                   element={Station_Creation !== 0 ? <StationCreation /> : <NoPermission />}
-                />
+                /> */}
                 <Route
                   path="/home/settings/permission"
                   element={<Permission />}

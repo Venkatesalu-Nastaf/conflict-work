@@ -140,8 +140,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="Datediv">
-                    <p>From <span className="Datetext">{FromDate}</span></p>
-                    <p>To <span className="Datetext">{ToDate}</span></p>
+                    <p>From: <span className="Datetext">{FromDate}</span></p>
+                    <p>To: <span className="Datetext">{ToDate}</span></p>
                 </div>
 
                 <div>
@@ -191,7 +191,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         </tfoot>
                     </table>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px', fontWeight: 600 }}>{rupeestext}</p></div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px', textTransform: 'capitalize' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px', fontWeight: 600 }}>{rupeestext}</p></div>
                 {gst === 0 ?
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <h4 style={{ fontWeight: 600, marginRight: '5px' }}>NOTE:</h4>
@@ -201,13 +201,15 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                     </div> : ""
                 }
 
+                <div className="printdiv">
+                    <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>Print</button>
+                    <button onClick={handlePopup} className="print">
+                        Cancel
+                    </button>
+                </div>
+
             </div>
-            <div className="printdiv">
-                <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>PRINT</button>
-                <button onClick={handlePopup} className="print">
-                    Cancel
-                </button>
-            </div>
+
         </>
     )
 }

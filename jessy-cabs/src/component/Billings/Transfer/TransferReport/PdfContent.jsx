@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   tableCell: {
     width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
-    fontSize: '10px',
+    fontSize: '11px',
     borderRight: '1px solid #000000'
   },
   gst: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     borderRight: '1px solid #000000'
   },
   tableheadingparticular: {
-    width: '62%',
+    width: '70%',
     fontSize: '11px',
     borderTop: '1px solid #000',
     borderRight: '1px solid #000',
@@ -121,10 +121,11 @@ const styles = StyleSheet.create({
 
   },
   tablecellparticular: {
-    width: '62%',
+    width: '70%',
     padding: 5,
     fontSize: '11px',
     borderRight: '1px solid #000000',
+    wordWrap: 'break-word',
   },
   tableheadingpermit: {
     width: '16%',
@@ -222,7 +223,8 @@ const styles = StyleSheet.create({
 
   },
   rupeestext: {
-    fontSize: '12px'
+    fontSize: '12px',
+    textTransform: 'capitalize'
   },
   signtext: {
     fontSize: '12px',
@@ -423,12 +425,12 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   <View>
                     <View style={styles.tableRow}>
 
-                      <View style={styles.tableheadsno}><Text>S NO</Text></View>
-                      <View style={styles.tableheading}><Text>TRIP DT</Text></View>
-                      <View style={styles.tableheadtripno}><Text>TRIP NO</Text></View>
-                      <View style={styles.tableheadingparticular}><Text>PARTICULARS</Text></View>
+                      <View style={styles.tableheadsno}><Text>S No</Text></View>
+                      <View style={styles.tableheading}><Text>Trip DT</Text></View>
+                      <View style={styles.tableheadtripno}><Text>Trip NO</Text></View>
+                      <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
                       <View style={styles.tableheadingpermit}><Text>Par/Permit</Text></View>
-                      <View style={styles.tableheadingAmount}><Text>AMOUNT</Text></View>
+                      <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
 
                     </View>
 
@@ -441,10 +443,34 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
-                            <View style={styles.tablecellparticular}><Text>{item.guestname} {'\n'}{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime} {'\n'}Vehicle Hire Charges For : {item.calcPackage} {'\n'}  {item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''} {item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''} {item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''} {item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''} {item.pickup}</Text></View>
+                            <View style={styles.tablecellparticular}>
+                              <Text>
+                                {item.guestname}
+                              </Text>
+                              <Text>{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}</Text>
+                              <Text>Vehicle Hire Charges For : {item.calcPackage}</Text>
+                              <Text>{item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}</Text>
+                              <Text>{item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''}</Text>
+                              <Text>{item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''}</Text>
+                              <Text>{item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''}</Text>
+                              <Text>{item.pickup}</Text>
+                            </View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
-                            <View style={styles.tableCellpermit}><Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}</Text></View>
-                            <View style={styles.tableCell}><Text style={styles.amounttext}>{item.package_amount} {'\n'} {item.ex_kmAmount} {'\n'} {item.ex_hrAmount} {'\n'} {item.night_totalAmount} {'\n'} {item.driverBeta_amount} </Text></View>
+                            <View style={styles.tableCellpermit}>
+                              <Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}</Text>
+
+                            </View>
+                            <View style={styles.tableCell}>
+                              {/* <Text style={styles.amounttext}> {'\n'}  {'\n'}  {'\n'}  {'\n'}  </Text> */}
+
+                              <Text>{'\n'}</Text>
+                              <Text>{'\n'}</Text>
+                              <Text>{item.package_amount}</Text>
+                              <Text>{item.ex_kmAmount}</Text>
+                              <Text>{item.ex_hrAmount}</Text>
+                              <Text>{item.night_totalAmount}</Text>
+                              <Text>{item.driverBeta_amount}</Text>
+                            </View>
                           </React.Fragment>
                         </View>
                       ))}
@@ -490,27 +516,27 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                   <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '100px', fontSize: '11px' }}>SUB TOTAL: </Text>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>SUB TOTAL: </Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '100px', fontSize: '11px' }}>CGST {gstAmount} on {fullAmount}:</Text>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>CGST {gstAmount}% on {fullAmount}:</Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '100px', fontSize: '11px' }}>SGST {gstAmount} on {fullAmount}:</Text>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>SGST {gstAmount}% on {fullAmount}:</Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
-                      <Text style={{ width: '100px', fontSize: '11px' }}>Parking & Permit:</Text>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>Parking & Permit:</Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{parkpermit}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '100px', fontSize: '11px' }}>Total Amount:</Text>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>Total Amount:</Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
                     </View>
                   </View>

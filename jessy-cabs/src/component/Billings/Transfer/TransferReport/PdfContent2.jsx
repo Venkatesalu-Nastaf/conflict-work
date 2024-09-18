@@ -277,10 +277,10 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                         </View>
                         <View style={{ borderBottom: '1px solid black' }}>
                             <View style={{ flexDirection: 'row', width: '250px', justifyContent: 'space-between', padding: 5 }}>
-                                <Text style={{ fontSize: '13px' }}>Duration :  </Text>
+                                <Text style={{ fontSize: '13px' }}>Duration: </Text>
                                 <Text style={{ fontSize: '12px' }}>{fromDate} </Text>
-                                <Text style={{ fontSize: '12px' }}>To</Text>
-                                <Text style={{ fontSize: '12px' }}> {enddate}</Text>
+                                <Text style={{ fontSize: '12px' }}>To: </Text>
+                                <Text style={{ fontSize: '12px' }}>{enddate}</Text>
                             </View>
                         </View>
 
@@ -337,22 +337,22 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                             <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                                    <Text style={{ width: '100px', fontSize: '11px' }}>SUB TOTAL: </Text>
+                                    <Text style={{ width: '120px', fontSize: '11px' }}>SUB TOTAL: </Text>
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
                                 </View>
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                                    <Text style={{ width: '100px', fontSize: '11px' }}>CGST {calgst}% on {fullAmount}: </Text>
+                                    <Text style={{ width: '120px', fontSize: '11px' }}>CGST {calgst}% on {fullAmount}: </Text>
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst.toFixed(0)}</Text>
                                 </View>
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
-                                    <Text style={{ width: '100px', fontSize: '11px' }}>SGST {calgst}% on {fullAmount}:</Text>
+                                    <Text style={{ width: '120px', fontSize: '11px' }}>SGST {calgst}% on {fullAmount}:</Text>
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst.toFixed(0)}</Text>
                                 </View>
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                                    <Text style={{ width: '100px', fontSize: '11px' }}>Net Payable:</Text>
+                                    <Text style={{ width: '120px', fontSize: '11px' }}>Net Payable:</Text>
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
                                 </View>
                             </View>

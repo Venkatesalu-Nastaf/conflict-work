@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 20px;
 }
 
 .Taxinvoicediv {
@@ -70,7 +71,7 @@
 }
 
 .Datetext {
-  margin-left: 40px;
+  margin-left: 5px;
 }
 
 .tableheadtext {
@@ -89,16 +90,17 @@ tbody {
   border-right: 1px solid gray;
 }
 
-.tabledata-ref{
+.tabledata-ref {
   font-size: 15px;
-  font-weight: 500; 
+  font-weight: 500;
   border-bottom: 1px solid gray;
 }
 
-.table-ref, .table-ref th{
+.table-ref,
+.table-ref th {
   border: 1px solid gray;
 }
 
-.table-ref th{
+.table-ref th {
   border: 1px solid gray !important;
 }

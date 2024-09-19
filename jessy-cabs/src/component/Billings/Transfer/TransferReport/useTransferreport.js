@@ -39,12 +39,18 @@ const useTransferreport = () => {
   const [tripID, setTripID] = useState();
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [pdfzipdata, setPdfzipdata] = useState([])
+  const [selectedRow, setSelectedRow] = useState([])
+  const [billedStatusCheck, setBilledStatusCheck] = useState();
   const location = useLocation()
   const { transferReport, setTransferReport } = PdfData()
+  // set All Tripsheet Values
+  const [allTripData, setAllTripData] = useState([])
+  const [removeUpdate, setRemoveUpdate] = useState(false)
+  const [totalTransferAmount, setTotalTransferAmount] = useState()
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId",
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId", "Status",
     ];
 
     const formData = {};
@@ -54,6 +60,7 @@ const useTransferreport = () => {
         formData[key] = value;
       }
     });
+
     setCustomer(formData.Customer)
     setFromDate(formData.FromDate)
     setEndDate(formData.EndDate)
@@ -62,6 +69,7 @@ const useTransferreport = () => {
     setInvoiceDate(formData.BillDate)
     setTransferReport(formData.TransferReport)
     setTripID(formData.TripId)
+    setBilledStatusCheck(formData.Status)
   }, [location, setTransferReport])
 
   window.addEventListener('click', (event) => {
@@ -180,18 +188,19 @@ const useTransferreport = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+
       try {
         const tripid = localStorage.getItem("selectedtripsheetid");
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
-        const customer = decodeURIComponent(storedCustomer);
+        // const customer = decodeURIComponent(storedCustomer);
         if (!customer || !tripid) return
 
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
             customer
-          )}/${tripid}`
+          )}/${tripID}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -256,14 +265,14 @@ const useTransferreport = () => {
   useEffect(() => {
     const fetchData = async () => {
       const tripid = localStorage.getItem("selectedtripsheetid");
-      const customer = localStorage.getItem("selectedcustomer");
+      // const customer = localStorage.getItem("selectedcustomer");
 
       try {
 
-        if (!tripid || !customer) return
+        if (!tripID || !customer) return
 
         const response = await fetch(
-          `${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`
+          `${apiUrl}/tripsheetcustomertripid/${customer}/${tripID}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -469,6 +478,14 @@ const useTransferreport = () => {
       })
       .filter((tripid) => tripid !== null);
 
+    const selectedTrips = newSelectionModel
+      .filter((selectedId) => selectedId !== null)
+      .map((selectedId) => {
+        const selectedRow = allTripData.find((row) => row.id === parseInt(selectedId));
+        return selectedRow ? selectedRow : null;
+      })
+      .filter((tripid) => tripid !== null);
+    setSelectedRow(selectedTrips)
     const tripsheetid = selectedTripIds;
     setRowSelectionModel(tripsheetid);
   };
@@ -526,14 +543,14 @@ const useTransferreport = () => {
         formattedTripID = tripID[0].split(',').map(id => id.trim());
       }
 
-      localStorage.setItem("selectedcustomer", customer[0]);
+      // localStorage.setItem("selectedcustomer", customer[0]);
 
       try {
         const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
           params: { tripID: formattedTripID }
         });
-        console.log(response.data, 'trip response');
         const tripData = response.data
+        setAllTripData(tripData)
         const tripsheetNumbers = tripData.map((row, index) => ({
           id: index + 1,
           guestname: row.guestname,
@@ -562,8 +579,6 @@ const useTransferreport = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const InvoiceNo = event.target.value;
-      console.log(InvoiceNo,'Invoice');
-      
       try {
         const response = await axios.get(`${apiUrl}/getParticularInvoiceDetails`, {
           params: {
@@ -590,6 +605,99 @@ const useTransferreport = () => {
       } catch (error) {
         console.log(error, 'error');
       }
+    }
+  };
+
+  const handleGroupKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const GroupId = event.target.value;
+
+      try {
+        const response = await axios.get(`${apiUrl}/getParticularInvoiceDetailsbyGroupTripId`, {
+          params: {
+            GroupTripId: GroupId
+          }
+        });
+
+        const Result = response.data;
+
+        const fromdate = Result?.map(li => li.FromDate);
+        setFromDate(fromdate)
+        const enddate = Result?.map(li => li.EndDate);
+        setEndDate(enddate)
+        const organization = Result?.map(li => li.Organization_name);
+
+        setCustomer(organization[0])
+        const InvoiceDate = Result?.map(li => li.Billdate)
+        setInvoiceDate(InvoiceDate)
+        const groupTripid = Result?.map(li => li.Grouptrip_id)
+        setGroupTripid(groupTripid)
+        const Invoice_no = Result?.map(li => li.Invoice_no)
+        setInvoiceno(Invoice_no)
+        const Amount = Result?.map(li => li.Amount)
+        setTotalTransferAmount(Amount)
+        const Status = Result?.map(li => li.Status)
+
+        const checkStatus = Status[0];
+        setBilledStatusCheck(checkStatus)
+        const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
+
+        setTripID(tripid)
+      } catch (error) {
+        console.log(error, 'error');
+      }
+    }
+  }
+
+  // to get select tripdetails
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/togetSelectTripsheetDetails`, {
+          params: {
+            Trip_id: rowSelectionModel,
+          },
+        });
+        setAllTripData(response.data)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [rowSelectionModel]);
+
+
+  const handleRemove = async () => {
+
+    const tripid = allTripData?.map(row => row.tripid.toString());
+    const totalPrice = allTripData.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+    const ActualAmount = parseInt(totalTransferAmount) - totalPrice;
+    const Trips = rows.length - allTripData.length;
+    const selectId = allTripData?.map(row => row.tripid);
+
+    const TransferUpdate = {
+      Trip_id: tripid,
+      Amount: ActualAmount,
+      Trips: Trips,
+    };
+
+    try {
+      const resultresponse = await axios.put(`${apiUrl}/updateList`, TransferUpdate);
+
+      const updateresponse = await axios.post(`${apiUrl}/removeUpdateTripsheet`, { tripid });
+
+      const updatedRows = rows.filter(row => !selectId.includes(row.tripid));
+
+      setSuccess(true);
+      setSuccessMessage("Successfully Removed");
+      setRows(updatedRows);
+      setSelectedRow([]);
+
+      const responsedata = resultresponse.data;
+
+    } catch (error) {
+      console.log(error, 'error');
     }
   };
 
@@ -654,7 +762,12 @@ const useTransferreport = () => {
     pdfzipdata,
     handleKeyDown,
     handleChange,
-    tripID
+    handleGroupKeyDown,
+    setGroupTripid,
+    tripID,
+    handleRemove,
+    billedStatusCheck,
+    setBilledStatusCheck
   };
 };
 

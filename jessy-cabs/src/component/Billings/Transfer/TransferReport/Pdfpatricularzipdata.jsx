@@ -410,19 +410,33 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const organisationdetails = organisationdetail
 
   const convertTimeFormat = (time) => {
-    const regex = /(\d+)h\s*(\d+)m/;
-    const match = time.match(regex);
-    if (match) {
-      const hours = match[1].padStart(2, '0');
-      const minutes = match[2].padStart(2, '0');
-      return `${hours}:${minutes}`;
-    }
+
+    // const regex = /(\d+)h\s*(\d+)m/;
+    // const match = time.match(regex);
+    // if (match) {
+    //   const hours = match[1].padStart(2, '0');
+    //   const minutes = match[2].padStart(2, '0');
+    //   return `${hours}:${minutes}`;
+    // }
     return time; // Return original if it doesn't match the pattern
   };
 
-  const trimSeconds = (time) => {
-    return time.slice(0, 5);
-  };
+  // const trimSeconds = (time) => {
+  //   return time.slice(0, 5);
+  // };
+  function trimSeconds(time) {
+
+    // Split the time string by colon (:)
+    const timeParts = time?.split(':');
+
+    // Check if there are seconds (length 3), return hours:minutes
+    if (timeParts?.length === 3) {
+      return `${timeParts[0]}:${timeParts[1]}`;
+    }
+
+    // If there's only hours:minutes, return it as is
+    return time;
+  }
 
   useEffect(() => {
     let addressone = ''

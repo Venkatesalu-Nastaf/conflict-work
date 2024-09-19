@@ -36,7 +36,6 @@ router.get('/payment-detail', (req, res) => {
 router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
-  console.log(customer, tripid, 'trip customer');
   const decodedCustomer = decodeURIComponent(customer);
   // Query to get tripsheet details
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
@@ -99,7 +98,6 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown';
 
         });
-        console.log(result, "rr")
 
 
         return res.status(200).json(result);
@@ -112,7 +110,6 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
 router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
-  console.log(customer, tripid, 'trip customer');
   const decodedCustomer = decodeURIComponent(customer);
   // Query to get tripsheet details
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
@@ -311,7 +308,6 @@ router.get('/Get-Billing', (req, res) => {
 router.post('/updateParticularTransferList', (req, res) => {
   const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid } = req.body;
   const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
-  console.log(Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, grouptripid, 'updatetransfer');
 
   if (!grouptripid) {
     return res.status(400).json({ error: 'grouptripid is required' });
@@ -339,7 +335,6 @@ router.post('/updateParticularTransferList', (req, res) => {
 // get transferList Where GroupTripId
 router.get('/getParticularTransferListDetails', (req, res) => {
   const { groupId } = req.query;
-  console.log(groupId, 'groupid');
 
   if (!groupId) {
     return res.status(400).json({ error: 'groupId is required' });
@@ -362,7 +357,6 @@ router.post('/insertTransferListTrip', (req, res) => {
   const { Status, Billdate, Organization_name, FromDate, EndDate, grouptripid, Trips, Amount, Trip_id } = req.body;
 
   const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
-  console.log(Status, Billdate, Organization_name, FromDate, EndDate, grouptripid, Trips, Amount, tripIdString, 'transfer');
 
   // Check if grouptripid exists
   const checkGroupTripIdQuery = 'SELECT Grouptrip_id FROM Transfer_list WHERE Grouptrip_id = ?';
@@ -398,35 +392,84 @@ router.post('/insertTransferListTrip', (req, res) => {
     }
   });
 });
-
-
-
 router.post('/transferlistdatatrip', (req, res) => {
   const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id } = req.body;
-  const sqlquery = 'INSERT INTO Transfer_list(Status,Billdate,Organization_name,Trip_id,FromDate,EndDate,Trips,Amount) VALUES(?,?,?,?,?,?,?,?)';
 
   if (!Array.isArray(Trip_id)) {
-    return res.status(400).json({ error: 'id should be an array' });
+    return res.status(400).json({ error: 'Trip_id should be an array' });
   }
 
+  const sqlquery = 'INSERT INTO Transfer_list(Status, Billdate, Organization_name, Trip_id, FromDate, EndDate, Trips, Amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   const idString = Trip_id.join(',');
 
+  // Insert into Transfer_list table
   db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert data into MySQL' });
     }
 
+    // Update tripsheet to set Billed_Status
     const updateQuery = "UPDATE tripsheet SET Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
     db.query(updateQuery, [Trip_id], (err, updateResult) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to update Billed_Status in MySQL' });
       }
-      console.log(updateResult, 'updateresult');
 
-      return res.status(200).json({ message: 'Inserted and updated successfully' });
+      // Fetch Grouptrip_id from Transfer_list
+      const groupidquery = `SELECT Grouptrip_id FROM Transfer_list WHERE Trip_id IN (?)`;
+      db.query(groupidquery, [idString], (error, groupResult) => {
+        if (error) {
+          return res.status(500).json({ error: 'Failed to fetch Grouptrip_id from MySQL' });
+        }
+
+        if (groupResult.length > 0) {
+          const groupTripId = groupResult[0].Grouptrip_id;
+
+          // Update tripsheet with GroupTripId
+          const tripsheetUpdateQuery = `UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
+          db.query(tripsheetUpdateQuery, [groupTripId, Trip_id], (updateError, finalResult) => {
+            if (updateError) {
+              return res.status(500).json({ error: 'Failed to update GroupTripId in tripsheet' });
+            }
+
+            return res.status(200).json({ message: 'Inserted and updated successfully', groupTripId });
+          });
+        } else {
+          return res.status(404).json({ error: 'No Grouptrip_id found' });
+        }
+      });
     });
   });
 });
+
+
+
+// router.post('/transferlistdatatrip', (req, res) => {
+//   const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id } = req.body;
+//   const sqlquery = 'INSERT INTO Transfer_list(Status,Billdate,Organization_name,Trip_id,FromDate,EndDate,Trips,Amount) VALUES(?,?,?,?,?,?,?,?)';
+
+//   if (!Array.isArray(Trip_id)) {
+//     return res.status(400).json({ error: 'id should be an array' });
+//   }
+
+//   const idString = Trip_id.join(',');
+
+//   db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Failed to insert data into MySQL' });
+//     }
+
+//     const updateQuery = "UPDATE tripsheet SET Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
+//     db.query(updateQuery, [Trip_id], (err, updateResult) => {
+//       if (err) {
+//         return res.status(500).json({ error: 'Failed to update Billed_Status in MySQL' });
+//       }
+//       console.log(updateResult, 'updateresult');
+
+//       return res.status(200).json({ message: 'Inserted and updated successfully' });
+//     });
+//   });
+// });
 router.get('/getparticulartransfer_list', (req, res) => {
   const { tripid } = req.query;  // tripid should be an array like ['1358', '1367']
 
@@ -450,7 +493,6 @@ router.get('/getparticulartransfer_list', (req, res) => {
       return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
     }
 
-    console.log(result, 'particular');
     return res.status(200).json(result);
   });
 });
@@ -459,7 +501,6 @@ router.get('/getparticulartransfer_list', (req, res) => {
 router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
   const { transferTripId } = req.query;
 
-  console.log(transferTripId, 'transferid');
 
   if (!transferTripId) {
     return res.status(400).json({ error: 'Transfer Trip ID is required' });
@@ -470,7 +511,6 @@ router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
     ? transferTripId.split(',')  // Split the string by commas
     : [transferTripId];          // If it's already a single value, wrap it in an array
 
-  console.log(tripIdArray, 'split transferid');
 
   const sqlquery = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
 
@@ -479,7 +519,6 @@ router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
       console.error(error, 'error');
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
-    console.log(result, 'result');
 
     return res.status(200).json(result);
   });
@@ -599,6 +638,22 @@ router.post('/tripsheetUpdate', (req, res) => {
   });
 });
 
+// update Remove details in tripsheet
+router.post('/removeUpdateTripsheet', (req, res) => {
+  const { tripid } = req.body;
+  const tripIdsArray = Array.isArray(tripid) ? tripid : [tripid];
+
+  const query = `UPDATE tripsheet SET Billed_Status = NULL,status = Closed WHERE tripid IN (?)`;
+
+  db.query(query, [tripIdsArray], (err, result) => {
+    if (err) {
+      return res.status(500).send({ error: 'Database update failed' });
+    }
+
+    res.status(200).send({ message: 'Tripsheet updated successfully', result });
+  });
+});
+
 
 // router.put('/updateList',(req,res)=>{
 //   const {Trip_id,Trips,Amount}= req.body;
@@ -646,7 +701,6 @@ router.post('/tripsheetUpdate', (req, res) => {
 
 router.get('/updateTransferListdata/:groupId', (req, res) => {
   const groupId = req.params.groupId;
-  // console.log(groupId, 'gid');
   const sqlquery = "SELECT * FROM Transfer_list where Grouptrip_id = ?";
 
   db.query(sqlquery, [groupId], (err, result) => {
@@ -654,7 +708,6 @@ router.get('/updateTransferListdata/:groupId', (req, res) => {
       console.log(err, 'error');
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    // console.log(result, 'getlist');
     return res.status(200).json(result);
   });
 });
@@ -801,7 +854,6 @@ router.get('/gettransfer_listdatas', (req, res) => {
 router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripids = req.params.tripid.split(',');
-  // console.log(customer, tripid)
 
   const decodedCustomer = decodeURIComponent(customer);
 
@@ -865,6 +917,20 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     });
 });
 
+// to get particular Tripsheet details
+router.get('/togetSelectTripsheetDetails', (req, res) => {
+  const { Trip_id } = req.query;
+  const tripIdsArray = Array.isArray(Trip_id) ? Trip_id : [Trip_id];
+
+  const query = 'SELECT * FROM tripsheet WHERE tripid IN (?)';
+
+  db.query(query, [tripIdsArray], (err, results) => {
+    if (err) {
+      return res.status(500).send({ error: 'Database query failed' });
+    }
+    res.status(200).send(results);
+  });
+});
 
 
 

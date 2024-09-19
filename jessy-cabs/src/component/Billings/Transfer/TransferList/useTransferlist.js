@@ -341,7 +341,7 @@ const useTransferlist = () => {
       window.location.href = billingPageUrl
     }
     else {
-      const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Group_id=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&BillDate=${data.Billdate || ''}&Customer=${data.Organization_name || ''}&TripId=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&TransferReport=true`
+      const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Group_id=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=Billed&BillDate=${data.Billdate || ''}&Customer=${data.Organization_name || ''}&TripId=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&TransferReport=true`;
       window.location.href = billingPageUrl
     }
 

@@ -137,7 +137,6 @@ router.put('/statusupdate', (req, res) => {
         console.log(err, 'error');
         return res.status(500).json({ error: "Failed to update data in MySQL" });
       }
-      console.log(updateGroupBillingResult, 'result');
     });
   });
 
@@ -279,8 +278,13 @@ router.get('/getParticularTripsheet', (req, res) => {
     return res.status(400).json({ error: 'TripID is required' });
   }
 
-  const tripIDs = Array.isArray(tripID) ? tripID : [tripID];
-  console.log(tripID, tripIDs, 'tripid');
+  const tripIDs = Array.isArray(tripID)
+    ? tripID
+    : tripID.includes(',')
+      ? tripID.split(',')
+      : [tripID];
+
+
 
   const query = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
   db.query(query, [tripIDs], (error, result) => {
@@ -288,28 +292,53 @@ router.get('/getParticularTripsheet', (req, res) => {
       console.error('Failed to retrieve tripsheet data:', error);
       return res.status(500).json({ error: 'Failed to retrieve tripsheet data' });
     }
-    console.log(result, 'trip res');
 
     return res.status(200).json(result);
   });
 });
 
-
-
 router.get('/getParticularInvoiceDetails', (req, res) => {
   const { InvoiceNo } = req.query;
-  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? AND Status = "Billed" `;
+  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? `;
 
   db.query(query, [InvoiceNo], (err, result) => {
     if (err) {
       console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
-    console.log(result, 'Billed Result');
 
     return res.status(200).json(result);
   });
 });
+
+router.get('/getParticularInvoiceDetailsbyGroupTripId', (req, res) => {
+  const { GroupTripId } = req.query;
+  const query = `SELECT * FROM Transfer_list WHERE Grouptrip_id = ? `;
+
+  db.query(query, [GroupTripId], (err, result) => {
+    if (err) {
+      console.error('Failed to retrieve booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+
+    return res.status(200).json(result);
+  });
+});
+
+// router.get('/getParticularInvoiceDetails', (req, res) => {
+//   const { InvoiceNo } = req.query;
+//   const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? AND Status = "Billed" `;
+
+//   db.query(query, [InvoiceNo], (err, result) => {
+//     if (err) {
+//       console.error('Failed to retrieve booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     console.log(result, 'Billed Result'); 
+
+//     return res.status(200).json(result);
+//   });
+// });
 
 
 

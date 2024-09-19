@@ -108,14 +108,14 @@ const Settings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         /> */}
-          <MenuItem
+          {/* <MenuItem
             label="Station Creation"
             to={Station_Creation && ("/home/settings/stationcreation")}
             alt="/home/settings/stationcreation"
             menuItemKey="Station Creation"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> */}
           <MenuItem
             label="Main setting"
             to={Main_Setting && ("/home/settings/mainsetting")}

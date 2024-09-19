@@ -2,10 +2,10 @@ import React from 'react'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+// import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import DriverBataRate from './DriverBataRate/DriverBataRate';
-import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
+// import DriverBataRate from './DriverBataRate/DriverBataRate';
+// import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
 import './RateManagement.css'
 
 const RateManagement = ({ stationName, organizationNames, vehileName }) => {
@@ -27,8 +27,8 @@ const RateManagement = ({ stationName, organizationNames, vehileName }) => {
                 <Tab label="Driver Bata Rate" value="driverbatarate" />
               </TabList>
             </Box>
-            <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} vehileName={vehileName} stationname={stationName}/></TabPanel>
-            <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel>
+            {/* <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} vehileName={vehileName} stationname={stationName}/></TabPanel>
+            <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel> */}
           </TabContext>
         </Box>
       </div>

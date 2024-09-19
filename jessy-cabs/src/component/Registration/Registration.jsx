@@ -30,9 +30,10 @@ const Registration = () => {
 
   const Customer = permissions[9]?.read || permissions[8]?.read;
   const Supllier = permissions[10]?.read;
-  const Employee = permissions[11]?.read;
+  // const Employee = permissions[11]?.read;
   const INFO = permissions[16]?.read;
-  const Rate_Management = permissions[17]?.read;
+  const Station_Creation = permissions[14]?.read;
+  // const Rate_Management = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);
 
@@ -64,15 +65,18 @@ const Registration = () => {
       case "Rate Type":
         hasPermission = INFO;
         break;
-      case "Rate Management":
-        hasPermission = Rate_Management;
-        break;
+      // case "Rate Management":
+      //   hasPermission = Rate_Management;
+      //   break;
       case "Customer":
         hasPermission = Customer;
         break;
       case "Supplier":
         hasPermission = Supllier;
         break;
+        case "Station Creation":
+          hasPermission = Station_Creation;
+          break;
       // case "Employees":
       //   hasPermission = Employee;
       //   break;
@@ -113,14 +117,14 @@ const Registration = () => {
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />
-          <MenuItem
+          {/* <MenuItem
             label="Rate Management"
             to={Rate_Management && ("/home/registration/ratemanagement")}
             alt="/home/registration/ratemanagement"
             menuItemKey="Ratemanagement"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> */}
           <MenuItem
             label="Customer"
             to={Customer && ("/home/registration/customer")}
@@ -134,6 +138,14 @@ const Registration = () => {
             to={Supllier && ("/home/registration/supplier")}
             alt="/home/registration/supplier"
             menuItemKey="Supplier"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          />
+           <MenuItem
+            label="Station Creation"
+            to={Station_Creation && ("/home/registration/stationcreation")}
+            alt="/home/registration/stationcreation"
+            menuItemKey="Station Creation"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           />

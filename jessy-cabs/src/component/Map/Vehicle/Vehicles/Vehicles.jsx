@@ -104,9 +104,9 @@ const Vehicles = () => {
     };
 
     return (
-        <div>
+        
             <div className='vehicle-tab-main'>
-                <div className='vehicle-tab-left-main'>
+                <div className='vehicle-tab-left-main main-content-vehicles'>
                     <div style={{ marginBottom: '20px' }}>
                         <Button variant="outlined" onClick={openSortOptionmenu}><MdOutlineSort className='btn-icon' /> Sort Options</Button>
                         <Menu
@@ -377,8 +377,8 @@ const Vehicles = () => {
                     </Dialog>
                 </React.Fragment>
 
-                <div className='vehicle-tab-right-main Scroll-Style'>
-                    <div className='vehicle-tab-right-top-division-main'>
+                <div className='vehicle-tab-right-main Scroll-Style ' >
+                    <div className='vehicle-tab-right-top-division-main main-content-vehicles'>
                         <div className='vehicle-tab-right-top-division-box'>
                             <div className='vehicle-details-box-veh-no'>TN22EB3001</div>
                             <div className='vehicle-tab-right-top-division-btn-section'>
@@ -532,7 +532,7 @@ const Vehicles = () => {
                     </div>
                 </div>
             </div>
-        </div>
+    
     )
 }
 

@@ -309,6 +309,26 @@ router.post('/tripsheet-add', (req, res) => {
     });
 });
 
+router.get('/drivernamedrivercreation', (req, res) => {
+    const sql = 'SELECT drivername,Mobileno FROM drivercreation';
+    db.query(sql, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
+        }
+        // Assuming your `result` contains a field `drivername` and `Mobileno`
+        return res.status(200).json(result);
+    });
+});
+router.get('/vehicleinfodatavehcile', (req, res) => {
+    db.query('SELECT * FROM vehicleinfo', (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log(results, "hhh");
+        return res.status(200).json(results);
+    });
+});
+
 // delete tripsheet data---------------------------------------------------
 router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;

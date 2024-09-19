@@ -74,6 +74,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -173,6 +174,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     book,
     handleClick,
     handleChange,
+    vechiledata,
+    handleVehicleChange,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -187,6 +190,9 @@ const TripSheet = ({ stationName, logoImage }) => {
     smsguest,
     sendEmail,
     setSendEmail,
+    handleDriverChange,
+    handleKeyEnterdriver,
+    drivername,
     formValues,
     selectedCustomerDatas,
     setDriverSMS,
@@ -258,7 +264,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     calculateTotalTimes,
     handleClickOpen,
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
-    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign,
+    maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate
   } = useTripsheet();
@@ -757,7 +763,38 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-
+                <div className="input">
+                  <TextField
+                    name="GroupTripId"
+                    size="small"
+                    value={groupTripId || ""}
+                    label="Group ID"
+                    id="standard-size-customer"
+                    // disabled
+                    autoFocus
+                    autoComplete="password"
+                    style={{ color: 'black' }}
+                    InputProps={{
+                      style: {
+                        color: 'black',
+                      },
+                      readOnly: true,
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        color: 'black',
+                      },
+                    }}
+                    sx={{
+                      "& .MuiInputBase-root.Mui-disabled": {
+                        color: "black",
+                      },
+                      "& .MuiFormLabel-root.Mui-disabled": {
+                        color: "black",
+                      },
+                    }}
+                  />
+                </div>
 
               </div>
               <div className='tripsheet-division1'>
@@ -2936,7 +2973,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         </TabPanel> */}
                         <TabPanel value={1} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
-                            <div style={{ display: "flex",alignItems:"baseline",flexWrap:"wrap" }}>
+                            <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
 
 
                               <div className='left-buttons'>
@@ -4668,7 +4705,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
 
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <CarCrashIcon color="action" />
                       </div>
@@ -4676,13 +4713,41 @@ const TripSheet = ({ stationName, logoImage }) => {
                         margin="normal"
                         size="small"
                         id="vehRegNo"
-                        label="Vehicle Rigster No"
+                        label="Vehicle Register No"
                         name="vehRegNo"
                         // value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
                         value={selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || ''}
                         onChange={handleChange}
                         autoComplete="password"
                         onKeyDown={handleKeyEnterDriverDetails}
+                      />
+                    </div> */}
+
+                    <div className="input">
+                      <div className="icone">
+                        <RateReviewIcon color="action" />
+                      </div>
+
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="vehicleRegno"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
+                        onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                        onKeyDown={handleKeyEnterdriver}
+                        value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
+                        options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
+                        getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Veh Reg No"
+                            name="vehRegNo"
+                            inputRef={params.inputRef}
+                          />
+                        )}
                       />
                     </div>
                     <div className="input">
@@ -4696,7 +4761,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         size="small"
                         value={
-                          selectedCustomerDatas.vehType || formData.vehType ||
+                          selectedCustomerDatas.vehType ||
+                          formData.vehType ||
                           selectedCustomerData.vehType ||
                           book.vehType || ""
                         }
@@ -4792,7 +4858,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
 
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <SensorOccupiedIcon color="action" />
                       </div>
@@ -4820,7 +4886,45 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onKeyDown={handleKeyEnterDriverDetails}
                       />
 
+                    </div> */}
+                    {console.log(selectedCustomerData?.driverName, book.driverName, "driverddd")}
+                    <div className="input">
+                      <div className="icone">
+                        <AirlineSeatReclineExtraIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="driverName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        onKeyDown={handleKeyEnterDriverDetails}
+                        value={selectedCustomerData?.driverName || book.driverName || ""} // Ensure the driverName is reflected correctly
+                        options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from your data
+                        getOptionLabel={(option) => option.label || selectedCustomerData?.driverName || book.driverName || ''} // Display label properly
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Driver Name"
+                            name="driverName"
+                            inputRef={params.inputRef}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: e.target.value });
+                              setFormData({ ...formData, driverName: e.target.value });
+                              setSelectedCustomerData({ ...selectedCustomerData, driverName: e.target.value });
+                              setFormValues({ ...formValues, driverName: e.target.value });
+                              setBook({ ...book, driverName: e.target.value });
+                              if (!lockdata) {
+                                setVendorinfodata({ ...vendorinfo, driverName: e.target.value });
+                              }
+                            }}
+                          />
+                        )}
+                      />
                     </div>
+
 
                     <div className="input">
                       <div className="icone">
@@ -4832,7 +4936,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         // value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
                         value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
                         onChange={handleChange}
-                        label="Cell"
+                        label="Driver Phone"
                         id="mobileNo"
                         // variant="standard"
                         size='small'

@@ -15,7 +15,7 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AlertPopup from "../../../AlertPopup/AlertPopup";
+// import AlertPopup from "../../../AlertPopup/AlertPopup";
 // import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 // import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import {
@@ -159,7 +159,8 @@ const Booking = ({ stationName, customerData }) => {
     setFormData,
     setStartTime,
     handleChangeFile,
-    handleDriverChange, 
+    handleDriverChange,
+    handleVehicleChange,
     drivername,
     sendEmail,
     setSendEmail,
@@ -189,6 +190,7 @@ const Booking = ({ stationName, customerData }) => {
     allFile,
     handleButtonClick,
     isEditMode,
+    vechiledata,
     handleEdit,
     handleContextMenu,
     handleimagedelete,
@@ -2533,29 +2535,57 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
+            {/* <div className="input">
+              <div className="icone">
+                <RateReviewIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="vehicleRegno"
+                freeSolo
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
+                onKeyDown={handleKeyEnterdriver}
+                value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}
+                // getOptionLabel={(option) => option.label || selectedCustomerData?.vehRegNo || book.vehRegNo || ''}
+                renderInput={(params) => (
+                  <TextField {...params} label="Veh Reg No" name="vehRegNo" inputRef={params.inputRef} />
+                )}
+              />
+
+            </div> */}
+
+            {/* Entering Manually */}
             <div className="input">
               <div className="icone">
-                <CarCrashIcon color="action" />
+                <RateReviewIcon color="action" />
               </div>
-              <TextField
-                name="vehRegNo"
-                className="full-width"
-                autoComplete="new-password"
-                value={
-                  formData.vehRegNo ||
-                  selectedCustomerData.vehRegNo ||
-                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||
-                  ""
-                }
-                onChange={handleChange}
-                onKeyDown={handleKeyEnterdriver}
-                label="Vehicle Register No"
-                id="vehRegNo"
-                // variant="standard"
-                margin="normal"
+
+              <Autocomplete
+                fullWidth
                 size="small"
+                id="vehicleRegno"
+                freeSolo  
+                sx={{ width: "100%" }}
+                onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
+                onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                onKeyDown={handleKeyEnterdriver}
+                value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
+                options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
+                getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Veh Reg No"
+                    name="vehRegNo"
+                    inputRef={params.inputRef}
+                  />
+                )}
               />
             </div>
+
 
             <div className="input">
               <div className="icone">
@@ -2580,7 +2610,7 @@ const Booking = ({ stationName, customerData }) => {
                 }
                 renderInput={(params) => {
                   return (
-                    <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
+                    <TextField {...params} label="Vehicle Type" name="vehicleType" inputRef={params.inputRef} />
                   );
                 }}
               />
@@ -2663,7 +2693,7 @@ const Booking = ({ stationName, customerData }) => {
               </div>
               <TextField
                 name="driverName"
-                className="full-width"
+                className="full-width"  
                 autoComplete="new-password"
                 value={
                   formData.driverName ||
@@ -2684,6 +2714,7 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <AirlineSeatReclineExtraIcon color="action" />
               </div>
+
               <Autocomplete
                 fullWidth
                 size="small"
@@ -2691,20 +2722,22 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
                 onKeyDown={handleKeyEnterdriver}
-                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
-                value={selectedCustomerData?.driverName || book.selectedCustomerData || ""}
-                options={drivername?.map((option) => ({ label: option }))} // Use organizationName here
-                getOptionLabel={(option) => option.label || selectedCustomerData?.driverName || ''}
-                renderInput={(params) => {
-                  return (
-                    <TextField {...params} label="Driver Name" name="driverName" inputRef={params.inputRef} />
-                  )
-                }
-                }
+                value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Driver Name"
+                    name="driverName"
+                    inputRef={params.inputRef}
+                  />
+                )}
               />
             </div>
-
+            {/* {console.log(formData.mobileNo, selectedCustomerData.mobileNo, book.mobileNo, "sharan")} */}
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -2714,7 +2747,7 @@ const Booking = ({ stationName, customerData }) => {
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  formData.mobileNo ||
+                  // formData.mobileNo ||
                   selectedCustomerData.mobileNo ||
                   book.mobileNo || selectedCustomerdriver.mobileNo ||
                   ""
@@ -2774,9 +2807,9 @@ const Booking = ({ stationName, customerData }) => {
                           <th className="table-head-booking">Vehicle Name</th>
                           <th className="table-head-booking">Vehicle NO</th>
                           <th className="table-head-booking">Travels Name</th> */}
-                          {/* <th className="table-head-booking">HIRE TYPES</th> */}
-                          {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
-                        {/* </tr>
+                  {/* <th className="table-head-booking">HIRE TYPES</th> */}
+                  {/* <th className="table-head-booking table-heading-last">ACTIVE</th> */}
+                  {/* </tr>
                       </thead>
                       <tbody>
                         {rowdriver?.length === 0 ? (
@@ -2794,9 +2827,9 @@ const Booking = ({ stationName, customerData }) => {
                               <td>{row.vehType}</td>
                               <td>{row.vehRegNo}</td>
                               <td>{row.travelsname}</td> */}
-                              {/* <td>{row.hireTypes}</td> */}
-                              {/* <td>{row.active}</td> */}
-                            {/* </tr>
+                  {/* <td>{row.hireTypes}</td> */}
+                  {/* <td>{row.active}</td> */}
+                  {/* </tr>
                           ))
                         )}
                       </tbody>
@@ -2862,7 +2895,7 @@ const Booking = ({ stationName, customerData }) => {
             </Button>
           </DialogActions>
         </Dialog>
-        {/* <div className="alert-popup-main">
+        <div className="alert-popup-main">
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
@@ -2905,9 +2938,8 @@ const Booking = ({ stationName, customerData }) => {
               <p>{warningMessage}</p>
             </div>
           }
-        </div> */}
+        </div>
 
-        <AlertPopup/>
         {/* <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">

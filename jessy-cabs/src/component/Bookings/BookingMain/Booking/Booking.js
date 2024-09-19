@@ -489,7 +489,7 @@ export const VehicleModel = [
 
 export const GroupTypes = [
   {
-    Option: "Luxzury",
+    Option: "Luxury",
     // optionvalue: "a/c",
   },
   {

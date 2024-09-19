@@ -69,16 +69,27 @@ router.get('/booking/:bookingno', (req, res) => {
     });
 });
 
-router.get('/drivernamevechicleinfo', (req, res) => {
-    const sql = 'select * from drivercreation'
-    db.query(sql, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
-        }
+router.get('/drivernamedrivercreation', (req, res) => {
+  const sql = 'SELECT drivername,Mobileno FROM drivercreation';
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
+    }
+    // Assuming your `result` contains a field `drivername` and `Mobileno`
+    return res.status(200).json(result);
+  });
+});
 
-        return res.status(200).json(result);
-    })
-})
+router.get('/vehicleinfodatavehcile', (req, res) => {
+    db.query('SELECT * FROM vehicleinfo', (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        console.log(results, "hhh");
+        return res.status(200).json(results);
+    });
+});
+
 
 router.get('/last-booking-no', (req, res) => {
     db.query('SELECT * FROM booking ORDER BY bookingno DESC LIMIT 1', (err, result) => {
@@ -89,7 +100,7 @@ router.get('/last-booking-no', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         const lastBooking = result[0];
-        return res.status(200).json(lastBooking);
+        return res.status(200).json(lastBooking);  
     });
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Drawer, IconButton, Box, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { PermissionContext } from "../../../context/permissionContext";
@@ -8,6 +8,7 @@ import EtripSheetSignature from './EtripSheetSignature/EtripSheetSignature';
 import "./OverviewDrawer.css"
 import { CiNoWaitingSign } from "react-icons/ci";
 import EtripSheetTable from './EtripSheetTable/EtripSheetTable';
+import { Status } from "./OverviewDrawerData.js";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,18 +21,39 @@ import { GiMatterStates } from "react-icons/gi";
 // import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 // import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Button from "@mui/material/Button";
-import useTripStatus from '../TripStatus/useTripStatus';
+// import useTri pStatus from '../TripStatus/useTripStatus';
+import useOverviewDrawer from './useOverviewDrawer.js'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import ClearIcon from '@mui/icons-material/Clear';
+import Checkbox from '@mui/material/Checkbox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import SpeedDial from "@mui/material/SpeedDial";
+import { styled } from "@mui/material/styles";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
 
 
-
-
-
-
-const OverviewDrawer = () => {
+const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const { isDrawerOpen, setIsDrawerOpen } = useContext(PermissionContext)
 
 
@@ -43,18 +65,60 @@ const OverviewDrawer = () => {
   const handleShowCards = () => {
     SetShowCards(!showCards);
   }
-  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const {
     popupOpen,
     handlePopupClose,
     selectedRow,
     handleBookingClick,
+    handlestatusChange,
+    handleCustomerChange,
+    VehNo,
+    handleVechicleNoChange,
+    cutomerName,
+    statusvalue,
+    handleShow,
+    handleShowAll,
+    fromDate,
+    department,
+    handleInputChange,
+    // stationName,
+    toDate,
+    setToDate,
+    setFromDate,
+    handleClick,
     handleTripsheetClick,
     handleButtonClick,
-  } = useTripStatus();
+    //POP ups..
+    hidePopup,
+    error,
+    errorMessage,
+    warning,
+    warningMessage,
+    success,
+    successMessage,
+    info,
+    infoMessage,
+    
+    selectedCustomerId,
+
+
+  } = useOverviewDrawer();
+
+  const [allCustomer, setAllCustomer] = useState([])
+  const { permissions } = useContext(PermissionContext)
+  const TripStatus_read = permissions[2]?.read;
+
+  useEffect(() => {
+    if (customer?.length > 1) {
+      setAllCustomer([...customer, { customer: "All" }])
+    }
+    else {
+      setAllCustomer(customer)
+    }
+  })
 
   return (
     <>
@@ -87,8 +151,8 @@ const OverviewDrawer = () => {
                   <DatePicker
                     label="From Date"
                     format="DD/MM/YYYY"
-                  // value={fromDate}
-                  // onChange={(date) => setFromDate(date)}
+                    value={fromDate}
+                    onChange={(date) => setFromDate(date)}
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -103,8 +167,8 @@ const OverviewDrawer = () => {
                   <DatePicker
                     label="To Date"
                     format="DD/MM/YYYY"
-                  // value={toDate}
-                  // onChange={(date) => setToDate(date)}
+                    value={toDate}
+                    onChange={(date) => setToDate(date)}
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -120,11 +184,11 @@ const OverviewDrawer = () => {
                 id="Status"
                 freeSolo
                 size="small"
-                // value={statusvalue}
-                // options={Status.map((option) => ({
-                //   label: option.option,
-                // }))}
-                // onChange={(event, value) => handlestatusChange(event, value)}
+                value={statusvalue}
+                options={Status.map((option) => ({
+                  label: option.option,
+                }))}
+                onChange={(event, value) => handlestatusChange(event, value)}
                 renderInput={(params) => {
                   return (
                     <TextField {...params} label="Status" inputRef={params.inputRef} />
@@ -139,21 +203,34 @@ const OverviewDrawer = () => {
               </div>
               <Autocomplete
                 fullWidth
-                id="Status"
-                freeSolo
+                multiple
+                id="Department"
                 size="small"
-                // value={statusvalue}
-                // options={Status.map((option) => ({
-                //   label: option.option,
-                // }))}
-                // onChange={(event, value) => handlestatusChange(event, value)}
+                value={department}
+                options={stationName.map((option) => ({
+                  label: option.Stationname,
+                }))}
+                isOptionEqualToValue={(option, value) => option.label === value.label}
+                onChange={(event, value) => handleInputChange(event, value)}
+                disableCloseOnSelect
+
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
                 renderInput={(params) => {
                   return (
                     <TextField {...params} label="Department" inputRef={params.inputRef} />
                   );
                 }}
               />
-
             </div>
 
             <div className="input">
@@ -162,14 +239,29 @@ const OverviewDrawer = () => {
               </div>
               <Autocomplete
                 fullWidth
-                id="Status"
+                multiple
+                id="Customer"
                 freeSolo
                 size="small"
-                // value={statusvalue}
-                // options={Status.map((option) => ({
-                //   label: option.option,
-                // }))}
-                // onChange={(event, value) => handlestatusChange(event, value)}
+                value={cutomerName}
+                options={allCustomer?.map((option) => ({
+                  label: option.customer,
+                }))}
+                disableCloseOnSelect
+
+                isOptionEqualToValue={(option, value) => option.label === value.label}
+                onChange={(event, value) => handleCustomerChange(event, value)}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
                 renderInput={(params) => {
                   return (
                     <TextField {...params} label="Customer" inputRef={params.inputRef} />
@@ -178,7 +270,6 @@ const OverviewDrawer = () => {
               />
 
             </div>
-
             <div className="input">
               <div className="icone">
                 <GiMatterStates color="action" />
@@ -188,11 +279,11 @@ const OverviewDrawer = () => {
                 id="vehicleNo"
                 freeSolo
                 size="small"
-                // value={VehNo}
-                // options={vehicleNo?.map((option) => ({
-                //   label: option.vehRegNo,
-                // }))}
-                // onChange={(event, value) => handleVechicleNoChange(event, value)}
+                value={VehNo}
+                options={vehicleNo?.map((option) => ({
+                  label: option.vehRegNo,
+                }))}
+                onChange={(event, value) => handleVechicleNoChange(event, value)}
                 renderInput={(params) => {
                   return (
                     <TextField {...params} label="Vehicle No" inputRef={params.inputRef} />
@@ -203,13 +294,90 @@ const OverviewDrawer = () => {
 
             <div className='show-all-button'>
               <div className="input" >
-                <Button variant="outlined" >Show</Button>
+                <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
               </div>
               <div className="input">
-                <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
               </div>
             </div>
-
+          </div>
+          <div className="SpeedDial">
+            <Box className='common-speed-dail'>
+              <StyledSpeedDial
+                ariaLabel="SpeedDial playground example"
+                icon={<SpeedDialIcon />}
+                direction="left"
+              >
+                {TripStatus_read === 1 && (
+                  <SpeedDialAction
+                    key="list"
+                    icon={<ChecklistIcon />}
+                    tooltipTitle="List"
+                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                  />
+                )}
+                <SpeedDialAction
+                  key="Cancel"
+                  icon={<CancelPresentationIcon />}
+                  tooltipTitle="Cancel"
+                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                />
+              </StyledSpeedDial>
+            </Box>
+          </div>
+          {/* <div className="SpeedDial">
+            <Box className='common-speed-dail'>
+              <StyledSpeedDial
+                ariaLabel="SpeedDial playground example"
+                icon={<SpeedDialIcon />}
+                direction="left"
+              >
+                {TripStatus_read === 1 && (
+                  <SpeedDialAction
+                    key="list"
+                    icon={<ChecklistIcon />}
+                    tooltipTitle="List"
+                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                  />
+                )}
+                <SpeedDialAction
+                  key="Cancel"
+                  icon={<CancelPresentationIcon />}
+                  tooltipTitle="Cancel"
+                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                />
+              </StyledSpeedDial>
+            </Box>
+          </div> */}
+          <div className='alert-popup-main'>
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
           </div>
 
           <Box sx={{ padding: '16px' }} className="main-content-overview">
@@ -231,7 +399,7 @@ const OverviewDrawer = () => {
               <Button variant="outlined">Cancel</Button>
               <Button variant="contained">Verified</Button>
               {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
-              <Button onClick={handleButtonClick}>Shdow</Button>
+              <Button onClick={handleButtonClick}>Show</Button>
             </div>
             <EtripSheetTable />
           </Box>
@@ -257,4 +425,5 @@ const OverviewDrawer = () => {
     </>
   )
 }
+
 export default OverviewDrawer;

@@ -78,6 +78,7 @@ const useBooking = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [reporttime, setreporttime] = useState("");
+  const [vechiledata, setVehicleData] = useState([]);
   const [drivername, setDrivername] = useState([]);
   const [starttime, setStartTime] = useState("");
   // const [bookingtime, setBookingTime] = useState("");
@@ -171,13 +172,16 @@ const useBooking = () => {
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
-    if(dispath){
+    if (dispath) {
       setSendEmail(false)
-      
+      setIsEditMode(dispath)
+      setEdit(dispath)
+
     }
     // setSendEmail(false)
-    setIsEditMode(dispath)
-    setEdit(dispath)
+    // setIsEditMode(dispath)
+
+    // setEdit(dispath)
     const formData = {};
 
     const parameterKeys = [
@@ -227,7 +231,7 @@ const useBooking = () => {
       "vehiclemodule",
       "ratenamebook",
       "shedOutDate"
-      
+
 
 
     ];
@@ -243,15 +247,15 @@ const useBooking = () => {
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
 
-    const ratetye=formData["ratenamebook"]
+    const ratetye = formData["ratenamebook"]
     setRate_name(ratetye)
     setBookingStatus(formData["status"])
 
     setBook(formData);
     setFormData(formData);
-    
+
   }, [location]);
- 
+
 
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
@@ -417,11 +421,11 @@ const useBooking = () => {
   useEffect(() => {
     const fetchOrganizationnames = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/drivernamevechicleinfo`);
+        const response = await axios.get(`${apiUrl}/drivernamedrivercreation`);
         const data = response.data
-        const names = data.map(res => res.drivername)
-
-        setDrivername(names)
+        // const names = data.map(res => res.drivername)
+        console.log(data)
+        setDrivername(data)
 
 
       }
@@ -431,6 +435,7 @@ const useBooking = () => {
     };
     fetchOrganizationnames()
   }, [apiUrl])
+  // console.log(drivername, "poiu")
 
 
   const handlePdfDownload = () => {
@@ -673,6 +678,117 @@ const useBooking = () => {
   // };
 
 
+  // const handleDriverChange = (event, value, name) => {
+  //   if (name === "driverName") {
+  //     if (value && value.label) { // Ensure value and label exist
+  //       const selectedDriver = drivername?.find(option => option.drivername === value.label); // Compare with drivername
+  //       console.log(selectedDriver, 'Selected driver'); // Check in the console
+
+  //       if (selectedDriver) {
+  //         setBook(prevState => ({
+  //           ...prevState,
+  //           driverName: value.label,
+  //           mobileNo: selectedDriver.Mobileno,
+  //         }));
+
+  //         setSelectedCustomerData(prevState => ({
+  //           ...prevState,
+  //           driverName: value.label,
+  //           mobileNo: selectedDriver.Mobileno,
+  //         }));
+  //       }
+  console.log(vechiledata,"okok")
+  // const handleVehicleChange = (event, value, name) => {
+  //   // const selectedOption = value ? value.label : '';
+  //   if (name === "vehRegNo") {
+
+  //     const selectedOrder = vechiledata?.find(option => option?.vehRegNo === value?.label);
+  //     console.log(selectedOrder, 'say')
+
+  //     if (selectedOrder) {
+
+  //       setBook(prevState => ({
+  //         ...prevState,
+  //         vehRegNo: value.label,
+  //         vehiclemodule: selectedOrder.vehType,
+  //         Groups:selectedOrder.Groups,
+
+
+  //         // vehicleInfo: selectedOrder.hiretypes
+  //       }));
+
+  //       setSelectedCustomerData(prevState => ({
+  //         ...prevState,
+  //         vehRegNo: value.label,
+  //         vehiclemodule: selectedOrder.vehType,
+  //         Groups: selectedOrder.Groups,
+  //         // vehicleInfo: selectedOrder.hiretypes
+  //       }));
+  //     }
+  //   }
+  // };
+
+
+  //Entering Manually...
+  const handleVehicleChange = (event, value, name) => {
+    if (name === "vehRegNo") {
+      const manualInput = typeof value === "string" ? value : value?.label;
+
+      if (manualInput) {
+        const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
+
+        setBook(prevState => ({
+          ...prevState,
+          vehRegNo: manualInput,
+          vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+          Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+        }));
+
+        setSelectedCustomerData(prevState => ({
+          ...prevState,
+          vehRegNo: manualInput,
+          vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+          Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+        }));
+      }
+    }
+  };
+  
+
+
+  useEffect(() => {
+    const fetchdatafromvehcileinfo = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/vehicleinfodatavehcile`)
+        const data = response.data
+        setVehicleData(data)
+
+      }
+      catch (err) {
+        console.log(err)
+      }
+    }
+    fetchdatafromvehcileinfo()
+  }, [apiUrl])
+
+  // useEffect(() => {
+  //   const fetchOrganizationnames = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/drivernamedrivercreation`);
+  //       const data = response.data
+  //       // const names = data.map(res => res.drivername)
+  //       console.log(data)
+  //       setDrivername(data)
+
+
+  //     }
+  //     catch (error) {
+  //       console.log(error, "error");
+  //     }
+  //   };
+  //   fetchOrganizationnames()
+  // }, [apiUrl])
+
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : "";
@@ -779,29 +895,51 @@ const useBooking = () => {
   }, [custmorName, apiUrl])
 
 
+//   const handleDriverChange = (event, value, name) => {
+//     if (name === "driverName") {
+//         if (value && value.label) { // Ensure value and label exist
+//             const selectedDriver = drivername?.find(option => option.drivername === value.label); // Compare with drivername
+//             console.log(selectedDriver, 'Selected driver'); // Check in the console
+
+//             if (selectedDriver) {
+//                 setBook(prevState => ({
+//                     ...prevState,
+//                     driverName: value.label,
+//                     mobileNo: selectedDriver.Mobileno,
+//                 }));
+
+//                 setSelectedCustomerData(prevState => ({
+//                     ...prevState,
+//                     driverName: value.label,
+//                     mobileNo: selectedDriver.Mobileno,
+//                 }));
+//             }
+//         } 
+        
+//     }
+// };
+
   const handleDriverChange = (event, value, name) => {
-    const selectedOption = value ? value.label : '';
-
     if (name === "driverName") {
-      const selectedOrder = drivername?.find(option => option?.label === value?.label); // Check driver name
+      const manualInput = typeof value === "string" ? value : value?.label;
 
-      if (selectedOrder) {
+      if (manualInput) {
+        const selectedDriver = drivername?.find(option => option.drivername === manualInput);
+
         setBook(prevState => ({
           ...prevState,
-          driverName: value?.label,
-          mobileNo: selectedOrder.mobileNo, // Set mobileNo from the drivername object
+          driverName: manualInput,
+          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
         }));
 
         setSelectedCustomerData(prevState => ({
           ...prevState,
-          driverName: value?.label,
-          mobileNo: selectedOrder.mobileNo, // Set mobileNo from the drivername object
+          driverName: manualInput,
+          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
         }));
       }
     }
   };
-
-
 
 
   const handleDateChange = (date, name) => {
@@ -821,7 +959,7 @@ const useBooking = () => {
     }));
   };
 
-  
+
   // useEffect(() => {
   //   const fetchgetvehicleName = async () => {
   //     try {
@@ -885,7 +1023,7 @@ const useBooking = () => {
     };
     fetchData();
   }, [apiUrl, datatrigger]);
-  
+
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -931,15 +1069,15 @@ const useBooking = () => {
 
   const [file, setFile] = useState(null);
 
-  
+
 
   const addPdf = async (lastbookid, fileData) => {
     const uploadFile = fileData || file
     if (uploadFile !== null) {
-      const createddata=dayjs().format('YYYY-MM-DD')
+      const createddata = dayjs().format('YYYY-MM-DD')
       const formData = new FormData();
       formData.append("file", uploadFile);
-      formData.append("created_at",createddata);
+      formData.append("created_at", createddata);
       try {
         await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
         setFile(null)
@@ -1072,7 +1210,7 @@ const useBooking = () => {
 
     if (sendEmail || sendmailguestsms) {
       const datamode = isEditMode ? selectedCustomerData.status || book.status || bookingStatus : bookingStatus || book.status
-    
+
       try {
         const user = localStorage.getItem("username")
         const dataToSend = {
@@ -1090,7 +1228,7 @@ const useBooking = () => {
           pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
           useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
           // starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
-          starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime|| book.starttime || "",
+          starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || "",
           startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
           driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
           // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
@@ -1114,8 +1252,8 @@ const useBooking = () => {
 
 
         };
-        
-       await axios.post(`${apiUrl}/send-email`, dataToSend);
+
+        await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
@@ -1155,48 +1293,48 @@ const useBooking = () => {
     setImageDialogOpen(false)
   }
 
-const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
-  const logupdatabookdetails=updatebook
-  try{
-   const modedata=isEditMode ? "Edited": "create"
-   console.log(updatebook,"logbook")
-    const updatedBooklogdetails = {
+  const handlebooklogDetails = async (updatebook, lastBookinglogno) => {
+    const logupdatabookdetails = updatebook
+    try {
+      const modedata = isEditMode ? "Edited" : "create"
+      console.log(updatebook, "logbook")
+      const updatedBooklogdetails = {
 
-      bookingtime:logupdatabookdetails.bookingtime,
-      bookingdate:logupdatabookdetails.bookingdate,
-      starttime:formData.starttime || selectedCustomerData.starttime || book.starttime ,
-      status:logupdatabookdetails.status,
-      guestname:logupdatabookdetails.guestname,
-      guestmobileno:logupdatabookdetails.guestmobileno,
-      address1:logupdatabookdetails.address1,
-      vehicleName:logupdatabookdetails.vehicleName,
-      startdate:logupdatabookdetails.startdate,
-      duty:logupdatabookdetails.duty,
-      useage:logupdatabookdetails.useage,
-      travelsname:logupdatabookdetails.travelsname,
-      vehRegNo:logupdatabookdetails.vehRegNo,
-      // customer:logupdatabookdetails.customer,
-      customer:formData.customer ||selectedCustomerData.customer ||selectedCustomerDatas.customer ||book.customer,
-      Log_Date:getCurrentTime(),
-      Log_Time:dayjs(),
-      mode:modedata,
-      bookingno:lastBookinglogno,
-      driverName:logupdatabookdetails.driverName,
-      username:logupdatabookdetails.username
+        bookingtime: logupdatabookdetails.bookingtime,
+        bookingdate: logupdatabookdetails.bookingdate,
+        starttime: formData.starttime || selectedCustomerData.starttime || book.starttime,
+        status: logupdatabookdetails.status,
+        guestname: logupdatabookdetails.guestname,
+        guestmobileno: logupdatabookdetails.guestmobileno,
+        address1: logupdatabookdetails.address1,
+        vehicleName: logupdatabookdetails.vehicleName,
+        startdate: logupdatabookdetails.startdate,
+        duty: logupdatabookdetails.duty,
+        useage: logupdatabookdetails.useage,
+        travelsname: logupdatabookdetails.travelsname,
+        vehRegNo: logupdatabookdetails.vehRegNo,
+        // customer:logupdatabookdetails.customer,
+        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
+        Log_Date: getCurrentTime(),
+        Log_Time: dayjs(),
+        mode: modedata,
+        bookingno: lastBookinglogno,
+        driverName: logupdatabookdetails.driverName,
+        username: logupdatabookdetails.username
 
-    };
-    console.log(updatedBooklogdetails,"boookup")
-    await axios.post(`${apiUrl}/bookinglogDetails`,updatedBooklogdetails)
+      };
+      console.log(updatedBooklogdetails, "boookup")
+      await axios.post(`${apiUrl}/bookinglogDetails`, updatedBooklogdetails)
+    }
+    catch (err) {
+      console.log(err, "err")
+    }
   }
-  catch(err){
-    console.log(err,"err")
-  }
-}
 
   //------------------------------------------------------
 
   // console.log(dayjs().format("YYYY-MM-DD"),"date")
-  
+
   const handleAdd = async () => {
 
     if (!selectedCustomerData.guestmobileno) {
@@ -1255,10 +1393,10 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
       const updatedBook = {
 
-        bookingtime:getCurrentTime(),
+        bookingtime: getCurrentTime(),
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
-        status:bookingStatus,
+        status: bookingStatus,
         mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
         guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
         guestmobileno: formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno,
@@ -1295,7 +1433,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
-        ratenamebook:ratename,
+        ratenamebook: ratename,
         // triptime: triptime,
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
@@ -1310,18 +1448,18 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
-     
+
       //image upload
       await Promise.all(selectetImg?.map(async (img) => {
-        const createddata=dayjs().format('YYYY-MM-DD')
+        const createddata = dayjs().format('YYYY-MM-DD')
         const formImageData = new FormData();
         formImageData.append('file', img);
         formImageData.append('bookingId', lastBookingno)
-        formImageData.append("created_at",createddata);
+        formImageData.append("created_at", createddata);
         await axios.post(`${apiUrl}/upload-booking-image`, formImageData)
       }))
-      handlebooklogDetails(updatedBook,lastBookingno)
-      
+      handlebooklogDetails(updatedBook, lastBookingno)
+
       setImagedata([])
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
@@ -1352,20 +1490,20 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
           row.bookingno === selectedCustomerData.bookingno ||
           formData.bookingno
       );
-      
 
-      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate ||book.bookingdate || dayjs();
-      const selectedbookingtime=selectedCustomerData.bookingtime || formData.bookingtime ||book.bookingtime || getCurrentTime();
+
+      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || book.bookingdate || dayjs();
+      const selectedbookingtime = selectedCustomerData.bookingtime || formData.bookingtime || book.bookingtime || getCurrentTime();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
 
-       
+
       // let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
       const updatedCustomer = {
         ...selectedCustomer,
         // bookingtime: bookingtime || getCurrentTime(),
-        bookingtime:selectedbookingtime,
+        bookingtime: selectedbookingtime,
         bookingdate: selectedBookingDate,
         starttime: restSelectedCustomerData.starttime,
         status: bookingStatus,
@@ -1407,7 +1545,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
-        ratenamebook:ratename,
+        ratenamebook: ratename,
         reporttime: restSelectedCustomerData.reporttime,
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
@@ -1418,13 +1556,13 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
       const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
         updatedCustomer
       )
-      handlebooklogDetails(updatedCustomer,editbookno)
-      
+      handlebooklogDetails(updatedCustomer, editbookno)
+
       if (response.data.success) {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
-          
+
           if (sendEmail) {
             handlecheck(editbookno);
           }
@@ -1433,14 +1571,14 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
           setInfoMessage(response.data.message);
         }
         setEdit(false)
-       
+
       }
-        // addPdf(booking_no);
-        setRow([]);
-        setRowsdriver([])
-        setRows([]);
-        handleCancel();
-        setSendEmail(true)
+      // addPdf(booking_no);
+      setRow([]);
+      setRowsdriver([])
+      setRows([]);
+      handleCancel();
+      setSendEmail(true)
     } catch (error) {
       console.error("An error occurred:", error);
       setError(true);
@@ -1544,7 +1682,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
     }
   };
 
- 
+
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -1601,7 +1739,7 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
           `${apiUrl}/drivername-detailsaccountbooking/${event.target.value}`
         );
         const vehicleData = response.data;
-        console.log(vehicleData,"data")
+        console.log(vehicleData, "data")
         // const transformedRows = vehicleData.map(transformRow);
 
         // setRowsdriver(transformedRows)
@@ -1815,65 +1953,65 @@ const handlebooklogDetails=async(updatebook,lastBookinglogno)=>{
 
   useEffect(() => {
     const fetchdataccountinfodata = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
-            const data = response.data
-            // console.log(data, "accccccccc")
-            setAccountInfoData(data)
+      try {
+        const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
+        const data = response.data
+        // console.log(data, "accccccccc")
+        setAccountInfoData(data)
 
-        }
-        catch (err) {
-            console.log(err)
-        }
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
     fetchdataccountinfodata()
-}, [apiUrl])
+  }, [apiUrl])
 
-const travelsdatafetch = async (travelsnamedata) => {
-  console.log(travelsnamedata, "datata")
-  try {
+  const travelsdatafetch = async (travelsnamedata) => {
+    console.log(travelsnamedata, "datata")
+    try {
       const response = await axios.get(`${apiUrl}/travelsnamedetailfetchbooking/${travelsnamedata}`)
       const data = response.data
-      console.log(data,"tr")
-   
+      console.log(data, "tr")
+
       setRowsdriver(data)
 
       // setDriverDetails(data)
       setSuccess(true);
       setSuccessMessage("successfully listed");
 
-  } catch (error) {
+    } catch (error) {
       setError(true);
       setErrorMessage("Error retrieving vehicle details.");
+    }
   }
-}
 
-const handletravelsAutocompleteChange = (event, value, name) => {
-  const selectedOption = value ? value.label : '';
+  const handletravelsAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
 
-  setBook(prevState => ({
-    ...prevState,
-    [name]: selectedOption
-  }));
+    setBook(prevState => ({
+      ...prevState,
+      [name]: selectedOption
+    }));
 
-  setSelectedCustomerData((prevData) => ({
-    ...prevData,
-    [name]: selectedOption,
-  }));
-  setFormData((prevData) => ({
-    ...prevData,
-    [name]: selectedOption,
-  }));
- 
-  travelsdatafetch(selectedOption)
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
 
-  // if (!lockdata) {
-  //     setVendorinfodata((prevValues) => ({
-  //         ...prevValues,
-  //         [name]: selectedOption,
-  //     }))
-  // }
-};
+    travelsdatafetch(selectedOption)
+
+    // if (!lockdata) {
+    //     setVendorinfodata((prevValues) => ({
+    //         ...prevValues,
+    //         [name]: selectedOption,
+    //     }))
+    // }
+  };
 
 
   //--------------------------------------------------------
@@ -1900,11 +2038,14 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     handleAdd,
     hidePopup,
     formData,
+    vechiledata,
+    setVehicleData,
     handleKeyDown,
     // handleGetMail,
     handleDateChange,
     getCurrentTime,
     setBook,
+    handleVehicleChange,
     setSelectedCustomerData,
     // setBookingTime,
     selectedCustomerDatas,
@@ -1963,8 +2104,8 @@ const handletravelsAutocompleteChange = (event, value, name) => {
     handleKeyEnterdriver, orderByDropDown,
     rowdriver,
     handleRowClickdriver,
-    selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus,handletravelsAutocompleteChange,accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,CopyEmail, setCopyEmail,setWarning,setWarningMessage,warningMessage,warning
+    selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
+    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning
   };
 };
 

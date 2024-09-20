@@ -44,6 +44,7 @@ const useTripsheet = () => {
     const [photos, setPhotos] = useState([]);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
+    const [vechiledata, setVehicleData] = useState([]);
     const [warning, setWarning] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [popupOpen, setPopupOpen] = useState(false);
@@ -52,6 +53,7 @@ const useTripsheet = () => {
     const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
+    const [drivername, setDrivername] = useState([]);
     const [warningMessage, setWarningMessage] = useState({});
     const [infoMessage, setINFOMessage] = useState({});
     const [link, setLink] = useState('');
@@ -73,6 +75,7 @@ const useTripsheet = () => {
     const [vendornightcount, setVendornightCount] = useState()
     const [cusnightcount, setcusnightCount] = useState()
     const [EditMap, setEditMap] = useState(false)
+    const [groupTripId, setGroupTripId] = useState()
 
     //-------------------------calc-------------------
 
@@ -169,7 +172,7 @@ const useTripsheet = () => {
     const [signaturelinkwhatsapp, setSignatureWhattsapplink] = useState()
     const [selectedMapRow, setSelectedMapRow] = useState("");
     const [CopyEmail, setCopyEmail] = useState(false);
-    const [copydatalink,setCopyDataLink]=useState(false)
+    const [copydatalink, setCopyDataLink] = useState(false)
 
     const [kmValue, setKmValue] = useState({
         shedOutState: '',
@@ -232,9 +235,9 @@ const useTripsheet = () => {
         parking: '',
         permit: '',
     });
-    const [conflictenddate,setConflictEndDate]=useState({
-    maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null
-})
+    const [conflictenddate, setConflictEndDate] = useState({
+        maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null
+    })
 
 
     const maplogcolumns = [
@@ -580,6 +583,7 @@ const useTripsheet = () => {
         console.log(formData, "VALUESSS")
 
 
+
         const formvendorinfo = {};
 
         const parameterKeys1 = [
@@ -771,6 +775,7 @@ const useTripsheet = () => {
         vehType: "",
         vehicleName: "",
         travelsname: "",
+        GroupTripId: ""
     }
 
     const [book, setBook] = useState(bookData);
@@ -831,8 +836,8 @@ const useTripsheet = () => {
             maxTripid: "",
         })
         setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
-        setConflictEndDate({ maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null})
-        
+        setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
+
 
         localStorage.removeItem('selectedTripid');
     };
@@ -1933,7 +1938,7 @@ const useTripsheet = () => {
         const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
         const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    
+
         // const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
         // const formattedCloseDate = dayjs(closeDate).format('YYYY-MM-DD');
         // const formattedShedOutDate = dayjs(shedoutdate).format('YYYY-MM-DD');
@@ -1950,16 +1955,16 @@ const useTripsheet = () => {
                 return 1;
             } else {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
-                return totalDays  + 1 ;
+                return totalDays + 1;
             }
         } else if (startDate && closeDate && !shedoutdate && !shedindate) {
             const startDateObj = dayjs(startDate).startOf('day');
             const closeDateObj = dayjs(closeDate).startOf('day');
-            
+
             const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-            
+
             if (totalDays > 0) {
-                
+
                 return totalDays;
             }
             return '';
@@ -2010,7 +2015,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 if (data.length > 0) {
                     const res = data[0].TimeToggle;
-                    
+
                     setTimeToggle(res); // Update state with the fetched result
                 } else {
                     setTimeToggle('');
@@ -2029,7 +2034,7 @@ const useTripsheet = () => {
         fetchdatacustomerTimeToggle();
     }, [fetchdatacustomerTimeToggle]);
     // console.log(fetchdatacustomerTimeToggle(),"time")
-    
+
 
 
     const calculateTotalTimes = () => {
@@ -2368,6 +2373,109 @@ const useTripsheet = () => {
     //     return '';
     // };
 
+    // const handleDriverChange = (event, value, name) => {
+    //     // const selectedOption = value ? value.label : "";
+    //     if (name === "driverName") {
+    //         const selectedDriver = drivername?.find(option => option.drivername === value.label); // Compare with drivername
+    //         // console.log(selectedDriver, 'Selected driver'); // Check in the console
+
+    //         if (selectedDriver) {
+    //             setBook(prevState => ({
+    //                 ...prevState,
+    //                 driverName: value.label,
+    //                 mobileNo: selectedDriver.Mobileno,
+    //             }));
+
+    //             setSelectedCustomerData(prevState => ({
+    //                 ...prevState,
+    //                 driverName: value.label,
+    //                 mobileNo: selectedDriver.Mobileno,
+    //             }));
+    //         }
+    //     }
+    // };
+    const handleDriverChange = (event, value, name) => {
+        if (name === "driverName") {
+            const manualInput = typeof value === "string" ? value : value?.label;
+
+            if (manualInput) {
+                const selectedDriver = drivername?.find(option => option.drivername === manualInput);
+
+                setBook(prevState => ({
+                    ...prevState,
+                    driverName: manualInput,
+                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
+                }));
+
+                setSelectedCustomerData(prevState => ({
+                    ...prevState,
+                    driverName: manualInput,
+                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
+                }));
+            }
+        }
+    };
+
+    useEffect(() => {
+        const fetchOrganizationnames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/drivernamedrivercreation`);
+                const data = response.data
+                // const names = data.map(res => res.drivername)
+                console.log(data)
+                setDrivername(data)
+
+
+            }
+            catch (error) {
+                console.log(error, "error");
+            }
+        };
+        fetchOrganizationnames()
+    }, [apiUrl])
+    console.log(drivername, "poiu")
+
+    const handleVehicleChange = (event, value, name) => {
+        if (name === "vehRegNo") {
+            const manualInput = typeof value === "string" ? value : value?.label;
+
+            if (manualInput) {
+                const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
+
+                setBook(prevState => ({
+                    ...prevState,
+                    vehRegNo: manualInput,
+                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
+                    Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+                }));
+
+                setSelectedCustomerData(prevState => ({
+                    ...prevState,
+                    vehRegNo: manualInput,
+                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
+                    Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+                }));
+            }
+        }
+    };
+
+
+
+
+    useEffect(() => {
+        const fetchdatafromvehcileinfo = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/vehicleinfodatavehcile`)
+                const data = response.data
+                setVehicleData(data)
+
+            }
+            catch (err) {
+                console.log(err)
+            }
+        }
+        fetchdatafromvehcileinfo()
+    }, [apiUrl])
     const calculatevendorTotalDays = () => {
         const shedoutdate = vendorinfo?.vendorshedOutDate || "";
         const shedindate = vendorinfo?.vendorshedInDate || ""
@@ -3154,6 +3262,7 @@ const useTripsheet = () => {
                             setdriverbeta_Count(bookingDetails.driverbeta_Count);
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
+                            setGroupTripId(bookingDetails.GroupTripId)
 
                             //---------------------------
 
@@ -3535,7 +3644,7 @@ const useTripsheet = () => {
     useEffect(() => {
         const calcdata = () => {
             if (nightBta && nightCount > 1) {
-                let nightTotalAmounts =Math.round(Number(nightBta) * Number(nightCount))
+                let nightTotalAmounts = Math.round(Number(nightBta) * Number(nightCount))
 
                 setnight_totalAmount(nightTotalAmounts)
             }
@@ -3577,7 +3686,7 @@ const useTripsheet = () => {
                 // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
                 //     calcNight = 2;
                 // }
-            } 
+            }
             // else if (TotalDay > 1) {
             //     if (newTimeStrings >= 22.0) {
             //         calcNight = TotalDay + 1;
@@ -3586,8 +3695,8 @@ const useTripsheet = () => {
             //     }
             // }
             else if (TotalDay > 1) {
-          
-                calcNight = TotalDay-1;
+
+                calcNight = TotalDay - 1;
             }
             // setNightCount(calcNight);
             setcusnightCount(calcNight)
@@ -3672,7 +3781,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const extraClac = () => {
-            let extraAbout_km =Math.round( Number(extraKM) * Number(extrakm_amount))
+            let extraAbout_km = Math.round(Number(extraKM) * Number(extrakm_amount))
             setEx_kmAmount(extraAbout_km)
         }
         extraClac();
@@ -3700,7 +3809,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const VendorextraClac = () => {
-            let extraAbout_km =  Math.round(Number(vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms) * Number(vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms))
+            let extraAbout_km = Math.round(Number(vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms) * Number(vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms))
             // setVendorExtraKmTotalAmount(extraAbout_km)
 
             setVendorbilldata(prevData => ({
@@ -3733,8 +3842,8 @@ const useTripsheet = () => {
             // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
             //     calcNight = 2;
             // }
-        } 
-        
+        }
+
         // else if (TotalDay > 1) {
         //     if (newTimeStrings >= 22.0) {
         //         calcNight = TotalDay + 1;
@@ -3744,15 +3853,15 @@ const useTripsheet = () => {
         // }
 
         else if (TotalDay > 1) {
-          
-                calcNight = TotalDay-1;
-            }
-            // if (newTimeStrings >= 22.0) {
-            //     calcNight = TotalDay + 1;
-            // } else {
-            //     calcNight = TotalDay;
-            // }
-        
+
+            calcNight = TotalDay - 1;
+        }
+        // if (newTimeStrings >= 22.0) {
+        //     calcNight = TotalDay + 1;
+        // } else {
+        //     calcNight = TotalDay;
+        // }
+
 
         return calcNight;
     }, [vendorinfo, calculatevendorTotalDays]);
@@ -3815,7 +3924,7 @@ const useTripsheet = () => {
     }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
-    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype,vendorstations;
+    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
 
     const fetchdatasupplierraratenamestations = async () => {
@@ -3853,11 +3962,11 @@ const useTripsheet = () => {
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             vendorratetype = vendorinfo.vendor_ratename || ratename || "";
-            vendorstations=await fetchdatasupplierraratenamestations();
+            vendorstations = await fetchdatasupplierraratenamestations();
 
 
 
-            if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype|| !vendorstations) {
+            if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype || !vendorstations) {
                 setError(true);
                 setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
                 return;
@@ -3882,11 +3991,11 @@ const useTripsheet = () => {
                     vehicleName: vendorvehicleNames,
                     organizationname: vendorratetype,
                     ratetype: "Supplier",
-                    stations:vendorstations
+                    stations: vendorstations
                 }
             });
             vendordata = response.data;
-            console.log(vendordata,"vendorrrrrrrr")
+            console.log(vendordata, "vendorrrrrrrr")
 
 
             const packages = vendordata.package;
@@ -3899,7 +4008,7 @@ const useTripsheet = () => {
             const Bata = Number(vendordata.Bata);
             const nHaltdays = Number(vendornightcount);
             const batahaltdays = Number(vendornightcount)
-            console.log(packages, Hours, KMS, Rate, extraHours, extraKMS, NHalt, Bata,"for supplier")
+            console.log(packages, Hours, KMS, Rate, extraHours, extraKMS, NHalt, Bata, "for supplier")
             let dataextrahous, dataextrakms
 
             // if (consvertedTotalHour > Hours) {
@@ -3988,7 +4097,7 @@ const useTripsheet = () => {
                 setError(true)
                 setErrorMessage("Suppiler Data Not Found")
                 setVendorbilldata({})
-                
+
             }
             else if (err.response.status === 500) {
                 setError(true)
@@ -4141,8 +4250,8 @@ const useTripsheet = () => {
             tothr = await (calculateTotalTimes() || formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || '');
             // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             organizationname = await fetchdatacustomeraratename()
-            console.log(organizationname,"ratetype")
-      
+            console.log(organizationname, "ratetype")
+
 
             if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {
                 setError(true);
@@ -4167,7 +4276,7 @@ const useTripsheet = () => {
                     duty: duty,
                     vehicleName: vehicleNames,
                     organizationname: organizationname.rateType,
-                    stations:organizationname.servicestation
+                    stations: organizationname.servicestation
                 }
             });
             data = response.data;
@@ -4271,7 +4380,7 @@ const useTripsheet = () => {
             setMinKM(KMS);
         }
         catch (err) {
-            console.log(err,"handle")
+            console.log(err, "handle")
 
             if (err.response.status === 404) {
                 setError(true)
@@ -4594,18 +4703,18 @@ const useTripsheet = () => {
     }, [apiUrl, vehicleRegisterNo])
 
 
-function removeSeconds(time) {
-    // Split the time string by colon (:)
-    const timeParts = time.split(':');
-  
-    // Check if there are seconds (length 3), return hours:minutes
-    if (timeParts.length === 3) {
-      return `${timeParts[0]}:${timeParts[1]}`;
+    function removeSeconds(time) {
+        // Split the time string by colon (:)
+        const timeParts = time.split(':');
+
+        // Check if there are seconds (length 3), return hours:minutes
+        if (timeParts.length === 3) {
+            return `${timeParts[0]}:${timeParts[1]}`;
+        }
+
+        // If there's only hours:minutes, return it as is
+        return time;
     }
-  
-    // If there's only hours:minutes, return it as is
-    return time;
-  }
 
     const transformFunconflict = (data) => {
         // const hybridcheck = hybridCheckCus.find((el) => customer === el.customer)
@@ -4613,67 +4722,67 @@ function removeSeconds(time) {
         // if (/hcl/i.test(data.customer)) {
         // if (hybridcheck && hybridcheck.hybrid) {
         //     return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
-        
-        return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate||null, shedintime: data.shedintime||data.closetime||null }
+
+        return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate || null, shedintime: data.shedintime || data.closetime || null }
     }
-   
+
     const dateconflict = useMemo(() => {
         return dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("YYYY-MM-DD");
-      }, [formData.shedOutDate, selectedCustomerData.shedOutDate, book.shedOutDate]);
-       
-    
+    }, [formData.shedOutDate, selectedCustomerData.shedOutDate, book.shedOutDate]);
+
+
     useEffect(() => {
 
         const fetchData = async () => {
             if (!vehicleRegisterNo) return
             try {
-            const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
-            
+                const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
 
-            const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict )
-          
-    
-        if (mapdata.length > 0) {
-            // console.log(mapdata,"kkkk",mapdata[0])
-            const firstTrip = mapdata[0];
-          
-            // Check if shedInDate matches the dateconflict
-            if (firstTrip?.shedInDate === dateconflict) {
-              setConflictEndDate({
-                maxShedInDate: firstTrip.shedInDate,
-                TripIdconflictdate: firstTrip.tripid,
-                conflictTimer: removeSeconds(firstTrip.shedintime),
-              });
+
+                const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict)
+
+
+                if (mapdata.length > 0) {
+                    // console.log(mapdata,"kkkk",mapdata[0])
+                    const firstTrip = mapdata[0];
+
+                    // Check if shedInDate matches the dateconflict
+                    if (firstTrip?.shedInDate === dateconflict) {
+                        setConflictEndDate({
+                            maxShedInDate: firstTrip.shedInDate,
+                            TripIdconflictdate: firstTrip.tripid,
+                            conflictTimer: removeSeconds(firstTrip.shedintime),
+                        });
+                    }
+                    else if (dateconflict < firstTrip?.shedInDate) {
+                        // No data or no matching conflict, reset the conflict state
+                        setConflictEndDate({
+                            maxShedInDate: firstTrip.shedInDate,
+                            TripIdconflictdate: firstTrip.tripid,
+                            conflictTimer: removeSeconds(firstTrip.shedintime),
+                        });
+                    }
+                }
+                else {
+                    setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
+                }
             }
-          else if  (dateconflict  < firstTrip?.shedInDate) {
-            // No data or no matching conflict, reset the conflict state
-            setConflictEndDate({
-                maxShedInDate: firstTrip.shedInDate,
-                TripIdconflictdate: firstTrip.tripid,
-                conflictTimer: removeSeconds(firstTrip.shedintime),
-              });
-          }
-        }
-        else{
-            setConflictEndDate({ maxShedInDate:null, TripIdconflictdate:null,conflictTimer:null})
-        }
-    }
-        catch (error) {
-            console.error("Error fetching trip data", error);
-            // Handle error (optional)
-          }
-           
-          
+            catch (error) {
+                console.error("Error fetching trip data", error);
+                // Handle error (optional)
+            }
 
-           
+
+
+
         }
 
         fetchData()
-    }, [apiUrl, vehicleRegisterNo,dateconflict])
-  
-      
+    }, [apiUrl, vehicleRegisterNo, dateconflict])
 
-    
+
+
+
 
     const transformFun1 = (data) => {
 
@@ -4775,7 +4884,7 @@ function removeSeconds(time) {
     }, [apiUrl, vehicleRegisterNo, shedoutkm])
 
 
-  
+
 
     // const generateAndCopyLinkdata = async () => {
     //     const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
@@ -5137,6 +5246,9 @@ function removeSeconds(time) {
         handleOpenMapLog,
         handleCloseMapLog,
         openEditMapLog,
+        handleDriverChange,
+        vehicleNames,
+        drivername,
         setOpenEditMapLog,
         handleEditMapDetails,
         handleKeyDown,
@@ -5154,6 +5266,7 @@ function removeSeconds(time) {
         DriverSMS,
         organizationdata,
         setStartTime,
+        handleVehicleChange,
         setBook,
         setFormData,
         setSelectedCustomerData,
@@ -5165,6 +5278,8 @@ function removeSeconds(time) {
         setSelectedCustomerDatas,
         setreporttime,
         setshedintime,
+        vechiledata,
+        setVehicleData,
         shedKilometers,
         calculateTotalKilometers,
         additionalTime,
@@ -5227,7 +5342,7 @@ function removeSeconds(time) {
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
-        handleDeleteMap,copydatalink,setCopyDataLink,conflictenddate
+        handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId
 
     };
 };

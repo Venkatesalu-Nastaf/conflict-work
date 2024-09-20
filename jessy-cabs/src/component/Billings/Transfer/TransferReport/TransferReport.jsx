@@ -122,7 +122,12 @@ const TransferReport = ({ stationName }) => {
     pdfzipdata,
     handleKeyDown,
     handleChange,
-    tripID
+    tripID,
+    handleGroupKeyDown,
+    setGroupTripid,
+    handleRemove,
+    billedStatusCheck,
+    setBilledStatusCheck
   } = useTransferreport();
   const {
     handleExcelDownload, error1, errormessage1,
@@ -318,6 +323,8 @@ const TransferReport = ({ stationName }) => {
                     label="Group Trip ID"
                     name="referenceno"
                     autoComplete='off'
+                    onKeyDown={handleGroupKeyDown}
+                    onChange={(e) => setGroupTripid(e.target.value)}
                     value={groupTripid}
                   />
                 </div>
@@ -476,9 +483,15 @@ const TransferReport = ({ stationName }) => {
                     className='full-width'
                     freeSolo
                     size="small"
-                    options={PDFbill.map((option) => ({
-                      label: option.Option,
-                    }))}
+                    options={billedStatusCheck === "Billed"
+                      ? PDFbill?.map(option => ({
+                        label: option.Option,
+                      })) : PDFbill?.filter(option => option.Option === "PDF 2").map(option => ({
+                        label: option.Option,
+                      }))
+
+                    }
+
                     value={pdfBillList}
                     onChange={(event, value) => setPdfBillList(value.label)}
                     renderInput={(params) => {
@@ -604,25 +617,26 @@ const TransferReport = ({ stationName }) => {
         </div>
         <div className="Download-btn">
           <div className="input-field">
-            <div className="input" >
-              <PopupState variant="popover" popupId="demo-popup-menu">
-                {(popupState) => (
-                  <React.Fragment>
-                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                      Download ZIP
-                    </Button>
-                    <Menu {...bindMenu(popupState)}>
-                      {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel)}>  ZIP </MenuItem>
-                      {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
-                      {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
-                    </Menu>
-                  </React.Fragment>
-                )}
-              </PopupState>
-            </div>
+            {billedStatusCheck === "Billed" ?
+              <div className="input" >
+                <PopupState variant="popover" popupId="demo-popup-menu">
+                  {(popupState) => (
+                    <React.Fragment>
+                      <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                        Download ZIP
+                      </Button>
+                      <Menu {...bindMenu(popupState)}>
+                        {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
+                        <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel)}>  ZIP </MenuItem>
+                        {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
+                        {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
+                      </Menu>
+                    </React.Fragment>
+                  )}
+                </PopupState>
+              </div> : ""}
             <div className="input">
-              <Button variant="outlined">Remove</Button>
+              <Button variant="outlined" onClick={() => handleRemove()} >Remove</Button>
             </div>
           </div>
         </div>

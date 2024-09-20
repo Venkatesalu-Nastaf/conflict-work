@@ -201,13 +201,13 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                     </div> : ""
                 }
 
-                <div className="printdiv">
-                    <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>Print</button>
-                    <button onClick={handlePopup} className="print">
-                        Cancel
-                    </button>
-                </div>
+            </div>
 
+            <div className="printdiv">
+                <button className="print" onClick={() => generatePDF(targetRef, { filename: `${refno}.pdf` })}>Print</button>
+                <button onClick={handlePopup} className="print">
+                    Cancel
+                </button>
             </div>
 
         </>

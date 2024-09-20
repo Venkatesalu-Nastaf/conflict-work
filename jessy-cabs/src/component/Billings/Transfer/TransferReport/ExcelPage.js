@@ -385,7 +385,6 @@ const useExeclpage = () => {
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
-        console.log(rowSelectionModel, 'rid');
 
         try {
             const zip = new JSZip();
@@ -679,7 +678,7 @@ const useExeclpage = () => {
             // Wait for all promises to resolve
             await Promise.all(pdfPromises);
 
-            const zipContent = await zip.generateAsync({ type: 'blob' });
+            const zipContent = await zip.generateAsync({ type: 'blob' });            
             // Download the ZIP file
             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
         }

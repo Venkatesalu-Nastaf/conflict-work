@@ -457,8 +457,9 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             </View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
+                              <Text>{'\n'}</Text>
+                              <Text>{'\n'}</Text>
                               <Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}</Text>
-
                             </View>
                             <View style={styles.tableCell}>
                               {/* <Text style={styles.amounttext}> {'\n'}  {'\n'}  {'\n'}  {'\n'}  </Text> */}

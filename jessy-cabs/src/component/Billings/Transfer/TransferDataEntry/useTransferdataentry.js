@@ -531,7 +531,7 @@ const useTransferdataentry = () => {
             localStorage.setItem('selectedcustomerdata', decodedCustomer);
 
             // Constructing billing page URL
-            const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&TransferReport=true`;
+            const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&TransferReport=true&Status=Billed`;
 
             // Redirecting to billing page
             window.location.href = billingPageUrl;
@@ -710,7 +710,6 @@ const useTransferdataentry = () => {
         }
         fetchData()
     }, [apiUrl, groupId, removeTransferRow])
-    console.log(selectedRow, 'update22');
 
     const handleRemove = async () => {
         const tripid = selectedRow?.map(row => row.tripid.toString());
@@ -739,7 +738,6 @@ const useTransferdataentry = () => {
 
                 setRows(updatedRows);
                 setSelectedRow([]);
-                console.log(latestTripNo, 'update');
 
 
             }
@@ -750,7 +748,6 @@ const useTransferdataentry = () => {
         }
 
     }
-    console.log(latestTripNo, 'update');
 
 
 
@@ -1066,7 +1063,6 @@ const useTransferdataentry = () => {
             try {
                 // Assuming `tripid` is the value you want to pass
                 const tripid = misGroupTripId;  // Use your actual `tripid` or state variable
-                console.log(tripid, 'transferlist33');
 
                 // Pass tripid as query parameter in the GET request
                 const response = await axios.get(`${apiUrl}/getparticulartransfer_list`, {
@@ -1075,7 +1071,6 @@ const useTransferdataentry = () => {
                     },
                 });
                 const data = response.data;
-                console.log(data[0].Grouptrip_id, data, 'transferlist22');
                 setGroupId(data[0].Grouptrip_id)
 
             } catch (error) {
@@ -1091,7 +1086,6 @@ const useTransferdataentry = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const GroupTripId = event.target.value;
-            console.log(GroupTripId, 'groupid');
 
             try {
                 // First API call to get Trip_id from GroupTripId
@@ -1109,7 +1103,6 @@ const useTransferdataentry = () => {
                     setFromDate(fromDate);
                     setToDate(toDate);
 
-                    console.log(transferTripId, 'tripid');
                     setToDate(dayjs(response.data[0].EndDate).format('YYYY-MM-DD'));
                     setFromDate(response.data[0].FromDate)
                     setCustomer(response.data[0].Organization_name)
@@ -1129,7 +1122,6 @@ const useTransferdataentry = () => {
                         }));
                         setRows(rowsWithUniqueId);
                     }
-                    console.log(tripsheetResponse.data, 'tripsheet details');
                 } else {
                     console.log('No Trip_id found for the given GroupTripId');
                 }

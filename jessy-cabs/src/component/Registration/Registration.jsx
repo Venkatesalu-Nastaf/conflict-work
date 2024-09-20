@@ -28,11 +28,16 @@ const Registration = () => {
 
   const { permissions } = useContext(PermissionContext)
 
-  const Customer = permissions[9]?.read || permissions[8]?.read;
-  const Supllier = permissions[10]?.read;
-  // const Employee = permissions[11]?.read;
-  const INFO = permissions[16]?.read;
-  const Station_Creation = permissions[14]?.read;
+  // const Customer = permissions[9]?.read || permissions[8]?.read;
+  // const Supllier = permissions[10]?.read;
+  // const INFO = permissions[16]?.read;
+  // const Station_Creation = permissions[14]?.read;
+
+  
+  const R_RATEtype = permissions[10]?.read ;
+  const R_Customer = permissions[11]?.read ;
+  const R_Supllier = permissions[12]?.read ;
+  const R_Station = permissions[13]?.read ;
   // const Rate_Management = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);
@@ -63,19 +68,19 @@ const Registration = () => {
     switch (label) {
 
       case "Rate Type":
-        hasPermission = INFO;
+        hasPermission = R_RATEtype;
         break;
       // case "Rate Management":
       //   hasPermission = Rate_Management;
       //   break;
       case "Customer":
-        hasPermission = Customer;
+        hasPermission = R_Customer;
         break;
       case "Supplier":
-        hasPermission = Supllier;
+        hasPermission = R_Supllier;
         break;
         case "Station Creation":
-          hasPermission = Station_Creation;
+          hasPermission = R_Station;
           break;
       // case "Employees":
       //   hasPermission = Employee;
@@ -109,14 +114,15 @@ const Registration = () => {
     <div className="Registration-conatiner" id="menu">
       <div className='menu-bar-main'>
         <div className="menu-bar">
+          {R_RATEtype ?
           <MenuItem
             label="Rate Type"
-            to={INFO && ("/home/registration/ratetype")}
+            to={R_RATEtype && ("/home/registration/ratetype")}
             alt="/home/registration/ratetype"
             menuItemKey="Ratetype"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
           {/* <MenuItem
             label="Rate Management"
             to={Rate_Management && ("/home/registration/ratemanagement")}
@@ -125,30 +131,33 @@ const Registration = () => {
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           /> */}
+          {R_Customer ?
           <MenuItem
             label="Customer"
-            to={Customer && ("/home/registration/customer")}
+            to={R_Customer && ("/home/registration/customer")}
             alt="/home/registration/customer"
             menuItemKey="Customer"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></> }
+          {R_Supllier ?
           <MenuItem
             label="Supplier"
-            to={Supllier && ("/home/registration/supplier")}
+            to={R_Supllier && ("/home/registration/supplier")}
             alt="/home/registration/supplier"
             menuItemKey="Supplier"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
+          {R_Station ? 
            <MenuItem
             label="Station Creation"
-            to={Station_Creation && ("/home/registration/stationcreation")}
+            to={R_Station && ("/home/registration/stationcreation")}
             alt="/home/registration/stationcreation"
             menuItemKey="Station Creation"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
           {/* <MenuItem
             label="Employees"
             to={Employee && ("/home/registration/employes")}

@@ -54,7 +54,7 @@ const Organization = ({ logoImage }) => {
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const MainSetting_modify = permissions[15]?.modify;
+    const MainSetting_modify = permissions[16]?.modify;
 
 
 
@@ -165,7 +165,7 @@ const Organization = ({ logoImage }) => {
                                         </div>
                                     </div>
                                     <div className="user-photo-edit">
-                                        <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                        <IconButton color="primary" disabled={!MainSetting_modify} onClick={toggleEditMode} size='small' variant="outlined" component="label">
                                             <ModeEditIcon />
                                         </IconButton>
                                     </div>

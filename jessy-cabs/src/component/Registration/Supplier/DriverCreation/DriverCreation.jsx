@@ -136,10 +136,10 @@ const DriverCreation = ({ stationName }) => {
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const Supllier_read = permissions[10]?.read;
-    const Supllier_new = permissions[10]?.new;
-    const Supllier_modify = permissions[10]?.modify;
-    const Supllier_delete = permissions[10]?.delete;
+    const Supllier_read = permissions[12]?.read;
+    const Supllier_new = permissions[12]?.new;
+    const Supllier_modify = permissions[12]?.modify;
+    const Supllier_delete = permissions[12]?.delete;
 
     return (
         <div className="DriverCreation-main">
@@ -656,7 +656,7 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             )}
 
-                            {Supllier_modify === 1 && (
+                            {Supllier_modify === 1 && isEditMode && (
                                 <SpeedDialAction
                                     key="edit"
                                     icon={<ModeEditIcon />}
@@ -664,7 +664,7 @@ const DriverCreation = ({ stationName }) => {
                                     onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                                 />
                             )}
-                            {Supllier_delete === 1 && (
+                            {Supllier_delete === 1 && isEditMode && (
                                 <SpeedDialAction
                                     key="delete"
                                     icon={<DeleteIcon />}
@@ -673,7 +673,7 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             )}
 
-                            {Supllier_new === 1 && (
+                            {Supllier_new === 1 && !isEditMode && (
                                 <SpeedDialAction
                                     key="Add"
                                     icon={<BookmarkAddedIcon />}
@@ -843,7 +843,7 @@ const DriverCreation = ({ stationName }) => {
                                     ))}
                                 </div>
                                 <div className='driver-creation-delete-print-btn-section'>
-                                    <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                                    <Button  disabled={!Supllier_delete} variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                                     <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
                                 </div>
                             </DialogContent>

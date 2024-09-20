@@ -368,6 +368,7 @@ router.get('/tabletemplateseatch', (req, res) => {
     let params = [];
     if (searchText) {
         const columnsToSearch = [
+            'Templateid',
             'TemplateName',
             'TemplateSubject',
             'TemplateMessageData',

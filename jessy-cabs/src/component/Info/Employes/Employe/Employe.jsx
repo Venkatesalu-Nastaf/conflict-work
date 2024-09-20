@@ -122,10 +122,10 @@ const Employe = () => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Employee_read = permissions[11]?.read;
-  const Employee_new = permissions[11]?.new;
-  const Employee_modify = permissions[11]?.modify;
-  const Employee_delete = permissions[11]?.delete;
+  const Employee_read = permissions[20]?.read;
+  const Employee_new = permissions[20]?.new;
+  const Employee_modify = permissions[20]?.modify;
+  const Employee_delete = permissions[20]?.delete;
 
   return (
     <div className="main-content-form Scroll-Style-hide">
@@ -504,7 +504,7 @@ const Employe = () => {
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
             )}
-            {Employee_modify === 1 && (
+            {Employee_modify === 1 && isEditMode &&(
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -512,7 +512,7 @@ const Employe = () => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {Employee_delete === 1 && (
+            {Employee_delete === 1 && isEditMode && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -520,7 +520,7 @@ const Employe = () => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-            {Employee_new === 1 && (
+            {Employee_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -672,7 +672,7 @@ const Employe = () => {
                 </div>
                 <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
                 <div style={{ display: 'flex' }}>
-                  <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                  <Button disabled={!Employee_delete} variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                   <Button variant='contained' onClick={() => handleDocumentDownload()} style={{ marginLeft: '20px' }}>Print</Button>
                 </div>
               </DialogContent>

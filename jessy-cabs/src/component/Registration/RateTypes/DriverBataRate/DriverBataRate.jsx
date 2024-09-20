@@ -74,18 +74,14 @@ const DriverBataRate = () => {
     handleEdit,
   } = useDriverbatarate();
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+ 
 
   // Permission ---------------------
   const { permissions } = useContext(PermissionContext)
-  const RateManagement_read = permissions[17]?.read;
-  const RateManagement_new = permissions[17]?.new;
-  const RateManagement_modify = permissions[17]?.modify;
-  const RateManagement_delete = permissions[17]?.delete;
+  const RateManagement_read = permissions[10]?.read;
+  const RateManagement_new = permissions[10]?.new;
+  const RateManagement_modify = permissions[10]?.modify;
+  const RateManagement_delete = permissions[10]?.delete;
 
   return (
     <div className="ratetype-form main-content-form Scroll-Style-hide">
@@ -332,7 +328,7 @@ const DriverBataRate = () => {
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
             )}
-            {RateManagement_modify === 1 && (
+            {RateManagement_modify === 1 && isEditMode &&(
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -340,7 +336,7 @@ const DriverBataRate = () => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {RateManagement_delete === 1 && (
+            {RateManagement_delete === 1 &&  isEditMode &&(
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -354,7 +350,7 @@ const DriverBataRate = () => {
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-            {RateManagement_new === 1 && (
+            {RateManagement_new === 1 && !isEditMode &&(
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}

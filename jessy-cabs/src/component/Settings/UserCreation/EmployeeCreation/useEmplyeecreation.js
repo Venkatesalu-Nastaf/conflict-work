@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+import dayjs from 'dayjs';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -26,6 +27,41 @@ const useEmplyeecreation = () => {
 
     ////-------------permission --------------------------
 
+    // const initialPermissionsData = [
+
+    //     { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
+    //     { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
+    //     { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
+    //     { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
+    //     { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
+    //     { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
+    //     { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 8, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+    //     { id: 9, name: 'Customer', read: false, new: false, modify: false, delete: false },
+    //     { id: 10, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+    //     { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 12, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+    //     { id: 13, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+    //     { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+    //     { id: 15, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 16, name: 'INFO', read: false, new: false, modify: false, delete: false },
+    //     { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+    //     { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+    //     { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+    //     { id: 20, name: 'Dashbord', read: false },
+    //     { id: 21, name: 'Map', read: false, new: false, modify: false, delete: false  },
+    //     { id: 22, name: 'RealTime', read: false, new: false, modify: false, delete: false  },
+    //     { id: 23, name: 'Vehicle', read: false, new: false, modify: false, delete: false  },
+    //     { id: 24, name: 'Reminders', read: false, new: false, modify: false, delete: false  },
+    //     { id: 25, name: 'History', read: false, new: false, modify: false, delete: false  },
+    //     { id: 26, name: 'Records', read: false, new: false, modify: false, delete: false  },
+    // ];
+    // dummy
     const initialPermissionsData = [
 
         { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
@@ -37,24 +73,33 @@ const useEmplyeecreation = () => {
         { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
         { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
         { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+        { id: 8, name: 'Reports', read: false, new: false, modify: false, delete: false },
 
-        { id: 8, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
-        { id: 9, name: 'Customer', read: false, new: false, modify: false, delete: false },
-        { id: 10, name: 'Supllier', read: false, new: false, modify: false, delete: false },
-        { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+        { id: 9, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+        { id: 10, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
+        { id: 11, name: 'Customer', read: false, new: false, modify: false, delete: false },
+        { id: 12, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+        { id: 13, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+        // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
 
-        { id: 12, name: 'SETTING', read: false, new: false, modify: false, delete: false },
-        { id: 13, name: 'User Creation', read: false, new: false, modify: false, delete: false },
-        { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
-        { id: 15, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+        { id: 14, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+        { id: 15, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+        { id: 16, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
 
-        { id: 16, name: 'INFO', read: false, new: false, modify: false, delete: false },
-        { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+        { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
+        // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
         { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
-        { id: 20, name: 'Dashbord', read: false },
+        { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
+        { id: 21, name: 'Dashboard', read: false },
+        // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+        { id: 22, name: 'Map', read: false, new: false, modify: false, delete: false  },
+        { id: 23, name: 'RealTime', read: false, new: false, modify: false, delete: false  },
+        { id: 24, name: 'Vehicle', read: false, new: false, modify: false, delete: false  },
+        { id: 25, name: 'Reminders', read: false, new: false, modify: false, delete: false  },
+        { id: 26, name: 'History', read: false, new: false, modify: false, delete: false  },
+        { id: 27, name: 'Records', read: false, new: false, modify: false, delete: false  },
     ];
-
 
 
 
@@ -127,14 +172,61 @@ const useEmplyeecreation = () => {
             }))
         );
     };
+    
 
+    const handleSwitchforthatrow = (id) => (event)=>{
+        // console.log(id,"iiiiii")
+        const { checked } = event.target;
+        setPermissionsData(prevData =>
+            prevData.map((permission, i) => {
+                if (i === id) {
+                    return { ...permission,
+                        read: checked,
+              new: checked,  // Toggles all the fields together
+              modify: checked,
+              delete: checked
+                }
+            }
+                return permission;
+            })
+        );
+    }
+
+const handleSwitchforallrows=(id1,id2)=>(event)=>{
+    console.log(id1,id2,"mainid")
+
+
+ const { checked } = event.target;
+        setPermissionsData(prevData =>
+            prevData.map((permission, id) => {
+                for (let i = id1; i <= id2; i++) {
+                    // newState[i][field] = checked;
+                    console.log(i,"ll")
+                
+                if (id === i) {
+                    return { ...permission,
+                        read: checked,
+              new: checked,  // Toggles all the fields together
+              modify: checked,
+              delete: checked
+                }
+            }
+            }
+                return permission;
+            })
+        );
+    }
+
+    
 
     //----------------------------------------------------
 
     const handleCheckboxChange = (index, field) => (event) => {
-        if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
-            handleMainCheckboxChange(index, field)
-        }
+        console.log(index,field,"main")
+        // if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
+        //     console.log(index,field,"maincheck")
+        //     handleMainCheckboxChange(index, field)
+        // }
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
@@ -147,27 +239,52 @@ const useEmplyeecreation = () => {
     }
 
     // its for set main checkbox state 
-    const handleMainCheckboxChange = (index, field) => {
-        setPermissionsData(prevData => {
-            const newState = prevData.map((item, idx) => {
-                if (idx >= index && idx < index + 4) {
-                    return {
-                        ...item,
-                        [field]: !item[field]
-                    };
+    // const handleMainCheckboxChange = (index, field) => {
+    //     console.log(field,index,"mainjjj")
+    //     setPermissionsData(prevData => {
+    //         const newState = prevData.map((item, idx) => {
+    //             console.log(item,idx,"mainidxxxx")
+    //             if (idx >= index && idx < index + 4) {
+    //                 console.log(idx,"kk",index+4)
+    //                 return {
+    //                     ...item,
+    //                     [field]: !item[field]
+    //                 };
+    //             }
+    //             return item;
+    //         });
+    //         console.log(newState,index,field,"filrdnewsatae")
+
+    //         const checked = newState[index][field];
+    //         // Set all checkboxes within the range to match the checked state of the main checkbox
+    //         for (let i = index + 1; i < index + 4; i++) {
+    //             newState[i][field] = checked;
+    //         }
+    //         return newState;
+
+    //     });
+    //     console.log(newState,"stae")
+    // };
+
+
+    const handleCheckboxChangealldata = (index1,index2,field) => (event) => {
+        console.log(index1,field,"main")
+        // if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
+        //     console.log(index,field,"maincheck")
+        //     handleMainCheckboxChange(index, field)
+        // }
+        const { checked } = event.target;
+        setPermissionsData(prevData =>
+            prevData.map((permission, id) => {
+                for (let i = index1; i <= index2; i++) {
+                if (id === i) {
+                    return { ...permission, [field]: checked };
                 }
-                return item;
-            });
-
-            const checked = newState[index][field];
-            // Set all checkboxes within the range to match the checked state of the main checkbox
-            for (let i = index + 1; i < index + 4; i++) {
-                newState[i][field] = checked;
             }
-            return newState;
-        });
-    };
-
+                return permission;
+            })
+        );
+    }
     ///----------------------------------------------------
 
     const [book, setBook] = useState({
@@ -249,7 +366,7 @@ const useEmplyeecreation = () => {
             if (response.status === 200) {
     
               const userDataArray = await response.json();
-              console.log(userDataArray,'userdata');
+            //   console.log(userDataArray,'userdata');
               if (userDataArray.length > 0) {
                 setOrganisationSendEmail(userDataArray[0])
                 // setDatatrigger(!datatrigger)
@@ -375,7 +492,8 @@ const useEmplyeecreation = () => {
 
 
         try {
-            const data = { book, permissionsData,organistaionsendmail }
+            const created_at=dayjs().format("YYYY-MM-DD")
+            const data = { book, permissionsData,organistaionsendmail,created_at}
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             setSuccess(true);
@@ -389,7 +507,7 @@ const useEmplyeecreation = () => {
 
     };
 
-
+console.log(permissionsData,"ppp")
     // edit
     const handleEdit = async (userid) => {
         try {
@@ -451,10 +569,11 @@ const useEmplyeecreation = () => {
                 setErrorMessage("Fill Active..");
                 return;
             }
+           
 
             const selectedCustomer = rows.find((row) => row.userid === userid); 
-            const updatedCustomer = { ...selectedCustomer, ...book };
-            const data = { updatedCustomer: updatedCustomer, permissionsData }
+            const updatedCustomer = { ...selectedCustomer, ...book, };
+            const data = { updatedCustomer: updatedCustomer, permissionsData}
 
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
@@ -654,10 +773,10 @@ const useEmplyeecreation = () => {
         handleClickShowPasswords,
         handleMouseDownPasswords,
         isEditMode,
-        handleEdit,handleChangeuniquecreation,cerendentialdata,showPermission, setShowPermission,
+        handleEdit,handleChangeuniquecreation,cerendentialdata,showPermission, setShowPermission,handleCheckboxChangealldata,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,handleSwitchforthatrow,handleSwitchforallrows
     };
 };
 

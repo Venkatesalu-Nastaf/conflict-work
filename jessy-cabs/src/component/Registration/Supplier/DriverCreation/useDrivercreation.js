@@ -42,12 +42,13 @@ const useDrivercreation = () => {
     const [cerendentialdata2,setCredentialData2]=useState();
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [datatrigger, setDatatrigger] = useState(false)
+    const [deletefile, setDeleteFile] = useState([])
     // const [profileimage,setProfileimage]=useState('')
     // console.log(profileimage,"imagedata")
     // venkat
 
 
-    // venkat
+   
     const handleSelectAll = () => {
         if (selectAll) {
             setDeleteFile([]);
@@ -556,6 +557,7 @@ const useDrivercreation = () => {
             setErrorMessage("PLease Enter driverid No");
             return;
         }
+        setDeleteFile([])
         showPdf(driverid);
     };
 
@@ -933,7 +935,7 @@ const useDrivercreation = () => {
             setDeleteFile([])
         }
     };
-    const [deletefile, setDeleteFile] = useState([])
+    // const [deletefile, setDeleteFile] = useState([])
 
 
 
@@ -1016,6 +1018,27 @@ const useDrivercreation = () => {
         }
     };
 
+
+    const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/getDriverDetails`);
+            const data = response.data;
+          
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+            
+           
+        } catch (err) {
+            console.log(err);
+        }
+    }, [apiUrl]); // Add any dependencies needed inside this array
+
+    useEffect(() => {
+        handleList();
+    }, [handleList]);
 
     //       const handleDocumentDownload = async () => {
     //     try {

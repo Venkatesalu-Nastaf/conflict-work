@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import './BackUp.css';
 import dayjs from "dayjs";
 import Box from '@mui/material/Box';
@@ -19,6 +19,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { PermissionContext } from '../../../context/permissionContext';
 
 // date
 const today = dayjs();
@@ -32,6 +33,9 @@ const BackUp = () => {
     const [errorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
+
+    const { permissions } = useContext(PermissionContext)
+    const MainSetting_modify = permissions[16]?.modify;
 
     //for popup
     const hidePopup = () => {
@@ -127,12 +131,12 @@ const BackUp = () => {
                                 </LocalizationProvider>
                             </div>
                             <div className="input back-up-btns">
-                                <Button startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
+                                <Button  disabled={!MainSetting_modify} startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
                                     Data BackUp
                                 </Button>
                             </div>
                             <div className="input back-up-btns">
-                                <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
+                                <Button   disabled={!MainSetting_modify} startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
                                     Import Data
                                 </Button>
                             </div>

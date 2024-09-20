@@ -74,20 +74,20 @@ const PackageRateEntery = ({vehileName,stationname }) => {
   } = usePackagerateentry();
 
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
-  console.log(stationname,"name")
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
+  // console.log(stationname,"name")
 
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
   const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
   const { permissions } = useContext(PermissionContext)
-  const RateManagement_read = permissions[17]?.read;
-  const RateManagement_new = permissions[17]?.new;
-  const RateManagement_modify = permissions[17]?.modify;
-  const RateManagement_delete = permissions[17]?.delete;
+  const RateManagement_read = permissions[10]?.read;
+  const RateManagement_new = permissions[10]?.new;
+  const RateManagement_modify = permissions[10]?.modify;
+  const RateManagement_delete = permissions[10]?.delete;
 
   //--------------------------------------------------------------------
 
@@ -211,7 +211,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                   />
                 </div>
                 <div style={{ marginLeft: "10px" }}>
-                  <Button variant="contained" disabled={!RateManagement_new} onClick={handleShow} >Show</Button>
+                  <Button variant="contained"  onClick={handleShow} >Show</Button>
 
                 </div>
               </div>
@@ -223,7 +223,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <div className='add-packages-btn'><Button variant="contained" onClick={handleAddExtra} >Add Packages</Button></div>}
+          {!isEditMode && <div className='add-packages-btn'><Button variant="contained" disabled={!RateManagement_new} onClick={handleAddExtra} >Add Packages</Button></div>}
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">
@@ -477,6 +477,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
 
             {RateManagement_read === 1 && (
@@ -487,7 +488,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
             )}
-            {RateManagement_modify === 1 && (
+            {RateManagement_modify === 1 && isEditMode &&(
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -495,7 +496,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {RateManagement_delete === 1 && (
+            {RateManagement_delete === 1 &&  isEditMode &&(
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -509,7 +510,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-            {RateManagement_new === 1 && (
+            {RateManagement_new === 1 &&  !isEditMode &&(
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}

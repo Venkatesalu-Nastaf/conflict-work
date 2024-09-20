@@ -106,7 +106,7 @@ const Customer = ({ stationName }) => {
     setSearchText,
     handleenterSearch,
     customerfieldSets,
-    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations,
+    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations,setInfo,setInfoMessage,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
@@ -118,16 +118,22 @@ const Customer = ({ stationName }) => {
 
   const { permissions } = useContext(PermissionContext)
 
-  const Customer_read = permissions[9]?.read;
-  const Customer_new = permissions[9]?.new;
-  const Customer_modify = permissions[9]?.modify;
-  const Customer_delete = permissions[19]?.delete;
+  const Customer_read = permissions[11]?.read;
+  const Customer_new = permissions[11]?.new;
+  const Customer_modify = permissions[11]?.modify;
+  const Customer_delete = permissions[11]?.delete;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const handleClickOpen = () => {
-    console.log(true, "truu")
-    setDeletedDialog(true)
+  
+    if(Customer_delete === 1){
+      setDeletedDialog(true)
+    }
+    else{
+      setInfo(true)
+      setInfoMessage("You don't Have Permission To Delete")
+    }
   };
 
 
@@ -460,7 +466,7 @@ const Customer = ({ stationName }) => {
               x
             </Button>
           )} */}
-
+                   
                     {index >= 1 && (
                       <Button variant="contained" color="error" onClick={handleClickOpen}>
                         x
@@ -488,7 +494,7 @@ const Customer = ({ stationName }) => {
 
                 ))}
 
-                <Button variant="contained" onClick={handleAddExtra} >Add+</Button>
+                <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} >Add+</Button>
 
 
               </div>
@@ -862,7 +868,7 @@ const Customer = ({ stationName }) => {
                         onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                       />
                     )}
-                    {Customer_delete === 1 && (
+                    {Customer_delete === 1 && isEditMode && (
                       <SpeedDialAction
                         key="delete"
                         icon={<DeleteIcon />}

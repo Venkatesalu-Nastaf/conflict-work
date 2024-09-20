@@ -33,7 +33,12 @@ const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
 const Map = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const { permissions } = useContext(PermissionContext)
-  const Maps = permissions[21]?.read;
+  // const Maps = permissions[21]?.read;
+  const Map_Realtime = permissions[23]?.read || 0
+  const Map_Vehicle = permissions[24]?.read || 0
+  const Map_Reminders = permissions[25]?.read || 0
+  const Map_History = permissions[26]?.read || 0
+  const Map_Records = permissions[27]?.read || 0
 
 
 
@@ -55,19 +60,19 @@ const Map = () => {
     let hasPermission = 0;
     switch (menuItem) {
       case "RealTime":
-        hasPermission = Maps;
+        hasPermission = Map_Realtime;
         break;
       case "Vehicle":
-        hasPermission = Maps;
+        hasPermission = Map_Vehicle;
         break;
       case "Reminders":
-        hasPermission = Maps;
+        hasPermission = Map_Reminders;
         break;
       case "History":
-        hasPermission = Maps;
+        hasPermission = Map_History;
         break;
         case "Records":
-        hasPermission = Maps;
+        hasPermission = Map_Records;
         break;
       default:
         break;
@@ -103,6 +108,7 @@ const Map = () => {
     <div className="billings-conatiner" id="menu">
       <div className="menu-bar-main">
         <div className="menu-bar">
+          {Map_Realtime ?
           <MenuItem
             label="RealTime"
             // to={Billing && ("/home/billing/billing")}
@@ -111,7 +117,8 @@ const Map = () => {
             menuItemKey="RealTime"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></>}
+          {Map_Vehicle ?
           <MenuItem
             label="Vehicle"
             // to={"/home/Map/Vehicle"}
@@ -120,7 +127,8 @@ const Map = () => {
             menuItemKey="Vehicle"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></>}
+          {Map_History ?
           <MenuItem
             label="History"
             // to={"/home/Map/Vehicle"}
@@ -129,7 +137,8 @@ const Map = () => {
             menuItemKey="History"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></>}
+          {Map_Reminders ?
           <MenuItem
             label="Reminders"
             // to={"/home/Map/Vehicle"}
@@ -138,7 +147,9 @@ const Map = () => {
             menuItemKey="Reminders"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></> }
+
+          {Map_Records ? 
             <MenuItem
             label="Records"
             // to={"/home/Map/Vehicle"}
@@ -147,7 +158,7 @@ const Map = () => {
             menuItemKey="Records"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></> }
 
         </div>
       </div>

@@ -36,6 +36,7 @@ const useEmployee = () => {
             setErrorMessage("PLease Enter Booking No");
             return;
         }
+        setDeleteFile([])
         showPdf(empid);
     };
 

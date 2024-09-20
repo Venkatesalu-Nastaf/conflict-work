@@ -27,10 +27,10 @@ const Settings = () => {
 
   const { permissions } = useContext(PermissionContext)
 
-  const SETTING = permissions[12]?.read;
-  const User_Creation = permissions[13]?.read;
-  const Station_Creation = permissions[14]?.read;
-  const Main_Setting = permissions[15]?.read;
+  // const SETTING = permissions[14]?.read;
+  const User_Creation = permissions[15]?.read;
+  // const Station_Creation = permissions[14]?.read;
+  const Main_Setting = permissions[16]?.read;
 
   const [warning, setWarning] = useState(false);
 
@@ -58,10 +58,7 @@ const Settings = () => {
     switch (menuItem) {
 
       case "User Creation":
-        hasPermission = User_Creation || SETTING;
-        break;
-      case "Station Creation":
-        hasPermission = Station_Creation;
+        hasPermission = User_Creation;
         break;
       case "Main setting":
         hasPermission = Main_Setting;
@@ -93,6 +90,7 @@ const Settings = () => {
     <div className="Settings-main">
       <div className="menu-bar-main">
         <div className="menu-bar">
+          {User_Creation ?
           <MenuItem
             label="User Creation"
             to={User_Creation && ("/home/settings/usercreation")}
@@ -100,7 +98,7 @@ const Settings = () => {
             menuItemKey="User Creation"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
           {/* <MenuItem
           label="Permission"
           to="/home/settings/permission"
@@ -116,6 +114,7 @@ const Settings = () => {
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           /> */}
+          {Main_Setting ? 
           <MenuItem
             label="Main setting"
             to={Main_Setting && ("/home/settings/mainsetting")}
@@ -123,7 +122,7 @@ const Settings = () => {
             menuItemKey="Main setting"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></>}
         </div>
       </div>
       <div className='alert-popup-main'>

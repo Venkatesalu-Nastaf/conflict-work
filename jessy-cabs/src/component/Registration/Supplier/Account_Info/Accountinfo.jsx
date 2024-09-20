@@ -88,7 +88,7 @@ const Accuntinfo = ({ stationName }) => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    handleRemoveField,
+    // handleRemoveField,
     handleFieldChange,
     setSearchText,
     handleSearch,
@@ -100,7 +100,8 @@ const Accuntinfo = ({ stationName }) => {
     rows,
     columns,
     isEditMode,
-    fields, handleAutocompleteChangestations,
+    // fields,
+     handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
   } = useAccountinfo();
 
@@ -112,10 +113,10 @@ const Accuntinfo = ({ stationName }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Supllier_read = permissions[10]?.read;
-  const Supllier_new = permissions[10]?.new;
-  const Supllier_modify = permissions[10]?.modify;
-  const Supllier_delete = permissions[10]?.delete;
+  const Supllier_read = permissions[12]?.read;
+  const Supllier_new = permissions[12]?.new;
+  const Supllier_modify = permissions[12]?.modify;
+  const Supllier_delete = permissions[12]?.delete;
 
   return (
     <div className="main-content-form">
@@ -423,7 +424,7 @@ const Accuntinfo = ({ stationName }) => {
 
               </div>
 
-              {fields?.map((field, index) => (
+              {/* {fields?.map((field, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={2}>
                   <TextField
                     value={field}
@@ -431,15 +432,15 @@ const Accuntinfo = ({ stationName }) => {
                     label={`Field ${index + 1}`}
                     variant="outlined"
                     style={{ marginRight: 8 }}
-                  />
+                  /> */}
                   {/* Optional: Button to remove a specific field */}
-                  {fields?.length > 1 && (
+                  {/* {fields?.length > 1 && (
                     <Button variant="contained" color="error" onClick={() => handleRemoveField(index)}>
                       Remove
                     </Button>
                   )}
                 </Box>
-              ))}
+              ))} */}
               {/* <Button variant="contained" onClick={handleAddExtra}>
                 Add+
               </Button> */}
@@ -588,7 +589,7 @@ const Accuntinfo = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                 />
               )}
-              {Supllier_modify === 1 && (
+              {Supllier_modify === 1 && isEditMode &&(
                 <SpeedDialAction
                   key="edit"
                   icon={<ModeEditIcon />}
@@ -596,7 +597,7 @@ const Accuntinfo = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                 />
               )}
-              {Supllier_delete === 1 && (
+              {Supllier_delete === 1 && isEditMode && (
                 <SpeedDialAction
                   key="delete"
                   icon={<DeleteIcon />}
@@ -604,7 +605,7 @@ const Accuntinfo = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                 />
               )}
-              {Supllier_new === 1 && (
+              {Supllier_new === 1 && !isEditMode && (
                 <SpeedDialAction
                   key="Add"
                   icon={<BookmarkAddedIcon />}

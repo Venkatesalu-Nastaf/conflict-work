@@ -336,7 +336,7 @@ const MailageDetails = () => {
                     onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                   />
                 )}
-                {FuelInfo_modify === 1 && (
+                {FuelInfo_modify === 1 && isEditMode && (
                   <SpeedDialAction
                     key="edit"
                     icon={<ModeEditIcon />}
@@ -344,7 +344,7 @@ const MailageDetails = () => {
                     onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                   />
                 )}
-                {FuelInfo_delete === 1 && (
+                {FuelInfo_delete === 1 && isEditMode && (
                   <SpeedDialAction
                     key="delete"
                     icon={<DeleteIcon />}
@@ -352,7 +352,7 @@ const MailageDetails = () => {
                     onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                   />
                 )}
-                {FuelInfo_new === 1 && (
+                {FuelInfo_new === 1 &&  !isEditMode &&(
                   <SpeedDialAction
                     key="Add"
                     icon={<BookmarkAddedIcon />}

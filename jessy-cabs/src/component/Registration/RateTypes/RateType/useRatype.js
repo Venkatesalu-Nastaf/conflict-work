@@ -589,16 +589,20 @@ const useRatype = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
+                handlelist()
+                
+
 
 
             } else if (actionName === 'Edit') {
 
-                const selectedCustomer = rows.find((row) => row.driverid === driverid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
+                // const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                // await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                // setSuccess(true);
+                // setSuccessMessage("Successfully updated");
+                // handleCancel();
+                handleEdit()
 
             }
 
@@ -612,11 +616,7 @@ const useRatype = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+    
 
 
     return {

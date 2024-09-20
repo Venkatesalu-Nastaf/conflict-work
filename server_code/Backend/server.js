@@ -48,6 +48,7 @@ const tripsheetRouter = require('./customer_master/Router/tripsheet/tripsheet');
 const pendingRouter = require('./customer_master/Router/Recieved/pending');
 const closedRouter = require('./customer_master/Router/Dispatch/closed');
 const dispatchRouter = require('./customer_master/Router/Dispatch/dispatch');
+const overviewdrawerRouter = require('./customer_master/Router/OverviewDrawer/overviewdrawer');
 const driverRouter = require('./customer_master/Router/driver/driver');
 const usercreationRouter = require('./customer_master/Router/usercreation/usercreation');
 const stationcreationRouter = require('./customer_master/Router/stationcreation/stationcreation');
@@ -107,6 +108,8 @@ app.use('/', closedRouter); // Booking/Dispatch/closed page database
 app.use('/', dispatchRouter); // Booking/Dispatch/Dispatch page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', driverRouter); // driver page database
+// -----------------------------------------------------------------------------------------------------------
+app.use('/', overviewdrawerRouter);  //Tripsheet/Overview/database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', usercreationRouter); // usercreation page database:
 // -----------------------------------------------------------------------------------------------------------

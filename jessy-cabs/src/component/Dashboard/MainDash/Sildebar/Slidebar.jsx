@@ -255,27 +255,48 @@ const Sidebar = () => {
     setMapDropdownVisible(false);
 
   }
+  
 
   const { permissions } = useContext(PermissionContext)
   const BOOKING = permissions[0]?.read;
   const BILLING = permissions[4]?.read;
-  const REGISTER = permissions[8]?.read;
-  const SETTING = permissions[12]?.read || permissions[13]?.read;
-  const INFO = permissions[16]?.read;
-  const Dashbord_read = permissions[20]?.read;
+  // const REGISTER = permissions[8]?.read;
+  // const SETTING = permissions[12]?.read || permissions[13]?.read;
+  // const REGISTER = permissions[9]?.read;
+  const REGISTER = permissions[9]?.read 
+  const SETTING = permissions[14]?.read 
+  const R_RATEtype = permissions[10]?.read 
+  const R_Customer=permissions[11]?.read 
+  const R_Supllier = permissions[12]?.read 
+  const R_Station = permissions[13]?.read 
+  // const INFO = permissions[16]?.read;
+  // const Dashbord_read = permissions[21]?.read;
+  const INFO = permissions[17]?.read;
+  const Dashbord_read = permissions[21]?.read;
+  
   // thsi for map page permisiion
-  const Maps = permissions[21]?.read;
+  const Maps = permissions[22]?.read;
+  const mailer=permissions[18]?.read;
+  const Fuel = permissions[19]?.read;
+  const Employee1 = permissions[20]?.read;
+  const userCreation = permissions[15]?.read ;
+  const Map_Realtime = permissions[23]?.read ;
+  const Map_Vehicle = permissions[24]?.read ;
+  const Map_Reminders = permissions[25]?.read ;
+  const Map_History = permissions[26]?.read ;
+  const Map_Records = permissions[27]?.read ;
+
 
 
   // its for hiding navigation based on permission 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
-  const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
-  const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
-  const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
+  const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read 
+  const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read 
+  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
 
   // thsi for map page permisiion
-  const Map_page_permission = permissions[21]?.read;
+  const Map_page_permission = permissions[22]?.read || permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
@@ -520,7 +541,7 @@ const Sidebar = () => {
 
         </div>
         <div className="menu">
-          {Dashbord_read === 1 && <MenuItem
+          {Dashbord_read === 1 ? <MenuItem
             label="Dashboard"
             to="/home/dashboard"
             value="/home/dashboard"
@@ -529,9 +550,9 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
-          />}
+          />:<></>}
 
-          {booking_page_permission && <MenuItem
+          {booking_page_permission ? <MenuItem
             label="Booking"
             to={BOOKING && ("/home/bookings/booking")}
             alt="/home/bookings/booking"
@@ -541,9 +562,9 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={HiOutlineUsers}
-          />}
+          />:<></>}
 
-          {Billing_permission && <MenuItem
+          {Billing_permission ? <MenuItem
             label="Billing"
             to={BILLING && ("/home/billing/billing")}
             // to={"/home/billing/billing"}
@@ -554,9 +575,9 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiBarChartSquare}
-          />}
+          />:<></>}
 
-          {Register_page_permission && <MenuItem
+          {Register_page_permission ? <MenuItem
             label="Register"
             to={REGISTER && ("/home/registration/customer")}
             alt="/home/registration/customer"
@@ -566,10 +587,10 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
-          />
+          />:<></>
           }
 
-          {Setting_page_permission && <MenuItem
+          {Setting_page_permission ? <MenuItem
             label="Settings"
             to={SETTING && ("/home/settings/usercreation")}
             alt="/home/settings/usercreation"
@@ -579,10 +600,10 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          />}
+          />:<></>}
 
 
-          {Info_page_permission && <MenuItem
+          {Info_page_permission ? <MenuItem
             label="Info"
             to={INFO && ("/home/info/ratetype")}
             alt="/home/info/ratetype"
@@ -592,7 +613,7 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineInfoCircle}
-          />}
+          />:<></>}
 
           <MenuItem
             label="User"
@@ -1147,7 +1168,7 @@ const Sidebar = () => {
           {/* </div> */}
         </div>
         <div className="menu menu-section-scroll">
-          {Dashbord_read === 1 && <MenuItem
+          {Dashbord_read === 1 ? <MenuItem
             label={`${expanded == false ? '' : 'Dashboard'}`}
             to="/home/dashboard"
             value="/home/dashboard"
@@ -1156,8 +1177,8 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
-          />}
-          {booking_page_permission &&
+          /> : <></>}
+          {booking_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Booking'}`}
@@ -1171,9 +1192,10 @@ const Sidebar = () => {
                 icon={HiOutlineUsers}
               />
             </div>
+            :<></>
           }
 
-
+{booking_page_permission ?
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1193,7 +1215,7 @@ const Sidebar = () => {
               handleMenuItemClick={handleBookingClick}
               icon={HiOutlineUsers}
             />
-          </motion.div>
+          </motion.div> : <></>}
           {bookingDropdownVisible && (
             <div className="settings-dropdown">
               <div className="settings-dropdown-links">
@@ -1228,7 +1250,7 @@ const Sidebar = () => {
               </div>
             </div>
           )}
-          {Billing_permission &&
+          {Billing_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Billing'}`}
@@ -1242,7 +1264,8 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={BiBarChartSquare}
               />
-            </div>}
+            </div>:<></>}
+            {Billing_permission ?
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1262,7 +1285,7 @@ const Sidebar = () => {
               handleMenuItemClick={handleBillingClick}
               icon={BiBarChartSquare}
             />
-          </motion.div>
+          </motion.div>:<></>}
           {billingDropdownVisible && (
             <div className="settings-dropdown">
               <div className="settings-dropdown-links">
@@ -1295,15 +1318,47 @@ const Sidebar = () => {
                   </span>
                 </p>
               </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/reports')}>
+                  <span>
+                    <FaMoneyBillWheat />
+                  </span>
+                  <span className="menu-items-registration">
+                    Reports
+                  </span>
+                </p>
+              </div>
             </div>
           )}
 
-          {Register_page_permission &&
+          {Register_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Register'}`}
-                to={REGISTER && ("/home/registration/ratetype")}
-                alt="/home/registration/ratetype"
+                // to={REGISTER && ("/home/registration/ratetype")}
+                // alt="/home/registration/ratetype"
+                to={
+                  R_RATEtype ?
+                     "/home/registration/ratetype"
+                     : R_Customer
+                     ? "/home/registration/customer"
+                     : R_Supllier
+                     ? "/home/registration/supplier"
+                     : R_Station
+                     ? "/home/registration/stationcreation"
+                     : "/home/registration/ratetype"
+                 }
+                 alt={
+                  R_RATEtype ?
+                     "/home/registration/ratetype"
+                     : R_Customer
+                     ? "/home/registration/customer"
+                     : R_Supllier
+                     ? "/home/registration/supplier"
+                     : R_Station
+                     ? "/home/registration/stationcreation"
+                     : "/home/registration/ratetype"
+                 }
                 value="/home/registration"
                 menuItemKey="/home/registration"
                 name="Register page"
@@ -1311,15 +1366,34 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={BiNotepad}
               />
-            </div>
+            </div>:<></>
           }
 
-          {Info_page_permission &&
+          {Info_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Info'}`}
-                to={INFO && ("/home/info/mailer")}
-                alt="/home/info/mailer"
+                // to={INFO && ("/home/info/mailer")}
+                to={
+                 mailer ?
+                    "/home/info/mailer"
+                    : Fuel
+                    ? "/home/info/fuelinfo"
+                    : Employee1
+                    ? "/home/info/employee"
+                    : "/home/info/mailer"
+                }
+                // alt="/home/info/mailer"
+                alt={
+                  mailer
+                    ? "/home/info/mailer"
+                    : Fuel
+                    ? "/home/info/fuelinfo"
+                    : Employee1
+                    ? "/home/info/employee"
+                    : "/home/info/mailer"
+                }
+                
                 value="/home/info"
                 menuItemKey="/home/info"
                 name="Info page"
@@ -1327,14 +1401,40 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={AiOutlineInfoCircle}
               />
-            </div>}
+            </div>:<></>}
 
-          {Map_page_permission &&
+          {Map_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Map'}`}
-                to={Maps && ("/home/Map/RealTime")}
-                alt="/home/Map/RealTime"
+                // to={Maps && ("/home/Map/RealTime")}
+                // alt="/home/Map/RealTime"
+                to={
+                  Map_Realtime ?
+                     "/home/Map/RealTime"
+                     : Map_History
+                     ? "/home/Map/History"
+                     : Map_Vehicle
+                     ? "/home/Map/Vehicle"
+                     : Map_Reminders
+                     ? "/home/Map/Reminders"
+                     : Map_Records 
+                     ? "/home/Map/Records" :
+                     "/home/Map/RealTime"
+                 }
+                 alt={
+                  Map_Realtime ?
+                     "/home/Map/RealTime"
+                     : Map_History
+                     ? "/home/Map/History"
+                     : Map_Vehicle
+                     ? "/home/Map/Vehicle"
+                     : Map_Reminders
+                     ? "/home/Map/Reminders"
+                     : Map_Records 
+                     ? "/home/Map/Records" :
+                     "/home/Map/RealTime"
+                 }
                 value="/home/Map"
                 menuItemKey="/home/Map"
                 name="Map page"
@@ -1342,9 +1442,9 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={FaMapMarked}
               />
-            </div>
+            </div>:<></>
           }
-
+        {Register_page_permission ?
           <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
@@ -1364,9 +1464,19 @@ const Sidebar = () => {
               handleMenuItemClick={handleRegisterClick}
               icon={BiNotepad}
             />
-          </motion.div>
+          </motion.div>:<></>}
           {registrationDropdownVisible && (
             <div className="settings-dropdown">
+               <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/ratetype')}>
+                  <span>
+                    <MdGroup />
+                  </span>
+                  <span className="menu-items-registration">
+                    Ratetype
+                  </span>
+                </p>
+              </div>
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
                   <span>
@@ -1388,19 +1498,19 @@ const Sidebar = () => {
                 </p>
               </div>
               <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/employes')}>
+                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/stationcreation')}>
                   <span>
                     <HiOutlineUserGroup />
                   </span>
                   <span className="menu-items-registration">
-                    Employees
+                    Station Creation
                   </span>
                 </p>
               </div>
             </div>
           )}
 
-          <motion.div className='mobile-menu-with-dropdown'>
+        {Info_page_permission ? <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
                 <span className="sidebar-main-menu">
@@ -1421,7 +1531,7 @@ const Sidebar = () => {
               dropdownItems={[
               ]}
             />
-          </motion.div>
+          </motion.div> :<></>}
           {infoDropdownVisible && (
             <div className="settings-dropdown">
               {/* <div className="settings-dropdown-links">
@@ -1464,10 +1574,20 @@ const Sidebar = () => {
                   </span>
                 </p>
               </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/employee')}>
+                  <span>
+                    <BsFillFuelPumpFill />
+                  </span>
+                  <span>
+                    Employee
+                  </span>
+                </p>
+              </div>
             </div>
           )}
 
-          <motion.div className='mobile-menu-with-dropdown'>
+         {Map_page_permission ? <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
                 <span className="sidebar-main-menu">
@@ -1488,7 +1608,7 @@ const Sidebar = () => {
               dropdownItems={[
               ]}
             />
-          </motion.div>
+          </motion.div> : <> </>}
           {mapDropdownVisible && (
             <div className="settings-dropdown">
               <div className="settings-dropdown-links">
@@ -1522,16 +1642,40 @@ const Sidebar = () => {
                   </span>
                 </p>
               </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/Records')}>
+                  <span>
+                    <SiClockify />
+                  </span>
+                  <span>
+                    Records
+                  </span>
+                </p>
+              </div>
             </div>
+            
           )}
 
 
-          {Setting_page_permission &&
+          {Setting_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
                 label={`${expanded == false ? '' : 'Settings'}`}
-                to={SETTING && ("/home/settings/usercreation")}
-                alt="/home/settings/usercreation"
+                // to={SETTING && ("/home/settings/usercreation")}
+                // alt="/home/settings/usercreation"
+                to={
+                  userCreation  ?
+                     "/home/settings/usercreation"
+                     : "/home/settings/mainsetting"
+                   
+                 }
+                 // alt="/home/info/mailer"
+                 alt={
+                  userCreation ?
+                     "/home/settings/usercreation"
+                     : "/home/settings/mainsetting"
+                 }
+
                 value="/home/settings"
                 menuItemKey="/home/settings"
                 name="Settings page"
@@ -1539,8 +1683,9 @@ const Sidebar = () => {
                 handleMenuItemClick={handleMenuItemClick}
                 icon={AiOutlineSetting}
               />
-            </div>}
-          <motion.div className='mobile-menu-with-dropdown'>
+            </div>:<></>}
+            
+         {Setting_page_permission ? <motion.div className='mobile-menu-with-dropdown'>
             <MenuItem
               label={
                 <span className="sidebar-main-menu">
@@ -1561,7 +1706,7 @@ const Sidebar = () => {
               dropdownItems={[
               ]}
             />
-          </motion.div>
+          </motion.div> :<></>}
           {settingsDropdownVisible && (
             <div className="settings-dropdown">
               <div className="settings-dropdown-links">
@@ -1575,7 +1720,7 @@ const Sidebar = () => {
                   </span>
                 </p>
               </div>
-              <div className="settings-dropdown-links">
+              {/* <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/stationcreation')}>
                   <span>
                     <FaCodeBranch />
@@ -1584,7 +1729,7 @@ const Sidebar = () => {
                     Station Creation
                   </span>
                 </p>
-              </div>
+              </div> */}
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
                   <span>

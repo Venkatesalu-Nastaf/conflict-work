@@ -241,11 +241,7 @@ const useDriverbatarate = () => {
             setErrorMessage("Check Network Connection");
         }
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+   
 
 
     return {

@@ -191,10 +191,10 @@ const Vehicaleinfo = ({ stationName }) => {
   } = VehicleAddData()
 
   useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+    
+      handleClick('List');
+    
+  }, [handleClick]);
 
 
 
@@ -225,11 +225,10 @@ const Vehicaleinfo = ({ stationName }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Supllier_read = permissions[10]?.read;
-  const Supllier_new = permissions[10]?.new;
-  const Supllier_modify = permissions[10]?.modify;
-  const Supllier_delete = permissions[10]?.delete;
-
+  const Supllier_read = permissions[12]?.read;
+  const Supllier_new = permissions[12]?.new;
+  const Supllier_modify = permissions[12]?.modify;
+  const Supllier_delete = permissions[12]?.delete;
   return (
     <div className="main-content-form">
       <form action="">
@@ -451,7 +450,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   <div>
                     {!isEditMode &&
                       <>
-                        <Button variant="outlined" onClick={handleClickOpen}>
+                        <Button disabled={!Supllier_new} variant="outlined" onClick={handleClickOpen}>
                           Add Vehicle
                         </Button>
                       </>
@@ -1128,38 +1127,46 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
-                onClick={(event) => handleClick(event, "List")}
+                onClick={() => handleClick("List")}
               />
             )}
-            {Supllier_modify === 1 && (
+            {Supllier_modify === 1 && isEditMode &&(
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
                 tooltipTitle="Edit"
-                onClick={(event) => handleClick(event, "Edit")}
+                onClick={() => handleClick("Edit")}
               />
             )}
-            {Supllier_delete === 1 && (
+            {Supllier_delete === 1 && isEditMode && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
                 tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
+                onClick={() => handleClick("Delete")}
               />
             )}
-            {edit ? "" : (Supllier_new === 1 && (
+            {/* {edit ? "" : (Supllier_new === 1 && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
                 tooltipTitle="Add"
                 onClick={(event) => handleClick(event, "Add")}
               />
-            ))}
+            ))} */}
+             {Supllier_new === 1 && !isEditMode && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={() => handleClick("Add")}
+              />
+            )}
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
-              onClick={(event) => handleClick(event, "Cancel")}
+              onClick={() => handleClick("Cancel")}
             />
           </StyledSpeedDial>
         </Box>
@@ -1303,7 +1310,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 ))}
               </div>
               <div className='vehicle-info-dailog-box-delete-print-division'>
-                <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button  disabled={!Supllier_delete}variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
             </DialogContent>

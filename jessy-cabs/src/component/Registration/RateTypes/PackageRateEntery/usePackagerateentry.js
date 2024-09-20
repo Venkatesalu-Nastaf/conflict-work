@@ -462,11 +462,11 @@ const usePackagerateentry = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // });
 
     return {
 

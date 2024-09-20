@@ -86,18 +86,13 @@ const RateType = ({ stationName}) => {
         handleDateChange, cerendentialdata, handleChangecredent
     } = useRatype();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const INFO_read = permissions[16]?.read;
-    const INFO_new = permissions[16]?.new;
-    const INFO_modify = permissions[16]?.modify;
-    const INFO_delete = permissions[16]?.delete;
+    const INFO_read = permissions[10]?.read;
+    const INFO_new = permissions[10]?.new;
+    const INFO_modify = permissions[10]?.modify;
+    const INFO_delete = permissions[10]?.delete;
 
     return (
         <div className="main-content-form Scroll-Style-hide">
@@ -323,11 +318,11 @@ const RateType = ({ stationName}) => {
                                 <div className="add-edit-ratetype input">
                                     {isEditMode ? (
                                         <Button variant="contained"
-                                            // disabled={INFO_modify} 
+                                            disabled={!INFO_modify} 
                                             onClick={handleEdit}>Edit</Button>
                                     ) : (
                                         <Button variant="contained"
-                                            // disabled={!INFO_new}
+                                            disabled={!INFO_new}
                                             onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
@@ -420,7 +415,7 @@ const RateType = ({ stationName}) => {
                                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                             />
                         )}
-                        {INFO_modify === 1 && (
+                        {INFO_modify === 1 && isEditMode &&(
                             <SpeedDialAction
                                 key="edit"
                                 icon={<ModeEditIcon />}
@@ -428,7 +423,7 @@ const RateType = ({ stationName}) => {
                                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                             />
                         )}
-                        {INFO_delete === 1 && (
+                        {INFO_delete === 1 && isEditMode &&(
                             <SpeedDialAction
                                 key="delete"
                                 icon={<DeleteIcon />}
@@ -436,7 +431,7 @@ const RateType = ({ stationName}) => {
                                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                             />
                         )}
-                        {INFO_new === 1 && (
+                        {INFO_new === 1 && !isEditMode &&(
                             <SpeedDialAction
                                 key="Add"
                                 icon={<BookmarkAddedIcon />}

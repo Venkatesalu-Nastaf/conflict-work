@@ -135,6 +135,7 @@ const useVehicleinfo = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
+        setDeleteFile([])
         showPdf(vehicleId);
     };
 
@@ -953,8 +954,8 @@ const useVehicleinfo = () => {
         }
     };
 
-    const handleClick = async (event, actionName, vehicleId) => {
-        event.preventDefault();
+    const handleClick = async (actionName, vehicleId) => {
+        // event.preventDefault();
         try {
             if (actionName === 'List') {
                 const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
@@ -1007,11 +1008,11 @@ const useVehicleinfo = () => {
         }
     };
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // });
 
     //search funtion
     const handleSearch = async () => {

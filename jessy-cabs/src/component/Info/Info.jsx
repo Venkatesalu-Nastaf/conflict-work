@@ -9,6 +9,7 @@ const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
+
   return (
     <Link
       className={`menu-link ${isActive ? "actives" : ""}`}
@@ -43,11 +44,12 @@ const Info = () => {
   // permission -----------------
 
   const { permissions } = useContext(PermissionContext)
-  const INFO = permissions[16]?.read;
-  const Rate_Management = permissions[17]?.read;
+  // const INFO = permissions[16]?.read;
   const Mailers = permissions[18]?.read;
   const Fuel_Info = permissions[19]?.read;
+  const Employee =permissions[20]?.read;
   const handleMenuItemClick = (menuItem, alt, e) => {
+  
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
     let hasPermission = 0;
@@ -61,11 +63,8 @@ const Info = () => {
       case "Fuel Info":
         hasPermission = Fuel_Info;
         break;
-      // case "Rate Type":
-      //   hasPermission = INFO;
-      //   break;
       case "Employee":
-        hasPermission = INFO;
+        hasPermission = Employee;
         break;
       default:
         break;
@@ -119,6 +118,7 @@ const Info = () => {
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           /> */}
+          {Mailers ?
           <MenuItem
             label="Mailers"
             to={Mailers && myTo}
@@ -126,7 +126,8 @@ const Info = () => {
             menuItemKey="Mailers"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></>}
+          {Fuel_Info ? 
           <MenuItem
             label="Fuel Info"
             to={Fuel_Info && ("/home/info/fuelinfo")}
@@ -134,15 +135,24 @@ const Info = () => {
             menuItemKey="FuelInfo"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></>}
+          {Employee ? 
           <MenuItem
             label="Employee"
-            to={Fuel_Info && ("/home/info/employee")}
+            to={Employee && ("/home/info/employee")}
             alt={"/home/info/employee"}
             menuItemKey="Employee"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></>}
+           {/* {/* <MenuItem
+            label="Employees"
+            to={Employee && ("/home/registration/employes")}
+            alt="/home/registration/employes"
+            menuItemKey="Employees"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          /> */}
         </div>
       </div>
       <div className='alert-popup-main'>

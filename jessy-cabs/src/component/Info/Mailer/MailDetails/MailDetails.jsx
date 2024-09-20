@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef,useContext,useCallback } from "react";
 import "./MailDetails.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,6 +18,7 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { PermissionContext } from '../../../context/permissionContext';
 
 import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
 import { APIURL } from "../../../url";
@@ -40,13 +41,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+// const actions = [
+//   { icon: <ChecklistIcon />, name: "List" },
+//   { icon: <CancelPresentationIcon />, name: "Cancel" },
+//   { icon: <DeleteIcon />, name: "Delete" },
+//   { icon: <ModeEditIcon />, name: "Edit" },
+//   { icon: <BookmarkAddedIcon />, name: "Add" },
+// ];
 
 
 const MailDetails = () => {
@@ -54,7 +55,7 @@ const MailDetails = () => {
   const [templatedata, setTemplateData] = useState([])
   const [selecteddata, setSelectedData] = useState([])
   const [file, setFile] = useState(null);
-  const [triggerdata, setTriggerData] = useState(false)
+ 
   const [data, setData] = useState({});
   const [templateimage, setTemplateimage] = useState([])
   const [error, setError] = useState(false);
@@ -66,6 +67,12 @@ const MailDetails = () => {
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
   const [datatrigger, setDataTrigger] = useState(false)
   const fileInputRef = useRef(null);
+
+  const { permissions } = useContext(PermissionContext)
+  const Mailer_create=permissions[18]?.new ;
+  const Mailer_modify=permissions[18]?.modify ;
+  const Mailer_delete=permissions[18]?.delete ;
+  const Mailer_read = permissions[18]?.read ;
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 50 },
@@ -88,6 +95,7 @@ const MailDetails = () => {
       width: 90,
       renderCell: (params) => (
         <Button
+        disabled={!Mailer_modify}
           onClick={() => handleButtonEditClick(params)}
           aria-label="edit"
           sx={{ color: '#1976d2' }}
@@ -102,6 +110,7 @@ const MailDetails = () => {
       width: 90,
       renderCell: (params) => (
         <Button
+        disabled={!Mailer_delete}
           onClick={() => handleButtondeleteClick(params)}
           aria-label="delete"
           sx={{ color: 'red' }}
@@ -127,9 +136,30 @@ const MailDetails = () => {
     }
   }, [error, success]);
 
-  useEffect(() => {
-    const fetchdata = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchdata = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiurl}/templatedataall`)
+  //       const data = response.data
+  //       const rowuniqueid = data.map((row, index) => ({
+  //         ...row,
+  //         idno: index + 1
+
+
+  //       }))
+  //       setTemplateData(rowuniqueid)
+  //       // setTriggerData(false)
+  //       setTriggerData(!triggerdata)
+  //     }
+  //     catch (err) {
+  //       console.log(err)
+  //     }
+  //   }
+  //   fetchdata()
+  // }, [apiurl, triggerdata])
+
+  const handleList = useCallback(async () => {
+    try {
         const response = await axios.get(`${apiurl}/templatedataall`)
         const data = response.data
         const rowuniqueid = data.map((row, index) => ({
@@ -138,15 +168,17 @@ const MailDetails = () => {
 
 
         }))
+        
         setTemplateData(rowuniqueid)
-        setTriggerData(false)
-      }
-      catch (err) {
-        console.log(err)
-      }
+    } catch (err) {
+        console.log(err);
     }
-    fetchdata()
-  }, [apiurl, triggerdata])
+}, [apiurl]); // Add any dependencies needed inside this array
+
+useEffect(() => {
+    handleList();
+}, [handleList]);
+
 
   function convertToPlain(html) {
 
@@ -218,6 +250,19 @@ const MailDetails = () => {
 
   const handleTemplateCreation = () => {
     navigate("/home/info/mailer/TemplateSelection");
+  }
+
+  const handleClick =(namedata)=>{
+  
+    if(namedata === "list"){
+
+      handleList()
+      setSearchname("")
+    }
+    else{
+      handleTemplateCreation()
+    }
+  
   }
 
   const Attachedimagedata = async (templateid) => {
@@ -382,7 +427,7 @@ const MailDetails = () => {
                 </div>
                 <div className="input-field  input-feild-mailer mail-textarea1-btn">
                   <div className="input" >
-                    <Button variant="contained" onClick={handlesendbulkemail} endIcon={<SendIcon />}>
+                    <Button variant="contained"  disabled={!Mailer_create} onClick={handlesendbulkemail} endIcon={<SendIcon />}>
                       Send
                     </Button>
                   </div>
@@ -433,8 +478,8 @@ const MailDetails = () => {
                         <div className="input">
                           <Button variant="contained" onClick={() => handleShowdata()}>Search</Button>
                         </div>
-                        <div className="input" onClick={handleTemplateCreation}>
-                          <Button variant="contained">Create Template</Button>
+                        <div className="input" >
+                          <Button  disabled={!Mailer_create} onClick={handleTemplateCreation} variant="contained">Create Template</Button>
                         </div>
                       </div>
                     </div>
@@ -476,7 +521,7 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          <Box className='common-speed-dail'>
+          {/* <Box className='common-speed-dail'>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
@@ -490,7 +535,36 @@ const MailDetails = () => {
                 />
               ))}
             </StyledSpeedDial>
-          </Box>
+          </Box> */}
+
+<Box className="common-speed-dail">
+                    <StyledSpeedDial
+                        ariaLabel="SpeedDial playground example"
+                        icon={<SpeedDialIcon />}
+                        direction="left"
+                    >
+
+                        {Mailer_read === 1 && (
+                            <SpeedDialAction
+                                key="list"
+                                icon={<ChecklistIcon />}
+                                tooltipTitle="List"
+                                onClick={()=>handleClick("list")}
+                            />
+                        )}
+                     
+                      
+                        {Mailer_create === 1 && (
+                            <SpeedDialAction
+                                key="Add"
+                                icon={<BookmarkAddedIcon />}
+                                tooltipTitle="Add"
+                                onClick={() =>handleClick("Add")}
+                            />
+                        )}
+                       year
+                    </StyledSpeedDial>
+                </Box>
         </form>
       </div>
     </div>

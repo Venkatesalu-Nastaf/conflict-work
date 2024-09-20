@@ -63,7 +63,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const EmployeeCreation = ({ stationName }) => {
-  console.log("station", stationName)
+  // console.log("station", stationName)
 
   const {
 
@@ -89,9 +89,9 @@ const EmployeeCreation = ({ stationName }) => {
     handleClickShowPasswords,
     handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
     isEditMode,
-    handleEdit,showPermission, setShowPermission,
+    handleEdit,showPermission, setShowPermission,handleCheckboxChangealldata,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
+    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,handleSwitchforthatrow,handleSwitchforallrows
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -135,10 +135,10 @@ const EmployeeCreation = ({ stationName }) => {
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
-  const UserCreation_read = permissions[13]?.read;
-  const UserCreation_new = permissions[13]?.new;
-  const UserCreation_modify = permissions[13]?.modify;
-  const UserCreation_delete = permissions[13]?.delete;
+  const UserCreation_read = permissions[15]?.read;
+  const UserCreation_new = permissions[15]?.new;
+  const UserCreation_modify = permissions[15]?.modify;
+  const UserCreation_delete = permissions[15]?.delete;
 
   // search operation ----------------
   const [searchUser, setSearchUser] = useState("")
@@ -146,7 +146,8 @@ const EmployeeCreation = ({ stationName }) => {
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
   }
-  console.log(rows, "filter")
+  
+  // console.log(rows, "filter")
   const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
 
   return (
@@ -439,7 +440,7 @@ const EmployeeCreation = ({ stationName }) => {
                     onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                   />
                 )}
-                {UserCreation_modify === 1 && (
+                {UserCreation_modify === 1 && isEditMode &&(
                   <SpeedDialAction
                     key="edit"
                     icon={<ModeEditIcon />}
@@ -447,7 +448,7 @@ const EmployeeCreation = ({ stationName }) => {
                     onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                   />
                 )}
-                {UserCreation_delete === 1 && (
+                {UserCreation_delete === 1 && isEditMode &&(
                   <SpeedDialAction
                     key="delete"
                     icon={<DeleteIcon />}
@@ -515,6 +516,9 @@ const EmployeeCreation = ({ stationName }) => {
                   newState={newState}
                   modifyState={modifyState}
                   deleteState={deleteState}
+                  handleSwitchforthatrow={handleSwitchforthatrow}
+                  handleSwitchforallrows={handleSwitchforallrows}
+                  handleCheckboxChangealldata={handleCheckboxChangealldata}
                 />}
               </div>
               {!isEditMode &&

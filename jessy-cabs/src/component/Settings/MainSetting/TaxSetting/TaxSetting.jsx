@@ -83,10 +83,10 @@ const TaxSetting = () => {
 
     // Permission-------------------------------------------
     const { permissions } = useContext(PermissionContext)
-    const MainSetting_read = permissions[15]?.read;
-    const MainSetting_new = permissions[15]?.new;
-    const MainSetting_modify = permissions[15]?.modify;
-    const MainSetting_delete = permissions[15]?.delete;
+    const MainSetting_read = permissions[16]?.read;
+    const MainSetting_new = permissions[16]?.new;
+    const MainSetting_modify = permissions[16]?.modify;
+    const MainSetting_delete = permissions[16]?.delete;
 
     return (
         <div className="TaxSetting-form">
@@ -315,7 +315,7 @@ const TaxSetting = () => {
                                                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                                             />
                                         )}
-                                        {MainSetting_modify === 1 && (
+                                        {MainSetting_modify === 1 && isEditMode  &&(
                                             <SpeedDialAction
                                                 key="edit"
                                                 icon={<ModeEditIcon />}
@@ -323,7 +323,7 @@ const TaxSetting = () => {
                                                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                                             />
                                         )}
-                                        {MainSetting_delete === 1 && (
+                                        {MainSetting_delete === 1 && isEditMode  && (
                                             <SpeedDialAction
                                                 key="delete"
                                                 icon={<DeleteIcon />}
@@ -331,7 +331,7 @@ const TaxSetting = () => {
                                                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                                             />
                                         )}
-                                        {MainSetting_new === 1 && (
+                                        {MainSetting_new === 1 && !isEditMode  && (
                                             <SpeedDialAction
                                                 key="Add"
                                                 icon={<BookmarkAddedIcon />}

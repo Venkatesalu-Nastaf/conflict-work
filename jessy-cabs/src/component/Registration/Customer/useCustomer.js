@@ -907,7 +907,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         columns,
         isEditMode, setSelectedCustomerData,
         handleEdit,
-        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,handleAutocompleteChangestations,
+        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,handleAutocompleteChangestations,setInfo,setInfoMessage,
         handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove,customerratetype,handleChangeuniquecustomer,cerendentialdata
     };
 };

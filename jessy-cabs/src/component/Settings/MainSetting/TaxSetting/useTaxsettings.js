@@ -190,7 +190,7 @@ const useTaxsettings = () => {
             }
         }
         handlelist();
-    }, [apiUrl]);
+    }, [apiUrl,rows]);
 
 
     const handleClick = async (event, actionName, STax) => {
@@ -217,16 +217,17 @@ const useTaxsettings = () => {
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.STax === STax);
-                const updatedCustomer = {
-                    ...selectedCustomer,
-                    ...selectedCustomerData,
-                };
-                await axios.put(`${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
+                handleEdit()
+            //     const selectedCustomer = rows.find((row) => row.STax === STax);
+            //     const updatedCustomer = {
+            //         ...selectedCustomer,
+            //         ...selectedCustomerData,
+            //     };
+            //     await axios.put(`${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+            //     handleCancel();
+            //     setRows([]);
+            //     setSuccess(true);
+            //     setSuccessMessage("Successfully updated");
             }
         } catch {
             setError(true);

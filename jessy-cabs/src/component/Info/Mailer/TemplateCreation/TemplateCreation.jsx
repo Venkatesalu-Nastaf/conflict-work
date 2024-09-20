@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect,useContext } from 'react';
 import "./TemplateCreation.css";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,8 @@ import { APIURL } from '../../../url';
 import { useLocation } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { PermissionContext } from '../../../context/permissionContext';
+
 
 
 
@@ -40,6 +42,14 @@ const TemplateCreation = () => {
   const [imagedataedit, setImagedataedit] = useState([])
   const fileInputRef = useRef(null);
   const [filedata, setFiledata] = useState(null)
+  const { permissions } = useContext(PermissionContext)
+const Template_create = permissions[18]?.new ;
+const Temaplate_modify=permissions[18]?.modify ;
+const Temaplate_delete=permissions[18]?.delete ;
+
+const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
+
+// console.log(temaplaa,"sa")
 
 
   useEffect(() => {
@@ -208,6 +218,7 @@ const TemplateCreation = () => {
   };
 
   const handleFileUploadClick = () => {
+  
     fileInputRef.current.click();
   };
 
@@ -265,9 +276,18 @@ const TemplateCreation = () => {
             </div>
             <div className='right-header'>
               <div className='flex items-center'>
-                <p onClick={handleFileUploadClick} className='attachments template-creation-attachments'>
+                {/* <Button disabled={!Template_create || !Temaplate_modify}onClick={handleFileUploadClick}  className='attachments template-creation-attachments'>
                   Attachments
-                </p>
+                </Button> */}
+                <Button
+                 variant="contained"
+                 aria-controls="save-menu"
+                 aria-haspopup="true"
+                 disabled={!diasblebothdata}
+                 onClick={handleFileUploadClick}  
+                 className='attachments template-creation-attachments'>
+                  Attachments
+                </Button>
                 <input
                   type="file"
                   id="imagestemplate"
@@ -321,6 +341,7 @@ const TemplateCreation = () => {
                     aria-haspopup="true"
                     onClick={handleEdit}
                     className='save-button-template'
+                    disabled={!Temaplate_modify}
                   >
                     Edit
                   </Button>
@@ -331,6 +352,7 @@ const TemplateCreation = () => {
                     aria-haspopup="true"
                     onClick={handleADD}
                     className='save-button-template'
+                    disabled={!Template_create}
                   >
                     Save
                   </Button>
@@ -361,7 +383,7 @@ const TemplateCreation = () => {
                   {imagedataedit.map((data, index) => (
                     <div className='template-creation-document-sub-division' key={index}>
                       <p className='template-creation-document-text'>{data.templateimage || data.name}</p>
-                      <Button onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
+                      <Button disabled={!Temaplate_delete} onClick={() => handleeditCancel(data, index)}><IoCloseSharp /></Button>  {/* Cancel icon with onClick handler */}
                     </div>
 
                   ))}

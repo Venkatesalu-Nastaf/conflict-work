@@ -92,10 +92,10 @@ const StationCreation = () => {
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
-  const StationCreation_read = permissions[16]?.read;
-  const StationCreation_new = permissions[16]?.new;
-  const StationCreation_modify = permissions[16]?.modify;
-  const StationCreation_delete = permissions[16]?.delete;
+  const StationCreation_read = permissions[13]?.read;
+  const StationCreation_new = permissions[13]?.new;
+  const StationCreation_modify = permissions[13]?.modify;
+  const StationCreation_delete = permissions[13]?.delete;
 
   return (
     <div className="stationcreation-main">
@@ -346,7 +346,7 @@ const StationCreation = () => {
                     onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                   />
                 )}
-                {StationCreation_modify === 1 && (
+                {StationCreation_modify === 1 && isEditMode &&(
                   <SpeedDialAction
                     key="edit"
                     icon={<ModeEditIcon />}
@@ -354,7 +354,7 @@ const StationCreation = () => {
                     onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                   />
                 )}
-                {StationCreation_delete === 1 && (
+                {StationCreation_delete === 1 && isEditMode && (
                   <SpeedDialAction
                     key="delete"
                     icon={<DeleteIcon />}
@@ -362,7 +362,7 @@ const StationCreation = () => {
                     onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                   />
                 )}
-                {StationCreation_new === 1 && (
+                {StationCreation_new === 1 && !isEditMode &&(
                   <SpeedDialAction
                     key="Add"
                     icon={<BookmarkAddedIcon />}

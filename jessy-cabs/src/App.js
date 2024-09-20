@@ -19,7 +19,7 @@ import Received from "./component/Bookings/Receiveds/Receiveds";
 import Registration from "./component/Registration/Registration";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
-import Employes from "./component/Registration/Employes/Employes";
+// import Employes from "./component/Registration/Employes/Employes";
 import Customer from "./component/Registration/Customer/Customer";
 import Suppliers from "./component/Registration/Supplier/Suppliers";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
@@ -56,7 +56,8 @@ import History from "./component/Map/History/History"
 import Reminders from "./component/Map/Reminders/Reminders";
 import UploadTollParking from "./component/Bookings/TripSheet/Uploadtollparking/UploadTollParking";
 import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
-import Employee from "./component/Info/Employes/Employes";
+// import Employee from "./component/Info/Employes/Employes";
+import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 
 
@@ -78,35 +79,86 @@ function App() {
 
   const { permissions } = useContext(PermissionContext)
 
+  // const BOOKING = permissions[0]?.read || permissions[1]?.read;;
+  // const TripStatus = permissions[2]?.read;
+  // const TriSheet = permissions[3]?.read;
+
+  // const BILLING = permissions[4]?.read || permissions[5]?.read;;
+  // const Billing_Transfer = permissions[6]?.read;
+  // const Billing_CoveringBill = permissions[7]?.read;
+  
+
+  // const REGISTER = permissions[8]?.read || permissions[9]?.read;
+  // const R_Supllier = permissions[10]?.read;
+  // const R_Employee = permissions[11]?.read;
+
+  // const SETTING = permissions[12]?.read || permissions[13]?.read;
+  // const Station_Creation = permissions[14]?.read;
+  // const Main_Setting = permissions[15]?.read;
+
+  // const INFO = permissions[16]?.read || permissions[17]?.read;
+  // const Mailers = permissions[18]?.read;
+  // const INFO_FuelInfo = permissions[19]?.read;
+  // const Dashbord_read = permissions[20]?.read;
+  // // this for map page
+  // const Maps = permissions[21]?.read;
+
+  // const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
+  // const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
+  // const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
+  // const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
+  // const Map_page_permission = permissions[21]?.read;
+
   const BOOKING = permissions[0]?.read || permissions[1]?.read;;
-  const TripStatus = permissions[2]?.read;
-  const TriSheet = permissions[3]?.read;
+  const TripStatus = permissions[2]?.read||0
+  const TriSheet = permissions[3]?.read||0
 
-  const BILLING = permissions[4]?.read || permissions[5]?.read;;
-  const Billing_Transfer = permissions[6]?.read;
-  const Billing_CoveringBill = permissions[7]?.read;
+  const BILLING = permissions[4]?.read ;
+  const BILLING_BillingMain = permissions[5]?.read;
+  const Billing_Transfer = permissions[6]?.read 
+  const Billing_CoveringBill = permissions[7]?.read
+  const Billing_Reports = permissions[8]?.read
+  
 
-  const REGISTER = permissions[8]?.read || permissions[9]?.read;
-  const R_Supllier = permissions[10]?.read;
-  const R_Employee = permissions[11]?.read;
+  const REGISTER = permissions[9]?.read 
+  const R_RATEtype = permissions[10]?.read 
+  const R_Customer=permissions[11]?.read 
+  const R_Supllier = permissions[12]?.read 
+  const R_Station = permissions[13]?.read 
+  
+  
 
-  const SETTING = permissions[12]?.read || permissions[13]?.read;
-  const Station_Creation = permissions[14]?.read;
-  const Main_Setting = permissions[15]?.read;
+  const SETTING = permissions[14]?.read 
+  const Main_Setting = permissions[16]?.read
+  const userCreation1=permissions[15]?.read ;
+ 
+ 
 
-  const INFO = permissions[16]?.read || permissions[17]?.read;
-  const Mailers = permissions[18]?.read;
-  const INFO_FuelInfo = permissions[19]?.read;
-  const Dashbord_read = permissions[20]?.read;
+
+  const INFO = permissions[17]?.read ;
+  const INFO_MAILER=permissions[18]?.read ;
+  // const Mailers = permissions[18]?.read;
+  const INFO_FuelInfo = permissions[19]?.read ;
+  
+  const INFO_Employee =  permissions[20]?.read 
+  const Dashbord_read = permissions[21]?.read 
   // this for map page
-  const Maps = permissions[21]?.read;
+  const Maps = permissions[22]?.read 
+  const Map_Realtime = permissions[23]?.read
+  const Map_Vehicle = permissions[24]?.read 
+  const Map_Reminders = permissions[25]?.read 
+  const Map_History = permissions[26]?.read 
+  const Map_Records = permissions[27]?.read 
+
+
 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
-  const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
-  const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
-  const Map_page_permission = permissions[21]?.read;
-  // const Info_page_permission = permissions[16]?.read || permissions[17]?.read || permissions[18]?.read || permissions[19]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
+  const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read ||permissions[13]?.read;
+  const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read 
+  
+  const Map_page_permission = permissions[22]?.read||permissions[23]?.read || permissions[24]?.read ||permissions[25]?.read ||permissions[26]?.read  || permissions[27]?.read
+  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
 
   //   let landingPAge ;
 
@@ -291,11 +343,20 @@ function App() {
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={Dashbord_read ? <MainDash stationName={stationName} /> :
 
-                (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+              //   (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+              //     (
+              //       Billing_permission ? (<Navigate to="/home/billing/billing" />) :
+              //         (
+              //           Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : <Navigate to="/home/info/ratetype" />)
+              //         )
+              //     )
+              //   )
+              // }
+              (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
                   (
                     Billing_permission ? (<Navigate to="/home/billing/billing" />) :
                       (
-                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : <Navigate to="/home/info/ratetype" />)
+                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):<MainDash stationName={stationName} />)
                       )
                   )
                 )
@@ -320,28 +381,28 @@ function App() {
               </Route>
 
 
-              <Route path="/home/Map" element={<Map />}>
+              <Route path="/home/Map" element={ Maps !== 0 ? <Map /> : <NoPermission />}>
                 <Route
                   path="/home/Map/RealTime"
-                  element={Maps !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={Map_Realtime !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/Map/History"
-                  element={Maps !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={Map_History !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/Map/Vehicle"
-                  element={Maps !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Vehicle !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
 
                 <Route
                   path="/home/Map/Reminders"
-                  element={Maps !== 0 ? <Reminders stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Reminders !== 0 ? <Reminders stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
 
                 <Route
                   path="/home/Map/Records"
-                  element={Maps !== 0 ? <Records stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Records !== 0 ? <Records stationName={stationName} logoImage={logo} /> : <NoPermission />}
                 />
 
                 <Route
@@ -356,32 +417,36 @@ function App() {
 
 
 
-              <Route path="/home/registration" element={<Registration />}>
+              <Route path="/home/registration" element={ REGISTER !== 0 ? <Registration /> : <NoPermission /> }>
+              <Route
+                  path="/home/registration/ratetype"
+                  element={R_RATEtype !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
+                />
                 <Route
                   path="/home/registration/customer"
-                  element={REGISTER !== 0 ? <Customer stationName={stationName} /> : <NoPermission />}
+                  element={R_Customer !== 0 ? <Customer stationName={stationName} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/registration/supplier"
                   element={R_Supllier !== 0 ? <Suppliers stationName={stationName} /> : <NoPermission />}
                 />
-                <Route
+                {/* <Route
                   path="/home/registration/employes"
                   element={R_Employee !== 0 ? <Employes stationName={stationName} /> : <NoPermission />}
-                />
+                /> */}
 
-                <Route
+                {/* <Route
                   path="/home/registration/reports"
-                  element={R_Employee !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
-                />
-
+                  element={R_Station !== 0 ? <Reports stationName={stationName} /> : <NoPermission />}
+                /> */}
+{/* 
                 <Route
                   path="/home/registration/ratetype"
                   element={R_Employee !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
-                />
+                /> */}
                  <Route
                   path="/home/registration/stationcreation"
-                  element={Station_Creation !== 0 ? <StationCreation /> : <NoPermission />}
+                  element={R_Station !== 0 ? <StationCreation /> : <NoPermission />}
                 />
 
                 {/* <Route
@@ -395,33 +460,39 @@ function App() {
                 /> */}
               </Route>
 
-              <Route path="/home/info" element={<Info />}>
+              <Route path="/home/info" element={INFO !== 0 ? <Info /> :<NoPermission />}>
                 {/* <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} /> */}
                 {/* <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />} /> */}
-                <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
+                {/* <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
-                <Route path="/home/info/employee" element={INFO_FuelInfo !== 0 ? <Employee /> : <NoPermission />} />
+                <Route path="/home/info/employee" element={INFO_FuelInfo !== 0 ? <Employee /> : <NoPermission />} /> */}
+                 <Route path="/home/info/mailer" element={INFO_MAILER !== 0 ? <Mailer /> : <NoPermission />} />
+                <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
+                <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
+                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
+                <Route path="/home/info/employee" element={INFO_Employee !== 0 ? <Employes /> : <NoPermission />} />
+                
               </Route>
-              <Route path="/home/billing" element={<Billings />}>
+              <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 
-                <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 ? <BillingMain organizationNames={organizationNames} /> : <NoPermission />} />
                 <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
                 <Route
                   path="/home/billing/coveringbill"
                   element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />}
                 />
-                <Route path="/home/billing/reports" element={Billing_Transfer !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/reports" element={Billing_Reports !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
               </Route>
 
               <Route path="/home/accounts" element={<Accounts />}>
 
               </Route>
-              <Route path="/home/settings" element={<Settings />}>
+              <Route path="/home/settings" element={SETTING !==0 ? <Settings /> : <NoPermission />}>
                 <Route
                   path="/home/settings/usercreation"
-                  element={SETTING !== 0 ? <UserCreation stationName={stationName} /> : <NoPermission />}
+                  element={userCreation1 !== 0 ? <UserCreation stationName={stationName} /> : <NoPermission />}
                 />
                 {/* <Route
                   path="/home/settings/stationcreation"
@@ -441,10 +512,10 @@ function App() {
                   path="/home/usersettings/usersetting"
                   element={<UserSetting />}
                 />
-                <Route
+                {/* <Route
                   path="/home/usersettings/usersetting"
                   element={<UserSetting />}
-                />
+                /> */}
               </Route>
             </Route>
             <Route path="/navigationmap" element={<NavigationMap />} />

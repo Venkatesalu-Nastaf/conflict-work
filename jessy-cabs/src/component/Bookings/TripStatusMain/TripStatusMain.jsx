@@ -54,7 +54,7 @@ const TripStatusMain = ({ stationName, customer, vehicleNo }) => {
 
             </div >
             <div>
-                <OverviewDrawer />
+                <OverviewDrawer stationName={stationName} customer={customer} vehicleNo={vehicleNo} />
             </div>
         </>
 

@@ -3,82 +3,222 @@ const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
 
+
+//old code 
+// router.get('/pending_tripsheet-show', (req, res) => {
+//   const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
+//   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+//   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+//   const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
+//   const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
+//   // console.log(fromDate, toDate, status, department, VehNo, cutomerName)
+
+
+//   let sqlQuery = '';
+//   let queryParams = [];
+
+//   if (status === 'pending' || status === 'Cancelled') {
+//     // Query booking table
+
+//     sqlQuery = `
+//       SELECT *
+//       FROM booking
+//       WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
+//     `;
+
+//     queryParams = [formattedFromDate, formattedToDate, status];
+
+//     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
+//       // sqlQuery += ' AND servicestation = ?';
+//       sqlQuery += ' AND servicestation  IN  (?)';
+//       queryParams.push(datadepartment);
+//     }
+
+//     if (VehNo) {
+//       sqlQuery += 'AND vehRegNo=?';
+//       queryParams.push(VehNo)
+//     }
+
+//     if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
+//       sqlQuery += 'AND customer IN (?)';
+//       queryParams.push(datacustomer)
+//     }
+
+
+//   } else {
+
+//     sqlQuery = `
+//     SELECT 
+//         booking.*,
+//         tripsheet.*
+//     FROM 
+//         tripsheet
+//     LEFT JOIN 
+//         booking ON tripsheet.bookingno = booking.bookingno
+//     WHERE 
+//         tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//         AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) 
+        
+//   `;
+//     queryParams = [formattedFromDate, formattedToDate];
+//     if (status === "Billed") {
+//       sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
+//       // queryParams.push(status);
+//     }
+//     // ----old
+//     // else if (status === "Closed") {
+
+//     //   sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
+//     // }
+//     // ---new
+//     else if (status === "Closed") {
+
+//       sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed" OR tripsheet.status = "Closed")';
+//     }
+
+//     else if (status && status !== 'All') {
+//       sqlQuery += ' AND tripsheet.status = ?';
+//       queryParams.push(status);
+//     }
+
+
+//     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
+//       sqlQuery += ' AND tripsheet.department IN (?)';
+//       queryParams.push(datadepartment);
+//     }
+
+//     if (VehNo) {
+//       sqlQuery += 'AND tripsheet.vehRegNo=?';
+//       queryParams.push(VehNo)
+//     }
+
+//     if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
+//       sqlQuery += 'AND tripsheet.customer iN (?)';
+//       queryParams.push(datacustomer)
+//     }
+//   }
+
+//   console.log(sqlQuery, queryParams)
+
+//   db.query(sqlQuery, queryParams, (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
+//     }
+
+//     return res.status(200).json(result);
+//   });
+// });
+
+
+
+// new  working code 
 router.get('/pending_tripsheet-show', (req, res) => {
   const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
   const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
   const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
-  // console.log(fromDate, toDate, status, department, VehNo, cutomerName)
-
-
+  
   let sqlQuery = '';
+  let Tripquery = '';
   let queryParams = [];
 
-  if (status === 'pending' || status === 'Cancelled') {
-    // Query booking table
+  //  'All' status
+  if (status === 'All') {
+    sqlQuery = `
+      SELECT * FROM booking
+      WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+    Tripquery = `
+      SELECT * FROM tripsheet
+      WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+    
+    queryParams = [formattedFromDate, formattedToDate];
 
+    if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
+      sqlQuery += ' AND servicestation IN (?)';
+      queryParams.push(datadepartment);
+    }
+
+    if (VehNo) {
+      sqlQuery += ' AND vehRegNo = ?';
+      queryParams.push(VehNo);
+    }
+
+    if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
+      sqlQuery += ' AND customer IN (?)';
+      queryParams.push(datacustomer);
+    }
+
+    // Fetch bookings
+    db.query(sqlQuery, queryParams, (err, bookingResults) => {
+      if (err) {
+        console.error('Error fetching bookings:', err.message);
+        return res.status(500).json({ error: 'Database error on fetching booking' });
+      }
+
+      // Fetch tripsheets
+      db.query(Tripquery, queryParams, (err, tripsheetResults) => {
+        if (err) {
+          console.error('Error fetching tripsheets:', err.message);
+          return res.status(500).json({ error: 'Database error on fetching trip sheet' });
+        }
+
+        // Send response 
+        return res.status(200).json({
+          booking: bookingResults,
+          tripsheet: tripsheetResults
+        });
+      });
+    });
+    return;
+  }
+
+  // Handle 'pending' and 'Cancelled' statuses
+  if (status === 'pending' || status === 'Cancelled') {
     sqlQuery = `
       SELECT *
       FROM booking
       WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
     `;
-
+    
     queryParams = [formattedFromDate, formattedToDate, status];
 
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
-      // sqlQuery += ' AND servicestation = ?';
-      sqlQuery += ' AND servicestation  IN  (?)';
+      sqlQuery += ' AND servicestation IN (?)';
       queryParams.push(datadepartment);
     }
 
     if (VehNo) {
-      sqlQuery += 'AND vehRegNo=?';
-      queryParams.push(VehNo)
+      sqlQuery += ' AND vehRegNo = ?';
+      queryParams.push(VehNo);
     }
 
     if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
-      sqlQuery += 'AND customer IN (?)';
-      queryParams.push(datacustomer)
+      sqlQuery += ' AND customer IN (?)';
+      queryParams.push(datacustomer);
     }
-
-
   } else {
-
+    // Handle other statuses
     sqlQuery = `
-    SELECT 
-        booking.*,
-        tripsheet.*
-    FROM 
-        tripsheet
-    LEFT JOIN 
-        booking ON tripsheet.bookingno = booking.bookingno
-    WHERE 
-        tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-        AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) 
-        
-  `;
+      SELECT booking.*, tripsheet.*
+      FROM tripsheet
+      LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+      WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+      AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+    `;
     queryParams = [formattedFromDate, formattedToDate];
+
     if (status === "Billed") {
       sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
-      // queryParams.push(status);
-    }
-    // ----old
-    // else if (status === "Closed") {
-
-    //   sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
-    // }
-    // ---new
-    else if (status === "Closed") {
-
+    } else if (status === "Closed") {
       sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed" OR tripsheet.status = "Closed")';
-    }
-
-    else if (status && status !== 'All') {
+    } else if (status && status !== 'All') {
       sqlQuery += ' AND tripsheet.status = ?';
       queryParams.push(status);
     }
-
 
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND tripsheet.department IN (?)';
@@ -86,18 +226,17 @@ router.get('/pending_tripsheet-show', (req, res) => {
     }
 
     if (VehNo) {
-      sqlQuery += 'AND tripsheet.vehRegNo=?';
-      queryParams.push(VehNo)
+      sqlQuery += ' AND tripsheet.vehRegNo = ?';
+      queryParams.push(VehNo);
     }
 
     if (datacustomer.length >= 1 && !datacustomer.includes('All')) {
-      sqlQuery += 'AND tripsheet.customer iN (?)';
-      queryParams.push(datacustomer)
+      sqlQuery += ' AND tripsheet.customer IN (?)';
+      queryParams.push(datacustomer);
     }
   }
 
-  console.log(sqlQuery, queryParams)
-
+  
   db.query(sqlQuery, queryParams, (err, result) => {
     if (err) {
       console.error(err);
@@ -107,11 +246,6 @@ router.get('/pending_tripsheet-show', (req, res) => {
     return res.status(200).json(result);
   });
 });
-
-
-
-
-
 
 
 

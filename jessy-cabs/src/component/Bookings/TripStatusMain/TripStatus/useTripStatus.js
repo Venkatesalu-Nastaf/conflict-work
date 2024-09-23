@@ -301,43 +301,164 @@ const useDispatched = () => {
   const reversedRows = [...rows].reverse();  // to reverse 
 
 
+  // const handleShow = useCallback(async () => {
+
+  //   if (!statusvalue) {
+  //     setError(true)
+  //     setErrorMessage("ENTER THE STATUS")
+  //     return
+  //   }
+    
+
+  //   try {
+  //     const response = await axios.get(
+  //       `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+  //         toDate.toISOString()
+  //       )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
+  //     );
+  //     const data = response.data;
+
+  //     if (data.length > 0) {
+  //       const rowsWithUniqueId = data.map((row, index) => ({
+  //         ...row,
+  //         id5: index + 1,
+  //       }));
+  //       setRows(rowsWithUniqueId)
+  //       setColumnShowall(false)
+  //       setSuccess(true);
+  //       setSuccessMessage("successfully listed")
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("no data found")
+  //     }
+  //   } catch {
+  //     setRows([]);
+  //     setError(true);
+  //     setErrorMessage("Error retrieving data");
+  //   }
+
+  // }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
+
+  // new working code
   const handleShow = useCallback(async () => {
-
     if (!statusvalue) {
-      setError(true)
-      setErrorMessage("ENTER THE STATUS")
-      return
+      setError(true);
+      setErrorMessage("ENTER THE STATUS");
+      return;
     }
-
+  
     try {
       const response = await axios.get(
-        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-          toDate.toISOString()
-        )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
+        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
       );
+  
       const data = response.data;
-
-      if (data.length > 0) {
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id5: index + 1,
-        }));
-        setRows(rowsWithUniqueId)
-        setColumnShowall(false)
-        setSuccess(true);
-        setSuccessMessage("successfully listed")
+  
+      if (statusvalue !== "All") {
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id5: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setColumnShowall(false);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else {
-        setRows([]);
-        setError(true);
-        setErrorMessage("no data found")
+        console.log('status all',statusvalue)
+        if (data && Array.isArray(data.tripsheet) && Array.isArray(data.booking)) {
+          // Process tripsheet data
+          const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
+            ...row,
+            id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
+          }));
+  
+          // Process booking data
+          const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
+            ...row,
+            id5: `booking-${index + 1}`, // Unique ID for booking
+          }));
+  
+          // Combine both sets of data
+          const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+  
+          setRows(combinedRows);
+          setColumnShowall(false);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       }
-    } catch {
+    } catch (error) {
+      console.error("Error retrieving data:", error); // Log the error for debugging
       setRows([]);
       setError(true);
       setErrorMessage("Error retrieving data");
     }
-
   }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
+  
+  // const handleShow = useCallback(async () => {
+  //   if (!statusvalue) {
+  //     setError(true);
+  //     setErrorMessage("ENTER THE STATUS");
+  //     return;
+  //   }
+  
+  //   try {
+  //     const response = await axios.get(
+  //       `${apiUrl}/pending_tripsheet-show`, {
+  //         params: {
+  //           department: department.map(dep => dep.label).join(','),
+  //           fromDate: fromDate.toISOString(),
+  //           toDate: toDate.toISOString(),
+  //           status: statusvalue,
+  //           VehNo: VehNo,
+  //           cutomerName: cutomerName.map(dep => dep.label).join(','),
+  //         },
+  //       }
+  //     );
+  
+  //     const data = response.data;
+  
+  //     if (data.bookings && data.tripsheets) {
+  //       const combinedData = [
+  //         ...data.bookings.map((row, index) => ({
+  //           ...row,
+  //           id: `booking-${index + 1}`, // Use a unique ID for bookings
+  //         })),
+  //         ...data.tripsheets.map((row, index) => ({
+  //           ...row,
+  //           id: `tripsheet-${index + 1}`, // Use a unique ID for tripsheets
+  //         })),
+  //       ];
+  
+  //       setRows(combinedData);
+  //       setColumnShowall(false);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error retrieving data:", error); // Log the error for debugging
+  //     setRows([]);
+  //     setError(true);
+  //     setErrorMessage("Error retrieving data");
+  //   }
+  // }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
+  
+
 
   const handleShowAll = async () => {
     setColumnShowall(false)

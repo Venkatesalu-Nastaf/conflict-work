@@ -474,11 +474,14 @@ const useTransferdataentry = () => {
             .filter((selectedId) => selectedId !== null)
             .map((selectedId) => {
                 const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-                return selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
-            })
-            .filter((tripid) => tripid !== null);
+                const amount = selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
+                // Only replace NaN with 0, keep other values as they are
+                return isNaN(amount) ? 0 : amount;
+            });
+
         // selected trips
-        const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0);
+        const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0) || 0;
+
         setTripAmount(totalSelectedTripAmount)
 
         // const handleselectTrips = selectedTrips;
@@ -859,25 +862,116 @@ const useTransferdataentry = () => {
 
     }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
+    //     const handleShow = async () => {
+    //         const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+    // console.log('11',servicestationValue);
+
+
+    //         if (servicestationValue !== "" && servicestationValue !== "All") {
+    //             try {
+    //                 console.log('22',servicestationValue);
+
+    //                 const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+    //                 const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+    //                 const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+    //                 const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+
+    //                 const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
+    //                     params: {
+    //                         customer: customerValue,
+    //                         fromDate: fromDateValue,
+    //                         toDate: toDateValue,
+    //                         servicestation: servicestationValue
+    //                     },
+    //                 });
+    //                 const data = response.data;
+    //                 if (data.length > 0) {
+    //                     const rowsWithUniqueId = data.map((row, index) => ({
+    //                         ...row,
+    //                         id: index + 1,
+    //                     }));
+    //                     setRows(rowsWithUniqueId);
+    //                     setSuccess(true);
+    //                     setSuccessMessage("successfully listed")
+    //                 } else {
+    //                     setRows([]);
+    //                     setError(true);
+    //                     setErrorMessage("no data found")
+    //                 }
+    //             } catch {
+    //                 console.log('33',servicestationValue);
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("Check your Network Connection");
+    //             }
+    //         }
+    //         else if (servicestationValue === "All" || servicestationValue === "") {
+    //             try {
+    //                 const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+    //                 const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+    //                 const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+
+    //                 const response = await axios.get(`${apiUrl}/All-Transfer-Billing`, {
+    //                     params: {
+    //                         customer: customerValue,
+    //                         fromDate: fromDateValue,
+    //                         toDate: toDateValue,
+    //                     },
+    //                 });
+    //                 const data = response.data;
+    //                 if (data.length > 0) {
+    //                     const rowsWithUniqueId = data.map((row, index) => ({
+    //                         ...row,
+    //                         id: index + 1,
+    //                     }));
+    //                     setRows(rowsWithUniqueId);
+    //                     setSuccess(true);
+    //                     setSuccessMessage("successfully listed")
+    //                 } else {
+    //                     setRows([]);
+    //                     setError(true);
+    //                     setErrorMessage("no data found")
+    //                 }
+    //             } catch {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("Check your Network Connection");
+    //             }
+    //         }
+
+    //     };
+
     const handleShow = async () => {
         const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-
         if (servicestationValue !== "" && servicestationValue !== "All") {
+
             try {
+
                 const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-                const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate) || dayjs(fromDate).format('YYYY-MM-DD');
+                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate) || dayjs(toDate).format('YYYY-MM-DD');
+                console.log('22', fromDate, toDate, servicestationValue, fromDateValue, toDateValue);
+                const enddate = dayjs(toDateValue).format('YYYY-MM-DD')
+                console.log('22', fromDate, enddate, servicestationValue, fromDateValue, toDateValue);
+
+                console.log('Request URL:', `${apiUrl}/Transfer-Billing`);
+                console.log('Params:', {
+                    customer: customerValue,
+                    fromDate: fromDateValue,
+                    toDate: enddate,
+                    servicestation: servicestationValue
+                });
 
                 const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
                     params: {
                         customer: customerValue,
                         fromDate: fromDateValue,
-                        toDate: toDateValue,
+                        toDate: enddate,
                         servicestation: servicestationValue
                     },
                 });
+
                 const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -886,31 +980,43 @@ const useTransferdataentry = () => {
                     }));
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
-                    setSuccessMessage("successfully listed")
+                    setSuccessMessage("successfully listed");
                 } else {
                     setRows([]);
                     setError(true);
-                    setErrorMessage("no data found")
+                    setErrorMessage("no data found");
                 }
-            } catch {
+            } catch (error) {
+
                 setRows([]);
                 setError(true);
-                setErrorMessage("Check your Network Connection");
+                // setErrorMessage("Check your Network Connection");
             }
         }
         else if (servicestationValue === "All" || servicestationValue === "") {
+            const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+
             try {
-                const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-                const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-                const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+                // Ensure that date values are correctly formatted
+                const fromDateValue = dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).isValid()
+                    ? dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).format('YYYY-MM-DD')
+                    : '';
+
+                const toDateValue = dayjs(selectedCustomerDatas?.todate ? selectedCustomerDatas.todate : toDate).isValid()
+                    ? dayjs(selectedCustomerDatas?.todate ? selectedCustomerDatas.todate : toDate).format('YYYY-MM-DD')
+                    : '';
+
+                // `toDateValue` is already formatted, so we don't need to reformat it again
+                const enddate = toDateValue;
 
                 const response = await axios.get(`${apiUrl}/All-Transfer-Billing`, {
                     params: {
                         customer: customerValue,
                         fromDate: fromDateValue,
-                        toDate: toDateValue,
+                        toDate: enddate,
                     },
                 });
+
                 const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -919,20 +1025,23 @@ const useTransferdataentry = () => {
                     }));
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
-                    setSuccessMessage("successfully listed")
+                    setSuccessMessage("successfully listed");
                 } else {
                     setRows([]);
                     setError(true);
-                    setErrorMessage("no data found")
+                    setErrorMessage("no data found");
                 }
-            } catch {
+            } catch (error) {
+                console.log('Error:', error.message);
+                console.log('Error Details:', error);
                 setRows([]);
                 setError(true);
-                setErrorMessage("Check your Network Connection");
+                // setErrorMessage("Check your Network Connection");
             }
         }
 
     };
+
 
     const handleAddGroup = async () => {
 
@@ -972,6 +1081,7 @@ const useTransferdataentry = () => {
                     Amount: tripAmount,
 
                 }
+
                 setMisGroupTripId(rowSelectionModel)
                 await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
                 setSuccess(true);
@@ -1018,6 +1128,7 @@ const useTransferdataentry = () => {
                 const trips = response.data[0].Trips;
                 const tripid = response.data[0].Trip_id;
                 const fullTotalAmount = parseInt(amount) + parseInt(tripAmount)
+
                 const TotalTrips = parseInt(trips) + parseInt(Trips)
                 // Ensure rowSelectionModel is an array of strings
                 const rowSelectionModelAsStrings = rowSelectionModel.map(String); // Converts [1358] to ["1358"]
@@ -1037,6 +1148,7 @@ const useTransferdataentry = () => {
                     Amount: totalamount,
                     grouptripid: grouptripid
                 }
+
                 const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
                 setSuccess(true)
                 setSuccessMessage("Successfully Added")
@@ -1082,6 +1194,62 @@ const useTransferdataentry = () => {
         fetchdata();
     }, [apiUrl, misGroupTripId]);
 
+    // const handleKeyDown = async (event) => {
+    //     if (event.key === 'Enter') {
+    //         event.preventDefault();
+    //         const GroupTripId = event.target.value;
+
+    //         try {
+    //             // First API call to get Trip_id from GroupTripId
+    //             const response = await axios.get(`${apiUrl}/getTripIdFromTransferList`, {
+    //                 params: {
+    //                     groupid: GroupTripId
+    //                 }
+    //             });
+    //             console.log(response.data,rows.length,'transven');
+
+    //             if (response.data && response.data.length > 0) {
+    //                 const transferTripId = response.data[0].Trip_id;
+    //                 console.log(transferTripId,'transven22');
+
+    //                 const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
+    //                 const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
+
+    //                 setFromDate(fromDate);
+    //                 setToDate(toDate);
+
+    //                 setToDate(dayjs(response.data[0].EndDate).format('YYYY-MM-DD'));
+    //                 setFromDate(response.data[0].FromDate)
+    //                 setCustomer(response.data[0].Organization_name)
+    //                 setInvoiceno(response.data[0].Invoice_no)
+    //                 setBillingdate(response.data[0].Billdate)
+
+    //                 const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
+    //                     params: {
+    //                         transferTripId: transferTripId
+    //                     }
+    //                 });
+    //                 const data = tripsheetResponse.data;
+    //                 console.log(data.length,'transven33');
+
+    //                 if (data.length > 0) {
+    //                     const rowsWithUniqueId = data.map((row, index) => ({
+    //                         ...row,
+    //                         id: index + 1,
+    //                     }));
+    //                     setRows(rowsWithUniqueId);
+    //                     setSuccess(true)
+    //                     setSuccessMessage("Successfully Listed")
+    //                 }
+    //             } else {
+    //                 console.log('No Trip_id found for the given GroupTripId');
+    //             }
+    //         } catch (error) {
+    //             console.log(error, 'error');
+    //         }
+    //     }
+    // };
+
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -1097,30 +1265,36 @@ const useTransferdataentry = () => {
 
                 if (response.data && response.data.length > 0) {
                     const transferTripId = response.data[0].Trip_id;
+
                     const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
 
                     setFromDate(fromDate);
                     setToDate(toDate);
 
-                    setToDate(dayjs(response.data[0].EndDate).format('YYYY-MM-DD'));
-                    setFromDate(response.data[0].FromDate)
-                    setCustomer(response.data[0].Organization_name)
-                    setInvoiceno(response.data[0].Invoice_no)
-                    setBillingdate(response.data[0].Billdate)
+                    setCustomer(response.data[0].Organization_name);
+                    setInvoiceno(response.data[0].Invoice_no);
+                    setBillingdate(response.data[0].Billdate);
 
+                    // Second API call to get tripsheet details using transferTripId
                     const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
                         params: {
                             transferTripId: transferTripId
                         }
                     });
                     const data = tripsheetResponse.data;
+
+                    // Filter out rows where tripid is 0
                     if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
+                        const filteredData = data.filter(row => row.tripid !== 0);
+                        const rowsWithUniqueId = filteredData.map((row, index) => ({
                             ...row,
                             id: index + 1,
                         }));
+
                         setRows(rowsWithUniqueId);
+                        setSuccess(true);
+                        setSuccessMessage("Successfully Listed");
                     }
                 } else {
                     console.log('No Trip_id found for the given GroupTripId');
@@ -1130,6 +1304,8 @@ const useTransferdataentry = () => {
             }
         }
     };
+
+
 
 
     // const handleShow = useCallback(async () => {

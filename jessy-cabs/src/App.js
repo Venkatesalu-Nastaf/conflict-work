@@ -110,8 +110,8 @@ function App() {
   // const Map_page_permission = permissions[21]?.read;
 
   const BOOKING = permissions[0]?.read || permissions[1]?.read;;
-  const TripStatus = permissions[2]?.read||0
-  const TriSheet = permissions[3]?.read||0
+  const TripStatus = permissions[2]?.read
+  const TriSheet = permissions[3]?.read
 
   const BILLING = permissions[4]?.read ;
   const BILLING_BillingMain = permissions[5]?.read;

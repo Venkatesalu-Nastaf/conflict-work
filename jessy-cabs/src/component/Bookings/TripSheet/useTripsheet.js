@@ -3979,6 +3979,7 @@ const useTripsheet = () => {
 
             vendortotalHours = await convertTimeToNumber(vendortothr);
             // const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
+            console.log(vendortotalHours,"hours")
             const consvertedTotalHour = vendortotalHours
             console.log(consvertedTotalHour, "totalfffffffffffffh")
 
@@ -4023,6 +4024,7 @@ const useTripsheet = () => {
                 // const matches = calculatevendorTotalTime().match(/(\d+)h\s*(\d+)m/);
                 const matches = consvertedTotalHour
                 if (matches) {
+                    console.log(matches,"mmaaa")
                     // const hours = parseInt(matches[1], 10);
                     // const minutes = parseInt(matches[2], 10);
 
@@ -4055,13 +4057,17 @@ const useTripsheet = () => {
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
-                dataextrakms = KM
+                let kmfixed=Number(KM.toFixed(2))
+                
+                // dataextrakms = KM
+                dataextrakms = kmfixed
             }
 
             if (vendorduty === "Outstation") {
                 // console.log(vendorduty,"dutydata")
                 let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                dataextrakms = km
+                let kmfixed2 = Number(km.toFixed(2))
+                dataextrakms = kmfixed2
             }
 
             console.log(dataextrahous, "hrs", dataextrakms, "kmsss")
@@ -4355,12 +4361,14 @@ const useTripsheet = () => {
 
             if (totkm > KMS && duty !== "Outstation") {
                 let KM = (Number(totkm) - Number(KMS))
-                setExtraKM(KM);
+                let cuctomerkm = Number(KM.toFixed(2))
+                setExtraKM(cuctomerkm);
             } else if (duty === "Outstation") {
                 console.log("duty", duty)
                 let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                console.log(km)
-                setExtraKM(km)
+                let cuctomerkm2 = Number(km.toFixed(2))
+                // console.log(km)
+                setExtraKM(cuctomerkm2)
             }
             else {
                 setExtraKM("")

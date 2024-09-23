@@ -88,10 +88,12 @@ const useTransferreport = () => {
       setInvoiceDate('')
       setGroupTripid('');
       setCustomerData("")
+      setTripID()
       setRows([])
       // setRowSelectionModel([])
     }
   }, [transferReport, setTransferReport])
+
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
   }, []);
@@ -221,7 +223,7 @@ const useTransferreport = () => {
               id: index + 1,
             }));
             setRows(rowsWithUniqueId);
-            // setSuccess(true);
+            setSuccess(true);
             setSuccessMessage("successfully listed");
           } else {
             setRows([]);
@@ -234,8 +236,12 @@ const useTransferreport = () => {
           ];
           setRows(tripsheetNumbers);
         } else {
+          setRows([])
+
         }
-      } catch { }
+      } catch {
+        setRows([])
+      }
     };
     fetchData();
   }, [apiUrl]);
@@ -520,7 +526,7 @@ const useTransferreport = () => {
           const tripData = await response.json();
 
           setPdfzipdata(tripData)
-          setSuccessMessage("successfully listed");
+          // setSuccess(true)
         }
         else {
           return
@@ -559,14 +565,26 @@ const useTransferreport = () => {
           customer: row.customer
         }));
         if (tripsheetNumbers.length > 0) {
-          const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+          const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
+          const rowsWithUniqueId = filteredData.map((row, index) => ({
             ...row,
             id: index + 1,
           }));
+          // const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+          //   ...row,
+          //   id: index + 1,
+          // }));
 
           setRows(rowsWithUniqueId);
+
+          // setSuccess(true)
         }
-      } catch (error) {
+        else {
+          setRows([])
+        }
+      }
+
+      catch (error) {
         console.error('Error fetching trip data:', error);
       }
     };
@@ -587,6 +605,8 @@ const useTransferreport = () => {
         });
 
         const Result = response.data;
+        setSuccess(true)
+        setSuccessMessage("successfully listed");
         const fromdate = Result?.map(li => li.FromDate);
         setFromDate(fromdate)
         const enddate = Result?.map(li => li.EndDate);
@@ -602,6 +622,7 @@ const useTransferreport = () => {
         const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
         setTripID(tripid)
+
       } catch (error) {
         console.log(error, 'error');
       }
@@ -621,7 +642,8 @@ const useTransferreport = () => {
         });
 
         const Result = response.data;
-
+        setSuccess(true)
+        setSuccessMessage("successfully listed");
         const fromdate = Result?.map(li => li.FromDate);
         setFromDate(fromdate)
         const enddate = Result?.map(li => li.EndDate);
@@ -683,19 +705,22 @@ const useTransferreport = () => {
     };
 
     try {
-      const resultresponse = await axios.put(`${apiUrl}/updateList`, TransferUpdate);
+      const updateTripsheet = await axios.put(`${apiUrl}/updateList`, TransferUpdate);
+      // const updateTripsheet =  await axios.post(`${apiUrl}/removeUpdateTripsheet`, { tripid });
 
-      const updateresponse = await axios.post(`${apiUrl}/removeUpdateTripsheet`, { tripid });
 
-      const updatedRows = rows.filter(row => !selectId.includes(row.tripid));
+      const selectionIds = Array.isArray(rowSelectionModel)
+        ? rowSelectionModel.map(item => item?.toString()) // Convert elements to strings
+        : [];
+
+      // Simplified filtering approach, only filter rows once
+      const updatedRows = rows.filter(row => !selectionIds.includes(row.tripid.toString()));
+
+      setRows([...updatedRows]);
 
       setSuccess(true);
       setSuccessMessage("Successfully Removed");
-      setRows(updatedRows);
       setSelectedRow([]);
-
-      const responsedata = resultresponse.data;
-
     } catch (error) {
       console.log(error, 'error');
     }

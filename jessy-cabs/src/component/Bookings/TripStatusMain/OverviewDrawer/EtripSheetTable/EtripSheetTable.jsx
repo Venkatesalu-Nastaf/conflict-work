@@ -15,6 +15,8 @@ const columns = [
     { field: "bookingdate", headerName: "Booking Date", width: 120 },
     { field: "shedOutDate", headerName: "ShedOut Date", width: 120 },
     { field: "startdate", headerName: "Start Date", width: 120 },
+    { field: "reporttime", headerName: "ShedOut Time", width: 110 },
+    { field: "starttime", headerName: "Start Time", width: 100 },
     { field: "guestname", headerName: "Guest Name", width: 140 },
     { field: "address1", headerName: "Address", width: 130 },
     { field: "email", headerName: "Email", width: 130 },
@@ -23,8 +25,6 @@ const columns = [
     { field: "driverName", headerName: "Driver Name", width: 130 },
     { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
     { field: "vehType", headerName: "Rate For", width: 130 },
-    { field: "reporttime", headerName: "ShedOut Time", width: 110 },
-    { field: "starttime", headerName: "Start Time", width: 100 },
     { field: "duty", headerName: "Duty", width: 100 },
     { field: "customercode", headerName: "Cost Code", width: 110 },
     { field: "registerno", headerName: "Request Id", width: 130 },
@@ -88,7 +88,8 @@ const columns = [
   ];
 
 
- const EtripSheetTable = () => {
+ const EtripSheetTable = ({rows1}) => {
+  console.log(rows1,"lkjhg")
   return (
     <>
     
@@ -118,7 +119,7 @@ const columns = [
                 }}
               >
                 <DataGrid
-                  rows={rows}
+                  rows={rows1}
                   columns={columns}
                   // onRowClick={(event) => handleButtonClick(event.row)}
                   pageSize={5}

@@ -7,6 +7,7 @@ import EtripSheetMap from './EtripSheetMap/EtripSheetMap';
 import EtripSheetSignature from './EtripSheetSignature/EtripSheetSignature';
 import "./OverviewDrawer.css"
 import { CiNoWaitingSign } from "react-icons/ci";
+import { DataGrid } from "@mui/x-data-grid";
 import EtripSheetTable from './EtripSheetTable/EtripSheetTable';
 import { Status } from "./OverviewDrawerData.js";
 import { MdOutlineCalendarMonth } from "react-icons/md";
@@ -73,9 +74,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     handlePopupClose,
     selectedRow,
     handleBookingClick,
+    reversedRows,
+    columnshowall,
+    columns,
+    filteredColumns,
     handlestatusChange,
     handleCustomerChange,
     VehNo,
+    handleButtonshowClick,
     handleVechicleNoChange,
     cutomerName,
     statusvalue,
@@ -401,13 +407,54 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
               <Button onClick={handleButtonClick}>Show</Button>
             </div>
-            <EtripSheetTable />
+            {/* <EtripSheetTable 
+              rows1={reversedRows}
+              columns={columnshowall ? columns : filteredColumns}
+              onRowClick={(event) => handleButtonClick(event.row)}
+              pageSize={5}
+               /> */}
+            
+          </Box>
+          <Box sx={{ padding: '16px' }}>
+            <div className='trip-status-table'>
+              <Box
+                sx={{
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px', // Adjust the scrollbar width here
+                      height: '8px', // Adjust the scrollbar width here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={reversedRows}
+                  columns={columnshowall ? columns : filteredColumns}
+                  onRowClick={(event) => handleButtonClick(event.row)}
+                  pageSize={5}
+                />
+              </Box>
+
+            </div>
           </Box>
         </Drawer>
       </div>
-
+           
       <Dialog open={popupOpen} onClose={handlePopupClose}>
-        <DialogTitle>Select an Option</DialogTitle>
+        <DialogTitle>Select an Option</DialogTitle  >
         <DialogContent>
           {selectedRow && (
             <div>
@@ -423,6 +470,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
         </DialogActions>
       </Dialog>
     </>
+    
   )
 }
 

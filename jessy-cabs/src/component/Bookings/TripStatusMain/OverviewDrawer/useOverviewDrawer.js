@@ -308,7 +308,7 @@ const useDispatched = () => {
 
         try {
             const response = await axios.get(
-                `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+                `${apiUrl}/pending_tripsheet-show1?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
                 )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
             );

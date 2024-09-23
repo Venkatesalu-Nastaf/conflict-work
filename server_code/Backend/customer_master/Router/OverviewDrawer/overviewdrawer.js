@@ -3,14 +3,13 @@ const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
 
-router.get('/pending_tripsheet-show', (req, res) => {
+router.get('/pending_tripsheet-show1', (req, res) => {
     const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
     const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
     const formattedToDate = moment(toDate).format('YYYY-MM-DD');
     const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
     const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
-    // console.log(fromDate, toDate, status, department, VehNo, cutomerName)
-
+    console.log(fromDate, toDate, status, department, VehNo, cutomerName, "hjkl")
 
     let sqlQuery = '';
     let queryParams = [];

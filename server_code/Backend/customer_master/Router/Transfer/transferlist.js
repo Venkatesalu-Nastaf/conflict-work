@@ -313,6 +313,7 @@ router.post('/updateParticularTransferList', (req, res) => {
     return res.status(400).json({ error: 'grouptripid is required' });
   }
 
+  // First query to update Transfer_list
   const updateQuery = `
     UPDATE Transfer_list 
     SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?
@@ -328,9 +329,21 @@ router.post('/updateParticularTransferList', (req, res) => {
       return res.status(404).json({ message: 'No record found with the provided grouptripid' });
     }
 
-    res.status(200).json({ message: 'Transfer list updated successfully' });
+    // Second query to update tripsheet
+    const updateTripSheetQuery = `UPDATE tripsheet SET Billed_Status = 'Transfer_Closed', GroupTripId=? WHERE tripid IN (?)`;
+
+    db.query(updateTripSheetQuery, [grouptripid, Trip_id], (err, tripSheetResult) => {
+      if (err) {
+        console.error('Error updating tripsheet:', err);
+        return res.status(500).json({ error: 'Failed to update tripsheet' });
+      }
+
+      // Success response after both queries execute successfully
+      res.status(200).json({ message: 'Transfer list and tripsheet updated successfully' });
+    });
   });
 });
+
 
 // get transferList Where GroupTripId
 router.get('/getParticularTransferListDetails', (req, res) => {
@@ -534,7 +547,7 @@ router.get('/getTripIdFromTransferList', (req, res) => {
   if (!groupid) {
     return res.status(400).json({ error: 'Group ID is required' });
   }
-  const sqlquery = `SELECT Trip_id,Organization_name,Invoice_no,Billdate,FromDate,EndDate FROM Transfer_list WHERE Grouptrip_id = ?`;
+  const sqlquery = `SELECT Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate FROM Transfer_list WHERE Grouptrip_id = ?`;
 
   db.query(sqlquery, [groupid], (error, result) => {
     if (error) {
@@ -592,38 +605,185 @@ router.get('/EmptyRowDelete', (req, res) => {
   });
 });
 
-
 router.put('/updateList', async (req, res) => {
   try {
     const { Trip_id, Trips, Amount } = req.body;
 
-    const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+    // Ensure Trip_id is an array
+    if (!Array.isArray(Trip_id)) {
+      return res.status(400).json({ error: "Trip_id must be an array" });
+    }
+
+    let sqlUpdateTransferList;
+
+    if (Trips === 0) {
+      sqlUpdateTransferList = `
+        UPDATE Transfer_list 
+        SET Trips = ?, 
+            Amount = ?, 
+            Status = "notbilled", 
+            Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) 
+        WHERE FIND_IN_SET(?, Trip_id) > 0
+      `;
+    } else {
+      sqlUpdateTransferList = `
+        UPDATE Transfer_list 
+        SET Trips = ?, 
+            Amount = ?, 
+            Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) 
+        WHERE FIND_IN_SET(?, Trip_id) > 0
+      `;
+    }
 
     const updatePromises = Trip_id.map(tripId => {
       return new Promise((resolve, reject) => {
         db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
           if (err) {
-            // console.log(err, 'error');
-            reject(err);
+            return reject(err);
+          }
+
+          if (updateGroupBillingResult.affectedRows > 0) {
+            // Second query to update `tripsheet` table
+            const sqlUpdateTripsheet = `
+              UPDATE tripsheet 
+              SET status = 'Closed', 
+                  Billed_Status = NULL, 
+                  apps = 'Closed', 
+                  GroupTripId = NULL 
+              WHERE tripid IN (?)
+            `;
+
+            db.query(sqlUpdateTripsheet, [tripId], (err, updateTripsheetResult) => {
+              if (err) {
+                return reject(err);
+              }
+
+              resolve(updateTripsheetResult);
+            });
           } else {
-            if (updateGroupBillingResult.affectedRows > 0) {
-              resolve(updateGroupBillingResult);
-            } else {
-              reject(new Error("No rows affected"));
-            }
+            reject(new Error("No rows affected in Transfer_list"));
           }
         });
       });
     });
 
-    // Wait for all update queries to finish
-    const updateResults = await Promise.all(updatePromises);
-    res.status(200).json(updateResults);
-  } catch (err) {
-    console.log(err, 'error');
-    res.status(500).json({ error: "An error occurred. Please try again later." });
+    // Execute all promises and send the result once all are complete
+    Promise.all(updatePromises)
+      .then(results => {
+        res.status(200).json({ message: "Update successful", results });
+      })
+      .catch(error => {
+        res.status(500).json({ error: error.message });
+      });
+
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 });
+
+
+// router.put('/updateList', async (req, res) => {
+//   try {
+//     const { Trip_id, Trips, Amount } = req.body;
+//     console.log(Trip_id,Trips, Amount,'update');
+//     let sqlUpdateTransferList;
+//  if(Trips==="0"){
+//    sqlUpdateTransferList = `UPDATE Transfer_list 
+//   SET Trips = ?, 
+//       Amount = ?,
+//       Status = "notbilled",
+//       Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) 
+//   WHERE FIND_IN_SET(?, Trip_id) > 0`;
+//  }
+//  else{
+//   sqlUpdateTransferList = `UPDATE Transfer_list 
+//   SET Trips = ?, 
+//       Amount = ?, 
+//       Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) 
+//   WHERE FIND_IN_SET(?, Trip_id) > 0`;
+//  }
+
+
+//     const updatePromises = Trip_id.map(tripId => {
+//       return new Promise((resolve, reject) => {
+//         db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+//           if (err) {
+//             reject(err);
+//           } else {
+//             if (updateGroupBillingResult.affectedRows > 0) {
+//               // Second query to update `tripsheet` table if the first update was successful
+//               const sqlUpdateTripsheet = `UPDATE tripsheet 
+//                                           SET status = 'Closed', 
+//                                               Billed_Status = NULL, 
+//                                               apps = 'Closed' ,
+//                                               GroupTripId=NULL
+//                                           WHERE tripid IN (?)`;
+
+//               db.query(sqlUpdateTripsheet, [tripId], (err, updateTripsheetResult) => {
+//                 if (err) {
+//                   reject(err);
+//                 } else {
+//                   console.log(updateGroupBillingResult,'updatetripsheet');
+
+//                   resolve(updateTripsheetResult);
+//                 }
+//               });
+//             } else {
+//               reject(new Error("No rows affected in Transfer_list"));
+//             }
+//           }
+//         });
+//       });
+//     });
+
+//     // Execute all promises and send the result once all are complete
+//     Promise.all(updatePromises)
+//       .then(results => {
+//         res.status(200).json({ message: "Update successful", results });
+//       })
+//       .catch(error => {
+//         res.status(500).json({ error: error.message });
+//       });
+
+//   } catch (error) {
+//     res.status(500).json({ error: "Server error" });
+//   }
+// });
+
+
+
+// router.put('/updateList', async (req, res) => {
+//   try {
+//     const { Trip_id, Trips, Amount } = req.body;
+
+//     const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+
+//     const updatePromises = Trip_id.map(tripId => {
+//       return new Promise((resolve, reject) => {
+//         db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+//           if (err) {
+//             // console.log(err, 'error');
+//             reject(err);
+//           } else {
+//             if (updateGroupBillingResult.affectedRows > 0) {
+//               db.query(`UPDATE tripsheet SET status=Closed,Billed_Status=NULL,apps=Closed WHERE tripid IN (?)`,[])
+//               resolve(updateGroupBillingResult);
+//             } else {
+//               reject(new Error("No rows affected"));
+//             }
+//           }
+//         });
+//       });
+//     });
+
+//     // Wait for all update queries to finish
+//     const updateResults = await Promise.all(updatePromises);
+//     res.status(200).json(updateResults);
+//   } catch (err) {
+//     console.log(err, 'error');
+//     res.status(500).json({ error: "An error occurred. Please try again later." });
+//   }
+// });
 
 
 router.post('/tripsheetUpdate', (req, res) => {
@@ -649,6 +809,7 @@ router.post('/removeUpdateTripsheet', (req, res) => {
     if (err) {
       return res.status(500).send({ error: 'Database update failed' });
     }
+    res.status(200).json(result);
 
     res.status(200).send({ message: 'Tripsheet updated successfully', result });
   });

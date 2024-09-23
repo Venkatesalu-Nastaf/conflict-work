@@ -494,6 +494,7 @@ const useRatype = () => {
 
             await axios.post(`${apiUrl}/ratetype`, updatedBook);
             handleCancel();
+            handlelist();
             
 
             setSuccess(true);

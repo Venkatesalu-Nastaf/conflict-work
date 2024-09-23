@@ -653,6 +653,23 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
 
     // Call the function to add customer property to each object
     // console.log("")
+    const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/customersgroup`);
+            const data = response.data;
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [apiUrl]); // Add dependencies like apiUrl
+
+    useEffect(() => {
+        handleList(); // Call the handleList function
+    }, [handleList]);
 
     const handleAdd = async () => {
 
@@ -799,23 +816,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
 
     
 
-    const handleList = useCallback(async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/customersgroup`);
-            const data = response.data;
-            const rowsWithUniqueId = data.map((row, index) => ({
-                ...row,
-                id: index + 1,
-            }));
-            setRows(rowsWithUniqueId);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [apiUrl]); // Add dependencies like apiUrl
-
-    useEffect(() => {
-        handleList(); // Call the handleList function
-    }, [handleList]); // Use handleList as a dependency
+    // Use handleList as a dependency
 
 
     const handleClick = async (event, actionName, customerId) => {

@@ -75,11 +75,7 @@ const PackageRateEntery = ({ organizationNames, vehileName,stationname }) => {
 
   const organizationName = organizationNames;
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+ 
   console.log(stationname,"name")
 
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");

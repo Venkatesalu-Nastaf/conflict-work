@@ -697,8 +697,8 @@ const useBooking = () => {
   //           mobileNo: selectedDriver.Mobileno,
   //         }));
   //       }
-  console.log(vechiledata,"okok")
-  // const handleVehicleChange = (event, value, name) => {
+  // console.log(vechiledata,"okok")
+  // const handleVehicleChange = (event, v  alue, name) => {
   //   // const selectedOption = value ? value.label : '';
   //   if (name === "vehRegNo") {
 
@@ -742,6 +742,7 @@ const useBooking = () => {
           vehRegNo: manualInput,
           vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+          hireTypes:selectedVehicle?.hiretypes || prevState.hireTypes
         }));
 
         setSelectedCustomerData(prevState => ({
@@ -749,6 +750,7 @@ const useBooking = () => {
           vehRegNo: manualInput,
           vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+          hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
         }));
       }
     }

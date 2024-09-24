@@ -2395,27 +2395,44 @@ const useTripsheet = () => {
     //     }
     // };
     const handleDriverChange = (event, value, name) => {
-        if (name === "driverName") {
-            const manualInput = typeof value === "string" ? value : value?.label;
+    if (name === "driverName") {
+      const manualInput = typeof value === "string" ? value : value?.label;
 
-            if (manualInput) {
-                const selectedDriver = drivername?.find(option => option.drivername === manualInput);
+      if (manualInput) {
+        const selectedDriver = drivername?.find(option => option.drivername === manualInput);
 
-                setBook(prevState => ({
-                    ...prevState,
-                    driverName: manualInput,
-                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
-                }));
+        setBook(prevState => ({
+          ...prevState,
+          driverName: manualInput,
+          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
+        }));
 
-                setSelectedCustomerData(prevState => ({
-                    ...prevState,
-                    driverName: manualInput,
-                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
-                }));
-            }
-        }
-    };
+        setSelectedCustomerData(prevState => ({
+          ...prevState,
+          driverName: manualInput,
+          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
+        }));
+      }
+    }
+  };
 
+    // useEffect(() => {
+    //     const fetchOrganizationnames = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/drivernamedrivercreation`);
+    //             const data = response.data
+    //             // const names = data.map(res => res.drivername)
+    //             console.log(data)
+    //             setDrivername(data)
+
+
+    //         }
+    //         catch (error) {
+    //             console.log(error, "error");
+    //         }
+    //     };
+    //     fetchOrganizationnames()
+    // }, [apiUrl])
     useEffect(() => {
         const fetchOrganizationnames = async () => {
             try {
@@ -2447,6 +2464,7 @@ const useTripsheet = () => {
                     vehRegNo: manualInput,
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
                 }));
 
                 setSelectedCustomerData(prevState => ({
@@ -2454,6 +2472,7 @@ const useTripsheet = () => {
                     vehRegNo: manualInput,
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
                 }));
             }
         }

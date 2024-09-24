@@ -298,6 +298,7 @@ const useTransferdataentry = () => {
             });
     }, []);
 
+console.log(fromDate,toDate,'date');
 
     const [book, setBook] = useState({
         Billdate: '',
@@ -326,6 +327,8 @@ const useTransferdataentry = () => {
         // setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
         const transferlist = updatedFormData.Trip_id?.split(',');
+        console.log(transferlist,'tttt');
+        
         setTransferId(transferlist);
         setInvoiceno(updatedFormData.Invoice_no);
         setGroupId(updatedFormData.Groupid);

@@ -125,7 +125,7 @@ const TransferReport = ({ stationName }) => {
     tripID,
     handleGroupKeyDown,
     setGroupTripid,
-    handleRemove,
+    // handleRemove,
     billedStatusCheck,
     setBilledStatusCheck
   } = useTransferreport();
@@ -219,7 +219,7 @@ const TransferReport = ({ stationName }) => {
       }
     }
     fetchData()
-  }, [apiUrl, billGenerate])
+  }, [apiUrl, billGenerate, misformat])
 
   useEffect(() => {
     if (pdfBillList === "PDF 1" || pdfBillList === "PDF 2") {
@@ -493,7 +493,7 @@ const TransferReport = ({ stationName }) => {
                     }
 
                     value={pdfBillList}
-                    onChange={(event, value) => setPdfBillList(value.label)}
+                    onChange={(event, value) => setPdfBillList(value?.label)}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="PDF Bill" inputRef={params.inputRef} />
@@ -635,9 +635,9 @@ const TransferReport = ({ stationName }) => {
                   )}
                 </PopupState>
               </div> : ""}
-            <div className="input">
+            {/* <div className="input">
               <Button variant="outlined" onClick={() => handleRemove()} >Remove</Button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="billing-tables-TransferReport">

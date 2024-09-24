@@ -70,6 +70,7 @@ const useTransferreport = () => {
     setTransferReport(formData.TransferReport)
     setTripID(formData.TripId)
     setBilledStatusCheck(formData.Status)
+    setRatetypeforpage('')
   }, [location, setTransferReport])
 
   window.addEventListener('click', (event) => {
@@ -690,41 +691,41 @@ const useTransferreport = () => {
   }, [rowSelectionModel]);
 
 
-  const handleRemove = async () => {
+  // const handleRemove = async () => {
 
-    const tripid = allTripData?.map(row => row.tripid.toString());
-    const totalPrice = allTripData.reduce((sum, li) => sum + li.totalcalcAmount, 0);
-    const ActualAmount = parseInt(totalTransferAmount) - totalPrice;
-    const Trips = rows.length - allTripData.length;
-    const selectId = allTripData?.map(row => row.tripid);
+  //   const tripid = allTripData?.map(row => row.tripid.toString());
+  //   const totalPrice = allTripData.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+  //   const ActualAmount = parseInt(totalTransferAmount) - totalPrice;
+  //   const Trips = rows.length - allTripData.length;
+  //   const selectId = allTripData?.map(row => row.tripid);
 
-    const TransferUpdate = {
-      Trip_id: tripid,
-      Amount: ActualAmount,
-      Trips: Trips,
-    };
+  //   const TransferUpdate = {
+  //     Trip_id: tripid,
+  //     Amount: ActualAmount,
+  //     Trips: Trips,
+  //   };
 
-    try {
-      const updateTripsheet = await axios.put(`${apiUrl}/updateList`, TransferUpdate);
-      // const updateTripsheet =  await axios.post(`${apiUrl}/removeUpdateTripsheet`, { tripid });
+  //   try {
+  //     const updateTripsheet = await axios.put(`${apiUrl}/updateList`, TransferUpdate);
+  //     // const updateTripsheet =  await axios.post(`${apiUrl}/removeUpdateTripsheet`, { tripid });
 
 
-      const selectionIds = Array.isArray(rowSelectionModel)
-        ? rowSelectionModel.map(item => item?.toString()) // Convert elements to strings
-        : [];
+  //     const selectionIds = Array.isArray(rowSelectionModel)
+  //       ? rowSelectionModel.map(item => item?.toString()) // Convert elements to strings
+  //       : [];
 
-      // Simplified filtering approach, only filter rows once
-      const updatedRows = rows.filter(row => !selectionIds.includes(row.tripid.toString()));
+  //     // Simplified filtering approach, only filter rows once
+  //     const updatedRows = rows.filter(row => !selectionIds.includes(row.tripid.toString()));
 
-      setRows([...updatedRows]);
+  //     setRows([...updatedRows]);
 
-      setSuccess(true);
-      setSuccessMessage("Successfully Removed");
-      setSelectedRow([]);
-    } catch (error) {
-      console.log(error, 'error');
-    }
-  };
+  //     setSuccess(true);
+  //     setSuccessMessage("Successfully Removed");
+  //     setSelectedRow([]);
+  //   } catch (error) {
+  //     console.log(error, 'error');
+  //   }
+  // };
 
 
   return {
@@ -790,7 +791,7 @@ const useTransferreport = () => {
     handleGroupKeyDown,
     setGroupTripid,
     tripID,
-    handleRemove,
+    // handleRemove,
     billedStatusCheck,
     setBilledStatusCheck
   };

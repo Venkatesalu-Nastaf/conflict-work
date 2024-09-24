@@ -212,14 +212,18 @@ const styles = StyleSheet.create({
     width: '70%',
   },
   signaturesection: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    marginTop: '30px',
+    // marginTop: '30px',
   },
   lastsectiondiv: {
     borderRight: '1px solid #000000',
     borderLeft: '1px solid #000000',
     borderBottom: '1px solid #000000',
+    flexDirection: 'row',
+    marginBottom: "30px",
+    // marginTop:"100px",
+
 
   },
   rupeestext: {
@@ -232,6 +236,9 @@ const styles = StyleSheet.create({
   },
   jessytext: {
     fontSize: '14px'
+  },
+  totalrupeesword: {
+    marginTop: "20px"
   }
 
 
@@ -252,6 +259,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const [gstAmount, setGstAmount] = useState(0)
+  const [advance, setAdvance] = useState();
   const organizationname = customer
   const organisationdetailfill = organisationdetails
   const organisationimage = images
@@ -270,6 +278,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       let nightAmount = 0
       let driverBeta = 0
       let gstamount = 0
+      let advanceamount = 0
       invdata?.map((li) => {
         totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
@@ -281,7 +290,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
         vendortollamount += parseInt(li.vendortoll || 0)
         nightAmount += parseInt(li.night_totalAmount || 0)
         driverBeta += parseInt(li.driverBeta_amount || 0)
-        gstamount = parseInt(li.gstTax)
+        advanceamount += parseInt(li.customeradvance || 0)
+        gstamount = parseFloat(li.gstTax / 2 || 0)
         return null
       })
       setTotalAmount(totalamount)
@@ -295,6 +305,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       setNightTotalAmount(nightAmount)
       setDriverBetaAmount(driverBeta)
       setGstAmount(gstamount)
+      setAdvance(advanceamount)
     }
   }, [apiUrl, invdata])
 
@@ -331,7 +342,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const tollAmount = parseInt(toll)
 
   const parkpermit = park + permitcharge + tollAmount
-  const FullAmount = fullAmount + gstAmount + gstAmount + parkpermit
+  const FullAmount = fullAmount + cgst + sgst + parkpermit - parseInt(advance)
   const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
@@ -429,7 +440,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       <View style={styles.tableheading}><Text>Trip DT</Text></View>
                       <View style={styles.tableheadtripno}><Text>Trip NO</Text></View>
                       <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
-                      <View style={styles.tableheadingpermit}><Text>Par/Permit</Text></View>
+                      <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
                       <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
 
                     </View>
@@ -449,10 +460,17 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               </Text>
                               <Text>{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}</Text>
                               <Text>Vehicle Hire Charges For : {item.calcPackage}</Text>
-                              <Text>{item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}</Text>
-                              <Text>{item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''}</Text>
-                              <Text>{item.nightCount ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''}</Text>
-                              <Text>{item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''}</Text>
+                              {item.extraKM ?
+                                <Text>{item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}</Text> : ""}
+                              {item.extraHR ?
+                                <Text>{item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''}</Text> : ""}
+                              {item.nightBta ?
+                                <Text>{item.nightBta ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''}</Text> : ""}
+                              {
+                                item.driverBeta ?
+                                  <Text>{item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''}</Text> : ""
+
+                              }
                               <Text>{item.pickup}</Text>
                             </View>
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
@@ -467,10 +485,10 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <Text>{'\n'}</Text>
                               <Text>{'\n'}</Text>
                               <Text>{item.package_amount}</Text>
-                              <Text>{item.ex_kmAmount}</Text>
-                              <Text>{item.ex_hrAmount}</Text>
-                              <Text>{item.night_totalAmount}</Text>
-                              <Text>{item.driverBeta_amount}</Text>
+                              {item.extraKM ? <Text>{item.ex_kmAmount}</Text> : ""}
+                              {item.extraHR ? <Text>{item.ex_hrAmount}</Text> : ""}
+                              {item.nightBta ? <Text>{item.night_totalAmount}</Text> : ""}
+                              {item.driverBeta ? <Text>{item.driverBeta_amount}</Text> : ""}
                             </View>
                           </React.Fragment>
                         </View>
@@ -531,10 +549,16 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst}</Text>
                     </View>
 
-                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                       <Text style={{ width: '130px', fontSize: '11px' }}>Parking & Permit:</Text>
                       <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{parkpermit}</Text>
                     </View>
+
+                    {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                      <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
+                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{advance}</Text>
+                    </View> : ""}
+
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                       <Text style={{ width: '130px', fontSize: '11px' }}>Total Amount:</Text>
@@ -544,25 +568,31 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 </View>
 
 
-
+              </View>
+              <View style={styles.totalrupeesword}>
+                <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
 
               </View>
-
 
               <View style={styles.lastsectiondiv}>
                 <View style={styles.lastsection}>
 
                   <View style={styles.rupees}>
-                    <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
+                    {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
+                    <Text style={styles.underlinetext}>Bank Details</Text>
+
+                    <Text style={styles.text2}>{organisationdetailfill[0].BankDetails} </Text>
                   </View>
 
-                  <View style={styles.companyName}>
-                    <Text style={styles.jessytext}>For jessy Cabs</Text>
-                  </View>
+
                 </View>
 
 
                 <View style={styles.signaturesection}>
+
+                  <View style={styles.companyName}>
+                    <Text style={styles.jessytext}>For jessy Cabs</Text>
+                  </View>
 
                   <View style={styles.signone}>
                     <Text></Text>

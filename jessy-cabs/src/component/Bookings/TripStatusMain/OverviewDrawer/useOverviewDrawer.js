@@ -66,6 +66,8 @@ const useDispatched = () => {
     const [statusvalue, setStatusValue] = useState("");
 
     const [columnshowall, setColumnShowall] = useState(true)
+    const [showCards, SetShowCards] = useState(false);
+
 
     //---------------------popup----------------------------
 
@@ -284,6 +286,7 @@ const useDispatched = () => {
     const handleInputChange = (event, newValue) => {
         setdepartment(newValue);
 
+
     }
     const handlestatusChange = (event, newValue) => {
         setStatusValue(newValue ? newValue.label : "");
@@ -380,22 +383,41 @@ const useDispatched = () => {
     };
 
 
+    const handleShowCards = () => {
+        SetShowCards(!showCards);
+      }
+
     const handleButtonClick = (row) => {
 
         if (row.status === "Cancelled") {
             setError(true);
             setErrorMessage("booking cancelled")
             return
+
         }
         setSelectedRow(row);
-        setPopupOpen(true);
+       //setPopupOpen(true);
+        console.log(row,'row data ')
     };
 
+    const handleRowClick = (row) => {
+        handleButtonClick(row); // Call handleButtonClick
+        handleShowCards(row);   // Call handleShowCards
+      };
+// show button
+      const handleShowButtonClick = () => {
+        if (selectedRow) {
+          setPopupOpen(true); // Open the popup with the selected row data
+          console.log(selectedRow, 'row data for popup');
+        }
+      };
 
     const handlePopupClose = () => {
         setSelectedRow(null);
         setPopupOpen(false);
     };
+
+
 
 
     const dataget = async (bookingno) => {
@@ -405,7 +427,7 @@ const useDispatched = () => {
         console.log(responsedata.data, "valureswpol")
         return responsedata.data[0]
     }
-    // console.log(selectedRow,"dtatatselected")
+    //console.log(selectedRow,"dtatatselected")
     const handleTripsheetClick = async () => {
         const dispatchcheck = "true";
         const calcPackageString = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
@@ -459,13 +481,15 @@ const useDispatched = () => {
         handlePdfDownload,
         reversedRows,
         handleButtonClick,
+        handleShowCards,
+        showCards,
         popupOpen,
         handlePopupClose,
         selectedRow,
         handleTripsheetClick,
         columns, handleBookingClick,
         filteredColumns,
-        columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,
+        columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,handleRowClick, handleShowButtonClick
     };
 };
 

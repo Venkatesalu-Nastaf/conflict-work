@@ -368,6 +368,36 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
+
+                                <div className="input organization-input">
+                                <label htmlFor="">Bank Address:</label>
+                                    {/* <TextField
+                                        size="small"
+                                        sx={{ width: "225px" }}
+                                        name="BankDetails"
+                                        className='address-field organisation-address-field'
+                                        value={selectedCustomerData?.BankDetails || book.BankDetails}
+                                        onChange={handleChange}
+                                        label="BankDetails"
+                                        id="Bank"
+                                        multiline
+                                        rows={5}
+                                        autoComplete="password"
+                                        disabled={!editMode}
+                                    /> */}
+                                    
+                                    <textarea   name="BankDetails"
+                                        className='address-field organisation-address-field'
+                                        value={selectedCustomerData?.BankDetails || book.BankDetails}
+                                        onChange={handleChange}
+                                        label="BankDetails"
+                                        id="Bank"
+                                        multiline
+                                        rows={5}
+                                        autoComplete="password"
+                                        disabled={!editMode}/>
+                                </div>
+                                {/* <textarea /> */}
                             </div>
                             {editMode ? (
                                 <div className="input-field save-cancel-inputs">

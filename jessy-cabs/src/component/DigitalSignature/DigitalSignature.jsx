@@ -108,8 +108,8 @@ const DigitalSignature = () => {
     const now = new Date();
     const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
     const formattedTime = datefunsdata(now, 'HH:mm:ss');
-    const formatteddate=datefunsdata(now,"yyyy-MM-dd")
-    const formattedtimes=datefunsdata(now,"HH:mm")
+    const formatteddate = datefunsdata(now,"yyyy-MM-dd")
+    const formattedtimes = datefunsdata(now,"HH:mm")
     return {
       dateTime: formattedDateTime,
       time: formattedTime,

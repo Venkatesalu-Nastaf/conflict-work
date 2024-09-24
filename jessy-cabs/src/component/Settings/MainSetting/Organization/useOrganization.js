@@ -57,7 +57,8 @@ const useOrganization = () => {
         telephone: '',
         Sender_Mail: '',
         EmailApp_Password: '',
-        fileName:''
+        fileName:'',
+        BankDetails:""
     });
 
 

@@ -1370,7 +1370,7 @@ const Booking = ({ stationName, customerData }) => {
               // variant="standard"
               />
             </div> */}
-
+            {/* {console.log(selectedCustomerData?.orderByMobileNo, book?.mobile, formData?.orderByMobileNo, selectedCustomerDatas?.orderByMobileNo, book?.orderByMobileNo, "MoBiLe")} */}
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -1380,11 +1380,12 @@ const Booking = ({ stationName, customerData }) => {
                 autoComplete="new-password"
                 className="full-width"
                 value={
-                  book?.mobile ||
-                  formData?.orderByMobileNo ||
                   selectedCustomerData?.orderByMobileNo ||
-                  selectedCustomerDatas?.orderByMobileNo ||
+                  book?.mobile ||
                   book?.orderByMobileNo ||
+                  formData?.orderByMobileNo ||
+                  selectedCustomerDatas?.orderByMobileNo ||
+                  
                   ""
                 }
                 onChange={handleChange}
@@ -1406,9 +1407,11 @@ const Booking = ({ stationName, customerData }) => {
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  book.orderByEmail || book.orderbyemail ||
-                  formData.orderByemail ||
                   selectedCustomerData.orderByEmail ||
+                  book.orderByEmail || 
+                  book.orderbyemail ||
+                  formData.orderByemail ||
+                 
                   selectedCustomerDatas.orderByEmail ||
 
                   ""
@@ -2455,7 +2458,7 @@ const Booking = ({ stationName, customerData }) => {
                 }
                 value={
                   Hire.find((option) => option.Option)?.label ||
-                  formData.hireTypes ||
+                  // formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
@@ -2463,9 +2466,9 @@ const Booking = ({ stationName, customerData }) => {
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) =>
+                getOptionLabel={(option) => 
                   option.label ||
-                  formData.hireTypes ||
+                  // formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
@@ -2586,7 +2589,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-
+            {console.log(formData.vehiclemodule)}
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -2597,7 +2600,7 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 size="small"
                 value={
-                  formData.vehiclemodule ||
+                  // formData.vehiclemodule ||
                   selectedCustomerData.vehiclemodule ||
                   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
                   ""
@@ -2668,7 +2671,7 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 size="small"
                 value={
-                  formData.Groups ||
+                  // formData.Groups ||
                   selectedCustomerData.Groups ||
                   book.Groups || selectedCustomerdriver.Groups ||
                   ""

@@ -5,7 +5,6 @@ import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
-// import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useThemes } from "../../UserSettings/Themes/ThemesContext";
 import ClearIcon from "@mui/icons-material/Clear";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
@@ -15,14 +14,10 @@ import Button from "@mui/material/Button";
 import { useData1 } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
-// import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
 import { PermissionContext } from "../../context/permissionContext";
-import update from "../../../assets/img/update.png"
 import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
 import { FaBell } from "react-icons/fa";
-import axios from 'axios'
-// import axios from "axios";
 import { useData } from "../MainDash/Sildebar/DataContext2";
 
 //dialog box
@@ -33,29 +28,20 @@ import { APIURL } from "../../url";
 import Tooltip from '@mui/material/Tooltip';
 import { BiSolidBellRing } from "react-icons/bi";
 
-
-// import Modal from '@mui/material/Modal';
-// import Box from '@mui/material/Box';
-
 const MainDashboard = () => {
 
   const apiUrl = APIURL;
-  // const { sharedData, setFilteredData,datatriguserinfo } = useData();
-  // const { setFilteredData,datatriguserinfo } = useData();
   const { setFilteredData, datatriguserinfo, expanded, setExpanded } = useData1();
-  //  const {datatriguserinfo, expanded, setExpanded } = useData1();
+
   const navigate = useNavigate();
-  // const [expanded, setExpanded] = useState(true);
+
   const { selectedTheme, setSelectedAvatar, selectedavtar, setSelectedTheme } = useThemes();
-  // const { setSelectedTheme } = useThemes();
+ 
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  // const [popupOpentoken, setPopupOpenToken] = useState(false);
-  // const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
   const data1 = localStorage.getItem("useridno")
   const data4 = localStorage.getItem("username");
-  // const data5 = localStorage.getItem("profileimages")
   const data6 = localStorage.getItem("organizationimages")
 
   const { setUser_id, setMakeRender, permissions, setPermission } = useContext(PermissionContext)
@@ -68,13 +54,6 @@ const MainDashboard = () => {
     setSendTrue(datavaule);
   }
 
-
-
-  // ------------
-  // useEffect(() => {
-
-  //   setSelectedImage(sharedData)
-  // }, [sharedData])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -218,28 +197,6 @@ const MainDashboard = () => {
   }, [user, datatriguserinfo]);
 
 
-  // const checkertoken=()=>{
-  //   setPopupOpenToken(true)
-  // }
-  // useEffect(()=>{
-  //   const fetchdata=async()=>{
-  //     try{
-  //       await axios.get(`${apiUrl}/checktokenexpire`, {headers: {
-  //         'x-auth-token': localStorage.getItem("tokensdata")
-  //       }})
-  //       // console.log(response)
-  //       // if(response.)
-  //     }
-  //     catch(err){
-  //       console.log(err,"data")
-  //       checkertoken()
-  //     }
-  //   }
-  //   fetchdata()
-  // })
-  // console.log(popupOpentoken,"ty")
-
-
 
   const storedUsername = localStorage.getItem("username");
 
@@ -293,35 +250,6 @@ const MainDashboard = () => {
   // const usercompany = routeData[0]?.organizationname;
   setUser_id(useridno);
 
-  // localStorage.setItem("useridno", useridno);
-  // localStorage.setItem("usercompany", usercompany);
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(`${apiUrl}/tripsheet-maindash`);
-  //       if (response.status === 200) {
-  //         if (response.ok) {
-  //           const data = await response.json();
-  //           if (data.length > 0) {
-  //             setFilteredData(data);
-  //           } else {
-  //             setFilteredData([]);
-  //           }
-  //         } else {
-  //         }
-  //       }
-  //       else {
-  //         const timer = setTimeout(fetchData, 2000);
-  //         return () => clearTimeout(timer);
-  //       }
-  //     } catch {
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [apiUrl, setFilteredData]);
 
 
   useEffect(() => {
@@ -339,10 +267,7 @@ const MainDashboard = () => {
           } else {
           }
         }
-        // else {
-        //   const timer = setTimeout(fetchData, 2000);
-        //   return () => clearTimeout(timer);
-        // }
+  
       } catch {
       }
     };

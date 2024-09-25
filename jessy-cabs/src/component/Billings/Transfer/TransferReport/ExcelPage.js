@@ -24,6 +24,7 @@ const useExeclpage = () => {
     const columns2 = [
         { key: "SNo", header: "Ref", width: 130 },
         { key: "department", header: "Hub Location", width: 150 },
+        { key: "customer", header: "Customer", width: 150 },
         { key: "request", header: "CAS Request ID/Route ID", width: 200 },
         { key: "tripid", header: "DS No", width: 100 },
         { key: "orderedby", header: "Category", width: 120 },
@@ -32,6 +33,7 @@ const useExeclpage = () => {
 
         { key: "VendorName", header: "Vendor Name", width: 150 },
         { key: "Vendor", header: "Vendor", width: 120 },
+        { key: "vehicleName", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
         { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
@@ -86,12 +88,14 @@ const useExeclpage = () => {
     const columns = [
         { key: "SNo", header: "Ref", width: 130 },
         { key: "department", header: "Hub Location", width: 150 },
+        { key: "customer", header: "Customer", width: 150 },
         { key: "request", header: "CAS Request ID/Route ID", width: 200 },
         { key: "tripid", header: "DS No", width: 100 },
         { key: "orderedby", header: "Category", width: 120 },
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
+        { key: "vehicleName", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehType", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
@@ -222,7 +226,7 @@ const useExeclpage = () => {
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
                     
@@ -321,7 +325,7 @@ const useExeclpage = () => {
                     singleData2["VendorName"] = " Jesscy Cabs"
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
-                    singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
                     //  singleData2["starttime"] = singleData2["starttime"] 

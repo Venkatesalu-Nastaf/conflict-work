@@ -109,7 +109,8 @@ function App() {
   // const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
   // const Map_page_permission = permissions[21]?.read;
 
-  const BOOKING = permissions[0]?.read || permissions[1]?.read;;
+  const BOOKING = permissions[0]?.read ;
+  const bookingdata = permissions[1]?.read;
   const TripStatus = permissions[2]?.read
   const TriSheet = permissions[3]?.read
 
@@ -221,23 +222,7 @@ function App() {
   const ref = useRef(false)
   const organizationname = orgName || localStorage.getItem('usercompany');
 
-  // const fetchOrgLogo = useCallback(async () => {
-  //   try {
-
-  //     // console.log("routeData", organizationname)
-  //     // if (!organizationname || organizationname === undefined) return
-  //     const response = await axios.get(`${apiUrl}/fetchorg-logo`)
-
-  //     if (response?.status === 200) {
-  //       const logoImage = response?.data[0]?.fileName;
-  //       setLogo(logoImage)
-  //       setLogoTrigger(false)
-  //       ref.current = true
-  //     }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
+ 
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -364,10 +349,10 @@ function App() {
 
               />
 
-              <Route path="/home/bookings" element={<Bookings />}>
+              <Route path="/home/bookings" element={ BOOKING !== 0 ? <Bookings /> : <NoPermission />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={BOOKING !== 0 ? <BookingMain stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={bookingdata !== 0 ? <BookingMain stationName={stationName} customerData={customerData} /> : <NoPermission />}
                 />
                 <Route
                   path="/home/bookings/tripsheet"

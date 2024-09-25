@@ -62,10 +62,10 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     setIsDrawerOpen(false);
   };
 
-  const [showCards, SetShowCards] = useState(false);
-  const handleShowCards = () => {
-    SetShowCards(!showCards);
-  }
+  // const [showCards, SetShowCards] = useState(false);
+  // const handleShowCards = () => {
+  //   SetShowCards(!showCards);
+  // }
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -74,6 +74,8 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     handlePopupClose,
     selectedRow,
     handleBookingClick,
+    handleShowCards,
+    showCards,
     reversedRows,
     columnshowall,
     columns,
@@ -97,6 +99,8 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     handleClick,
     handleTripsheetClick,
     handleButtonClick,
+    handleShowButtonClick,
+    handleRowClick,
     //POP ups..
     hidePopup,
     error,
@@ -405,7 +409,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               <Button variant="outlined">Cancel</Button>
               <Button variant="contained">Verified</Button>
               {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
-              <Button onClick={handleButtonClick}>Show</Button>
+              {/* <Button onClick={handleButtonClick}>Show</Button> */}
+              <Button onClick={handleShowButtonClick}>Show</Button>
+              
             </div>
             {/* <EtripSheetTable 
               rows1={reversedRows}
@@ -440,10 +446,17 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                   },
                 }}
               >
-                <DataGrid
+                {/* <DataGrid
                   rows={reversedRows}
                   columns={columnshowall ? columns : filteredColumns}
                   onRowClick={(event) => handleButtonClick(event.row)}
+                  pageSize={5}
+                /> */}
+                {/* chges for show button and show card button */}
+                <DataGrid
+                  rows={reversedRows}
+                  columns={columnshowall ? columns : filteredColumns}
+                  onRowClick={(event) => handleRowClick(event.row)}
                   pageSize={5}
                 />
               </Box>

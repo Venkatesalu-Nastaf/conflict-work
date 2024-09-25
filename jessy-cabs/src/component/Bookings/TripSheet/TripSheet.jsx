@@ -4639,11 +4639,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                        value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        value={
+                          // selectedCustomerDatas.hiretypes
+                            formData.hireTypes ||
+                           formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                         options={HireTypes.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        getOptionLabel={(option) => option.label 
+                          || formData.hireTypes 
+                          // || selectedCustomerDatas.hiretypes 
+                          || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
@@ -4761,8 +4767,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         size="small"
                         value={
-                          selectedCustomerDatas.vehType ||
-                          formData.vehType ||
+                          // selectedCustomerDatas.vehType ||
+                          // formData.vehType ||
                           selectedCustomerData.vehType ||
                           book.vehType || ""
                         }
@@ -4842,9 +4848,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         size="small"
                         value={
-                          selectedCustomerDatas.Groups ||
-                          formData.Groups ||
                           selectedCustomerData.Groups ||
+                          formData.Groups ||
+                          selectedCustomerDatas.Groups ||
                           book.Groups || ""
                         }
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
@@ -4888,7 +4894,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                     </div> */}
                     {console.log(selectedCustomerData?.driverName, book.driverName, "driverddd")}
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <AirlineSeatReclineExtraIcon color="action" />
                       </div>
@@ -4899,10 +4905,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         onKeyDown={handleKeyEnterDriverDetails}
                         value={selectedCustomerData?.driverName || book.driverName || ""} // Ensure the driverName is reflected correctly
                         options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from your data
-                        getOptionLabel={(option) => option.label || selectedCustomerData?.driverName || book.driverName || ''} // Display label properly
+                        getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Display label properly
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -4923,9 +4930,77 @@ const TripSheet = ({ stationName, logoImage }) => {
                           />
                         )}
                       />
+                    </div> */}
+                    <div className="input">
+                      <div className="icone">
+                        <AirlineSeatReclineExtraIcon color="action" />
+                      </div>
+
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="driverName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} // Handle manual input
+                        onKeyDown={handleKeyEnterdriver}
+                        value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                        options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                        getOptionLabel={(option) => (typeof option === "string" ? option : option.label || "")} // Adjust to show input value or option label
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Driver Name"
+                            name="driverName"
+                            inputRef={params.inputRef}
+                            onChange={(e) => {
+                              handleChange(e);
+                              const value = e.target.value;
+                              setSelectedCustomerDatas({ ...selectedCustomerDatas, driverName: value });
+                              setFormData({ ...formData, driverName: value });
+                              setSelectedCustomerData({ ...selectedCustomerData, driverName: value });
+                              setFormValues({ ...formValues, driverName: value });
+                              setBook({ ...book, driverName: value });
+
+                              if (!lockdata) {
+                                setVendorinfodata({ ...vendorinfo, driverName: value });
+                              }
+                            }}
+                          />
+                        )}
+                      />
                     </div>
+                    {/* <div className="input">
+                      <div className="icone">
+                        <AirlineSeatReclineExtraIcon color="action" />
+                      </div>
+
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="driverName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                        onKeyDown={handleKeyEnterdriver}
+                        value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                        options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                        getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Driver Name"
+                            name="driverName"
+                            inputRef={params.inputRef}
+                          />
+                        )}
+                      />
+                    </div> */}
 
 
+                    {console.log(selectedCustomerDatas.mobileNo, formData.mobileNo, selectedCustomerData.mobileNo, formValues.mobileNo, book.mobileNo ,"phone")}
                     <div className="input">
                       <div className="icone">
                         <PhoneIphoneIcon color="action" />
@@ -4934,7 +5009,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         name="mobileNo"
                         className='full-width'
                         // value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
-                        value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
+                        // value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
+                        value={
+                          // selectedCustomerData.mobileNo ||
+                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""} 
                         onChange={handleChange}
                         label="Driver Phone"
                         id="mobileNo"

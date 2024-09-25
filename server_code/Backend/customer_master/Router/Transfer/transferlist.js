@@ -200,7 +200,7 @@ router.get('/tripsheetiddata/:id', (req, res) => {
 
 
   // Prepare the query with placeholders
-  const query = 'SELECT * FROM tripsheet WHERE status = "Closed" AND  tripid IN (?)';
+  const query = 'SELECT * FROM tripsheet WHERE status = "Billed" AND  tripid IN (?)';
 
   // Execute the query with tripIds as parameters
   db.query(query, [tripIds], (err, result) => {
@@ -330,7 +330,7 @@ router.post('/updateParticularTransferList', (req, res) => {
     }
 
     // Second query to update tripsheet
-    const updateTripSheetQuery = `UPDATE tripsheet SET Billed_Status = 'Transfer_Closed', GroupTripId=? WHERE tripid IN (?)`;
+    const updateTripSheetQuery = `UPDATE tripsheet SET status='Billed', Billed_Status = 'Transfer_Closed', GroupTripId=? WHERE tripid IN (?)`;
 
     db.query(updateTripSheetQuery, [grouptripid, Trip_id], (err, tripSheetResult) => {
       if (err) {
@@ -422,7 +422,7 @@ router.post('/transferlistdatatrip', (req, res) => {
     }
 
     // Update tripsheet to set Billed_Status
-    const updateQuery = "UPDATE tripsheet SET Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
+    const updateQuery = "UPDATE tripsheet SET  status='Billed',Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
     db.query(updateQuery, [Trip_id], (err, updateResult) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to update Billed_Status in MySQL' });

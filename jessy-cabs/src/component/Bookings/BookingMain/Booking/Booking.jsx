@@ -11,13 +11,11 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+// import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-// import AlertPopup from "../../../AlertPopup/AlertPopup";
-// import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-// import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+
 import {
   Duty,
   Hire,
@@ -46,10 +44,9 @@ import InfoIcon from "@mui/icons-material/Info";
 import ClearIcon from "@mui/icons-material/Clear";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
-// import { AiOutlineFileSearch } from "react-icons/ai";
-import NoCrashIcon from "@mui/icons-material/NoCrash";
+
 import AltRouteIcon from "@mui/icons-material/AltRoute";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
+
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
@@ -61,8 +58,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-// import LocationCityIcon from "@mui/icons-material/LocationCity";
-// import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -84,7 +80,7 @@ import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../../url";
 
 // spped dial 
-import ChecklistIcon from "@mui/icons-material/Checklist";
+
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -92,14 +88,13 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
-import InputLabel from '@mui/material/InputLabel';
+
+
 import Select from '@mui/material/Select';
 
 // import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -125,7 +120,8 @@ const Booking = ({ stationName, customerData }) => {
   const apiUrl = APIURL;
 
   const {
-    selectedCustomerData, handleImagechange2, selectetImg, removeSelectedImage,
+    selectedCustomerData, handleImagechange2, 
+    // selectetImg, removeSelectedImage,
     selectedCustomerId,
     // rows,
     actionName,
@@ -150,7 +146,7 @@ const Booking = ({ stationName, customerData }) => {
     getCurrentTime,
     setBook,
     setSelectedCustomerData,
-    setBookingTime,
+    // setBookingTime,
     selectedCustomerDatas,
     // handleKeyEnter,
     formValues,
@@ -206,20 +202,22 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
-    imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
+
+    // imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
+     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
 
-  useEffect(() => {
-    if (actionName === "List") {
-      handleClick(null, "List");
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === "List") {
+  //     handleClick(null, "List");
+  //   }
+  // }, [actionName, handleClick]);
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Booking_read = permissions[1]?.read;
+  // const Booking_read = permissions[1]?.read;
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
@@ -230,20 +228,7 @@ const Booking = ({ stationName, customerData }) => {
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
 
 
-  // const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-  // const selectedDate = formData.bookingdate
-  //   ? dayjs(formData.bookingdate)
-  //   : selectedCustomerData.bookingdate
-  //     ? dayjs(selectedCustomerData.bookingdate)
-  //     : book.bookingdate
-  //       ? dayjs(book.bookingdate)
-  //       : dayjs();
-
-  //       console.log('aaaaa',selectedDate);
-
-  // const handleSelectDateChange = (event) => {
-  //   setSelectedDate(event.target.value);
-  // };
+ 
 
 
 
@@ -252,15 +237,7 @@ const Booking = ({ stationName, customerData }) => {
     setSelectedCustomerData({ ...selectedCustomerData, status: event.target.value })
   };
 
-  // const customerName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
 
-  // const serviceStationFilterFun = () => {
-  //   const filterData = customerData.filter(item => item.customer === customerName)
-  //   return filterData.length > 0 ? filterData[0].servicestation : "";
-
-  // }
-
-  // validation for date
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || dayjs())
   const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate || dayjs())
@@ -2399,15 +2376,15 @@ const Booking = ({ stationName, customerData }) => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {Booking_read === 1 && (
+            {/* {Booking_read === 1 && (
               <SpeedDialAction
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
-            )}
-            {Booking_modify === 1 && (
+            )} */}
+            {Booking_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -2415,7 +2392,7 @@ const Booking = ({ stationName, customerData }) => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {Booking_delete === 1 && (
+            {Booking_delete === 1 &&  isEditMode &&  (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -2423,7 +2400,7 @@ const Booking = ({ stationName, customerData }) => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-            {Booking_new === 1 && (
+            {Booking_new === 1 && !isEditMode &&  (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}

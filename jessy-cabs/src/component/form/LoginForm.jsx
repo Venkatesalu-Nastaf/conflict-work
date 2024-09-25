@@ -72,10 +72,13 @@ const Login = () => {
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
+        const data=response.data.user;
         setUserdashboard(true) // its for logo trigger
         setLogoTrigger(prev => !prev)
-        loginUser(input.username);
-        localStorage.setItem("username", input.username);
+        // loginUser(input.username);
+        loginUser(data.username);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("SuperAdmin",data.superAdmin)
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
@@ -158,9 +161,6 @@ const Login = () => {
                 )}
               </div>
             </div>
-            {/* <div className="forget-link">
-              <a href="/">forget password !</a>
-            </div> */}
             <div className="group button-group">
               <button type="submit" className="signup-btn" onClick={formSubmitter}>
                 Login

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useContext } from 'react';
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
 import Dialog from '@mui/material/Dialog';
@@ -22,6 +22,7 @@ import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import useBankaccount from './useBankaccount';
+import { PermissionContext } from '../../../context/permissionContext';
 
 const BankAccount = () => {
 
@@ -67,7 +68,11 @@ const BankAccount = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  const { permissions } = useContext(PermissionContext)
 
+  const Billing_new = permissions[5]?.new;
+  const Billing_modify = permissions[5]?.modify;
+  const Billing_delete = permissions[5]?.delete;
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container main-content-form">
@@ -171,7 +176,7 @@ const BankAccount = () => {
 
         <div className="BankAccount-first-container">
           <div className="input bankaddbtn">
-            <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
+            <Button variant="contained" startIcon={<AddCircleOutlineIcon />} disabled={!Billing_new} onClick={handleAddBankClick} >
               Add bank
             </Button>
           </div>
@@ -235,7 +240,7 @@ const BankAccount = () => {
                     />
                   </div>
                   <div className="inpu">
-                    <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
+                    <Button variant="contained"  disabled={!Billing_new} startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                       Add
                     </Button>
                   </div>
@@ -353,11 +358,11 @@ const BankAccount = () => {
                   <div className="button-container-bankAccount">
                     <div className="inpt input-bank-account-icon">
                       {editingIndex === index ? (
-                        <IconButton color="primary" variant="contained" onClick={() => handleSaveEdit(index)}>
+                        <IconButton color="primary" disabled={!Billing_modify} variant="contained" onClick={() => handleSaveEdit(index)}>
                           <SaveIcon />
                         </IconButton>
                       ) : (
-                        <IconButton color="primary" variant="contained" onClick={() => handleEditBank(index)}>
+                        <IconButton color="primary"  disabled={!Billing_modify}variant="contained" onClick={() => handleEditBank(index)}>
                           <EditIcon />
                         </IconButton>
                       )}
@@ -373,7 +378,7 @@ const BankAccount = () => {
                         Are you sure you want to Delete this
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={() => handlesuredelete(bankDetail.id)} variant="contained" color="primary">
+                        <Button  disabled={!Billing_delete}onClick={() => handlesuredelete(bankDetail.id)} variant="contained" color="primary">
                           Yes
                         </Button>
                         <Button onClick={handlePopupClose} variant="contained" color="primary">

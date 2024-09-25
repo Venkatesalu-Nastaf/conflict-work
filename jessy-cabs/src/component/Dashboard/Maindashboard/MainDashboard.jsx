@@ -49,7 +49,7 @@ const MainDashboard = () => {
 
   // ------------
 
-  const [sendTrue, setSendTrue] = useState("");
+  const [setSendTrue] = useState("");
   const sendTrueValue = (datavaule) => {
     setSendTrue(datavaule);
   }
@@ -87,6 +87,7 @@ const MainDashboard = () => {
       localStorage.removeItem("selectedusertheme")
       localStorage.removeItem("username")
       localStorage.removeItem("tokensdata")
+      localStorage.removeItem("SuperAdmin")
       // localStorage.removeItem("expiretime")
 
 

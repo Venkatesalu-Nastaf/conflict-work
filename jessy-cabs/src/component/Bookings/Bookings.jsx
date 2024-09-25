@@ -24,7 +24,8 @@ const Bookings = () => {
 
   const { permissions } = useContext(PermissionContext);
   // const BOOKING = permissions[0]?.read;
-  const Booking = permissions[1]?.read || permissions[0]?.read;;
+  // const Booking = permissions[1]?.read || permissions[0]?.read;;
+  const Booking = permissions[1]?.read 
   const Trip_Status = permissions[2]?.read;
   const Trip_sheet = permissions[3]?.read;
   const [warning, setWarning] = useState(false);
@@ -78,6 +79,7 @@ const Bookings = () => {
     <div className="Bookings-main">
       <div className="menu-bar-main">
         <div className="menu-bar">
+          {Booking ?
           <MenuItem
             label="Booking"
             to={Booking && ("/home/bookings/booking")}
@@ -85,7 +87,9 @@ const Bookings = () => {
             menuItemKey="Booking"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></>
+}
+          {Trip_Status ? 
           <MenuItem
             label="Trip Status"
             to={Trip_Status && ("/home/bookings/tripstatus")}
@@ -93,7 +97,8 @@ const Bookings = () => {
             menuItemKey="TripStatus"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></> }
+          {Trip_sheet ? 
           <MenuItem
             label="Trip Sheet"
             to={Trip_sheet && ("/home/bookings/tripsheet")}
@@ -101,7 +106,7 @@ const Bookings = () => {
             menuItemKey="Trip Sheet"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />: <></> }
         </div>
       </div>
       <div className='alert-popup-main'>

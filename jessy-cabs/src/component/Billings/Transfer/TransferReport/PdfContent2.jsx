@@ -162,6 +162,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const [permit, setPermit] = useState('')
     const [gst, setGst] = useState('')
     const [gstAmount, setGstAmount] = useState(0)
+    const [advance, setAdvance] = useState();
     const apiUrl = APIURL;
     const organisationdetailfill = organisationname
     const organisationimage = imagename
@@ -171,12 +172,14 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             let parkingamount = 0
             let permitamount = 0
             let exkmamount = 0
+            let advanceamount = 0
             let gstamount = 0
             invdata?.map((li) => {
                 totalamount += parseInt(li.totalcalcAmount || 0)
                 parkingamount += parseInt(li.parking || 0)
                 permitamount += parseInt(li.permit || 0)
                 exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
+                advanceamount += parseInt(li.customeradvance || 0)
                 gstamount = parseInt(li.gstTax)
                 return null
             })
@@ -185,6 +188,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             setPermit(permitamount)
             setExtraKmAmount(exkmamount)
             setGstAmount(gstamount)
+            setAdvance(advanceamount)
         }
     }, [apiUrl, invdata])
 
@@ -205,12 +209,12 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
     const fullAmount = parseInt(totalAmount)
     const calgst = gstAmount/2;
-    const cgst = fullAmount * calgst / 100
-    const sgst = fullAmount * calgst / 100
+    const cgst = Math.round(fullAmount * calgst / 100)
+    const sgst = Math.round(fullAmount * calgst / 100)
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
     // const parkpermit = park + permitcharge
-    const FullAmount = fullAmount + cgst + sgst
+    const FullAmount = fullAmount + cgst + sgst - parseInt(advance)
     const formattedFullAmount = FullAmount.toFixed(0);
     const tripsheetnos = invdata?.length
     const rupeestext = numWords(parseInt(formattedFullAmount));
@@ -346,10 +350,15 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst.toFixed(0)}</Text>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', }}>
                                     <Text style={{ width: '120px', fontSize: '11px' }}>SGST {calgst}% on {fullAmount}:</Text>
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst.toFixed(0)}</Text>
                                 </View>
+
+                                {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                                    <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{advance}</Text>
+                                </View> : ""}
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                     <Text style={{ width: '120px', fontSize: '11px' }}>Net Payable:</Text>

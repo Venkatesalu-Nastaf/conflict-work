@@ -29,7 +29,7 @@ const upload = multer({
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail,created_at } = req.body;
-  const { username, stationname, designation, organizationname, userpassword, active, email, mobileno } = book;
+  const { username, stationname, designation, organizationname, userpassword, active, email, mobileno,superAdmin } = book;
   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
   
 console.log(username, stationname, designation, organizationname, userpassword, active, email, mobileno,created_at);
@@ -38,8 +38,8 @@ console.log(stationname,"stt",typeof(stationname))
 const idString = stationname.join(',');
 console.log(idString,"ff")
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,created_at)
-VALUES (?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,created_at,superAdmin)
+VALUES (?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at,superAdmin]);
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -190,12 +190,8 @@ router.get('/user-permissionget/:userid', (req, res) => {
 
 router.get('/usercreation', (req, res) => {
   // const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
-  let query = 'SELECT * FROM usercreation';
+  const  query = 'SELECT * FROM usercreation';
 
-  // if (filterValue) {
-  //   // Add a WHERE clause to filter based on the query parameter
-  //   query += ` WHERE userid = '${filterValue}'`; // Replace 'column_name' with the actual column name you want to filter on
-  // }
 
   db.query(query, (err, results) => {
     if (err) {

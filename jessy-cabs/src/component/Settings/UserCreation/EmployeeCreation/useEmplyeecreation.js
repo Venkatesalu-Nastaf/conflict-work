@@ -297,6 +297,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         organizationname: '',
         userpassword: '',
         active: false,
+        superAdmin: false,
     });
 
     // TABLE END
@@ -345,6 +346,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
             organizationname: '',
             userpassword: '',
             active: false,
+            superAdmin:false
         }));
 
         setPermissionsData(initialPermissionsData);
@@ -422,6 +424,31 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
 
 
     }
+
+     // show list
+     const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/usercreation`);
+            const data = response.data;
+            // const data = response.data;
+    //   const rowsWithUniqueId = data.map((row, index) => ({
+    //     ...row,
+    //     id: index + 1,
+    //   }));
+      console.log(data,"id")
+
+    
+       
+            setRows(data);
+            // return data;
+        } catch {
+        }
+    }, [apiUrl])
+    useEffect(() => {
+        handleList();
+      }, [handleList]);
+    
+
     const handleAdd = async () => {
         const username = book.username;
         const branchName = book.stationname;
@@ -432,9 +459,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         const mobileno = book.mobileno
         const password = book.userpassword
 
-        console.log("branchName", branchName)
-        console.log("email", email)
-        console.log("mobileno", mobileno)
+       
 
         if (!password) {
             setWarning(true);
@@ -496,9 +521,11 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
             const data = { book, permissionsData,organistaionsendmail,created_at}
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
+            handleList()
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             setCredentialData()
+            
         } catch (error) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -507,7 +534,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
 
     };
 
-console.log(permissionsData,"ppp")
+// console.log(permissionsData,"ppp")
     // edit
     const handleEdit = async (userid) => {
         try {
@@ -577,9 +604,11 @@ console.log(permissionsData,"ppp")
 
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
+            handleList()
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
+            // handleList()
             
             
 
@@ -605,21 +634,21 @@ console.log(permissionsData,"ppp")
     }
 
 
-    // show list
-    const handleList = useCallback(async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/usercreation`);
-            const data = response.data;
-            // const rowsWithUniqueId = data.map((row, index) => ({
-            //     ...row,
-            //     id: index + 1,
-            // }));
-            // setRows(rowsWithUniqueId);
-            setRows(data);
-            return data;
-        } catch {
-        }
-    }, [apiUrl, setRows])
+    // // show list
+    // const handleList = useCallback(async () => {
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/usercreation`);
+    //         const data = response.data;
+    //         // const rowsWithUniqueId = data.map((row, index) => ({
+    //         //     ...row,
+    //         //     id: index + 1,
+    //         // }));
+    //         // setRows(rowsWithUniqueId);
+    //         setRows(data);
+    //         return data;
+    //     } catch {
+    //     }
+    // }, [apiUrl, setRows])
 
     //------------------------------------------------------
 

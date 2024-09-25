@@ -1,19 +1,19 @@
 import { useState, useEffect, useCallback, } from "react";
 import axios from "axios";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+// import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
+// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useUser } from "../../../form/UserContext";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useLocation } from "react-router-dom";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
 import Excel from 'exceljs';
-// import { toast } from 'react-toastify';
+
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -74,7 +74,6 @@ const useBooking = () => {
   const [rows, setRows] = useState([]);
   const [row, setRow] = useState([]);
   const [rowdriver, setRowsdriver] = useState([]);
-  const [displayCopy, setDisplayCopy] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [reporttime, setreporttime] = useState("");
@@ -1593,8 +1592,8 @@ const useBooking = () => {
   const handleClick = async (event, actionName) => {
     event.preventDefault();
     try {
-      if (actionName === "Email") {
-      } else if (actionName === "Cancel") {
+      
+       if (actionName === "Cancel") {
         handleCancel();
         setRows([]);
         setRow([]);
@@ -1625,8 +1624,7 @@ const useBooking = () => {
         setSendEmail(false)
         handleEdit()
 
-      } else if (actionName === "Copy This") {
-        handleClickShow();
+      
       } else if (actionName === "Add") {
         handleAdd();
       }
@@ -1637,28 +1635,6 @@ const useBooking = () => {
     }
   };
 
-  useEffect(() => {
-    if (actionName === "List") {
-      handleClick(null, "List");
-    }
-  });
-
-  const handleClickShow = () => {
-    setDisplayCopy(true);
-  };
-
-  const handleClickHide = () => {
-    setDisplayCopy(false);
-  };
-
-  const actions = [
-    { icon: <LocalPostOfficeIcon />, name: "Email" },
-    { icon: <CancelPresentationIcon />, name: "Clear" },
-    { icon: <DeleteIcon />, name: "Delete" },
-    { icon: <ModeEditIcon />, name: "Modify" },
-    { icon: <ContentCopyIcon />, name: "Copy This" },
-    edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
-  ];
 
   const handleKeyDown = async (event) => {
 
@@ -1852,11 +1828,14 @@ const useBooking = () => {
   };
   useEffect(() => {
     if (user && user.username) {
+      
       const username = user.username;
+     
       localStorage.setItem("username", username);
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
+  console.log(user,"userr")
 
 
 
@@ -2061,10 +2040,8 @@ const useBooking = () => {
     popupOpenmail,
     sendEmail,
     setSendEmail,
-    displayCopy,
+    // displayCopy,
     currentYear,
-    handleClickHide,
-    actions,
     searchText,
     setSearchText,
     lastBookingNo,

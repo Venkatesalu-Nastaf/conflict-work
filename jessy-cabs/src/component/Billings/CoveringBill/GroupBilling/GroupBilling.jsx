@@ -138,6 +138,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const { permissions } = useContext(PermissionContext)
     const CoveringBill_read = permissions[7]?.read;
     const CoveringBill_new = permissions[7]?.new;
+    const CoveringBill_delete = permissions[7]?.delete;
 
     useEffect(() => {
         if (viewGroupBill && viewGroupBill.length > 0) {
@@ -329,7 +330,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                             <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
                         </div>
                         <div className="input" >
-                            <Button variant="contained" onClick={handleRemoveData} >Remove</Button>
+                            <Button variant="contained" disabled={!CoveringBill_delete} onClick={handleRemoveData} >Remove</Button>
                         </div>
                     </div>
                 </div>

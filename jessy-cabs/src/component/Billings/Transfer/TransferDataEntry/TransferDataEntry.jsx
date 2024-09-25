@@ -183,7 +183,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     />
                   </div>
-                  <div className="input" >
+                  <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
@@ -192,24 +192,33 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         <DatePicker
                           label="From Date"
                           id="fromDate"
-                          className='full-width'
-                          // value={fromDate}
-                          value={fromDate || selectedCustomerDatas.fromdate ? dayjs(fromDate || selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
+                          className="full-width"
+                          value={
+                            fromDate || selectedCustomerDatas?.fromdate
+                              ? dayjs(fromDate || selectedCustomerDatas?.fromdate)
+                              : fromDate || formDataTransfer?.FromDate
+                                ? dayjs(formDataTransfer?.FromDate)
+                                : dayjs() // Set today's date if no value is available
+                          }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'fromdate');
                             const formattedDate = dayjs(date).format('YYYY-MM-DD');
-                            const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
-                            setFromDate(parsedDate);
+                            setFromDate(formattedDate);
                           }}
                         >
                           {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.fromdate || fromDate} />
+                            <TextField
+                              {...inputProps}
+                              inputRef={inputRef}
+                              value={selectedCustomerDatas?.fromdate || fromDate || dayjs().format('DD/MM/YYYY')}
+                            />
                           )}
                         </DatePicker>
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
+
                   <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -286,7 +295,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
+                  </Menu> 
                 </>
               )}
             </PopupState>

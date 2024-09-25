@@ -335,8 +335,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
 
-  const cgst = Math.floor(fullAmount * gstAmount / 100);
-  const sgst = Math.floor(fullAmount * gstAmount / 100);
+  const cgst = Math.round(fullAmount * gstAmount / 100);
+  const sgst = Math.round(fullAmount * gstAmount / 100);
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)

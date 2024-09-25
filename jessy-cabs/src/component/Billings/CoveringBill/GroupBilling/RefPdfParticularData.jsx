@@ -5,6 +5,7 @@ import useGroupbilling from "./useGroupbilling";
 // import { APIURL } from "../../../url";
 import numWords from 'num-words'
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
+import { green } from "@mui/material/colors";
 
 const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno }) => {
 
@@ -19,6 +20,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     const [gst, setGst] = useState('')
     const [fullAmount, setFullAmount] = useState('')
     const [totalCgst, setTotalCgst] = useState(0)
+    const [advance, setAdvance] = useState();
     const [fullTotal, setFullTotal] = useState(0)
     // const apiUrl = APIURL;
     // const organisationimage = imagename
@@ -45,6 +47,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         let customer = ""
         let totalamount = 0
         let totalcgst = 0
+        let advanceamount = 0
         let fullamount = 0
 
         if (Array.isArray(pdfData)) {
@@ -53,7 +56,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
                 totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
-                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100
+                advanceamount += parseInt(li.customeradvance || 0)
+                fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100 - (parseInt(li.customeradvance) || 0)
             })
         }
 
@@ -61,6 +65,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         setCustomer(customer)
         setFullAmount(totalamount.toFixed(0))
         setTotalCgst(totalcgst.toFixed(0))
+        setAdvance(advanceamount)
         setFullTotal(fullamount.toFixed(0))
     }, [pdfData, Gst])
 
@@ -148,7 +153,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                     <table className="table-ref">
                         <thead>
                             <tr>
-                                <th className="tableheadtext">S No</th>
+                                <th className="tableheadtext">SNo</th>
                                 <th className="tableheadtext">Bill No</th>
                                 <th className="tableheadtext">Bill Date</th>
                                 <th className="tableheadtext">Ordered By</th>
@@ -156,6 +161,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <th className="tableheadtext">Amount</th>
                                 <th className="tableheadtext">CGST</th>
                                 <th className="tableheadtext">SGST</th>
+                                {pdfData.some(li => parseInt(li.customeradvance) > 0) && (
+                                    <th className="tableheadtext">Cus Adv</th>
+                                )}
                                 <th className="tableheadtext">Bill Amt</th>
                             </tr>
                         </thead>
@@ -170,8 +178,11 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <td className="tdata">{li.totalcalcAmount}</td>
                                     <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
                                     <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
+                                    {parseInt(li.customeradvance) > 0 && (
+                                        <td className="tdata">{parseInt(li.customeradvance)}</td>
+                                    )}
                                     <td className="tdata">
-                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}
+                                        {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0) - parseInt(li.customeradvance || 0)}
                                     </td>
                                 </tr>
                             ))}
@@ -186,6 +197,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <td className="tdata">{fullAmount}</td>
                                 <td className="tdata">{totalCgst}</td>
                                 <td className="tdata">{totalCgst}</td>
+                                {advance > 0 && (
+                                    <td className="tdata">{advance}</td>
+                                )}
                                 <td className="tdata">{fullTotal}</td>
                             </tr>
                         </tfoot>

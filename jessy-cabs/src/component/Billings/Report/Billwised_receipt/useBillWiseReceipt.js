@@ -170,6 +170,12 @@ const useBillWiseReceipt = () => {
       const tripid = selectedBillRow.flatMap((li) =>
         li.Trip_id.split(",").map(Number)
       );
+     
+      if(tripid.length === 0){
+        setError(true);
+        setErrorMessage("Select the data");
+        return;
+      }
 
       try {
         const response = await axios.get(`${apiUrl}/getTripAdvance`, {

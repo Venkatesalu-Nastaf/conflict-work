@@ -1893,6 +1893,19 @@ router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
         res.status(200).json(result);
     })
 })
+router.get('/Checkstatusandappsclosed/:tripid',(req,res)=>{
+    const tripid = req.params.tripid;
+    console.log(tripid,"cusssssssssssssssssss")
+    db.query('select status,apps from tripsheet where tripid = ?', [tripid], (err, result) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal server error' });
+            return;
+        }
+      console.log(result,"mm")
+        res.status(200).json(result);
+    })
+})
+
 
 // router.get('/regno/:vehino',(req,res)=>{
 //     const customer = req.params.vehino;

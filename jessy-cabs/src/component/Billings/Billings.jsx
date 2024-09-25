@@ -38,9 +38,10 @@ const Billings = () => {
   }, [warning]);
 
   const { permissions } = useContext(PermissionContext)
-  const Billing = permissions[5]?.read || permissions[4]?.read;;
+  const Billing = permissions[5]?.read;
   const Transfer = permissions[6]?.read;
   const Covering_Bill = permissions[7]?.read;
+  const Reports = permissions[8]?.read;
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const handleMenuItemClick = (label, alt, e) => {
     localStorage.setItem('activeMenuItem', label);
@@ -57,7 +58,7 @@ const Billings = () => {
         hasPermission = Covering_Bill;
         break;
       case "Reports":
-        hasPermission = Covering_Bill;
+        hasPermission = Reports;
         break;
       default:
         break;
@@ -80,6 +81,7 @@ const Billings = () => {
     <div className="billings-conatiner" id="menu">
       <div className="menu-bar-main">
         <div className="menu-bar">
+          {Billing ?
           <MenuItem
             label="Billing"
             to={Billing && ("/home/billing/billing")}
@@ -87,7 +89,9 @@ const Billings = () => {
             menuItemKey="Billing"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
+
+          {Transfer ?
           <MenuItem
             label="Transfer"
             to={Transfer && ("/home/billing/transfer")}
@@ -95,7 +99,8 @@ const Billings = () => {
             menuItemKey="Transfer"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> :<></>}
+          {Covering_Bill ?
           <MenuItem
             label="Covering Bill"
             to={Covering_Bill && ("/home/billing/coveringbill")}
@@ -103,7 +108,8 @@ const Billings = () => {
             menuItemKey="Covering Bill"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          />:<></> }
+          {Reports ?
           <MenuItem
             label="Reports"
             to={Covering_Bill && ("/home/billing/reports")}
@@ -111,7 +117,7 @@ const Billings = () => {
             menuItemKey="Reports"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
-          />
+          /> : <></> }
         </div>
       </div>
       <div className='alert-popup-main'>

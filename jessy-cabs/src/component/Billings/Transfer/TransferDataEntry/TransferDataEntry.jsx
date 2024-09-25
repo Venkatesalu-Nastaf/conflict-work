@@ -30,14 +30,14 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
   const {
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     warning,
     successMessage,
     errorMessage,
     warningMessage,
-    handleClick,
+    // handleClick,
     hidePopup,
     // date,
     Billingdate,
@@ -80,15 +80,16 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   } = useTransferdataentry();
 
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
 
   const { permissions } = useContext(PermissionContext)
   const Transfer_read = permissions[6]?.read;
   const Transfer_new = permissions[6]?.new;
+  const Transfer_delete = permissions[6]?.new;
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -305,7 +306,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
             </div>
             <div className="total-inputs">
-              <Button variant="outlined" onClick={handleRemove} >Remove Selected</Button>
+              <Button variant="outlined" disabled={!Transfer_delete} onClick={handleRemove} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>

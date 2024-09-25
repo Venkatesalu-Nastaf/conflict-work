@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext,useMemo} from 'react';
 import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -11,7 +11,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox,Switch } from "@mui/material";
 // import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
@@ -119,6 +119,7 @@ const EmployeeCreation = ({ stationName }) => {
       setSationNameforUser(data); // Set the original array when length is not greater than 1
     }
   }, [stationName]);
+ 
 
 
   //  for showing table
@@ -148,7 +149,13 @@ const EmployeeCreation = ({ stationName }) => {
   }
   
   // console.log(rows, "filter")
-  const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
+ 
+  // const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
+  const filteruser = useMemo(() => {
+    return rows.filter(user => 
+      user.username.toLowerCase().includes(searchUser.toLowerCase())
+    );
+  }, [rows, searchUser]);
 
   return (
     <div className="EmployeeCreation-main">
@@ -173,24 +180,7 @@ const EmployeeCreation = ({ stationName }) => {
                     style={{ width: '100%' }}
                   />
                 </div>
-                {/* <div className="input" style={{ paddingRight: '15px' }}>
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faImagePortrait} size="lg" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="user-name"
-                    label="User Name"
-                    name="username"
-                    value={book.username || ''}
-                    // onChange={handleChange}
-                    onChange={handleChangeuniquecreation}
-                  />
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{ color: "red" }}>{cerendentialdata ? `UserName Already Exist` : ""}</span>
-                  </div>
-                </div> */}
+               
 
 
                 <div className="input">
@@ -259,31 +249,23 @@ const EmployeeCreation = ({ stationName }) => {
                     id="designation"
                   />
                 </div>
+              
+                <div className="input" style={{ paddingRight: '15px' }}>
+                <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
+                <Switch
+                    label='label'
+                    id="superAdmin"
+                    name="superAdmin"
+                    onChange={handleChange}
+                  
+
+                    checked={book.superAdmin}
+                  />
+                </div>
                 <div className="input user-creation-station-select-main">
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo-stationname"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                    value={stationNameforUSer.find((option) => option.Option)?.label || book?.stationname || ''}
-                    options={stationNameforUSer.map((option) => ({
-                      label: option.Stationname,
-                    }))}
-                    getOptionLabel={(option) => option.label || book?.stationname || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Branch Name" name="stationname" />
-                      )
-                    }
-                    }
-                  /> */}
-
-                  {/* {console.log("stationNameforUSer", stationNameforUSer)} */}
 
                   <Autocomplete
                     size='small'
@@ -298,6 +280,7 @@ const EmployeeCreation = ({ stationName }) => {
                       : []
                     }
                     isOptionEqualToValue={(option, value) => option === value}
+
                     disableCloseOnSelect
                     getOptionLabel={(option) => option}
                     renderOption={(props, option, { selected }) => (

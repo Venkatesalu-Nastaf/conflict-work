@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import "./BillWiseReceipt.css";
 import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,6 +20,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Box from "@mui/material/Box";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
+import { PermissionContext } from "../../../context/permissionContext";
+
 
 
 
@@ -29,6 +31,11 @@ export const BillWiseReceipt = () => {
     , rows,  pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,handleBalanceAmount,
     totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange
   } = useBillWiseReceipt();
+  const { permissions } = useContext(PermissionContext)
+  // const Report_read = permissions[1]?.read;
+ 
+
+  const Report_create = permissions[8]?.delete;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -230,7 +237,7 @@ export const BillWiseReceipt = () => {
                     </div>
                     <div className='total-inputsss' style={{display: 'flex', gap: '10px'}}>
                       <Button variant='contained' onClick={handlePending}>Pending </Button>
-                      <Button variant='contained' onClick={handleAddBillReceive}>ADD</Button>
+                      <Button variant='contained' disabled={!Report_create} onClick={handleAddBillReceive}>ADD</Button>
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">On A/C:</label>

@@ -238,7 +238,7 @@ const useTripsheet = () => {
     const [conflictenddate, setConflictEndDate] = useState({
         maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null
     })
-
+    const [checkstatusapps,setCheckStatusApp]=useState([])
 
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -1054,8 +1054,53 @@ const useTripsheet = () => {
 
     // handleConfirm
 
+    const tripID1 = useMemo(() => {
+        return formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+      }, [formData.bookingno, selectedCustomerData.bookingno, book.bookingno]);
+    
+      useEffect(() => {
+        // Only make the API call if tripID1 is defined (not null or undefined)
+        if (tripID1) {
+          const fetchData = async () => {
+            try {
+              const response = await axios.get(`${apiUrl}/Checkstatusandappsclosed/${tripID1}`);
+              const data = response.data;
+             
+              setCheckStatusApp(data)
 
+              // Further processing of the data
+            } catch (err) {
+              console.log(err);
+            }
+          };
+    
+          fetchData(); // Trigger the async function to fetch data
+        }
+      }, [tripID1, apiUrl]);
+
+   
     const handleEdit = async () => {
+
+        const statusdata=checkstatusapps?.length > 0 ? checkstatusapps : "";
+        const checkdata=statusdata[0] ;
+        const superpower=localStorage.getItem("SuperAdmin")     
+         // Log the type of superpower
+        console.log(checkdata,"checkk")
+
+        if (
+            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) || 
+            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && Number(superpower) === 0)
+          ) {
+              setError(true);
+              setErrorMessage(`status is ${checkdata?.status},NOT Edited Data`);
+              return;
+          }
+        // if( checkdata?.status === "Billed" || checkdata?.status === "Closed" && checkdata?.appsdata === "Closed" ){
+        //     setError(true);
+        //     setErrorMessage(`status is ${checkdata?.status} `);
+        //     return 
+        // }
+
         try {
             try {
                 // const hiretypesdatavendor = selectedCustomerDatas.hiretypes || formData.hireTypes || selectedCustomerData.hireTypes || formValues.hireTypes || book.hireTypes;
@@ -1700,9 +1745,8 @@ const useTripsheet = () => {
     const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
-            if (actionName === 'List') {
-            }
-            else if (actionName === 'Cancel') {
+            
+            if (actionName === 'Cancel') {
                 handleCancel();
                 setRow([]);
                 setRows([]);
@@ -2450,7 +2494,7 @@ const useTripsheet = () => {
         };
         fetchOrganizationnames()
     }, [apiUrl])
-    console.log(drivername, "poiu")
+
 
     const handleVehicleChange = (event, value, name) => {
         if (name === "vehRegNo") {

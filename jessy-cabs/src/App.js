@@ -79,36 +79,6 @@ function App() {
 
   const { permissions } = useContext(PermissionContext)
 
-  // const BOOKING = permissions[0]?.read || permissions[1]?.read;;
-  // const TripStatus = permissions[2]?.read;
-  // const TriSheet = permissions[3]?.read;
-
-  // const BILLING = permissions[4]?.read || permissions[5]?.read;;
-  // const Billing_Transfer = permissions[6]?.read;
-  // const Billing_CoveringBill = permissions[7]?.read;
-  
-
-  // const REGISTER = permissions[8]?.read || permissions[9]?.read;
-  // const R_Supllier = permissions[10]?.read;
-  // const R_Employee = permissions[11]?.read;
-
-  // const SETTING = permissions[12]?.read || permissions[13]?.read;
-  // const Station_Creation = permissions[14]?.read;
-  // const Main_Setting = permissions[15]?.read;
-
-  // const INFO = permissions[16]?.read || permissions[17]?.read;
-  // const Mailers = permissions[18]?.read;
-  // const INFO_FuelInfo = permissions[19]?.read;
-  // const Dashbord_read = permissions[20]?.read;
-  // // this for map page
-  // const Maps = permissions[21]?.read;
-
-  // const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  // const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read
-  // const Register_page_permission = permissions[8]?.read || permissions[9]?.read || permissions[10]?.read || permissions[11]?.read
-  // const Setting_page_permission = permissions[12]?.read || permissions[13]?.read || permissions[14]?.read || permissions[15]?.read
-  // const Map_page_permission = permissions[21]?.read;
-
   const BOOKING = permissions[0]?.read ;
   const bookingdata = permissions[1]?.read;
   const TripStatus = permissions[2]?.read
@@ -161,11 +131,6 @@ function App() {
   const Map_page_permission = permissions[22]?.read||permissions[23]?.read || permissions[24]?.read ||permissions[25]?.read ||permissions[26]?.read  || permissions[27]?.read
   const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
 
-  //   let landingPAge ;
-
-  // const entryPAgeFun = ()=>{
-
-  // }
 
 
   //--------   fetch station name ------------------------------------------------------------
@@ -241,12 +206,7 @@ function App() {
     fetchdata()
   }, [apiUrl, setLogo, setLogoTrigger, orgName, organizationname, logotrigger])
 
-  // useEffect(() => {
-  //   if (!ref.current) {
-  //     fetchOrgLogo()
-  //   }
 
-  // }, [logotrigger, fetchOrgLogo])
 
   //--------------------------------------------
   // vehicle No 

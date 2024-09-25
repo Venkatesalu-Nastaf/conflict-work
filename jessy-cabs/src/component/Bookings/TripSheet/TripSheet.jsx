@@ -32,8 +32,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
 
 //dialog box
 import Dialog from '@mui/material/Dialog';
@@ -51,7 +50,6 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DataUsageIcon from "@mui/icons-material/DataUsage";
@@ -72,30 +70,22 @@ import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-// import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-// import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
 // FontAwesomeIcon Link
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
 import { faStamp } from "@fortawesome/free-solid-svg-icons";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
-import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
-import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import {faCloudMoon} from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
-// import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
-import ChecklistIcon from "@mui/icons-material/Checklist";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 import InputLabel from '@mui/material/InputLabel';
@@ -159,10 +149,16 @@ const TripSheet = ({ stationName, logoImage }) => {
   // const inputRef = useRef(null);
 
   const {
-    selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount, calcCheck, vehileNames,
-    rows, handleKeyEnterDriverDetails, handleimagedelete, maplogcolumns,
-    actionName,
+    selectedCustomerData, 
+    // handleConfirm,
+     driverBeta, driverbeta_Count, nightBta, nightCount,
+    selectedCustomerId, setNightBeta, setNightCount,
+    //  calcCheck, 
+    vehileNames,
+    rows,
+    handleimagedelete, maplogcolumns,
+    //  handleKeyEnterDriverDetails,
+    // actionName,
     error,
     success,
     info,
@@ -239,13 +235,17 @@ const TripSheet = ({ stationName, logoImage }) => {
     // link,
     // isSignatureSubmitted,
     isEditMode,
-    handleEdit, checkCloseKM,
+    handleEdit, 
+    // checkCloseKM,
     driverdetails, ClosedTripData,
     // sign, 
-    handleCalc, calcPackage, extraHR, extraKM, package_amount,
+    // handleCalc,
+     calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
-    ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc,
-    driverbeta_Count_calc, driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
+    ex_kmAmount, ex_hrAmount, night_totalAmount,
+    //  driverBeta_calc,
+    // driverbeta_Count_calc,
+     driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
@@ -269,11 +269,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
 
   const apiurl = APIURL
   // Permission ------------ayyan
@@ -281,10 +281,14 @@ const TripSheet = ({ stationName, logoImage }) => {
   const { permissions } = useContext(PermissionContext)
   const fileInputRefdata = useRef(null);
 
-  const Tripsheet_read = permissions[3]?.read;
+  // const Tripsheet_read = permissions[3]?.read;
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
+  const billing_read = permissions[4]?.read ;
+
+  
+  
 
   // varibles for validation 
 
@@ -435,36 +439,36 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
   const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-  const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
   const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
 
-  const checkTimeandDateConflict = () => {
-    if (ClosedTripData.length < 1 || !ClosedTripData) return
+  // const checkTimeandDateConflict = () => {
+  //   if (ClosedTripData.length < 1 || !ClosedTripData) return
 
-    let time = "00:00", tripid = null;
-    for (const trip of ClosedTripData) {
-      const shedInDate = new Date(trip.shedInDate);
-      const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
+  //   let time = "00:00", tripid = null;
+  //   for (const trip of ClosedTripData) {
+  //     const shedInDate = new Date(trip.shedInDate);
+  //     const parsedShedindate = new Date(shedInDate.getFullYear(), shedInDate.getMonth(), shedInDate.getDate());
 
-      if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
-        if (time < trip.shedintime) {
-          time = trip.shedintime;
-          tripid = trip.tripid;
-        }
-      }
-    }
-    if (shedOuttime && time) {
-      if (shedOuttime <= time) {
+  //     if ((parcedShedOutDate.getDate() === parsedShedindate.getDate()) && (parcedShedOutDate.getMonth() === parsedShedindate.getMonth()) && (parcedShedOutDate.getFullYear() === parsedShedindate.getFullYear())) {
+  //       if (time < trip.shedintime) {
+  //         time = trip.shedintime;
+  //         tripid = trip.tripid;
+  //       }
+  //     }
+  //   }
+  //   if (shedOuttime && time) {
+  //     if (shedOuttime <= time) {
 
-        const sendLabel = (tripID !== tripid) ? <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p> : null
+  //       const sendLabel = (tripID !== tripid) ? <p style={{ color: "red", fontSize: "14px", textAlign: "center", fontWeight: 'bold' }}>Conflict maxTime :{time} | {tripid}</p> : null
 
-        return sendLabel;
-      }
-      return
-    } else {
-      return
-    }
-  }
+  //       return sendLabel;
+  //     }
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // }
 
 
   const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
@@ -2099,7 +2103,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           {/* <Tab>Vendor Info</Tab>
                           <Tab>Vendor Bill</Tab>
                           <Tab>Customer Bill</Tab> */}
-                          <Tab>Bill</Tab>
+                         {billing_read ? <Tab>Bill</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
@@ -2971,7 +2975,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </div>
                         </TabPanel> */}
-                        <TabPanel value={1} sx={{ p: 2 }}>
+                        <TabPanel value={billing_read ? 1: 0} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
 
@@ -3054,7 +3058,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         </div>
                                         <div>
 
-                                          <Button onClick={handleEditMapDetails}>Submit</Button>
+                                          <Button disabled={!Tripsheet_modify} onClick={handleEditMapDetails}>Submit</Button>
                                         </div>
                                       </div>
 
@@ -3062,7 +3066,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </Modal>
 
                                   <div className="input">
-                                    <Button variant="contained" onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained"  disabled={!Tripsheet_modify} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -3071,7 +3075,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                    <Button onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                                    <Button  disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
                                   </div>
 
 
@@ -3114,7 +3118,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       </Button>
                                       <Button variant="contained" onClick={() => {
                                         handlesignaturemageDelete()
-                                      }} color="primary">
+                                       
+                                      }} color="primary"  disabled={!Tripsheet_delete}>
                                         Delete
                                       </Button>
                                     </DialogActions>
@@ -3123,10 +3128,10 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
-                                    <Button onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
+                                    <Button   disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div>
                                   <div className="input">
-                                    <Button variant='outlined' className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button>
                                   </div>
 
                                   {/* <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
@@ -3139,7 +3144,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
-                                    <Button variant='outlined' className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
+                                    <Button variant='outlined' disabled={!Tripsheet_delete} className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
                                   </div>
                                 </div>
                               </div>
@@ -3213,6 +3218,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <Button
                                   variant="contained"
                                   color="secondary"
+                                  disabled={!Tripsheet_delete}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -3233,7 +3239,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </div>
                         </TabPanel>
-                        <TabPanel value={2} sx={{ p: 2 }}>
+                        <TabPanel value={billing_read ? 2 :1} sx={{ p: 2 }}>
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               {/* <div>
@@ -3253,7 +3259,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div style={{ display: "blocks" }}>
 
 
-                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                  <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
                                   {/* {signaturelinkcopy ? <p style={{ color: 'green' }}>Link.....</p> : <></>} */}
                                 </div>
                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
@@ -3293,7 +3299,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           </div>
                         </TabPanel>
-                        <TabPanel value={0} sx={{ p: 2 }}>
+                       {billing_read ? <TabPanel value={billing_read ? 0 :""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
                               <p className='bill-topics'>Vendor Info</p>
@@ -3631,6 +3637,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <Button
                                     variant='contained'
                                     onClick={handleVendorcalc}
+                                    disabled={!Tripsheet_modify}
                                   >
                                     Update
                                   </Button>
@@ -4202,6 +4209,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           </div>
 
                         </TabPanel>
+                        : <></>
+                        }
 
 
                       </Tabs>
@@ -4610,7 +4619,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <div className="input">
                   {isEditMode ? (<>
                     <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
-                    {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+                    {/* {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
 
                   </>
                   ) : (
@@ -4893,7 +4902,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
 
                     </div> */}
-                    {console.log(selectedCustomerData?.driverName, book.driverName, "driverddd")}
+                 
                     {/* <div className="input">
                       <div className="icone">
                         <AirlineSeatReclineExtraIcon color="action" />
@@ -5000,7 +5009,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div> */}
 
 
-                    {console.log(selectedCustomerDatas.mobileNo, formData.mobileNo, selectedCustomerData.mobileNo, formValues.mobileNo, book.mobileNo ,"phone")}
                     <div className="input">
                       <div className="icone">
                         <PhoneIphoneIcon color="action" />
@@ -5144,15 +5152,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                   direction="left"
                 >
 
-                  {Tripsheet_read === 1 && (
+                  {/* {Tripsheet_read === 1 && (
                     <SpeedDialAction
                       key="list"
                       icon={<ChecklistIcon />}
                       tooltipTitle="List"
                       onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                     />
-                  )}
-                  {Tripsheet_modify === 1 && (
+                  )} */}
+                  {Tripsheet_modify === 1 &&  isEditMode && (
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
@@ -5160,7 +5168,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                     />
                   )}
-                  {Tripsheet_delete === 1 && (
+                  {Tripsheet_delete === 1 && isEditMode && (
                     <SpeedDialAction
                       key="delete"
                       icon={<DeleteIcon />}
@@ -5168,7 +5176,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
                   )}
-                  {Tripsheet_new === 1 && (
+                  {Tripsheet_new === 1 && !isEditMode &&(
                     <SpeedDialAction
                       key="Add"
                       icon={<BookmarkAddedIcon />}

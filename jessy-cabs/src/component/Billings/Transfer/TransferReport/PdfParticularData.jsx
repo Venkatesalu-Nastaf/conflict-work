@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import { blue } from "@mui/material/colors";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
@@ -356,14 +357,14 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
           </div>
 
-          <div style={{ display: 'flex', gap: 30, border: '1.5px solid #000000', padding: 10 }}>
+          <div style={{ display: 'flex', gap:20, border: '1.5px solid #000000', padding: 10,}}>
             <div className="clientFistDiv">
 
               <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
               <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{addressCustomer}</span></p>
               <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName">{category}</span></p>
               <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
-              <p className="detailstext"> <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
+              <p className="detailstext" > <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
               <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
               <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}</span></p>
               <p className="detailstext"><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
@@ -371,15 +372,15 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
             <div className="clientSecondDiv">
               <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >{escort}</span> </p>
-              <p className="detailstext"> <span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report ? "Yes" : "No"}</span> </p>
+              <p className="detailstext"><span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report ? "Yes" : "No"}</span> </p>
               <p className="detailstext"><span className="labeltagsecond">CCode </span><p className="colontag">:</p><span>{tripCustomercode ? tripCustomercode : 'No'}</span> </p>
             </div>
-            <div>
+            <div className="clientThirdDiv">
               <p className="detailstext"><span className="labeltag">Log No</span><p className="colontag">:</p>{Tripidno}</p>
               <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p>{tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</p>
               <p className="detailstext"><span className="labeltag">Duty Type  </span><p className="colontag">:</p><span className="clientName">{duty}</span> </p>
               <p className="detailstext"><span className="labeltag">Vehicle Type  </span><p className="colontag">:</p><span className="clientName">{vehicletype}</span> </p>
-              <p className="detailstext"><span className="labeltag">Vehicle No  </span><p className="colontag">:</p><span className="clientName">{vehicleno}</span></p>
+              <p className="detailstext"><span className="labeltag">Vehicle No  </span><p className="colontag ">:</p><span className="clientName">{vehicleno}</span></p>
               <p className="detailstext"><span className="labeltag">Driver Name  </span><p className="colontag">:</p><span className="clientName">{drivername}</span></p>
               <p className="detailstext"><span className="labeltag">Driver Mobile</span><p className="colontag">:</p><span className="clientName">{drivermobile}</span></p>
               <p className="detailstext"><span className="labeltag">Request No</span><p className="colontag">:</p>{request}</p>
@@ -456,17 +457,22 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                 <p>Total Fastag/Tollssss: {totaltoll ? totaltoll : 0}</p>
               </div>
             </div>
-            <div className="tripsheet-RouteSummary">
-              <h2>Route Summary</h2>
-              <ol type="1">
-                {routeData.length > 0 && routeData.map((data, index) => (
-                  <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
-                ))}
-              </ol>
-            </div>
+            {routeData.length > 0 && (
+              <div className="tripsheet-RouteSummary" style={{marginTop:50}}>
+                <h2>Route Summary</h2>
+                <ol type="1">
+                  {routeData.map((data, index) => (
+                    <li key={index}>
+                      <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+                                  
           </div>
           <div >
-            {attachedImage ? <p className="attachtext">Attached Image</p> : <p className="attachtext"> No Attached Image</p>}
+            {attachedImage ? <p className="attachtext" style={{marginTop:180}}>Attached Image</p> : <p className="attachtext"></p>}
             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
               attachedImage.map((image, index) => (
                 <img key={index} src={image} alt='' className="attachimage" />

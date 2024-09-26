@@ -3075,7 +3075,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                    <Button  disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                                    <Button  disabled={!Tripsheet_modify}  onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
                                   </div>
 
 
@@ -3110,6 +3110,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <Button
                                         variant="contained"
                                         color="secondary"
+                                        disabled={!Tripsheet_modify}
                                         onClick={() => {
                                           handlesignaturemageDownload()
                                         }}
@@ -3637,7 +3638,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <Button
                                     variant='contained'
                                     onClick={handleVendorcalc}
-                                    disabled={!Tripsheet_modify}
+                                    disabled={isEditMode ? !Tripsheet_modify :!Tripsheet_new}
                                   >
                                     Update
                                   </Button>

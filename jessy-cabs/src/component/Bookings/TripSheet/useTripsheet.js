@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -10,8 +10,12 @@ import { APIURL, Apiurltransfer } from "../../url";
 import { Button } from '@mui/material';
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
+import { PermissionContext } from '../../context/permissionContext';
 
 const useTripsheet = () => {
+    const { permissions } = useContext(PermissionContext)
+    const Tripsheet_modify1 = permissions[3]?.modify;
+    const Tripsheet_delete1 = permissions[3]?.delete;
     const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
     const apiUrl = APIURL;
     // THIS APIURL TRANSFER FRO DRIVER APP
@@ -238,7 +242,8 @@ const useTripsheet = () => {
     const [conflictenddate, setConflictEndDate] = useState({
         maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null
     })
-    const [checkstatusapps,setCheckStatusApp]=useState([])
+    const [checkstatusapps, setCheckStatusApp] = useState([])
+    const usernamedata = localStorage.getItem("username");
 
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -257,8 +262,9 @@ const useTripsheet = () => {
                 <Button
                     onClick={() => handleEditMapLogPoint(params)}
                     aria-label="open-dialog"
+                    disabled={!Tripsheet_modify1}
                 >
-                    <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_modify1} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <FiEdit3 style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -272,9 +278,9 @@ const useTripsheet = () => {
                 <Button
                     onClick={() => handleRemoveMapLogPoint(params)}
                     aria-label="open-dialog"
-
+                    disabled={!Tripsheet_delete1}
                 >
-                    <Button variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_delete1} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -1056,45 +1062,102 @@ const useTripsheet = () => {
 
     const tripID1 = useMemo(() => {
         return formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-      }, [formData.bookingno, selectedCustomerData.bookingno, book.bookingno]);
-    
-      useEffect(() => {
+    }, [formData.bookingno, selectedCustomerData.bookingno, book.bookingno]);
+
+    useEffect(() => {
         // Only make the API call if tripID1 is defined (not null or undefined)
         if (tripID1) {
-          const fetchData = async () => {
-            try {
-              const response = await axios.get(`${apiUrl}/Checkstatusandappsclosed/${tripID1}`);
-              const data = response.data;
-             
-              setCheckStatusApp(data)
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(`${apiUrl}/Checkstatusandappsclosed/${tripID1}`);
+                    const data = response.data;
 
-              // Further processing of the data
-            } catch (err) {
-              console.log(err);
-            }
-          };
-    
-          fetchData(); // Trigger the async function to fetch data
+                    setCheckStatusApp(data)
+
+                    // Further processing of the data
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+
+            fetchData(); // Trigger the async function to fetch data
         }
-      }, [tripID1, apiUrl]);
+    }, [tripID1, apiUrl]);
 
-   
+    const getCurrentTime = () => {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        return `${hours}:${minutes}`;
+    };
+
+
+    const handleTripsheetlogDetails = async (updatebook, lastBookinglogno) => {
+        const logupdatabookdetails = updatebook
+        try {
+            const modedata = isEditMode ? "Edited" : "create"
+            // console.log(updatebook, "logbook")
+            const updatedBooklogdetails = {
+
+
+               tripsheet_date: logupdatabookdetails.tripsheetdate,
+                shedOutDate: logupdatabookdetails.shedOutDate,
+                Reportdate: logupdatabookdetails.startdate,
+                closedate: logupdatabookdetails.closedate,
+                shedInDate: logupdatabookdetails.shedInDate,
+                totaldays: logupdatabookdetails.totaldays,
+                ShedOutTime: logupdatabookdetails.reporttime,
+                Reporttime: logupdatabookdetails.starttime,
+                closetime: logupdatabookdetails.closetime,
+                shedintime: logupdatabookdetails.shedintime,
+                totaltime: logupdatabookdetails.totaltime,
+                additionaltime: logupdatabookdetails.additionaltime,
+                shedout: logupdatabookdetails.shedout,
+                startkm: logupdatabookdetails.startkm,
+                closekm: logupdatabookdetails.closekm,
+                shedin: logupdatabookdetails.shedin,
+                totalkm1: logupdatabookdetails.totalkm1,
+                shedkm: logupdatabookdetails.shedkm,
+                Travelsname: logupdatabookdetails.travelsname,
+                status: logupdatabookdetails.status,
+                apps: logupdatabookdetails.apps,
+                vehicleName: logupdatabookdetails.vehicleName,
+                vehRegNo: logupdatabookdetails.vehRegNo,
+                Log_Date: dayjs().format("YYYY-MM-DD"),
+                Log_Time: getCurrentTime(),
+                mode: modedata,
+                tripsheet_no: lastBookinglogno,
+                driverName: logupdatabookdetails.driverName,
+                username: usernamedata
+
+            };
+            // console.log(updatedBooklogdetails, "boookup")
+            await axios.post(`${apiUrl}/TripsheetlogDetailslogged`, updatedBooklogdetails);
+            
+        }
+        catch (err) {
+            console.log(err, "err")
+        }
+    }
+
+
+
     const handleEdit = async () => {
 
-        const statusdata=checkstatusapps?.length > 0 ? checkstatusapps : "";
-        const checkdata=statusdata[0] ;
-        const superpower=localStorage.getItem("SuperAdmin")     
-         // Log the type of superpower
-        console.log(checkdata,"checkk")
+        const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
+        const checkdata = statusdata[0];
+        const superpower = localStorage.getItem("SuperAdmin")
+        // Log the type of superpower
+        console.log(checkdata, "checkk")
 
         if (
-            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) || 
+            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
             (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && Number(superpower) === 0)
-          ) {
-              setError(true);
-              setErrorMessage(`status is ${checkdata?.status},NOT Edited Data`);
-              return;
-          }
+        ) {
+            setError(true);
+            setErrorMessage(`status is ${checkdata?.status},NOT Edited Data`);
+            return;
+        }
         // if( checkdata?.status === "Billed" || checkdata?.status === "Closed" && checkdata?.appsdata === "Closed" ){
         //     setError(true);
         //     setErrorMessage(`status is ${checkdata?.status} `);
@@ -1195,6 +1258,7 @@ const useTripsheet = () => {
 
                 };
 
+                const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
                 for (const key in updatedCustomer) {
                     if (key === '0') {
@@ -1219,7 +1283,7 @@ const useTripsheet = () => {
                 if (DriverSMS) {
                     await handleDriverSendSMS()
                 }
-
+                handleTripsheetlogDetails(updatedCustomer, tripsheetlogtripid)
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
@@ -1331,6 +1395,7 @@ const useTripsheet = () => {
         const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
         const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+        const tripnodata = formData.tripid || selectedCustomerData.tripid || book.tripid
         // const
         if (!customer) {
             setError(true);
@@ -1365,7 +1430,8 @@ const useTripsheet = () => {
 
         try {
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-            const dattasign = signimageUrl ? "Closed" : book.apps;
+            // const dattasign = signimageUrl ? "Closed" : book.apps;
+            const dattasign = book.apps;
             const updatedBook = {
                 ...book,
                 apps: dattasign,
@@ -1470,9 +1536,11 @@ const useTripsheet = () => {
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
-            handleCancel();
+            handleTripsheetlogDetails(updatedBook, tripnodata)
+            // handleCancel();
             setRow([]);
             setRows([]);
+            handleCancel();
             setSuccess(true);
             handleSendSMS();
             handleDriverSendSMS();
@@ -1745,7 +1813,7 @@ const useTripsheet = () => {
     const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
-            
+
             if (actionName === 'Cancel') {
                 handleCancel();
                 setRow([]);
@@ -2439,26 +2507,26 @@ const useTripsheet = () => {
     //     }
     // };
     const handleDriverChange = (event, value, name) => {
-    if (name === "driverName") {
-      const manualInput = typeof value === "string" ? value : value?.label;
+        if (name === "driverName") {
+            const manualInput = typeof value === "string" ? value : value?.label;
 
-      if (manualInput) {
-        const selectedDriver = drivername?.find(option => option.drivername === manualInput);
+            if (manualInput) {
+                const selectedDriver = drivername?.find(option => option.drivername === manualInput);
 
-        setBook(prevState => ({
-          ...prevState,
-          driverName: manualInput,
-          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
-        }));
+                setBook(prevState => ({
+                    ...prevState,
+                    driverName: manualInput,
+                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Keep mobileNo if not found
+                }));
 
-        setSelectedCustomerData(prevState => ({
-          ...prevState,
-          driverName: manualInput,
-          mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
-        }));
-      }
-    }
-  };
+                setSelectedCustomerData(prevState => ({
+                    ...prevState,
+                    driverName: manualInput,
+                    mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
+                }));
+            }
+        }
+    };
 
     // useEffect(() => {
     //     const fetchOrganizationnames = async () => {
@@ -4042,7 +4110,7 @@ const useTripsheet = () => {
 
             vendortotalHours = await convertTimeToNumber(vendortothr);
             // const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
-            console.log(vendortotalHours,"hours")
+            console.log(vendortotalHours, "hours")
             const consvertedTotalHour = vendortotalHours
             console.log(consvertedTotalHour, "totalfffffffffffffh")
 
@@ -4087,7 +4155,7 @@ const useTripsheet = () => {
                 // const matches = calculatevendorTotalTime().match(/(\d+)h\s*(\d+)m/);
                 const matches = consvertedTotalHour
                 if (matches) {
-                    console.log(matches,"mmaaa")
+                    console.log(matches, "mmaaa")
                     // const hours = parseInt(matches[1], 10);
                     // const minutes = parseInt(matches[2], 10);
 
@@ -4120,8 +4188,8 @@ const useTripsheet = () => {
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
-                let kmfixed=Number(KM.toFixed(2))
-                
+                let kmfixed = Number(KM.toFixed(2))
+
                 // dataextrakms = KM
                 dataextrakms = kmfixed
             }

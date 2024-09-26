@@ -1038,6 +1038,7 @@ const useBooking = () => {
       setErrorMessage("PLease Enter Booking No");
       return;
     }
+    setDeleteFile([])
     // setDialogOpen(true);
     showPdf();
   };
@@ -1835,7 +1836,7 @@ const useBooking = () => {
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
-  console.log(user,"userr")
+ 
 
 
 

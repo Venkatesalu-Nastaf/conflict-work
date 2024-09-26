@@ -2196,7 +2196,7 @@ const Booking = ({ stationName, customerData }) => {
                   <Button
                     color="primary"
                     variant="contained"
-
+                    disabled={!Booking_modify}
                     component="label"
                   >
                     Attach Image
@@ -2242,6 +2242,7 @@ const Booking = ({ stationName, customerData }) => {
                     color="primary"
                     variant="contained"
                     component="label"
+                    disabled={!Booking_new}
                   >
                     Attach File
                     <input
@@ -2566,7 +2567,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-            {console.log(formData.vehiclemodule)}
+          
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -3134,7 +3135,7 @@ const Booking = ({ stationName, customerData }) => {
                 ))}
             </div>
             <div>
-              <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>
+              <Button disabled={!Booking_delete} variant="contained" onClick={() => handleimagedelete(deletefile)}>
                 Delete
               </Button>
             </div>
@@ -3162,7 +3163,7 @@ const Booking = ({ stationName, customerData }) => {
                       handlecheckbox(img.path)
 
                     }} />
-                </div>
+                </div>F
               ))}
             </div>
             <div className='vehicle-info-dailog-box-delete-print-division'>

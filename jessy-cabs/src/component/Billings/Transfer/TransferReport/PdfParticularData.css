@@ -40,13 +40,14 @@
 }
 
 .detailstext {
-  font-size: 14px;
+  font-size: 13.5px;
   white-space: nowrap;
   /* font-weight: bold; */
   display: flex;
   align-items: center;
   margin: 0%;
   padding: 0%;
+  /* padding-left: 20px; */
 }
 
 .clientName {
@@ -54,6 +55,9 @@
   white-space: normal;
   /* font-weight: 400; */
   text-align: left;
+}
+.clientFistDiv{
+  
 }
 
 .colontag {
@@ -70,10 +74,17 @@
   text-align: left;
 }
 
+
 .clientSecondDiv {
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
   align-content: center;
+
+  
+}
+.clientThirdDiv{
+  padding-right: 40px;
+
 }
 
 .labeltagsecond {

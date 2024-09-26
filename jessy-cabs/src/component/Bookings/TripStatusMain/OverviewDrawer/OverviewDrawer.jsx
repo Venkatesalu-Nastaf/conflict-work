@@ -111,8 +111,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     successMessage,
     info,
     infoMessage,
-    
+    // map and img functions
     selectedCustomerId,
+    setSignImageUrl,
+    signImageUrl,
+    setMapImageUrl,
+    mapImgUrl,
+    imageDetails,
+    setImageDetails
 
 
   } = useOverviewDrawer();
@@ -395,9 +401,16 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             <p onClick={handleShowCards}>Show Cards</p>
             {showCards ?
               <div className='top-cards'>
-                <EtripSheetSignature />
-                <EtripSheetMap />
-                <EtripSheetImages />
+                {/* <EtripSheetSignature /> */}
+                <EtripSheetSignature signImageUrl={signImageUrl} />
+
+                {/* <EtripSheetMap /> */}
+                <EtripSheetMap mapImgUrl = {mapImgUrl}/>
+                {/* <EtripSheetImages /> */}
+                {/* <EtripSheetImages imageDetails = {imageDetails}/> */}
+               {/* <EtripSheetImages imageDetails={imageDetails} /> */}
+                 <EtripSheetImages imageDetails={imageDetails} />
+
               </div>
               :
               <div className='top-cards-hidden'>

@@ -68,6 +68,11 @@ const useDispatched = () => {
     const [columnshowall, setColumnShowall] = useState(true)
     const [showCards, SetShowCards] = useState(false);
 
+    // map and signature states
+    const [signImageUrl, setSignImageUrl] = useState('');
+    const [mapImgUrl ,setMapImageUrl] = useState("")
+    const [imageDetails, setImageDetails] = useState('');
+
 
     //---------------------popup----------------------------
 
@@ -381,6 +386,203 @@ const useDispatched = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
+    // const showSignature = async (row) =>{
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     if (!tripid) {
+
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid")
+    //         return
+    //     }  
+    //     const response = await fetch(`${apiUrl}/get-signimage/${tripid}`); 
+    //     if (response.status === 200) {
+    //         const imageUrl = URL.createObjectURL(await response.blob());
+    //         setSignImageUrl(imageUrl);
+    //         console.log('tripidgdhghhdhdhdhdhdhdhdhd',tripid)
+    //         console.log('imgurl',imageUrl,'tripid',tripid)
+    //       }
+
+    //     console.log("tripid from overdrawer",tripid)
+    // }
+
+    // signature showing 
+    const showSignature = async (row) => {
+        const tripid = row.tripid || selectedRow.tripid;
+        if (!tripid) {
+            setWarning(true);
+            setWarning("Enter The Tripid");
+            return;
+        }
+    
+        const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+        console.log('Response status:', response.status); // Check response status
+        if (response.status === 200) {
+            const imageUrl = URL.createObjectURL(await response.blob());
+            setSignImageUrl(imageUrl);
+            //console.log('tripid:', tripid);
+            //console.log('imgurl:', imageUrl);
+        } else {
+            console.error("Failed to fetch signature image, status:", response.status);
+        }
+    
+        console.log("tripid from overdrawer:", tripid);
+    };
+
+    // show map function 
+
+    const showMap = async (row) => {
+        const tripid = row.tripid || selectedRow.tripid;
+        if (!tripid) {
+            setWarning(true);
+            setWarning("Enter The Tripid");
+            return;
+        }
+    
+        const response =  await fetch(`${apiUrl}/getmapimages/${tripid}`);
+        console.log('Response status:', response.status); // Check response status
+        if (response.status === 200) {
+            const MapimageUrl = URL.createObjectURL(await response.blob());
+            setMapImageUrl(MapimageUrl);
+            //console.log('tripid:', tripid);
+           // console.log('mapimgurl:', MapimageUrl);
+        } else {
+            console.error("Failed to fetchMap image, status:", response.status);
+        }
+    
+        console.log("tripid from overdrawer:", tripid);
+    };
+
+    // const showImageDetails = async (row) =>{
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    //     const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`)
+    //     console.log(response,"responsssssse")
+
+    //     setImageDetails(response.data);
+
+    // }
+    // const showImageDetails = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`);
+    //         console.log(response, "response");
+    //         setImageDetails(response.data); // Assuming response.data is an array of images
+    //         console.log(response.data,'response data')
+    //         console.log(tripid,'response id')
+
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setWarning("Failed to fetch data");
+    //     }
+    // };
+
+    // const showImageDetails = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid; 
+    
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`);
+    //         const data = response.data; // Assuming this is your images data
+    //         console.log(response, "response");
+    //         console.log(data, "response data");
+    //         console.log(tripid, "response id");
+    
+    //         const rowsWithUniqueId = data.map((image, index) => ({
+    //             ...image,
+    //             id5: index + 1,
+    //         }));
+    //         setImageDetails(rowsWithUniqueId); // Set the processed data
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setWarning("Failed to fetch data");
+    //         setImageDetails([]); // Clear image details on error
+    //     }
+    // };
+    
+
+    // const showImageDetails = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid; 
+    //     const bookingno = row.bookingno || selectedRow.bookingno;
+    
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+    //         const data = response.data; // Assuming this contains image data
+    
+    //         console.log(data, "response");
+    
+    //         // Process the data, assuming data contains an array of image objects
+    //         const rowsWithUniqueId = data.map((image, index) => ({
+    //             ...image,
+    //             id5: index + 1,
+    //         }));
+    //         console.log(rowsWithUniqueId, "image details");
+    
+    //         setImageDetails(rowsWithUniqueId); // Set the processed data
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setWarning("Failed to fetch data");
+    //         setImageDetails([]); // Clear image details on error
+    //     }
+    // };
+    
+    const showImageDetails = async (row) => {
+        const tripid = row.tripid || selectedRow.tripid; 
+        const bookingno = row.bookingno || selectedRow.bookingno;
+    
+        if (!tripid) {
+            setWarning(true);
+            setWarning("Enter The Tripid");
+            return;
+        }
+    
+        try {
+            const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+            const data = response.data; // Assuming this contains image data
+    
+            console.log(data, "response");
+    
+            // Process the data to construct the full image URL
+            const rowsWithUniqueId = data.map((image, index) => ({
+                ...image,
+                id5: index + 1,
+                url: `${apiUrl}/get-image/${encodeURIComponent(image.path)}` // Construct full URL
+            }));
+    
+            console.log(rowsWithUniqueId, "image details"); // Check if URLs are present
+            setImageDetails(rowsWithUniqueId); // Set the processed data
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setWarning("Failed to fetch data");
+            setImageDetails([]); // Clear image details on error
+        }
+    };
+    
+
+    
+    
+     
+     
+    
 
 
     const handleShowCards = () => {
@@ -400,9 +602,17 @@ const useDispatched = () => {
         console.log(row,'row data ')
     };
 
-    const handleRowClick = (row) => {
+    // const handleRowClick = (row) => {
+    //     handleButtonClick(row); // Call handleButtonClick
+    //     handleShowCards(row);   // Call handleShowCards
+    //   };
+     // Function to call aboove functions 
+     const handleRowClick = (row) => {
         handleButtonClick(row); // Call handleButtonClick
         handleShowCards(row);   // Call handleShowCards
+        showSignature(row) // call signature 
+        showMap(row) // call map
+        showImageDetails(row)
       };
 // show button
       const handleShowButtonClick = () => {
@@ -489,7 +699,8 @@ const useDispatched = () => {
         handleTripsheetClick,
         columns, handleBookingClick,
         filteredColumns,
-        columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,handleRowClick, handleShowButtonClick
+        columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,handleRowClick, handleShowButtonClick,
+        setSignImageUrl,signImageUrl, mapImgUrl,setMapImageUrl,imageDetails,setImageDetails
     };
 };
 

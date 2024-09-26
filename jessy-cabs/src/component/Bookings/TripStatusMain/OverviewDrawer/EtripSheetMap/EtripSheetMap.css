@@ -5,3 +5,9 @@
     border: 1px solid #ccc;
     border-radius: 8px;
 }
+.map-image {
+    max-width: 100%; /* Ensure the image does not exceed the width of its container */
+    height: auto;    /* Maintain aspect ratio */
+    display: block;  /* Remove any inline spacing */
+    overflow: hidden; /* Hide overflow if needed */
+}

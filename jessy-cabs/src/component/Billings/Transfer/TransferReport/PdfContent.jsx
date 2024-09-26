@@ -524,7 +524,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>Parking & Permit:</Text>
                     <Text style={styles.text2}>Total Amount:</Text>
                   </View>
-
+                  
                   <View>
                     <Text style={styles.text2}>{fullAmount}</Text>
                     <Text style={styles.text2}>{cgst}</Text>
@@ -569,15 +569,23 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
 
               </View>
-              <View style={styles.totalrupeesword}>
+              {/* <View style={styles.totalrupeesword}>
                 <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
 
+              </View> */}
+              <View style={styles.totalrupeesword}>
+                <Text style={[styles.rupeestext, { paddingLeft: 10 }]}>
+                  {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}
+                </Text>
               </View>
+              
+
 
               <View style={styles.lastsectiondiv}>
                 <View style={styles.lastsection}>
+                  
 
-                  <View style={styles.rupees}>
+                  < View style={styles.rupees}>
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
                     <Text style={styles.underlinetext}>Bank Details</Text>
 

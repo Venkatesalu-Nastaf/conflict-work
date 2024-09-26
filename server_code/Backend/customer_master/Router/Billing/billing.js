@@ -581,7 +581,76 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
 //   })
 // });
 //--------------------------------------------
+router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
+  const tripid = req.params.tripid;
+  console.log(tripid,"tripplog")
+  // booking.customer, booking.guestname, booking.guestmobilno, booking.address1, booking.duty, booking.useage,TripsheetLog_Details.Log_id,TripsheetLog_Details.Log_Date,TripsheetLog_Details.Log_Time,TripsheetLog_Details.mode
+  // TripsheetLog_Details.tripsheet_no,TripsheetLog_Details.status,TripsheetLog_Details.apps,TripsheetLog_Details.shedOutDate ,TripsheetLog_Details.startdate as Reportdate,TripsheetLog_Details.closedate,TripsheetLog_Details.shedInDate,TripsheetLog_Details.reporttime as Shed Out Time,TripsheetLog_Details.starttime,TripsheetLog_Details.closetime,TripsheetLog_Details.shedintime,TripsheetLog_Details.totaltime,
+  // TripsheetLog_Details.additionaltime,TripsheetLog_Details.shedout,TripsheetLog_Details.startkm,TripsheetLog_Details.closekm,TripsheetLog_Details.shedin,TripsheetLog_Details.totalkm1,TripsheetLog_Details.shedkm,TripsheetLog_Details.vehRegNo,TripsheetLog_Details.vehicleName,TripsheetLog_Details.driverName,TripsheetLog_Details.mobileNo
+  // const sqlQuery = `
+  //   SELECT 
+  //     TripsheetLog_Details.*, booking.customer, booking.guestname, booking.guestmobilno, booking.address1, booking.duty, booking.useage
 
+  //   FROM
+  //       booking
+  //   LEFT JOIN 
+  //       TripsheetLog_Details   ON TripsheetLog_Details.tripsheet_no = booking.bookingno
+  //   WHERE 
+  //      TripsheetLog_Details.tripsheet_no = ?
+        
+  // `;
+  const sqlQuery = `
+    SELECT 
+      TripsheetLog_Details.*, 
+      booking.customer, 
+      booking.guestname, 
+      booking.guestmobileno, 
+      booking.address1, 
+      booking.duty, 
+      booking.useage
+    FROM
+      booking
+    LEFT JOIN 
+      TripsheetLog_Details 
+    ON 
+      TripsheetLog_Details.tripsheet_no = booking.bookingno
+    WHERE 
+      TripsheetLog_Details.tripsheet_no = ?
+  `;
+
+  db.query(sqlQuery,[tripid], (err, result) => {
+    if (err) {
+     
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+   
+     // Assuming there is only one matching booking
+    return res.status(200).json(result);
+  });
+
+});
+
+
+router.post("/TripsheetlogDetailslogged", (req, res) => {
+  const bookData = req.body;
+  // console.log(bookData)
+
+  db.query('INSERT INTO TripsheetLog_Details SET ?', bookData, (err, result) => {
+      if (err) {
+        console.log(err)
+          return res.status(500).json({ error: "Failed to insert data into MySQL" });
+      }
+
+      // Check if the insertion was successful (affectedRows > 0)
+      if (result.affectedRows ===  0) {
+          return res.status(400).json("data not inserted succefully")
+      } 
+      // console.log(result,"log")
+
+          return res.status(200).json("data inserted succefully")
+      
+  });
+})
 
 
 

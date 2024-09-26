@@ -39,7 +39,7 @@ const idString = stationname.join(',');
 console.log(idString,"ff")
   try {
     await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,created_at,superAdmin)
-VALUES (?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at,superAdmin]);
+VALUES (?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at,superAdmin]);
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {

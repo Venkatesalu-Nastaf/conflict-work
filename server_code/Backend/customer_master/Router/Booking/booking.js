@@ -49,7 +49,7 @@ router.post('/bookinglogDetails', async (req, res) => {
         } 
         // console.log(result,"log")
 
-            return res.status(200).json("data not inserted succefully")
+            return res.status(200).json("data  inserted succefully")
         
     });
 })

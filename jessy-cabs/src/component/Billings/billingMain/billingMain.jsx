@@ -22,12 +22,12 @@ const BillingMain = ({ organizationNames }) => {
             <Box sx={{ borderBottom: 1, borderColor: "divider", overflow: 'auto' }} className="head-tab-all">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Billing" value="billing" />
-                <Tab label="Payment" value="payment" />
+                <Tab label="Individual Billing" value="IndividualBilling" />
                 <Tab label="BankAccount Details" value="bankAccountdetails" />
               </TabList>
             </Box>
             <TabPanel value="billing"><Billing /></TabPanel>
-            <TabPanel value="payment"><PaymentDetail organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="IndividualBilling"><PaymentDetail organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>

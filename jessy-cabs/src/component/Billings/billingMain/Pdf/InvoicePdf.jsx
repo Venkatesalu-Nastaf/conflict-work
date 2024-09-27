@@ -7,22 +7,25 @@ import './InvoicePdf.css';
 import dayjs from "dayjs";
 import numWords from 'num-words'
 import Invoice from "./Invoice";
-import { APIURL } from "../../../url";
+// import { APIURL } from "../../../url";
 
 
-const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, customerData }) => {
-    const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
+const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) => {
+    // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
+    const { setParticularPdf, particularRefNo,setIndividualBilled,individualBilled} = PdfData();
     const [billingDate] = useState(dayjs());
-    const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
-    const apiUrl = APIURL;
+    // const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
+    const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
+    // const apiUrl = APIURL;
     const targetRef = useRef();
 
     const handlePopupClose = () => {
         setParticularPdf(false);
     }
 
+    console.log(billdatadate,"date")
     const formatAddress = (address) => {
-        return address.split('\n').map((line, index) => <p key={index}>{line}</p>);
+        return address?.split('\n').map((line, index) => <p key={index}>{line}</p>);
     }
 
 
@@ -36,36 +39,48 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
     const AmountInWords = numWords(parseInt(paymentValue)) || 0;
 
     // setting the Billed details
-    useEffect(() => {
-        const Invoice_No = `RF${particularRefNo}`;
-        const Trip_id = particularRefNo;
-        const Status = "Billed";
-        const Amount = book.totalcalcAmount || 0;
-        const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
-        const Customer = customerData.customer;
+    // useEffect(() => {
+    //     const Invoice_No = `RF${particularRefNo}`;
+    //     const Trip_id = particularRefNo;
+    //     const Status = "Billed";
+    //     const Amount = book.totalcalcAmount || 0;
+    //     // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
+    //     const Bill_Date = billingDate.format('YYYY-MM-DD');
+    //     const Customer = customerData.customer;
+    //     const billing_no = book.billingno;
+    //     const guestname = book.guestname;
 
-        setIndividualBillData({
-            Invoice_No,
-            Trip_id,
-            Status,
-            Amount,
-            Bill_Date,
-            Customer
-        });
-    }, [particularRefNo, book, customerData, setIndividualBillData]);
+    //     setIndividualBillData({
+    //         Invoice_No,
+    //         Trip_id,
+    //         Status,
+    //         Amount,
+    //         Bill_Date,
+    //         Customer,
+    //         billing_no,
+    //         guestname
+    //     });
+    // }, [particularRefNo, book, customerData, setIndividualBillData]);
+
+    // const handlePrint = async () => {
+    //     try {
+    //         generatePDF(targetRef, { filename: 'page.pdf' });
+    //         await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
+    //         setIndividualBilled(!individualBilled);
+    //     } catch (error) {
+    //         console.log('An error occurred:', error);
+    //     } finally {
+    //         setParticularPdf(false);
+    //     }
+    // };
 
     const handlePrint = async () => {
-        try {
+        setIndividualBilled(!individualBilled);
+        setParticularPdf(false);
             generatePDF(targetRef, { filename: 'page.pdf' });
-            await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
-            setIndividualBilled(!individualBilled);
-        } catch (error) {
-            console.log('An error occurred:', error);
-        } finally {
-            setParticularPdf(false);
-        }
+         
+            
     };
-
     return (
         <>
             <div className="refdiv">
@@ -95,7 +110,8 @@ const InvoicePdf = ({ book, logo, organizationaddress, organizationdata, custome
                             </div>
                             <div className="invno-div">
                                 <p className="receiver-details">Invoice No : <span className="invoiceno">RF{particularRefNo}</span> </p>
-                                <p className="receiver-details">Invoice Date : {billingDate.format('YYYY-MM-DD')} </p>
+                                {/* <p className="receiver-details">Invoice Date : {billingDate.format('YYYY-MM-DD')} </p> */}
+                                <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('YYYY-MM-DD')} </p>
                             </div>
                         </div>
                         <div className="table-div">

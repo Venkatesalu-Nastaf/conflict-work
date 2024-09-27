@@ -8,13 +8,14 @@ import { APIURL } from "../../../url";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "tripid", headerName: "TripSheet No", width: 130 },
-  { field: "customer", headerName: "Organization", width: 130 },
-  { field: "Billingdate", headerName: "Bill Date", width: 130 },
-  { field: "Totalamount", headerName: "Total Amount", width: 130 },
-  { field: "paidamount", headerName: "Paid", width: 130 },
-  { field: "pendingamount", headerName: "Pending", width: 130 },
-  { field: "BankAccount", headerName: "Bank Account", width: 150 },
+  { field: "Trip_id", headerName: "TripSheet No", width: 130 },
+  { field: "billing_no", headerName: "Billing_no", width: 150 },
+  { field: "Customer", headerName: "Organization", width: 130 },
+  { field: "Bill_Date", headerName: "Bill Date", width: 130 },
+  { field: "Amount", headerName: "Total Amount", width: 130 },
+  { field: "Status", headerName: "Status", width: 130 },
+  { field: "guestname", headerName: "Guestname", width: 130 },
+
 ];
 
 const usePaymentdetails = () => {
@@ -197,36 +198,64 @@ const usePaymentdetails = () => {
     }
   }, [rows]);
 
-  const handleButtonClickTripsheet = (selectedRow) => {
-    const billingPageUrl = `/home/billing/billing?tripid=${selectedRow.tripid || ""
-      }&billingno=${selectedRow.billingno || ""}&Billingdate=${selectedRow.Billingdate || ""
-      }&totalkm1=${selectedRow.totalkm1 || ""}&totaltime=${selectedRow.totaltime || ""
-      }&customer=${selectedRow.customer || ""}&supplier=${selectedRow.supplier || ""
-      }&startdate=${selectedRow.startdate || ""}&totaldays=${selectedRow.totaldays || ""
-      }&guestname=${selectedRow.guestname || ""}&rateType=${selectedRow.rateType || ""
-      }&vehRegNo=${selectedRow.vehRegNo || ""}&vehType=${selectedRow.vehType || ""
-      }&duty=${selectedRow.duty || ""}&MinCharges=${selectedRow.MinCharges || ""
-      }&minchargeamount=${selectedRow.minchargeamount || ""}&ChargesForExtra=${selectedRow.ChargesForExtra || ""
-      }&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ""
-      }&cfeamount=${selectedRow.cfeamount || ""}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ""
-      }&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ""
-      }&cfehamount=${selectedRow.cfehamount || ""}&NightHalt=${selectedRow.NightHalt || ""
-      }&NightHaltamount=${selectedRow.NightHaltamount || ""}&nhamount=${selectedRow.nhamount || ""
-      }&driverbata=${selectedRow.driverbata || ""}&driverbataamount=${selectedRow.driverbataamount || ""
-      }&dbamount=${selectedRow.dbamount || ""}&OtherCharges=${selectedRow.OtherCharges || ""
-      }&OtherChargesamount=${selectedRow.OtherChargesamount || ""
-      }&permitothertax=${selectedRow.permitothertax || ""}&parkingtollcharges=${selectedRow.parkingtollcharges || ""
-      }&MinKilometers=${selectedRow.MinKilometers || ""}&MinHours=${selectedRow.MinHours || ""
-      }&GrossAmount=${selectedRow.GrossAmount || ""}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ""
-      }&DiscountAmount=${selectedRow.DiscountAmount || ""}&DiscountAmount2=${selectedRow.DiscountAmount2 || ""
-      }&AdvanceReceived=${selectedRow.AdvanceReceived || ""}&RoundedOff=${selectedRow.RoundedOff || ""
-      }&BalanceReceivable=${selectedRow.BalanceReceivable || ""}&NetAmount=${selectedRow.NetAmount || ""
-      }&Totalamount=${selectedRow.Totalamount || ""}&paidamount=${selectedRow.paidamount || ""
-      }&pendingamount=${selectedRow.pendingamount || ""}&BankAccount=${selectedRow.BankAccount || ""
-      }`;
-    window.location.href = billingPageUrl;
-  };
 
+  // const dataget = async (bookingno) => {
+  //   const bookdatano = bookingno
+  //   console.log(bookdatano)
+  //   const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
+  //   console.log(responsedata.data, "valureswpol")
+  //   return responsedata.data[0]
+  // }
+//   const handleButtonClickTripsheet = async(rowdata) => {
+
+// const selectedRow1 = rowdata;
+//     const dispatchcheck = "true";
+//     const selectedRow = await dataget(selectedRow1.Trip_id)
+//     const customerdata = selectedRow1.Customer ? encodeURIComponent(selectedRow1.Customer.toString()) : '';
+//     const customerpacakage = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
+//     console.log(customerdata,"data")
+
+//     const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow.tripid || ""}&billingno=${selectedRow.billingno || ""}&Billingdate=${selectedRow1.Bill_Date || ""
+//       }&totalkm1=${selectedRow.totalkm1 || ""}&totaltime=${selectedRow.totaltime || 0
+//       }&department=${selectedRow.department || 0
+//       }&calcPackage=${customerpacakage}&customer=${customerdata}&supplier=${selectedRow.supplier || ""
+//       }&startdate=${selectedRow.startdate || ""}&totaldays=${selectedRow.totaldays || 0
+//       }&guestname=${selectedRow.guestname || ""}&rateType=${selectedRow.rateType || ""
+//       }&vehRegNo=${selectedRow.vehRegNo || ""}&vehType=${selectedRow.vehType || ""
+//       }&duty=${selectedRow.duty || ""}&MinCharges=${selectedRow.MinCharges || ""
+//       }&minchargeamount=${selectedRow.minchargeamount || ""}&ChargesForExtra=${selectedRow.ChargesForExtra || ""
+//       }&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ""
+//       }&cfeamount=${selectedRow.cfeamount || ""}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ""
+//       }&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ""
+//       }&cfehamount=${selectedRow.cfehamount || ""}&NightHalt=${selectedRow.NightHalt || ""
+//       }&NightHaltamount=${selectedRow.NightHaltamount || ""}&nhamount=${selectedRow.nhamount || ""
+//       }&driverbata=${selectedRow.driverbata || ""}&driverbataamount=${selectedRow.driverbataamount || ""
+//       }&dbamount=${selectedRow.dbamount || ""}&OtherCharges=${selectedRow.OtherCharges || ""
+//       }&OtherChargesamount=${selectedRow.OtherChargesamount || ""
+//       }&permitothertax=${selectedRow.permitothertax || ""}&parkingtollcharges=${selectedRow.parkingtollcharges || ""
+//       }&MinKilometers=${selectedRow.MinKilometers || ""}&MinHours=${selectedRow.MinHours || ""
+//       }&GrossAmount=${selectedRow.GrossAmount || ""}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ""
+//       }&DiscountAmount=${selectedRow.DiscountAmount || ""}&DiscountAmount2=${selectedRow.DiscountAmount2 || ""
+//       }&AdvanceReceived=${selectedRow.AdvanceReceived || ""}&RoundedOff=${selectedRow.RoundedOff || ""
+//       }&BalanceReceivable=${selectedRow.BalanceReceivable || ""}&NetAmount=${selectedRow.NetAmount || ""
+//       }&Totalamount=${selectedRow.Totalamount || ""}&paidamount=${selectedRow.paidamount || ""
+//       }&pendingamount=${selectedRow.pendingamount || ""}&BankAccount=${selectedRow.BankAccount || ""
+//       }`;
+//     window.location.href = billingPageUrl;
+//   };
+
+
+const handleButtonClickTripsheet = async(rowdata) => {
+
+  const selectedRow1 = rowdata;
+      const dispatchcheck = "true";
+      // const selectedRow = await dataget(selectedRow1.Trip_id)
+      
+  
+      const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id|| ""}&Billingdate=${selectedRow1.Bill_Date || ""}`
+       
+      window.location.href = billingPageUrl;
+    };
   const reversedRows = [...rows].reverse();
 
   return {

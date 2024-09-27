@@ -1295,10 +1295,10 @@ const useBooking = () => {
     setImageDialogOpen(false)
   }
 
-  const handlebooklogDetails = async (updatebook, lastBookinglogno) => {
+  const handlebooklogDetails = async (updatebook, lastBookinglogno,modedata) => {
     const logupdatabookdetails = updatebook
     try {
-      const modedata = isEditMode ? "Edited" : "create"
+      // const modedata = isEditMode ? "Edited" : "create"
       console.log(updatebook, "logbook")
       const updatedBooklogdetails = {
 
@@ -1317,8 +1317,8 @@ const useBooking = () => {
         vehRegNo: logupdatabookdetails.vehRegNo,
         // customer:logupdatabookdetails.customer,
         customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
-        Log_Date: getCurrentTime(),
-        Log_Time: dayjs(),
+        Log_Date:dayjs().format("yyyy-MM-DD"),
+        Log_Time:getCurrentTime(),
         mode: modedata,
         bookingno: lastBookinglogno,
         driverName: logupdatabookdetails.driverName,
@@ -1460,7 +1460,7 @@ const useBooking = () => {
         formImageData.append("created_at", createddata);
         await axios.post(`${apiUrl}/upload-booking-image`, formImageData)
       }))
-      handlebooklogDetails(updatedBook, lastBookingno)
+      handlebooklogDetails(updatedBook, lastBookingno,"create")
 
       setImagedata([])
       setLastBookingNo(lastBookingno);
@@ -1558,7 +1558,7 @@ const useBooking = () => {
       const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
         updatedCustomer
       )
-      handlebooklogDetails(updatedCustomer, editbookno)
+      handlebooklogDetails(updatedCustomer, editbookno,"Edited")
 
       if (response.data.success) {
         if (response.status === 201) {
@@ -1600,13 +1600,16 @@ const useBooking = () => {
         setRow([]);
         setRowsdriver([])
       } else if (actionName === "Delete") {
-
+           const deletebookno = book.bookingno || selectedCustomerData.bookingno
         const response = await axios.delete(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno}`);
+        const updatedCustomer ={...selectedCustomerData,...book}
 
         if (response.data.success) {
           if (response.status === 201) {
             setSuccess(true);
             setSuccessMessage(response.data.message);
+            handlebooklogDetails(updatedCustomer,deletebookno,"Delete")
+          
           } else {
             setInfo(true);
             setInfoMessage(response.data.message)

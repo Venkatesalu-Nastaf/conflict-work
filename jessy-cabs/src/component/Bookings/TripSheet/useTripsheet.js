@@ -930,8 +930,11 @@ const useTripsheet = () => {
         const tripid = selectedCustomerData.tripid;
         try {
             if (tripid !== null && tripid !== "undefined" && tripid) {
+                const updatedCustomer = {...selectedCustomerData}
+                
 
                 await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
+                handleTripsheetlogDetails(updatedCustomer,tripid,"Delete")
                 setFormData({});
                 setSelectedCustomerData({});
                 handleCancel();
@@ -1092,10 +1095,10 @@ const useTripsheet = () => {
     };
 
 
-    const handleTripsheetlogDetails = async (updatebook, lastBookinglogno) => {
+    const handleTripsheetlogDetails = async (updatebook, lastBookinglogno,modedata) => {
         const logupdatabookdetails = updatebook
         try {
-            const modedata = isEditMode ? "Edited" : "create"
+            // const modedata = isEditMode ? "Edited" : "create"
             // console.log(updatebook, "logbook")
             const updatedBooklogdetails = {
 
@@ -1283,7 +1286,7 @@ const useTripsheet = () => {
                 if (DriverSMS) {
                     await handleDriverSendSMS()
                 }
-                handleTripsheetlogDetails(updatedCustomer, tripsheetlogtripid)
+                handleTripsheetlogDetails(updatedCustomer, tripsheetlogtripid,"Edited")
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
@@ -1536,7 +1539,7 @@ const useTripsheet = () => {
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
-            handleTripsheetlogDetails(updatedBook, tripnodata)
+            handleTripsheetlogDetails(updatedBook, tripnodata,"create")
             // handleCancel();
             setRow([]);
             setRows([]);

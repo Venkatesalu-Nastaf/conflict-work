@@ -4,9 +4,11 @@ import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
 import { PdfData } from '../../Transfer/TransferReport/PdfContext.js';
+import { useLocation } from "react-router-dom";
 
 const useBilling = () => {
     const apiUrl = APIURL;
+    const location = useLocation();
     // const user_id = localStorage.getItem('useridno');
     const [bankOptions, setBankOptions] = useState([]);
     const [info, setInfo] = useState(false);
@@ -27,6 +29,18 @@ const useBilling = () => {
     const [customerData, setCustomerData] = useState('');
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
+    const [edit,setEdit]=useState(false)
+    const [selectbillingdata,setselectBillingData]=useState({})
+    const [billingdate,setBillingDate]=useState()
+    //  const [IndividualBillData, setIndividualBillData] = useState({
+    //     Invoice_No: '',
+    //     Trip_id: '',
+    //     Status: '',
+    //     Amount: '',
+    //     Bill_Date: '',
+    //     Customer: '',
+    //     Trips: "1"
+    // })
 
     const { setParticularPdf, setParticularRefNo, individualBilled } = PdfData();
     //for popup
@@ -36,6 +50,7 @@ const useBilling = () => {
         setInfo(false);
         setWarning(false);
     };
+   
 
     useEffect(() => {
         if (error || success || warning || info) {
@@ -120,6 +135,7 @@ const useBilling = () => {
         paidamount: "",
         pendingamount: "",
         BankAccount: "",
+        totalcalcAmount: 0
 
     }
 
@@ -314,17 +330,276 @@ const useBilling = () => {
     }
 
 
-    const addData = {
-        ...book,
-        nhamount: total_Nighthalt_Amount() || book.nhamount,
-        BankAccount: selectedBankAccount || book.BankAccount,
-        pendingamount: pendingAmountCalc() || book.pendingamount,
-        GrossAmount: total_GrossAmount() || book.GrossAmount,
-        BalanceReceivable: balanceRecivable() || book.BalanceReceivable,
-        RoundedOff: roundOffCalc() || book.RoundedOff,
-        NetAmount: netAmountCalc() || book.NetAmount,
-        Totalamount: netAmountCalc() || book.NetAmount,
-        Billingdate: book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
+    // const addData = {
+    //     ...book,
+    //     nhamount: total_Nighthalt_Amount() || book.nhamount,
+    //     BankAccount: selectedBankAccount || book.BankAccount,
+    //     pendingamount: pendingAmountCalc() || book.pendingamount,
+    //     GrossAmount: total_GrossAmount() || book.GrossAmount,
+    //     BalanceReceivable: balanceRecivable() || book.BalanceReceivable,
+    //     RoundedOff: roundOffCalc() || book.RoundedOff,
+    //     NetAmount: netAmountCalc() || book.NetAmount,
+    //     Totalamount: netAmountCalc() || book.NetAmount,
+    //     Billingdate: book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
+    // }
+
+    // useEffect(() => {
+    //     const Invoice_No = `RF${particularRefNo}`;
+    //     const Trip_id = particularRefNo;
+    //     const Status = "Billed";
+    //     const Amount = book.totalcalcAmount || 0;
+    //     // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
+    //     const Bill_Date = billingDate.format('YYYY-MM-DD');
+    //     const Customer = customerData.customer;
+    //     const billing_no = book.billingno;
+    //     const guestname = book.guestname;
+
+    //     setIndividualBillData({
+    //         Invoice_No,
+    //         Trip_id,
+    //         Status,
+    //         Amount,
+    //         Bill_Date,
+    //         Customer,
+    //         billing_no,
+    //         guestname
+    //     });
+    // }, [particularRefNo, book, customerData, setIndividualBillData]);
+    // useEffect(() => {
+    //     const params = new URLSearchParams(location.search);
+    //     console.log("params", params)
+      
+    //     const dispath = params.get("dispatchcheck");
+    //     if (dispath) {
+            
+            
+    //         setEdit(dispath)
+
+    //     }
+        
+    //     const formData = {};
+
+    //     const parameterKeys = [
+            
+    //         "tripid",
+    //         "billingno",
+    //         "invoiceno",
+    //         "department",
+    //         "Billingdate",
+    //         "totalkm1",
+    //         "totaltime",
+    //         "customer",
+    //        "supplier",
+    //         "startdate",
+    //         "totaldays",
+    //         "guestname",
+    //         "rateType",
+    //         "vehRegNo",
+    //         "trips",
+    //         "vehType",
+    //         "duty",
+    //         "calcPackage",
+    
+    //         "package_amount",
+    //         "extraKM",
+    //         "extrakm_amount",
+    //         "ex_kmAmount",
+    //         "extraHR",
+    //         "extrahr_amount",
+    //         "ex_hrAmount",
+    //         "nightBta",
+    //         "nightCount",
+    //         "nhamount",
+    //         "driverBeta",
+    //         "driverbeta_Count",
+    //         "driverBeta_amount",
+    //         "OtherCharges",
+    //         "OtherChargesamount",
+    //         "permit",
+    //         "parking",
+    //         "toll",
+    //         "vpermettovendor",
+    //         "vendortoll",
+    //         "minKM",
+    //         "minHour",
+    //         "GrossAmount",
+    //         "AfterTaxAmount",
+    //         "DiscountAmount",
+    //         "DiscountAmount2",
+    //         "customeradvance",
+    //         "BalanceReceivable",
+    //         "RoundedOff",
+    //         "NetAmount",
+    //         "Totalamount",
+    //         "paidamount",
+    //         "pendingamount",
+    //         "BankAccount",
+    //         "totalcalcAmount",
+
+
+
+    //     ];
+
+    //     parameterKeys.forEach((key) => {
+    //         const value = params.get(key);
+    //         if (value !== null && value !== "null") {
+    //             formData[key] = value;
+    //         }
+    //     });
+
+    //     console.log(formData,"form")
+
+    //     setselectBillingData(formData)
+      
+
+    //     // setBook(formData);
+        
+        
+       
+
+    // }, [location]);
+     const dataget = async (bookingno) => {
+    const bookdatano = bookingno
+    const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
+    const bookingDetails = responsedata.data[0]; 
+   setBook(() => ({ ...bookingDetails }));
+  }
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        console.log("params", params)
+      
+        const dispath = params.get("dispatchcheck");
+        const tripid = params.get("tripid");
+        const billingdate1 = params.get("Billingdate");
+        if (dispath) {
+            console.log(billingdate1,"datae",tripid,dispath)
+            dataget(tripid)
+            setEdit(dispath)
+            setBillingDate(billingdate1)
+
+        }
+        
+        // const formData = {};
+
+        // const parameterKeys = [
+            
+        //     "tripid",
+        //     "billingno",
+        //     "invoiceno",
+        //     "department",
+        //     "Billingdate",
+        //     "totalkm1",
+        //     "totaltime",
+        //     "customer",
+        //    "supplier",
+        //     "startdate",
+        //     "totaldays",
+        //     "guestname",
+        //     "rateType",
+        //     "vehRegNo",
+        //     "trips",
+        //     "vehType",
+        //     "duty",
+        //     "calcPackage",
+    
+        //     "package_amount",
+        //     "extraKM",
+        //     "extrakm_amount",
+        //     "ex_kmAmount",
+        //     "extraHR",
+        //     "extrahr_amount",
+        //     "ex_hrAmount",
+        //     "nightBta",
+        //     "nightCount",
+        //     "nhamount",
+        //     "driverBeta",
+        //     "driverbeta_Count",
+        //     "driverBeta_amount",
+        //     "OtherCharges",
+        //     "OtherChargesamount",
+        //     "permit",
+        //     "parking",
+        //     "toll",
+        //     "vpermettovendor",
+        //     "vendortoll",
+        //     "minKM",
+        //     "minHour",
+        //     "GrossAmount",
+        //     "AfterTaxAmount",
+        //     "DiscountAmount",
+        //     "DiscountAmount2",
+        //     "customeradvance",
+        //     "BalanceReceivable",
+        //     "RoundedOff",
+        //     "NetAmount",
+        //     "Totalamount",
+        //     "paidamount",
+        //     "pendingamount",
+        //     "BankAccount",
+        //     "totalcalcAmount",
+
+
+
+        // ];
+
+        // parameterKeys.forEach((key) => {
+        //     const value = params.get(key);
+        //     if (value !== null && value !== "null") {
+        //         formData[key] = value;
+        //     }
+        // });
+
+        // console.log(formData,"form")
+
+        // setselectBillingData(formData)
+      
+
+        // setBook(formData);
+        
+        
+       
+
+    }, [location]);
+    
+ 
+    
+      useEffect(() => {
+        window.history.replaceState(null, document.title, window.location.pathname);
+       
+    }, []);
+
+
+    const handlebilldata = async () => {
+        const tripno = book.tripid;
+        if (!tripno) {
+            setError(true);
+            setErrorMessage("Please enter TripID");
+            return
+        }
+
+        try {
+            const IndividualBillData = {
+                Invoice_No: `RF${book.tripid}`,
+                Trip_id: book.tripid,
+                Status: "Billed",
+                Amount: book?.totalcalcAmount || 0,
+                Bill_Date: dayjs().format('YYYY-MM-DD'),
+                Customer: customerData?.customer,
+                billing_no: book?.billingno,
+                guestname: book?.guestname,
+            }
+            await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
+            handleCancel();
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+
+        }
+        catch (err) {
+            // console.log(err)
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
     }
 
     const handleClick = async (event, actionName, tripid) => {
@@ -336,28 +611,29 @@ const useBilling = () => {
             else if (actionName === 'Cancel') {
                 handleCancel();
             }
-            else if (actionName === 'Delete') {
+            // else if (actionName === 'Delete') {
 
-                await axios.delete(`${apiUrl}/billing-delete/${book.tripid}`);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-            }
-            else if (actionName === 'Edit') {
+            //     await axios.delete(`${apiUrl}/billing-delete/${book.tripid}`);
+            //     setSuccess(true);
+            //     setSuccessMessage("Successfully Deleted");
+            //     handleCancel();
+            // }
+            // else if (actionName === 'Edit') {
 
-                await axios.put(`${apiUrl}/billing-edit/${book.tripid}`, addData);
-                handleCancel();
-                setSuccess(true);
-                setSuccessMessage("Successfully Updated");
-            }
+            //     await axios.put(`${apiUrl}/billing-edit/${book.tripid}`, addData);
+            //     handleCancel();
+            //     setSuccess(true);
+            //     setSuccessMessage("Successfully Updated");
+            // }
             else if (actionName === 'Add') {
+                handlebilldata()
 
-                if (book.tripid) {
-                    await axios.post(`${apiUrl}/billing-add`, addData);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                }
+                // if (book.tripid) {
+                //     await axios.post(`${apiUrl}/billing-add`, addData);
+                //     handleCancel();
+                //     setSuccess(true);
+                //     setSuccessMessage("Successfully Added");
+                // }
             }
 
         } catch (err) {
@@ -387,6 +663,7 @@ const useBilling = () => {
                     setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
+                    setEdit(false)
                 } else {
                     setError(true)
                     setErrorMessage("Enter TripID")
@@ -478,7 +755,8 @@ const useBilling = () => {
     //     };
     //     fetchData();
     // }, [apiUrl]);
-    const memoizedCustomer = useMemo(() => book.customer, [book.customer]);
+    const memoizedCustomer = useMemo(() => book?.customer, [book?.customer]);
+    
 
     useEffect(() => {
         const fetchCustomerData = async () => {
@@ -547,24 +825,24 @@ const useBilling = () => {
 
 
     const organizationaddress1 = customerData.address1;
-    const organizationaddress2 = customerData.address2;
-    const organizationcity = customerData.city;
-    const organizationgstnumber = customerData.gstnumber;
-    const tripdepartment = book.department;
-    const tripcode = book.customercode;
-    const triprequest = book.request;
-    const tripShedkm = book.shedkm;
-    const tripshedin = book.shedin;
-    const tripshedout = book.shedout;
-    const tripreporttime = book.reporttime;
-    const tripshedintime = book.shedintime;
-    const tripadditionaltime = book.additionaltime;
-    const tripstartkm = book.startkm;
-    const tripclosekm = book.closekm;
-    const tripstarttime = book.starttime;
-    const tripclosetime = book.closetime;
-    const tripstartdate = book.startdate;
-    const tripclosedate = book.closedate;
+    // const organizationaddress2 = customerData.address2;
+    // const organizationcity = customerData.city;
+    // const organizationgstnumber = customerData.gstnumber;
+    // const tripdepartment = book.department;
+    // const tripcode = book.customercode;
+    // const triprequest = book.request;
+    // const tripShedkm = book.shedkm;
+    // const tripshedin = book.shedin;
+    // const tripshedout = book.shedout;
+    // const tripreporttime = book.reporttime;
+    // const tripshedintime = book.shedintime;
+    // const tripadditionaltime = book.additionaltime;
+    // const tripstartkm = book.startkm;
+    // const tripclosekm = book.closekm;
+    // const tripstarttime = book.starttime;
+    // const tripclosetime = book.closetime;
+    // const tripstartdate = book.startdate;
+    // const tripclosedate = book.closedate;
     // const roundOffValue = calculateRoundOff();
     // const BalanceValue = calculatePayableAmount();
     // const TotalAmountValue = calculateroundedPayableAmount();
@@ -596,6 +874,7 @@ const useBilling = () => {
     // Empty the book
     useEffect(() => {
         setBook(emptyBookvalues);
+        setCustomerData('');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [individualBilled]);
 
@@ -625,26 +904,26 @@ const useBilling = () => {
         bankOptions,
         popupOpen,
         handlePopupClose,
-        triprequest,
-        tripcode,
-        tripdepartment,
-        routeData,
-        tripShedkm,
-        tripshedin,
-        tripshedout,
-        tripreporttime,
-        tripshedintime,
-        tripadditionaltime,
-        tripstartkm,
-        tripclosekm,
-        tripstarttime,
-        tripclosetime,
-        tripstartdate,
-        tripclosedate,
+        // triprequest,
+        // tripcode,
+        // tripdepartment,
+        // routeData,
+        // tripShedkm,
+        // tripshedin,
+        // tripshedout,
+        // tripreporttime,
+        // tripshedintime,
+        // tripadditionaltime,
+        // tripstartkm,
+        // tripclosekm,
+        // tripstarttime,
+        // tripclosetime,
+        // tripstartdate,
+        // tripclosedate,
         organizationaddress1,
-        organizationaddress2,
-        organizationcity,
-        organizationgstnumber,
+        // organizationaddress2,
+        // organizationcity,
+        // organizationgstnumber,
         GmapimageUrl,
         customerData,
         setBook,
@@ -652,7 +931,7 @@ const useBilling = () => {
         setRouteData,
         setMapImageUrl,
         setGMapImageUrl,
-        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,
+        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate
     };
 };
 

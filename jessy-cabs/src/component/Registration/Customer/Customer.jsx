@@ -106,7 +106,7 @@ const Customer = ({ stationName }) => {
     setSearchText,
     handleenterSearch,
     customerfieldSets,
-    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations,setInfo,setInfoMessage,
+    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations, setInfo, setInfoMessage,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
@@ -126,11 +126,11 @@ const Customer = ({ stationName }) => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const handleClickOpen = () => {
-  
-    if(Customer_delete === 1){
+
+    if (Customer_delete === 1) {
       setDeletedDialog(true)
     }
-    else{
+    else {
       setInfo(true)
       setInfoMessage("You don't Have Permission To Delete")
     }
@@ -399,104 +399,107 @@ const Customer = ({ stationName }) => {
 
               </div>
 
-              <div className="input-field Customer-page-input-field-addbtn">
+              <div className="Customer-page-input-field-addbtn">
                 {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
+                <div>
 
+                  {customerfieldSets.map((datafield, index) => (
+                    <>
 
-                {customerfieldSets.map((datafield, index) => (
-                  <>
+                      <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap', marginBottom: '20px' }}>
+                        <div className="input" key={index}>
+                          <div className="icone">
+                            <PermIdentityIcon color="action" />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="orderedbycutomer"
+                            className='full-width'
+                            sx={{ width: "300px" }}
+                            label="Ordered By"
+                            name="orderedby"
+                            value={datafield.orderedby || ""}
 
-                    <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap' }}>
-                      <div className="input" key={index}>
-                        <div className="icone">
-                          <PermIdentityIcon color="action" />
+                            // value={fieldSet.orderdby || ""}
+                            onChange={(e) => handleChangecustomer(e, index)}
+                          // variant="standard"
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="orderedbycutomer"
-                          className='full-width'
-                          sx={{ width: "300px" }}
-                          label="Ordered By"
-                          name="orderedby"
-                          value={datafield.orderedby || ""}
-
-                          // value={fieldSet.orderdby || ""}
-                          onChange={(e) => handleChangecustomer(e, index)}
-                        // variant="standard"
-                        />
-                      </div>
-                      <div className="input" key={index}>
-                        <div className="icone">
-                          <AttachEmailIcon color="action" />
+                        <div className="input" key={index}>
+                          <div className="icone">
+                            <AttachEmailIcon color="action" />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="orderebyemail"
+                            className='full-width'
+                            label="Ordered By Email"
+                            name="orderByEmail"
+                            autoComplete="new-password"
+                            value={datafield.orderByEmail || ""}
+                            // value={fieldSet.Hours || ""}
+                            onChange={(e) => handleChangecustomer(e, index)}
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="orderebyemail"
-                          className='full-width'
-                          label="Ordered By Email"
-                          name="orderByEmail"
-                          autoComplete="new-password"
-                          value={datafield.orderByEmail || ""}
-                          // value={fieldSet.Hours || ""}
-                          onChange={(e) => handleChangecustomer(e, index)}
-                        />
-                      </div>
-                      <div className="input" key={index}>
-                        <div className="icone">
-                          <LocalPhoneIcon color="action" />
+                        <div className="input" key={index}>
+                          <div className="icone">
+                            <LocalPhoneIcon color="action" />
+                          </div>
+                          <TextField
+                            // type='number'
+                            size="small"
+                            id="mobliecustomer"
+                            className='full-width'
+                            label="Mobile No"
+                            name="orderByMobileNo"
+                            autoComplete="new-password"
+                            value={datafield.orderByMobileNo || ""}
+                            onChange={(e) => handleChangecustomer(e, index)}
+                          />
                         </div>
-                        <TextField
-                          // type='number'
-                          size="small"
-                          id="mobliecustomer"
-                          className='full-width'
-                          label="Mobile No"
-                          name="orderByMobileNo"
-                          autoComplete="new-password"
-                          value={datafield.orderByMobileNo || ""}
-                          onChange={(e) => handleChangecustomer(e, index)}
-                        />
+
+                        {index >= 1 && (
+                          <Button variant="contained" color="error" onClick={handleClickOpen}>
+                            x
+                          </Button>
+                        )}
+
                       </div>
 
-                    </div>
-
-                    {/* Remove Button */}
-                    {/* {index >=1 && (
+                      {/* Remove Button */}
+                      {/* {index >=1 && (
             <Button variant="contained" color="error" onClick={() => handleRemove(index,datafield.id)}>
               x
             </Button>
           )} */}
-                   
-                    {index >= 1 && (
-                      <Button variant="contained" color="error" onClick={handleClickOpen}>
-                        x
-                      </Button>
-                    )}
-                    <Dialog open={deletedialogbox} onClose={handleClose}>
-                      <DialogTitle>{"Are you sure you want to delete this item?"}</DialogTitle>
-                      <DialogContent>
-
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={() => handleRemove(index, datafield.id)}
-                          color="error">
-                          Delete
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-
-                  </>
 
 
-                ))}
+                      <Dialog open={deletedialogbox} onClose={handleClose}>
+                        <DialogTitle>{"Are you sure you want to delete this item?"}</DialogTitle>
+                        <DialogContent>
 
-                <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} >Add+</Button>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose} color="primary">
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={() => handleRemove(index, datafield.id)}
+                            color="error">
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+
+                    </>
 
 
+                  ))}
+
+                  <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
+
+
+                </div>
               </div>
 
             </div>
@@ -812,7 +815,7 @@ const Customer = ({ stationName }) => {
 
               </div>
 
-              
+
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -915,63 +918,63 @@ const Customer = ({ stationName }) => {
                 </div>
 
                 <div className="detail-container">
-                <div className="container-left">
-                  <div className="">
-                    <div className="input-field vehicle-info-search-input-field">
-                      <div className="input">
-                        <div className="icone">
-                          <AiOutlineFileSearch color="action" />
+                  <div className="container-left">
+                    <div className="">
+                      <div className="input-field vehicle-info-search-input-field">
+                        <div className="input">
+                          <div className="icone">
+                            <AiOutlineFileSearch color="action" />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="searchText"
+                            className='full-width'
+                            label="Search"
+                            name="searchText"
+                            value={searchText}
+                            onKeyDown={handleenterSearch}
+                            onChange={(e) => setSearchText(e.target.value)}
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="searchText"
-                          className='full-width'
-                          label="Search"
-                          name="searchText"
-                          value={searchText}
-                          onKeyDown={handleenterSearch}
-                          onChange={(e) => setSearchText(e.target.value)}
-                        />
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="fromDate"
-                            className='full-width'
-                            label="From Date"
-                            format="DD/MM/YYYY"
-                            name='fromDate'
-                            value={fromDate}
-                            onChange={(date) => setFromDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <div className="icone">
-                            <DateRangeIcon color="action" />
-                          </div>
-                          <DatePicker
-                            id="toDate"
-                            className='full-width'
-                            label="To Date"
-                            format="DD/MM/YYYY"
-                            name="toDate"
-                            value={toDate}
-                            onChange={(date) => setToDate(date)}
-                          />
-                        </LocalizationProvider>
-                      </div>
-                      <div className="input">
-                        <Button variant="contained" onClick={handleSearch}>Search</Button>
+                        <div className="input">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="icone">
+                              <DateRangeIcon color="action" />
+                            </div>
+                            <DatePicker
+                              id="fromDate"
+                              className='full-width'
+                              label="From Date"
+                              format="DD/MM/YYYY"
+                              name='fromDate'
+                              value={fromDate}
+                              onChange={(date) => setFromDate(date)}
+                            />
+                          </LocalizationProvider>
+                        </div>
+                        <div className="input">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="icone">
+                              <DateRangeIcon color="action" />
+                            </div>
+                            <DatePicker
+                              id="toDate"
+                              className='full-width'
+                              label="To Date"
+                              format="DD/MM/YYYY"
+                              name="toDate"
+                              value={toDate}
+                              onChange={(date) => setToDate(date)}
+                            />
+                          </LocalizationProvider>
+                        </div>
+                        <div className="input">
+                          <Button variant="contained" onClick={handleSearch}>Search</Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
               </div>
 

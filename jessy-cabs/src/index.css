@@ -175,6 +175,7 @@ body {
 .input-field .input:hover {
   transform: translateY(-5px) scale(1.05);
 }
+
 .input-field .input-g:hover {
   transform: translateY(-5px) scale(1.05);
 }
@@ -435,6 +436,10 @@ body {
   align-items: center;
   justify-content: flex-start;
   padding: 15px;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .Download-btn {
@@ -737,7 +742,7 @@ body {
     width: 99% !important;
   }
 
-  .main-content-container {     
+  .main-content-container {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 80vh;
@@ -909,6 +914,6 @@ body {
   }
 }
 
-.css-160unip > .MuiTextField-root {
+.css-160unip>.MuiTextField-root {
   min-width: auto !important;
 }

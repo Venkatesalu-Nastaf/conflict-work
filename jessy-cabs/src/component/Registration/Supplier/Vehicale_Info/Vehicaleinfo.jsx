@@ -45,6 +45,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehicleinfo from './useVehicleinfo';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import EmailIcon from "@mui/icons-material/Email";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
@@ -1101,7 +1102,7 @@ const Vehicaleinfo = ({ stationName }) => {
           }
           {success &&
             <div className='alert-popup Success' >
-              <div className="popup-icon"> <ClearIcon /> </div>
+              <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>

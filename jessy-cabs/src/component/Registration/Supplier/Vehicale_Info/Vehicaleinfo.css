@@ -347,7 +347,7 @@ align-items: center;
 }
 
 .input-permit-no{
-  width: fit-content;
+  width: 304px;
   display: flex;
   align-items: center;
   justify-content: center;

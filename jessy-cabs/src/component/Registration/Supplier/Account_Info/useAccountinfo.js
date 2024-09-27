@@ -643,11 +643,11 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Travel Mail fields");
       return;
     }
-    if (!vehiclinfo) {
-      setWarning(true);
-      setWarningMessage("Fill Vehicle info fields");
-      return;
-    }
+    // if (!vehiclinfo) {
+    //   setWarning(true);
+    //   setWarningMessage("Fill Vehicle info fields");
+    //   return;
+    // }
     if (!ratetype) {
       setWarning(true);
       setWarningMessage("Fill Rate Type fields");

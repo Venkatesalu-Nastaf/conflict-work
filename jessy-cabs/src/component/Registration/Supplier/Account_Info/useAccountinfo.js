@@ -777,6 +777,7 @@ const useAccountinfo = () => {
 
       else if (actionName === 'Cancel') {
         handleCancel();
+        handleList();
         setRows([]);
       }
 
@@ -786,6 +787,7 @@ const useAccountinfo = () => {
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
+        handleList();
         setRows([]);
       }
 

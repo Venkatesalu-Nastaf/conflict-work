@@ -1158,7 +1158,7 @@ const useTripsheet = () => {
             (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && Number(superpower) === 0)
         ) {
             setError(true);
-            setErrorMessage(`status is ${checkdata?.status},NOT Edited Data`);
+            setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
             return;
         }
         // if( checkdata?.status === "Billed" || checkdata?.status === "Closed" && checkdata?.appsdata === "Closed" ){

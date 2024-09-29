@@ -23,13 +23,32 @@ const MapComponent = () => {
     const endtime = searchParams.get('endtime');
     const startdate = searchParams.get('startdate');
     const enddate = searchParams.get('closedate');
-    const latitude = JSON.parse(decodeURIComponent(urlParams.get('latitude')));
-    const longitude = JSON.parse(decodeURIComponent(urlParams.get('longitude')));
+    const latitude = searchParams.get('latitude');
+    const longitude = searchParams.get('longitude')
+    const startLatitude = searchParams.get('startLatitude')
+    const startLongitude = searchParams.get('startLongitude')
+    const endLatitude = searchParams.get('endLatitude')
+    const endLongitude = searchParams.get('endLongitude')
+    const wayLatitude = searchParams.get('wayLatitude')
+    const wayLongitude = searchParams.get('wayLongitude')
+    const startingDate = searchParams.get('startingDate')
+    const startingTime = searchParams.get('startingTime')
+    const startPlaceName = searchParams.get('startPlaceName')
+    const endPlaceName = searchParams.get('endPlaceName')
+    const wayPlaceName = searchParams.get('wayPlaceName')
+    const endingDate = searchParams.get('endingDate')
+    const endingTime = searchParams.get('endingTime')
+    const wayTime = searchParams.get('wayTime')
+    const wayDate = searchParams.get('wayDate')
+    // const latitude = JSON.parse(decodeURIComponent(urlParams.get('latitude')));
+    // const longitude = JSON.parse(decodeURIComponent(urlParams.get('longitude')));
     const row = JSON.parse(decodeURIComponent(urlParams.get('row')));   
      const formattedStartTime = starttime?.slice(0, 5);
     const formattedEndTime = endtime?.slice(0, 5);
+    console.log(startLatitude,startLongitude,endLatitude,endLongitude,wayLatitude,wayLongitude,'latitude');
+    
     useEffect(() => {
-        window.initMap({ lat: latitude, lng: longitude,row:row });
+        window.initMap({ lat: latitude, lng: longitude,row:row,startLatitude:startLatitude,startLongitude:startLongitude,endLatitude:endLatitude,endLongitude:endLongitude,wayLatitude:wayLatitude,wayLongitude:wayLongitude,startingDate:startingDate,startingTime:startingTime,startPlaceName:startPlaceName,endingDate:endingDate,endingTime:endingTime,endPlaceName:endPlaceName,wayDate:wayDate,wayTime:wayTime,wayPlaceName:wayPlaceName });
     }, []);
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();

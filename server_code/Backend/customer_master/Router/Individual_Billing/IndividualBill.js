@@ -5,6 +5,7 @@ const db = require('../../../db');
 router.post('/IndividualBill', (req, res) => {
     const IndividualBillData = req.body;
     const tripid = IndividualBillData.Trip_id;
+   
 
     db.query('INSERT INTO Individual_Billing SET ?', IndividualBillData, (err, result) => {
         if (err) {

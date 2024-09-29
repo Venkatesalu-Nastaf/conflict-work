@@ -843,6 +843,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
 
             else if (actionName === 'Cancel') {
                 handleCancel();
+                handleList(); 
                 setRows([]);
             }
 
@@ -854,7 +855,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 setTriggerCustomerAdd(prev => !prev)
                 setRows([]);
             }
-
+            
             else if (actionName === 'Edit') {
                 handleEdit()
             }

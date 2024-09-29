@@ -2770,6 +2770,7 @@ const Booking = ({ stationName, customerData }) => {
                   <Button
                     variant="contained"
                     onClick={handleAdd}
+                    disabled={!Booking_new}
                   >
                     Add New</Button> : <></>
               }

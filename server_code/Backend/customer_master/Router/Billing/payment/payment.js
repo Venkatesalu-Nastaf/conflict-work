@@ -12,20 +12,45 @@ router.get('/organizationoptions', (req, res) => {
     });
 });
 
+// router.get('/payment-details', (req, res) => {
+//     const { billingno, customer, fromDate, toDate } = req.query;
+//     let query = 'SELECT * FROM billing WHERE 1=1';
+//     let params = [];
+//     if (billingno) {
+//         query += ' AND billingno = ?';
+//         params.push(billingno);
+//     }
+//     if (customer) {
+//         query += ' AND customer = ?';
+//         params.push(customer);
+//     }
+//     if (fromDate && toDate) {
+//         query += ' AND Billingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+//         params.push(fromDate);
+//         params.push(toDate);
+//     }
+//     db.query(query, params, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//         }
+//         return res.status(200).json(result);
+//     });
+// });
+
 router.get('/payment-details', (req, res) => {
     const { billingno, customer, fromDate, toDate } = req.query;
-    let query = 'SELECT * FROM billing WHERE 1=1';
+    let query = 'SELECT * FROM Individual_Billing WHERE 1=1';
     let params = [];
     if (billingno) {
-        query += ' AND billingno = ?';
+        query += ' AND billing_no = ?';
         params.push(billingno);
     }
     if (customer) {
-        query += ' AND customer = ?';
+        query += ' AND Customer = ?';
         params.push(customer);
     }
     if (fromDate && toDate) {
-        query += ' AND Billingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        query += ' AND Bill_Date >= DATE_ADD(?, INTERVAL 0 DAY) AND Bill_Date <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(fromDate);
         params.push(toDate);
     }
@@ -50,5 +75,19 @@ router.get('/totalAmount_from_billing', (req, res) => {
         }
     });
 });
+
+router.get('/getdatafromtripsheetvaluebilling/:tripidno',(req,res)=>{
+    const bookingno = req.params.tripidno;
+    db.query("select * from tripsheet where tripid = ?",[bookingno],(err,results)=>{
+  
+      if (err) {
+        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+      }
+      console.log(results, 'ff')
+      return res.status(200).json(results)
+    
+  
+    })
+  })
 
 module.exports = router;

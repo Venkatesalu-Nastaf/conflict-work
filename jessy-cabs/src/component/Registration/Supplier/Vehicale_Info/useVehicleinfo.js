@@ -829,12 +829,12 @@ const useVehicleinfo = () => {
             return;
 
         }
-        if (!book.driverName) {
-            setWarning(true);
-            setWarningMessage(" Choose Drivername");
-            return;
+        // if (!book.driverName) {
+        //     setWarning(true);
+        //     setWarningMessage(" Choose Drivername");
+        //     return;
 
-        }
+        // }
         if (!book.vehRegNo) {
             setWarning(true);
             setWarningMessage("Enter VehicleRegNo");

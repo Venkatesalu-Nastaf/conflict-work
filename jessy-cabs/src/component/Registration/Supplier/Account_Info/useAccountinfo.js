@@ -643,11 +643,11 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Travel Mail fields");
       return;
     }
-    if (!vehiclinfo) {
-      setWarning(true);
-      setWarningMessage("Fill Vehicle info fields");
-      return;
-    }
+    // if (!vehiclinfo) {
+    //   setWarning(true);
+    //   setWarningMessage("Fill Vehicle info fields");
+    //   return;
+    // }
     if (!ratetype) {
       setWarning(true);
       setWarningMessage("Fill Rate Type fields");
@@ -777,6 +777,7 @@ const useAccountinfo = () => {
 
       else if (actionName === 'Cancel') {
         handleCancel();
+        handleList();
         setRows([]);
       }
 
@@ -786,6 +787,7 @@ const useAccountinfo = () => {
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
+        handleList();
         setRows([]);
       }
 

@@ -825,15 +825,20 @@ const useDrivercreation = () => {
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage('Successfully listed');
+                    handleList();
+                    setRows([]);
                 } else {
                     setRows([]);
                     setError(true);
                     setErrorMessage('No data found');
+                    handleList();
+                    setRows([]);
                 }
             }
 
             else if (actionName === 'Cancel') {
                 handleCancel();
+                handleList();
                 setRows([]);
             }
 
@@ -843,6 +848,7 @@ const useDrivercreation = () => {
                 setSuccess(true);
                 setSuccessMessage('Successfully Deleted');
                 handleCancel();
+                handleList();
                 setRows([]);
             }
 

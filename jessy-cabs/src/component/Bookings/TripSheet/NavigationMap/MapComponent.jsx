@@ -40,6 +40,7 @@ const MapComponent = () => {
     const endingTime = searchParams.get('endingTime')
     const wayTime = searchParams.get('wayTime')
     const wayDate = searchParams.get('wayDate')
+    const editMode = searchParams.get('edit')
     // const latitude = JSON.parse(decodeURIComponent(urlParams.get('latitude')));
     // const longitude = JSON.parse(decodeURIComponent(urlParams.get('longitude')));
     const row = JSON.parse(decodeURIComponent(urlParams.get('row')));   
@@ -48,7 +49,7 @@ const MapComponent = () => {
     console.log(startLatitude,startLongitude,endLatitude,endLongitude,wayLatitude,wayLongitude,'latitude');
     
     useEffect(() => {
-        window.initMap({ lat: latitude, lng: longitude,row:row,startLatitude:startLatitude,startLongitude:startLongitude,endLatitude:endLatitude,endLongitude:endLongitude,wayLatitude:wayLatitude,wayLongitude:wayLongitude,startingDate:startingDate,startingTime:startingTime,startPlaceName:startPlaceName,endingDate:endingDate,endingTime:endingTime,endPlaceName:endPlaceName,wayDate:wayDate,wayTime:wayTime,wayPlaceName:wayPlaceName });
+        window.initMap({ lat: latitude, editMode :editMode,lng: longitude,row:row,startLatitude:startLatitude,startLongitude:startLongitude,endLatitude:endLatitude,endLongitude:endLongitude,wayLatitude:wayLatitude,wayLongitude:wayLongitude,startingDate:startingDate,startingTime:startingTime,startPlaceName:startPlaceName,endingDate:endingDate,endingTime:endingTime,endPlaceName:endPlaceName,wayDate:wayDate,wayTime:wayTime,wayPlaceName:wayPlaceName });
     }, []);
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();

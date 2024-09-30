@@ -353,6 +353,7 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
     //   sqlQuery += ' AND tripsheet.status = ?';
     //   queryParams.push(status);
     // }
+    // changes for billed 
     if (status === "Billed") {
       sqlQuery += ' AND (tripsheet.status = "Billed" OR tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
   } else if (status === "Closed") {

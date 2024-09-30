@@ -31,13 +31,13 @@
 }
 
 .left-arrow {
-    left: 10px; /* Position left */
+    left: 10px; /* left */
 }
 
 .right-arrow {
-    right: 10px; /* Position right */
+    right: 10px; /* right */
 }
 
 .arrow:hover {
-    background: rgba(255, 255, 255, 1); /* Change background on hover */
+    background: rgba(255, 255, 255, 1); 
 }

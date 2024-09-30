@@ -345,14 +345,23 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
     `;
     queryParams = [formattedFromDate, formattedToDate];
 
+    // if (status === "Billed") {
+    //   sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
+    // } else if (status === "Closed") {
+    //   sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed" OR tripsheet.status = "Closed")';
+    // } else if (status && status !== 'All') {
+    //   sqlQuery += ' AND tripsheet.status = ?';
+    //   queryParams.push(status);
+    // }
     if (status === "Billed") {
-      sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
-    } else if (status === "Closed") {
-      sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed" OR tripsheet.status = "Closed")';
-    } else if (status && status !== 'All') {
+      sqlQuery += ' AND (tripsheet.status = "Billed" OR tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
+  } else if (status === "Closed") {
+      sqlQuery += ' AND (tripsheet.status = "Closed" OR tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
+  } else if (status && status !== 'All') {
       sqlQuery += ' AND tripsheet.status = ?';
       queryParams.push(status);
-    }
+  }
+  
 
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND tripsheet.department IN (?)';

@@ -398,7 +398,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
           <Box sx={{ padding: '16px' }} className="main-content-overview">
             {/* <Typography variant="body1">This is the content inside the full-page drawer.</Typography> */}
-            <p onClick={handleShowCards}>Show Cards</p>
+            {/* <p onClick={handleShowCards}>Show Cards</p> */}
             {showCards ?
               <div className='top-cards'>
                 {/* <EtripSheetSignature /> */}

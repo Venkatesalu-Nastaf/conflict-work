@@ -1,7 +1,43 @@
-.EtripSheetImages-card{
+.EtripSheetImages-card {
+    position: relative; /* Allow absolute positioning of arrows */
     width: 400px;
     height: 300px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
+    overflow: hidden; /* Prevent overflow of arrows */
+}
+
+.image-container {
+    position: relative; /* Allow positioning of arrows within this div */
+}
+
+.map-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px; /* Maintain image height */
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%; /* Make arrows circular */
+    z-index: 10; /* Ensure arrows are above image */
+}
+
+.left-arrow {
+    left: 10px; /* Position left */
+}
+
+.right-arrow {
+    right: 10px; /* Position right */
+}
+
+.arrow:hover {
+    background: rgba(255, 255, 255, 1); /* Change background on hover */
 }

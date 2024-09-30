@@ -195,8 +195,8 @@ const closeDateFunction = () => {
         const response = await axios.get(`${apiurl}/customerreviewdataallmonth/${stationarray}/${datestart}/${dateEnd}`)
         const data = response.data
         setTodayBooking(data)
-        // setStationdata(data)
-        console.log(data)
+    
+     
 
       }
       else {
@@ -295,7 +295,7 @@ const closeDateFunction = () => {
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "white" }}>
-            {(
+            {( filteredData &&
               filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
                   <TableRow
@@ -308,7 +308,9 @@ const closeDateFunction = () => {
                     <TableCell align="left" className="driver-trip-date">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
                     <TableCell className="driver-tripstatus"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
                     <TableCell className="Details driver-details">
+                      <div >
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
+                      </div>
                     </TableCell>
 
                   </TableRow>

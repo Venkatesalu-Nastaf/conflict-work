@@ -61,11 +61,7 @@ const Login = () => {
   };
 
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("auth")) navigate("/");
 
-
-  // });
 
   const formSubmitter = async (e) => {
     e.preventDefault();

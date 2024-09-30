@@ -5,6 +5,7 @@ const apiUrl = APIURL;
 export const fetchBankOptions = async () => {
   try {
     const response = await axios.get(`${apiUrl}/bankoptions`);
+  
     return response.data;
   } catch (error) {
     console.error('Error fetching bank options:', error);

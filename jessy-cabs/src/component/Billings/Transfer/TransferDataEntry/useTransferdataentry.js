@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
-import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+// import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import { APIURL } from "../../../url";
@@ -56,7 +56,7 @@ const useTransferdataentry = () => {
     const [Billingdate, setBillingdate] = useState(dayjs());
     const [date] = useState(dayjs());
     const [totalAmount, setTotalAmount] = useState(0);
-    const [bankOptions, setBankOptions] = useState([]);
+    // const [bankOptions, setBankOptions] = useState([]);
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
@@ -282,21 +282,21 @@ const useTransferdataentry = () => {
 
     //----------------------------------------------
 
-    useEffect(() => {
-        Organization()
-            .then((data) => {
-                if (data) {
-                    setBankOptions(data);
-                } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch organization options.');
-                }
-            })
-            .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch organization options.');
-            });
-    }, []);
+    // useEffect(() => {
+    //     Organization()
+    //         .then((data) => {
+    //             if (data) {
+    //                 setBankOptions(data);
+    //             } else {
+    //                 setError(true);
+    //                 setErrorMessage('Failed to fetch organization options.');
+    //             }
+    //         })
+    //         .catch(() => {
+    //             setError(true);
+    //             setErrorMessage('Failed to fetch organization options.');
+    //         });
+    // }, []);
 
 console.log(fromDate,toDate,'date');
 
@@ -1368,7 +1368,7 @@ console.log(fromDate,toDate,'date');
         handleKeyenter,
         customer,
         tripData,
-        bankOptions,
+        // bankOptions,
         setCustomer,
         fromDate,
         handleDateChange,

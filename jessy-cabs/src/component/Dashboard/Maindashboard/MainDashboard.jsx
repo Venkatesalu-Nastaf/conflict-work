@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext,useLayoutEffect } from "react";
 import "./MainDashboard.css";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
@@ -31,7 +31,8 @@ import { BiSolidBellRing } from "react-icons/bi";
 const MainDashboard = () => {
 
   const apiUrl = APIURL;
-  const { setFilteredData, datatriguserinfo, expanded, setExpanded } = useData1();
+  const { datatriguserinfo, expanded, setExpanded } = useData1();
+  // const { setFilteredData, datatriguserinfo, expanded, setExpanded } = useData1();
 
   const navigate = useNavigate();
 
@@ -86,7 +87,7 @@ const MainDashboard = () => {
       localStorage.removeItem("organizationimages")
       localStorage.removeItem("selectedusertheme")
       localStorage.removeItem("username")
-      localStorage.removeItem("tokensdata")
+ 
       localStorage.removeItem("SuperAdmin")
       // localStorage.removeItem("expiretime")
 
@@ -251,30 +252,28 @@ const MainDashboard = () => {
   // const usercompany = routeData[0]?.organizationname;
   setUser_id(useridno);
 
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/tripsheet-maindash`);
-        if (response.status === 200) {
-          if (response.ok) {
-            const data = await response.json();
-            if (data.length > 0) {
-              setFilteredData(data);
-            } else {
-              setFilteredData([]);
-            }
-          } else {
-          }
-        }
+  // useLayoutEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/tripsheet-maindash`);
+  //       if (response.status === 200) {
+  //         if (response.ok) {
+  //           const data = await response.json();
+  //           if (data.length > 0) {
+  //             setFilteredData(data);
+  //           } else {
+  //             setFilteredData([]);
+  //           }
+  //         } else {
+  //         }
+  //       }
   
-      } catch {
-      }
-    };
+  //     } catch {
+  //     }
+  //   };
 
-    fetchData();
-  }, [apiUrl]);
+  //   fetchData();
+  // }, [apiUrl]);
 
   useEffect(() => {
     if (permissions.length > 1 && data1 !== undefined && data4 !== null  && storedusertheme !== null) {

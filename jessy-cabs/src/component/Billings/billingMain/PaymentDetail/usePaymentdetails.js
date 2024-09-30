@@ -9,6 +9,7 @@ import { APIURL } from "../../../url";
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "Trip_id", headerName: "TripSheet No", width: 130 },
+  { field: "Invoice_No", headerName: "Invoice No", width: 130 },
   { field: "billing_no", headerName: "Billing_no", width: 150 },
   { field: "Customer", headerName: "Organization", width: 130 },
   { field: "Bill_Date", headerName: "Bill Date", width: 130 },
@@ -20,12 +21,6 @@ const columns = [
 
 const usePaymentdetails = () => {
   const apiUrl = APIURL;
-  // const user_id = localStorage.getItem("useridno");
-
-  // const [tableData, setTableData] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [paidAmount, setPaidAmount] = useState(0);
-  const [pendingAmount, setPendingAmount] = useState(0);
   const [customer, setCustomer] = useState("");
   const [billingno, setBillingNo] = useState("");
   const [rows, setRows] = useState([]);
@@ -38,7 +33,7 @@ const usePaymentdetails = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
-  // const [bankOptions, setBankOptions] = useState([]);
+
   const [infoMessage] = useState({});
 
 
@@ -160,43 +155,7 @@ const usePaymentdetails = () => {
   // }, []);
 
   //calculate total amount in column
-  useEffect(() => {
-    const calculatedTotalAmount = rows.reduce(
-      (total, row) => total + parseFloat(row.Totalamount || 0),
-      0
-    );
-    if (!isNaN(calculatedTotalAmount)) {
-      setTotalAmount(calculatedTotalAmount.toFixed(2));
-    } else {
-      setTotalAmount("0");
-    }
-  }, [rows]);
 
-  //calculate paid amount in column
-  useEffect(() => {
-    const calculatedPaidAmount = rows.reduce(
-      (total, row) => total + parseFloat(row.paidamount || 0),
-      0
-    );
-    if (!isNaN(calculatedPaidAmount)) {
-      setPaidAmount(calculatedPaidAmount.toFixed(2));
-    } else {
-      setPaidAmount("0");
-    }
-  }, [rows]);
-
-  //calculate pending amount in column
-  useEffect(() => {
-    const calculatedPendingAmount = rows.reduce(
-      (total, row) => total + parseFloat(row.pendingamount || 0),
-      0
-    );
-    if (!isNaN(calculatedPendingAmount)) {
-      setPendingAmount(calculatedPendingAmount.toFixed(2));
-    } else {
-      setPendingAmount("0");
-    }
-  }, [rows]);
 
 
   // const dataget = async (bookingno) => {
@@ -249,10 +208,10 @@ const handleButtonClickTripsheet = async(rowdata) => {
 
   const selectedRow1 = rowdata;
       const dispatchcheck = "true";
-      // const selectedRow = await dataget(selectedRow1.Trip_id)
+   
       
   
-      const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id|| ""}&Billingdate=${selectedRow1.Bill_Date || ""}`
+      const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id|| ""}&Billingdate=${selectedRow1.Bill_Date || ""}&Invoicedata=${selectedRow1.Invoice_No || ""}`
        
       window.location.href = billingPageUrl;
     };
@@ -279,9 +238,7 @@ const handleButtonClickTripsheet = async(rowdata) => {
     handleShow,
     handleExcelDownload,
     handlePdfDownload,
-    totalAmount,
-    paidAmount,
-    pendingAmount,
+ 
     reversedRows,
     handleButtonClickTripsheet,
     columns,

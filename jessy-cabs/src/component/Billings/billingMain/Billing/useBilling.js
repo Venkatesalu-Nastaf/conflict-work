@@ -32,6 +32,7 @@ const useBilling = () => {
     const [edit,setEdit]=useState(false)
     const [selectbillingdata,setselectBillingData]=useState({})
     const [billingdate,setBillingDate]=useState()
+    const [invoiceno,setInvoiceNo]=useState()
     //  const [IndividualBillData, setIndividualBillData] = useState({
     //     Invoice_No: '',
     //     Trip_id: '',
@@ -79,6 +80,7 @@ const useBilling = () => {
     const handlePopupClose = () => {
         setPopupOpen(false);
     };
+    
 
 
     const emptyBookvalues = {
@@ -326,6 +328,8 @@ const useBilling = () => {
         setBook(emptyBookvalues);
         setSelectedBankAccount('');
         setCustomerData('')
+        setBillingDate()
+        setInvoiceNo()
 
     }
 
@@ -467,16 +471,18 @@ const useBilling = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        console.log("params", params)
+        // console.log("params", params)
       
         const dispath = params.get("dispatchcheck");
         const tripid = params.get("tripid");
         const billingdate1 = params.get("Billingdate");
+        const Invoicedata = params.get("Invoicedata")
         if (dispath) {
-            console.log(billingdate1,"datae",tripid,dispath)
+            // console.log(billingdate1,"datae",tripid,dispath,Invoicedata)
             dataget(tripid)
             setEdit(dispath)
             setBillingDate(billingdate1)
+            setInvoiceNo(Invoicedata)
 
         }
         
@@ -656,14 +662,21 @@ const useBilling = () => {
                     // console.log(bookingDetails,"details")
                     // setBook(() => ({ ...bookingDetails, rateType: customerData?.rateType }))
                     // setBook(() =>  bookingDetails)
-                    const bookingDetails = response.data[0];  // Accessing the first item if response.data is an array
-
+                    const bookingDetails = response.data[0];
+                    const booklength = response.data
+                     // Accessing the first item if response.data is an array
+                    if(booklength.length > 0){
 
                     // Update the state with the booking details
                     setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                     setEdit(false)
+                    }
+                    else{
+                    setError(true)
+                    setErrorMessage("Data Not Found")
+                    }
                 } else {
                     setError(true)
                     setErrorMessage("Enter TripID")
@@ -846,6 +859,48 @@ const useBilling = () => {
     // const roundOffValue = calculateRoundOff();
     // const BalanceValue = calculatePayableAmount();
     // const TotalAmountValue = calculateroundedPayableAmount();
+    const handleKeyenterinvoicdeno = async(event)=>{
+     
+
+            if (event.key === "Enter") {
+              event.preventDefault();
+             
+              try {
+                if (invoiceno) {
+                const response = await axios.get(
+                  `${apiUrl}/INVOICEENTER_Billing/${invoiceno}`
+                );
+                // const bookingDetails = response.data;
+                const bookingDetails = response.data[0];
+                const bookdata=response.data; // Accessing the first item if response.data is an array
+
+                if(bookdata.length > 0 ){
+                setBillingDate(bookingDetails.Bill_Date)
+                setBook(() => ({ ...bookingDetails }));
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
+             
+                setEdit(true);
+            
+                }
+                else{
+                    setBook(() => ({ ...emptyBookvalues }));
+                    setError(true);
+                    setErrorMessage("Data Not Found");
+                }
+            }
+
+                else{
+                    setError(true);
+                    setErrorMessage("Enter The Invoice_No");
+                }
+              } catch {
+                setError(true);
+                setErrorMessage("Error retrieving booking details");
+              }
+            }
+          }
+    
 
     const [organizationdata, setorganizationData] = useState('');
 
@@ -875,6 +930,8 @@ const useBilling = () => {
     useEffect(() => {
         setBook(emptyBookvalues);
         setCustomerData('');
+        // setBillingDate('')
+        // setInvoiceNo()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [individualBilled]);
 
@@ -924,6 +981,7 @@ const useBilling = () => {
         // organizationaddress2,
         // organizationcity,
         // organizationgstnumber,
+        invoiceno,
         GmapimageUrl,
         customerData,
         setBook,
@@ -931,6 +989,8 @@ const useBilling = () => {
         setRouteData,
         setMapImageUrl,
         setGMapImageUrl,
+        handleKeyenterinvoicdeno,
+        setInvoiceNo,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate
     };
 };

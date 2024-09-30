@@ -29,8 +29,10 @@ const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) 
     }
 
 
-    const startDate = dayjs(book.startdate);
-    const billingdate = startDate.format('YYYY-MM-DD');
+    // const startDate = dayjs(book.startdate);
+    // const billingdate = startDate.format('YYYY-MM-DD');
+    // const startDate = dayjs(book.startdate);
+    // const billingdate = book.startdate ? dayjs(book.startdate).format('YYYY-MM-DD') : boo
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
     const gstAmount = customerData?.gstTax / 2
     const cgst = totalAmount * gstAmount / 100 || 0;
@@ -130,7 +132,7 @@ const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) 
 
                                     <tr>
                                         <td className="tabledata" style={{ textAlign: '' }}>1</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{billingdate}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.startdate ? dayjs(book.startdate).format("YYYY-MM-DD"):''}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.tripid}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>
                                             {book.guestname} <br />

@@ -116,13 +116,15 @@ const Billing = () => {
         // organizationgstnumber,
         // GmapimageUrl,
         // mapimageUrl,
+        handleKeyenterinvoicdeno,
          total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,
         //   handleKeyenterBilling,
-           discound_PercentageCalc,
+           discound_PercentageCalc,invoiceno,setInvoiceNo,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate
 
         // ... (other state variables and functions)
     } = useBilling();
+    
 
     useEffect(() => {
         if (actionName === 'List') {
@@ -133,9 +135,7 @@ const Billing = () => {
     const { permissions } = useContext(PermissionContext)
     const Billing_read = permissions[5]?.read;
     const Billing_new = permissions[5]?.new;
-    // const Billing_modify = permissions[5]?.modify;
-    // const Billing_delete = permissions[5]?.delete;
-    //   organisation logo
+  
     const { logo } = useData()
     const { particularPdf, organizationDetail } = PdfData()
     
@@ -179,6 +179,24 @@ const Billing = () => {
                                     value={book.billingno || selectbillingdata.billingno || ''}
                                     onChange={handleChange}
                                     // onKeyDown={handleKeyenterBilling}
+                                />
+                            </div>
+                         
+                            <div className="input">
+                                <div className="icone">
+                                    <BadgeIcon color="action" />
+                                </div>
+                                <TextField
+                                    // margin="normal"
+                                    size="small"
+                                    id="InvoiceNo"
+                                    className='full-width'
+                                    label="Invoice NO"
+                                    name="Invoice_No"
+                                    autoComplete="new-password"
+                                    value={invoiceno || ''}
+                                    onChange={(e)=>setInvoiceNo(e.target.value)}
+                                    onKeyDown={handleKeyenterinvoicdeno}
                                 />
                             </div>
                             <div className="input">

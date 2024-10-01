@@ -18,9 +18,20 @@ let allLatitudeValues = [];
 let allLongitudeValues = [];
 let startPlaceName;
 let endPlaceName;
-let wayPlaceName;
+let wayPlaceName = [];
 let startLatitude;
 let startLongitude;
+let endLatitude;
+let endLongitude;
+let wayLatitude;
+let wayLongitude
+let wayPointLatitude;
+let wayPointLongitude;
+let wayDate=[];
+let wayTime = [];
+let Alpha;
+let mapDetails = [];
+let editmode;
 const apiUrl = APIURL;
 
 // function initMap(lat) {
@@ -167,20 +178,31 @@ function initMap(lat) {
     const allLatitudeValues = [];
     const allLongitudeValues = [];
 console.log(lat,'allvalues');
+    const lastPointrow = lat?.row;
+    const endpoint = lastPointrow?.map(li=>li?.Location_Alpha)
+    const lastPoint =  endpoint?.includes('C');
 
+    console.log(endpoint,lastPoint,'alphalast');
+    
     const latitudevalue = lat?.lat;
     const longitudevalue = lat?.lng;
+    editmode = lat?.editMode
+    const wayTrips = lat?.row?.filter(trip => trip.trip_type === "waypoint")
+    wayDate=wayTrips?.map(li=>li.date)
+    wayTime = wayTrips?.map(li => li.time)
+     wayPointLatitude = wayTrips?.map(li=>li.Latitude)
+    wayPointLongitude = wayTrips?.map(li=>li.Longitude)
+console.log(wayPointLatitude,wayPointLongitude,wayTrips,wayDate,'allway');
 
-     startLatitude = lat?.startLatitude
-     startLongitude = lat?.startLongitude
-     startPlaceName = lat?.startPlaceName
-     endPlaceName = lat?.endPlaceName
-     wayPlaceName = lat?.wayPlaceName
-    const endLatitude = lat?.endLatitude
-    const endLongitude = lat?.endLongitude
-    const wayLatitude = lat?.wayLatitude
-    const wayLongitude = lat?.wayLongitude
-
+    startLatitude = lat?.startLatitude
+    startLongitude = lat?.startLongitude
+    startPlaceName = lat?.startPlaceName
+    endPlaceName = lat?.endPlaceName
+    wayPlaceName = lat?.wayPlaceName
+    endLatitude = lat?.endLatitude
+    endLongitude = lat?.endLongitude
+    wayLatitude = lat?.wayLatitude
+    wayLongitude = lat?.wayLongitude
     // if (latitudevalue !== undefined && longitudevalue !== undefined) {
     //     const latArray = latitudevalue?.toString().split(',').map(item => item.trim());
     //     const lngArray = longitudevalue?.toString().split(',').map(item => item.trim());
@@ -230,7 +252,7 @@ console.log(lat,'allvalues');
 
             map.fitBounds(bounds);
         });
-     
+     let markerLabel;
         // Create a new marker using the first latitude and longitude values
         if (startLatitude && startLongitude) {
             const markerA = createMarker(
@@ -241,10 +263,11 @@ console.log(lat,'allvalues');
                 'start', 
                 startPlaceName,
                 startLatitude,
-                startLongitude
+                startLongitude,
             );
             
             google.maps.event.addListener(markerA, 'click', function () {
+                Alpha = "A"
                 console.log("Marker A clicked, showing popup.");
 
             });
@@ -257,18 +280,19 @@ console.log(lat,'allvalues');
             //     infoWindow.setContent(`End Location (B)`);
             //     infoWindow.open(map, markerB);
             // });
-            const markerC = createMarker(
+            const markerE = createMarker(
                 new google.maps.LatLng(endLatitude, endLongitude), 
-                "C", 
+                markerLabel, 
                 lat?.endingDate || '', 
                 lat?.endingTime || '', 
                 'end', 
                 endPlaceName,
                 endLatitude,
-                endLongitude 
+                endLongitude ,
             );
             
-            google.maps.event.addListener(markerC, 'click', function () {
+            google.maps.event.addListener(markerE, 'click', function () {
+                Alpha="E"
                 console.log("Marker C clicked, showing popup.");
 
             });
@@ -276,27 +300,69 @@ console.log(lat,'allvalues');
         const infoWindow = new google.maps.InfoWindow();
 
         // Marker C (Waypoint)
-        if (wayLatitude && wayLongitude) {
-       
-            // google.maps.event.addListener(markerB, 'click', function () {
-            //     infoWindow.setContent(`Waypoint (B) - Date: ${markerData.date}, Time: ${markerData.time}`);
-            //     infoWindow.open(map, markerB);
-            // });
-            const markerB = createMarker(
-                new google.maps.LatLng(wayLatitude, wayLongitude), 
-                "B", 
-                lat?.wayDate || '', 
-                lat?.wayTime || '', 
-                'waypoint', 
-                wayPlaceName,
-                wayLatitude,
-                wayLongitude
-            );
-            google.maps.event.addListener(markerB, 'click', function () {
-                console.log("Marker C clicked, showing popup.");
-
+        if (wayPointLatitude && wayPointLongitude && wayPointLatitude.length === wayPointLongitude.length) {
+            wayPointLatitude?.map((latStr, index) => {
+                const lonStr = wayPointLongitude[index];
+                
+                // Convert latitude and longitude from strings to numbers
+                const latitude = parseFloat(latStr);
+                const longitude = parseFloat(lonStr);
+        
+                const wayDates = wayDate[index] || ''; // Assuming wayDate is an array
+                const wayTimes = wayTime[index] || ''; // Assuming wayTime is an array
+                const placeName = wayPlaceName || 'Unnamed Location'; // Assuming wayPlaceName is an array or fallback to a default
+        console.log(wayDate,wayTime,placeName,lonStr,index,wayDate,'alphawaypoints');
+        
+                // Generate alphabet for marker label based on index
+                 markerLabel = String.fromCharCode(66 + index); // 65 is the char code for 'A'
+        
+                console.log(`Rendering marker ${markerLabel} for Latitude: ${latitude}, Longitude: ${longitude}`);
+        
+                // Create marker for each latitude and longitude pair, with incrementing alphabet labels
+                const markerB = createMarker(
+                    new google.maps.LatLng(latitude, longitude), 
+                    markerLabel, // Alphabet label
+                    wayDates, 
+                    wayTimes, 
+                    'waypoint', 
+                    placeName,
+                    latitude,
+                    longitude
+                );
+        
+                // Add event listener for marker click
+                google.maps.event.addListener(markerB, 'click', function () {
+                    console.log(`Marker ${markerLabel} at Latitude: ${latitude}, Longitude: ${longitude} clicked, showing popup.`);
+                });
             });
+        } else {
+            console.error("Mismatch in the length of wayPointLatitude and wayPointLongitude arrays.");
         }
+        
+        
+        
+        
+        // if (wayLatitude && wayLongitude) {
+       
+        //     // google.maps.event.addListener(markerB, 'click', function () {
+        //     //     infoWindow.setContent(`Waypoint (B) - Date: ${markerData.date}, Time: ${markerData.time}`);
+        //     //     infoWindow.open(map, markerB);
+        //     // });
+        //     const markerB = createMarker(
+        //         new google.maps.LatLng(wayLatitude, wayLongitude), 
+        //         "B", 
+        //         lat?.wayDate || '', 
+        //         lat?.wayTime || '', 
+        //         'waypoint', 
+        //         wayPlaceName,
+        //         wayLatitude,
+        //         wayLongitude
+        //     );
+        //     google.maps.event.addListener(markerB, 'click', function () {
+        //         console.log("Marker C clicked, showing popup.");
+
+        //     });
+        // }
         window.map = map;
     } catch (error) {
         console.error('Error initializing map:', error);
@@ -316,16 +382,110 @@ console.log(lat,'allvalues');
 
 
 function submitMapPopup() {
-    const date = document.getElementById('date').value;
-    const time = document.getElementById('time').value;
-    const tripTypeElement = document.getElementById('tripType');
-    const placeName = document.getElementById('placeName')?.value || startPlaceName;
-    const tripid = localStorage.getItem('selectedTripid');
-    const lat = document.getElementById('lat')?.value || startLatitude;
-    const long = document.getElementById('lng')?.value || startLongitude;
-    const latitude = parseFloat(lat)
-    const longitude = parseFloat(long)
+      if(editmode==="editMode")
+      {
+        const position = popup.getPosition();
+        const latitude = position.lat();
+        const longitude = position.lng();
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const placeName = document.getElementById('placeName')?.value;
+        const tripTypeElement = document.getElementById('tripType');
+        const tripid = localStorage.getItem('selectedTripid');
+        const lat = document.getElementById('lat')?.value || startLatitude || endLatitude ||wayLatitude  ;
+        const long = document.getElementById('lng')?.value || startLongitude || endLongitude|| wayLongitude;
+        // const latitude = parseFloat(lat) || latitude1
+        // const longitude = parseFloat(long) || longitude1
+        let alpha;
     
+    
+        if (!date || !time || !tripTypeElement) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+    
+        const selectedTripType = tripTypeElement.value;
+        if(selectedTripType==="start"){
+            alpha="A"
+        }
+        if(selectedTripType==="waypoint"){
+            alpha="B"
+        }
+        if(selectedTripType==="end"){
+            alpha="C"
+        }
+        console.log(date,time,selectedTripType,placeName,tripid,'alpha',latitude,longitude,alpha,editmode,typeof(latitude));
+        // gmappost-submitForm
+        fetch(`${apiUrl}/gmappost-submitForm`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude,alpha }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                // Handle the response as needed
+            })
+            .catch(error => console.error('Error:', error));
+        // fetch(`${apiUrl}/gmap-submitForm`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('Server response:', data);
+        //         // Handle the response as needed
+        //     })
+        //     .catch(error => console.error('Error:', error));
+        console.log(waypoints,wayPlaceName,selectedTripType,'waypoints');
+    
+        popup.close();
+        if (selectedTripType === 'start') {
+            startMarker = createMarker(popup.getPosition(), 'A', date, time, selectedTripType, placeName);
+        } else if (selectedTripType === 'end') {
+            if (waypoints.length > 0 || wayPlaceName!=="") {
+                const lastWaypointLabel = waypoints[waypoints.length - 1]?.label;
+                const nextEndLabel = getNextAlphabeticLetter(lastWaypointLabel);
+                endMarker = createMarker(popup.getPosition(), nextEndLabel, date, time, selectedTripType, placeName);
+                document.getElementById('end').value = placeName;
+                console.log(placeName,nextEndLabel,lastWaypointLabel,'wayp1234');
+                
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            } else {
+                endMarker = createMarker(popup.getPosition(), 'B', date, time, selectedTripType, placeName);
+                document.getElementById('end').value = placeName;
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            }
+        } else if (selectedTripType === 'waypoint') {
+            const waypointLabel = getNextWaypointLabel();
+            const waypointMarker = createMarker(popup.getPosition(), waypointLabel, date, time, selectedTripType, placeName);
+            waypoints.push(waypointMarker);
+            if (startMarker && endMarker) {
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            }
+        }
+      }
+      else{
+
+    const position = popup.getPosition();
+    const latitude1 = position.lat();
+    const longitude1 = position.lng();
+    const date = document.getElementById('date')?.value;
+    const time = document.getElementById('time')?.value;
+    const placeName = document.getElementById('placeName')?.value;
+    const tripTypeElement = document.getElementById('tripType');
+    const tripid = localStorage.getItem('selectedTripid');
+    const lat = document.getElementById('lat')?.value || startLatitude || endLatitude ||wayLatitude  ;
+    const long = document.getElementById('lng')?.value || startLongitude || endLongitude|| wayLongitude;
+    const latitude = parseFloat(lat) || latitude1
+    const longitude = parseFloat(long) || longitude1
+    let alpha;
+
 
     if (!date || !time || !tripTypeElement) {
         alert('Please fill in all required fields.');
@@ -333,8 +493,30 @@ function submitMapPopup() {
     }
 
     const selectedTripType = tripTypeElement.value;
-    console.log(date,time,selectedTripType,placeName,tripid,'ajay',latitude,longitude);
-
+    if(selectedTripType==="start"){
+        alpha="A"
+    }
+    if(selectedTripType==="waypoint"){
+        alpha="B"
+    }
+    if(selectedTripType==="end"){
+        alpha="C"
+    }
+    console.log(date,time,selectedTripType,placeName,tripid,'alpha',lat,long,latitude,longitude,latitude1,longitude1,alpha);
+    // gmappost-submitForm
+    fetch(`${apiUrl}/gmappost-submitForm`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude,alpha }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            // Handle the response as needed
+        })
+        .catch(error => console.error('Error:', error));
     // fetch(`${apiUrl}/gmap-submitForm`, {
     //     method: 'POST',
     //     headers: {
@@ -348,16 +530,19 @@ function submitMapPopup() {
     //         // Handle the response as needed
     //     })
     //     .catch(error => console.error('Error:', error));
+    console.log(waypoints,wayPlaceName,selectedTripType,'waypoints');
 
     popup.close();
     if (selectedTripType === 'start') {
         startMarker = createMarker(popup.getPosition(), 'A', date, time, selectedTripType, placeName);
     } else if (selectedTripType === 'end') {
-        if (waypoints.length > 0) {
-            const lastWaypointLabel = waypoints[waypoints.length - 1].label;
+        if (waypoints.length > 0 || wayPlaceName!=="") {
+            const lastWaypointLabel = waypoints[waypoints.length - 1]?.label;
             const nextEndLabel = getNextAlphabeticLetter(lastWaypointLabel);
             endMarker = createMarker(popup.getPosition(), nextEndLabel, date, time, selectedTripType, placeName);
             document.getElementById('end').value = placeName;
+            console.log(placeName,nextEndLabel,lastWaypointLabel,'wayp1234');
+            
             calculateAndDisplayRoute(directionsService, directionsRenderer);
         } else {
             endMarker = createMarker(popup.getPosition(), 'B', date, time, selectedTripType, placeName);
@@ -373,10 +558,11 @@ function submitMapPopup() {
         }
     }
 }
+}
 
 
 function getNextAlphabeticLetter(currentLetter) {
-    return String.fromCharCode(currentLetter.charCodeAt(0) + 1);
+    return String.fromCharCode(currentLetter?.charCodeAt(0) + 1);
 }
 
 function getNextWaypointLabel() {
@@ -523,16 +709,69 @@ console.log( date, time, tripType, placeName ,'marker7788');
         }
 
         const deleteButton = popupContent.querySelector('#DeleteButton');
+        // if (deleteButton) {
+        //     const position = popup.getPosition();
+        //     const latitude = position.lat();
+        //     const longitude = position.lng();
+        //     console.log(latitude,longitude,'del Latitude and longitude');
+            
+        //     deleteButton.addEventListener('click', () => {
+        //         marker.setMap(null); // Remove the marker from the map
+        //         delete markersMap[label]; // Remove the marker from the markersMap
+        //         '/deleteMapPoint'
+        //         if (tripType === 'waypoint') {
+        //             waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
+        //         }
+        //         popup.close(); // Close the popup
+        //     });
+        // }
+
         if (deleteButton) {
+            const position = popup.getPosition();
+            const tripid = localStorage.getItem('selectedTripid');
+            const latitudepoint = position.lat();
+            const longitudepoint = position.lng();
+            const latitude = latitudepoint.toString()
+            const longitude = longitudepoint.toString()
+            console.log(latitude, longitude,tripid, 'del Latitude and longitude');
+        
             deleteButton.addEventListener('click', () => {
                 marker.setMap(null); // Remove the marker from the map
                 delete markersMap[label]; // Remove the marker from the markersMap
+        
+                // Check if the marker is a waypoint
                 if (tripType === 'waypoint') {
                     waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
                 }
+        
+                // Make the API call to delete the marker from the database
+                fetch(`${apiUrl}/deleteMapPoint`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: latitude,
+                        longitude: longitude,
+                        tripid: tripid  // Include the tripid for deletion
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        console.log(data.message); // Log success message
+                    } else {
+                        console.log('Error:', data.error); // Log any errors
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting marker:', error);
+                });
+        
                 popup.close(); // Close the popup
             });
         }
+        
 
     });
 

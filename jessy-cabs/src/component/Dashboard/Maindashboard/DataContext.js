@@ -1,11 +1,5 @@
 // DataContext.js
 import React, { createContext, useContext, useState } from 'react';
-// import { APIURL } from "../../url"
-// import axios from 'axios';
-// import dayjs from "dayjs";
-
-// const apiUrl = APIURL
-
 const DataContext = createContext();
 
 export const useData1 = () => {
@@ -20,8 +14,6 @@ export const DataProvider = ({ children }) => {
     const [expanded,setExpanded]=useState(false);
     const [viewmonthdata,setViewMonthdata]=useState("monthly")
     const [todaybooking, setTodayBooking] = useState([]);
-    // const [toDate, setToDate] = useState(dayjs());
-    // const [fromDate, setFromDate] = useState(dayjs());
     
 
 const [triggerCustomerAdd,setTriggerCustomerAdd]=useState(false)

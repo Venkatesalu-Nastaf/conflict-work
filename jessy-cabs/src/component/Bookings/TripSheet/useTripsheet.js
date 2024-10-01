@@ -80,6 +80,7 @@ const useTripsheet = () => {
     const [cusnightcount, setcusnightCount] = useState()
     const [EditMap, setEditMap] = useState(false)
     const [groupTripId, setGroupTripId] = useState()
+    const [manualTripID,setManualTripID] = useState([])
 
     //-------------------------calc-------------------
 
@@ -207,6 +208,7 @@ const useTripsheet = () => {
     const [timeToggle, setTimeToggle] = useState('');
     const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
+    const [manualMarkTrigger,setManualMarkTrigger] = useState(false)
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
@@ -355,7 +357,17 @@ const useTripsheet = () => {
     //         }
     //     }
     // };
+
     const handleButtonClick = () => {
+        console.log(manualTripID,'manu');
+        
+        if(manualTripID.length>0){
+            console.log(manualTripID,'manualll');
+            
+            setError(true)
+            setErrorMessage("Already Map Is Created")
+            return
+        }
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
         const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerData.closetime || formData.closetime;
@@ -3353,7 +3365,7 @@ const useTripsheet = () => {
 
 
             try {
-
+setManualMarkTrigger(!manualMarkTrigger)
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
@@ -5293,7 +5305,7 @@ const useTripsheet = () => {
 
     const handleEditMap = () => {
         // setEditMap(!EditMap);
-
+    const editTrigger = "editMode"
         // Get the trip, time, and date details
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
@@ -5323,7 +5335,7 @@ const useTripsheet = () => {
         const wayLatitude = wayTrips?.map(li => li.Latitude)
         const wayLongitude = wayTrips?.map(li =>li.Longitude)
 
-        console.log(row,startingTime,endingTime,startingDate,endingDate,wayDate,wayTime,'lat');
+        console.log(row,startingTime,endingTime,startingDate,endingDate,wayDate,wayTime,editTrigger,'lat');
 
 
         // Check if tripid is valid
@@ -5341,7 +5353,7 @@ const useTripsheet = () => {
 
 
             // Open new tab with serialized latitude and longitude arrays
-            const newTab = window.open(`/navigationmap?tripid=${tripid}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}&startLatitude=${startLatitude}&startPlaceName=${startPlaceName}&endLatitude=${endLatitude}&startingTime=${startingTime}&startingDate=${startingDate}&startLongitude=${startLongitude}&endLongitude=${endLongitude}&endingDate=${endingDate}&endingTime=${endingTime}&endPlaceName=${endPlaceName}&wayLatitude=${wayLatitude}&wayLongitude=${wayLongitude}&wayDate=${wayDate}&wayTime=${wayTime}&wayPlaceName=${wayPlaceName}`, '_blank', 'noopener,noreferrer');
+            const newTab = window.open(`/navigationmap?tripid=${tripid}&edit=${editTrigger}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}&startLatitude=${startLatitude}&startPlaceName=${startPlaceName}&endLatitude=${endLatitude}&startingTime=${startingTime}&startingDate=${startingDate}&startLongitude=${startLongitude}&endLongitude=${endLongitude}&endingDate=${endingDate}&endingTime=${endingTime}&endPlaceName=${endPlaceName}&wayLatitude=${wayLatitude}&wayLongitude=${wayLongitude}&wayDate=${wayDate}&wayTime=${wayTime}&wayPlaceName=${wayPlaceName}`, '_blank', 'noopener,noreferrer');
             if (newTab) {
                 newTab.focus();
             }
@@ -5375,6 +5387,25 @@ const useTripsheet = () => {
     //     }
 
     // }
+
+    useEffect(()=>{
+        const fetchData = async()=>{
+            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
+            console.log(tripid,'tripidmanual');
+            try{
+            
+            const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
+            console.log(response.data,'manual');
+            setManualTripID(response.data)
+            }
+            catch(error){
+                console.log(error,'Manual Error');
+                
+            }
+
+        }
+        fetchData()
+    },[manualMarkTrigger])
 
     const handleDeleteMap = () => {
 

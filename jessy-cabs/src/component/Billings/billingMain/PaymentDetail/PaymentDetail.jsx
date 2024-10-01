@@ -46,9 +46,6 @@ const PaymentDetail = ({ organizationNames }) => {
     handleShow,
     handleExcelDownload,
     handlePdfDownload,
-    totalAmount,
-    paidAmount,
-    pendingAmount,
     reversedRows,
     handleButtonClickTripsheet,
     columns
@@ -197,20 +194,7 @@ const PaymentDetail = ({ organizationNames }) => {
               )}
             </PopupState>
           </div>
-          <div className='amount-calculator'>
-            <div className='total-inputs' >
-              <label htmlFor="toatlAmount">Total Amount:</label>
-              <input type="number" id="toatlAmount" value={totalAmount} readOnly />
-            </div>
-            <div className='total-inputs' >
-              <label htmlFor="paindAmounts">Paid Amount:</label>
-              <input type="number" id="paindAmounts" value={paidAmount} readOnly />
-            </div>
-            <div className='total-inputs' >
-              <label htmlFor="pendingAmount">Pending Amount:</label>
-              <input type="number" id="pendingAmount" value={pendingAmount} readOnly />
-            </div>
-          </div>
+         
         </div>
         <div className="table-bookingCopy-PaymentDetail">
           <div className='payment-table'>

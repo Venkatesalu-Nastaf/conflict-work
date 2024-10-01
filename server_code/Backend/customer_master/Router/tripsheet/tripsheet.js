@@ -1336,6 +1336,254 @@ router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
     });
 });
 
+// router.post('/gmappost-submitForm', (req, res) => {
+//     const { date, time, tripType, placeName, tripid, latitude, longitude, alpha } = req.body;
+
+//     console.log(latitude, longitude, tripType, placeName, tripid, alpha, 'latt');
+
+//     // Query to check existing waypoints for the given tripid and tripType
+//     const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+
+//     db.query(getquery, [tripid, tripType], (error, results) => {
+//         if (error) {
+//             console.error('Database Error:', error);
+//             return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+//         console.log(results,'resultsss');
+
+//         if(results.length===0){
+//             const insertQuery = "INSERT INTO gmapdata (date, time,Location_Alpha,  trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?,?)";
+//             db.query(insertQuery, [date, time, alpha,tripType, placeName, tripid,latitude,longitude], (err, insertResults) => {
+//                 if (err) {
+//                     return res.status(500).json({ error: 'Internal Server Error' });
+//                 }
+//                 res.status(200).json({ message: 'Form data submitted successfully' });
+//             });
+//         }
+
+//         let newAlpha = alpha; // Initialize with the incoming alpha value for start or end
+
+//         if (tripType === 'waypoint') {
+//             // Get the existing Location_Alpha values for waypoints
+//             const waypointAlphas = results?.map(row => row.Location_Alpha);
+//             const latitudePoint = results?.map(row => row.Latitude);
+//             const longitudePoint = results?.map(row => row.Longitude);
+//             // Find the highest numbered alpha, e.g., "B1", "B2", etc.
+//             let maxAlphaNumber = 0;
+//             waypointAlphas.forEach(a => {
+//                 const match = a.match(/^B(\d+)$/); // Match alphas like "B1", "B2", etc.
+//                 if (match) {
+//                     const num = parseInt(match[1], 10);
+//                     if (num > maxAlphaNumber) {
+//                         maxAlphaNumber = num;
+//                     }
+//                 }
+//             });
+
+//             // Increment the alpha number for the new waypoint
+//             newAlpha = `B${maxAlphaNumber + 1}`;
+
+//             // Insert the new waypoint record into gmapdata table
+//             const insertQuery = `
+//                 INSERT INTO gmapdata 
+//                 (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) 
+//                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+//             `;
+//             const values = [date, time, newAlpha, tripType, placeName, tripid, latitude, longitude];
+
+//             db.query(insertQuery, values, (err, insertResults) => {
+//                 if (err) {
+//                     console.error('Database Error:', err);
+//                     return res.status(500).json({ error: 'Internal Server Error' });
+//                 }
+
+//                 res.status(200).json({ message: 'Waypoint submitted successfully', alpha: newAlpha });
+//             });
+//         }
+
+//         // Handle the update logic for start or end tripType
+//         if (tripType === 'start' || tripType === 'end') {
+//             const updateQuery = `
+//                 UPDATE gmapdata
+//                 SET date = ?, time = ?, place_name = ?, Latitude = ?, Longitude = ?
+//                 WHERE tripid = ? AND trip_type = ?
+//             `;
+//             const updateValues = [date, time, placeName, latitude, longitude, tripid, tripType];
+
+//             db.query(updateQuery, updateValues, (err, updateResults) => {
+//                 if (err) {
+//                     console.error('Database Update Error:', err);
+//                     return res.status(500).json({ error: 'Internal Server Error' });
+//                 }
+
+//                 res.status(200).json({ message: `${tripType} trip updated successfully` });
+//             });
+//         }
+//     });
+// });
+
+router.post('/gmappost-submitForm', (req, res) => {
+    const { date, time, tripType, placeName, tripid, latitude, longitude, alpha } = req.body;
+
+    console.log(latitude, longitude, tripType, placeName, tripid, alpha, 'latt');
+
+    // Query to check existing waypoints for the given tripid and tripType
+    const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+
+    db.query(getquery, [tripid, tripType], (error, results) => {
+        if (error) {
+            console.error('Database Error:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        console.log(results, 'resultsss');
+
+        if (results.length === 0) {
+            // Only insert if no results are found
+            const insertQuery = "INSERT INTO gmapdata (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            db.query(insertQuery, [date, time, alpha, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                return res.status(200).json({ message: 'Form data submitted successfully' });
+            });
+        } else {
+            // Handle update logic or waypoint insertion if data exists
+
+            let newAlpha = alpha; // Initialize with the incoming alpha value for start or end
+
+            if (tripType === 'waypoint') {
+                // Handle waypoint logic
+                const waypointAlphas = results?.map(row => row.Location_Alpha);
+                const latitudePoint = results?.map(row => row.Latitude);
+                const longitudePoint = results?.map(row => row.Longitude);
+
+                console.log(latitudePoint, longitudePoint, 'checking', latitude, longitude);
+
+                // Convert latitude and longitude to strings
+                const latitudeStr = latitude.toString();
+                const longitudeStr = longitude.toString();
+
+                // Check if the latitude and longitude exist in their respective arrays
+                const latitudeExists = latitudePoint.some(lat => lat.toString() === latitudeStr);
+                const longitudeExists = longitudePoint.some(lng => lng.toString() === longitudeStr);
+
+                console.log(latitudeExists, longitudeExists, latitudeStr, longitudeStr, 'all values');
+
+                // If the latitude and longitude exist, update and stop further execution
+                if (latitudeExists && longitudeExists) {
+                    const updateQuery = `
+                        UPDATE gmapdata
+                        SET date = ?, time = ?, Latitude = ?, Longitude = ?
+                        WHERE tripid = ? AND Latitude = ? AND Longitude = ?
+                    `;
+
+                    const updateValues = [date, time, latitudeStr, longitudeStr, tripid, latitudeStr, longitudeStr];
+
+                    db.query(updateQuery, updateValues, (err, updateResults) => {
+                        if (err) {
+                            console.log('Database Update Error:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+
+                        console.log(updateResults, 'urs');
+                        return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                    });
+
+                    // Stop further execution since the update is done
+                    return;
+                }
+
+                // Logic for generating a new alpha for the waypoint
+                let maxAlphaNumber = 0;
+                waypointAlphas.forEach(a => {
+                    const match = a.match(/^B(\d+)$/); // Match alphas like "B1", "B2", etc.
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        if (num > maxAlphaNumber) {
+                            maxAlphaNumber = num;
+                        }
+                    }
+                });
+
+                newAlpha = `B${maxAlphaNumber + 1}`;
+
+                // Insert new waypoint if the latitude and longitude don't exist
+                const insertQuery = `
+                    INSERT INTO gmapdata 
+                    (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                `;
+                const values = [date, time, newAlpha, tripType, placeName, tripid, latitude, longitude];
+
+                db.query(insertQuery, values, (err, insertResults) => {
+                    if (err) {
+                        console.error('Database Error:', err);
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+
+                    return res.status(200).json({ message: 'Waypoint submitted successfully', alpha: newAlpha });
+                });
+            } else if (tripType === 'start' || tripType === 'end') {
+                // Handle start or end trip update logic
+                const updateQuery = `
+                    UPDATE gmapdata
+                    SET date = ?, time = ?, place_name = ?, Latitude = ?, Longitude = ?
+                    WHERE tripid = ? AND trip_type = ?
+                `;
+                const updateValues = [date, time, placeName, latitude, longitude, tripid, tripType];
+
+                db.query(updateQuery, updateValues, (err, updateResults) => {
+                    if (err) {
+                        console.error('Database Update Error:', err);
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+
+                    return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                });
+            }
+        }
+    });
+});
+
+// Delete marker Point by Latitude and Longitude
+router.delete('/deleteMapPoint', (req, res) => {
+    const { latitude, longitude, tripid } = req.body;
+
+    const deleteQuery = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? AND tripid = ?";
+    const deleteValues = [latitude, longitude, tripid];
+
+    db.query(deleteQuery, deleteValues, (err, deleteResults) => {
+        if (err) {
+            console.error('Database Delete Error:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (deleteResults.affectedRows > 0) {
+            return res.status(200).json({ message: 'Map point deleted successfully' });
+        } else {
+            return res.status(404).json({ message: 'Map point not found' });
+        }
+    });
+});
+
+// get the gmapdata by tripid
+router.get('/getGmapdataByTripId/:tripid',(req,res)=>{
+    const tripid = req.params.tripid;
+    console.log(tripid,'tripidmanual');
+    
+    const sqlquery = `SELECT * FROM gmapdata WHERE tripid = ?`
+    db.query(sqlquery,[tripid],(error,result)=>{
+        if(error){
+            console.log(error);
+        }
+        return res.status(200).json(result);
+
+    })
+})
+
+
+
 router.post('/gmap-submitForm', (req, res) => {
     const date = req.body.date;
     const time = req.body.time;
@@ -1344,7 +1592,7 @@ router.post('/gmap-submitForm', (req, res) => {
     const tripid = req.body.tripid;
     const latitude = req.body.latitude;
     const longitude = req.body.longitude;
-console.log(latitude,longitude,'latt');
+    console.log(latitude, longitude, tripType, placeName, tripid, latitude, longitude, 'latt');
 
     // Query to check if the tripid and trip_type exist
     const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
@@ -1353,18 +1601,19 @@ console.log(latitude,longitude,'latt');
         if (err) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
+        console.log(results, 'result');
 
         if (results.length > 0) {
             // Trip ID and trip type exist, delete the old row
-            const deleteQuery = "DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?";
-            db.query(deleteQuery, [tripid, tripType], (err, deleteResults) => {
+            const deleteQuery = `DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?`;
+            db.query(deleteQuery, [tripid], (err, deleteResults) => {
                 if (err) {
                     return res.status(500).json({ error: 'Internal Server Error' });
                 }
 
                 // Insert the new row
                 const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
-                db.query(insertQuery, [date, time, tripType, placeName, tripid,latitude,longitude], (err, insertResults) => {
+                db.query(insertQuery, [date, time, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
                     if (err) {
                         return res.status(500).json({ error: 'Internal Server Error' });
                     }
@@ -1374,7 +1623,7 @@ console.log(latitude,longitude,'latt');
         } else {
             // Trip ID and trip type do not exist, insert the new row directly
             const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
-            db.query(insertQuery, [date, time, tripType, placeName, tripid,latitude,longitude], (err, insertResults) => {
+            db.query(insertQuery, [date, time, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
                 if (err) {
                     return res.status(500).json({ error: 'Internal Server Error' });
                 }
@@ -1461,7 +1710,7 @@ router.get(`/t4hr-pack`, (req, res) => {
     const OrganizationName = req.query.organizationname;
     const stations = req.query.stations;
 
-    console.log(totalHours, VehicleName, duty, totkm, OrganizationName,stations, 'rate');
+    console.log(totalHours, VehicleName, duty, totkm, OrganizationName, stations, 'rate');
 
     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
         res.status(400).json({ error: 'Missing required parameters' });
@@ -1490,7 +1739,7 @@ router.get(`/t4hr-pack`, (req, res) => {
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName,stations, totalHours, totkm, duty, VehicleName, OrganizationName,stations], (error, results) => {
+    db.query(sql, [duty, VehicleName, OrganizationName, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
@@ -1514,7 +1763,7 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
     const OrganizationName = req.query.organizationname;
     const stations = req.query.stations;
 
-    console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan",stations)
+    console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan", stations)
 
 
     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype || !stations) {
@@ -1534,15 +1783,15 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                     LIMIT 1;`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, ratetype,stations, totalHours, totkm, duty, VehicleName, OrganizationName,stations], (error, results) => {
-    
+    db.query(sql, [duty, VehicleName, OrganizationName, ratetype, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
+
         // Check if any rows were returned
         if (results.length === 0) {
             return res.status(404).json({ error: 'No data found' });
         }
 
         // Send the fetched row in the response
-        console.log(results[0],"supplier",results)
+        console.log(results[0], "supplier", results)
         res.json(results[0]);
     });
 });
@@ -1678,20 +1927,20 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
 //                   }
 //             }
 
-    
+
 //         })
 
 //     })
-    
-   
 
-  
+
+
+
 // });
 
 router.get('/trip-data/:vehregno', async (req, res) => {
     const vehregno = req.params.vehregno;
-    console.log(vehregno,"veh")
-  
+    console.log(vehregno, "veh")
+
     const sql1 = `
       SELECT tripid AS shedInDateTripid, shedInDate, shedintime 
       FROM tripsheet 
@@ -1701,7 +1950,7 @@ router.get('/trip-data/:vehregno', async (req, res) => {
       ORDER BY shedInDate DESC, tripid DESC 
       LIMIT 1
     `;
-  
+
     const sql2 = `
       SELECT tripid AS closeDateTripid, closedate, closetime 
       FROM tripsheet 
@@ -1711,51 +1960,51 @@ router.get('/trip-data/:vehregno', async (req, res) => {
       ORDER BY closedate DESC, tripid DESC 
       LIMIT 1
     `;
-  
+
     try {
-      // Execute both queries in parallel
-      const [results1, results2] = await Promise.all([
-        new Promise((resolve, reject) => db.query(sql1, [vehregno], (err, results) => err ? reject(err) : resolve(results))),
-        new Promise((resolve, reject) => db.query(sql2, [vehregno], (err, results) => err ? reject(err) : resolve(results)))
-      ]);
-      console.log(results1,"shed")
-      console.log(results2,"close")
-  
-      // If no results are found
-      if (results1.length === 0 && results2.length === 0) {
-        return res.json([]);
-      }
-  
-      // If only results2 has data (closeDate)
-      if (results1.length === 0 && results2.length > 0) {
-        return res.json(results2);
-      }
-  
-      // If only results1 has data (shedInDate)
-      if (results1.length > 0 && results2.length === 0) {
-        return res.json(results1);
-      }
-  
-      // If both results1 and results2 have data
-      if (results1.length > 0 && results2.length > 0) {
-        // Check if the trip IDs are the same
-        if (results1[0].shedInDateTripid === results2[0].closeDateTripid) {
-          return res.json(results1);  // You can choose either, they are the same trip
+        // Execute both queries in parallel
+        const [results1, results2] = await Promise.all([
+            new Promise((resolve, reject) => db.query(sql1, [vehregno], (err, results) => err ? reject(err) : resolve(results))),
+            new Promise((resolve, reject) => db.query(sql2, [vehregno], (err, results) => err ? reject(err) : resolve(results)))
+        ]);
+        console.log(results1, "shed")
+        console.log(results2, "close")
+
+        // If no results are found
+        if (results1.length === 0 && results2.length === 0) {
+            return res.json([]);
         }
-  
-        // Compare dates to return the more recent one
-        if (new Date(results1[0].shedInDate) > new Date(results2[0].closedate)) {
-          return res.json(results1);
-        } else {
-          return res.json(results2);
+
+        // If only results2 has data (closeDate)
+        if (results1.length === 0 && results2.length > 0) {
+            return res.json(results2);
         }
-      }
+
+        // If only results1 has data (shedInDate)
+        if (results1.length > 0 && results2.length === 0) {
+            return res.json(results1);
+        }
+
+        // If both results1 and results2 have data
+        if (results1.length > 0 && results2.length > 0) {
+            // Check if the trip IDs are the same
+            if (results1[0].shedInDateTripid === results2[0].closeDateTripid) {
+                return res.json(results1);  // You can choose either, they are the same trip
+            }
+
+            // Compare dates to return the more recent one
+            if (new Date(results1[0].shedInDate) > new Date(results2[0].closedate)) {
+                return res.json(results1);
+            } else {
+                return res.json(results2);
+            }
+        }
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Error fetching trip data.' });
+        console.error(err);
+        return res.status(500).json({ message: 'Error fetching trip data.' });
     }
-  });
-  
+});
+
 
 
 
@@ -1870,38 +2119,38 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
-    console.log(customer,"cusssssssssssssssssss")
+    console.log(customer, "cusssssssssssssssssss")
     db.query('select rateType,TimeToggle,servicestation from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-      console.log(result,"mm")
+        console.log(result, "mm")
         res.status(200).json(result);
     })
 })
 
 router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
     const supplier = req.params.supplierdata;
-    console.log(supplier,"cusssssssssssssssssss")
+    console.log(supplier, "cusssssssssssssssssss")
     db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-      console.log(result,"mm")
+        console.log(result, "mm")
         res.status(200).json(result);
     })
 })
-router.get('/Checkstatusandappsclosed/:tripid',(req,res)=>{
+router.get('/Checkstatusandappsclosed/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    console.log(tripid,"cusssssssssssssssssss")
+    console.log(tripid, "cusssssssssssssssssss")
     db.query('select status,apps from tripsheet where tripid = ?', [tripid], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
         }
-      console.log(result,"mm")
+        console.log(result, "mm")
         res.status(200).json(result);
     })
 })
@@ -1910,7 +2159,7 @@ router.get('/Checkstatusandappsclosed/:tripid',(req,res)=>{
 // router.get('/regno/:vehino',(req,res)=>{
 //     const customer = req.params.vehino;
 //     console.log(customer)
-    
+
 //     const sql = `
 //     SELECT 
 //         GREATEST(

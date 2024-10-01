@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
-import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
+// import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import { useLocation } from "react-router-dom";
 import { PdfData } from "./PdfContext";
@@ -24,7 +24,7 @@ const useTransferreport = () => {
   const [invoiceDate, setInvoiceDate] = useState('')
   const [date] = useState(dayjs());
   const [info, setInfo] = useState(false);
-  const [bankOptions, setBankOptions] = useState([]);
+  // const [bankOptions, setBankOptions] = useState([]);
   const [tripData, setTripData] = useState("");
   const [rows, setRows] = useState([]);
   const [error, setError] = useState(false);
@@ -342,16 +342,16 @@ const useTransferreport = () => {
   const organizationcity = customerData.city;
   const organizationgstnumber = customerData.gstnumber;
 
-  useEffect(() => {
-    Organization()
-      .then((data) => {
-        if (data) {
-          setBankOptions(data);
-        } else {
-        }
-      })
-      .catch(() => { });
-  }, []);
+  // useEffect(() => {
+  //   Organization()
+  //     .then((data) => {
+  //       if (data) {
+  //         setBankOptions(data);
+  //       } else {
+  //       }
+  //     })
+  //     .catch(() => { });
+  // }, []);
 
   const [routedData, setRoutedData] = useState("");
 
@@ -744,7 +744,7 @@ const useTransferreport = () => {
     date,
     customer,
     tripData,
-    bankOptions,
+    // bankOptions,
     ratetypeforpage,
     attachedImage,
     setCustomer,

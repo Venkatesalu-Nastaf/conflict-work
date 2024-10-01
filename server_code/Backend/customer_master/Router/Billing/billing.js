@@ -487,6 +487,7 @@ router.get('/Group-Billing', (req, res) => {
 
 router.get('/tripsheet-keydown/:tripid', async (req, res) => {
   const tripid = req.params.tripid;
+ 
 
   const query = `
     SELECT * FROM tripsheet 
@@ -501,6 +502,7 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
       console.log(error);
       return res.status(500).json({ error: 'Database query failed' });
     }
+    console.log(result)
     return res.status(200).json(result);
   });
 });

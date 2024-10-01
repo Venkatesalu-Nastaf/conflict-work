@@ -545,39 +545,137 @@ const useDispatched = () => {
     //     }
     // };
     
-    const showImageDetails = async (row) => {
-        const tripid = row.tripid || selectedRow.tripid; 
+    // const showImageDetails = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid; 
+    //     const bookingno = row.bookingno || selectedRow.bookingno;
+    
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+    //         const data = response.data; // Assuming this contains image data
+    
+    //         console.log(data, "response");
+    
+    //         // Process the data to construct the full image URL
+    //         const rowsWithUniqueId = data.map((image, index) => ({
+    //             ...image,
+    //             id5: index + 1,
+               
+    //         }));
+    
+    //         console.log(rowsWithUniqueId, "image details"); 
+    //         console.log(rowsWithUniqueId.map(image => image.url), "image URLs");
+
+    //         setImageDetails(rowsWithUniqueId); // Set the processed data
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setWarning("Failed to fetch data");
+    //         setImageDetails([]); // Clear image details on error
+    //     }
+    // };
+
+    // const handleRefresh = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid
+    //     const bookingno = row.bookingno || selectedRow.bookingno
+    //     try {
+    //         if (!tripid) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //         } else {
+    //             const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+    //             const data = response.data;
+
+    //             //sepration of data----------------------------
+    //             let tripResults = [];
+    //             let bookingResults = [];
+
+    //             data?.map((item) => {
+    //                 if (item.type === "tripResults") {
+    //                     tripResults = item.data
+    //                 } else if (item.type === "bookingResults") {
+    //                     bookingResults = item.data
+    //                 }
+    //             })
+    //             const bothData = [...tripResults, ...bookingResults]
+
+    //             console.log('bothData',bothData)
+    //             //------------------------
+
+    //             if (bothData.length > 0) {
+    //                 const rowsWithUniqueId = bothData.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setImageDetails(rowsWithUniqueId);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed")
+    //                 console.log('rowwithuniqueid',rowsWithUniqueId)
+    //             } else {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("no data found")
+    //             }
+    //         }
+    //     } catch {
+    //     }
+    // };
+    
+    const handleShowImage = async (row) => {
+        const tripid = row.tripid || selectedRow.tripid;
         const bookingno = row.bookingno || selectedRow.bookingno;
-    
-        if (!tripid) {
-            setWarning(true);
-            setWarning("Enter The Tripid");
-            return;
-        }
-    
+        
         try {
-            const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
-            const data = response.data; // Assuming this contains image data
+            if (!tripid) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+            } else {
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+                const data = response.data;
     
-            console.log(data, "response");
+                console.log('API response:', data); // Log the entire response
     
-            // Process the data to construct the full image URL
-            const rowsWithUniqueId = data.map((image, index) => ({
-                ...image,
-                id5: index + 1,
-                url: `${apiUrl}/get-image/${encodeURIComponent(image.path)}` // Construct full URL
-            }));
+                let tripResults = [];
+                let bookingResults = [];
     
-            console.log(rowsWithUniqueId, "image details"); // Check if URLs are present
-            setImageDetails(rowsWithUniqueId); // Set the processed data
+                data?.map((item) => {
+                    if (item.type === "tripResults") {
+                        tripResults = item.data || []; // Ensure it's an array
+                    } else if (item.type === "bookingResults") {
+                        bookingResults = item.data || []; // Ensure it's an array
+                    }
+                });
+    
+                const bothData = [...tripResults, ...bookingResults];
+    
+                console.log('bothData:', bothData); // Log the combined data
+    
+                if (bothData.length > 0) {
+                    const rowsWithUniqueId = bothData.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setImageDetails(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed");
+                    console.log('rowsWithUniqueId:', rowsWithUniqueId);
+                } else {
+                    setImageDetails([]); // Ensure image details is cleared
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
-            setWarning("Failed to fetch data");
-            setImageDetails([]); // Clear image details on error
+            setError(true);
+            setErrorMessage("An error occurred while fetching data.");
         }
     };
     
-
     
     
      
@@ -612,7 +710,9 @@ const useDispatched = () => {
         handleShowCards(row);   // Call handleShowCards
         showSignature(row) // call signature 
         showMap(row) // call map
-        showImageDetails(row)
+        //showImageDetails(row)
+        //handleRefresh(row)
+        handleShowImage(row)
       };
 // show button
       const handleShowButtonClick = () => {

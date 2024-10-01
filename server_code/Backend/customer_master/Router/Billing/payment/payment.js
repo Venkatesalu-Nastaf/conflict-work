@@ -90,4 +90,29 @@ router.get('/getdatafromtripsheetvaluebilling/:tripidno',(req,res)=>{
     })
   })
 
+  router.get("/INVOICEENTER_Billing/:invoiceno",(req,res)=>{
+
+    const bookingno = req.params.invoiceno;
+
+    const sql = `
+    SELECT ts.*, bill.Bill_Date, bill.Invoice_No as  invoiceno
+    FROM tripsheet AS ts
+    LEFT JOIN Individual_Billing AS bill ON ts.tripid = bill.Trip_id
+    WHERE bill.Invoice_No = ?
+`;
+
+    db.query(sql,[bookingno],(err,results)=>{
+  
+        if (err) {
+            console.log(err)
+          return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+        }
+        console.log(results, 'ff')
+        return res.status(200).json(results)
+      
+    
+      })
+
+  })
+
 module.exports = router;

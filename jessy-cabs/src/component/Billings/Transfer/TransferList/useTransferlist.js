@@ -3,7 +3,7 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
-import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
+// import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 const useTransferlist = () => {
@@ -13,7 +13,7 @@ const useTransferlist = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [customer, setCustomer] = useState("");
-  const [bankOptions, setBankOptions] = useState([]);
+  // const [bankOptions, setBankOptions] = useState([]);
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [success, setSuccess] = useState(false);
@@ -229,16 +229,16 @@ const useTransferlist = () => {
     setServiceStation(newValue ? decodeURIComponent(newValue.label) : "");
   };
 
-  useEffect(() => {
-    Organization()
-      .then((data) => {
-        if (data) {
-          setBankOptions(data);
-        } else {
-        }
-      })
-      .catch(() => { });
-  }, []);
+  // useEffect(() => {
+  //   Organization()
+  //     .then((data) => {
+  //       if (data) {
+  //         setBankOptions(data);
+  //       } else {
+  //       }
+  //     })
+  //     .catch(() => { });
+  // }, []);
 
   const handleShow = useCallback(async () => {
     try {
@@ -357,7 +357,7 @@ const useTransferlist = () => {
     warningMessage,
     hidePopup,
     customer,
-    bankOptions,
+    // bankOptions,
     setCustomer,
     fromDate,
     setFromDate,

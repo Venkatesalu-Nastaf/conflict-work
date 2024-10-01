@@ -136,7 +136,7 @@ const PaymentDetail = ({ organizationNames }) => {
                 </div>
 
                 <div className="input">
-                  <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
+                  <Button className='full-width' variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>
               {/* <div className="input-field payment-search-field">

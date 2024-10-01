@@ -113,15 +113,21 @@
 
 // export default EtripSheetImages;
 
+
 // import React, { useState } from 'react';
 // import "./EtripSheetImages.css";
 // import { APIURL } from '../../../../url';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+// import Dialog from '@mui/material/Dialog';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import IconButton from '@mui/material/IconButton';
 
 // const EtripSheetImages = ({ imageDetails }) => {
 //   const apiUrl = APIURL;
 //   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [openDialog, setOpenDialog] = useState(false);
 
 //   const nextImage = () => {
 //     if (currentIndex < imageDetails.length - 1) {
@@ -135,12 +141,21 @@
 //     }
 //   };
 
+//   const openImageDialog = () => {
+//     setOpenDialog(true);
+//   };
+
+//   const closeImageDialog = () => {
+//     setOpenDialog(false);
+//     setCurrentIndex(0); // Reset index when closing dialog
+//   };
+
 //   return (
 //     <>
 //       <div>
 //         <p>Images</p>
 //         <div className='EtripSheetImages-card'>
-//           <div className="image-container">
+//           <div className="image-container" onClick={openImageDialog}>
 //             {imageDetails && imageDetails.length > 0 ? (
 //               <img
 //                 src={`${apiUrl}/get-image/${imageDetails[currentIndex].path}`}
@@ -160,11 +175,34 @@
 //           </div>
 //         </div>
 //       </div>
+
+//       {/* Dialog for showing all images */}
+//       <Dialog open={openDialog} onClose={closeImageDialog} fullWidth>
+//         <DialogTitle>Image Gallery</DialogTitle>
+//         <DialogContent>
+//           <div className='image-gallery'>
+//             {imageDetails && imageDetails.length > 0 ? (
+//               imageDetails.map((image, index) => (
+//                 <div key={image.id} className="image-gallery-item" onClick={() => setCurrentIndex(index)}>
+//                   <img
+//                     src={`${apiUrl}/get-image/${image.path}`}
+//                     alt={`Image ${image.id}`}
+//                     className='gallery-image'
+//                   />
+//                 </div>
+//               ))
+//             ) : (
+//               <p>No images available</p>
+//             )}
+//           </div>
+//         </DialogContent>
+//       </Dialog>
 //     </>
 //   );
 // }
 
 // export default EtripSheetImages;
+
 import React, { useState } from 'react';
 import "./EtripSheetImages.css";
 import { APIURL } from '../../../../url';
@@ -201,6 +239,38 @@ const EtripSheetImages = ({ imageDetails }) => {
     setCurrentIndex(0); // Reset index when closing dialog
   };
 
+  const renderContent = (item) => {
+    const imageUrl = `${apiUrl}/get-image/${item.path}`;
+    if (item.path.endsWith('.pdf')) {
+      return (
+        <embed
+          src={imageUrl}
+          title="PDF Viewer"
+          style={{
+            maxWidth: '100%',
+            maxHeight: '600px',
+            width: '100%',
+            height: '600px',
+            border: 'none',
+          }}
+        />
+      );
+    } else {
+      return (
+        <img
+          src={imageUrl}
+          alt={`Image ${item.id}`}
+          className='map-image'
+          style={{
+            maxWidth: '100%',
+            maxHeight: '600px',
+            objectFit: 'contain',
+          }}
+        />
+      );
+    }
+  };
+
   return (
     <>
       <div>
@@ -208,21 +278,17 @@ const EtripSheetImages = ({ imageDetails }) => {
         <div className='EtripSheetImages-card'>
           <div className="image-container" onClick={openImageDialog}>
             {imageDetails && imageDetails.length > 0 ? (
-              <img
-                src={`${apiUrl}/get-image/${imageDetails[currentIndex].path}`}
-                alt={`Image ${imageDetails[currentIndex].id}`}
-                className='map-image'
-              />
+              renderContent(imageDetails[currentIndex])
             ) : (
               <p>No images available</p>
             )}
             {/* Navigation arrows */}
-            <div className="arrow left-arrow" onClick={prevImage} style={{ visibility: currentIndex === 0 ? 'hidden' : 'visible' }}>
+            {/* <div className="arrow left-arrow" onClick={prevImage} style={{ visibility: currentIndex === 0 ? 'hidden' : 'visible' }}>
               <ArrowBackIcon />
             </div>
             <div className="arrow right-arrow" onClick={nextImage} style={{ visibility: currentIndex === imageDetails.length - 1 ? 'hidden' : 'visible' }}>
               <ArrowForwardIcon />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -235,11 +301,7 @@ const EtripSheetImages = ({ imageDetails }) => {
             {imageDetails && imageDetails.length > 0 ? (
               imageDetails.map((image, index) => (
                 <div key={image.id} className="image-gallery-item" onClick={() => setCurrentIndex(index)}>
-                  <img
-                    src={`${apiUrl}/get-image/${image.path}`}
-                    alt={`Image ${image.id}`}
-                    className='gallery-image'
-                  />
+                  {renderContent(image)}
                 </div>
               ))
             ) : (
@@ -253,4 +315,3 @@ const EtripSheetImages = ({ imageDetails }) => {
 }
 
 export default EtripSheetImages;
-

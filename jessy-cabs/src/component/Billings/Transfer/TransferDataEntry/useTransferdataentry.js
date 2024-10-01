@@ -298,7 +298,7 @@ const useTransferdataentry = () => {
     //         });
     // }, []);
 
-console.log(fromDate,toDate,'date');
+// console.log(fromDate,toDate,'date');
 
     const [book, setBook] = useState({
         Billdate: '',
@@ -964,6 +964,7 @@ console.log(fromDate,toDate,'date');
                     fromDate: fromDateValue,
                     toDate: enddate,
                     servicestation: servicestationValue
+                    
                 });
 
                 const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
@@ -976,6 +977,7 @@ console.log(fromDate,toDate,'date');
                 });
 
                 const data = response.data;
+                
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -984,6 +986,7 @@ console.log(fromDate,toDate,'date');
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage("successfully listed");
+                    
                 } else {
                     setRows([]);
                     setError(true);
@@ -998,7 +1001,7 @@ console.log(fromDate,toDate,'date');
         }
         else if (servicestationValue === "All" || servicestationValue === "") {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-
+                   
             try {
                 // Ensure that date values are correctly formatted
                 const fromDateValue = dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).isValid()
@@ -1019,8 +1022,35 @@ console.log(fromDate,toDate,'date');
                         toDate: enddate,
                     },
                 });
+                
+               // const data = response.data;
+               // console.log('ResponseData',data)
+               // console.log('Total Calculated Amount:', data.totalcalcAmount)
+
+                // my code 
 
                 const data = response.data;
+                console.log('Full Response',data)
+
+
+            const filteredData = data.filter(item => item.totalcalcAmount === 0 || item.totalcalcAmount === null);
+
+             const mappedData = filteredData.map(item => {
+    
+            return {
+                     id: item.id, 
+                     Tripid:item.tripid,
+                     Booking:item.bookingno,
+                     Status:item.status,
+                     totalcalcAmount: item.totalcalcAmount,
+        
+                  };
+                });
+
+
+                console.log('Filtered Data with totalcalcAmount as 0 or null:', mappedData);
+
+
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,

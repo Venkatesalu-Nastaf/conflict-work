@@ -32,7 +32,9 @@ const useBilling = () => {
     const [edit,setEdit]=useState(false)
     const [selectbillingdata,setselectBillingData]=useState({})
     const [billingdate,setBillingDate]=useState()
-    const [invoiceno,setInvoiceNo]=useState()
+    const [invoiceno,setInvoiceNo]=useState();
+   
+    const dataempty = Number(localStorage.getItem("searchdataurl"))
     //  const [IndividualBillData, setIndividualBillData] = useState({
     //     Invoice_No: '',
     //     Trip_id: '',
@@ -43,7 +45,7 @@ const useBilling = () => {
     //     Trips: "1"
     // })
 
-    const { setParticularPdf, setParticularRefNo, individualBilled } = PdfData();
+    const { setParticularPdf, setParticularRefNo,setIndividualBilled, individualBilled } = PdfData();
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -464,116 +466,113 @@ const useBilling = () => {
     // }, [location]);
      const dataget = async (bookingno) => {
     const bookdatano = bookingno
+    if(bookingno !== null){
+
+    
     const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
     const bookingDetails = responsedata.data[0]; 
    setBook(() => ({ ...bookingDetails }));
+    }
+    else{
+       
+        setBook(() => ({  }));
+    }
   }
+ 
+
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
+        // const params = new URLSearchParams(location.search);
+         const params = dataempty === 0 ? new URLSearchParams(location.search): new URLSearchParams();
+       
         // console.log("params", params)
-      
-        const dispath = params.get("dispatchcheck");
+       
+        const dispath = params.get("dispatchcheck")
         const tripid = params.get("tripid");
         const billingdate1 = params.get("Billingdate");
         const Invoicedata = params.get("Invoicedata")
-        if (dispath) {
-            // console.log(billingdate1,"datae",tripid,dispath,Invoicedata)
+        // console.log(billingdate1,"daff",tripid,dispath,Invoicedata,dataempty)
+        if (dispath && dataempty === 0) {
+       
             dataget(tripid)
-            setEdit(dispath)
+            setEdit(true)
             setBillingDate(billingdate1)
             setInvoiceNo(Invoicedata)
+            setIndividualBilled(false)
+           
+            // localStorage.setItem("searchdataurl",1)
 
         }
+        else{
+            dataget(null)
+            setEdit(false)
+            setBillingDate('')
+            setInvoiceNo('')
+        }
+       
         
-        // const formData = {};
-
-        // const parameterKeys = [
-            
-        //     "tripid",
-        //     "billingno",
-        //     "invoiceno",
-        //     "department",
-        //     "Billingdate",
-        //     "totalkm1",
-        //     "totaltime",
-        //     "customer",
-        //    "supplier",
-        //     "startdate",
-        //     "totaldays",
-        //     "guestname",
-        //     "rateType",
-        //     "vehRegNo",
-        //     "trips",
-        //     "vehType",
-        //     "duty",
-        //     "calcPackage",
-    
-        //     "package_amount",
-        //     "extraKM",
-        //     "extrakm_amount",
-        //     "ex_kmAmount",
-        //     "extraHR",
-        //     "extrahr_amount",
-        //     "ex_hrAmount",
-        //     "nightBta",
-        //     "nightCount",
-        //     "nhamount",
-        //     "driverBeta",
-        //     "driverbeta_Count",
-        //     "driverBeta_amount",
-        //     "OtherCharges",
-        //     "OtherChargesamount",
-        //     "permit",
-        //     "parking",
-        //     "toll",
-        //     "vpermettovendor",
-        //     "vendortoll",
-        //     "minKM",
-        //     "minHour",
-        //     "GrossAmount",
-        //     "AfterTaxAmount",
-        //     "DiscountAmount",
-        //     "DiscountAmount2",
-        //     "customeradvance",
-        //     "BalanceReceivable",
-        //     "RoundedOff",
-        //     "NetAmount",
-        //     "Totalamount",
-        //     "paidamount",
-        //     "pendingamount",
-        //     "BankAccount",
-        //     "totalcalcAmount",
-
-
-
-        // ];
-
-        // parameterKeys.forEach((key) => {
-        //     const value = params.get(key);
-        //     if (value !== null && value !== "null") {
-        //         formData[key] = value;
-        //     }
-        // });
-
-        // console.log(formData,"form")
-
-        // setselectBillingData(formData)
-      
-
-        // setBook(formData);
-        
+       
         
        
 
-    }, [location]);
+    }, [location,dataempty]);
     
- 
+   
     
       useEffect(() => {
+        
         window.history.replaceState(null, document.title, window.location.pathname);
        
-    }, []);
+       
+    },[]);
+    // console.log(individualBilled,"bill",edit)
+
+
+    window.addEventListener('click', (event) => {
+        const clickedText = event.target.textContent || event.target.innerText;
+       
+        if (clickedText === "Individual Billing" || clickedText === "BankAccount Details" ) {
+           
+            
+            
+            
+            dataget(null)
+            setBillingDate('')
+            setInvoiceNo('')
+            setEdit(false)
+            setBook(() => ({}));
+            setIndividualBilled(false)
+            localStorage.setItem("searchdataurl",1)
+        }
+      });
+    // useEffect(() => {
+    //     const handleTabClick = (event) => {
+    //         const clickedText = event.target.textContent || event.target.innerText;
+            
+    //         // Check if the clicked tab is "Individual Billing"
+    //         if (clickedText === "Individual Billing" || clickedText === "BankAccount Details") {
+    //             console.log("Individual Billing tab clicked");
+    //             dataget(null)
+    //                     setBillingDate('')
+    //                     setInvoiceNo('')
+    //                     setEdit(false)
+    //                     setBook(() => ({}));
+    //                     localStorage.setItem("searchdataurl",1)
+                
+    //             // Clear the URL parameters only when "Individual Billing" is clicked
+    //             window.history.replaceState(null, document.title, window.location.pathname);
+    //         }
+    //     };
+    
+    //     // Attach the event listener to the whole window or the specific tab container
+    //     window.addEventListener('click', handleTabClick);
+    
+    //     // Clean up the event listener when the component is unmounted
+    //     return () => {
+    //         window.removeEventListener('click', handleTabClick);
+    //     };
+    // }, [dataempty]);
+    
 
 
     const handlebilldata = async () => {
@@ -672,6 +671,8 @@ const useBilling = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                     setEdit(false)
+                    setIndividualBilled(false)
+               
                     }
                     else{
                     setError(true)
@@ -881,6 +882,7 @@ const useBilling = () => {
                 setSuccessMessage("Successfully listed");
              
                 setEdit(true);
+                setIndividualBilled(false)
             
                 }
                 else{
@@ -927,13 +929,22 @@ const useBilling = () => {
 
 
     // Empty the book
+   
     useEffect(() => {
-        setBook(emptyBookvalues);
-        setCustomerData('');
+        // setBook(emptyBookvalues);
+        // setCustomerData('');
         // setBillingDate('')
+        if(individualBilled && edit){
+             setBillingDate('')
+              setInvoiceNo()
+              setBook(emptyBookvalues);
+        setCustomerData('');
+        }
+        
         // setInvoiceNo()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [individualBilled]);
+  
 
     return {
 

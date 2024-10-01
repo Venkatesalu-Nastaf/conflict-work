@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import 'jspdf-autotable';
 import dayjs from "dayjs";
 import "./Accountinfo.css";
@@ -105,11 +105,7 @@ const Accuntinfo = ({ stationName }) => {
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
   } = useAccountinfo();
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
@@ -138,11 +134,6 @@ const Accuntinfo = ({ stationName }) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.accountNo || ""}
 
-                // disabled
-
-
-
-                // variant="standard"
                 />
               </div>
               <div className="input">
@@ -219,19 +210,6 @@ const Accuntinfo = ({ stationName }) => {
                   onChange={handleChange}
                   placeholder="Address"
                 />
-                {/* <TextField
-                  margin="normal"
-                  id="address123"
-                  className='full-width'
-                  label="Address"
-                  name="address1"
-                  multiline
-                  rows={2}
-                  sx={{ width: "100%" }}
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  onChange={handleChange}
-                /> */}
               </div>
               <div className="input">
                 <div className="icone">
@@ -424,26 +402,6 @@ const Accuntinfo = ({ stationName }) => {
 
               </div>
 
-              {/* {fields?.map((field, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={2}>
-                  <TextField
-                    value={field}
-                    onChange={(e) => handleFieldChange(index, e)}
-                    label={`Field ${index + 1}`}
-                    variant="outlined"
-                    style={{ marginRight: 8 }}
-                  /> */}
-                  {/* Optional: Button to remove a specific field */}
-                  {/* {fields?.length > 1 && (
-                    <Button variant="contained" color="error" onClick={() => handleRemoveField(index)}>
-                      Remove
-                    </Button>
-                  )}
-                </Box>
-              ))} */}
-              {/* <Button variant="contained" onClick={handleAddExtra}>
-                Add+
-              </Button> */}
 
               <div className="input">
                 <div className="icone">
@@ -456,7 +414,6 @@ const Accuntinfo = ({ stationName }) => {
                   autoComplete="new-password"
                   className='full-width'
                   value={selectedCustomerData?.driverName || book.driverName}
-                  // onChange={handleChange}
                   label="Driver Name"
                   id="Drivername"
                 // variant="standard"
@@ -495,51 +452,7 @@ const Accuntinfo = ({ stationName }) => {
             </div>
           </div>
         </div>
-        {/* <div className="input-field account-info-label">
-          <div className="input radio">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                A/C Type
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="acType"
-                id="acType"
-                autoComplete="new-password"
-                onChange={handleChange}
-                value={selectedCustomerData?.acType || book.acType}
-              >
-                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
-                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
-              </RadioGroup>
-            </FormControl>
-          </div>
-          <div className="input">
-            <div className="icone">
-              <RateReviewIcon color="action" />
-            </div>
-            <TextField
-              margin='normal'
-              size='small'
-              name="rateType"
-              autoComplete="new-password"
-              className='full-width'
-              value={selectedCustomerData?.rateType || book.rateType}
-              onChange={handleChange}
-              label="Rate Type"
-              id="rateType"
-              // variant="standard"
-            />
-          </div>
-          <div className="input">
-            {isEditMode ? (
-              <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
-            ) : (
-              <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
-            )}
-          </div>
-        </div> */}
+       
 
 
 
@@ -711,17 +624,7 @@ const Accuntinfo = ({ stationName }) => {
 
 
         <div className="table-customer-lists">
-          {/* <DataGrid
-            rows={rows}
-            columns={columns}
-            onRowClick={handleRowClick}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          /> */}
+         
           <Box
             sx={{
               height: 400, // Adjust this value to fit your needs

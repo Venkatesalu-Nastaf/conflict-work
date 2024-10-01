@@ -84,7 +84,7 @@ import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
-import {faCloudMoon} from "@fortawesome/free-solid-svg-icons";
+import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
@@ -149,9 +149,9 @@ const TripSheet = ({ stationName, logoImage }) => {
   // const inputRef = useRef(null);
 
   const {
-    selectedCustomerData, 
+    selectedCustomerData,
     // handleConfirm,
-     driverBeta, driverbeta_Count, nightBta, nightCount,
+    driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount,
     //  calcCheck, 
     vehileNames,
@@ -235,17 +235,17 @@ const TripSheet = ({ stationName, logoImage }) => {
     // link,
     // isSignatureSubmitted,
     isEditMode,
-    handleEdit, 
+    handleEdit,
     // checkCloseKM,
     driverdetails, ClosedTripData,
     // sign, 
     // handleCalc,
-     calcPackage, extraHR, extraKM, package_amount,
+    calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount,
     //  driverBeta_calc,
     // driverbeta_Count_calc,
-     driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
+    driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
@@ -285,10 +285,10 @@ const TripSheet = ({ stationName, logoImage }) => {
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
-  const billing_read = permissions[4]?.read ;
+  const billing_read = permissions[4]?.read;
 
-  
-  
+
+
 
   // varibles for validation 
 
@@ -1649,51 +1649,27 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
-                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (<label>Report Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Report Time</label>)}
-                    {/* {(calculateTotalDay() === 0 && ((reportTimeVar < startTimeVar) ? (<label>Start Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!reportTimeVar && <label>Start Time</label>)} */}
+                    {/* Display 'Invalid Time' conditionally based on the report and start times */}
+                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (
+                      <label>Report Time</label>
+                    ) : (
+                      <label style={{ color: "red" }}>Invalid Time</label>
+                    ))) || (!reportTimeVar && <label>Report Time</label>)}
 
-                    {/* <input
-                      type="time"
-                      id="starttime"
-                      name='starttime'
-                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
-                      onChange={(event) => {
-
-                        const rTime = event.target.value;
-                        if ((reportTimeVar && rTime <= reportTimeVar)) {
-                          return;
-                        } else {
-
-                          setBook({ ...book, starttime: event.target.value });
-                          setStartTime(event.target.value);
-                          setFormData({ ...formData, starttime: event.target.value });
-                          setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                        }
-                      }}
-                        
-                    /> */}
+                    {/* Time input without restricting manual entry */}
                     <input
                       type="time"
                       id="starttime"
-                      name='starttime'
+                      name="starttime"
                       value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                       onChange={(event) => {
-
                         const rTime = event.target.value;
 
-                        // console.log("Current reportTimeVar:", reportTimeVar);
-                        // console.log("Current book:", book);
-                        // console.log("Current formData:", formData);
-                        // console.log("Current selectedCustomerData:", selectedCustomerData);
-                        if ((reportTimeVar && rTime >= reportTimeVar)) {
-                          return;
-                        } else {
-
-                          setBook({ ...book, starttime: event.target.value });
-                          setStartTime(event.target.value);
-                          setFormData({ ...formData, starttime: event.target.value });
-                          setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                        }
+                        // Allow the input time to be entered without restriction
+                        setBook({ ...book, starttime: rTime });
+                        setStartTime(rTime);
+                        setFormData({ ...formData, starttime: rTime });
+                        setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
                       }}
                     />
                   </div>
@@ -1705,9 +1681,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='closetime tripsheet-shed-in-time'>
-                    {/* {(Number(kmValue.totalDays) === 1) ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>} */}
-                    {calculateTotalDay() === 1 ? (startTimeVar && ((startTimeVar < closeTimeVar) ? (<label>Close Time</label>) : (<label style={{ color: "red" }}>Invalid Time</label>))) || (!startTimeVar && <label>Close Time</label>) : <label>Close Time</label>}
-
+                    {/* Display 'Invalid Time' conditionally based on the start and close times, and the total number of days */}
+                    {calculateTotalDay() === 1 ? (
+                      startTimeVar && ((startTimeVar < closeTimeVar) ? (
+                        <label>Close Time</label>
+                      ) : (
+                        <label style={{ color: "red" }}>Invalid Time</label>
+                      ))
+                      || (!startTimeVar && <label>Close Time</label>)
+                    ) : (
+                      <label>Close Time</label>
+                    )}
                     <input
                       type="time"
                       name="closetime"
@@ -1715,18 +1699,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
-                        if (calculateTotalDay() === 1 && (startTimeVar && rTime <= startTimeVar)) {
-                          return;
-                        } else {
-                          setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                          setBook({ ...book, closetime: event.target.value });
-                          setCloseTime(event.target.value);
-                        }
 
+                        // Update the time without restriction
+                        setSelectedCustomerData({ ...selectedCustomerData, closetime: rTime });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
+                        setBook({ ...book, closetime: rTime });
+                        setCloseTime(rTime);
                       }}
                     />
                   </div>
+
                 </div>
 
 
@@ -1735,14 +1717,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <MdOutlineAccessTimeFilled />
                   </div>
                   <div className='input-type-grid'>
+                    {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
                     {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
-                      || (!closeTimeVar && <label> Shed In Time</label>)
+                      || (!closeTimeVar && <label>Shed In Time</label>)
                     }
+
                     {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""}
+
+                    {/* Time input field */}
                     <input
                       type="time"
                       name="shedintime"
@@ -1750,24 +1736,25 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={(event) => {
                         const rTime = event.target.value;
 
-                        // Check if the day difference is 0
+                        // Always allow input and set the state
+                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                        setBook({ ...book, shedintime: rTime });
+                        setshedintime(rTime);
+
+                        // Check if the day difference is 1, and validate the time
                         if (calculateTotalDay() === 1) {
-                          // Only allow time greater than closeTimeVar
-                          if (closeTimeVar && rTime > closeTimeVar) {
-                            setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
-                            setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
-                            setBook({ ...book, shedintime: rTime });
-                            setshedintime(rTime);
+                          if (closeTimeVar && rTime <= closeTimeVar) {
+                            // If the shed in time is invalid, display an error message but allow input
+                            console.log("Invalid Shed In Time");
+                          } else {
+                            // Valid input, you can handle any additional logic here
                             if (!lockdata) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
                           }
                         } else {
-                          // Allow any time
-                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
-                          setBook({ ...book, shedintime: rTime });
-                          setshedintime(rTime);
+                          // If the day difference is more than 1, allow any time
                           if (!lockdata) {
                             setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
@@ -2103,7 +2090,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           {/* <Tab>Vendor Info</Tab>
                           <Tab>Vendor Bill</Tab>
                           <Tab>Customer Bill</Tab> */}
-                         {billing_read ? <Tab>Bill</Tab> : <> </>}
+                          {billing_read ? <Tab>Bill</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
@@ -2975,7 +2962,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </div>
                         </TabPanel> */}
-                        <TabPanel value={billing_read ? 1: 0} sx={{ p: 2 }}>
+                        <TabPanel value={billing_read ? 1 : 0} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
 
@@ -2991,6 +2978,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
                                     </DialogContent>
                                     <DialogActions>
+                                      <Button onClick={handleDeleteMap} variant="contained" color="primary">
+                                        Delete
+                                      </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                                         Cancel
                                       </Button>
@@ -3066,7 +3056,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </Modal>
 
                                   <div className="input">
-                                    <Button variant="contained"  disabled={!Tripsheet_modify} onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -3075,7 +3065,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                    <Button  disabled={!Tripsheet_modify}  onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                                    <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
                                   </div>
 
 
@@ -3119,8 +3109,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       </Button>
                                       <Button variant="contained" onClick={() => {
                                         handlesignaturemageDelete()
-                                       
-                                      }} color="primary"  disabled={!Tripsheet_delete}>
+
+                                      }} color="primary" disabled={!Tripsheet_delete}>
                                         Delete
                                       </Button>
                                     </DialogActions>
@@ -3129,7 +3119,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
-                                    <Button   disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
+                                    <Button disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div>
                                   <div className="input">
                                     <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button>
@@ -3143,11 +3133,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <Button variant='outlined' className='full-width'>Delete GPS Log</Button>
                               </div> */}
                                 </div>
-                                <div className="in-feild" style={{ marginTop: '10px' }}>
+                                {/* <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
                                     <Button variant='outlined' disabled={!Tripsheet_delete} className='full-width' onClick={handleDeleteMap}>Delete Map</Button>
                                   </div>
-                                </div>
+                                </div> */}
                               </div>
 
                               <div className="table-TripSheet right-buttons">
@@ -3240,7 +3230,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </div>
                         </TabPanel>
-                        <TabPanel value={billing_read ? 2 :1} sx={{ p: 2 }}>
+                        <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}>
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               {/* <div>
@@ -3300,7 +3290,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           </div>
                         </TabPanel>
-                       {billing_read ? <TabPanel value={billing_read ? 0 :""} sx={{ p: 2 }}>
+                        {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
                               <p className='bill-topics'>Vendor Info</p>
@@ -3638,7 +3628,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <Button
                                     variant='contained'
                                     onClick={handleVendorcalc}
-                                    disabled={isEditMode ? !Tripsheet_modify :!Tripsheet_new}
+                                    disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
                                   >
                                     Update
                                   </Button>
@@ -4210,7 +4200,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           </div>
 
                         </TabPanel>
-                        : <></>
+                          : <></>
                         }
 
 
@@ -4651,13 +4641,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           // selectedCustomerDatas.hiretypes
-                            formData.hireTypes ||
-                           formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                          formData.hireTypes ||
+                          formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                         options={HireTypes.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label 
-                          || formData.hireTypes 
+                        getOptionLabel={(option) => option.label
+                          || formData.hireTypes
                           // || selectedCustomerDatas.hiretypes 
                           || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                         renderInput={(params) => {
@@ -4903,7 +4893,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
 
                     </div> */}
-                 
+
                     {/* <div className="input">
                       <div className="icone">
                         <AirlineSeatReclineExtraIcon color="action" />
@@ -5021,7 +5011,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         // value={selectedCustomerDatas.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || ''}
                         value={
                           // selectedCustomerData.mobileNo ||
-                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""} 
+                          book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
                         label="Driver Phone"
                         id="mobileNo"
@@ -5161,7 +5151,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                     />
                   )} */}
-                  {Tripsheet_modify === 1 &&  isEditMode && (
+                  {Tripsheet_modify === 1 && isEditMode && (
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
@@ -5177,7 +5167,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
                   )}
-                  {Tripsheet_new === 1 && !isEditMode &&(
+                  {Tripsheet_new === 1 && !isEditMode && (
                     <SpeedDialAction
                       key="Add"
                       icon={<BookmarkAddedIcon />}

@@ -1654,6 +1654,31 @@ router.get('/getAllGmapdata', (req, res) => {
     });
 });
 
+// Delete Map Query
+router.post('/deleteMapByTripid/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+  
+    // First delete query for mapimage
+    const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
+    db.query(deleteQuery, [tripid], (error, result) => {
+      if (error) {
+        console.log(error, 'error');
+        return res.status(500).json({ message: 'Error deleting from mapimage', error });
+      }
+  
+      // Second delete query for gmapdata
+      const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+      db.query(deleteMapDataQuery, [tripid], (error, result) => {
+        if (error) {
+          console.log(error, 'error');
+          return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+        }
+  
+        return res.status(200).json({ message: 'Deletion successful', result });
+      });
+    });
+  });
+  
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL

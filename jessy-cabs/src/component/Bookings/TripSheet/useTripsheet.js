@@ -80,7 +80,7 @@ const useTripsheet = () => {
     const [cusnightcount, setcusnightCount] = useState()
     const [EditMap, setEditMap] = useState(false)
     const [groupTripId, setGroupTripId] = useState()
-    const [manualTripID,setManualTripID] = useState([])
+    const [manualTripID, setManualTripID] = useState([])
 
     //-------------------------calc-------------------
 
@@ -208,7 +208,7 @@ const useTripsheet = () => {
     const [timeToggle, setTimeToggle] = useState('');
     const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
-    const [manualMarkTrigger,setManualMarkTrigger] = useState(false)
+    const [manualMarkTrigger, setManualMarkTrigger] = useState(false)
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
@@ -359,11 +359,11 @@ const useTripsheet = () => {
     // };
 
     const handleButtonClick = () => {
-        console.log(manualTripID,'manu');
-        
-        if(manualTripID.length>0){
-            console.log(manualTripID,'manualll');
-            
+        console.log(manualTripID, 'manu');
+
+        if (manualTripID.length > 0) {
+            console.log(manualTripID, 'manualll');
+
             setError(true)
             setErrorMessage("Already Map Is Created")
             return
@@ -942,11 +942,11 @@ const useTripsheet = () => {
         const tripid = selectedCustomerData.tripid;
         try {
             if (tripid !== null && tripid !== "undefined" && tripid) {
-                const updatedCustomer = {...selectedCustomerData}
-                
+                const updatedCustomer = { ...selectedCustomerData }
+
 
                 await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
-                handleTripsheetlogDetails(updatedCustomer,tripid,"Delete")
+                handleTripsheetlogDetails(updatedCustomer, tripid, "Delete")
                 setFormData({});
                 setSelectedCustomerData({});
                 handleCancel();
@@ -1107,7 +1107,7 @@ const useTripsheet = () => {
     };
 
 
-    const handleTripsheetlogDetails = async (updatebook, lastBookinglogno,modedata) => {
+    const handleTripsheetlogDetails = async (updatebook, lastBookinglogno, modedata) => {
         const logupdatabookdetails = updatebook
         try {
             // const modedata = isEditMode ? "Edited" : "create"
@@ -1115,7 +1115,7 @@ const useTripsheet = () => {
             const updatedBooklogdetails = {
 
 
-               tripsheet_date: logupdatabookdetails.tripsheetdate,
+                tripsheet_date: logupdatabookdetails.tripsheetdate,
                 shedOutDate: logupdatabookdetails.shedOutDate,
                 Reportdate: logupdatabookdetails.startdate,
                 closedate: logupdatabookdetails.closedate,
@@ -1148,7 +1148,7 @@ const useTripsheet = () => {
             };
             // console.log(updatedBooklogdetails, "boookup")
             await axios.post(`${apiUrl}/TripsheetlogDetailslogged`, updatedBooklogdetails);
-            
+
         }
         catch (err) {
             console.log(err, "err")
@@ -1298,7 +1298,7 @@ const useTripsheet = () => {
                 if (DriverSMS) {
                     await handleDriverSendSMS()
                 }
-                handleTripsheetlogDetails(updatedCustomer, tripsheetlogtripid,"Edited")
+                handleTripsheetlogDetails(updatedCustomer, tripsheetlogtripid, "Edited")
                 setSendEmail(true)
                 setDriverSMS(true)
                 setSmsGuest(true)
@@ -1551,7 +1551,7 @@ const useTripsheet = () => {
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
-            handleTripsheetlogDetails(updatedBook, tripnodata,"create")
+            handleTripsheetlogDetails(updatedBook, tripnodata, "create")
             // handleCancel();
             setRow([]);
             setRows([]);
@@ -3365,7 +3365,7 @@ const useTripsheet = () => {
 
 
             try {
-setManualMarkTrigger(!manualMarkTrigger)
+                setManualMarkTrigger(!manualMarkTrigger)
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
@@ -5304,58 +5304,60 @@ setManualMarkTrigger(!manualMarkTrigger)
 
 
     const handleEditMap = () => {
-        // setEditMap(!EditMap);
-    const editTrigger = "editMode"
-        // Get the trip, time, and date details
-        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-        const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
-        const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
-        const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
-        const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+        if (manualTripID.length > 0) {
+            // setEditMap(!EditMap);
+            const editTrigger = "editMode"
+            // Get the trip, time, and date details
+            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+            const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
+            const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+            const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
 
-        // Get latitude and longitude arrays from 'row'
-        const latitude = row.map(li => li.Latitude);
-        const longitude = row.map(li => li.Longitude);
-        const startingTrips = row.filter(trip => trip.trip_type === "start");
-        const endingTrips = row.filter(trip => trip.trip_type === "end");
-        const wayTrips = row.filter(trip => trip.trip_type === "waypoint")
-        const startingDate = startingTrips.length > 0 ? startingTrips[0].date : '';
-        const endingDate = endingTrips.length > 0 ? endingTrips[0].date : '';
-        const startingTime = startingTrips.length > 0 ? startingTrips[0].time : '';
-        const endingTime = endingTrips.length > 0 ? endingTrips[0].time : '';
-        const startPlaceName = startingTrips.length > 0 ? startingTrips[0].place_name : '';
-        const endPlaceName = endingTrips.length > 0 ? endingTrips[0].place_name : '';
-        const wayPlaceName = wayTrips?.map(li=>li.place_name)
-        const wayDate = wayTrips?.map(li => li.date);
-        const wayTime = wayTrips?.map(li => li.time);
-        const startLatitude = startingTrips.length > 0 ? startingTrips[0].Latitude : '';
-        const endLatitude = endingTrips.length  > 0 ? endingTrips[0].Latitude : '';
-        const startLongitude = startingTrips.length > 0 ? startingTrips[0].Longitude : '';
-        const endLongitude = endingTrips.length > 0 ? endingTrips[0].Longitude : '';
-        const wayLatitude = wayTrips?.map(li => li.Latitude)
-        const wayLongitude = wayTrips?.map(li =>li.Longitude)
+            // Get latitude and longitude arrays from 'row'
+            const latitude = row.map(li => li.Latitude);
+            const longitude = row.map(li => li.Longitude);
+            const startingTrips = row.filter(trip => trip.trip_type === "start");
+            const endingTrips = row.filter(trip => trip.trip_type === "end");
+            const wayTrips = row.filter(trip => trip.trip_type === "waypoint")
+            const startingDate = startingTrips.length > 0 ? startingTrips[0].date : '';
+            const endingDate = endingTrips.length > 0 ? endingTrips[0].date : '';
+            const startingTime = startingTrips.length > 0 ? startingTrips[0].time : '';
+            const endingTime = endingTrips.length > 0 ? endingTrips[0].time : '';
+            const startPlaceName = startingTrips.length > 0 ? startingTrips[0].place_name : '';
+            const endPlaceName = endingTrips.length > 0 ? endingTrips[0].place_name : '';
+            const wayPlaceName = wayTrips?.map(li => li.place_name)
+            const wayDate = wayTrips?.map(li => li.date);
+            const wayTime = wayTrips?.map(li => li.time);
+            const startLatitude = startingTrips.length > 0 ? startingTrips[0].Latitude : '';
+            const endLatitude = endingTrips.length > 0 ? endingTrips[0].Latitude : '';
+            const startLongitude = startingTrips.length > 0 ? startingTrips[0].Longitude : '';
+            const endLongitude = endingTrips.length > 0 ? endingTrips[0].Longitude : '';
+            const wayLatitude = wayTrips?.map(li => li.Latitude)
+            const wayLongitude = wayTrips?.map(li => li.Longitude)
 
-        console.log(row,startingTime,endingTime,startingDate,endingDate,wayDate,wayTime,editTrigger,'lat');
-
-
-        // Check if tripid is valid
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Please enter the tripid");
-        } else {
-            // Store the tripid in local storage
-            localStorage.setItem('selectedTripid', tripid);
-
-            // Serialize latitude and longitude arrays for the URL
-            const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
-            const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
-            const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
+            console.log(row, startingTime, endingTime, startingDate, endingDate, wayDate, wayTime, editTrigger, 'lat');
 
 
-            // Open new tab with serialized latitude and longitude arrays
-            const newTab = window.open(`/navigationmap?tripid=${tripid}&edit=${editTrigger}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}&startLatitude=${startLatitude}&startPlaceName=${startPlaceName}&endLatitude=${endLatitude}&startingTime=${startingTime}&startingDate=${startingDate}&startLongitude=${startLongitude}&endLongitude=${endLongitude}&endingDate=${endingDate}&endingTime=${endingTime}&endPlaceName=${endPlaceName}&wayLatitude=${wayLatitude}&wayLongitude=${wayLongitude}&wayDate=${wayDate}&wayTime=${wayTime}&wayPlaceName=${wayPlaceName}`, '_blank', 'noopener,noreferrer');
-            if (newTab) {
-                newTab.focus();
+            // Check if tripid is valid
+            if (!tripid) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+            } else {
+                // Store the tripid in local storage
+                localStorage.setItem('selectedTripid', tripid);
+
+                // Serialize latitude and longitude arrays for the URL
+                const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
+                const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
+                const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
+
+
+                // Open new tab with serialized latitude and longitude arrays
+                const newTab = window.open(`/navigationmap?tripid=${tripid}&edit=${editTrigger}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}&startLatitude=${startLatitude}&startPlaceName=${startPlaceName}&endLatitude=${endLatitude}&startingTime=${startingTime}&startingDate=${startingDate}&startLongitude=${startLongitude}&endLongitude=${endLongitude}&endingDate=${endingDate}&endingTime=${endingTime}&endPlaceName=${endPlaceName}&wayLatitude=${wayLatitude}&wayLongitude=${wayLongitude}&wayDate=${wayDate}&wayTime=${wayTime}&wayPlaceName=${wayPlaceName}`, '_blank', 'noopener,noreferrer');
+                if (newTab) {
+                    newTab.focus();
+                }
             }
         }
     };
@@ -5388,26 +5390,38 @@ setManualMarkTrigger(!manualMarkTrigger)
 
     // }
 
-    useEffect(()=>{
-        const fetchData = async()=>{
+    useEffect(() => {
+        const fetchData = async () => {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
-            console.log(tripid,'tripidmanual');
-            try{
-            
-            const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
-            console.log(response.data,'manual');
-            setManualTripID(response.data)
+            console.log(tripid, 'tripidmanual');
+            try {
+
+                const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
+                console.log(response.data, 'manual');
+                setManualTripID(response.data)
             }
-            catch(error){
-                console.log(error,'Manual Error');
-                
+            catch (error) {
+                console.log(error, 'Manual Error');
+
             }
 
         }
         fetchData()
-    },[manualMarkTrigger])
+    }, [manualMarkTrigger])
 
-    const handleDeleteMap = () => {
+    const handleDeleteMap = async () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        try {
+            const respone = await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
+            console.log(respone.data);
+            setError(true)
+            setErrorMessage("Successfully Deleted")
+            setMapimgPopupOpen(false)
+        }
+        catch (error) {
+            console.log(error, 'error');
+
+        }
 
     }
 

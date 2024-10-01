@@ -139,6 +139,7 @@ const Billing = () => {
     const { logo } = useData()
     const { particularPdf, organizationDetail } = PdfData()
     
+  
     return (
         <div className="form-container form-container-billing main-content-billing">
 
@@ -160,6 +161,7 @@ const Billing = () => {
                                     autoFocus
                                     autoComplete="off"
                                     value={book.tripid || selectbillingdata.tripid || ""}
+                                    // value={book.tripid || ""}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
                                 />

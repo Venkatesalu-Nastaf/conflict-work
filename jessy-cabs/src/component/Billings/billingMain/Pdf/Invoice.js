@@ -93,8 +93,8 @@ const Invoice = () => {
                 }
                 else {
                     setRouteData("")
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
+                    // const timer = setTimeout(fetchData, 2000);
+                    // return () => clearTimeout(timer);
                 }
             }
             catch (err) {

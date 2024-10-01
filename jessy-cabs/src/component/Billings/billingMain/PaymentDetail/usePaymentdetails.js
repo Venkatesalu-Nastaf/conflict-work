@@ -208,7 +208,7 @@ const handleButtonClickTripsheet = async(rowdata) => {
 
   const selectedRow1 = rowdata;
       const dispatchcheck = "true";
-   
+      localStorage.setItem("searchdataurl",0)
       
   
       const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id|| ""}&Billingdate=${selectedRow1.Bill_Date || ""}&Invoicedata=${selectedRow1.Invoice_No || ""}`

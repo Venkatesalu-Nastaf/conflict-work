@@ -103,7 +103,7 @@ const useCustomer = () => {
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-        console.log(rows, "exceldata")
+       
 
         try {
 
@@ -255,9 +255,7 @@ const useCustomer = () => {
 
         });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE")
-
-        // Scale content
+      // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
@@ -339,32 +337,7 @@ const useCustomer = () => {
         }
     };
 
-    // const  fetchdataratemanganmentstations=async(stations)=>{
-    //     // console.log(customerdataname,"namee")
-    //     const ratetype=selectedCustomerData?.rateType || book.rateType 
-    //     const ratename="Customer"
-    //     if(stations){
-    //         const response=await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`)
-    //         const responsedata=response.data;
-            
-    //         console.log(response,"data")
-    //         console.log(responsedata?.length,"reeee")
-           
-    //         if(responsedata?.length ===0){
-    //             setInfo(true)
-    //             setInfoMessage("ratetype stations not regitsered")
-                
-    //             setCredentialDataforstations(true)
-    //         }
-    //         else{
-    //             setSuccess(true)
-    //             setSuccessMessage("Ratetype stations registered")
-    //             setCredentialDataforstations(false)
-    //             // return false;
-    //         }
-    //     }
-    // }
-    // const ratetypedata=selectedCustomerData?.rateType || book.rateType 
+  
     
 
 const memoizedFetchStations = useMemo(() => {
@@ -399,9 +372,9 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     const selectedOption = newValue ? newValue.label : '';
     if(name === "servicestation"){
        
-            // const datacrendital= fetchdataratemanganmentstations(selectedOption);
+           
             await memoizedFetchStations(selectedOption)
-            // console.log(datacrendital,"datacred")
+            
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: selectedOption,
@@ -441,8 +414,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     }
     };
     const handleAutocompleteChangebilling = (event, newValue, name) => {
-
-        console.log(newValue, "bill")
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -531,8 +502,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             const response= await axios.get(`${apiUrl}/getuniqueCustomerdata/${customerdataname}`)
             const responsedata=response.data;
             
-            // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
            
             if(responsedata?.length >=1){
                 setCredentialData(true)
@@ -589,7 +558,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         try {
             const response = await fetch(`${apiUrl}/searchCustomer?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
-            console.log(data, "typedata")
+        
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
@@ -613,9 +582,8 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
 
     const handleenterSearch = useCallback(async (e) => {
         if (e.key === "Enter") {
-            console.log("Search Text:", searchText);
-
-            try {
+          
+           try {
                 const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(searchText)}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -709,14 +677,11 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             console.log(cerendentialdata,"credddatattaatta")
             // const datasets={...customerfieldSets,customer:book.customer}
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
-           
-            
-            console.log(book,"gggg")
-
+        
             const response = await axios.post(`${apiUrl}/customers`, book);
 
             if (response.data.success) {
-                console.log("customer response", response)
+               
                 await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
                 handleCancel();
                 setTriggerCustomerAdd(prev => !prev)
@@ -762,7 +727,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         };
 
         const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
-        console.log(datasets,"hhhhh",updatedCustomer)
         await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
@@ -773,7 +737,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         handleList();
     };
     const deletedatecustomerorder=async(id)=>{
-        console.log(id,"iddddd")
         try{
             await axios.delete(`${apiUrl}/deletecustomerorderdatasdata/${id}`);
             setDeletedDialog(false)
@@ -784,20 +747,16 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     }
 
     const handleRemove = (index,id) => {
-        console.log(index,"customer",id)
         setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
         if(id){
-            console.log(id,"datatta")
             setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
              deletedatecustomerorder(id)
         }
         else{
-            console.log(id,"elsedata")
             setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
             setDeletedDialog(false)
         }
         
-        // deletedatecustomerorder(id)
     
     }
     useEffect(()=>{

@@ -23,8 +23,6 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 import { FaPercent } from "react-icons/fa";
 
 
-
-
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -138,7 +136,7 @@ const Customer = ({ stationName }) => {
 
 
   const handleClose = () => {
-    console.log("false")
+
     setDeletedDialog(false)
   }
 
@@ -168,8 +166,7 @@ const Customer = ({ stationName }) => {
                     className='full-width'
                     autoComplete="new-password"
                     value={selectedCustomerData?.customerId || ""}
-                  // onChange={handleChange}
-                  // variant="standard"
+
                   />
                 </div>
                 <div className="input">
@@ -252,39 +249,11 @@ const Customer = ({ stationName }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                {/* <div className="input">
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <TextField
-                  margin='normal'
-                  size='small'
-                  name="customeremail"
-                  label="Email"
-                  className='full-width'
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.customeremail || book.customeremail}
-                  onChange={handleChange}
-                  id="customeremail"
-                // variant="standard"
-                />
-              </div> */}
+
                 <div className="input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
-                  {/* <TextField
-                    margin='normal'
-                    size='small'
-                    name="rateType"
-                    label="Rate Type"
-                    className='full-width'
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.rateType || book.rateType}
-                    onChange={handleChange}
-                    id="ratetype"
-                  // variant="standard"
-                  /> */}
 
                   <Autocomplete
                     fullWidth
@@ -293,9 +262,8 @@ const Customer = ({ stationName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
-                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
                     value={selectedCustomerData?.rateType || book.rateType || ''}
-                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
+
                     options={customerratetype.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.rateType || book.rateType || ''}
                     renderInput={(params) => {
@@ -323,23 +291,7 @@ const Customer = ({ stationName }) => {
                   // variant="standard"
                   />
                 </div>
-                {/* <div className="input">
-                <div className="icone">
-                  <LocalPhoneIcon color="action" />
-                </div>
-                <TextField
-                  margin='normal'
-                  size='small'
-                  name="phoneno"
-                  label="Phone"
-                  className='full-width'
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.phoneno || book.phoneno}
-                  onChange={handleChange}
-                  id="phoneno"
-                // variant="standard"
-                />
-              </div> */}
+
                 <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -374,12 +326,6 @@ const Customer = ({ stationName }) => {
                     id="hybrid"
                     name="hybrid"
                     onChange={handleChange}
-                    // onChange={(e) => {
-                    //   const isChecked = e.target.checked;
-                    //   setBook((prev) => ({ ...prev, hybrid: isChecked }));
-                    //   setSelectedCustomerData((prev) => ({ ...prev, hybrid: isChecked }));
-                    //   console.log("book.hybrid", isChecked, selectedCustomerData.hybrid);
-                    // }}
 
                     checked={book.hybrid || selectedCustomerData.hybrid}
                   />
@@ -519,71 +465,9 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     placeholder="Address"
                   />
-                  {/* <TextField
-                  margin="normal"
-                  id="address1"
-                  label="Address"
-                  name="address1"
-                  className='full-width'
-                  multiline
-                  rows={2}
-                  sx={{ width: '100%', resize: 'both', overflow: 'auto' }}
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  onChange={handleChange}
-                /> */}
+
                 </div>
-                {/* <FormControlLabel
-                name="printBill"
-                id="printBill"
-                value="Printbill"
-                control={<Checkbox size="small" />}
-                label="Print Bill"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.printBill || book.printBill)}
-              />
-              <FormControlLabel
-                name="userName"
-                id="userName"
-                value="Username"
-                control={<Checkbox size="small" />}
-                label="User Name"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.userName || book.userName)}
-              />
-              <FormControlLabel
-                name="bookName"
-                id="bookName"
-                value="Bookname"
-                control={<Checkbox size="small" />}
-                label="Book Name"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.bookName || book.bookName)}
-              />
-              <FormControlLabel
-                name="division"
-                id="division"
-                value="Divistion"
-                control={<Checkbox size="small" />}
-                label="Divistion"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.division || book.division)}
-              />
-              <FormControlLabel
-                size="small"
-                id="hourRoundedOff"
-                name="hourRoundedOff"
-                value="Hourroundedoff"
-                control={<Checkbox size="small" />}
-                label="Hour Roundedoff"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
-              /> */}
+
                 <div className="input">
                   <div className="icone">
                     <DomainAddIcon color="action" />
@@ -713,7 +597,7 @@ const Customer = ({ stationName }) => {
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
 
-                  {/* {console.log("BillingGroup", BillingGroup)} */}
+                
 
                   {isInputVisible && (
                     <Autocomplete
@@ -980,19 +864,6 @@ const Customer = ({ stationName }) => {
 
 
               <div className="table-customer-lists">
-                {/* <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-              /> */}
-
-
 
                 <Box
                   sx={{

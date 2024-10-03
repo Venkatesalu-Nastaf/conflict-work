@@ -87,6 +87,7 @@ const MainDashboard = () => {
       localStorage.removeItem("organizationimages")
       localStorage.removeItem("selectedusertheme")
       localStorage.removeItem("username")
+      localStorage.removeItem("searchdataurl")
  
       localStorage.removeItem("SuperAdmin")
       // localStorage.removeItem("expiretime")

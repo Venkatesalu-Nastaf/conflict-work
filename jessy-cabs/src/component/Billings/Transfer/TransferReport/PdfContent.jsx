@@ -9,11 +9,17 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
     padding: 10,
+    pageBreakInside: 'avoid', 
+    overflow: 'hidden'
   },
   heading: {
     border: '2px solid #000000',
-    padding: '20px'
+    padding: '20px',
+    boxSizing: 'border-box', 
+    pageBreakInside: 'avoid', 
+    overflow: 'hidden'
   },
+
 
   section: {
     marginTop: 10
@@ -238,7 +244,8 @@ const styles = StyleSheet.create({
     fontSize: '14px'
   },
   totalrupeesword: {
-    marginTop: "20px"
+    marginTop: "20px",
+    flexDirection: 'row'
   }
 
 
@@ -446,7 +453,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     </View>
 
 
-                    <View style={styles.tablevalue}>
+                    <View style={[styles.tablevalue,{fontSize:"10px"}]}>
                       {invdata.map((item, index) => (
 
                         <View style={styles.tablevalueRow} key={index}>
@@ -534,38 +541,38 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   </View> */}
 
                   <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
-                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>SUB TOTAL: </Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop:2}}>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>SUB TOTAL: </Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
                     </View>
 
-                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>CGST {gstAmount}% on {fullAmount}:</Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst}</Text>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>CGST {gstAmount}% on {fullAmount}:</Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgst}</Text>
                     </View>
 
-                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>SGST {gstAmount}% on {fullAmount}:</Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst}</Text>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>SGST {gstAmount}% on {fullAmount}:</Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{sgst}</Text>
                     </View>
 
-                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>Parking & Permit:</Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{parkpermit}</Text>
+                    <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>Parking & Permit:</Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{parkpermit}</Text>
                     </View>
 
                     {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{advance}</Text>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>Customer Advance (-)</Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{advance}</Text>
                     </View> : ""}
 
 
                     <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                      <Text style={{ width: '130px', fontSize: '11px' }}>Total Amount:</Text>
-                      <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
+                      <Text style={{ width: '130px', fontSize: '10px' }}>Total Amount:</Text>
+                      <Text style={{ fontSize: '11px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
                     </View>
                   </View>
-                </View>
+                </View> 
 
 
               </View>
@@ -573,35 +580,28 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
 
               </View> */}
-              <View style={styles.totalrupeesword}>
-                <Text style={[styles.rupeestext, { paddingLeft: 10 }]}>
-                  {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}
-                </Text>
-              </View>
-              
 
-
-              <View style={styles.lastsectiondiv}>
+              <View style={styles.lastsectiondiv}>  
                 <View style={styles.lastsection}>
-                  
-
                   < View style={styles.rupees}>
+                    <View style={styles.totalrupeesword}>
+                      <Text style={[styles.rupeestext, {paddingBottom:10, marginBottom:5}]}>
+                        {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}
+                      </Text>
+                    </View>
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
                     <Text style={styles.underlinetext}>Bank Details</Text>
 
-                    <Text style={styles.text2}>{organisationdetailfill[0].BankDetails} </Text>
+                    <Text style={styles.text2}>{organisationdetailfill  [0].BankDetails} </Text>
                   </View>
-
-
                 </View>
-
-
                 <View style={styles.signaturesection}>
-
-                  <View style={styles.companyName}>
-                    <Text style={styles.jessytext}>For jessy Cabs</Text>
+                  <View style={[styles.companyName, { flexDirection: 'row' }]}>
+                    <Text style={[styles.jessytext,{paddingTop:15,fontSize:"12px"}]}>For jessy Cabs</Text>
                   </View>
-
+                  {/* <View style={[styles.companyName, { marginBottom: 100 }]}>  
+                    <Text style={styles.jessytext}>For jessy Cabs</Text>
+                  </Vie w> */}
                   <View style={styles.signone}>
                     <Text></Text>
                   </View>

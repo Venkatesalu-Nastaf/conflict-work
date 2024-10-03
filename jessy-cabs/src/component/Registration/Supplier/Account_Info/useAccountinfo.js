@@ -54,18 +54,6 @@ const useAccountinfo = () => {
   }, [error, success, warning, info]);
 
 
-  // download function
-  // const convertToCSV = (data) => {
-  //   const header = columns.map((column) => column.headerName).join(",");
-  //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-  //   return [header, ...rows].join("\n");
-  // };
-  // const handleExcelDownload = () => {
-  //   const csvData = convertToCSV(rows);
-  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  //   saveAs(blob, "Account_Info.csv");
-  // };
-
 
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
@@ -151,59 +139,7 @@ const useAccountinfo = () => {
 
   }
 
-  //   const handlePdfDownload = () => {
-  //     const pdf = new jsPDF('l');
-  //     pdf.setFontSize(12);
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.text("Account_Info", 10, 10);
-
-  //     const tableData = rows.map((row) => [
-  //       row['id'],
-  //       row['cperson'],
-  //       row['accountNo'],
-  //       row['address1'],
-  //       row['phone'],
-  //       row['isRunning'],
-  //       row['vehicleInfo'],
-  //       row['vehCommission'],
-  //       row['rateType'],
-  //       row['autoRefresh']
-  //     ]);
-
-  //     pdf.autoTable({
-  //       head: [['Sno', 'Supplier_Name', 'Vehicle_No', 'Address', 'Phone', 'Active', 'Owner_Type', 'Percentage', 'Rate_Type', 'Driver']],
-  //       body: tableData,
-  //       startY: 20,
-  //       headStyles: {
-  //         fontSize: 9,
-  //         cellPadding: 1.5, // Decrease padding in header
-
-  //         rowHeight: 8, 
-  //         valign: 'middle',
-
-  //         font: 'helvetica', // Set font type for body
-
-  //         cellWidth: 'wrap'
-
-
-
-
-  //        // Header text color
-  //     },
-
-  // bodyStyles: {
-  //     fontSize: 9,
-  //      valign: 'middle', // Adjust the font size for the body
-
-  // },
-
-
-
-  //     });
-
-  //     const pdfBlob = pdf.output('blob');
-  //     saveAs(pdfBlob, 'Account_Info.pdf');
-  //   };
+ 
 
   const handlePdfDownload = () => {
     const pdf = new jsPDF({
@@ -218,7 +154,7 @@ const useAccountinfo = () => {
 
     // Extracting body
     const body = rows.map(row => Object.values(row));
-    console.log(header.length, "len")
+
 
     let fontdata = 1;
     if (header.length <= 13) {
@@ -247,7 +183,7 @@ const useAccountinfo = () => {
     else if (header.length >= 41 && header.length <= 46) {
       fontdata = 2;
     }
-    console.log(fontdata, "data")
+ 
 
     pdf.autoTable({
       head: [header],
@@ -282,7 +218,7 @@ const useAccountinfo = () => {
 
     });
     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-    console.log(scaleFactor, "SCALE")
+
 
     // Scale content
     pdf.scale(scaleFactor, scaleFactor);
@@ -325,27 +261,7 @@ const useAccountinfo = () => {
 
   });
 
-  // const [fields, setFields] = useState(['']);
 
-  // // Function to handle adding a new input field
-  // const handleAddExtra = () => {
-  //   setFields([...fields, '']);
-
-  // }
-  // console.log(fields,"sharan")
-
-  // Function to handle changes in input fields
-  // const handleFieldChange = (index, event) => {
-  //   const newFields = fields.slice();
-  //   newFields[index] = event.target.value;
-  //   setFields(newFields);
-  // };
-
-  // // Function to handle removal of an input field (optional)
-  // const handleRemoveField = (index) => {
-  //   const newFields = fields.filter((_, i) => i !== index);
-  //   setFields(newFields);
-  // };
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
@@ -429,7 +345,6 @@ const useAccountinfo = () => {
     try {
       const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
       const data = await response.json();
-      console.log(data, "typedata")
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
           ...row,
@@ -453,7 +368,7 @@ const useAccountinfo = () => {
 
   const handleenterSearch = useCallback(async (e) => {
     if (e.key === "Enter") {
-      console.log("Search Text:", searchText);
+    
 
       try {
         const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}`);
@@ -542,14 +457,12 @@ const useAccountinfo = () => {
 
 
   const uniquetravellname = async (traveldataname) => {
-    // console.log(customerdataname,"namee")
+    
     if (traveldataname) {
 
       const response = await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${traveldataname}`)
       const responsedata = response.data;
 
-      // console.log(response,"data")
-      // console.log(responsedata?.length,"reeee")
 
       if (responsedata?.length >= 1) {
         setCredentialData(true)
@@ -627,7 +540,7 @@ const useAccountinfo = () => {
   const handleAdd = async () => {
     const ratetype = book.rateType;
     const travelsname = book.travelsname;
-    const vehiclinfo = book.vehicleInfo;
+  
     // const Accdate = book.Accdate || dayjs().format('YYYY-MM-DD');
     const travelsemail = book.travelsemail;
     // const vehRegNo = book.vehRegNo;
@@ -670,7 +583,7 @@ const useAccountinfo = () => {
   }
 
     try {
-      console.log(book, "datata")
+     
       await axios.post(`${apiUrl}/accountinfo`, book);
       handleCancel();
       // setRows([]);
@@ -698,10 +611,8 @@ const useAccountinfo = () => {
       return;
   }
     try {
-      // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+    
       const { id, ...restselectedcustomer } = selectedCustomerData
-      // console.log(selectedCustomer,"cust")
-      // console.log(selectedCustomerData,"datata")
       const updatedCustomer = { ...restselectedcustomer };
       await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
       setSuccess(true);
@@ -792,13 +703,6 @@ const useAccountinfo = () => {
       }
 
       else if (actionName === 'Edit') {
-        // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-        // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        // await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
-        // setSuccess(true);
-        // setSuccessMessage("Successfully updated");
-        // handleCancel();
-        // setRows([]);
         handleEdit()
       }
 

@@ -6,8 +6,6 @@ import dayjs from "dayjs";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 
-
-
 const columns = [
   { field: "id5", headerName: "Sno", width: 50 },
   { field: "bookingno", headerName: "Booking No", width: 110 },
@@ -30,7 +28,6 @@ const columns = [
   { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
   { field: "vehType", headerName: "Rate For", width: 130 },
   { field: "duty", headerName: "Duty", width: 100 },
-  // { field: "pickup", headerName: "Pickup", width: 130 },
   { field: "customercode", headerName: "Cost Code", width: 110 },
   { field: "registerno", headerName: "Request Id", width: 130 },
   { field: "flightno", headerName: "Flight No", width: 130 },
@@ -38,7 +35,6 @@ const columns = [
   { field: "remarks", headerName: "Remark", width: 130 },
   { field: "vehiclemodule", headerName: "Vehicle Type", width: 110 },
   { field: "paymenttype", headerName: "Payment Type", width: 130 },
-  // { field: "servicestation", headerName: "Station", width: 130 },
   { field: "advance", headerName: "Advance", width: 90 },
   { field: "totaltime", headerName: "TotalHR", width: 90 },
   { field: "totalkm1", headerName: "TotalKM", width: 100 },
@@ -67,7 +63,6 @@ const useDispatched = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
   const [statusvalue, setStatusValue] = useState("");
-
   const [columnshowall, setColumnShowall] = useState(true)
 
   //---------------------popup----------------------------
@@ -96,31 +91,20 @@ const useDispatched = () => {
     return !hideColumns.includes(col.field) || (statusvalue !== "pending" && statusvalue !== "Cancelled");
   });
 
-
-
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-
-
     try {
-
       const fileName = "Pending Reports"
       // creating one worksheet in workbook
       const worksheet = workbook.addWorksheet(workSheetName);
-
       const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
       const filteredcolumnsdata = filteredColumns.map(key => ({ key: key.field, header: key.headerName }));
-
       const newcolumndata = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : columndata
-      //         worksheet.columns = columnsexcel
-
+      //worksheet.columns = columnsexcel
       worksheet.columns = newcolumndata;
-
-
       // updated the font for first row.
       worksheet.getRow(1).font = { bold: true };
-
       // Set background color for header cells
       worksheet.getRow(1).eachCell((cell, colNumber) => {
         cell.fill = {
@@ -129,8 +113,6 @@ const useDispatched = () => {
           fgColor: { argb: '9BB0C1' } // Green background color
         };
       });
-
-
       worksheet.getRow(1).height = 30;
       // loop through all of the columns and set the alignment with width.
       worksheet.columns.forEach((column) => {
@@ -139,8 +121,6 @@ const useDispatched = () => {
       });
 
       rows.forEach((singleData, index) => {
-
-
         worksheet.addRow(singleData);
 
         // Adjust column width based on the length of the cell values in the added row
@@ -185,7 +165,6 @@ const useDispatched = () => {
       // removing worksheet's instance to create new one
       workbook.removeWorksheet(workSheetName);
     }
-
   }
 
   const handlePdfDownload = () => {
@@ -197,12 +176,9 @@ const useDispatched = () => {
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Booking Details", 10, 10);
-
-
     const fullcoumndata = columns.map(key => (key.field));
     const filteredcolumnsdata = filteredColumns.map(key => (key.field));
     const header = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : fullcoumndata;
-
     const body = rows.map(row => {
       const rowData = [];
       header.forEach(columnName => {
@@ -211,8 +187,6 @@ const useDispatched = () => {
       });
       return rowData;
     });
-
-
     let fontdata = 1;
     if (header.length <= 13) {
       fontdata = 16;
@@ -246,22 +220,17 @@ const useDispatched = () => {
       fontdata = 2;
     }
 
-
     pdf.autoTable({
       head: [header],
       body: body,
       startY: 20,
-
       headStyles: {
         // fontSize: 5,
         fontSize: fontdata,
         cellPadding: 1.5, // Decrease padding in header
-
         minCellHeigh: 8,
         valign: 'middle',
-
         font: 'helvetica', // Set font type for body
-
         cellWidth: 'wrap',
         // cellWidth: 'auto'
       },
@@ -271,22 +240,18 @@ const useDispatched = () => {
         valign: 'middle',
         cellWidth: 'auto'
         // Adjust the font size for the body
-
       },
       columnWidth: 'auto'
-
     });
     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-
     // Scale content
     pdf.scale(scaleFactor, scaleFactor);
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'pending Reports.pdf');
   };
-
+  
   const handleInputChange = (event, newValue) => {
     setdepartment(newValue);
-
   }
   const handlestatusChange = (event, newValue) => {
     setStatusValue(newValue ? newValue.label : "");
@@ -297,48 +262,7 @@ const useDispatched = () => {
   const handleCustomerChange = (event, newValue) => {
     setCutomerName(newValue)
   }
-
   const reversedRows = [...rows].reverse();  // to reverse 
-
-
-  // const handleShow = useCallback(async () => {
-
-  //   if (!statusvalue) {
-  //     setError(true)
-  //     setErrorMessage("ENTER THE STATUS")
-  //     return
-  //   }
-    
-
-  //   try {
-  //     const response = await axios.get(
-  //       `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-  //         toDate.toISOString()
-  //       )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
-  //     );
-  //     const data = response.data;
-
-  //     if (data.length > 0) {
-  //       const rowsWithUniqueId = data.map((row, index) => ({
-  //         ...row,
-  //         id5: index + 1,
-  //       }));
-  //       setRows(rowsWithUniqueId)
-  //       setColumnShowall(false)
-  //       setSuccess(true);
-  //       setSuccessMessage("successfully listed")
-  //     } else {
-  //       setRows([]);
-  //       setError(true);
-  //       setErrorMessage("no data found")
-  //     }
-  //   } catch {
-  //     setRows([]);
-  //     setError(true);
-  //     setErrorMessage("Error retrieving data");
-  //   }
-
-  // }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
 
   // new working code
   const handleShow = useCallback(async () => {
@@ -347,12 +271,10 @@ const useDispatched = () => {
       setErrorMessage("ENTER THE STATUS");
       return;
     }
-  
     try {
       const response = await axios.get(
         `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
       );
-  
       const data = response.data;
   
       if (statusvalue !== "All") {
@@ -371,23 +293,19 @@ const useDispatched = () => {
           setErrorMessage("No data found");
         }
       } else {
-        console.log('status all',statusvalue)
         if (data && Array.isArray(data.tripsheet) && Array.isArray(data.booking)) {
           // Process tripsheet data
           const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
             ...row,
             id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
           }));
-  
           // Process booking data
           const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
             ...row,
             id5: `booking-${index + 1}`, // Unique ID for booking
           }));
-  
           // Combine both sets of data
           const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
-  
           setRows(combinedRows);
           setColumnShowall(false);
           setSuccess(true);
@@ -406,59 +324,6 @@ const useDispatched = () => {
     }
   }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
   
-  // const handleShow = useCallback(async () => {
-  //   if (!statusvalue) {
-  //     setError(true);
-  //     setErrorMessage("ENTER THE STATUS");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const response = await axios.get(
-  //       `${apiUrl}/pending_tripsheet-show`, {
-  //         params: {
-  //           department: department.map(dep => dep.label).join(','),
-  //           fromDate: fromDate.toISOString(),
-  //           toDate: toDate.toISOString(),
-  //           status: statusvalue,
-  //           VehNo: VehNo,
-  //           cutomerName: cutomerName.map(dep => dep.label).join(','),
-  //         },
-  //       }
-  //     );
-  
-  //     const data = response.data;
-  
-  //     if (data.bookings && data.tripsheets) {
-  //       const combinedData = [
-  //         ...data.bookings.map((row, index) => ({
-  //           ...row,
-  //           id: `booking-${index + 1}`, // Use a unique ID for bookings
-  //         })),
-  //         ...data.tripsheets.map((row, index) => ({
-  //           ...row,
-  //           id: `tripsheet-${index + 1}`, // Use a unique ID for tripsheets
-  //         })),
-  //       ];
-  
-  //       setRows(combinedData);
-  //       setColumnShowall(false);
-  //       setSuccess(true);
-  //       setSuccessMessage("Successfully listed");
-  //     } else {
-  //       setRows([]);
-  //       setError(true);
-  //       setErrorMessage("No data found");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error retrieving data:", error); // Log the error for debugging
-  //     setRows([]);
-  //     setError(true);
-  //     setErrorMessage("Error retrieving data");
-  //   }
-  // }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
-  
-
 
   const handleShowAll = async () => {
     setColumnShowall(false)
@@ -466,9 +331,7 @@ const useDispatched = () => {
       const response = await axios.get(
         `${apiUrl}/tripsheet-showall`
       );
-
       const data = response.data;
-
       if (data && data.tripsheet && data.booking) {
         // Process tripsheet data
         const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
@@ -480,14 +343,12 @@ const useDispatched = () => {
           ...row,
           id1: index + 1,
         }));
-        console.log(bookingRowsWithUniqueId, "iiiii")
         // Combine both sets of data
         const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
         const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
           ...row,
           id5: index + 1,
         }));
-        console.log(tripsheetRowsWithUniqueId2, "datattttrip")
         setRows(tripsheetRowsWithUniqueId2);
         setSuccess(true);
         setSuccessMessage("Successfully listed");
@@ -502,10 +363,7 @@ const useDispatched = () => {
       setErrorMessage("Check your Network Connection");
     }
   };
-
-
   const handleButtonClick = (row) => {
-
     if (row.status === "Cancelled") {
       setError(true);
       setErrorMessage("booking cancelled")
@@ -515,21 +373,16 @@ const useDispatched = () => {
     setPopupOpen(true);
   };
 
-
   const handlePopupClose = () => {
     setSelectedRow(null);
     setPopupOpen(false);
   };
 
-
   const dataget = async (bookingno) => {
     const bookdatano = bookingno
-    console.log(bookdatano)
     const responsedata = await axios.get(`${apiUrl}/getdatafromboookingvalue/${bookdatano}`)
-    console.log(responsedata.data, "valureswpol")
     return responsedata.data[0]
   }
-  // console.log(selectedRow,"dtatatselected")
   const handleTripsheetClick = async () => {
     const dispatchcheck = "true";
     const calcPackageString = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
@@ -546,17 +399,11 @@ const useDispatched = () => {
 
 
   const handleBookingClick = async () => {
-    // console.log('1111');
 
     const dispatchcheck = "true";
-    console.log("selectedrow", selectedRow, dispatchcheck)
     const selectedRow1 = await dataget(selectedRow.tripid)
     const customerdata = selectedRow1.customer ? encodeURIComponent(selectedRow1.customer.toString()) : '';
-    // console.log(selectedRow1,'sele11');
-
-    // console.log(datavalue,"value")
     const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow1?.ratenamebook || ""}&paymenttype=${selectedRow1?.paymenttype || ''}&bookingdate=${selectedRow1?.bookingdate}&advance=${selectedRow1?.advance}&remarks=${selectedRow1?.remarks}&vehiclemodule=${selectedRow1?.vehiclemodule}&flightno=${selectedRow1?.flightno}&vehicleName=${selectedRow1?.vehicleName || ""}&Groups=${selectedRow1?.Groups}&servicestation=${selectedRow1?.servicestation}&registerno=${selectedRow1?.registerno}&travelsname=${selectedRow1?.travelsname || ""}&travelsemail=${selectedRow1?.travelsemail || ""}&tripid=${selectedRow1?.tripid || ''}&bookingno=${selectedRow1?.bookingno || ''}&status=${selectedRow1?.status || ''}&billingno=${selectedRow1?.billingno || ''}&apps=${selectedRow1?.apps || ''}&customer=${customerdata || ''}&orderedby=${selectedRow1?.orderedby || ''}&mobile=${selectedRow1?.mobile || selectedRow1?.orderByMobileNo || ''}&guestname=${selectedRow1?.guestname || ''}&guestmobileno=${selectedRow1?.guestmobileno || ''}&email=${selectedRow1?.email || ''}&employeeno=${selectedRow1?.employeeno || ''}&guestmobileno=${selectedRow1?.guestmobileno || ''}&orderbyemail=${selectedRow1?.orderbyemail || selectedRow1?.orderByEmail || ''}&address1=${selectedRow1?.address1 || ''}&hireTypes=${selectedRow1?.hireTypes || ''}&department=${selectedRow1?.department || selectedRow1?.servicestation}&vehRegNo=${selectedRow1?.vehRegNo || ''}&driverName=${selectedRow1?.driverName || ''}&mobileNo=${selectedRow1?.mobileNo || ''}&gps=${selectedRow1?.gps || ''}&duty=${selectedRow1?.duty || ''}&pickup=${selectedRow1?.pickup || ''}&useage=${selectedRow1?.useage || ''}&request=${selectedRow1?.request || selectedRow1?.registerno}&startdate=${selectedRow1?.startdate || ''}&employeeno=${selectedRow1?.employeeno || ''}&shedOutDate=${selectedRow1?.shedOutDate || ''}&shedInDate=${selectedRow1?.shedInDate || ''}&reporttime=${selectedRow1?.reporttime || ''}&shedintime=${selectedRow1?.shedintime || ''}&starttime=${selectedRow1?.starttime || ''}&customercode=${selectedRow1?.customercode || ''}&customeradvance=${selectedRow1?.customeradvance || selectedRow1?.advance || ''}&documentnotes=${selectedRow1?.documentnotes || ''}&vehicles=${selectedRow1?.vehicles || ''}&bookingtime=${selectedRow1?.bookingtime || ""}`;
-    //  const bookingPageUrl = `/home/bookings/booking?dispatchcheck=${dispatchcheck}&ratenamebook=${selectedRow1.ratenamebook || ""}&bookingdate=${selectedRow1.bookingdate}&advance=${selectedRow1.advance || ""}&remarks=${selectedRow1.remarks ||""}&vehiclemodule=${selectedRow1.vehiclemodule}&flightno=${selectedRow1.flightno||""}&vehicleName=${selectedRow1.vehicleName}&Groups=${selectedRow1.Groups}&servicestation=${selectedRow1.servicestation}&registerno=${selectedRow1.registerno}&travelsname=${selectedRow1.travelsname || ""}&travelsemail=${selectedRow1.travelsemail || ""}&tripid=${selectedRow1.tripid || ''}&bookingno=${selectedRow1.bookingno || ''}&status=${selectedRow1.status || ''}&billingno=${selectedRow1.billingno || ''}&apps=${selectedRow1.apps || ''}&customer=${selectedRow1.customer || ''}&orderedby=${selectedRow1.orderedby || ''}&guestname=${selectedRow1.guestname || ''}&guestmobileno=${selectedRow1.guestmobileno || ''}&email=${selectedRow1.email || ''}&employeeno=${selectedRow1.employeeno || ''}&address1=${selectedRow1.address1 || ''}&hireTypes=${selectedRow1.hireTypes || ''}&vehRegNo=${selectedRow1.vehRegNo || ''}&driverName=${selectedRow1.driverName || ''}&mobileNo=${selectedRow1.mobileNo || ''}&duty=${selectedRow1.duty || ''}&pickup=${selectedRow1.pickup || ''}&useage=${selectedRow1.useage || ''}&startdate=${selectedRow1.startdate || ''}&employeeno=${selectedRow1.employeeno || ''}&shedOutDate=${selectedRow1.shedOutDate || ''}&reporttime=${selectedRow1.reporttime || ''}&starttime=${selectedRow1.starttime || ''}&customercode=${selectedRow1.customercode || ''}&orderByMobileNo=${selectedRow1.orderByMobileNo ||""}&orderByEmail=${selectedRow1.orderByEmail || ''}&paymenttype=${selectedRow1.paymenttype || ''}`;
     window.location.href = await bookingPageUrl;
   }
 

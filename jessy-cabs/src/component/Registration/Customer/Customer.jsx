@@ -21,8 +21,6 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import { UnderGroup, states, Customertype, Select } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
-
-
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -35,10 +33,8 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import RateReviewIcon from "@mui/icons-material/RateReview";
-// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -51,7 +47,6 @@ import { GrSelect } from "react-icons/gr";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -134,14 +129,9 @@ const Customer = ({ stationName }) => {
     }
   };
 
-
   const handleClose = () => {
-
     setDeletedDialog(false)
   }
-
-
-
 
   return (
     <div className="form-container form-container-customer">
@@ -158,7 +148,6 @@ const Customer = ({ stationName }) => {
                     <AccountBalanceWalletIcon color="action" />
                   </div>
                   <TextField
-                    // margin="normal"
                     size="small"
                     name="customerId"
                     label="Customer ID"
@@ -174,14 +163,12 @@ const Customer = ({ stationName }) => {
                     <BadgeIcon color="action" />
                   </div>
                   <TextField
-                    // margin="normal"
                     size="small"
                     id="customer"
                     className='full-width'
                     label="Organization Name"
                     value={selectedCustomerData?.customer || book.customer}
                     autoComplete="new-password"
-                    // variant="standard"
                     // onChange={handleChange}
                     onChange={handleChangeuniquecustomer}
                     name="customer"
@@ -196,7 +183,6 @@ const Customer = ({ stationName }) => {
                     <PermIdentityIcon color="action" />
                   </div>
                   <TextField
-                    // margin="normal"
                     size="small"
                     id="name"
                     className='full-width'
@@ -254,7 +240,6 @@ const Customer = ({ stationName }) => {
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -263,7 +248,6 @@ const Customer = ({ stationName }) => {
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "rateType")}
                     value={selectedCustomerData?.rateType || book.rateType || ''}
-
                     options={customerratetype.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.rateType || book.rateType || ''}
                     renderInput={(params) => {
@@ -288,7 +272,6 @@ const Customer = ({ stationName }) => {
                     value={selectedCustomerData?.opBalance || book.opBalance}
                     onChange={handleChange}
                     id="opBalance"
-                  // variant="standard"
                   />
                 </div>
 
@@ -326,7 +309,6 @@ const Customer = ({ stationName }) => {
                     id="hybrid"
                     name="hybrid"
                     onChange={handleChange}
-
                     checked={book.hybrid || selectedCustomerData.hybrid}
                   />
                 </div>
@@ -340,18 +322,13 @@ const Customer = ({ stationName }) => {
                     checked={book.TimeToggle || selectedCustomerData.TimeToggle || 0}
                   />
                 </div>
-
-
-
               </div>
 
               <div className="Customer-page-input-field-addbtn">
-                {/* <Button variant="contained" onClick={handleAddExtra} >Add+</Button> */}
                 <div>
 
                   {customerfieldSets.map((datafield, index) => (
                     <>
-
                       <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap', marginBottom: '20px' }}>
                         <div className="input" key={index}>
                           <div className="icone">
@@ -365,10 +342,7 @@ const Customer = ({ stationName }) => {
                             label="Ordered By"
                             name="orderedby"
                             value={datafield.orderedby || ""}
-
-                            // value={fieldSet.orderdby || ""}
                             onChange={(e) => handleChangecustomer(e, index)}
-                          // variant="standard"
                           />
                         </div>
                         <div className="input" key={index}>
@@ -383,7 +357,6 @@ const Customer = ({ stationName }) => {
                             name="orderByEmail"
                             autoComplete="new-password"
                             value={datafield.orderByEmail || ""}
-                            // value={fieldSet.Hours || ""}
                             onChange={(e) => handleChangecustomer(e, index)}
                           />
                         </div>
@@ -392,7 +365,6 @@ const Customer = ({ stationName }) => {
                             <LocalPhoneIcon color="action" />
                           </div>
                           <TextField
-                            // type='number'
                             size="small"
                             id="mobliecustomer"
                             className='full-width'
@@ -403,7 +375,6 @@ const Customer = ({ stationName }) => {
                             onChange={(e) => handleChangecustomer(e, index)}
                           />
                         </div>
-
                         {index >= 1 && (
                           <Button variant="contained" color="error" onClick={handleClickOpen}>
                             x
@@ -411,14 +382,6 @@ const Customer = ({ stationName }) => {
                         )}
 
                       </div>
-
-                      {/* Remove Button */}
-                      {/* {index >=1 && (
-            <Button variant="contained" color="error" onClick={() => handleRemove(index,datafield.id)}>
-              x
-            </Button>
-          )} */}
-
 
                       <Dialog open={deletedialogbox} onClose={handleClose}>
                         <DialogTitle>{"Are you sure you want to delete this item?"}</DialogTitle>
@@ -436,18 +399,12 @@ const Customer = ({ stationName }) => {
                           </Button>
                         </DialogActions>
                       </Dialog>
-
                     </>
-
-
                   ))}
 
                   <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
-
-
                 </div>
               </div>
-
             </div>
 
             <div className="Customer-page-secend-containers">
@@ -465,7 +422,6 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     placeholder="Address"
                   />
-
                 </div>
 
                 <div className="input">
@@ -530,7 +486,6 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     label="Entity"
                     id="entity"
-                  // variant="standard"
                   />
                 </div>
                 <div className="input">
@@ -587,18 +542,11 @@ const Customer = ({ stationName }) => {
                     <option value="12">12%</option>
                   </select>
                 </div>
-                {/* </div>
-          </div>
-          <div className="detail-container-main-customer-spdail">
-            <div className="input-field customer-input-feild-add"> */}
                 <div className="input customer-billing-group-input">
                   <div className='customer-billing-group-input-division'>
                     <FormLabel htmlFor='billinggrouph'>Billing Group</FormLabel>
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
                   </div>
-
-                
-
                   {isInputVisible && (
                     <Autocomplete
                       size='small'
@@ -680,7 +628,6 @@ const Customer = ({ stationName }) => {
                   />
                 </div>
 
-
                 <div className="input">
                   {isEditMode ? (
                     <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
@@ -693,13 +640,9 @@ const Customer = ({ stationName }) => {
                     >
                       Add
                     </Button>
-
                   )}
                 </div>
-
               </div>
-
-
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -745,7 +688,6 @@ const Customer = ({ stationName }) => {
                         onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                       />
                     )}
-
                     {Customer_modify === 1 && isEditMode && (
 
                       <SpeedDialAction
@@ -800,7 +742,6 @@ const Customer = ({ stationName }) => {
                     )}
                   </PopupState>
                 </div>
-
                 <div className="detail-container">
                   <div className="container-left">
                     <div className="">
@@ -859,12 +800,8 @@ const Customer = ({ stationName }) => {
                     </div>
                   </div>
                 </div>
-
               </div>
-
-
               <div className="table-customer-lists">
-
                 <Box
                   sx={{
                     height: 400, // Adjust this value to fit your needs
@@ -880,7 +817,6 @@ const Customer = ({ stationName }) => {
                         backgroundColor: '#457cdc',
                         borderRadius: '20px',
                         minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
                       },
                       '&::-webkit-scrollbar-thumb:hover': {
                         backgroundColor: '#3367d6',
@@ -903,7 +839,6 @@ const Customer = ({ stationName }) => {
               </div>
             </div>
           </div>
-
         </form>
       </div>
     </div>

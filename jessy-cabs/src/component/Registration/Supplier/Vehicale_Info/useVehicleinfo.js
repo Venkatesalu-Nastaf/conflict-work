@@ -7,13 +7,10 @@ import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 
-
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const createddata=dayjs().format('YYYY-MM-DD')
-    console.log(createddata,"datta")
-
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
     const [rows1, setRows1] = useState([]);
@@ -27,7 +24,6 @@ const useVehicleinfo = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage,setWarningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [drivername, setDrivername] = useState([]);
@@ -55,11 +51,8 @@ const useVehicleinfo = () => {
         },
         { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
         { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
-        {
-            field: "doadate", headerName: "Attached Date", width: 130,
-
+        {   field: "doadate", headerName: "Attached Date", width: 130,
             valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
-
         },
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
         { field: "stations", headerName: "Stations", width: 170 },
@@ -127,11 +120,9 @@ const useVehicleinfo = () => {
             })
             .catch()
     }
-
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
-
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
@@ -158,25 +149,19 @@ const useVehicleinfo = () => {
 
     //---------------------------------------
 
-
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-
         try {
-
             const fileName = "VehicleStatement Reports"
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
             //         console.log(headers,"hed")
             const columnsExcel = headers.map(key => ({ key, header: key }));
-
             worksheet.columns = columnsExcel;
-
             // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
-
             // Set background color for header cells
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
@@ -185,26 +170,19 @@ const useVehicleinfo = () => {
                     fgColor: { argb: '9BB0C1' } // Green background color
                 };
             });
-
-
             worksheet.getRow(1).height = 30;
             // loop through all of the columns and set the alignment with width.
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-
             rows.forEach((singleData, index) => {
-
-
                 worksheet.addRow(singleData);
-
                 // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
                     const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
                     const cellLength = cellValue.toString().length; // Get length of cell value as a string
                     const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
                     // Set column width to the maximum of current width and cell length plus extra space
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
@@ -214,12 +192,9 @@ const useVehicleinfo = () => {
             worksheet.eachRow({ includeEmpty: false }, (row) => {
                 // store each cell to currentCell
                 const currentCell = row._cells;
-
                 // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
-
                     const cellAddress = singleCell._address;
-
                     // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
@@ -231,7 +206,6 @@ const useVehicleinfo = () => {
             });
             // write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
-
             // download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
@@ -241,9 +215,7 @@ const useVehicleinfo = () => {
             // removing worksheet's instance to create new one
             workbook.removeWorksheet(workSheetName);
         }
-
     }
-
 
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
@@ -255,11 +227,8 @@ const useVehicleinfo = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("VehicleInfo Details", 10, 10);
         const header = Object.keys(rows[0]);
-
         // Extracting body
         const body = rows.map(row => Object.values(row));
-        console.log(header.length, "len")
-
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -287,8 +256,6 @@ const useVehicleinfo = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata, "data")
-
         pdf.autoTable({
             head: [header],
             body: body,
@@ -298,16 +265,12 @@ const useVehicleinfo = () => {
                 // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-
                 minCellHeigh: 8,
                 valign: 'middle',
-
                 font: 'helvetica', // Set font type for body
-
                 cellWidth: 'wrap',
                 // cellWidth: 'auto'
             },
-
             bodyStyles: {
                 // fontSize:4,
                 // fontSize: fontdata-1
@@ -316,20 +279,16 @@ const useVehicleinfo = () => {
                 //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-
             },
             columnWidth: 'auto'
-
         });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         console.log(scaleFactor, "SCALE")
-
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'VehicleStatementReports.pdf');
     };
-
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF('p', 'pt', 'letter');
     //     pdf.setFontSize(16); // Increase font size for the title
@@ -401,18 +360,13 @@ const useVehicleinfo = () => {
     //     // Save the PDF file with the calculated number of pages
     //     pdf.save(`VehicleStatementReports (${totalPages} pages).pdf`);
     // };
-
-
     useEffect(() => {
         const fetchOrganizationnames = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/drivernamevechicleinfo`);
                 const data = response.data
                 const names = data.map(res => res.drivername)
-
                 setDrivername(names)
-
-
             }
             catch (error) {
                 console.log(error, "error");
@@ -420,11 +374,6 @@ const useVehicleinfo = () => {
         };
         fetchOrganizationnames()
     }, [apiUrl])
-
-
-
-
-
 
     // const handlePdfDownload = () => {
     //     // Convert Excel data to CSV format
@@ -442,7 +391,6 @@ const useVehicleinfo = () => {
     //     // Save the PDF file
     //     pdf.save("VehicleStatementReports.pdf");
     // };
-
 
     const [book, setBook] = useState({
 
@@ -511,8 +459,6 @@ const useVehicleinfo = () => {
         setIsEditMode(false);
     };
 
-
-
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
@@ -562,16 +508,10 @@ const useVehicleinfo = () => {
     };
 
     const uniquevechicleRegno=async(veghnodata)=>{
-        // console.log(customerdataname,"namee")
-        // console.log(customerdataname,ratenamedata,"ratt")
         if(veghnodata){
 
             const response= await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
             const responsedata=response.data;
-            
-            // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
-           
             if(responsedata?.length >=1){
                 
                 setCredentialData(true)
@@ -585,7 +525,6 @@ const useVehicleinfo = () => {
 
        const  handleChangecredent=(event)=>{
         const { name, value } = event.target;
-       
         const data=uniquevechicleRegno(value)
         console.log(data)
         setBook((prevBook) => ({
@@ -599,7 +538,6 @@ const useVehicleinfo = () => {
 
        }
 
-
     const handleKeyEnter = useCallback(
         async (event) => {
             if (event.key === "Enter") {
@@ -609,7 +547,6 @@ const useVehicleinfo = () => {
 
                         try {
                             const data = event.target.value
-                            // console.log(data,"tar",typeof(data))
                             const response = await axios.get(`${apiUrl}/vechiclenameinfo`, {
                                 params: {
                                     vehicletypename: data
@@ -650,9 +587,6 @@ const useVehicleinfo = () => {
         [rows1, enterPressCount, apiUrl, setSelectedCustomerData]
     );
 
-
-
-
     // insurence copy-1
     const [insurance, setInsurance] = useState(null);
     const addInsurence_copy = async (vehicleid) => {
@@ -673,27 +607,6 @@ const useVehicleinfo = () => {
         }
         setInsurance(null);
     };
-
-    // licence copyy---2
-    // const [licence, setLicence] = useState(null);
-    // const addLicence_copy = async (vechicleid) => {
-    //     if (licence !== null) {
-
-    //         const formData = new FormData();
-    //         formData.append("file", licence);
-    //         try {
-    //             await axios.post(`${apiUrl}/licence-pdf/${vechicleid}`, formData);
-    //             setLicence(null)
-    //         }
-    //         catch {
-    //             setError(true);
-    //             setErrorMessage('something wrong');
-    //         }
-    //     } else {
-    //         return
-    //     }
-    //     setLicence(null);
-    // };
 
     // nationalPermit copyy---3
     const [nationalPermit, setNationalPermit] = useState(null);
@@ -747,7 +660,6 @@ const useVehicleinfo = () => {
         }
     };
 
-
     // rcBook copyy---5
     const [rcBook, setRcbook] = useState(null);
     const addRcBook_copy = async (vechicleid) => {
@@ -791,43 +703,35 @@ const useVehicleinfo = () => {
     };
 
     const handleAdd = async () => {
-
-
         if (!book.vehicleName) {
             setWarning(true);
             setWarningMessage("Enter Vehicle Name");
             return;
-
         }
         if (!book.hiretypes) {
             setWarning(true);
             setWarningMessage("Enter Hiretypes");
             return;
-
         }
         if (!book.fueltype) {
             setWarning(true);
             setWarningMessage("Enter Fueltype");
             return;
-
         }
         if (!book.Groups) {
             setWarning(true);
             setWarningMessage("Enter Groups");
             return;
-
         }
         if (!book.vehType) {
             setWarning(true);
             setWarningMessage("Choose vehicletype");
             return;
-
         }
         if (!book.mobileNo) {
             setWarning(true);
             setWarningMessage("Enter MobileNo");
             return;
-
         }
         // if (!book.driverName) {
         //     setWarning(true);
@@ -839,42 +743,34 @@ const useVehicleinfo = () => {
             setWarning(true);
             setWarningMessage("Enter VehicleRegNo");
             return;
-
         }
         if (!book.stations) {
             setWarning(true);
             setWarningMessage("Choose Stations");
             return;
-
         }
         if (!book.owner) {
             setWarning(true);
             setWarningMessage("Enter The Owner Name");
             return;
-
         }
         if (cerendentialdata === true) {
             setWarning(true);
             setWarningMessage(" VehicleRegNo Already Exists");
             return;
         }
-
-
         try {
             const data = { ...book }
             await axios.post(`${apiUrl}/vehicleinfo`, data);
             const response = await axios.get(`${apiUrl}/lastvechileinfogetid`);
             const lastvehicleidno = response.data.vehicleId;
-
             addFcCopy_copy(lastvehicleidno);
             addRcBook_copy(lastvehicleidno);
             addStatePermit_copy(lastvehicleidno);
             addNationalPermit_copy(lastvehicleidno);
-            // addLicence_copy(lastvehicleidno);
             addInsurence_copy(lastvehicleidno);
             handleCancel();
             setCredentialData()
-
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
@@ -884,7 +780,6 @@ const useVehicleinfo = () => {
         }
     };
 
-
     const [deletefile, setDeleteFile] = useState([])
     const handlecheckbox = (fileName) => {
             if (deletefile.includes(fileName)) {
@@ -893,30 +788,26 @@ const useVehicleinfo = () => {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
         }
     };
-
+    
     const handleDocumentDownload = async () => {
         try {
             // Filter selected files
             const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
-
             // Download each file
             for (const file of selectedFiles) {
                 const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
                 });
-
                 // Convert image blob to base64 data URL
                 const reader = new FileReader();
                 reader.readAsDataURL(response.data);
                 reader.onloadend = () => {
                     const imageDataUrl = reader.result;
-
                     // Create PDF document
                     const pdf = new jsPDF();
                     const imgWidth = pdf.internal.pageSize.getWidth();
                     const imgHeight = pdf.internal.pageSize.getHeight();
                     pdf.addImage(imageDataUrl, 'JPEG', 0, 0, imgWidth, imgHeight);
-
                     // Save PDF file
                     pdf.save(file.fileName + '.pdf');
                 };
@@ -927,20 +818,14 @@ const useVehicleinfo = () => {
         }
     };
 
-
-
     const handleEdit = async (vehicleId) => {
         try {
-            // const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
-
-
             addFcCopy_copy(selectedCustomerData.vehicleId);
             addRcBook_copy(selectedCustomerData.vehicleId);
             addStatePermit_copy(selectedCustomerData.vehicleId);
             addNationalPermit_copy(selectedCustomerData.vehicleId);
-            // addLicence_copy(selectedCustomerData.vehicleId);
             addInsurence_copy(selectedCustomerData.vehicleId);
             handleCancel();
             setCredentialData()
@@ -955,7 +840,6 @@ const useVehicleinfo = () => {
     };
 
     const handleClick = async (actionName, vehicleId) => {
-        // event.preventDefault();
         try {
             if (actionName === 'List') {
                 const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
@@ -976,7 +860,6 @@ const useVehicleinfo = () => {
                 }
 
             }
-
             else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows1([]);
@@ -984,7 +867,6 @@ const useVehicleinfo = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
             }
-
             else if (actionName === 'Delete') {
                 await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
                 setSelectedCustomerData({});
@@ -994,11 +876,9 @@ const useVehicleinfo = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
             }
-
             else if (actionName === 'Edit') {
                 handleEdit()
             }
-
             else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -1077,7 +957,6 @@ const useVehicleinfo = () => {
             target: { name: "vehicleName", value: customerData.vehicleName },
         });
         setCredentialData()
-
         setEdit(true)
         setIsEditMode(true);
     }, []);
@@ -1089,17 +968,12 @@ const useVehicleinfo = () => {
         setIsEditMode(true);
     }, []);
 
-
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
-
     const handleClosedeleteDialog = () => {
         setDialogdeleteOpen(false);
     };
-
     const [imagedata, setImagedata] = useState(null);
-
     const handleimagedelete = (imageName) => {
-
         if (deletefile.length > 0) {
             setImagedata(prevDeleteFile => {
                 if (!prevDeleteFile || !Array.isArray(prevDeleteFile)) {
@@ -1111,10 +985,8 @@ const useVehicleinfo = () => {
             setDeleteFile([]);
         }
     };
-
     const handleContextMenu = () => {
         try {
-
             axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
                 .then(() => {
                     setDialogdeleteOpen(false);
@@ -1134,7 +1006,6 @@ const useVehicleinfo = () => {
         setSelectAll(false)
     };
 
-
     return {
         selectedCustomerData,
         rows,
@@ -1146,7 +1017,6 @@ const useVehicleinfo = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
         book,
         handleClick,
         handleChange,
@@ -1166,7 +1036,6 @@ const useVehicleinfo = () => {
         handlePdfDownload,
         columns,
         setInsurance,
-        // setLicence,
         setNationalPermit,
         setStatePermit,
         setRcbook,

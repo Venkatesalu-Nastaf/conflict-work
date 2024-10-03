@@ -144,14 +144,6 @@ function App() {
       try {
         const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
         const resData = response.data;
-        console.log("station--", resData)
-
-        // const trasform = resData.map((item) => {
-        //   const stations = item.Stationname.split(',')
-        //   return stations.map(name => ({ Stationname: name }))
-        // })
-
-        // console.log("trasform", trasform)
         setStationName(resData);
       } catch (error) {
         console.log("error occur ", error);
@@ -159,7 +151,6 @@ function App() {
     }
     fetchSattionName();
   }, [apiUrl, loginUserName])
-
 
   //---------------------------------------------------------------------
   //  fetching Organisation name (Customer )
@@ -306,9 +297,7 @@ function App() {
                   )
                 )
               }
-
               />
-
               <Route path="/home/bookings" element={ BOOKING !== 0 ? <Bookings /> : <NoPermission />}>
                 <Route
                   path="/home/bookings/booking"

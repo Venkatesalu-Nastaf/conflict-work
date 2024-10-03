@@ -30,34 +30,25 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // FONTAWESOME
-// import { faFileInvoice, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { RiFileUploadLine } from "react-icons/ri";
-
-// import { faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import ClearIcon from '@mui/icons-material/Clear';
 import { TbLicense } from "react-icons/tb";
-
-// import ListAltIcon from "@mui/icons-material/ListAlt";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import TaxiAlertIcon from '@mui/icons-material/TaxiAlert';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-// import RateReviewIcon from "@mui/icons-material/RateReview";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-// import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-// import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import useDrivercreation from './useDrivercreation';
 import { APIURL } from "../../../url";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -125,7 +116,6 @@ const DriverCreation = ({ stationName }) => {
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
         handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
-
     } = useDrivercreation();
 
     useEffect(() => {
@@ -152,7 +142,6 @@ const DriverCreation = ({ stationName }) => {
                                     <BadgeIcon color="action" />
                                 </div>
                                 <TextField
-                                    // margin="normal"
                                     size="small"
                                     id="driverid"
                                     className='full-width'
@@ -160,7 +149,6 @@ const DriverCreation = ({ stationName }) => {
                                     name="driverid"
                                     value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
-                                // variant="standard"
                                 />
                             </div>
                             <div className="input driver-input">
@@ -170,7 +158,6 @@ const DriverCreation = ({ stationName }) => {
                                             <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                         </div>
                                         <TextField
-                                            // margin="normal"
                                             size="small"
                                             id="drivername"
                                             className='full-width'
@@ -193,7 +180,6 @@ const DriverCreation = ({ stationName }) => {
                                             <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                         </div>
                                         <TextField
-                                            // margin="normal"
                                             size="small"
                                             id="username"
                                             className='full-width'
@@ -214,7 +200,6 @@ const DriverCreation = ({ stationName }) => {
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
                                 <TextField
-                                    // margin="normal"
                                     size="small"
                                     id="Email"
                                     className='full-width'
@@ -266,7 +251,7 @@ const DriverCreation = ({ stationName }) => {
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowPasswords}
                                                     onMouseDown={handleMouseDownPasswords}
-                                                >
+                                                    >
                                                     {showPasswords ? <Visibility /> : <VisibilityOff />}
                                                 </IconButton>
                                             </InputAdornment>
@@ -361,7 +346,6 @@ const DriverCreation = ({ stationName }) => {
                                     label="Mobile No"
                                     id="Mobileno"
                                     className='full-width'
-                                // variant="standard"
                                 />
                             </div>
                             <div className="input driver-input">
@@ -422,53 +406,6 @@ const DriverCreation = ({ stationName }) => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                            {/* <div className="input driver-input">
-                                <div className="icone">
-                                    <AssignmentIndIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    name="aadharno"
-                                    className='full-width'
-                                    value={selectedCustomerData?.aadharno || book.aadharno}
-                                    onChange={handleChange}
-                                    label="Aadhar Card No"
-                                    id="aadharno"
-                                />
-
-
-
-
-
-                                <Tooltip title="upload Aadhar Card" arrow>
-
-                                    <Button component="label">
-                                        <span className='upload-icon'>
-                                            <RiFileUploadLine />
-
-                                        </span>
-                                        <input
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => setFile(e.target.files[0])}
-                                        />
-                                    </Button>
-                                </Tooltip>
-
-
-                            </div> */}
-                            {/* <div className="input driver-input">
-                                <Button color="primary" variant="contained" component="label">
-                                    aadhar card
-                                    <input
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => setFile(e.target.files[0])}
-                                    />
-                                </Button>
-                            </div> */}
-
-
                             <div className="input-adhar driver-input">
                                 <div className="icone">
                                     <TbLicense color="action" />
@@ -499,8 +436,7 @@ const DriverCreation = ({ stationName }) => {
                                 </Button>
                             </Tooltip>
                             </div>
-                            
-
+                        
                             <div className="input-adhar driver-input">
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
@@ -537,8 +473,6 @@ const DriverCreation = ({ stationName }) => {
                                 </Tooltip>
                             </div>
 
-
-
                             <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     PROFILE IMAGE
@@ -550,7 +484,6 @@ const DriverCreation = ({ stationName }) => {
                                     />
                                 </Button>
                             </div>
-
                             {/* <div className="input driver-input">
                                 <Button color="primary" variant="contained" component="label">
                                     License
@@ -594,22 +527,6 @@ const DriverCreation = ({ stationName }) => {
                                 )}
                             </div>
                         </div>
-
-                        {/* <div className="Download-btn">
-                           <PopupState variant="popover" popupId="demo-popup-menu">
-                                 {(popupState) => (
-                                    <React.Fragment>
-                                        <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                                            Download
-                                        </Button>
-                                        <Menu {...bindMenu(popupState)}>
-                                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                                        </Menu>
-                                    </React.Fragment>
-                                )}
-                            </PopupState>
-                        </div> */}
                     </div>
                     <div className='alert-popup-main'>
                         {error &&

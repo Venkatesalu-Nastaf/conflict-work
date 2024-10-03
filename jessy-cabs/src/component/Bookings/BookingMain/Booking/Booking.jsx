@@ -1,26 +1,21 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
-// import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-// import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-// import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-
 import {
   Duty,
   Hire,
   PayType,
-  // Report,
   GroupTypes,
   vehicaleinfos
 } from "./Booking";
@@ -28,25 +23,16 @@ import {
   TextField,
   FormControlLabel,
   FormControl,
-  // FormLabel,
-  // Radio,
-  // RadioGroup,
   Checkbox,
 } from "@mui/material";
-
-
-
 
 // ICONS
 import { PiCarSimpleFill } from "react-icons/pi";
 import InfoIcon from "@mui/icons-material/Info";
-// import SellIcon from "@mui/icons-material/Sell";
 import ClearIcon from "@mui/icons-material/Clear";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
-
 import AltRouteIcon from "@mui/icons-material/AltRoute";
-
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
@@ -58,7 +44,6 @@ import EmailIcon from "@mui/icons-material/Email";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -78,9 +63,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../../url";
-
-// spped dial 
-
+// speed dial 
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -88,12 +71,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
-
-
-
 import Select from '@mui/material/Select';
-
-// import Button from '@mui/material/Button';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -109,33 +87,24 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = ({ stationName, customerData }) => {
-
-  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
+const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   // to tranform datas based on 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All").map(option => option?.Stationname)
-
   const apiUrl = APIURL;
-
   const {
     selectedCustomerData, handleImagechange2, 
   
     selectedCustomerId,
-    // rows,
-    actionName,
     error, orderByDropDown,
     success,
     info,
-    // warning,
     successMessage,
     errorMessage,
-    // warningMessage,
     infoMessage,
     book,
     handleClick,
     handleChange,
-
-    // handleRowClick,
     handleAdd,
     hidePopup,
     formData,
@@ -144,11 +113,8 @@ const Booking = ({ stationName, customerData }) => {
     getCurrentTime,
     setBook,
     setSelectedCustomerData,
-    // setBookingTime,
     selectedCustomerDatas,
-    // handleKeyEnter,
     formValues,
-    // handleenterSearch,
     handleAutocompleteChange,
     setFormData,
     setStartTime,
@@ -159,7 +125,6 @@ const Booking = ({ stationName, customerData }) => {
     sendEmail,
     setSendEmail,
     lastBookingNo,
-   
     bookingStatus, setBookingStatus,
     setreporttime,
     storedUsername,
@@ -176,18 +141,14 @@ const Booking = ({ stationName, customerData }) => {
     handleimagedelete,
     handleClosedeleteDialog,
     dialogdeleteOpen,
-    // handleprevent,
     rowdriver,
     handleRowClickdriver,
-    // setErrorMessage,
-    // setError,
     edit, AvilableimageCount,
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
 
-    // imageDialogOpen, handleCloseImageDialog, setImageDialogOpen,
      handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
   } = useBooking();
 
@@ -195,7 +156,6 @@ const Booking = ({ stationName, customerData }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  // const Booking_read = permissions[1]?.read;
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
@@ -205,17 +165,10 @@ const Booking = ({ stationName, customerData }) => {
   const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
 
-
- 
-
-
-
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
     setSelectedCustomerData({ ...selectedCustomerData, status: event.target.value })
   };
-
-
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || dayjs())
   const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate || dayjs())
@@ -256,17 +209,13 @@ const Booking = ({ stationName, customerData }) => {
     pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
     starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || "",
-    // starttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || "",
     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
     driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
-    // vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
     vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
-
     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
     vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
     servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation || selectedCustomerDatas.servicestation,
-    // status: book.status || formData.status || selectedCustomerData.status,
     requestno: formData.registerno || selectedCustomerData.registerno || book.registerno || "",
     duty: formData.duty || selectedCustomerData.duty || book.duty || "",
     bookingno: book.bookingno || selectedCustomerData.bookingno || formData.bookingno,
@@ -275,14 +224,10 @@ const Booking = ({ stationName, customerData }) => {
     Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
     status: selectedCustomerData.status || book.status || bookingStatus
 
-
-
-
   };
 
   const handlecopiedemailcontentbooking = () => {
     const tripidstatus = selectedCustomerData.status || book.status || bookingStatus;
-
 
     if (sendEmail) {
       return;
@@ -297,7 +242,6 @@ const Booking = ({ stationName, customerData }) => {
       document.execCommand('copy');
       document.body.removeChild(tempTextarea);
       setCopyEmail(true)
-
       setTimeout(() => {
         setCopyEmail(false)
       }, (2000));
@@ -308,7 +252,6 @@ const Booking = ({ stationName, customerData }) => {
       setWarningMessage("Check Your Trip Status")
     }
   }
-
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -336,7 +279,6 @@ const Booking = ({ stationName, customerData }) => {
               <label>Status</label>
               <Box sx={{ width: '100%' }}>
                 <FormControl fullWidth>
-                  {/* <InputLabel id="demo-simple-select-label">Status</InputLabel> */}
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -350,14 +292,11 @@ const Booking = ({ stationName, customerData }) => {
                     <MenuItem value={'pending'}>Pending</MenuItem>
                     <MenuItem value={'Cancelled'}>Cancelled</MenuItem>
                     <MenuItem value={'Opened'}>Opened</MenuItem>
-
                   </Select>
                 </FormControl>
               </Box>
-           
             </div>
 
-    
             <span className="d-grid">
               <label>Username</label>
               <input type="text" value={formData.username ||
@@ -366,7 +305,6 @@ const Booking = ({ stationName, customerData }) => {
                 storedUsername ||
                 ""} />
             </span>
-           
 
             <span className="d-grid">
               <label className="tripsheet-top-division-date-label">Booking Date</label>
@@ -384,7 +322,6 @@ const Booking = ({ stationName, customerData }) => {
                     }
                     format="DD/MM/YYYY"
                     readOnly
-             
                   />
                 </LocalizationProvider>
               </div>
@@ -405,7 +342,6 @@ const Booking = ({ stationName, customerData }) => {
                readOnly
               />
             </span>
-
 
             <span className="d-grid">
               <label>Trip Id</label>
@@ -451,21 +387,12 @@ const Booking = ({ stationName, customerData }) => {
         
       
         </div>
-        {/* <div className="booking-main-section1">
-          <div className="sub-section1">
-            <div className="first-division">
-             
-            </div>
-          </div>
-        
-        </div> */}
         <div>
           <div className="second-division second-division-booking">
             <div className="input">
               <div className="icone">
                 <PermIdentityIcon color="action" />
               </div>
-            
               <Autocomplete
                 fullWidth
                 size="small"
@@ -474,16 +401,13 @@ const Booking = ({ stationName, customerData }) => {
                 sx={{ width: "100%" }}
                 onChange={(event, value) => {
                   handleAutocompleteChange(event, value, "customer")
-                  // handleCustomerEnter2(event)
                 }}
-                // value={book.customer || ''}
                 value={
                   formData.customer ||
                   selectedCustomerData.customer ||
                   selectedCustomerDatas.customer ||
                   book.customer ||
                   ""}
-
                 options={CustomerNames?.map((option) => ({
                   label: option.customer,
                 }))}
@@ -501,7 +425,6 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
 
-
             </div>
             <div className="input">
               <div className="icone">
@@ -515,10 +438,7 @@ const Booking = ({ stationName, customerData }) => {
                 sx={{ width: "100%" }}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
-
-
                 }
-                // value={book.orderedBy || ''}
                 value={
                   formData.orderedby ||
                   selectedCustomerData.orderedby ||
@@ -544,7 +464,6 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
 
-
             </div>
             <div className="input">
               <div className="icone">
@@ -566,7 +485,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Order by Mobile No"
                 id="orderByMobileNo"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -576,7 +494,6 @@ const Booking = ({ stationName, customerData }) => {
                 <ForwardToInboxIcon color="action" />
               </div>
 
-              {/* {console.log("book--", book)} */}
               <TextField
                 name="orderByEmail"
                 className="full-width"
@@ -594,7 +511,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Order By Email"
                 id="orderByEmail"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -609,7 +525,6 @@ const Booking = ({ stationName, customerData }) => {
                 id="servicestation"
                 freeSolo
                 size="small"
-                // value={serviceStationFilterFun() || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
                 value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
 
                 options={stationOptions}
@@ -622,8 +537,6 @@ const Booking = ({ stationName, customerData }) => {
                   );
                 }}
               />
-
-            
 
             </div>
 
@@ -688,7 +601,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Guest Name"
                 id="guestname"
-                // variant="standard"
                 margin="normal"
                 size="small"
                 required
@@ -712,7 +624,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Guest Mobile No"
                 id="guestmobileno"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -735,7 +646,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Guest Email"
                 id="email"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -762,8 +672,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
               />
             </div>
-
-
 
             <div className="input">
               <div className="icone">
@@ -831,8 +739,6 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-
-
             <div className="input">
               <div className="icone">
                 <AirplaneTicketIcon color="action" />
@@ -850,7 +756,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Flight No"
                 id="flightno"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -873,7 +778,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Employee Id"
                 id="employeeno"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -898,7 +802,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Request Id"
                 id="registerno"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -921,7 +824,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Cost Code"
                 id="customercode"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -931,43 +833,6 @@ const Booking = ({ stationName, customerData }) => {
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
               </div>
-              {/* <Autocomplete
-                fullWidth
-                size="small"
-                id="vehType"
-                freeSolo
-                sx={{ width: "100%" }}
-                onChange={(event, value) =>
-                  handleAutocompleteChange(event, value, "vehType")
-                }
-                value={
-                  formData.vehType ||
-                  selectedCustomerData.vehType ||
-                  book.vehType || selectedCustomerdriver.vehType ||
-                  ""
-                }
-                options={vehileName.map((option) => ({
-                  label: option,
-                }))}
-                getOptionLabel={(option) =>
-                  option.label ||
-                  formData.vehType ||
-                  selectedCustomerData.vehType ||
-                  book.vehType || selectedCustomerdriver.vehType ||
-                  ""
-                }
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label="Vehicle Name"
-                      name="vehType"
-                      inputRef={params.inputRef}
-                    />
-                  );
-                }}
-              /> */}
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -1006,7 +871,6 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-
             <div className="input booking-report-date-input">
               <div className="icone">
                 <CalendarMonthIcon color="action" />
@@ -1037,9 +901,6 @@ const Booking = ({ stationName, customerData }) => {
                 </LocalizationProvider>
               </div>
             </div>
-
-
-
 
             <div className="input booking-report-date-input" style={{ display: "grid" }}>
               {startDateCheckFun()}
@@ -1074,13 +935,8 @@ const Booking = ({ stationName, customerData }) => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-
               </div>
-
             </div>
-
-
-          
 
             <div>
               <div className="input time booking-start-time-input">
@@ -1118,10 +974,6 @@ const Booking = ({ stationName, customerData }) => {
                     id="starttime"
                     value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
                     onChange={(event) => {
-                      // const sTime = event.target.value;
-                      // if (reportTimeVar && sTime <= reportTimeVar) {
-                      //   return;
-                      // }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });
@@ -1159,10 +1011,6 @@ const Booking = ({ stationName, customerData }) => {
               />
             </div>
 
-
-
-
-            
             {isEditMode ? (
               <div>
                 <div className="input-dummy">
@@ -1176,7 +1024,6 @@ const Booking = ({ stationName, customerData }) => {
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      // onChange={(e) => setFile(e.target.files[0])}
                       onChange={handleChangeFile}
                     />
                   </Button>
@@ -1196,8 +1043,6 @@ const Booking = ({ stationName, customerData }) => {
             ) : (
 
               <div className="booking-image-attach-input-division input">
-
-
                 <div className="input-dummy">
                   <Button
                     color="primary"
@@ -1213,17 +1058,8 @@ const Booking = ({ stationName, customerData }) => {
                     />
                   </Button>
                 </div>
-                <div className="booking-image-attach-view-division">
-                  {/* <Tooltip title={`${selectetImg.length} images selected`} arrow>
-                    <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button>
-                  </Tooltip> */}
-                  {/* <span>{selectetImg.length} images selected</span>
-                  <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>view</Button> */}
-                </div>
               </div>
             )}
-
-           
 
             <div className="input pick-up-address-input">
               <div className="icone">
@@ -1266,8 +1102,7 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               </div>
             </div>
-          </div>
-         
+          </div> 
         </div>
         <Box className='common-speed-dail'>
           <StyledSpeedDial
@@ -1275,7 +1110,6 @@ const Booking = ({ stationName, customerData }) => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-    
             {Booking_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
@@ -1308,7 +1142,6 @@ const Booking = ({ stationName, customerData }) => {
             />
           </StyledSpeedDial>
         </Box>
-        {/**  helloo */}
 
         <div className="vehicle-confirm">
           <div className="input-field input-feild-vehicle-confirm">
@@ -1327,7 +1160,6 @@ const Booking = ({ stationName, customerData }) => {
                 }
                 value={
                   Hire.find((option) => option.Option)?.label ||
-                  // formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
@@ -1337,7 +1169,6 @@ const Booking = ({ stationName, customerData }) => {
                 }))}
                 getOptionLabel={(option) => 
                   option.label ||
-                  // formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
@@ -1354,14 +1185,10 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
             </div>
-
             <div className="input">
               <div className="icone">
                 <AltRouteIcon color="action" />
               </div>
-            
-
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -1391,13 +1218,10 @@ const Booking = ({ stationName, customerData }) => {
                 }
               />
             </div>
-
-        
             <div className="input">
               <div className="icone">
                 <RateReviewIcon color="action" />
               </div>
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -1406,7 +1230,7 @@ const Booking = ({ stationName, customerData }) => {
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                 onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
-                onKeyDown={handleKeyEnterdriver}
+                // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                 options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
                 getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
@@ -1420,8 +1244,6 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               />
             </div>
-
-          
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -1432,7 +1254,6 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 size="small"
                 value={
-                  // formData.vehiclemodule ||
                   selectedCustomerData.vehiclemodule ||
                   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
                   ""
@@ -1450,9 +1271,6 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
             </div>
-
-          
-
             <div className="input">
               <div className="icone">
                 <EmailIcon color="action" />
@@ -1463,7 +1281,6 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 size="small"
                 value={
-                  // formData.Groups ||
                   selectedCustomerData.Groups ||
                   book.Groups || selectedCustomerdriver.Groups ||
                   ""
@@ -1481,12 +1298,10 @@ const Booking = ({ stationName, customerData }) => {
                 }}
               />
             </div>
-
             <div className="input">
               <div className="icone">
                 <AirlineSeatReclineExtraIcon color="action" />
               </div>
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -1509,7 +1324,6 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               />
             </div>
-            {/* {console.log(formData.mobileNo, selectedCustomerData.mobileNo, book.mobileNo, "sharan")} */}
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -1519,7 +1333,6 @@ const Booking = ({ stationName, customerData }) => {
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  // formData.mobileNo ||
                   selectedCustomerData.mobileNo ||
                   book.mobileNo || selectedCustomerdriver.mobileNo ||
                   ""
@@ -1527,7 +1340,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Driver Phone"
                 id="mobileNo"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -1550,7 +1362,6 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={handleChange}
                 label="Travels Email"
                 id="travelsemail"
-                // variant="standard"
                 margin="normal"
                 size="small"
               />
@@ -1603,8 +1414,6 @@ const Booking = ({ stationName, customerData }) => {
                         <td>{row.vehType}</td>
                         <td>{row.vehRegNo}</td>
                         <td>{row.travelsname}</td>
-                        {/* <td>{row.hireTypes}</td> */}
-                        {/* <td>{row.active}</td> */}
                       </tr>
                     ))
                   )}
@@ -1673,8 +1482,6 @@ const Booking = ({ stationName, customerData }) => {
           }
         </div>
 
-      
-
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
             <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
@@ -1726,5 +1533,4 @@ const Booking = ({ stationName, customerData }) => {
     </div >
   );
 };
-
 export default Booking;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext,useLayoutEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./MainDashboard.css";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
@@ -199,10 +199,7 @@ const MainDashboard = () => {
     }
   }, [user, datatriguserinfo]);
 
-
-
   const storedUsername = localStorage.getItem("username");
-
   const navigateToUserSettings = () => {
     if (window.location.pathname !== "/home/usersettings/usersetting") {
       navigate("/home/usersettings/usersetting");
@@ -211,13 +208,10 @@ const MainDashboard = () => {
 
   const [routeData, setRouteData] = useState("");
   const storeUsername = localStorage.getItem("username");
-
   const { setOrgName } = useData()
-
   useEffect(() => {
     const fetchData = async () => {
       const username = storeUsername;
-      console.log("routeData username", username)
       try {
         const response = await fetch(
           `${apiUrl}/userdata/${encodeURIComponent(username)}`
@@ -230,14 +224,11 @@ const MainDashboard = () => {
         const userprofile = routeData[0]?.profile_image
         setSelectedTheme(usertheme);
         setSelectedAvatar(userprofile)
-        console.log("routeData", routeData)
         localStorage.setItem("selectedusertheme", JSON.stringify(usertheme));
         localStorage.setItem("selectedProfileimageuser", JSON.stringify(userprofile))
-
         if (routeData) {
           setOrgName(routeData[0]?.organizationname)
           localStorage.setItem("useridno", routeData[0]?.userid);
-          // localStorage.setItem("usercompany", routeData[0]?.organizationname);
           setRouteData(routeData);
         }
 

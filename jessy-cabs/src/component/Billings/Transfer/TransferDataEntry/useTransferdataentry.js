@@ -79,6 +79,8 @@ const useTransferdataentry = () => {
     // const [formData, setFormData] = useState({})
     const { billingPage, setBillingPage } = PdfData()
 
+    const [selectTripid,setSelectTripid] = useState([])
+
 
 
     const handleExcelDownload = async () => {
@@ -473,6 +475,10 @@ const useTransferdataentry = () => {
             })
             .filter((tripid) => tripid !== null);
 
+            setSelectTripid(selectedTrips)
+            
+           // console.log(selectTripid,'tripsdatas')
+
         const selectedTripAmount = newSelectionModel
             .filter((selectedId) => selectedId !== null)
             .map((selectedId) => {
@@ -705,7 +711,7 @@ const useTransferdataentry = () => {
                 const tripString = trip.join(','); // Join the trip IDs with commas
                 const a = tripString.split(','); // Split the string into an array
                 const b = a.map((li) => parseInt(li)) || ""
-                console.log(b, 'update34');
+                //console.log(b, 'update34');
 
                 setLatestTripNo(b)
                 const groupid = response?.map(li => li.Grouptrip_id)[0];
@@ -1076,56 +1082,280 @@ const useTransferdataentry = () => {
     };
 
 
-    const handleAddGroup = async () => {
+    // const handleAddGroup = async () => {
 
-        if (rowSelectionModel.length === 0) {
-            setError(true)
-            setErrorMessage("Please select the Row")
-            return
-        }
+    //     if (rowSelectionModel.length === 0) {
+    //         setError(true)
+    //         setErrorMessage("Please select the Row")
+    //        // console.log("Row selection model is empty:", rowSelectionModel);
+    //         return
+            
+    //     }
+    //     if (groupId === "") {
+
+    //         try {
+    //             if (!rows || rows.length === 0) {
+    //                 throw new Error("Rows data is empty");
+    //             }
+
+    //             const fromdate = rows[0]?.startdate;
+    //             const enddate = rows[rows.length - 1]?.startdate;
+    //             const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+    //             const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+    //             const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+    //             const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+    //             const OrganizationName = selectedCustomerDatas.customer || customer;
+    //             const Trips = rowSelectionModel.length;
+    //             const billstatus = "notbilled";
+
+
+    //             const transferlist = {
+    //                 Status: billstatus,
+    //                 Billdate: billDate,
+    //                 Organization_name: OrganizationName,
+    //                 Trip_id: rowSelectionModel,
+    //                 FromDate: fromDate,
+    //                 EndDate: EndDate,
+    //                 Trips: Trips,
+    //                 Amount: tripAmount,
+
+    //             }
+
+    //             setMisGroupTripId(rowSelectionModel)
+                
+    //             rowSelectionModel.forEach(tripId => {
+    //                 const tripData = Trips.find(trip => trip.id === tripId); // Assuming Trips is an array of trip objects
+    //                 if (tripData) {
+    //                     console.log(`Trip ID: ${tripId}`, tripData); // Log the trip ID and its data
+    //                 } else {
+    //                     console.log(`Trip ID: ${tripId} not found in Trips`);
+    //                 }
+    //             });
+
+
+    //             await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully added");
+    //             console.log(transferlist,'listtransfer')
+    //             // setRows([])
+    //             // const billingPageUrl = `/home/billing/transfer`
+    //             // window.location.href = billingPageUrl
+
+
+
+    //         } catch (error) {
+    //             console.error("Error occurred:", error);
+    //             setErrorMessage("Failed to add organization: " + error.message);
+    //         }
+    //     }
+    //     else if (groupId !== "") {
+    //         // updateTransferListTrip'
+    //         try {
+    //             if (!rows || rows.length === 0) {
+    //                 throw new Error("Rows data is empty");
+    //             }
+
+    //             const fromdate2 = rows[0]?.startdate;
+    //             const enddate = rows[rows.length - 1]?.startdate;
+    //             const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');
+    //             const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+    //             const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+    //             const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+    //             const OrganizationName = selectedCustomerDatas.customer || customer;
+    //             const Trips = rowSelectionModel.length;
+    //             const billstatus = "notbilled";
+    //             const grouptripid = parseInt(groupId)
+
+
+    //             const response = await axios.get(`${apiUrl}/getParticularTransferListDetails`, {
+    //                 params: {
+    //                     groupId: grouptripid
+    //                 }
+    //             });
+
+    //             const amount = response.data[0].Amount;
+    //             const trips = response.data[0].Trips;
+    //             const tripid = response.data[0].Trip_id;
+    //             const fullTotalAmount = parseInt(amount) + parseInt(tripAmount)
+
+    //             const TotalTrips = parseInt(trips) + parseInt(Trips)
+    //             // Ensure rowSelectionModel is an array of strings
+    //             const rowSelectionModelAsStrings = rowSelectionModel.map(String); // Converts [1358] to ["1358"]
+
+    //             // Combine rowSelectionModelAsStrings and tripid into a new array
+    //             const combinedArray = [...rowSelectionModelAsStrings, tripid]; // Results in ["1358", "1358"]
+    //             const todate = toDate.format('YYYY-MM-DD')
+    //             const totalamount = fullTotalAmount.toString()
+    //             const tripscount = TotalTrips.toString()
+    //             const transferlist = {
+    //                 Billdate: billDate,
+    //                 Organization_name: OrganizationName,
+    //                 Trip_id: combinedArray,
+    //                 FromDate: fromDate,
+    //                 EndDate: todate,
+    //                 Trips: tripscount,
+    //                 Amount: totalamount,
+    //                 grouptripid: grouptripid
+    //             }
+
+    //             const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
+    //             setSuccess(true)
+    //             setSuccessMessage("Successfully Added")
+
+    //             // console.log(transferlist, rows, rowSelectionModel, 'transferlist');
+    //             // setMisGroupTripId(rowSelectionModel)
+    //             // await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
+    //             // setSuccess(true);
+    //             // setSuccessMessage("Successfully added");
+    //             // setRows([])
+    //             // const billingPageUrl = `/home/billing/transfer`
+    //             // window.location.href = billingPageUrl
+
+
+
+    //         } catch (error) {
+    //             console.error("Error occurred:", error);
+    //             setErrorMessage("Failed to add organization: " + error.message);
+    //         }
+    //     }
+    // }
+    
+const handleAddGroup = async () => {
+    if (rowSelectionModel.length === 0) {
+        setError(true);
+        setErrorMessage("Please select the Row");
+        return; 
+
+    }
+
+    // if (groupId === "") {
+        // const tripDetails = selectTripid.map(item => {
+        //     console.log(item.totalcalcAmount, 'Current item in mapping'); // Log each item
+        //     console.log(item.tripid,'tripid of select');
+            
+        //     return {
+                
+        //         tripid: item.tripid,
+        //         totalcalcAmount: item.totalcalcAmount
+        //     };
+        // });
+        // try {
+        //     if (!rows || rows.length === 0) {
+        //         throw new Error("Rows data is empty");
+        //     }
+
+        //     const fromdate = rows[0]?.startdate;
+        //     const enddate = rows[rows.length - 1]?.startdate;
+        //     const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+        //     const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+        //     const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+        //     const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+        //     const OrganizationName = selectedCustomerDatas.customer || customer;
+        //     const Trips = rowSelectionModel.length;
+        //     const billstatus = "notbilled";
+
+        //     const transferlist = {
+        //         Status: billstatus,
+        //         Billdate: billDate,
+        //         Organization_name: OrganizationName,
+        //         Trip_id: rowSelectionModel,
+        //         FromDate: fromDate,
+        //         EndDate: EndDate,
+        //         Trips: Trips,
+        //         Amount: tripAmount,
+        //     };
+
+        //     setMisGroupTripId(rowSelectionModel);
+        //     console.log(selectTripid, 'selected trips state');
+
+        //     rowSelectionModel.forEach(tripId => {
+        //         const tripData = Trips.find(trip => trip.id === tripId); // Assuming Trips is an array of trip objects
+        //         if (tripData) {
+        //             console.log(`Trip ID: ${tripId}`, tripData); // Log the trip ID and its data
+        //         } else {
+        //             console.log(`Trip ID: ${tripId} not found in Trips`);
+        //         }
+        //     });
+
+       
+    
         if (groupId === "") {
-
+            // Map to get trip details
+            const tripDetails = selectTripid.map(item => ({
+                tripid: item.tripid,
+                totalcalcAmount: item.totalcalcAmount
+            }));
+    
+            // Filter valid trips and invalid trips
+            const validTrips = tripDetails.filter(trip => trip.totalcalcAmount > 0);
+            const invalidTrips = tripDetails.filter(trip => trip.totalcalcAmount === 0 || trip.totalcalcAmount === null);
+    
+            // If there are invalid trips, show an error message
+            if (invalidTrips.length > 0) {
+                const invalidTripIds = invalidTrips.map(trip => trip.tripid).join(', ');
+                console.log(`The following trip IDs are invalid (amount is zero or null): ${invalidTripIds}`);
+                setError(true);
+                setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+            }
+    
+            // Proceed only with valid trips
+            if (validTrips.length === 0) {
+                return; // If there are no valid trips, exit the function
+            }
+    
             try {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
                 }
-
+    
                 const fromdate = rows[0]?.startdate;
                 const enddate = rows[rows.length - 1]?.startdate;
                 const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
                 const EndDate = dayjs(enddate).format('YYYY-MM-DD');
-
+    
                 const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
                 const billDate = dayjs(billdate).format('YYYY-MM-DD');
-
+    
                 const OrganizationName = selectedCustomerDatas.customer || customer;
-                const Trips = rowSelectionModel.length;
+                const Trips = validTrips.length; 
                 const billstatus = "notbilled";
-
-
+    
+                // Construct the transfer list with valid trips and their amounts
                 const transferlist = {
                     Status: billstatus,
                     Billdate: billDate,
                     Organization_name: OrganizationName,
-                    Trip_id: rowSelectionModel,
+                    Trip_id: validTrips.map(trip => trip.tripid), // Only include valid trip IDs
+                    Amount: validTrips.reduce((total, trip) => total + trip.totalcalcAmount, 0), // Sum of valid amounts
                     FromDate: fromDate,
                     EndDate: EndDate,
                     Trips: Trips,
-                    Amount: tripAmount,
+                };
+    
+                setMisGroupTripId(validTrips.map(trip => trip.tripid)); 
+    
+                // Log the valid trips and transfer list for debugging
+                console.log(validTrips, 'Valid Trips for posting');
+                console.log(transferlist, 'Transfer List to be posted');
+    
+           
+            
+            
 
-                }
+           // console.log(tripDetails, 'Selected Trip IDs and Amounts');
 
-                setMisGroupTripId(rowSelectionModel)
-                await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
-                setSuccess(true);
-                setSuccessMessage("Successfully added");
-                // setRows([])
-                // const billingPageUrl = `/home/billing/transfer`
-                // window.location.href = billingPageUrl
+            await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+            setSuccess(true);
+            setSuccessMessage("Successfully added");
+            console.log(transferlist, 'listtransfer');
 
-
-
-            } catch (error) {
+        } catch (error) {
                 console.error("Error occurred:", error);
                 setErrorMessage("Failed to add organization: " + error.message);
             }
@@ -1182,7 +1412,7 @@ const useTransferdataentry = () => {
                     grouptripid: grouptripid
                 }
 
-                const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
+                //const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
                 setSuccess(true)
                 setSuccessMessage("Successfully Added")
 
@@ -1203,6 +1433,7 @@ const useTransferdataentry = () => {
             }
         }
     }
+
     useEffect(() => {
         const fetchdata = async () => {
             try {

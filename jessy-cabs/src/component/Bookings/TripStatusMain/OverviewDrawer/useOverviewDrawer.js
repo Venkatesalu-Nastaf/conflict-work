@@ -66,7 +66,7 @@ const useDispatched = () => {
     const [statusvalue, setStatusValue] = useState("");
 
     const [columnshowall, setColumnShowall] = useState(true)
-    const [showCards, SetShowCards] = useState(false);
+    const [showCards, setShowCards] = useState(false);
 
     // map and signature states
     const [signImageUrl, setSignImageUrl] = useState('');
@@ -684,7 +684,8 @@ const useDispatched = () => {
 
 
     const handleShowCards = () => {
-        SetShowCards(!showCards);
+        //SetShowCards(!showCards);
+        setShowCards(prevShowCards => !prevShowCards);
       }
 
     const handleButtonClick = (row) => {
@@ -695,7 +696,7 @@ const useDispatched = () => {
             return
 
         }
-        setSelectedRow(row);
+       
        //setPopupOpen(true);
         console.log(row,'row data ')
     };
@@ -707,9 +708,13 @@ const useDispatched = () => {
      // Function to call aboove functions 
      const handleRowClick = (row) => {
         handleButtonClick(row); // Call handleButtonClick
-        handleShowCards(row);   // Call handleShowCards
+       // handleShowCards(row);   // Call handleShowCards
         showSignature(row) // call signature 
         showMap(row) // call map
+        if (!showCards) {
+            setShowCards(true);
+        }
+        setSelectedRow(row);
         //showImageDetails(row)
         //handleRefresh(row)
         handleShowImage(row)

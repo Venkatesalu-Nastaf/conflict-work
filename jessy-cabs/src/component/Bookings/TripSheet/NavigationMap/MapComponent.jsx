@@ -18,7 +18,6 @@ const MapComponent = () => {
     const location = useLocation()
     const apiURL = APIURL
 
-
     const TripId = localStorage.getItem('selectedTripid')
     const searchParams = new URLSearchParams(location.search);
     const urlParams = new URLSearchParams(window.location.search);
@@ -52,12 +51,13 @@ const MapComponent = () => {
     const formattedStartTime = starttime?.slice(0, 5);
     const formattedEndTime = endtime?.slice(0, 5);
 
-    const [startLat, setStartLat] = useState(null);
-    const [startLong, setStartLong] = useState(null);
+    const [startLat, setStartLat] = useState();
+    const [startLong, setStartLong] = useState();
     const [endLat, setEndLat] = useState(null);
     const [endLong, setEndLong] = useState(null);
     const [wayLat, setWayLat] = useState([]);  // Assuming multiple waypoints, use an array
     const [wayLong, setWayLong] = useState([]);
+    const [wayTrip,setWayTrip]  = useState([])
 
     useLayoutEffect(() => {
         const fetchData = async () => {
@@ -65,32 +65,50 @@ const MapComponent = () => {
                 const response = await axios.get(`${apiURL}/get-gmapdata/${tripid}`);
                 const mapData = response.data;
                 console.log(mapData, 'mapData');
-
-                const startingTrips = mapData.filter(trip => trip.trip_type === "start");
-                const endingTrips = mapData.filter(trip => trip.trip_type === "end");
-                const wayTrips = mapData.filter(trip => trip.trip_type === "waypoint");
-
-                // Set the state with the fetched values
-                setStartLat(startingTrips.length > 0 ? startingTrips[0].Latitude : '');
-                setStartLong(startingTrips.length > 0 ? startingTrips[0].Longitude : '');
-                setEndLat(endingTrips.length > 0 ? endingTrips[0].Latitude : '');
-                setEndLong(endingTrips.length > 0 ? endingTrips[0].Longitude : '');
-
-                setWayLat(wayTrips.map(trip => trip.Latitude));
-                setWayLong(wayTrips.map(trip => trip.Longitude));
-                console.log(startingTrips, startLat, 'Updated Start Location');
+    
+                // Filter trips based on type
+                const startingTrips = mapData?.filter(trip => trip.trip_type === "start");
+                const endingTrips = mapData?.filter(trip => trip.trip_type === "end");
+                const wayTrips = mapData?.filter(trip => trip.trip_type === "waypoint");
+    
+                setWayTrip(mapData); // Waypoints data
+    
+                // Update Start and End Location
+                if (startingTrips.length > 0) {
+                    setStartLat(startingTrips[0].Latitude);
+                    setStartLong(startingTrips[0].Longitude);
+                }
+                if (endingTrips.length > 0) {
+                    setEndLat(endingTrips[0].Latitude);
+                    setEndLong(endingTrips[0].Longitude);
+                }
+    
+                // Update waypoints in one go to avoid triggering multiple renders
+                const newWayLat = wayTrips?.map(trip => trip.Latitude);
+                const newWayLong = wayTrips?.map(trip => trip.Longitude);
+    
+                if (JSON.stringify(newWayLat) !== JSON.stringify(wayLat) || JSON.stringify(newWayLong) !== JSON.stringify(wayLong)) {
+                    setWayLat(newWayLat);
+                    setWayLong(newWayLong);
+                }
+    
+                console.log(startingTrips, 'Updated Start Location');
             } catch (error) {
                 console.error('Error fetching map data:', error);
             }
         };
-
+    
         fetchData();
-    }, [apiURL, tripid, editMapTrigger, editMode, startLat, startLong, endLat, endLong, location]);
+    }, [apiURL, tripid, editMapTrigger]); 
     console.log(startLat, startLong, endLat, endLong, wayLat, wayLong, 'editttt');
 
+ 
+
     useEffect(() => {
-        window.initMap({ lat: latitude, editMode: editMode, lng: longitude, row: row, startLatitude: startLatitude, startLongitude: startLongitude, endLatitude: endLatitude, endLongitude: endLongitude, wayLatitude: wayLatitude, wayLongitude: wayLongitude, startingDate: startingDate, startingTime: startingTime, startPlaceName: startPlaceName, endingDate: endingDate, endingTime: endingTime, endPlaceName: endPlaceName, wayDate: wayDate, wayTime: wayTime, wayPlaceName: wayPlaceName });
-    }, []);
+        window.initMap({ lat: latitude, editMode: editMode, lng: longitude, row: row, startLatitude: startLat, startLongitude: startLong, endLatitude: endLat, endLongitude: endLong, wayLatitude: wayLat, wayLongitude: wayLong, startingDate: startingDate, startingTime: startingTime, startPlaceName: startPlaceName, endingDate: endingDate, endingTime: endingTime, endPlaceName: endPlaceName, wayDate: wayDate, wayTime: wayTime, wayPlaceName: wayPlaceName });
+    }, [location,editMode,startLat,endLat]);
+
+    
     const handleSelect = async (address) => {
         const geocoder = new google.maps.Geocoder();
 
@@ -119,7 +137,7 @@ const MapComponent = () => {
     };
     const handleEditMapPoints = () => {
         window.handleEditMapPoints()
-        setEditMapTrigger(editMapTrigger)
+        setEditMapTrigger(!editMapTrigger)
     }
 
     const generateStaticMap = () => {

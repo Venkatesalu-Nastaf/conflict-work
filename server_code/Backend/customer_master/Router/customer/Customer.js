@@ -8,21 +8,16 @@ router.post('/customers', (req, res) => {
   const customerData = req.body;
   // const customerData = req.body;
   console.log("customerData", customerData)
-
   // Convert billingGroup array to a comma-separated string
   if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
     customerData.billingGroup = customerData.billingGroup.join(', ');
   }
-
-
   db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {
       console.log("err", err);
       return res.status(404).json({ message: "there is issu checking customer " })
     }
-
     console.log("result", result)
-
     if (result.length > 0) {
       return res.status(200).json({ message: "Customer Name Exist..", success: false })
     } else {
@@ -36,9 +31,6 @@ router.post('/customers', (req, res) => {
     }
 
   })
-
-
-
 });
 
 // Delete Customer Master data
@@ -68,7 +60,6 @@ router.get('/customers', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
-  console.log(updatedCustomerData, "dddd")
   if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
     updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
   }
@@ -135,8 +126,6 @@ router.get('/searchCustomer', (req, res) => {
   });
 });
 
-
-
 router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
   db.query('select address1,gstnumber from customers where customer = ?', [customername], (err, result) => {
@@ -147,15 +136,6 @@ router.get('/customeraddress/:customername', (req, res) => {
   })
 })
 
-// Collect data for Customer Master table
-// router.get('/customers', (req, res) => {
-//   db.query('SELECT * FROM customers', (err, results) => {
-//     if (err) {
-//       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-//     }
-//      return res.status(200).json(results);
-//   });
-// });
 router.get('/customersgroup', (req, res) => {
   const query = `
      SELECT
@@ -176,7 +156,6 @@ router.get('/customersgroup', (req, res) => {
       console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
-    // console.log(results)
     return res.status(200).json(results);
   });
 });
@@ -215,7 +194,6 @@ router.get('/getcustomer-address/:customer', (req, res) => {
 
   })
 })
-
 
 router.post('/customerorderdbydata', (req, res) => {
   const customerdata = req.body;
@@ -260,40 +238,6 @@ router.get('/getcustomerorderdata/:customerdata', (req, res) => {
   })
 
 })
-// router.put('/updatecustomerorderdata', (req, res) => {
-
-//   const customerdata = req.body;
-//   if (!Array.isArray(customerdata)) {
-//     return res.status(400).json({ error: "Request body must be an array" });
-//   }
-
-//   // Insert each object in the array as a separate row in the database
-//   const insertQueries = customerdata.map(bookData => {
-
-//     return new Promise((resolve, reject) => {
-//       db.query('Update customerOrderdata SET customer=?,orderedby=?,orderByEmail=?,orderByMobileNo=? where id=?'
-//         , [bookData.customer, bookData.orderedby, bookData.orderByEmail, bookData.orderByMobileNo, bookData.id], (err, result) => {
-//           if (err) {
-//             reject(err);
-//           } else {
-//             resolve(result);
-//           }
-//         });
-//     });
-//   });
-
-//   // Execute all insert queries concurrently
-//   Promise.all(insertQueries)
-//     .then(() => {
-//       return res.status(200).json({ message: "Data inserted successfully" });
-
-//     })
-//     .catch(err => {
-//       console.log(err);
-//       return res.status(500).json({ error: "Failed to insert data into MySQL" });
-//     });
-
-// })
 
 router.put('/updatecustomerorderdata', (req, res) => {
   const customerdata = req.body;
@@ -335,7 +279,6 @@ router.put('/updatecustomerorderdata', (req, res) => {
     });
   });
 
-
   // Execute all queries concurrently
   Promise.all(queries)
     .then(() => {
@@ -365,15 +308,12 @@ router.get('/ratemanagmentCustomerdata', (req, res) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results, "hhh")
     return res.status(200).json(results);
   });
 
 })
 
-
 router.delete("/deletecustomerorderdata/:customer", (req, res) => {
-
   const customer = req.params.customer;
   db.query("delete from customerOrderdata where customer=?", [customer], (err, result) => {
     if (err) {
@@ -388,7 +328,6 @@ router.delete("/deletecustomerorderdata/:customer", (req, res) => {
 
 router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
-  console.log(customer, fromDate, toDate)
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
   console.log(formattedFromDate, "f", formattedToDate)
@@ -399,9 +338,6 @@ router.get("/Monthilywisedatatrip", (req, res) => {
     }
     console.log(results)
     const datas = results?.map((data) => data.customer)
-    console.log(datas, "dttd")
-
-
     //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
     //    const sql=`SELECT 
     //     customer, 
@@ -427,7 +363,6 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   GROUP BY 
     customer
 `;
-
     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
       if (err) {
         console.log(err)
@@ -442,21 +377,13 @@ router.get("/Monthilywisedatatrip", (req, res) => {
           address: customerDetail ? customerDetail.address1 : null,
         };
       });
-      //   const data= results1.forEach(row => {
 
       return res.status(200).json(combinedResults)
     })
-
-    // return res.status(200).json(results)
-
   })
-
-
 })
 
-
 router.get('/montlywisedataall', (req, res) => {
-  console.log("enter")
   db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer", (err, result) => {
     if (err) {
       console.log(err)
@@ -502,10 +429,7 @@ router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:statio
     }
     console.log(results.length,"dddd")
     return res.status(200).json(results);
-
   })
 })
-
-
 
 module.exports = router;

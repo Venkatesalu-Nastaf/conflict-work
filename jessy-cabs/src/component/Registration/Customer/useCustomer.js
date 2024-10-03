@@ -9,25 +9,19 @@ import 'jspdf-autotable'
 import { Organization } from './Customerdata';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext'
 
-
-
 // TABLE START
 const columns = [
     { field: "id", headerName: "S.No", width: 60 },
     { field: "customerId", headerName: "Customer ID", width: 130 },
     { field: "customer", headerName: "Name", width: 160 },
-    // { field: "customeremail", headerName: "E-mail", width: 160 },
     { field: "address1", headerName: "Address", width: 130 },
-    // { field: "phoneno", headerName: "Phone", width: 160 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
     { field: "gstnumber", headerName: "GST_NO", width: 160 },
     { field: "state", headerName: "State", width: 160 },
     { field: "orderedby", headerName: "OrderedBy", width: 260 },
     { field: "orderByEmail", headerName: "Email", width: 260 },
     { field: "orderByMobileNo", headerName: "MobileNo", width: 260 },
-    // { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
-
 
 // TABLE END
 
@@ -55,16 +49,12 @@ const useCustomer = () => {
     const [cerendentialdata,setCredentialData]=useState()
     const [deletedialogbox,setDeletedDialog]=useState(false)
     const [cerendentialdataforstations,setCredentialDataforstations]=useState()
-    
-
 
     //---------------------------------------
     const { triggerCustomerAdd, setTriggerCustomerAdd } = useData1()
-
     const handleButtonClick = () => {
         setIsInputVisible(!isInputVisible);
     };
-
     const [customerfieldSets, setCustomerFieldSets] = useState([{
         // dinamic data
         orderedby: '',
@@ -81,11 +71,8 @@ const useCustomer = () => {
             })
     }, []);
 
-
-
     const handleChangecustomer = (event, index) => {
         const { name, value } = event.target;
-
         const newFieldSets = [...customerfieldSets];
         newFieldSets[index][name] = value;
         setCustomerFieldSets(newFieldSets);
@@ -99,12 +86,9 @@ const useCustomer = () => {
         }]);
     };
 
-
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-       
-
         try {
 
             const fileName = "customer_details"
@@ -113,10 +97,8 @@ const useCustomer = () => {
             const headers = Object.keys(rows[0]);
             const columns = headers.map(key => ({ key, header: key }));
             worksheet.columns = columns;
-
             // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
-
             // Set background color for header cells
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
@@ -125,41 +107,30 @@ const useCustomer = () => {
                     fgColor: { argb: '9BB0C1' } // Green background color
                 };
             });
-
-
             worksheet.getRow(1).height = 30;
             // loop through all of the columns and set the alignment with width.
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-
             rows.forEach((singleData, index) => {
-
-
                 worksheet.addRow(singleData);
-
                 // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
                     const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
                     const cellLength = cellValue.toString().length; // Get length of cell value as a string
                     const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
                     // Set column width to the maximum of current width and cell length plus extra space
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-
             // loop through all of the rows and set the outline style.
             worksheet.eachRow({ includeEmpty: false }, (row) => {
                 // store each cell to currentCell
                 const currentCell = row._cells;
-
                 // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
-
                     const cellAddress = singleCell._address;
-
                     // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
@@ -171,7 +142,6 @@ const useCustomer = () => {
             });
             // write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
-
             // download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
@@ -183,22 +153,18 @@ const useCustomer = () => {
         }
 
     }
-
-
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
-            format: "tabloid" // [width, height] in inches
+            format: "tabloid"
         });
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
         const header = Object.keys(rows[0]);
-
         // Extracting body
         const body = rows.map(row => Object.values(row));
-
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -223,33 +189,25 @@ const useCustomer = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-
             headStyles: {
                 // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-
                 minCellHeigh: 8,
                 valign: 'middle',
-
                 font: 'helvetica', // Set font type for body
-
                 cellWidth: 'wrap',
-
             },
 
             bodyStyles: {
-
                 fontSize: fontdata - 1,
                 valign: 'middle',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-
             },
             columnWidth: 'auto'
 
@@ -260,7 +218,6 @@ const useCustomer = () => {
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -277,7 +234,6 @@ const useCustomer = () => {
         }
     }, [error, warning, info, success]);
 
-
     const [book, setBook] = useState({
         // customerId: '',
         name: '',
@@ -286,21 +242,13 @@ const useCustomer = () => {
         servicestation: '',
         date: dayjs(),
         address1: '',
-        // customeremail: '',
         rateType: '',
         opBalance: '',
-        // phoneno: '',
         underGroup: '',
         gstTax: '',
         acType: '',
         entity: '',
-        // printBill: '',
-        // userName: '',
-        // bookName: '',
-        // division: '',
-        // hourRoundedOff: '',
         selectOption: '',
-        // active: '',
         state: '',
         gstnumber: '',
         SalesPerson: '',
@@ -310,12 +258,8 @@ const useCustomer = () => {
         TimeToggle:false,
     });
 
-   
-    
-
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
-
         if (type === 'checkbox') {
             setBook((prevBook) => ({
                 ...prevBook,
@@ -337,20 +281,14 @@ const useCustomer = () => {
         }
     };
 
-  
-    
-
 const memoizedFetchStations = useMemo(() => {
     return async (stations) => {
         const ratetype = selectedCustomerData?.rateType || book.rateType;
         const ratename = "Customer";
-       
-
         if (stations) {
             try {
                 const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
                 const responsedata = response.data;
-
                 if (responsedata?.length === 0) {
                     setInfo(true);
                     setInfoMessage("Ratetype stations not registered");
@@ -367,14 +305,10 @@ const memoizedFetchStations = useMemo(() => {
         }
     };
 }, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
-
 const handleAutocompleteChangestations=async(event, newValue, name) => {
     const selectedOption = newValue ? newValue.label : '';
     if(name === "servicestation"){
-       
-           
             await memoizedFetchStations(selectedOption)
-            
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: selectedOption,
@@ -400,7 +334,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                     servicestation: '', // Clear the servicestation
                     [name]: selectedOption, // Update the ratetype
                 }));
-               
             }
         else{
            setBook((prevBook) => ({
@@ -424,8 +357,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             [name]: newValue,
         }));
     };
-
-
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
         const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
@@ -456,11 +387,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             underGroup: '',
             gstTax: '',
             acType: '',
-            // printBill: '',
-            // userName: '',
-            // bookName: '',
-            // division: '',
-            // hourRoundedOff: '',
             selectOption: '',
             // active: '',
             entity: '',
@@ -494,15 +420,10 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             console.log(err)
         }
     }
-
     const uniquecustomer=async(customerdataname)=>{
-        // console.log(customerdataname,"namee")
         if(customerdataname){
-
             const response= await axios.get(`${apiUrl}/getuniqueCustomerdata/${customerdataname}`)
             const responsedata=response.data;
-            
-           
             if(responsedata?.length >=1){
                 setCredentialData(true)
                 // return true;
@@ -512,20 +433,11 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 // return false;
             }
         }
-
-    
-            
-      
     }
-  
-   
 
-
-   
     const handleChangeuniquecustomer=(event)=>{
         const { name, value} = event.target;
-        const datacrendital= uniquecustomer(value);
-        console.log(datacrendital,"cred")
+         uniquecustomer(value);
         setBook((prevBook) => ({
             ...prevBook,
             [name]:value,
@@ -534,11 +446,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             ...prevData,
             [name]:value,
         }));
-
-
     }
-   
-
 
     const handleRowClick = (params) => {
         const customerData = params.row;
@@ -547,18 +455,15 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         if (datta.length >= 2) {
             setIsInputVisible(!isInputVisible);
         }
-
         setSelectedCustomerId(params.row.customerId);
         getcustomerdata(customerData.customer)
         setIsEditMode(true);
     }
-
     //search with date
     const handleSearch = async () => {
         try {
             const response = await fetch(`${apiUrl}/searchCustomer?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
-        
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
@@ -579,18 +484,14 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         }
     };
 
-
     const handleenterSearch = useCallback(async (e) => {
         if (e.key === "Enter") {
-          
            try {
                 const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(searchText)}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-
                 const data = await response.json();
-
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -620,7 +521,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     };
 
     // Call the function to add customer property to each object
-    // console.log("")
     const handleList = useCallback(async () => {
         try {
             const response = await axios.get(`${apiUrl}/customersgroup`);
@@ -638,9 +538,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     useEffect(() => {
         handleList(); // Call the handleList function
     }, [handleList]);
-
     const handleAdd = async () => {
-
         const hasEmptyFields = customerfieldSets.some(fieldSet =>
             !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
         );
@@ -661,7 +559,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
             return;
         }
-         
         if(cerendentialdata === true){
             setError(true);
             setErrorMessage('customer aldrreay exist.');
@@ -672,16 +569,10 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setErrorMessage('RateType stations not registered ');
             return;
         }
-
         try {
-            console.log(cerendentialdata,"credddatattaatta")
-            // const datasets={...customerfieldSets,customer:book.customer}
             const datasets = addCustomerToObjects(customerfieldSets, book.customer);
-        
             const response = await axios.post(`${apiUrl}/customers`, book);
-
             if (response.data.success) {
-               
                 await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
                 handleCancel();
                 setTriggerCustomerAdd(prev => !prev)
@@ -695,7 +586,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 setError(true);
                 setErrorMessage(response.data.message);
             }
-
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -703,7 +593,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     };
 
     const handleEdit = async () => {
-        // const selectedCustomer = rows.find((row) => row.customerId === customerId);
         const hasEmptyFields = customerfieldSets.some(fieldSet =>
             !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
         );
@@ -717,12 +606,9 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setErrorMessage('RateType stations not registered ');
             return;
         }
-
         const { id, orderByEmail, orderedby, orderByMobileNo,customerId, ...restselectedcustomerdata } = selectedCustomerData
         const updatedCustomer = {
-            // ...selectedCustomer,
             ...restselectedcustomerdata,
-            // ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
 
@@ -731,7 +617,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
-      
         handleCancel();
         setRows([]);
         handleList();
@@ -756,8 +641,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
             setDeletedDialog(false)
         }
-        
-    
     }
     useEffect(()=>{
         const fetchcustomerratedata=async()=>{
@@ -776,8 +659,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     
 
     // Use handleList as a dependency
-
-
     const handleClick = async (event, actionName, customerId) => {
         event.preventDefault();
         try {
@@ -797,7 +678,6 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                     setError(true);
                     setErrorMessage("No data found");
                 }
-
             }
 
             else if (actionName === 'Cancel') {

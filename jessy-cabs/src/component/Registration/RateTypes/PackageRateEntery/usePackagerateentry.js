@@ -1,9 +1,6 @@
-
-
 import { useState, useEffect, useCallback,useMemo } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
-
 
 // Table START
 const columns = [
@@ -26,9 +23,7 @@ const columns = [
     { field: "Bata", headerName: "Bata", width: 70 },
 ];
 // TABLE END
-
 const usePackagerateentry = () => {
-
     const [fieldSets, setFieldSets] = useState([{
         // dinamic data
         duty: '',
@@ -44,7 +39,6 @@ const usePackagerateentry = () => {
         NHalt: '',
         Bata: '',
     }]);
-
 
     const [commonData, setCommonData] = useState({
         //static data
@@ -80,27 +74,20 @@ const usePackagerateentry = () => {
     //------------------------------------------------
     const [validitydata, setValiditydata] = useState([])
    
-
     const memoizedUrl = useMemo(() => {
-        
         if (!commonData.ratetype || !commonData.OrganizationName) {
             return null;
         }
-
         return `${apiUrl}/ratemanagementdatavalidityfromratetype/${commonData.ratetype}/${commonData.OrganizationName}`;
     }, [apiUrl, commonData.ratetype, commonData.OrganizationName]);
-
     useEffect(() => {
-
         if (!memoizedUrl) {
-            console.log("Missing ratetype or OrganizationName, skipping fetch");
             return; // Exit early if URL is invalid
         }
         const fetchOrganizationnames = async () => {
             try {
                 const response = await axios.get(memoizedUrl);
                 const data = response.data;
-                console.log(data, "jjjj");
                 setValiditydata(data);
             } catch (error) {
                 console.log(error, "error");
@@ -108,22 +95,6 @@ const usePackagerateentry = () => {
         };
         fetchOrganizationnames();
     }, [memoizedUrl]);
-
-
-    // useEffect(() => {
-    //     const fetchOrganizationnames = async () => {
-    //         try {
-    //             const response = await axios.get(`${apiUrl}/ratetype/${commonData.ratetype}/${commonData.OrganizationName}`);
-    //             const data = response.data
-    //             console.log(data,"jjjj")
-    //             setValiditydata(data)
-    //         }
-    //         catch (error) {
-    //             console.log(error, "error");
-    //         }
-    //     };
-    //     fetchOrganizationnames()
-    // }, [apiUrl])
 
     useEffect(() => {
         const fetchOrganizationnames = async () => {
@@ -135,10 +106,7 @@ const usePackagerateentry = () => {
             try {
                 const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);
                 const data = response.data
-                console.log(data, "rdddd")
                 setRatename(data.map(row => row.ratename))
-
-
             }
             catch (error) {
                 console.log(error, "error");
@@ -146,7 +114,6 @@ const usePackagerateentry = () => {
         };
         fetchOrganizationnames()
     }, [apiUrl, commonData.ratetype])
-
 
     //// popup-----------------------------------------
 
@@ -166,16 +133,13 @@ const usePackagerateentry = () => {
         }
     }, [error, success, warning, info]);
 
-
     //------on change---------------------------------------------
 
     const handleChange = (event, index) => {
         const { name, value } = event.target;
-
         const newFieldSets = [...fieldSets];
         newFieldSets[index][name] = value;
         setFieldSets(newFieldSets);
-
         setCommonData(prevCommonData => ({
             ...prevCommonData,
             [name]: value
@@ -217,7 +181,6 @@ const usePackagerateentry = () => {
         }]);
     };
 
-
     const handleCancelUI = (index) => {
         if (fieldSets.length === 1) {
             return;
@@ -227,11 +190,8 @@ const usePackagerateentry = () => {
         setFieldSets(newDatas);
     };
 
-
     // -------------------------------------------------------------
-
     
-
     const handleCancel = () => {
         setFieldSets((prefiled) => ([{
             // dinamic data
@@ -249,7 +209,6 @@ const usePackagerateentry = () => {
             Bata: '',
         }]));
 
-
         setCommonData(prev => ({
             ratetype: '',
             OrganizationName: '',
@@ -257,11 +216,9 @@ const usePackagerateentry = () => {
             Validity: '',
             stations:''
         }))
-
         setIsEditMode(false);
         setValiditydata([])
     };
-
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
@@ -281,7 +238,6 @@ const usePackagerateentry = () => {
             NHalt,
             Bata,
         }]);
-
         // Extract relevant properties for commonData
         const { ratetype, OrganizationName, vehicleName, Validity,stations} = customerData;
         setCommonData({
@@ -294,16 +250,6 @@ const usePackagerateentry = () => {
         setSelectedCustomerId(params.row.id);
         setIsEditMode(true);
     }, []);
-
-    // const handleList = async () => {
-    //     try {
-    //         const response = await axios.get(`${apiUrl}/ratemanagement`);
-    //         const data = response.data;
-    //         setRows(data);
-    //     } catch(err) {
-    //         console.log(err)
-    //     }
-    // }
 
     const handleList = useCallback(async () => {
         try {
@@ -319,21 +265,16 @@ const usePackagerateentry = () => {
         handleList();
     }, [handleList]);
 
-
     const handleAdd = async () => {
         const dutys = fieldSets.map(fieldSet => fieldSet.duty); // Extract duties from fieldSets
-
         // Check if any duty is empty
         if (dutys.some(duty => !duty)) {
             setError(true);
             setErrorMessage("Enter Duty field and others..!");
             return;
         }
-
         try {
             const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
-            console.log(requestData,"reee")
-
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             // If successful, update state
             setSuccess(true);
@@ -345,24 +286,6 @@ const usePackagerateentry = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
-
-
-    // useEffect(() => {
-    //     const handleList = async () => {
-    //         try {
-    //             const response = await axios.get(`${apiUrl}/ratemanagement`);
-    //             const data = response.data;
-    //             setRows(data);
-    //         } catch {
-    //         }
-    //     }
-    //     handleList();
-    // }, [apiUrl]);
- 
-       
-
-
-
     const handleShow = async () => {
         try {
             const rateType = commonData?.ratetype;
@@ -381,14 +304,12 @@ const usePackagerateentry = () => {
                 // setErrorMessage("No Data Found..!");
                 setInfo(true)
                 setInfoMessage("No Data Found..!")
-
             }
 
         } catch (err) {
             console.log("err", err)
         }
     }
-
 
     //Edit
     const handleEdit = async () => {
@@ -397,7 +318,6 @@ const usePackagerateentry = () => {
                 ...commonData,
                 ...fieldSets[0] // Assuming fieldSets contains only one set of data
             };
-
             await axios.put(`${apiUrl}/ratemanagement-edit/${selectedCustomerId}`, updatedData);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
@@ -410,7 +330,6 @@ const usePackagerateentry = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
-
     const handledelete = async () => {
         try {
 
@@ -462,14 +381,8 @@ const usePackagerateentry = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
-    // useEffect(() => {
-    //     if (actionName === 'List') {
-    //         handleClick(null, 'List');
-    //     }
-    // });
 
     return {
-
         selectedCustomerId,
         rows,
         actionName,
@@ -492,7 +405,6 @@ const usePackagerateentry = () => {
         // datevalidity, 
         handleShow,
         handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata
-
     };
 };
 

@@ -135,7 +135,6 @@ const Vehicaleinfo = ({ stationName }) => {
   const {
     selectedCustomerData,
     rows,
-    actionName,
     error,
     success,
     info,
@@ -186,7 +185,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames
+    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
   } = VehicleAddData()

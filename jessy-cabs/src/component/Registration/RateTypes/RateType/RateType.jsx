@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import "./RateType.css";
 import "jspdf-autotable";
 import Box from "@mui/material/Box";
@@ -11,13 +11,11 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
-// import FactCheckIcon from '@mui/icons-material/FactCheck';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -54,12 +52,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const RateType = ({ stationName}) => {
-
     const {
         selectedCustomerData,
         selectedCustomerId,
         rows,
-        actionName,
         error,
         success,
         info,
@@ -85,7 +81,6 @@ const RateType = ({ stationName}) => {
         handleEdit,
         handleDateChange, cerendentialdata, handleChangecredent
     } = useRatype();
-
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
@@ -169,24 +164,6 @@ const RateType = ({ stationName}) => {
                                             <div className="icone">
                                                 <RateReviewIcon color="action" />
                                             </div>
-                                            {/* <Autocomplete
-                                        fullWidth
-                                        size="small"
-                                        id="ratename"
-                                        freeSolo
-                                        sx={{ width: "100%" }}
-                                        onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
-                                        value={selectedCustomerData?.ratename || book.selectedCustomerData || ""}
-                                        options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
-                                        getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
-                                        renderInput={(params) => {
-                                            return (
-                                                <TextField {...params} label="Organization Name" name="ratename" inputRef={params.inputRef} />
-                                            )
-                                        }
-                                        }
-                                    /> */}
-
                                             <TextField
                                                 size="small"
                                                 id="ratename"
@@ -196,10 +173,7 @@ const RateType = ({ stationName}) => {
                                                 value={selectedCustomerData?.ratename || book.ratename}
                                                 onChange={handleChangecredent}
                                                 style={{
-
-
                                                 }}
-
                                             />
                                         </span>
                                         <span style={{ textAlign: 'center' }}>
@@ -222,7 +196,6 @@ const RateType = ({ stationName}) => {
                                         onChange={handleChange}
                                     />
                                 </div> */}
-
 
                                 <div className="input">
                                     <div className='icone'>

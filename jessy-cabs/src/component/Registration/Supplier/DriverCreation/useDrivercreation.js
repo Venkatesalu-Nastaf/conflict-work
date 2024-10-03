@@ -764,22 +764,17 @@ const useDrivercreation = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
-
         }
     };
 
-    const handleEdit = async (userid) => {
+    const handleEdit = async () => {
         setEdit(true)
         const data = selectedCustomerData.driverid
         const formData = new FormData();
         const {id,driverid,...restselected}=selectedCustomerData
-        console.log(restselected,"data")
-
         for (const key in restselected) {
-            console.log(key,restselected[key])
             formData.append(key, restselected[key]);
           }
-        
         // const updatedriver = {
         //     drivername: selectedCustomerData.drivername,
         //     username: selectedCustomerData.username,

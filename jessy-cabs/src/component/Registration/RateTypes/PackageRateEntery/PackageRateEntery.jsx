@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -9,7 +9,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { RateType, PriceTag,Duty } from "./PackageRateEnteryData.js";
 import { PermissionContext } from '../../../context/permissionContext.js';
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,7 +19,6 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-// import EngineeringIcon from "@mui/icons-material/Engineering";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -49,7 +47,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
   const {
     selectedCustomerId,
     rows,
-    actionName,
     error,
     success,
     info,
@@ -72,7 +69,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
     fieldSets, commonData, handleCancelUI, handleAddExtra, ratename,validitydata
 
   } = usePackagerateentry();
-
 
   // useEffect(() => {
   //   if (actionName === 'List') {
@@ -125,18 +121,14 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-
-
                   <Autocomplete
                     fullWidth
                     size="small"
                     id="OrganizationName"
                     freeSolo
                     sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
-                    // value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}              
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-                    // options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
                     options={ratename.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
@@ -212,7 +204,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                 </div>
                 <div style={{ marginLeft: "10px" }}>
                   <Button variant="contained"  onClick={handleShow} >Show</Button>
-
                 </div>
               </div>
             </div>
@@ -227,38 +218,9 @@ const PackageRateEntery = ({vehileName,stationname }) => {
 
           {fieldSets.map((fieldSet, index) => (
             <div key={index} className="input-field feild-inputs">
-              {/* <div>
-                <div className="input">
-                  <div className="icone">
-                    <EngineeringIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo-duty"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "duty", index)}
-                    value={Duty.find((option) => option.optionvalue)?.label || fieldSet?.duty || ''}
-                    options={Duty.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || fieldSet?.duty || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
-                </div>
-              </div> */}
               <div>
                 <div className='first'>
                   <div className="input">
-                    {/* <div className="icone">
-                      <EngineeringIcon color="action" />
-                    </div> */}
                     <Autocomplete
                       fullWidth
                       size="small"
@@ -290,7 +252,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                       autoComplete="new-password"
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
-                    // variant="standard"
                     />
                   </div>
                   <div className="input">
@@ -432,17 +393,12 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                     ) : (
                       <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
                     )}
-
                   </div>
-
                 </div>
               </div>
             </div>
           ))}
-
-
         </div>
-
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -528,8 +484,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
               onRowClick={handleRowClick}
               pageSize={5}
             /> */}
-
-
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs
@@ -545,7 +499,6 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                         backgroundColor: '#457cdc',
                         borderRadius: '20px',
                         minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
                     },
                     '&::-webkit-scrollbar-thumb:hover': {
                         backgroundColor: '#3367d6',

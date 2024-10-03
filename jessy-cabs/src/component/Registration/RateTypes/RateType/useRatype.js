@@ -40,9 +40,6 @@ const useRatype = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
     
-
-
-
     // handlechange-----------------
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format("YYYY-MM-DD");
@@ -77,16 +74,10 @@ const useRatype = () => {
         }
     }, [error, success, warning, info]);
 
-
-
-
-
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-
         try {
-
             const fileName = "Ratetype Reports"
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
@@ -99,12 +90,8 @@ const useRatype = () => {
                 headers.unshift('id');
                 console.log(headers, "unsift")
             }
-            console.log(headers, "out")
-            //         console.log(headers,"hed")
             const columnsExcel = headers.map(key => ({ key, header: key }));
-
             worksheet.columns = columnsExcel;
-
 
             // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
@@ -118,7 +105,6 @@ const useRatype = () => {
                 };
             });
 
-
             worksheet.getRow(1).height = 30;
             // loop through all of the columns and set the alignment with width.
             worksheet.columns.forEach((column) => {
@@ -128,7 +114,6 @@ const useRatype = () => {
 
             rows.forEach((singleData, index) => {
 
-
                 worksheet.addRow(singleData);
 
                 // Adjust column width based on the length of the cell values in the added row
@@ -136,7 +121,6 @@ const useRatype = () => {
                     const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
                     const cellLength = cellValue.toString().length; // Get length of cell value as a string
                     const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
                     // Set column width to the maximum of current width and cell length plus extra space
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
@@ -146,12 +130,9 @@ const useRatype = () => {
             worksheet.eachRow({ includeEmpty: false }, (row) => {
                 // store each cell to currentCell
                 const currentCell = row._cells;
-
                 // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
-
                     const cellAddress = singleCell._address;
-
                     // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
@@ -163,7 +144,6 @@ const useRatype = () => {
             });
             // write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
-
             // download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
@@ -173,7 +153,6 @@ const useRatype = () => {
             // removing worksheet's instance to create new one
             workbook.removeWorksheet(workSheetName);
         }
-
     }
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF();
@@ -216,7 +195,6 @@ const useRatype = () => {
             header.splice(idIndex, 1);
 
             header.unshift('id');
-
         }
 
         // Extracting body
@@ -258,35 +236,24 @@ const useRatype = () => {
             startY: 20,
 
             headStyles: {
-                // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-
                 minCellHeigh: 8,
                 valign: 'middle',
-
                 font: 'helvetica', // Set font type for body
-
                 cellWidth: 'wrap',
-                // cellWidth: 'auto'
             },
 
             bodyStyles: {
-                // fontSize:4,
-                // fontSize: fontdata-1
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-
             },
             columnWidth: 'auto'
-
         });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         console.log(scaleFactor, "SCALE")
-
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
@@ -306,18 +273,10 @@ const useRatype = () => {
         closetime:dayjs(),
     });
 
-   
-
      const uniqueRatetype=async(customerdataname,ratenamedata)=>{
-        // console.log(customerdataname,"namee")
-        console.log(customerdataname,ratenamedata,"ratt")
         if(customerdataname && ratenamedata){
-
             const response= await axios.get(`${apiUrl}/getcustomeruniqueratetype/${customerdataname}/${ratenamedata}`)
             const responsedata=response.data;
-            
-            // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
            
             if(responsedata?.length >=1){
                 
@@ -332,7 +291,6 @@ const useRatype = () => {
 
        const  handleChangecredent=(event)=>{
         const { name, value } = event.target;
-        console.log(selectedCustomerData?.ratename || book.ratename,value,"valuee")
         const data=uniqueRatetype(selectedCustomerData?.ratetype || book.ratetype,value)
         console.log(data)
         setBook((prevBook) => ({
@@ -343,13 +301,10 @@ const useRatype = () => {
             ...prevData,
             [name]: value,
         }));
-
        }
-  
 
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
-
         if (type === 'checkbox') {
             setBook((prevBook) => ({
                 ...prevBook,
@@ -408,8 +363,6 @@ const useRatype = () => {
         }
     }, [apiUrl, searchText]);
 
-
-
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
@@ -422,9 +375,6 @@ const useRatype = () => {
         }));
     };
     
-
-
-
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -441,14 +391,12 @@ const useRatype = () => {
         setIsEditMode(false);
     };
 
-
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
     }, []);
-
 
     const handleAdd = async () => {
         const ratename = book.ratename;
@@ -485,8 +433,6 @@ const useRatype = () => {
                 ratename: book.ratename || selectedCustomerData.ratename,
                 // validity: book.validity || selectedCustomerData.validity,
                 active: book.active || selectedCustomerData.active,
-                // starttime: book.starttime || selectedCustomerData.starttime,
-                // closetime: book.closetime || selectedCustomerData.closetime
                 starttime:starttime,
                 closetime:closetime
             }; 
@@ -526,7 +472,6 @@ const useRatype = () => {
     useEffect(() => {
         handlelist();
     }, [handlelist]);
-
 
     const handleEdit = async (driverid) => {
 
@@ -592,9 +537,6 @@ const useRatype = () => {
                 handleCancel();
                 handlelist()
                 
-
-
-
             } else if (actionName === 'Edit') {
 
                 // const selectedCustomer = rows.find((row) => row.driverid === driverid);
@@ -604,7 +546,6 @@ const useRatype = () => {
                 // setSuccessMessage("Successfully updated");
                 // handleCancel();
                 handleEdit()
-
             }
 
             else {

@@ -35,7 +35,6 @@ router.post('/booking', async (req, res) => {
 });
 router.post('/bookinglogDetails', async (req, res) => {
     const bookData = req.body;
-    // console.log(bookData)
 
     db.query('INSERT INTO BookingLogDetails SET ?', bookData, (err, result) => {
         if (err) {
@@ -47,8 +46,6 @@ router.post('/bookinglogDetails', async (req, res) => {
         if (result.affectedRows ===  0) {
             return res.status(400).json("data not inserted succefully")
         } 
-        // console.log(result,"log")
-
             return res.status(200).json("data  inserted succefully")
         
     });
@@ -85,7 +82,6 @@ router.get('/vehicleinfodatavehcile', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        console.log(results, "hhh");
         return res.status(200).json(results);
     });
 });
@@ -149,7 +145,6 @@ router.put('/booking/:bookingno', async (req, res) => {
         if (checkBookingId.length > 0) return res.json({ message: "This Booking dosen't allowed to edit", error: false, success: true })
 
         // Update the booking
-        console.log(updatedCustomerData,"cuuu")
         const updateResult = await query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno])
         if (updateResult.affectedRows === 0) return res.json({ message: "Booking Id not found", error: false, success: true });
 
@@ -331,7 +326,6 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
             return res.status(404).json({ error: 'Customer not found' });
         }
 
-        console.log(result,"rr")
         return res.status(200).json(result);
     });
 });
@@ -372,8 +366,6 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
-
-        // console.log(result,"travelanemadata")
         return res.status(200).json(result);
     });
 });
@@ -409,7 +401,6 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
 //             return res.status(404).json({ error: 'Customer not found' });
 //         }
 
-//         console.log(result,"travelanemadata")
 //         return res.status(200).json(result);
 //     });
 // });
@@ -438,8 +429,6 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
-
-        console.log(result,"travelanemadata")
         return res.status(200).json(result);
     });
 });
@@ -480,8 +469,6 @@ router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
-
-        console.log(result,"rr")
         return res.status(200).json(result);
     });
 });
@@ -777,88 +764,86 @@ router.post('/send-onbook-email', async (req, res) => {
 //end online-booking mail
 //End booking page database 
 //search function for booking page
-router.get('/table-for-booking', (req, res) => {
-    const { searchText, fromDate, toDate } = req.query;
-    let query = 'SELECT * FROM booking WHERE 1=1';
-    let params = [];
+// router.get('/table-for-booking', (req, res) => {
+//     const { searchText, fromDate, toDate } = req.query;
+//     let query = 'SELECT * FROM booking WHERE 1=1';
+//     let params = [];
 
-    if (searchText) {
-        const columnsToSearch = [
-            'bookingno',
-            'bookingdate',
-            'bookingtime',
-            'status',
-            'tripid',
-            'customer',
-            'orderedby',
-            'mobile',
-            'guestname',
-            'guestmobileno',
-            'email',
-            'employeeno',
-            'address1',
-            // 'streetno',
-            // 'city',
-            'report',
-            'vehType',
-            'paymenttype',
-            'startdate',
-            'starttime',
-            'reporttime',
-            'duty',
-            'pickup',
-            'customercode',
-            'registerno',
-            'flightno',
-            'orderbyemail',
-            'remarks',
-            'servicestation',
-            'advance',
-            // 'nameupdate',
-            // 'address3',
-            // 'address4',
-            // 'cityupdate',
-            'useage',
-            'username',
-            'emaildoggle',
-            'hireTypes',
-            'travelsname',
-            'vehRegNo',
-            'vehiclemodule',
-            'driverName',
-            'mobileNo',
-            'travelsemail',
-            // 'triptime',
-            // 'tripdate',
-            'Groups'
-        ];
+//     if (searchText) {
+//         const columnsToSearch = [
+//             'bookingno',
+//             'bookingdate',
+//             'bookingtime',
+//             'status',
+//             'tripid',
+//             'customer',
+//             'orderedby',
+//             'mobile',
+//             'guestname',
+//             'guestmobileno',
+//             'email',
+//             'employeeno',
+//             'address1',
+//             // 'streetno',
+//             // 'city',
+//             'report',
+//             'vehType',
+//             'paymenttype',
+//             'startdate',
+//             'starttime',
+//             'reporttime',
+//             'duty',
+//             'pickup',
+//             'customercode',
+//             'registerno',
+//             'flightno',
+//             'orderbyemail',
+//             'remarks',
+//             'servicestation',
+//             'advance',
+//             // 'nameupdate',
+//             // 'address3',
+//             // 'address4',
+//             // 'cityupdate',
+//             'useage',
+//             'username',
+//             'emaildoggle',
+//             'hireTypes',
+//             'travelsname',
+//             'vehRegNo',
+//             'vehiclemodule',
+//             'driverName',
+//             'mobileNo',
+//             'travelsemail',
+//             // 'triptime',
+//             // 'tripdate',
+//             'Groups'
+//         ];
 
-        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+//         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
-        query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `${searchText}%`);
-    }
+//         query += ` AND (${likeConditions})`;
+//         params = columnsToSearch.map(() => `${searchText}%`);
+//     }
 
-    // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
-    if (fromDate && toDate) {
-        // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-        // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+//     // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
+//     if (fromDate && toDate) {
+//         // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+//         // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+//         const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+//         const formattedToDate = moment(toDate).format('YYYY-MM-DD');
 
-        query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-        params.push(formattedFromDate, formattedToDate);
-    }
+//         query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+//         params.push(formattedFromDate, formattedToDate);
+//     }
 
-    db.query(query, params, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
-        }
-        return res.status(200).json(result);
-    });
-});
-
-
+//     db.query(query, params, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+//         }
+//         return res.status(200).json(result);
+//     });
+// });
 // image or pdf upload 
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {

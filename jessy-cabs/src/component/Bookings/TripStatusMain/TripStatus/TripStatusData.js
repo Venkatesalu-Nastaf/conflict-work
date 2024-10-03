@@ -1,6 +1,4 @@
-
 export const Status = [
-
   {
     option: "Opened",
     optionvalue: "Opened",
@@ -30,5 +28,4 @@ export const Status = [
     option: "All",
     optionvalue: "All",
   },
-
 ]

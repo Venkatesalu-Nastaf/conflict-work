@@ -26,7 +26,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DialogTitle from '@mui/material/DialogTitle';
 import { PermissionContext } from '../../../context/permissionContext.js';
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -53,9 +52,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
 const TripStatus = ({ stationName, customer, vehicleNo }) => {
-  // console.log(stationName,"sta")
 
   const {
     statusvalue, handlestatusChange, VehNo, cutomerName,
@@ -79,7 +76,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     department,
     hidePopup,
     handleInputChange,
-    // handleButtontripsheet,
     handleExcelDownload,
     handlePdfDownload,
     reversedRows,
@@ -92,30 +88,14 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     filteredColumns,
     columnshowall, setCutomerName, setVehNo, handleBookingClick,
   } = useTripStatus();
-
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
-
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
-
-  // station name All setup
-
-  // const [allStationName, setAllStationName] = useState([])
-
-  // useEffect(() => {
-  //   if (stationName.length > 1) {
-  //     setAllStationName([...stationName, { Stationname: "All" }])
-  //   } else {
-  //     setAllStationName(stationName)
-  //   }
-  // }, [stationName])
-
   const [allCustomer, setAllCustomer] = useState([])
-
   useEffect(() => {
     if (customer?.length > 1) {
       setAllCustomer([...customer, { customer: "All" }])
@@ -124,7 +104,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
       setAllCustomer(customer)
     }
   })
-
 
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
@@ -163,21 +142,10 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                {/* <div className='show-all-button'>
-                  <div className="input" >
-                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
-                  </div>
-                  <div className="input">
-                    <Button className='text-nowrap' variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
-                  </div>
-                </div> */}
-                {/* </div>
-              <div className="input-field TripStatus-input-feilds"> */}
                 <div className="input">
                   <div className="icone">
                     <SiStatuspal color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="Status"
@@ -195,7 +163,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     }}
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <GiMatterStates color="action" />
@@ -206,16 +173,12 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     id="Department"
                     size="small"
                     value={department}
-                    // options={allStationName.map((option) => ({
-                    //   label: option.Stationname,
-                    // }))}
                     options={stationName.map((option) => ({
                       label: option.Stationname,
                     }))}
                     isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleInputChange(event, value)}
                     disableCloseOnSelect
-
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
                         <Checkbox
@@ -233,7 +196,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                       );
                     }}
                   />
-
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -250,7 +212,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                       label: option.customer,
                     }))}
                     disableCloseOnSelect
-
                     isOptionEqualToValue={(option, value) => option.label === value.label}
                     onChange={(event, value) => handleCustomerChange(event, value)}
                     renderOption={(props, option, { selected }) => (
@@ -271,7 +232,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     }}
                   />
                 </div>
-
                 <div className="input">
                   <div className="icone">
                     <GiMatterStates color="action" />
@@ -293,7 +253,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     }}
                   />
                 </div>
-
                 <div className='show-all-button'>
                   <div className="input" >
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
@@ -302,8 +261,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
-
-
               </div>
             </div>
             <div className='alert-popup-main'>
@@ -378,21 +335,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
           </PopupState>
         </div>
         <div className="table-bookingCopy-TripStatus">
-          {/* <div className="Download-btn">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </div> */}
           <div className='trip-status-table'>
             <Box
               sx={{
@@ -409,7 +351,6 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     backgroundColor: '#457cdc',
                     borderRadius: '20px',
                     minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
                   },
                   '&::-webkit-scrollbar-thumb:hover': {
                     backgroundColor: '#3367d6',
@@ -446,5 +387,4 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     </div>
   )
 }
-
 export default TripStatus

@@ -29,7 +29,7 @@ import { TextField } from "@mui/material";
 import Switch from '@mui/material/Switch';
 import Menu from '@mui/material/Menu';
 import Vehicles from './Vehicles/Vehicles';
-import { useNavigate,  } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import { CiFilter } from "react-icons/ci";
 import { IoDownloadOutline } from "react-icons/io5";
 import TabContext from '@mui/lab/TabContext';
@@ -190,53 +190,56 @@ export const Vehicle = () => {
                   <Button variant="outlined" onClick={handleClickOpenFilter}><CiFilter className='btn-icon' /> Filters</Button>
                 </span>
 
-                <span>
-                  <div>
-                    <Button variant="contained" onClick={openReports}><IoDownloadOutline className='btn-icon' /> Reports</Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorElReoprts}
-                      open={openReoprts}
-                      onClose={closeReoprts}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                    >
-                      <MenuItem onClick={closeReoprts}>All Summary Vehicles</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Vehicles Details Report</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Vehicle PnL Report</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Vehicle Tag Report</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Day Wise Report</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Night Driving</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Sim Tracking Report</MenuItem>
-                      <MenuItem onClick={closeReoprts}>Vehicle Performance Report</MenuItem>
-                    </Menu>
-                  </div>
-                </span>
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>
+                    <div>
+                      <Button variant="contained" onClick={openReports}><IoDownloadOutline className='btn-icon' /> Reports</Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorElReoprts}
+                        open={openReoprts}
+                        onClose={closeReoprts}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={closeReoprts}>All Summary Vehicles</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Vehicles Details Report</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Vehicle PnL Report</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Vehicle Tag Report</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Day Wise Report</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Night Driving</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Sim Tracking Report</MenuItem>
+                        <MenuItem onClick={closeReoprts}>Vehicle Performance Report</MenuItem>
+                      </Menu>
+                    </div>
+                  </span>
+                  <span>
 
-                  <div>
-                    <Button variant="contained" onClick={openMenu}><FaPlus /></Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorElMenu}
-                      open={openPlusMenu}
-                      onClose={closeMenu}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                    >
-                      <MenuItem onClick={navigateAddVehicle}>Add Vehicles</MenuItem>
-                      <MenuItem onClick={closeMenu}>Vehicles Details Report</MenuItem>
-                      <MenuItem onClick={closeMenu}>Vehicle PnL Report</MenuItem>
-                      <MenuItem onClick={closeMenu}>Vehicle Tag Report</MenuItem>
-                      <MenuItem onClick={closeMenu}>Day Wise Report</MenuItem>
-                      <MenuItem onClick={closeMenu}>Night Driving</MenuItem>
-                      <MenuItem onClick={closeMenu}>Sim Tracking Report</MenuItem>
-                      <MenuItem onClick={closeMenu}>Vehicle Performance Report</MenuItem>
-                    </Menu>
-                  </div>
-                </span>
+                    <div>
+                      <Button variant="contained" onClick={openMenu}><FaPlus /></Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorElMenu}
+                        open={openPlusMenu}
+                        onClose={closeMenu}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={navigateAddVehicle}>Add Vehicles</MenuItem>
+                        <MenuItem onClick={closeMenu}>Vehicles Details Report</MenuItem>
+                        <MenuItem onClick={closeMenu}>Vehicle PnL Report</MenuItem>
+                        <MenuItem onClick={closeMenu}>Vehicle Tag Report</MenuItem>
+                        <MenuItem onClick={closeMenu}>Day Wise Report</MenuItem>
+                        <MenuItem onClick={closeMenu}>Night Driving</MenuItem>
+                        <MenuItem onClick={closeMenu}>Sim Tracking Report</MenuItem>
+                        <MenuItem onClick={closeMenu}>Vehicle Performance Report</MenuItem>
+                      </Menu>
+                    </div>
+                  </span>
+                </div>
+
               </div>
             </div>
 
@@ -422,7 +425,7 @@ export const Vehicle = () => {
 
           </div>
 
-          <Box sx={{ width: '100%', typography: 'body1', padding: "20px" }}>
+          <Box sx={{ width: 'auto', typography: 'body1', padding: "20px" }}>
             <TabContext value={valuedetailstabs}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">

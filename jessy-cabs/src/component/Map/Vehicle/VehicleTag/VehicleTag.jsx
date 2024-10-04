@@ -28,7 +28,7 @@ const VehicleTag = () => {
         { id: 1, name: 'Snow', drivingScore: 'Jon', idleDuration: 35, overspeedDuration: 'Snow', hardAccelerationCount: 'Jon', hardBrakeCount: 35 },
     ];
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <div className='main-content-vehicle-tag '>
                 <Button variant='outlined'><LiaNewspaper className='btn-icon' /> History</Button>
                 <Button variant='outlined'><CiClock2 className='btn-icon' /> Live</Button>

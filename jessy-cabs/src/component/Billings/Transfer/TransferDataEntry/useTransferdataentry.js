@@ -520,6 +520,40 @@ const useTransferdataentry = () => {
     //     const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
     //     window.location.href = billingPageUrl;
     // }
+    // const handleButtonClickTripsheet = async () => {
+    //     try {
+    //         // Validate rowSelectionModel
+    //         if (!rowSelectionModel) {
+    //             console.error('Error: rowSelectionModel is undefined or null');
+    //             return;
+    //         }
+
+    //         const id = rowSelectionModel;
+    //         // console.log(id,'checkid');
+    //         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
+
+    //         // Sending PUT requests
+    //         const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
+    //         const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
+    //         console.log(response, Tripresponse, 'check response');
+    //         // Setting selected customer data in local storage
+    //         localStorage.setItem('selectedcustomer', customerdata);
+    //         const storedCustomer = localStorage.getItem('selectedcustomer');
+    //         const decodedCustomer = decodeURIComponent(storedCustomer);
+    //         localStorage.setItem('selectedcustomerdata', decodedCustomer);
+
+    //         // Constructing billing page URL
+    //         const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&TransferReport=true&Status=Billed`;
+
+    //         // Redirecting to billing page
+    //         window.location.href = billingPageUrl;
+    //     } catch (error) {
+    //         // Handle any errors that occurred during the requests
+    //         console.error('Error:', error.message); // You can add custom error handling here
+    //     }
+    // };
+    
+ // my code 
     const handleButtonClickTripsheet = async () => {
         try {
             // Validate rowSelectionModel
@@ -529,12 +563,33 @@ const useTransferdataentry = () => {
             }
 
             const id = rowSelectionModel;
+            const tripDetails = selectTripid.map(item => ({
+                tripid: item.tripid,
+                totalcalcAmount: item.totalcalcAmount
+            }));
+    
+            // Filter valid trips and invalid trips
+            const validTrips = tripDetails.filter(trip => trip.totalcalcAmount > 0);
+            const invalidTrips = tripDetails.filter(trip => trip.totalcalcAmount === 0 || trip.totalcalcAmount === null);
+    
+            // If there are invalid trips, show an error message
+            if (invalidTrips.length > 0) {
+                const invalidTripIds = invalidTrips.map(trip => trip.tripid).join(', ');
+                console.log(`The following trip IDs are invalid (amount is zero or null): ${invalidTripIds}`);
+                setError(true);
+                setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+            }
+    
+            // Proceed only with valid trips
+            if (validTrips.length === 0) {
+                return; // If there are no valid trips, exit the function
+            }
             // console.log(id,'checkid');
             const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
 
             // Sending PUT requests
             const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
-            const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
+           const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
             console.log(response, Tripresponse, 'check response');
             // Setting selected customer data in local storage
             localStorage.setItem('selectedcustomer', customerdata);
@@ -552,6 +607,7 @@ const useTransferdataentry = () => {
             console.error('Error:', error.message); // You can add custom error handling here
         }
     };
+
 
 
 
@@ -628,11 +684,84 @@ const useTransferdataentry = () => {
             [name]: parsedDate,
         }));
     };
+    // const handleAddOrganization = async () => {
+    //     if (rowSelectionModel.length === 0) {
+    //         setError(true)
+    //         setErrorMessage("Please select the Row")
+    //         return
+    //     }
+    //     try {
+    //         if (!rows || rows.length === 0) {
+    //             throw new Error("Rows data is empty");
+    //         }
+
+    //         const fromdate = rows[0]?.startdate;
+    //         const enddate = rows[rows.length - 1]?.startdate;
+    //         const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+    //         const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+    //         const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+    //         const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+    //         const OrganizationName = selectedCustomerDatas.customer || customer;
+    //         const Trips = rowSelectionModel.length;
+    //         const billstatus = "notbilled";
+
+
+    //         const transferlist = {
+    //             Status: billstatus,
+    //             Billdate: billDate,
+    //             Organization_name: OrganizationName,
+    //             Trip_id: rowSelectionModel,
+    //             FromDate: fromDate,
+    //             EndDate: EndDate,
+    //             Trips: Trips,
+    //             Amount: tripAmount,
+
+    //         }
+    //         await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully added");
+    //         setRows([])
+    //         const billingPageUrl = `/home/billing/transfer`
+    //         window.location.href = billingPageUrl
+
+
+
+    //     } catch (error) {
+    //         console.error("Error occurred:", error);
+    //         setErrorMessage("Failed to add organization: " + error.message);
+    //     }
+    // }
+
+    //my code
     const handleAddOrganization = async () => {
         if (rowSelectionModel.length === 0) {
             setError(true)
             setErrorMessage("Please select the Row")
             return
+        }
+         // Map to get trip details
+         const tripDetails = selectTripid.map(item => ({
+            tripid: item.tripid,
+            totalcalcAmount: item.totalcalcAmount
+        }));
+
+        // Filter valid trips and invalid trips
+        const validTrips = tripDetails.filter(trip => trip.totalcalcAmount > 0);
+        const invalidTrips = tripDetails.filter(trip => trip.totalcalcAmount === 0 || trip.totalcalcAmount === null);
+
+        // If there are invalid trips, show an error message
+        if (invalidTrips.length > 0) {
+            const invalidTripIds = invalidTrips.map(trip => trip.tripid).join(', ');
+            console.log(`The following trip IDs are invalid (amount is zero or null): ${invalidTripIds}`);
+            setError(true);
+            setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+        }
+
+        // Proceed only with valid trips
+        if (validTrips.length === 0) {
+            return; // If there are no valid trips, exit the function
         }
         try {
             if (!rows || rows.length === 0) {
@@ -652,18 +781,37 @@ const useTransferdataentry = () => {
             const billstatus = "notbilled";
 
 
+            // const transferlist = {
+            //     Status: billstatus,
+            //     Billdate: billDate,
+            //     Organization_name: OrganizationName,
+            //     Trip_id: rowSelectionModel,
+            //     FromDate: fromDate,
+            //     EndDate: EndDate,
+            //     Trips: Trips,
+            //     Amount: tripAmount,
+
+            // }
+
+            // Construct the transfer list with valid trips and their amounts
             const transferlist = {
                 Status: billstatus,
                 Billdate: billDate,
                 Organization_name: OrganizationName,
-                Trip_id: rowSelectionModel,
+                Trip_id: validTrips.map(trip => trip.tripid), // Only include valid trip IDs
+                Amount: validTrips.reduce((total, trip) => total + trip.totalcalcAmount, 0), // Sum of valid amounts
                 FromDate: fromDate,
                 EndDate: EndDate,
                 Trips: Trips,
-                Amount: tripAmount,
+            };
 
-            }
-            await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+            setMisGroupTripId(validTrips.map(trip => trip.tripid)); 
+
+            // Log the valid trips and transfer list for debugging
+            console.log(validTrips, 'Valid Trips for posting');
+            console.log(transferlist, 'Transfer List to be posted');
+
+           // await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
             setSuccess(true);
             setSuccessMessage("Successfully added");
             setRows([])

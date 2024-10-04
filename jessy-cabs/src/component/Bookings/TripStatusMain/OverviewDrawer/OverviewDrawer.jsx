@@ -41,6 +41,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import {  CircularProgress } from '@mui/material';
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -75,6 +76,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     selectedRow,
     handleBookingClick,
     handleShowCards,
+    handleCloseCards,
     showCards,
     reversedRows,
     columnshowall,
@@ -118,7 +120,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     setMapImageUrl,
     mapImgUrl,
     imageDetails,
-    setImageDetails
+    setImageDetails,
+    setLoading,
+    loading
 
 
   } = useOverviewDrawer();
@@ -401,6 +405,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             {/* <p onClick={handleShowCards}>Show Cards</p> */}
             {showCards ?
               <div className='top-cards'>
+                 <IconButton onClick={handleCloseCards}  sx={{ position: 'absolute', right: '16px', top: '200px' }}>
+                        <CloseIcon sx={{ fontSize: '2rem' }} />
+                    </IconButton>
                 {/* <EtripSheetSignature /> */}
                 <EtripSheetSignature signImageUrl={signImageUrl} />
 
@@ -434,15 +441,16 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                /> */}
             
           </Box>
-          <Box sx={{ padding: '16px' }}>
+          {/* <Box sx={{ padding: '16px' }}>
+         
             <div className='trip-status-table'>
               <Box
                 sx={{
-                  height: 400, // Adjust this value to fit your needs
+                  height: 400, 
                   '& .MuiDataGrid-virtualScroller': {
                     '&::-webkit-scrollbar': {
-                      width: '8px', // Adjust the scrollbar width here
-                      height: '8px', // Adjust the scrollbar width here
+                      width: '8px', 
+                      height: '8px', 
                     },
                     '&::-webkit-scrollbar-track': {
                       backgroundColor: '#f1f1f1',
@@ -450,7 +458,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                     '&::-webkit-scrollbar-thumb': {
                       backgroundColor: '#457cdc',
                       borderRadius: '20px',
-                      minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                      minHeight: '60px',
 
                     },
                     '&::-webkit-scrollbar-thumb:hover': {
@@ -458,7 +466,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                     },
                   },
                 }}
-              >
+              > */}
                 {/* <DataGrid
                   rows={reversedRows}
                   columns={columnshowall ? columns : filteredColumns}
@@ -466,16 +474,66 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                   pageSize={5}
                 /> */}
                 {/* chges for show button and show card button */}
-                <DataGrid
+                {/* <DataGrid
                   rows={reversedRows}
                   columns={columnshowall ? columns : filteredColumns}
                   onRowClick={(event) => handleRowClick(event.row)}
                   pageSize={5}
                 />
-              </Box>
+              </Box> */}
 
+            {/* </div>
+          </Box> */}
+
+          {/* Code with loading */}
+          <Box sx={{ padding: '16px' }}>
+            <div className='trip-status-table'>
+                <Box
+                    sx={{
+                        position: 'relative', // Set position relative for the container
+                        height: 400, // Adjust this value to fit your needs
+                        '& .MuiDataGrid-virtualScroller': {
+                            '&::-webkit-scrollbar': {
+                                width: '8px',
+                                height: '8px',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#457cdc',
+                                borderRadius: '20px',
+                                minHeight: '60px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#3367d6',
+                            },
+                        },
+                    }}
+                >
+                    {/* Show loading spinner if loading is true */}
+                    {loading && (
+                        <Box
+                            sx={{
+                                position: 'absolute', // Position the loading spinner absolutely
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)', // Center the spinner
+                                zIndex: 1, // Ensure it appears above the DataGrid
+                            }}
+                        >
+                            <CircularProgress />
+                        </Box>
+                    )}
+                    <DataGrid
+                        rows={reversedRows}
+                        columns={columnshowall ? columns : filteredColumns}
+                        onRowClick={(event) => handleRowClick(event.row)}
+                        pageSize={5}
+                    />
+                </Box>
             </div>
-          </Box>
+        </Box>
         </Drawer>
       </div>
            

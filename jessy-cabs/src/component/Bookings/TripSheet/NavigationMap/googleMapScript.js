@@ -34,147 +34,19 @@ let mapDetails = [];
 let editmode;
 const apiUrl = APIURL;
 
-// function initMap(lat) {
-//     // const allLatitudeValues = [];
-//     // const allLongitudeValues = [];
 
-//     const latitudevalue = lat?.lat;
-//     const longitudevalue = lat?.lng;
-
-//     if (latitudevalue !== undefined && longitudevalue !== undefined) {
-//         const latArray = latitudevalue.toString().split(',').map(item => item.trim());
-//         const lngArray = longitudevalue.toString().split(',').map(item => item.trim());
-
-//         allLatitudeValues.push(...latArray);
-//         allLongitudeValues.push(...lngArray);
-//     }
-
-
-//     console.log(allLatitudeValues,allLongitudeValues, 'latitude and longitude arrays');
-
-
-//     try {
-
-//         map = new google.maps.Map(document.getElementById('map'), {
-//             zoom: 10,
-//             center: { lat: 13.0827, lng: 80.2707 },
-//         });
-//         directionsService = new google.maps.DirectionsService();
-//         directionsRenderer = new google.maps.DirectionsRenderer();
-//         directionsRenderer.setMap(map);
-//         map.addListener('click', (event) => {
-//             handleMapClick(event.latLng);
-//         });
-//         const input = document.getElementById('pac-input');
-//         searchBox = new google.maps.places.SearchBox(input);
-//         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-//         // Bias the SearchBox results towards the current map's viewport.
-//         map.addListener('bounds_changed', function () {
-//             searchBox.setBounds(map.getBounds());
-//         });
-//         searchBox.addListener('places_changed', function () {
-//             const places = searchBox.getPlaces();
-//             if (places.length === 0) {
-//                 return;
-//             }
-//             const bounds = new google.maps.LatLngBounds();
-//             places.forEach(function (place) {
-//                 if (!place.geometry) {
-//                     console.log('Returned place contains no geometry');
-//                     return;
-//                 }
-//                 createMarker(place.geometry.location, place.name);
-//                 if (place.geometry.viewport) {
-//                     bounds.union(place.geometry.viewport);
-//                 } else {
-//                     bounds.extend(place.geometry.location);
-//                 }
-//             });
-
-//             map.fitBounds(bounds);
-//         });
-//         window.map = map;
-//     } catch (error) {
-//         console.error('Error initializing map:', error);
-//     }
+// function updateMapPoints(mapdet){
+//     console.log(mapdet,'map234');
+    
+//     startLatitude = mapdet?.startLatitude
+//     startLongitude = mapdet?.startLongitude
+//     endLatitude = mapdet?.endLatitude
+//     endLongitude = mapdet?.endLongitude
+//     wayLatitude = mapdet?.wayLatitude
+//     wayLongitude = mapdet?.wayLongitude
 // }
-// async function initMap(lat, lng, row) {
-//     console.log(lat, lng, row, 'latlng');
 
-//     try {
-//         // Load the Maps API
-//         const { Map, Marker } = await google.maps.importLibrary("maps");
-
-//         // Initialize the map
-//         const map = new Map(document.getElementById('map'), {
-//             zoom: 10,
-//             center: { lat: lat[0] || 13.0827, lng: lng[0] || 80.2707 },  // Centering on the first lat/lng or default
-//         });
-
-//         // Initialize Directions Service and Renderer
-//         const directionsService = new google.maps.DirectionsService();
-//         const directionsRenderer = new google.maps.DirectionsRenderer();
-//         directionsRenderer.setMap(map);
-
-//         // Add a click listener on the map
-//         map.addListener('click', (event) => {
-//             handleMapClick(event.latLng);
-//         });
-
-//         // Create search box input
-//         const input = document.getElementById('pac-input');
-//         const searchBox = new google.maps.places.SearchBox(input);
-//         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-//         // Bias the SearchBox results towards the current map's viewport
-//         map.addListener('bounds_changed', function () {
-//             searchBox.setBounds(map.getBounds());
-//         });
-
-//         // Handle the places changed event from search box
-//         searchBox.addListener('places_changed', function () {
-//             const places = searchBox.getPlaces();
-//             if (places.length === 0) return;
-
-//             const bounds = new google.maps.LatLngBounds();
-//             places.forEach(function (place) {
-//                 if (!place.geometry) {
-//                     console.log('Returned place contains no geometry');
-//                     return;
-//                 }
-//                 createMarker(place.geometry.location, place.name);  // Add marker for each place
-//                 if (place.geometry.viewport) {
-//                     bounds.union(place.geometry.viewport);
-//                 } else {
-//                     bounds.extend(place.geometry.location);
-//                 }
-//             });
-
-//             map.fitBounds(bounds);
-//         });
-
-//         // Render markers for each lat/lng
-//         for (let i = 0; i < lat.length; i++) {
-//             const latValue = lat[i];
-//             const lngValue = lng[i];
-//             const position = new google.maps.LatLng(latValue, lngValue);
-//             console.log(`Lat: ${latValue}, Lng: ${lngValue}`);
-
-//             // Create a marker for each lat/lng pair using the new syntax
-//             new Marker({
-//                 position: position,
-//                 map: map,
-//                 title: row[i]?.placeName || 'Unknown Place'
-//             });
-//         }
-
-//         window.Map = map;  // Make map accessible globally if needed
-
-//     } catch (error) {
-//         console.error('Error initializing map:', error);
-//     }
-// }
-function initMap(lat) {
+function initMap(lat) {    
     const allLatitudeValues = [];
     const allLongitudeValues = [];
     console.log(lat, 'allvalues');
@@ -298,6 +170,7 @@ function initMap(lat) {
             });
         }
         const infoWindow = new google.maps.InfoWindow();
+console.log(wayPointLatitude,wayPointLongitude,'00000');
 
         // Marker C (Waypoint)
         if (wayPointLatitude && wayPointLongitude && wayPointLatitude.length === wayPointLongitude.length) {
@@ -307,6 +180,7 @@ function initMap(lat) {
                 // Convert latitude and longitude from strings to numbers
                 const latitude = parseFloat(latStr);
                 const longitude = parseFloat(lonStr);
+console.log(latitude,longitude,'00000111111111');
 
                 const wayDates = wayDate[index] || ''; // Assuming wayDate is an array
                 const wayTimes = wayTime[index] || ''; // Assuming wayTime is an array
@@ -368,16 +242,6 @@ function initMap(lat) {
         console.error('Error initializing map:', error);
     }
 }
-
-// Function to create a marker on the map
-// function createMarker(location, title) {
-//     const marker = new google.maps.Marker({
-//         position: location,
-//         map: map,
-//         title: title,
-//     });
-// }
-
 
 
 
@@ -1093,3 +957,4 @@ window.createMarker = createMarker;
 window.generateStaticMap = generateStaticMap;
 window.generateEditStaticMap = generateEditStaticMap;
 window.handleEditMapPoints = handleEditMapPoints;
+// window.updateMapPoints = updateMapPoints;

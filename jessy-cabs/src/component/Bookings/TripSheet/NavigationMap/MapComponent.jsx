@@ -86,11 +86,12 @@ const MapComponent = () => {
                 // Update waypoints in one go to avoid triggering multiple renders
                 const newWayLat = wayTrips?.map(trip => trip.Latitude);
                 const newWayLong = wayTrips?.map(trip => trip.Longitude);
-    
-                if (JSON.stringify(newWayLat) !== JSON.stringify(wayLat) || JSON.stringify(newWayLong) !== JSON.stringify(wayLong)) {
-                    setWayLat(newWayLat);
-                    setWayLong(newWayLong);
-                }
+                  setWayLat(newWayLat)
+                  setWayLong(newWayLong)
+                // if (JSON.stringify(newWayLat) !== JSON.stringify(wayLat) || JSON.stringify(newWayLong) !== JSON.stringify(wayLong)) {
+                //     setWayLat(newWayLat);
+                //     setWayLong(newWayLong);
+                // }
     
                 console.log(startingTrips, 'Updated Start Location');
             } catch (error) {

@@ -3,10 +3,8 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const moment = require('moment');
-// const { json } = require('body-parser');
 require('dotenv').config()
 // trip sheet database:
-
 
 // add tripsheet database-------------------------------------------- 
 router.post('/tripsheet-add', (req, res) => {
@@ -141,7 +139,6 @@ router.post('/tripsheet-add', (req, res) => {
 
     } = req.body
 
-
     const addCustomerData = {
         tripid,
         bookingno,
@@ -270,7 +267,6 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
     }
-
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
     const driverTripAssign = {
@@ -280,7 +276,6 @@ router.post('/tripsheet-add', (req, res) => {
         reporttime,
         shedintime
     }
-
 
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
 
@@ -324,7 +319,6 @@ router.get('/vehicleinfodatavehcile', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        console.log(results, "hhh");
         return res.status(200).json(results);
     });
 });
@@ -609,8 +603,6 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         driverbeta_Count,
         driverBeta_amount, 'edited');
 
-
-
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             console.log(err, "edit")
@@ -626,8 +618,6 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
 
                 db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
             }
-
-
             return res.status(200).json({ message: "Data updated successfully" });
         }
     });
@@ -635,12 +625,8 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
 
 // confirm tripsheet details------------------------------------------------
 router.put('/tripsheet-confirm/:tripid', (req, res) => {
-    // const tripid = req.params.tripid;
-    // const updatedCustomerData = req.body;
     const tripid = req.params.tripid;
-
     const {
-
         bookingno,
         tripsheetdate,
         status,
@@ -884,70 +870,6 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
     });
 });
 
-
-
-// collect data from tripsheet database------------------------------------
-// router.get('/tripsheet-enter/:tripid', async (req, res) => {
-//     const tripid = req.params.tripid;
-//     const username = req.query.loginUserName;
-//     console.log("tripid", tripid, "username", username)
-
-//     let data = '';
-
-//     if (!username) {
-//         return res.status(500).json({ error: "username is undefined" })
-//     }
-
-//     db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
-//         if (err) {
-//             return res.status(500).json({ error: "there some issue ffetching station name " })
-//         }
-
-//         data = await results[0]?.Stationname;
-
-//         console.log("data", data)
-//         const arryData = data.split(',');
-//         console.log("arryData", arryData)
-//         //------------------------------------------------------------
-
-//         if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
-//             // its for fetch by All
-//             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"`, tripid, (err, result) => {
-//                 if (err) {
-//                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//                 }
-//                 if (result.length === 0) {
-
-//                     return res.status(404).json({ error: 'Booking not found' });
-//                 }
-//                 const bookingDetails = result[0]; // Assuming there is only one matching booking
-//                 return res.status(200).json(bookingDetails);
-//             });
-//         }
-//         else if (arryData) {
-//             // its for fetch by All
-
-//             const placeholders = arryData?.map(() => '?').join(', ');
-//             const queryParams = [tripid, data]
-//             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (${placeholders})`, queryParams, (err, result) => {
-//                 if (err) {
-//                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//                 }
-//                 if (result.length === 0) {
-//                     return res.status(404).json({ error: 'Booking not found' });
-//                 }
-//                 const bookingDetails = result[0]; // Assuming there is only one matching booking
-//                 return res.status(200).json(bookingDetails);
-//             });
-//         } else {
-//             return res.status(500).json({ error: 'there is some ISSUE ' });
-//         }
-//         //----------------------------------------------------------
-//     })
-// });
-
-//--------------------------------------------------------
-
 // ----chnage collect data-----------------------------------
 
 router.get('/tripsheet-enter/:tripid', async (req, res) => {
@@ -1009,11 +931,10 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
         } else {
             return res.status(500).json({ error: 'there is some ISSUE ' });
         }
-        //----------------------------------------------------------
     })
 });
 
-// ===========================================================
+// --------------------------------------------------------------
 router.get('/tripsheet-maindash', (req, res) => {
     const { fromDate, toDate } = req.query;
     console.log(fromDate, "dd", toDate)
@@ -1026,7 +947,6 @@ router.get('/tripsheet-maindash', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Booking not found' });
         }
-        // const bookingDetails = result[0]; // Assuming there is only one matching booking
         console.log(result.length, "len")
         return res.status(200).json(result);
     });
@@ -1043,7 +963,6 @@ router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
         if (result.length === 0) {
             return res.status(200).json(result);
         }
-        // const bookingDetails = result[0]; // Assuming there is only one matching booking
         console.log(result, "cc")
         return res.status(200).json(result);
     });
@@ -1062,7 +981,6 @@ router.get('/tripsheet-maindashcuurentdate', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Booking not found' });
         }
-        // const bookingDetails = result[0]; // Assuming there is only one matching booking
         console.log(result, "hh")
         return res.status(200).json(result);
     });
@@ -1570,8 +1488,6 @@ router.delete('/deleteMapPoint', (req, res) => {
 // get the gmapdata by tripid
 router.get('/getGmapdataByTripId/:tripid',(req,res)=>{
     const tripid = req.params.tripid;
-    console.log(tripid,'tripidmanual');
-    
     const sqlquery = `SELECT * FROM gmapdata WHERE tripid = ?`
     db.query(sqlquery,[tripid],(error,result)=>{
         if(error){

@@ -28,8 +28,8 @@ const Safety = () => {
         { id: 1, name: 'Snow', drivingScore: 'Jon', idleDuration: 35, overspeedDuration: 'Snow', hardAccelerationCount: 'Jon', hardBrakeCount: 35 },
     ];
     return (
-        <div>
-           <div className='main-content-vehicle-safety'>
+        <div style={{ width: '100%' }}>
+            <div className='main-content-vehicle-safety'>
                 <Button variant='outlined'><LiaNewspaper className='btn-icon' /> History</Button>
                 <Button variant='outlined'><CiClock2 className='btn-icon' /> Live</Button>
                 <Button variant='outlined'><FaBriefcase className='btn-icon' /> Jobs</Button>

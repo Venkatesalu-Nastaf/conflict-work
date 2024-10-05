@@ -119,7 +119,7 @@ const Vehicles = () => {
                             }}
                         >
                             <MenuItem onClick={closeSortOption}>All Summary Vehicles</MenuItem>
-                            <MenuItem onClick={closeSortOption}>Vehicles Details Report</MenuItem>
+                            <MenuItem onClick={closeSortOption}> Report</MenuItem>
                             <MenuItem onClick={closeSortOption}>Vehicle PnL Report</MenuItem>
                             <MenuItem onClick={closeSortOption}>Vehicle Tag Report</MenuItem>
                             <MenuItem onClick={closeSortOption}>Day Wise Report</MenuItem>
@@ -434,7 +434,7 @@ const Vehicles = () => {
                                 </div>
 
 
-                                <div className='vehicle-stats-box'>
+                                <div className='vehicle-stats-box vehicle-stats-box-border'>
                                     <span className='vehicle-stats-box-content vehicle-stats-box-content-border-bottom'>
                                         <span className='vehicle-stats-box-content-heading'>0 Km</span>
                                         <span>Distance</span>

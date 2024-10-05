@@ -72,6 +72,7 @@ const useDispatched = () => {
     const [signImageUrl, setSignImageUrl] = useState('');
     const [mapImgUrl ,setMapImageUrl] = useState("")
     const [imageDetails, setImageDetails] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     //---------------------popup----------------------------
@@ -345,6 +346,7 @@ const useDispatched = () => {
     }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
 
     const handleShowAll = async () => {
+        setLoading(true); // Start loading
         setColumnShowall(false)
         try {
             const response = await axios.get(
@@ -352,6 +354,9 @@ const useDispatched = () => {
             );
 
             const data = response.data;
+            if(data && data.length > 0){
+                setLoading(false); // Stop loading
+            }
 
             if (data && data.tripsheet && data.booking) {
                 // Process tripsheet data
@@ -359,6 +364,7 @@ const useDispatched = () => {
                     ...row,
                     id1: index + 1,
                 }));
+
                 // Process booking data
                 const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
                     ...row,
@@ -384,6 +390,10 @@ const useDispatched = () => {
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");
+        }finally {
+              setLoading(false); // Stop loading
+            
+           
         }
     };
     // const showSignature = async (row) =>{
@@ -625,54 +635,114 @@ const useDispatched = () => {
     //     }
     // };
     
+    // const handleShowImage = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     const bookingno = row.bookingno || selectedRow.bookingno;
+        
+    //     try {
+    //         if (!tripid) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //         } 
+    //         setLoading(true); // Start loading
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+    //             const data = response.data;
+    
+    //             console.log('API response:', data); // Log the entire response
+    
+    //             let tripResults = [];
+    //             let bookingResults = [];
+    
+    //             data?.map((item) => {
+    //                 if (item.type === "tripResults") {
+    //                     tripResults = item.data || []; // Ensure it's an array
+    //                 } else if (item.type === "bookingResults") {
+    //                     bookingResults = item.data || []; // Ensure it's an array
+    //                 }
+    //             });
+    
+    //             const bothData = [...tripResults, ...bookingResults];
+    
+    //             console.log('bothData:', bothData); // Log the combined data
+    
+    //             if (bothData.length > 0) {
+    //                 const rowsWithUniqueId = bothData.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setImageDetails(rowsWithUniqueId);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed");
+    //                 console.log('rowsWithUniqueId:', rowsWithUniqueId);
+    //             } else {
+    //                 setImageDetails([]); // Ensure image details is cleared
+    //                 setError(true);
+    //                 setErrorMessage("No data found");
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setError(true);
+    //         setErrorMessage("An error occurred while fetching data.");
+    //     }finally{
+    //         setLoading(false);
+    //     }
+    // };
     const handleShowImage = async (row) => {
         const tripid = row.tripid || selectedRow.tripid;
         const bookingno = row.bookingno || selectedRow.bookingno;
-        
+    
+        // Early return if tripid is not present
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the tripid");
+            return; // Exit the function early
+        }
+    
+        //setLoading(true); // Start loading
+    
         try {
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
-                const data = response.data;
+            const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+            const data = response.data;
     
-                console.log('API response:', data); // Log the entire response
+            console.log('API response:', data); // Log the entire response
     
-                let tripResults = [];
-                let bookingResults = [];
+            let tripResults = [];
+            let bookingResults = [];
     
-                data?.map((item) => {
-                    if (item.type === "tripResults") {
-                        tripResults = item.data || []; // Ensure it's an array
-                    } else if (item.type === "bookingResults") {
-                        bookingResults = item.data || []; // Ensure it's an array
-                    }
-                });
-    
-                const bothData = [...tripResults, ...bookingResults];
-    
-                console.log('bothData:', bothData); // Log the combined data
-    
-                if (bothData.length > 0) {
-                    const rowsWithUniqueId = bothData.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setImageDetails(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("successfully listed");
-                    console.log('rowsWithUniqueId:', rowsWithUniqueId);
-                } else {
-                    setImageDetails([]); // Ensure image details is cleared
-                    setError(true);
-                    setErrorMessage("No data found");
+            data?.forEach((item) => {
+                if (item.type === "tripResults") {
+                    tripResults = item.data || []; // Ensure it's an array
+                } else if (item.type === "bookingResults") {
+                    bookingResults = item.data || []; // Ensure it's an array
                 }
+            });
+    
+            const bothData = [...tripResults, ...bookingResults];
+    
+            console.log('bothData:', bothData); // Log the combined data
+    
+            if (bothData.length > 0) {
+                const rowsWithUniqueId = bothData.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setImageDetails(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
+                console.log('rowsWithUniqueId:', rowsWithUniqueId);
+            } else {
+                setImageDetails([]); // Ensure image details is cleared
+                setError(true);
+                setErrorMessage("No data found");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
             setError(true);
             setErrorMessage("An error occurred while fetching data.");
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
     
@@ -687,6 +757,9 @@ const useDispatched = () => {
         //SetShowCards(!showCards);
         setShowCards(prevShowCards => !prevShowCards);
       }
+      const handleCloseCards = () => {
+        setShowCards(false); // Close the cards
+    };
 
     const handleButtonClick = (row) => {
 
@@ -797,6 +870,7 @@ const useDispatched = () => {
         reversedRows,
         handleButtonClick,
         handleShowCards,
+        handleCloseCards,
         showCards,
         popupOpen,
         handlePopupClose,
@@ -805,7 +879,7 @@ const useDispatched = () => {
         columns, handleBookingClick,
         filteredColumns,
         columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,handleRowClick, handleShowButtonClick,
-        setSignImageUrl,signImageUrl, mapImgUrl,setMapImageUrl,imageDetails,setImageDetails
+        setSignImageUrl,signImageUrl, mapImgUrl,setMapImageUrl,imageDetails,setImageDetails,setLoading,loading
     };
 };
 

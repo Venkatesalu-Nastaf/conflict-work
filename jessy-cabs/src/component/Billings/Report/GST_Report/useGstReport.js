@@ -48,7 +48,6 @@ const useGstReport = () => {
         const fetchCustomerData = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/allCustomers`);
-                console.log(response.data, 'customer');
                 setOrganization(response.data);
                 if (response.data.length > 0) {
                     setGstReport(prevGstReport => ({
@@ -68,7 +67,6 @@ const useGstReport = () => {
         const fetchDepartmentData = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/allDepartment`);
-                console.log(response.data, 'department');
                 setDepartment(response.data);
                 if (response.data.length > 0) {
                     setGstReport(prevGstReport => ({
@@ -285,7 +283,6 @@ const useGstReport = () => {
             });
     
             const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
-            console.log(response.data, 'reportdata');
     
             // Combine coveringBilledResults and transferBilledResults into a single array
             const combinedData = [
@@ -352,7 +349,6 @@ const useGstReport = () => {
                     igst: 0
                 };
             });
-    
             // Set rows and tax report state
             setRows(updatedTripsheetResults);
             setTaxReport({
@@ -368,7 +364,6 @@ const useGstReport = () => {
             console.error('Error fetching data:', error);
         }
     };
-    
 
     return {
         organization,
@@ -383,5 +378,4 @@ const useGstReport = () => {
         handleDownloadExcel
     };
 };
-
 export default useGstReport;

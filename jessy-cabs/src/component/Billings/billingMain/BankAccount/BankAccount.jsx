@@ -93,87 +93,6 @@ const BankAccount = () => {
             </div>
           </div>
         </div>
-        {/* <div className="BankAccount-detail-container-main">
-          <div className="BankAccount-first-container">
-            <div className="input bankaddbtn">
-              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
-                Add bank
-              </Button>
-            </div>
-          </div>
-          {showAddBankForm && (
-            <div className="AddBankContainer-BankAccount">
-              <div className="input-field input-field-bankaccount">
-                <div className="input input-bankaccount">
-                  <div className="icone">
-                    <AiFillBank color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    label="Bank Name"
-                    name="bankname"
-                    id="banknameHDFC"
-                    autoFocus
-                    value={book.bankname || ''}
-                    onChange={handleChange}
-                  />
-
-
-                  
-                </div>
-                <div className="input input-bankaccount">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faSackDollar} size="xl" />
-                  </div>
-                  <TextField
-                    type="number"
-                    size="small"
-                    label="Capital Amount"
-                    name="capital"
-                    id="capital"
-                    value={book.capital || ''}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input input-bankaccount">
-                  <div className="icone">
-                    <ListAltIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo-AccountType"
-                    freeSolo
-                    sx={{ width: "20ch" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
-                    value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
-                    options={AccountType.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || book.AccountType || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
-                </div>
-                <div className="inpu">
-                  <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
-                    Add
-                  </Button>
-                </div>
-                <div className="inpu">
-                  <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
-                    <CancelIcon />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div> */}
-
         <div className="BankAccount-first-container">
           <div className="input bankaddbtn">
             <Button variant="contained" startIcon={<AddCircleOutlineIcon />} disabled={!Billing_new} onClick={handleAddBankClick} >
@@ -257,20 +176,6 @@ const BankAccount = () => {
               <div className="addedbanks-Details-BankAccount" key={index}>
                 <div className="input-field input-field-bankaccount input-Field-bank-account">
 
-                  {/* <div className="input input-bankname">
-                    <div className="icone">
-                      <AiFillBank color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      label="Bank Namxxxe"
-                      id="bankname02"
-                      name="bankname2"
-                      value={editingIndex === index ? bankDetail.bankname : (bankDetail.bankname || book.bankname || '')}
-                      onChange={(event) => handleChange(event, index)}
-                      disabled={editingIndex !== index}
-                    />
-                  </div> */}
                   <div className="input input-bankname">
                     <div className="icone">
                       <AiFillBank color="action" />
@@ -289,22 +194,11 @@ const BankAccount = () => {
                     <div className="icone">
                       <AiFillBank color="action" />
                     </div>
-                    {/* <TextField
-                      size="small"
-                      label="Net Balance"
-                      name="netbalance"
-                      id="netbalance89"
-                      type="number"
-                      value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
-                      onChange={(event) => handleChange(event, index)}
-                      disabled={editingIndex !== index}
-                    /> */}
                     <TextField
                       size="small"
                       label="Net Balance"
                       name="capital"
                       id="netbalance89"
-                      // type="text"
                       value={bankDetail.capital || ""}
                       onChange={(event) => handleChange(event, index)}
                       disabled={editingIndex !== index}
@@ -316,7 +210,6 @@ const BankAccount = () => {
                     <input
                       className="bank-amount-input"
                       name="totalin"
-                      // type="number"
                       id={`totalin-${index}`}
                       value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
                       onChange={(event) => handleChange(event, index)}
@@ -324,13 +217,6 @@ const BankAccount = () => {
                     />
                    
                   </div>
-                  {/* <input    
-                      name="enterTotalIn"
-                      // type="number"
-                      id={`enterTotalIn-${index}`}
-                      value={editingIndex === index ? bankDetail.enterTotalIn : (bankDetail.enterTotalIn || book.enterTotalIn || '')}
-                      onChange={(event) => handleChange(event, index)}
-                      disabled={editingIndex !== index} /> */}
                       </div>
                   <div>
                   <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`}>
@@ -338,7 +224,6 @@ const BankAccount = () => {
                     <input
                       className="bank-amount-input"
                       name="totalout"
-                      // type="number"
                       id={`totalout-${index}`}
                       value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
                       // onChange={(event) => handleChange(event, index)}
@@ -349,7 +234,6 @@ const BankAccount = () => {
                   </div>
                   <input    
                       name="enterTotalOut"
-                      // type="number"
                       id={`enterTotalOut-${index}`}
                       value={editingIndex === index ? bankDetail.enterTotalOut : (bankDetail.enterTotalOut || book.enterTotalOut || '')}
                       onChange={(event) => handleChange(event, index)}
@@ -368,7 +252,6 @@ const BankAccount = () => {
                       )}
                     </div>
                     <div className="inpt input-bank-account-icon">
-
                       <IconButton color="error" variant="contained" onClick={() => handleDelete(index)}>
                         <DeleteIcon />
                       </IconButton>
@@ -389,8 +272,6 @@ const BankAccount = () => {
                   </div>
                 </div>
               </div>
-
-
             ))}
           </div>
         </div>

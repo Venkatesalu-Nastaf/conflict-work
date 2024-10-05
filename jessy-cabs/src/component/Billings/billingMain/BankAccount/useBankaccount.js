@@ -216,7 +216,6 @@ const useBankaccount = () => {
         setPopupOpen(false);
     }
 
-
     const handlesuredelete = () => {
         const updatedBank = bankDetails[deleteId];
         handleDeleteBank(updatedBank.id)
@@ -235,19 +234,15 @@ const useBankaccount = () => {
         }
     }; // Add dependencies as needed
 
-
     const handleDelete = (id) => {
         setPopupOpen(true);
         setEditingIndex(null);
         setDeleteId(id);
-
-
     };
 
     const handleEditBank = (index) => {
         setEditingIndex(index);
     };
-
 
     //calculate totalout amount
     useEffect(() => {
@@ -256,7 +251,6 @@ const useBankaccount = () => {
         ), 0) || parseInt(book.totalout, 10) || 0;
         setTotalOut(calculatedTotalOut);
     }, [bankDetails, book, success]);
-
 
     //calculate totalin amount
     useEffect(() => {
@@ -279,7 +273,7 @@ const useBankaccount = () => {
 
             }
             catch (error) {
-                console.log(error, "error");
+                // console.log(error, "error");
             }
         };
         fetchOrganizationnames()

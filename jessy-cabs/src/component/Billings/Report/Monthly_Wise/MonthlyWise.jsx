@@ -42,7 +42,6 @@ const MonthlyWise = () => {
         columns,
         handleShow,
     } = useMonthlyWise();
-    console.log(rows, "font")
     return (
         <div className="MonthlyWise-main">
             <form >
@@ -164,7 +163,6 @@ const MonthlyWise = () => {
                                 />
                             </Box>
                         </div>
-
                     </div>
                     <div className='alert-popup-main'>
                         {error &&
@@ -201,5 +199,4 @@ const MonthlyWise = () => {
         </div>
     )
 }
-
 export default MonthlyWise

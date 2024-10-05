@@ -493,7 +493,6 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
               <div className="icone">
                 <ForwardToInboxIcon color="action" />
               </div>
-
               <TextField
                 name="orderByEmail"
                 className="full-width"
@@ -503,9 +502,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                   book.orderByEmail || 
                   book.orderbyemail ||
                   formData.orderByemail ||
-                 
                   selectedCustomerDatas.orderByEmail ||
-
                   ""
                 }
                 onChange={handleChange}
@@ -519,7 +516,6 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
               <div className="icone">
                 <DomainAddIcon color="action" />
               </div>
-
               <Autocomplete
                 fullWidth
                 id="servicestation"
@@ -537,7 +533,6 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                   );
                 }}
               />
-
             </div>
 
             <div className="input booking-payment-type-input">

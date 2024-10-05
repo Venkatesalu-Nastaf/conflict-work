@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-// import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import Excel from 'exceljs';
-
-
 const useMonthlyWise = () => {
     const apiUrl = APIURL;
   
@@ -50,7 +47,6 @@ const useMonthlyWise = () => {
     };
 
 
-    console.log(customertypedata,"type")
     const handleShow = async () => {
 
         if (!customertypedata) {
@@ -72,7 +68,6 @@ const useMonthlyWise = () => {
               ...row,
               id: index + 1,
             }));
-            console.log(rowsWithUniqueId,"ifdd")
             setRows(rowsWithUniqueId)
             // setRows([])
             setSuccess(true);

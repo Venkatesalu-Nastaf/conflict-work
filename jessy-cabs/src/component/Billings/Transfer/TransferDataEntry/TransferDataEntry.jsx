@@ -14,7 +14,6 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { Autocomplete } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
 //for pdf
-
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,16 +29,13 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
   const {
     rows,
-    // actionName,
     error,
     success,
     warning,
     successMessage,
     errorMessage,
     warningMessage,
-    // handleClick,
     hidePopup,
-    // date,
     Billingdate,
     selectedCustomerDatas,
     invoiceno,
@@ -115,22 +111,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-                  {/* <div className='input'>
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
-                          label="Date"
-                          id="date"
-                          name="date"
-                          value={date}
-                          format="DD/MM/YYYY"
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </div> */}
+
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -324,16 +305,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
         </div>
         <div className="table-bookingCopy-TransferDataEntry">
           <div className='transfer-data-entry-table'>
-            {/* <DataGrid
-              rows={rows}
-              columns={columns}
-              onRowSelectionModelChange={(newRowSelectionModel) => {
-                setRowSelectionModel(newRowSelectionModel);
-                handleRowSelection(newRowSelectionModel);
-              }}
-              checkboxSelection
-              disableRowSelectionOnClick
-            /> */}
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs

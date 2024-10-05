@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
-// import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import { APIURL } from "../../../url";
@@ -67,7 +66,6 @@ const useTransferdataentry = () => {
     const [totalValue, setTotalValue] = useState(0)
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [info, setInfo] = useState(false);
-
     const location = useLocation();
     const [transferId, setTransferId] = useState([])
     const [tripAmount, setTripAmount] = useState('')
@@ -78,10 +76,7 @@ const useTransferdataentry = () => {
     const [removeTransferRow, setRemoveTransferRow] = useState(false)
     // const [formData, setFormData] = useState({})
     const { billingPage, setBillingPage } = PdfData()
-
     const [selectTripid,setSelectTripid] = useState([])
-
-
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -107,7 +102,6 @@ const useTransferdataentry = () => {
                     fgColor: { argb: '9BB0C1' } // Green background color
                 };
             });
-
 
             worksheet.getRow(1).height = 30;
             // loop through all of the columns and set the alignment with width.
@@ -163,9 +157,7 @@ const useTransferdataentry = () => {
             // removing worksheet's instance to create new one
             workbook.removeWorksheet(workSheetName);
         }
-
     }
-
 
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
@@ -178,10 +170,8 @@ const useTransferdataentry = () => {
         pdf.text("Transfer_DataEntry", 10, 10);
         const header = Object.keys(rows[0]);
 
-
         // Extracting body
         const body = rows.map(row => Object.values(row));
-
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -206,38 +196,28 @@ const useTransferdataentry = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-
             headStyles: {
                 // fontSize: 5,
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-
                 minCellHeigh: 8,
                 valign: 'middle',
-
                 font: 'helvetica', // Set font type for body
-
                 cellWidth: 'wrap',
                 // cellWidth: 'auto'
             },
 
             bodyStyles: {
-                // fontSize:4,
-                // fontSize: fontdata-1
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
-
             },
             columnWidth: 'auto'
-
         });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         console.log(scaleFactor, "SCALE")
@@ -247,7 +227,6 @@ const useTransferdataentry = () => {
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Transfer_DataEntry.pdf');
     };
-
     const handleCancel = () => {
         setBook('');
         setCustomer('');
@@ -271,8 +250,6 @@ const useTransferdataentry = () => {
         setWarning(false);
         setInfo(false);
     };
-
-
     useEffect(() => {
         if (error || success || warning || info) {
             const timer = setTimeout(() => {
@@ -329,8 +306,6 @@ const useTransferdataentry = () => {
         // setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
         const transferlist = updatedFormData.Trip_id?.split(',');
-        console.log(transferlist,'tttt');
-        
         setTransferId(transferlist);
         setInvoiceno(updatedFormData.Invoice_no);
         setGroupId(updatedFormData.Groupid);
@@ -340,13 +315,10 @@ const useTransferdataentry = () => {
         setBillingdate(updatedFormData.Billdate);
         setTotalValue(parseInt(updatedFormData.Amount));
         setBillingPage(updatedFormData?.billingsheet)
-
-
         return () => {
             // setFormData({}); // Reset formData state to an empty object
         };
     }, [location, setBillingPage]);
-
     window.addEventListener('click', (event) => {
         if (event.target === window) {
             setBillingPage(false)
@@ -393,7 +365,6 @@ const useTransferdataentry = () => {
     //calculate total amount in column
     useEffect(() => {
         const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.totalcalcAmount || 0), 0);
-        // const cal = rows.map(li=>li.total)
         if (!isNaN(calculatedTotalAmount)) {
             setTotalAmount(calculatedTotalAmount.toFixed(2));
         } else {
@@ -435,8 +406,6 @@ const useTransferdataentry = () => {
         window.history.replaceState(null, document.title, window.location.pathname);
     }, []);
 
-
-
     const handleChange = useCallback((event) => {
         const { name, value } = event.target;
 
@@ -447,12 +416,9 @@ const useTransferdataentry = () => {
         }));
 
     }, [setBook]);
-
     const handlechnageinvoice = (event) => {
-
         setInvoiceno(event.target.value)
     }
-
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
@@ -465,7 +431,6 @@ const useTransferdataentry = () => {
                 return selectedRow ? selectedRow.tripid : null;
             })
             .filter((tripid) => tripid !== null);
-        // setRowselect(selectedTripIds)
 
         const selectedTrips = newSelectionModel
             .filter((selectedId) => selectedId !== null)
@@ -474,10 +439,7 @@ const useTransferdataentry = () => {
                 return selectedRow ? selectedRow : null;
             })
             .filter((tripid) => tripid !== null);
-
             setSelectTripid(selectedTrips)
-            
-           // console.log(selectTripid,'tripsdatas')
 
         const selectedTripAmount = newSelectionModel
             .filter((selectedId) => selectedId !== null)
@@ -492,20 +454,14 @@ const useTransferdataentry = () => {
         const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0) || 0;
 
         setTripAmount(totalSelectedTripAmount)
-
-        // const handleselectTrips = selectedTrips;
         setSelectedRow(selectedTrips)
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
         localStorage.setItem('selectedtripsheetid', tripsheetid);
         const selectedRowCount = selectedTripIds.length;
-
         localStorage.setItem('selectedrowcount', selectedRowCount);
     };
     const handleClickGenerateBill = () => {
-
-        // handleBillGenerate();
-        //   handleAdd();
         handleButtonClickTripsheet();
     };
 
@@ -1514,7 +1470,6 @@ const handleAddGroup = async () => {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
                 }
-
                 const fromdate2 = rows[0]?.startdate;
                 const enddate = rows[rows.length - 1]?.startdate;
                 const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');

@@ -479,7 +479,6 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                   book?.orderByMobileNo ||
                   formData?.orderByMobileNo ||
                   selectedCustomerDatas?.orderByMobileNo ||
-                  
                   ""
                 }
                 onChange={handleChange}
@@ -962,8 +961,6 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 </div>
                 <div className="input-type-grid">
                   {reportTimeVar ? (((reportTimeVar < starttimeVar) ? (<label>Report time</label>) : (<label>Report Time</label>)) || (!reportTimeVar && <label>Report Time</label>)) : <label> Report Time</label>}
-
-
                   <input
                     type="time"
                     id="starttime"

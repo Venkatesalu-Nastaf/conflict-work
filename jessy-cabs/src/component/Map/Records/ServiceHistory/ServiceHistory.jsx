@@ -95,20 +95,18 @@ const ServiceHistory = () => {
                         </LocalizationProvider>
                     </div>
 
-
-
-                        <div>
-                            <Button variant='contained' ><CiFilter className='btn-icon' /> Filter</Button>
-                        </div>
-                        <div>
-                            <Button variant='outlined'><FaUpload className='btn-icon' /></Button>
-                        </div>
-                        <div>
-                            <Button variant='contained'><IoDownloadOutline className='btn-icon' /> Report</Button>
-                        </div>
-                        <div>
-                            <Button variant='contained'><FaPlus className='btn-icon' /> Add service</Button>
-                        </div>
+                    <div>
+                        <Button variant='contained' ><CiFilter className='btn-icon' /> Filter</Button>
+                    </div>
+                    <div>
+                        <Button variant='outlined'><FaUpload className='btn-icon' /></Button>
+                    </div>
+                    <div>
+                        <Button variant='contained'><IoDownloadOutline className='btn-icon' /> Report</Button>
+                    </div>
+                    <div>
+                        <Button variant='contained'><FaPlus className='btn-icon' /> Add service</Button>
+                    </div>
 
                 </div>
 

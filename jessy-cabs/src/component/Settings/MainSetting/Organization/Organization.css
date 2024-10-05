@@ -354,6 +354,7 @@ border-right: 1px solid transparent !important;
     width: 300px !important;
     gap: 5px;
     display: grid !important;
+    align-content: center;
 }
 
 .organisation-details-input .organization-text-area {

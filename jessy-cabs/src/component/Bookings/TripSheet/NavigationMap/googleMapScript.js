@@ -33,6 +33,7 @@ let Alpha;
 let mapDetails = [];
 let editmode;
 const apiUrl = APIURL;
+let markerLabel;
 
 
 // function updateMapPoints(mapdet){
@@ -124,7 +125,6 @@ function initMap(lat) {
 
             map.fitBounds(bounds);
         });
-        let markerLabel;
         // Create a new marker using the first latitude and longitude values
         if (startLatitude && startLongitude) {
             const markerA = createMarker(
@@ -146,29 +146,7 @@ function initMap(lat) {
         }
 
         // Marker B (End)
-        if (endLatitude && endLongitude) {
-            // const markerB = createMarker(new google.maps.LatLng(endLatitude, endLongitude), "B");
-            // google.maps.event.addListener(markerB, 'click', function () {
-            //     infoWindow.setContent(`End Location (B)`);
-            //     infoWindow.open(map, markerB);
-            // });
-            const markerE = createMarker(
-                new google.maps.LatLng(endLatitude, endLongitude),
-                markerLabel,
-                lat?.endingDate || '',
-                lat?.endingTime || '',
-                'end',
-                endPlaceName,
-                endLatitude,
-                endLongitude,
-            );
-
-            google.maps.event.addListener(markerE, 'click', function () {
-                Alpha = "E"
-                console.log("Marker C clicked, showing popup.");
-
-            });
-        }
+ 
         const infoWindow = new google.maps.InfoWindow();
 console.log(wayPointLatitude,wayPointLongitude,'00000');
 
@@ -209,7 +187,31 @@ console.log(latitude,longitude,'00000111111111');
                     console.log(`Marker ${markerLabel} at Latitude: ${latitude}, Longitude: ${longitude} clicked, showing popup.`);
                 });
             });
-        } else {
+        } 
+        
+        if (endLatitude && endLongitude) {
+            // const markerB = createMarker(new google.maps.LatLng(endLatitude, endLongitude), "B");
+            // google.maps.event.addListener(markerB, 'click', function () {
+            //     infoWindow.setContent(`End Location (B)`);
+            //     infoWindow.open(map, markerB);
+            // });
+            const markerE = createMarker(
+                new google.maps.LatLng(endLatitude, endLongitude),
+                'Z',
+                lat?.endingDate || '',
+                lat?.endingTime || '',
+                'end',
+                endPlaceName,
+                endLatitude,
+                endLongitude,
+            );
+
+            google.maps.event.addListener(markerE, 'click', function () {
+                Alpha = "E"
+                console.log("Marker C clicked, showing popup.");
+
+            });
+        }else {
             console.error("Mismatch in the length of wayPointLatitude and wayPointLongitude arrays.");
         }
 
@@ -318,18 +320,21 @@ function submitMapPopup() {
                 document.getElementById('end').value = placeName;
                 console.log(placeName, nextEndLabel, lastWaypointLabel, 'wayp1234');
 
-                calculateAndDisplayRoute(directionsService, directionsRenderer);
+                calculateAndDisplayRoutes(directionsService, directionsRenderer);
             } else {
                 endMarker = createMarker(popup.getPosition(), 'B', date, time, selectedTripType, placeName);
                 document.getElementById('end').value = placeName;
-                calculateAndDisplayRoute(directionsService, directionsRenderer);
+                calculateAndDisplayRoutes(directionsService, directionsRenderer);
             }
         } else if (selectedTripType === 'waypoint') {
-            const waypointLabel = getNextWaypointLabel();
+            const waypointLabel = getNextWaypointLabels(markerLabel) || getNextWaypointLabel();
+            markerLabel=waypointLabel
+            console.log(waypointLabel,'wayss');
+            
             const waypointMarker = createMarker(popup.getPosition(), waypointLabel, date, time, selectedTripType, placeName);
             waypoints.push(waypointMarker);
             if (startMarker && endMarker) {
-                calculateAndDisplayRoute(directionsService, directionsRenderer);
+                calculateAndDisplayRoutes(directionsService, directionsRenderer);
             }
         }
     }
@@ -427,11 +432,18 @@ function submitMapPopup() {
 function getNextAlphabeticLetter(currentLetter) {
     return String.fromCharCode(currentLetter?.charCodeAt(0) + 1);
 }
-
 function getNextWaypointLabel() {
     const lastWaypointLabel = waypoints.length > 0 ? waypoints[waypoints.length - 1].label : 'A';
     const nextCharCode = lastWaypointLabel.charCodeAt(0) + 1;
     return String.fromCharCode(nextCharCode);
+
+}
+function getNextWaypointLabels(currentLetter) {
+    // const lastWaypointLabel = waypoints.length > 0 ? waypoints[waypoints.length - 1].label : 'A';
+    // const nextCharCode = lastWaypointLabel.charCodeAt(0) + 1;
+    // return String.fromCharCode(nextCharCode);
+        return String.fromCharCode(currentLetter?.charCodeAt(0) + 1);
+
 }
 function handleMapClick(latLng) {
 
@@ -583,22 +595,6 @@ function createMarker(position, label, date = '', time = '', tripType = '', plac
         }
 
         const deleteButton = popupContent.querySelector('#DeleteButton');
-        // if (deleteButton) {
-        //     const position = popup.getPosition();
-        //     const latitude = position.lat();
-        //     const longitude = position.lng();
-        //     console.log(latitude,longitude,'del Latitude and longitude');
-
-        //     deleteButton.addEventListener('click', () => {
-        //         marker.setMap(null); // Remove the marker from the map
-        //         delete markersMap[label]; // Remove the marker from the markersMap
-        //         '/deleteMapPoint'
-        //         if (tripType === 'waypoint') {
-        //             waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
-        //         }
-        //         popup.close(); // Close the popup
-        //     });
-        // }
 
         if (deleteButton) {
             const position = popup.getPosition();
@@ -615,8 +611,13 @@ function createMarker(position, label, date = '', time = '', tripType = '', plac
 
                 // Check if the marker is a waypoint
                 if (tripType === 'waypoint') {
-                    waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
+                    waypoints = waypoints.filter(wp => wp.latitude !== latitude || wp.longitude !== longitude);
+                    console.log('Updated waypoints:', waypoints); // Verify the waypoint is removed
                 }
+        
+                // if (tripType === 'waypoint') {
+                //     waypoints = waypoints.filter(wp => wp.label !== label); // Remove waypoint if applicable
+                // }
 
                 // Make the API call to delete the marker from the database
                 fetch(`${apiUrl}/deleteMapPoint`, {
@@ -663,9 +664,10 @@ function clearMarkers() {
         endMarker.setMap(null);
     }
     for (const waypoint of waypoints) {
-        waypoint.setMap(null);
+        console.log(waypoints,'editwayp');
+        // waypoint.setMap(null);
     }
-    markersMap = {}; // Clear the markers map
+    // markersMap = {}; // Clear the markers map
 }
 
 function calculateAndDisplayRoutes(directionsService, directionsRenderer) {
@@ -678,10 +680,10 @@ function calculateAndDisplayRoutes(directionsService, directionsRenderer) {
     }));
 
     if (startLatitude && startLongitude && endLatitude && endLongitude) {
-        console.log('aaaaa');
 
         const startLocation = new google.maps.LatLng(startLatitude, startLongitude);
         const endLocation = new google.maps.LatLng(endLatitude, endLongitude);
+        console.log(startLatitude,endLatitude,wayPointLatitude,'aaaaa');
 
         directionsService
             .route({
@@ -709,6 +711,11 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         location: waypoint.getPosition(),
         stopover: true,
     }));
+
+    const waypointsPosition = wayPointLatitude.map((lat, index) => ({
+        location: new google.maps.LatLng(lat, wayPointLongitude[index]), // Use LatLng constructor for each waypoint
+        stopover: true,
+    }));
     if (startMarker && endMarker) {
         const startLocation = startMarker.getPosition();
         const endLocation = endMarker.getPosition();
@@ -716,7 +723,7 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
             .route({
                 origin: startLocation,
                 destination: endLocation,
-                waypoints: waypointsPositions,
+                waypoints: waypointsPositions || waypointsPosition,
                 travelMode: google.maps.TravelMode.DRIVING,
             })
             .then((response) => {

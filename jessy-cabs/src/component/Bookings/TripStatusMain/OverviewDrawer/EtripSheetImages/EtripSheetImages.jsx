@@ -203,7 +203,119 @@
 
 // export default EtripSheetImages;
 
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// import "./EtripSheetImages.css";
+// import { APIURL } from '../../../../url';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+// import Dialog from '@mui/material/Dialog';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import IconButton from '@mui/material/IconButton';
+
+// const EtripSheetImages = ({ imageDetails }) => {
+//   const apiUrl = APIURL;
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [openDialog, setOpenDialog] = useState(false);
+
+//   const nextImage = () => {
+//     if (currentIndex < imageDetails.length - 1) {
+//       setCurrentIndex(currentIndex + 1);
+//     }
+//   };
+
+//   const prevImage = () => {
+//     if (currentIndex > 0) {
+//       setCurrentIndex(currentIndex - 1);
+//     }
+//   };
+
+//   const openImageDialog = () => {
+//     setOpenDialog(true);
+//   };
+
+//   const closeImageDialog = () => {
+//     setOpenDialog(false);
+//     setCurrentIndex(0); // Reset index when closing dialog
+//   };
+
+//   const renderContent = (item) => {
+//     const imageUrl = `${apiUrl}/get-image/${item.path}`;
+//     if (item.path.endsWith('.pdf')) {
+//       return (
+//         <embed
+//           src={imageUrl}
+//           title="PDF Viewer"
+//           style={{
+//             maxWidth: '100%',
+//             maxHeight: '600px',
+//             width: '100%',
+//             height: '600px',
+//             border: 'none',
+//           }}
+//         />
+//       );
+//     } else {
+//       return (
+//         <img
+//           src={imageUrl}
+//           alt={`Image ${item.id}`}
+//           className='map-image'
+//           style={{
+//             maxWidth: '100%',
+//             maxHeight: '600px',
+//             objectFit: 'contain',
+//           }}
+//         />
+//       );
+//     }
+//   };
+
+//   return (
+//     <>
+//       <div>
+//         <p>Images</p>
+//         <div className='EtripSheetImages-card'>
+//           <div className="image-container" onClick={openImageDialog}>
+//             {imageDetails && imageDetails.length > 0 ? (
+//               renderContent(imageDetails[currentIndex])
+//             ) : (
+//               <p>No images available</p>
+//             )}
+//             {/* Navigation arrows */}
+//             {/* <div className="arrow left-arrow" onClick={prevImage} style={{ visibility: currentIndex === 0 ? 'hidden' : 'visible' }}>
+//               <ArrowBackIcon />
+//             </div>
+//             <div className="arrow right-arrow" onClick={nextImage} style={{ visibility: currentIndex === imageDetails.length - 1 ? 'hidden' : 'visible' }}>
+//               <ArrowForwardIcon />
+//             </div> */}
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Dialog for showing all images */}
+//       <Dialog open={openDialog} onClose={closeImageDialog} fullWidth>
+//         <DialogTitle>Image Gallery</DialogTitle>
+//         <DialogContent>
+//           <div className='image-gallery'>
+//             {imageDetails && imageDetails.length > 0 ? (
+//               imageDetails.map((image, index) => (
+//                 <div key={image.id} className="image-gallery-item" onClick={() => setCurrentIndex(index)}>
+//                   {renderContent(image)}
+//                 </div>
+//               ))
+//             ) : (
+//               <p>No images available</p>
+//             )}
+//           </div>
+//         </DialogContent>
+//       </Dialog>
+//     </>
+//   );
+// }
+
+// export default EtripSheetImages;
+import React, { useState, useEffect } from 'react';
 import "./EtripSheetImages.css";
 import { APIURL } from '../../../../url';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -212,11 +324,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress
 
 const EtripSheetImages = ({ imageDetails }) => {
   const apiUrl = APIURL;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(true); // State for loading
+
+  useEffect(() => {
+    if (imageDetails.length > 0) {
+      setLoading(false); // Set loading to false once images are available
+    }
+  }, [imageDetails]);
 
   const nextImage = () => {
     if (currentIndex < imageDetails.length - 1) {
@@ -277,18 +397,17 @@ const EtripSheetImages = ({ imageDetails }) => {
         <p>Images</p>
         <div className='EtripSheetImages-card'>
           <div className="image-container" onClick={openImageDialog}>
-            {imageDetails && imageDetails.length > 0 ? (
-              renderContent(imageDetails[currentIndex])
+            {loading ? (
+              <div display="flex" justifyContent="center" alignItems="center" height="400px">
+                <CircularProgress />
+              </div>
             ) : (
-              <p>No images available</p>
+              imageDetails && imageDetails.length > 0 ? (
+                renderContent(imageDetails[currentIndex])
+              ) : (
+                <p>No images available</p>
+              )
             )}
-            {/* Navigation arrows */}
-            {/* <div className="arrow left-arrow" onClick={prevImage} style={{ visibility: currentIndex === 0 ? 'hidden' : 'visible' }}>
-              <ArrowBackIcon />
-            </div>
-            <div className="arrow right-arrow" onClick={nextImage} style={{ visibility: currentIndex === imageDetails.length - 1 ? 'hidden' : 'visible' }}>
-              <ArrowForwardIcon />
-            </div> */}
           </div>
         </div>
       </div>
@@ -315,3 +434,4 @@ const EtripSheetImages = ({ imageDetails }) => {
 }
 
 export default EtripSheetImages;
+

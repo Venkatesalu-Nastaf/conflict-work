@@ -126,6 +126,8 @@
   align-items: center;
   gap: 20px;
   width: 220px;
+  position: relative;
+  left: 40px;
 }
 
 .dispatch-input {

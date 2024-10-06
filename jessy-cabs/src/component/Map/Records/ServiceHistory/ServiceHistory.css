@@ -1,9 +1,10 @@
-.service-history{
+.service-history {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.service-history-btns{
+
+.service-history-btns {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -11,9 +12,10 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     padding: 10px;
+    zoom: 85%;
 }
-.service-total-history{
+
+.service-total-history {
     display: block;
     width: 100%;
 }
-

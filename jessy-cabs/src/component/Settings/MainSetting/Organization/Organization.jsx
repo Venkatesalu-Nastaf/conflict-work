@@ -370,7 +370,20 @@ const Organization = ({ logoImage }) => {
                                 </div>
 
                                 <div className="input organization-input">
-                                <label htmlFor="">Bank Address:</label>
+                                    <div>
+                                        <label htmlFor="">Bank Address:</label>
+                                        <textarea
+                                            name="BankDetails"
+                                            className='address-field organisation-address-field Scroll-Style-hide'
+                                            value={selectedCustomerData?.BankDetails || book.BankDetails}
+                                            onChange={handleChange}
+                                            label="BankDetails"
+                                            id="Bank"
+                                            multiline
+                                            rows={5}
+                                            autoComplete="password"
+                                            disabled={!editMode} />
+                                    </div>
                                     {/* <TextField
                                         size="small"
                                         sx={{ width: "225px" }}
@@ -385,17 +398,23 @@ const Organization = ({ logoImage }) => {
                                         autoComplete="password"
                                         disabled={!editMode}
                                     /> */}
-                                    
-                                    <textarea   name="BankDetails"
+
+                                    {/* <TextField
+                                        size="small"
+                                        sx={{ width: "225px" }}
+                                        name="addressLine1"
                                         className='address-field organisation-address-field'
                                         value={selectedCustomerData?.BankDetails || book.BankDetails}
                                         onChange={handleChange}
-                                        label="BankDetails"
+                                        // label="BankDetails"
                                         id="Bank"
                                         multiline
-                                        rows={5}
+                                        rows={3}
                                         autoComplete="password"
-                                        disabled={!editMode}/>
+                                        disabled={!editMode}
+                                    /> */}
+
+
                                 </div>
                                 {/* <textarea /> */}
                             </div>

@@ -47,7 +47,7 @@
 .PendingServiceHistory-overall{
     display: block;
     padding: 10px;
-    width: 100%;
+    width: auto;
 }
 
 .overall-table-div-width{

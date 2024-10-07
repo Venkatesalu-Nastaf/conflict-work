@@ -37,6 +37,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Checkbox from '@mui/material/Checkbox';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -86,7 +87,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     handleTripsheetClick,
     columns,
     filteredColumns,
-    columnshowall, setCutomerName, setVehNo, handleBookingClick,
+    columnshowall, setCutomerName, setVehNo, handleBookingClick,loading,setLoading
   } = useTripStatus();
   useEffect(() => {
     if (actionName === 'List') {
@@ -334,7 +335,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             )}
           </PopupState>
         </div>
-        <div className="table-bookingCopy-TripStatus">
+        {/* <div className="table-bookingCopy-TripStatus">
           <div className='trip-status-table'>
             <Box
               sx={{
@@ -358,14 +359,151 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                 },
               }}
             >
+               {loading && (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1,
+                width: '90%', // Slightly reduced width for padding
+                height: '70%', // Height remains the same
+                backgroundColor: '#fff', // Background color to match DataGrid
+                borderRadius: '8px', // Rounded corners
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Subtle shadow for depth
+                padding: '16px', // Padding for content
+            }}
+        >
+            <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="10%"
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7 }}
+            />
+            <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="20%"
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+            />
+            <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="20%"
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+            />
+            <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="20%"
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+            />
+            <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="20%"
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+            />
+        </Box>
+    )}
               <DataGrid
                 rows={reversedRows}
                 columns={columnshowall ? columns : filteredColumns}
                 onRowClick={(event) => handleButtonClick(event.row)}
                 pageSize={5}
               />
-            </Box>
-            <Dialog open={popupOpen} onClose={handlePopupClose}>
+            </Box>*/}
+            <div className="table-bookingCopy-TripStatus">
+    <div className='trip-status-table'>
+        <Box
+            sx={{
+                height: 400, // Adjust this value to fit your needs
+                position: 'relative', // Ensure the loading box is positioned relative to the Box
+                '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                        width: '8px', // Adjust the scrollbar width here
+                        height: '8px', // Adjust the scrollbar height here
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#457cdc',
+                        borderRadius: '20px',
+                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                        backgroundColor: '#3367d6',
+                    },
+                },
+            }}
+        >
+            <DataGrid
+                rows={reversedRows}
+                columns={columnshowall ? columns : filteredColumns}
+                onRowClick={(event) => handleButtonClick(event.row)}
+                pageSize={5}
+               // loading={loading} // This will show the built-in loading overlay
+            />
+            {loading && (
+                <Box
+                    sx={{
+                      position: 'absolute', // Position the loading spinner absolutely
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)', // Center the spinner
+                      zIndex: 1, // Ensure it appears above the DataGrid
+                      width: '100%', // Make it full width of the parent
+                      height: '70%', // Make it full height of the parent
+                    }}
+                >
+                    <Skeleton
+                        variant="rectangular"
+                        animation="wave"
+                        width="100%"
+                        height="10%"
+                        sx={{ bgcolor: '#b0bec5', opacity: 0.7 }}
+                    />
+                    <Skeleton
+                        variant="rectangular"
+                        animation="wave"
+                        width="100%"
+                        height="20%"
+                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                    />
+                    <Skeleton
+                        variant="rectangular"
+                        animation="wave"
+                        width="100%"
+                        height="20%"
+                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                    />
+                    <Skeleton
+                        variant="rectangular"
+                        animation="wave"
+                        width="100%"
+                        height="20%"
+                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                    />
+                    <Skeleton
+                        variant="rectangular"
+                        animation="wave"
+                        width="100%"
+                        height="20%"
+                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                    />
+                </Box>
+            )}
+        </Box>
+   
+
+            <Dialog open={popupOpen} onClose={handlePopupClose}> 
               <DialogTitle>Select an Option</DialogTitle>
               <DialogContent>
                 {selectedRow && (

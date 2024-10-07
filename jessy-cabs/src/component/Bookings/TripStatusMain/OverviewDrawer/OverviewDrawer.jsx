@@ -42,6 +42,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import {  CircularProgress } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -139,6 +141,13 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
       setAllCustomer(customer)
     }
   })
+
+  const CustomNoRowsOverlay = () => (
+    <div style={{ textAlign: 'center', padding: '20px' }}>
+        {/* Optionally, you can add your own message or styles */}
+        <p></p>
+    </div>
+);
 
   return (
     <>
@@ -520,9 +529,50 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                                 left: '50%',
                                 transform: 'translate(-50%, -50%)', // Center the spinner
                                 zIndex: 1, // Ensure it appears above the DataGrid
+                                width: '100%', // Make it full width of the parent
+                                height: '70%', // Make it full height of the parent
                             }}
                         >
-                            <CircularProgress />
+                            {/* <CircularProgress /> */}
+                            {/* <Skeleton 
+                             sx={{ bgcolor: 'grey.500', width: '100%', height: '100%' }} 
+                             variant="rectangular"/> */}
+                             <Skeleton 
+                variant="rectangular" 
+                animation="wave" 
+                width="100%" 
+                height="10%" 
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7 }} // Light gray with some transparency
+              />
+              <Skeleton 
+                variant="rectangular" 
+                animation="wave" 
+                width="100%" 
+                height="20%" 
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
+              />
+              <Skeleton 
+                variant="rectangular" 
+                animation="wave" 
+                width="100%" 
+                height="20%" 
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
+              />
+               <Skeleton 
+                variant="rectangular" 
+                animation="wave" 
+                width="100%" 
+                height="20%" 
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
+              />
+               <Skeleton 
+                variant="rectangular" 
+                animation="wave" 
+                width="100%" 
+                height="20%" 
+                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
+              />
+                            
                         </Box>
                     )}
                     <DataGrid
@@ -530,6 +580,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                         columns={columnshowall ? columns : filteredColumns}
                         onRowClick={(event) => handleRowClick(event.row)}
                         pageSize={5}
+                        components={{
+                          NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
+                      }}
                     />
                 </Box>
             </div>

@@ -73,6 +73,8 @@ const useDispatched = () => {
     const [mapImgUrl ,setMapImageUrl] = useState("")
     const [imageDetails, setImageDetails] = useState('');
     const [loading, setLoading] = useState(false);
+    const [maploading,setMapLoading] = useState(false)
+    const [signloading,setSignLoading] = useState(false)
 
 
     //---------------------popup----------------------------
@@ -309,6 +311,7 @@ const useDispatched = () => {
 
     const handleShow = useCallback(async () => {
 
+        setLoading(true); // Start loading
         if (!statusvalue) {
             setError(true)
             setErrorMessage("ENTER THE STATUS")
@@ -322,6 +325,10 @@ const useDispatched = () => {
                 )}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label)}`
             );
             const data = response.data;
+
+            if(data && data.length > 0){
+                setLoading(false); // Stop loading
+            }
 
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
@@ -341,13 +348,19 @@ const useDispatched = () => {
             setRows([]);
             setError(true);
             setErrorMessage("Error retrieving data");
-        }
+        }finally {
+            setLoading(false); // Stop loading
+          
+         
+      }
 
     }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
 
     const handleShowAll = async () => {
         setLoading(true); // Start loading
         setColumnShowall(false)
+
+        setRows([]); // Clear rows to show empty grid
         try {
             const response = await axios.get(
                 `${apiUrl}/tripsheet-showall`
@@ -416,51 +429,121 @@ const useDispatched = () => {
     // }
 
     // signature showing 
+
+   // old code byme 
+    // const showSignature = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //     const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+    //     console.log('Response status:', response.status); // Check response status
+    //     if (response.status === 200) {
+    //         const imageUrl = URL.createObjectURL(await response.blob());
+    //         setSignImageUrl(imageUrl);
+    //         //console.log('tripid:', tripid);
+    //         //console.log('imgurl:', imageUrl);
+    //     } else {
+    //         console.error("Failed to fetch signature image, status:", response.status);
+    //     }
+    
+    //     console.log("tripid from overdrawer:", tripid);
+    // };
+
     const showSignature = async (row) => {
         const tripid = row.tripid || selectedRow.tripid;
+    
         if (!tripid) {
             setWarning(true);
             setWarning("Enter The Tripid");
             return;
         }
     
-        const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-        console.log('Response status:', response.status); // Check response status
-        if (response.status === 200) {
-            const imageUrl = URL.createObjectURL(await response.blob());
-            setSignImageUrl(imageUrl);
-            //console.log('tripid:', tripid);
-            //console.log('imgurl:', imageUrl);
-        } else {
-            console.error("Failed to fetch signature image, status:", response.status);
+       setSignLoading(true); // Start loading before fetching the image
+        setSignImageUrl(""); // Reset the signature image URL before fetching
+    
+        try {
+            const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+            console.log('Response status:', response.status); // Check response status
+    
+            if (response.status === 200) {
+                const imageUrl = URL.createObjectURL(await response.blob());
+                setSignImageUrl(imageUrl); // Set the new signature image URL
+            } else {
+                console.error("Failed to fetch signature image, status:", response.status);
+                setSignImageUrl(""); // Reset if there's an error
+            }
+        } catch (error) {
+            console.error("Error fetching signature image:", error);
+            setSignImageUrl(""); // Reset if there's an error
+        } finally {
+            setSignLoading(false); // Stop loading after the fetch attempt
         }
     
-        console.log("tripid from overdrawer:", tripid);
+        console.log("Trip ID from overdrawer:", tripid);
     };
-
+    
+// old code byme
     // show map function 
+
+    // const showMap = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //     const response =  await fetch(`${apiUrl}/getmapimages/${tripid}`);
+    //     console.log('Response status:', response.status); // Check response status
+    //     if (response.status === 200) {
+    //         const MapimageUrl = URL.createObjectURL(await response.blob());
+    //         setMapImageUrl(MapimageUrl);
+    //         //console.log('tripid:', tripid);
+    //        // console.log('mapimgurl:', MapimageUrl);
+    //     } else {
+    //         console.error("Failed to fetchMap image, status:", response.status);
+    //     }
+    
+    //     console.log("tripid from overdrawer:", tripid);
+    // };
 
     const showMap = async (row) => {
         const tripid = row.tripid || selectedRow.tripid;
+          
         if (!tripid) {
             setWarning(true);
             setWarning("Enter The Tripid");
             return;
         }
+        setMapLoading(true);
+        // setLoading(true); // Start loading before fetching the image
+        setMapImageUrl(""); // Reset the map image URL before fetching
     
-        const response =  await fetch(`${apiUrl}/getmapimages/${tripid}`);
-        console.log('Response status:', response.status); // Check response status
-        if (response.status === 200) {
-            const MapimageUrl = URL.createObjectURL(await response.blob());
-            setMapImageUrl(MapimageUrl);
-            //console.log('tripid:', tripid);
-           // console.log('mapimgurl:', MapimageUrl);
-        } else {
-            console.error("Failed to fetchMap image, status:", response.status);
+        try {
+            const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+            console.log('Response status:', response.status); // Check response status
+    
+            if (response.status === 200) {
+                const MapimageUrl = URL.createObjectURL(await response.blob());
+                setMapImageUrl(MapimageUrl);
+            } else {
+                console.error("Failed to fetch map image, status:", response.status);
+                setMapImageUrl(""); // Reset if there's an error
+            }
+        } catch (error) {
+            console.error("Error fetching map image:", error);
+            setMapImageUrl(""); // Reset if there's an error
+        } finally {
+            setMapLoading(false); // Stop loading after the fetch attempt
         }
     
-        console.log("tripid from overdrawer:", tripid);
+        console.log("Trip ID from overdrawer:", tripid);
     };
+    
 
     // const showImageDetails = async (row) =>{
     //     const tripid = row.tripid || selectedRow.tripid;
@@ -692,6 +775,7 @@ const useDispatched = () => {
     const handleShowImage = async (row) => {
         const tripid = row.tripid || selectedRow.tripid;
         const bookingno = row.bookingno || selectedRow.bookingno;
+       // setLoading(true); // Start loading
     
         // Early return if tripid is not present
         if (!tripid) {
@@ -705,7 +789,10 @@ const useDispatched = () => {
         try {
             const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
             const data = response.data;
-    
+
+            if(data && data.length > 0){
+                setLoading(false); // Stop loading
+            }
             console.log('API response:', data); // Log the entire response
     
             let tripResults = [];
@@ -769,6 +856,7 @@ const useDispatched = () => {
             return
 
         }
+        setMapLoading(true)
        
        //setPopupOpen(true);
         console.log(row,'row data ')
@@ -784,6 +872,7 @@ const useDispatched = () => {
        // handleShowCards(row);   // Call handleShowCards
         showSignature(row) // call signature 
         showMap(row) // call map
+        
         if (!showCards) {
             setShowCards(true);
         }

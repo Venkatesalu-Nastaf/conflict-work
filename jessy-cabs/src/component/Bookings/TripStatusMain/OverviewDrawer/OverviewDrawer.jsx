@@ -522,56 +522,33 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 >
                     {/* Show loading spinner if loading is true */}
                     {loading && (
+                        // <Box
+                        //     sx={{
+                        //         position: 'absolute', // Position the loading spinner absolutely
+                        //         top: '50%',
+                        //         left: '50%',
+                        //         transform: 'translate(-50%, -50%)', // Center the spinner
+                        //         zIndex: 1, // Ensure it appears above the DataGrid
+                        //         width: '100%', // Make it full width of the parent
+                        //         height: '70%', // Make it full height of the parent
+                        //     }}
+                        // >
+                        //     <CircularProgress />
                         <Box
-                            sx={{
-                                position: 'absolute', // Position the loading spinner absolutely
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)', // Center the spinner
-                                zIndex: 1, // Ensure it appears above the DataGrid
-                                width: '100%', // Make it full width of the parent
-                                height: '70%', // Make it full height of the parent
-                            }}
-                        >
-                            {/* <CircularProgress /> */}
-                            {/* <Skeleton 
-                             sx={{ bgcolor: 'grey.500', width: '100%', height: '100%' }} 
-                             variant="rectangular"/> */}
-                             <Skeleton 
-                variant="rectangular" 
-                animation="wave" 
-                width="100%" 
-                height="10%" 
-                sx={{ bgcolor: '#b0bec5', opacity: 0.7 }} // Light gray with some transparency
-              />
-              <Skeleton 
-                variant="rectangular" 
-                animation="wave" 
-                width="100%" 
-                height="20%" 
-                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
-              />
-              <Skeleton 
-                variant="rectangular" 
-                animation="wave" 
-                width="100%" 
-                height="20%" 
-                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
-              />
-               <Skeleton 
-                variant="rectangular" 
-                animation="wave" 
-                width="100%" 
-                height="20%" 
-                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
-              />
-               <Skeleton 
-                variant="rectangular" 
-                animation="wave" 
-                width="100%" 
-                height="20%" 
-                sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }} 
-              />
+                        sx={{
+                          position: 'absolute', // Position the loading spinner absolutely
+                          top: '50%', // Adjust this value based on your DataGrid header height
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)', // Center the spinner horizontally
+                          zIndex: 1, // Ensure it appears above the DataGrid
+                          width: '100%', // Make it full width of the parent
+                          height: '70%', // Make it full height of the parent
+                          display: 'flex', // Use flexbox for centering
+                          justifyContent: 'center', // Center horizontally
+                          alignItems: 'center', // Center vertically
+                        }}
+                      >
+                        <CircularProgress />
                             
                         </Box>
                     )}

@@ -275,6 +275,7 @@ const useDispatched = () => {
       setErrorMessage("ENTER THE STATUS");
       return;
     }
+    setRows([]); // Clear rows to show empty grid
     try {
       const response = await axios.get(
         `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
@@ -338,6 +339,7 @@ const useDispatched = () => {
   const handleShowAll = async () => {
     setLoading(true)
     setColumnShowall(false)
+    setRows([]); // Clear rows to show empty grid
     try {
       const response = await axios.get(
         `${apiUrl}/tripsheet-showall`

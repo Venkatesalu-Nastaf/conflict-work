@@ -77,6 +77,7 @@ const useTransferdataentry = () => {
     // const [formData, setFormData] = useState({})
     const { billingPage, setBillingPage } = PdfData()
     const [selectTripid,setSelectTripid] = useState([])
+    const [loading,setLoading] = useState(false)
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -1054,11 +1055,14 @@ const useTransferdataentry = () => {
 
     //     };
 
+
+    //working code
     const handleShow = async () => {
+        setLoading(true); // Stop loading
         const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
-
+    
         if (servicestationValue !== "" && servicestationValue !== "All") {
-
+            
             try {
 
                 const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
@@ -1087,6 +1091,7 @@ const useTransferdataentry = () => {
                 });
 
                 const data = response.data;
+               
                 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -1096,6 +1101,7 @@ const useTransferdataentry = () => {
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage("successfully listed");
+                    setLoading(false); // Stop loading
                     
                 } else {
                     setRows([]);
@@ -1107,11 +1113,13 @@ const useTransferdataentry = () => {
                 setRows([]);
                 setError(true);
                 // setErrorMessage("Check your Network Connection");
+            }finally{
+                setLoading(false); // Stop loading
             }
         }
         else if (servicestationValue === "All" || servicestationValue === "") {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-                   
+            setLoading(true); // Stop loading
             try {
                 // Ensure that date values are correctly formatted
                 const fromDateValue = dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).isValid()
@@ -1180,10 +1188,98 @@ const useTransferdataentry = () => {
                 setRows([]);
                 setError(true);
                 // setErrorMessage("Check your Network Connection");
+            }finally{
+                setLoading(false); // Stop loading
             }
         }
 
     };
+
+    // const handleShow = async () => {
+    //     const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+    //     setLoading(true); // Start loading
+    
+    //     try {
+    //         if (servicestationValue !== "" && servicestationValue !== "All") {
+    //             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+    //             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate) || dayjs(fromDate).format('YYYY-MM-DD');
+    //             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate) || dayjs(toDate).format('YYYY-MM-DD');
+    
+    //             const enddate = dayjs(toDateValue).format('YYYY-MM-DD');
+    
+    //             const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
+    //                 params: {
+    //                     customer: customerValue,
+    //                     fromDate: fromDateValue,
+    //                     toDate: enddate,
+    //                     servicestation: servicestationValue,
+    //                 },
+    //             });
+    
+    //             const data = response.data;
+    //             if (data && data.length > 0) {
+    //                 const rowsWithUniqueId = data.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setRows(rowsWithUniqueId);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed");
+    //             } else {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("no data found");
+    //             }
+    //         } else if (servicestationValue === "All" || servicestationValue === "") {
+    //             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+    
+    //             const fromDateValue = dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).isValid()
+    //                 ? dayjs(selectedCustomerDatas?.fromdate ? selectedCustomerDatas.fromdate : fromDate).format('YYYY-MM-DD')
+    //                 : '';
+    
+    //             const toDateValue = dayjs(selectedCustomerDatas?.todate ? selectedCustomerDatas.todate : toDate).isValid()
+    //                 ? dayjs(selectedCustomerDatas?.todate ? selectedCustomerDatas.todate : toDate).format('YYYY-MM-DD')
+    //                 : '';
+    
+    //             const response = await axios.get(`${apiUrl}/All-Transfer-Billing`, {
+    //                 params: {
+    //                     customer: customerValue,
+    //                     fromDate: fromDateValue,
+    //                     toDate: toDateValue,
+    //                 },
+    //             });
+    
+    //             const data = response.data;
+    //             const filteredData = data.filter(item => item.totalcalcAmount === 0 || item.totalcalcAmount === null);
+    //             const mappedData = filteredData.map(item => ({
+    //                 id: item.id,
+    //                 Tripid: item.tripid,
+    //                 Booking: item.bookingno,
+    //                 Status: item.status,
+    //                 totalcalcAmount: item.totalcalcAmount,
+    //             }));
+    
+    //             if (mappedData.length > 0) {
+    //                 setRows(mappedData);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed");
+    //             } else {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("no data found");
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.log('Error:', error.message);
+    //         console.log('Error Details:', error);
+    //         setRows([]);
+    //         setError(true);
+    //         // setErrorMessage("Check your Network Connection");
+    //     } finally {
+    //         setLoading(false); // Ensure loading is stopped in finally block
+    //     }
+    // };
+    
 
 
     // const handleAddGroup = async () => {
@@ -1760,7 +1856,9 @@ const handleAddGroup = async () => {
         setGroupId,
         handleAddGroup,
         handleKeyDown,
-        handleRemove
+        handleRemove,
+        loading,
+        setLoading
     };
 };
 

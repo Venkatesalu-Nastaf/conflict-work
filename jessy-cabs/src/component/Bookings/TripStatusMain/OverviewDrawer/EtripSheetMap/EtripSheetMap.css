@@ -35,3 +35,13 @@
     align-items: center;     /* Center vertically */
     height: 300px;           /* Set to your desired height */
   }
+  .no-map-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 300px;           /* Adjust based on your card height */
+    color: red;              /* Set text color to red */
+    font-weight: bold;       /* Make the text bold */
+    font-size: 20px;         /* Increase font size  */
+  }
+  

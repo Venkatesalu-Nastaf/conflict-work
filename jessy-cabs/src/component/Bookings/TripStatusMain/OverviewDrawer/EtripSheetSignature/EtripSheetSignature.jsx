@@ -23,6 +23,7 @@ const EtripSheetSignature = ({signImageUrl}) => {
   const [loading, setLoading] = useState(true); // State for loading
   useEffect(() => {
     // Simulate a loading delay or fetch
+    setLoading(true)
     const timer = setTimeout(() => {
       // Only set loading to false after checking if mapImgUrl is valid
       if (signImageUrl && signImageUrl.length > 0) {
@@ -53,7 +54,7 @@ const EtripSheetSignature = ({signImageUrl}) => {
                       <img src={signImageUrl} alt="Map" className="map-image" />
                     ) : (
                       // <p>No images available</p>
-                      <div className="no-images-container">
+                      <div className="no-sign-container">
                       <p>No Signature Available !</p>
                       
 

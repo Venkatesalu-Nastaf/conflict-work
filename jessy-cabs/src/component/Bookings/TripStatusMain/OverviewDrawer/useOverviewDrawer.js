@@ -317,7 +317,7 @@ const useDispatched = () => {
             setErrorMessage("ENTER THE STATUS")
             return  
         }
-
+        setRows([]); // Clear rows to show empty grid
         try {
             const response = await axios.get(
                 `${apiUrl}/pending_tripsheet-show1?department=${department.map(dep => dep.label)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
@@ -453,17 +453,50 @@ const useDispatched = () => {
     //     console.log("tripid from overdrawer:", tripid);
     // };
 
+    // const showSignature = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     setSignLoading(true); 
+    //     if (!tripid) {
+    //         setWarning(true);
+    //         setWarning("Enter The Tripid");
+    //         return;
+    //     }
+    
+    //   // Start loading before fetching the image
+    //     setSignImageUrl(""); // Reset the signature image URL before fetching
+    
+    //     try {
+    //         const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+    //         console.log('Response status:', response.status); // Check response status
+    
+    //         if (response.status === 200) {
+    //             const imageUrl = URL.createObjectURL(await response.blob());
+    //             setSignImageUrl(imageUrl); // Set the new signature image URL
+    //         } else {
+    //             console.error("Failed to fetch signature image, status:", response.status);
+    //             setSignImageUrl(""); // Reset if there's an error
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching signature image:", error);
+    //         setSignImageUrl(""); // Reset if there's an error
+    //     } finally {
+    //         setSignLoading(false); // Stop loading after the fetch attempt
+    //     }
+    
+    //     console.log("Trip ID from overdrawer:", tripid);
+    // };
     const showSignature = async (row) => {
         const tripid = row.tripid || selectedRow.tripid;
     
+        // Reset the signature image URL before fetching
+        setSignImageUrl(""); 
+        setSignLoading(true); 
+    
         if (!tripid) {
-            setWarning(true);
             setWarning("Enter The Tripid");
+            setSignLoading(false); // Stop loading if there's no trip ID
             return;
         }
-    
-       setSignLoading(true); // Start loading before fetching the image
-        setSignImageUrl(""); // Reset the signature image URL before fetching
     
         try {
             const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
@@ -474,17 +507,18 @@ const useDispatched = () => {
                 setSignImageUrl(imageUrl); // Set the new signature image URL
             } else {
                 console.error("Failed to fetch signature image, status:", response.status);
-                setSignImageUrl(""); // Reset if there's an error
+                setErrorMessage("No Signature found")
             }
         } catch (error) {
             console.error("Error fetching signature image:", error);
-            setSignImageUrl(""); // Reset if there's an error
+            
         } finally {
             setSignLoading(false); // Stop loading after the fetch attempt
         }
     
         console.log("Trip ID from overdrawer:", tripid);
     };
+    
     
 // old code byme
     // show map function 
@@ -533,78 +567,61 @@ const useDispatched = () => {
             } else {
                 console.error("Failed to fetch map image, status:", response.status);
                 setMapImageUrl(""); // Reset if there's an error
+                setErrorMessage("No Map found")
             }
         } catch (error) {
             console.error("Error fetching map image:", error);
             setMapImageUrl(""); // Reset if there's an error
+            
         } finally {
             setMapLoading(false); // Stop loading after the fetch attempt
         }
     
         console.log("Trip ID from overdrawer:", tripid);
     };
-    
-
-    // const showImageDetails = async (row) =>{
+    // const showMap = async (row) => {
     //     const tripid = row.tripid || selectedRow.tripid;
-    //     if (!tripid) {
-    //         setWarning(true);
-    //         setWarning("Enter The Tripid");
-    //         return;
-    //     }
-    //     const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`)
-    //     console.log(response,"responsssssse")
-
-    //     setImageDetails(response.data);
-
-    // }
-    // const showImageDetails = async (row) => {
-    //     const tripid = row.tripid || selectedRow.tripid;
-    //     if (!tripid) {
-    //         setWarning(true);
-    //         setWarning("Enter The Tripid");
-    //         return;
-    //     }
-    //     try {
-    //         const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`);
-    //         console.log(response, "response");
-    //         setImageDetails(response.data); // Assuming response.data is an array of images
-    //         console.log(response.data,'response data')
-    //         console.log(tripid,'response id')
-
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error);
-    //         setWarning("Failed to fetch data");
-    //     }
-    // };
-
-    // const showImageDetails = async (row) => {
-    //     const tripid = row.tripid || selectedRow.tripid; 
     
     //     if (!tripid) {
-    //         setWarning(true);
     //         setWarning("Enter The Tripid");
     //         return;
     //     }
+    
+    //     setMapLoading(true);
+    //     setMapImageUrl(""); // Reset the map image URL before fetching
     
     //     try {
-    //         const response = await axios.get(`${apiUrl}/signaturetimedatadetails/${tripid}`);
-    //         const data = response.data; // Assuming this is your images data
-    //         console.log(response, "response");
-    //         console.log(data, "response data");
-    //         console.log(tripid, "response id");
+    //         const cachedImage = localStorage.getItem(`mapImage_${tripid}`);
+    //         if (cachedImage) {
+    //             setMapImageUrl(cachedImage); // Use cached image if available
+    //             setMapLoading(false);
+    //             return; // Exit if using cached image
+    //         }
     
-    //         const rowsWithUniqueId = data.map((image, index) => ({
-    //             ...image,
-    //             id5: index + 1,
-    //         }));
-    //         setImageDetails(rowsWithUniqueId); // Set the processed data
+    //         const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+    //         console.log('Response status:', response.status); // Check response status
+    
+    //         if (response.status === 200) {
+    //             const mapImageUrl = URL.createObjectURL(await response.blob());
+    //             setMapImageUrl(mapImageUrl);
+    
+    //             // Cache the image for future use
+    //             localStorage.setItem(`mapImage_${tripid}`, mapImageUrl);
+    //         } else {
+    //             console.error("Failed to fetch map image, status:", response.status);
+    //             setMapImageUrl(""); // Reset if there's an error
+    //         }
     //     } catch (error) {
-    //         console.error("Error fetching data:", error);
-    //         setWarning("Failed to fetch data");
-    //         setImageDetails([]); // Clear image details on error
+    //         console.error("Error fetching map image:", error);
+    //         setMapImageUrl(""); // Reset if there's an error
+    //     } finally {
+    //         setMapLoading(false); // Stop loading after the fetch attempt
     //     }
+    
+    //     console.log("Trip ID from overdrawer:", tripid);
     // };
+    
+
     
 
     // const showImageDetails = async (row) => {
@@ -772,67 +789,116 @@ const useDispatched = () => {
     //         setLoading(false);
     //     }
     // };
-    const handleShowImage = async (row) => {
-        const tripid = row.tripid || selectedRow.tripid;
-        const bookingno = row.bookingno || selectedRow.bookingno;
-       // setLoading(true); // Start loading
+    // const handleShowImage = async (row) => {
+    //     const tripid = row.tripid || selectedRow.tripid;
+    //     const bookingno = row.bookingno || selectedRow.bookingno;
+    //    // setLoading(true); // Start loading
     
-        // Early return if tripid is not present
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Please enter the tripid");
-            return; // Exit the function early
-        }
+    //     // Early return if tripid is not present
+    //     if (!tripid) {
+    //         setError(true);
+    //         setErrorMessage("Please enter the tripid");
+    //         return; // Exit the function early
+    //     }
     
-        //setLoading(true); // Start loading
+    //     //setLoading(true); // Start loading
     
-        try {
-            const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
-            const data = response.data;
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+    //         const data = response.data;
 
-            if(data && data.length > 0){
-                setLoading(false); // Stop loading
-            }
-            console.log('API response:', data); // Log the entire response
+    //         if(data && data.length > 0){
+    //             setLoading(false); // Stop loading
+    //         }
+    //         console.log('API response:', data); // Log the entire response
     
-            let tripResults = [];
-            let bookingResults = [];
+    //         let tripResults = [];
+    //         let bookingResults = [];
     
-            data?.forEach((item) => {
-                if (item.type === "tripResults") {
-                    tripResults = item.data || []; // Ensure it's an array
-                } else if (item.type === "bookingResults") {
-                    bookingResults = item.data || []; // Ensure it's an array
-                }
-            });
+    //         data?.forEach((item) => {
+    //             if (item.type === "tripResults") {
+    //                 tripResults = item.data || []; // Ensure it's an array
+    //             } else if (item.type === "bookingResults") {
+    //                 bookingResults = item.data || []; // Ensure it's an array
+    //             }
+    //         });
     
-            const bothData = [...tripResults, ...bookingResults];
+    //         const bothData = [...tripResults, ...bookingResults];
     
-            console.log('bothData:', bothData); // Log the combined data
+    //         console.log('bothData:', bothData); // Log the combined data
     
-            if (bothData.length > 0) {
-                const rowsWithUniqueId = bothData.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setImageDetails(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-                console.log('rowsWithUniqueId:', rowsWithUniqueId);
-            } else {
-                setImageDetails([]); // Ensure image details is cleared
-                setError(true);
-                setErrorMessage("No data found");
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+    //         if (bothData.length > 0) {
+    //             const rowsWithUniqueId = bothData.map((row, index) => ({
+    //                 ...row,
+    //                 id: index + 1,
+    //             }));
+    //             setImageDetails(rowsWithUniqueId);
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully listed");
+    //             console.log('rowsWithUniqueId:', rowsWithUniqueId);
+    //         } else {
+    //             setImageDetails([]); // Ensure image details is cleared
+    //             setError(true);
+    //            // setErrorMessage("No data found");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         setError(true);
+    //         setErrorMessage("An error occurred while fetching data.");
+    //     } finally {
+    //         setLoading(false); // Stop loading
+    //     }
+    // };
+    const handleShowImage = async (row) => {
+    const tripid = row.tripid || selectedRow.tripid;
+    const bookingno = row.bookingno || selectedRow.bookingno;
+
+    // Early return if tripid is not present
+    if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+        return; // Exit the function early
+    }
+
+    setLoading(true); // Start loading
+
+    try {
+        const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+        const data = response.data;
+
+        console.log('API response:', data); // Log the entire response
+
+        // Ensure data is an array and separate tripResults and bookingResults
+        const tripResults = data.filter(item => item.type === "tripResults").flatMap(item => item.data || []);
+        const bookingResults = data.filter(item => item.type === "bookingResults").flatMap(item => item.data || []);
+
+        const bothData = [...tripResults, ...bookingResults];
+
+        console.log('Combined Data:', bothData); // Log the combined data
+
+        if (bothData.length > 0) {
+            const rowsWithUniqueId = bothData.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setImageDetails(rowsWithUniqueId);
+            setSuccess(true);
+            setSuccessMessage("Successfully listed");
+            console.log('Rows with Unique ID:', rowsWithUniqueId);
+        } else {
+            setImageDetails([]); // Ensure image details are cleared
             setError(true);
-            setErrorMessage("An error occurred while fetching data.");
-        } finally {
-            setLoading(false); // Stop loading
+            setErrorMessage("No Image found"); // Provide user feedback
         }
-    };
-    
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(true);
+        setErrorMessage("An error occurred while fetching data.");
+    } finally {
+        setLoading(false); // Stop loading
+    }
+};
+
     
     
      
@@ -868,18 +934,20 @@ const useDispatched = () => {
     //   };
      // Function to call aboove functions 
      const handleRowClick = (row) => {
+        setMapLoading(true)
         handleButtonClick(row); // Call handleButtonClick
        // handleShowCards(row);   // Call handleShowCards
         showSignature(row) // call signature 
         showMap(row) // call map
-        
+        handleShowImage(row)
         if (!showCards) {
             setShowCards(true);
         }
         setSelectedRow(row);
         //showImageDetails(row)
         //handleRefresh(row)
-        handleShowImage(row)
+        
+       setLoading(false);
       };
 // show button
       const handleShowButtonClick = () => {

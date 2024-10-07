@@ -39,6 +39,7 @@ const EtripSheetMap = ({ mapImgUrl }) => {
 
   useEffect(() => {
     // Simulate a loading delay or fetch
+   setLoading(true);
     const timer = setTimeout(() => {
       // Only set loading to false after checking if mapImgUrl is valid
       if (mapImgUrl && mapImgUrl.length > 0) {
@@ -70,7 +71,7 @@ const EtripSheetMap = ({ mapImgUrl }) => {
                       <img src={mapImgUrl} alt="Map" className="map-image" />
                     ) : (
                       // <p>No images available</p>
-                      <div className="no-images-container">
+                      <div className="no-map-container">
                       <p>No Trip Map Available !</p>
                       
 

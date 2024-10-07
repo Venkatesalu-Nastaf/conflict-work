@@ -341,6 +341,7 @@ const EtripSheetImages = ({ imageDetails }) => {
   // }, [imageDetails]);
   useEffect(() => {
     // Simulate a loading delay or fetch
+    setLoading(true)
     const timer = setTimeout(() => {
       // Only set loading to false after checking if mapImgUrl is valid
       if (imageDetails && imageDetails.length > 0) {

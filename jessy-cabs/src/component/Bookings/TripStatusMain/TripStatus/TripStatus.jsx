@@ -106,6 +106,13 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     }
   })
 
+  const CustomNoRowsOverlay = () => (
+    <div style={{ textAlign: 'center', padding: '20px' }}>
+        {/* Optionally, you can add your own message or styles */}
+        <p></p>
+    </div>
+);
+
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
       <form action="">
@@ -450,6 +457,9 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                 onRowClick={(event) => handleButtonClick(event.row)}
                 pageSize={5}
                // loading={loading} // This will show the built-in loading overlay
+               components={{
+                NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
+            }}
             />
             {loading && (
                 <Box

@@ -57,8 +57,6 @@ const BankAccount = () => {
     handlePopupClose,
     // handleDeleteBank,
     handlesuredelete
-
-
     // ... (other state variables and functions)
   } = useBankaccount();
 

@@ -77,7 +77,6 @@ const MonthlyWise = () => {
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div>
-
                         <div className="input">
                             <div className="icone">
                                 <GiMatterStates color="action" />

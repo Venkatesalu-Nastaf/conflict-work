@@ -16,7 +16,6 @@ const columns = [
   { field: "Amount", headerName: "Total Amount", width: 130 },
   { field: "Status", headerName: "Status", width: 130 },
   { field: "guestname", headerName: "Guestname", width: 130 },
-
 ];
 
 const usePaymentdetails = () => {
@@ -33,7 +32,6 @@ const usePaymentdetails = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
-
   const [infoMessage] = useState({});
 
 
@@ -99,10 +97,57 @@ const usePaymentdetails = () => {
   }, [error, success, warning, info]);
 
   //------------------------------------------------
+  const handleKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const Billno = event.target.value;
+      try {
+        const response = await axios.get(`${apiUrl}/getBillnoFromIndividualBill`, {
+          params: {
+          billno: Billno
+          }
+        });
 
-  const handleInputChange = (event) => {
-    if (event.target.name === "customer") {
-      setCustomer(event.target.value);
+        if (response.data && response.data.length > 0) {
+          const transferTripId = response.data[0].Trip_id;
+          const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
+          const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
+          setFromDate(fromDate);
+          setToDate(toDate);
+          setCustomer(response.data[0].customer);
+          // Second API call to get tripsheet details using transferTripId
+          const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
+            params: {
+              transferTripId: transferTripId
+            }
+          });
+          const data = tripsheetResponse.data;
+
+          // Filter out rows where tripid is 0
+          if (data.length > 0) {
+            const filteredData = data.filter(row => row.tripid !== 0);
+            const rowsWithUniqueId = filteredData.map((row, index) => ({
+              ...row,
+              id: index + 1,
+            }));
+
+            setRows(rowsWithUniqueId);
+            setSuccess(true);
+            setSuccessMessage("Successfully Listed");
+          }
+        } else {
+          console.log('No Trip_id found for the given GroupTripId');
+        }
+      } catch (error) {
+        console.log(error, 'error');
+      }
+    }
+  };
+  
+  const handleInputChange = (event, value, name) => {
+    if (name === "customer") {
+      const selectedlabel = value ? value.label : ""  
+      setCustomer(selectedlabel);
     } else if (event.target.name === "billingno") {
       setBillingNo(event.target.value);
     }
@@ -111,12 +156,10 @@ const usePaymentdetails = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `${apiUrl}/payment-details?billingno=${billingno}&customer=${encodeURIComponent(
-          customer
-        )}&fromDate=${fromDate.format("YYYY-MM-DD")}&toDate=${toDate.format(
-          "YYYY-MM-DD"
-        )}`
+        `${apiUrl}/payment-details?billingno=${billingno}
+        &fromDate=${fromDate.format("YYYY-MM-DD")}&toDate=${toDate.format("YYYY-MM-DD")}&organizationNames=${customer}`
       );
+
       const data = response.data;
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
@@ -131,90 +174,25 @@ const usePaymentdetails = () => {
         setError(true);
         setErrorMessage("no data found");
       }
-    } catch {
+    } catch (error) {
+      console.error('Error fetching data:', error);
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, [billingno, customer, fromDate, toDate, apiUrl]);
 
-  // useEffect(() => {
-  //   Organization()
-  //     .then((data) => {
-  //       if (data) {
-  //         setBankOptions(data);
-  //       } else {
-  //         setError(true);
-  //         setErrorMessage("Failed to fetch organization options.");
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setError(true);
-  //       setErrorMessage("Failed to fetch organization options.");
-  //     });
-  // }, []);
+  const handleButtonClickTripsheet = async (rowdata) => {
 
-  //calculate total amount in column
+    const selectedRow1 = rowdata;
+    const dispatchcheck = "true";
+    localStorage.setItem("searchdataurl", 0)
 
 
+    const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id || ""}&Billingdate=${selectedRow1.Bill_Date || ""}&Invoicedata=${selectedRow1.Invoice_No || ""}`
 
-  // const dataget = async (bookingno) => {
-  //   const bookdatano = bookingno
-  //   console.log(bookdatano)
-  //   const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
-  //   console.log(responsedata.data, "valureswpol")
-  //   return responsedata.data[0]
-  // }
-//   const handleButtonClickTripsheet = async(rowdata) => {
-
-// const selectedRow1 = rowdata;
-//     const dispatchcheck = "true";
-//     const selectedRow = await dataget(selectedRow1.Trip_id)
-//     const customerdata = selectedRow1.Customer ? encodeURIComponent(selectedRow1.Customer.toString()) : '';
-//     const customerpacakage = selectedRow.calcPackage ? encodeURIComponent(selectedRow.calcPackage.toString()) : '';
-//     console.log(customerdata,"data")
-
-//     const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow.tripid || ""}&billingno=${selectedRow.billingno || ""}&Billingdate=${selectedRow1.Bill_Date || ""
-//       }&totalkm1=${selectedRow.totalkm1 || ""}&totaltime=${selectedRow.totaltime || 0
-//       }&department=${selectedRow.department || 0
-//       }&calcPackage=${customerpacakage}&customer=${customerdata}&supplier=${selectedRow.supplier || ""
-//       }&startdate=${selectedRow.startdate || ""}&totaldays=${selectedRow.totaldays || 0
-//       }&guestname=${selectedRow.guestname || ""}&rateType=${selectedRow.rateType || ""
-//       }&vehRegNo=${selectedRow.vehRegNo || ""}&vehType=${selectedRow.vehType || ""
-//       }&duty=${selectedRow.duty || ""}&MinCharges=${selectedRow.MinCharges || ""
-//       }&minchargeamount=${selectedRow.minchargeamount || ""}&ChargesForExtra=${selectedRow.ChargesForExtra || ""
-//       }&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ""
-//       }&cfeamount=${selectedRow.cfeamount || ""}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ""
-//       }&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ""
-//       }&cfehamount=${selectedRow.cfehamount || ""}&NightHalt=${selectedRow.NightHalt || ""
-//       }&NightHaltamount=${selectedRow.NightHaltamount || ""}&nhamount=${selectedRow.nhamount || ""
-//       }&driverbata=${selectedRow.driverbata || ""}&driverbataamount=${selectedRow.driverbataamount || ""
-//       }&dbamount=${selectedRow.dbamount || ""}&OtherCharges=${selectedRow.OtherCharges || ""
-//       }&OtherChargesamount=${selectedRow.OtherChargesamount || ""
-//       }&permitothertax=${selectedRow.permitothertax || ""}&parkingtollcharges=${selectedRow.parkingtollcharges || ""
-//       }&MinKilometers=${selectedRow.MinKilometers || ""}&MinHours=${selectedRow.MinHours || ""
-//       }&GrossAmount=${selectedRow.GrossAmount || ""}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ""
-//       }&DiscountAmount=${selectedRow.DiscountAmount || ""}&DiscountAmount2=${selectedRow.DiscountAmount2 || ""
-//       }&AdvanceReceived=${selectedRow.AdvanceReceived || ""}&RoundedOff=${selectedRow.RoundedOff || ""
-//       }&BalanceReceivable=${selectedRow.BalanceReceivable || ""}&NetAmount=${selectedRow.NetAmount || ""
-//       }&Totalamount=${selectedRow.Totalamount || ""}&paidamount=${selectedRow.paidamount || ""
-//       }&pendingamount=${selectedRow.pendingamount || ""}&BankAccount=${selectedRow.BankAccount || ""
-//       }`;
-//     window.location.href = billingPageUrl;
-//   };
-
-
-const handleButtonClickTripsheet = async(rowdata) => {
-
-  const selectedRow1 = rowdata;
-      const dispatchcheck = "true";
-      localStorage.setItem("searchdataurl",0)
-      
-  
-      const billingPageUrl = `/home/billing/billing?dispatchcheck=${dispatchcheck}&tripid=${selectedRow1.Trip_id|| ""}&Billingdate=${selectedRow1.Bill_Date || ""}&Invoicedata=${selectedRow1.Invoice_No || ""}`
-       
-      window.location.href = billingPageUrl;
-    };
+    window.location.href = billingPageUrl;
+  };
   const reversedRows = [...rows].reverse();
 
   return {
@@ -223,6 +201,7 @@ const handleButtonClickTripsheet = async(rowdata) => {
     info,
     warning,
     successMessage,
+    handleKeyDown,
     errorMessage,
     warningMessage,
     infoMessage,
@@ -238,7 +217,7 @@ const handleButtonClickTripsheet = async(rowdata) => {
     handleShow,
     handleExcelDownload,
     handlePdfDownload,
- 
+
     reversedRows,
     handleButtonClickTripsheet,
     columns,

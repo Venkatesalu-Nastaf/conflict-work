@@ -46,7 +46,7 @@ const useMonthlyWise = () => {
         setCustpmerType(selectedOption)
     };
 
-
+    
     const handleShow = async () => {
 
         if (!customertypedata) {

@@ -42,6 +42,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import {  CircularProgress } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -139,6 +141,13 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
       setAllCustomer(customer)
     }
   })
+
+  const CustomNoRowsOverlay = () => (
+    <div style={{ textAlign: 'center', padding: '20px' }}>
+        {/* Optionally, you can add your own message or styles */}
+        <p></p>
+    </div>
+);
 
   return (
     <>
@@ -513,16 +522,34 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 >
                     {/* Show loading spinner if loading is true */}
                     {loading && (
+                        // <Box
+                        //     sx={{
+                        //         position: 'absolute', // Position the loading spinner absolutely
+                        //         top: '50%',
+                        //         left: '50%',
+                        //         transform: 'translate(-50%, -50%)', // Center the spinner
+                        //         zIndex: 1, // Ensure it appears above the DataGrid
+                        //         width: '100%', // Make it full width of the parent
+                        //         height: '70%', // Make it full height of the parent
+                        //     }}
+                        // >
+                        //     <CircularProgress />
                         <Box
-                            sx={{
-                                position: 'absolute', // Position the loading spinner absolutely
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)', // Center the spinner
-                                zIndex: 1, // Ensure it appears above the DataGrid
-                            }}
-                        >
-                            <CircularProgress />
+                        sx={{
+                          position: 'absolute', // Position the loading spinner absolutely
+                          top: '50%', // Adjust this value based on your DataGrid header height
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)', // Center the spinner horizontally
+                          zIndex: 1, // Ensure it appears above the DataGrid
+                          width: '100%', // Make it full width of the parent
+                          height: '70%', // Make it full height of the parent
+                          display: 'flex', // Use flexbox for centering
+                          justifyContent: 'center', // Center horizontally
+                          alignItems: 'center', // Center vertically
+                        }}
+                      >
+                        <CircularProgress />
+                            
                         </Box>
                     )}
                     <DataGrid
@@ -530,6 +557,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                         columns={columnshowall ? columns : filteredColumns}
                         onRowClick={(event) => handleRowClick(event.row)}
                         pageSize={5}
+                        components={{
+                          NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
+                      }}
                     />
                 </Box>
             </div>

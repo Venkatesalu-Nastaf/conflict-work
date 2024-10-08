@@ -1,14 +1,42 @@
-.EtripSheetSignature-card{
+.EtripSheetSignature-card {
+    display: flex;
+    justify-content: center; /* Center the image */
+    align-items: center;     /* Center the image */
     width: 400px;
     height: 300px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
-    
+    overflow: hidden;        /* Hide overflow if needed */
 }
+
 .signature-image {
-    max-width: 100%; /* Ensure the image does not exceed the width of its container */
-    height: auto;    /* Maintain aspect ratio */
-    display: block;  /* Remove any inline spacing */
-    overflow: hidden; /* Hide overflow if needed */
+    max-width: 100%;        /* Ensure the image does not exceed the width of its container */
+    max-height: 100%;       /* Ensure the image does not exceed the height of its container */
+    width: auto;            /* Allow image to scale while maintaining aspect ratio */
+    height: auto;           /* Allow image to scale while maintaining aspect ratio */
+    display: block;         /* Remove any inline spacing */
+    object-fit: contain;    /* Maintain aspect ratio */
 }
+
+.loading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 300px;           /* Set to your desired height */
+}
+
+.sign-heading {
+    font-weight: bold;
+    font-size: 24px;
+}
+.no-sign-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 300px;           /* Adjust based on your card height */
+    color: red;              /* Set text color to red */
+    font-weight: bold;       /* Make the text bold */
+    font-size: 20px;         /* Increase font size  */
+  }
+  

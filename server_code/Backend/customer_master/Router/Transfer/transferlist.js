@@ -514,16 +514,13 @@ router.get('/getparticulartransfer_list', (req, res) => {
 router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
   const { transferTripId } = req.query;
 
-
   if (!transferTripId) {
     return res.status(400).json({ error: 'Transfer Trip ID is required' });
   }
-
   // Split the string into an array if it's a comma-separated string
   const tripIdArray = transferTripId.includes(',')
     ? transferTripId.split(',')  // Split the string by commas
     : [transferTripId];          // If it's already a single value, wrap it in an array
-
 
   const sqlquery = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
 

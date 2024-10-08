@@ -65,6 +65,8 @@ const useDispatched = () => {
   const [statusvalue, setStatusValue] = useState("");
   const [columnshowall, setColumnShowall] = useState(true)
 
+  const [loading, setLoading] = useState(false);
+
   //---------------------popup----------------------------
 
   const hidePopup = () => {
@@ -266,16 +268,22 @@ const useDispatched = () => {
 
   // new working code
   const handleShow = useCallback(async () => {
+
+    setLoading(true)
     if (!statusvalue) {
       setError(true);
       setErrorMessage("ENTER THE STATUS");
       return;
     }
+    setRows([]); // Clear rows to show empty grid
     try {
       const response = await axios.get(
         `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
       );
       const data = response.data;
+      if(data && data.length > 0){
+        setLoading(false); // Stop loading
+    }
   
       if (statusvalue !== "All") {
         if (data.length > 0) {
@@ -321,17 +329,26 @@ const useDispatched = () => {
       setRows([]);
       setError(true);
       setErrorMessage("Error retrieving data");
-    }
+    }finally {
+      setLoading(false); // Stop loading
+    
+   }
   }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
   
 
   const handleShowAll = async () => {
+    setLoading(true)
     setColumnShowall(false)
+    setRows([]); // Clear rows to show empty grid
     try {
       const response = await axios.get(
         `${apiUrl}/tripsheet-showall`
       );
       const data = response.data;
+      if(data && data.length > 0){
+        setLoading(false); // Stop loading
+    }
+
       if (data && data.tripsheet && data.booking) {
         // Process tripsheet data
         const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
@@ -361,7 +378,11 @@ const useDispatched = () => {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
-    }
+    }finally {
+      setLoading(false); // Stop loading
+    
+   
+}
   };
   const handleButtonClick = (row) => {
     if (row.status === "Cancelled") {
@@ -436,7 +457,7 @@ const useDispatched = () => {
     handleTripsheetClick,
     columns, handleBookingClick,
     filteredColumns,
-    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,
+    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading
   };
 };
 

@@ -35,6 +35,7 @@ const PaymentDetail = ({ organizationNames }) => {
     warningMessage,
     infoMessage,
     handleClick,
+    handleKeyDown,
     hidePopup,
     billingno,
     handleInputChange,
@@ -79,6 +80,7 @@ const PaymentDetail = ({ organizationNames }) => {
                     label="Billing No"
                     name="billingno"
                     value={billingno || ''}
+                    onKeyDown={handleKeyDown}
                     onChange={handleInputChange}
                     autoComplete='off'
                   />
@@ -89,15 +91,17 @@ const PaymentDetail = ({ organizationNames }) => {
                   </div>
                   <Autocomplete
                     fullWidth
-                    id="free-solo-Organization"
+                    id="organization"
                     freeSolo
                     size="small"
                     value={customer}
-                    options={organizationNames}
-                    onChange={handleInputChange}
-                    renderInput={(params) => {
+                    name="customer"
+                    options={organizationNames?.map((option) => ({ label: option }))}
+                    getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  
+                    onChange={(event,value) => handleInputChange(event,value,"customer")}
+                    renderInput={(params) =>{
                       return (
-                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                        <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
                       );
                     }}
                   />
@@ -134,9 +138,8 @@ const PaymentDetail = ({ organizationNames }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
                 <div className="input">
-                  <Button className='full-width' variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
+                  <Button className='full-width' variant="contained" disabled={!Billing_read} onClick={handleShow}>Search</Button>
                 </div>
               </div>
               {/* <div className="input-field payment-search-field">
@@ -194,7 +197,7 @@ const PaymentDetail = ({ organizationNames }) => {
               )}
             </PopupState>
           </div>
-         
+
         </div>
         <div className="table-bookingCopy-PaymentDetail">
           <div className='payment-table'>
@@ -202,24 +205,24 @@ const PaymentDetail = ({ organizationNames }) => {
               sx={{
                 height: 400, // Adjust this value to fit your needs
                 '& .MuiDataGrid-virtualScroller': {
-                    '&::-webkit-scrollbar': {
-                        width: '8px', // Adjust the scrollbar width here
-                        height: '8px', // Adjust the scrollbar width here
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: '#f1f1f1',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#457cdc',
-                        borderRadius: '20px',
-                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
 
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#3367d6',
-                    },
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
                 },
-            }}
+              }}
             >
               <DataGrid
                 rows={reversedRows}

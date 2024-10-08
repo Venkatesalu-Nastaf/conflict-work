@@ -24,6 +24,8 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import {  CircularProgress } from '@mui/material';
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
 
@@ -71,7 +73,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     setGroupId,
     handleAddGroup,
     handleKeyDown,
-    handleRemove
+    handleRemove,
+    loading,
+    setLoading
     // ... (other state variables and functions)
   } = useTransferdataentry();
 
@@ -305,7 +309,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
         </div>
         <div className="table-bookingCopy-TransferDataEntry">
           <div className='transfer-data-entry-table'>
-            <Box
+            {/* <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs
                 '& .MuiDataGrid-virtualScroller': {
@@ -328,6 +332,30 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                 },
               }}
             >
+              {loading && (
+    <Box
+      sx={{
+                        position: 'absolute', // Position the loading spinner absolutely
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)', // Center the spinner
+                                zIndex: 1, // Ensure it appears above the DataGrid
+                                width: '100%', // Make it full width of the parent
+                                height: '70%', // Make it full height of the parent
+      }}
+    >
+      {[...Array(5)].map((_, index) => ( // Adjust the number of skeletons based on expected rows
+        <Skeleton
+          key={index}
+          variant="rectangular"
+          animation="wave"
+          width="90%"
+          height="20%" // Adjust height based on desired visibility
+          sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: index === 0 ? 0 : '8px' }}
+        />
+      ))}
+    </Box>
+  )}
               <DataGrid
                 rows={rows}
                 columns={columns}
@@ -338,7 +366,62 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                 checkboxSelection
                 disableRowSelectionOnClick
               />
-            </Box>
+            </Box> */}
+            <Box
+  sx={{
+    height: 400, // Adjust this value to fit your needs
+    position: 'relative', // Necessary for absolute positioning of the loading indicator
+    '& .MuiDataGrid-virtualScroller': {
+      '&::-webkit-scrollbar': {
+        width: '8px',
+        height: '8px',
+      },
+      '&::-webkit-scrollbar-track': {
+        backgroundColor: '#f1f1f1',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#457cdc',
+        borderRadius: '20px',
+        minHeight: '60px',
+      },
+      '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: '#3367d6',
+      },
+    },
+  }}
+>
+  {loading && (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 56,
+        left: 0,
+        right: 0,
+        bottom: 0, // Cover the entire DataGrid area
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center', // Center vertically
+        alignItems: 'center', // Center horizontally
+        zIndex: 1,
+        bgcolor: 'rgba(255, 255, 255, 0.8)', // Optional: add a slight background to distinguish loading
+      }}
+    >
+     <CircularProgress />
+    </Box>
+  )}
+  <DataGrid
+    rows={rows}
+    columns={columns}
+    onRowSelectionModelChange={(newRowSelectionModel) => {
+      setRowSelectionModel(newRowSelectionModel);
+      handleRowSelection(newRowSelectionModel);
+    }}
+    checkboxSelection
+    disableRowSelectionOnClick
+    sx={{ height: '100%', width: '100%' }} // Ensure DataGrid takes up full box size
+  />
+</Box>
+
           </div>
           <div className='alert-popup-main'>
             {error &&

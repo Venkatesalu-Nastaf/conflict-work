@@ -500,6 +500,7 @@ const useTransferreport = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('loading')
       try {
         const tripid = rowSelectionModel
         const encoded = localStorage.getItem("selectedcustomerdata");

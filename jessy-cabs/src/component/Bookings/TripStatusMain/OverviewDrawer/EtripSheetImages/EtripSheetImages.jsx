@@ -332,10 +332,26 @@ const EtripSheetImages = ({ imageDetails }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(true); // State for loading
 
+  // useEffect(() => {
+  //   if (imageDetails.length > 0) {
+  //     setLoading(false); // Set loading to false once images are available
+  //   }else {
+  //     setLoading(false); // Set loading to false if no URL is provided
+  //   }
+  // }, [imageDetails]);
   useEffect(() => {
-    if (imageDetails.length > 0) {
-      setLoading(false); // Set loading to false once images are available
-    }
+    // Simulate a loading delay or fetch
+    setLoading(true)
+    const timer = setTimeout(() => {
+      // Only set loading to false after checking if mapImgUrl is valid
+      if (imageDetails && imageDetails.length > 0) {
+        setLoading(false); // Valid image URL
+      } else {
+        setLoading(false); // No valid image URL
+      }
+    }, 1000); // Simulate a delay, adjust as needed
+
+    return () => clearTimeout(timer); // Cleanup timeout on unmount
   }, [imageDetails]);
 
   const nextImage = () => {
@@ -394,9 +410,9 @@ const EtripSheetImages = ({ imageDetails }) => {
   return (
     <>
       <div>
-        <p>Images</p>
+        <p className="bold-text">Images</p>
         <div className='EtripSheetImages-card'>
-          <div className="image-container" onClick={openImageDialog}>
+          {/* <div className="image-container" onClick={openImageDialog}>
             {loading ? (
               <div display="flex" justifyContent="center" alignItems="center" height="400px">
                 <CircularProgress />
@@ -408,7 +424,26 @@ const EtripSheetImages = ({ imageDetails }) => {
                 <p>No images available</p>
               )
             )}
-          </div>
+          </div> */}
+                          <div className='image-container' onClick={openImageDialog}>
+                  {loading ? (
+                    <div className="loading-container">
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    imageDetails && imageDetails.length > 0 ? (
+                      renderContent(imageDetails[currentIndex])
+                    ) : (
+                      // <p>No images available</p>
+                      <div className="no-images-container">
+                      <p>No Images Available !</p>
+                      
+
+                    </div>
+                    )
+                  )}
+                </div>
+
         </div>
       </div>
 

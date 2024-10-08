@@ -377,7 +377,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
           address: customerDetail ? customerDetail.address1 : null,
         };
       });
-
+      
       return res.status(200).json(combinedResults)
     })
   })

@@ -1,13 +1,47 @@
-.EtripSheetMap-card{
+/* .EtripSheetMap-card{
     width: 400px;
     height: 300px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
-}
+} */
+.EtripSheetMap-card {
+    display: flex;
+    justify-content: center; /* Center the map image */
+    align-items: center;     /* Center the map image */
+    width: 400px;
+    height: 300px;           /* Set to your desired height */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden; 
+
+  }
 .map-image {
     max-width: 100%; /* Ensure the image does not exceed the width of its container */
     height: auto;    /* Maintain aspect ratio */
     display: block;  /* Remove any inline spacing */
     overflow: hidden; /* Hide overflow if needed */
+    object-fit: contain;
 }
+.map-heading{
+    
+    font-weight: bold;
+    font-size: 24px;
+}
+.loading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 300px;           /* Set to your desired height */
+  }
+  .no-map-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 300px;           /* Adjust based on your card height */
+    color: red;              /* Set text color to red */
+    font-weight: bold;       /* Make the text bold */
+    font-size: 20px;         /* Increase font size  */
+  }
+  

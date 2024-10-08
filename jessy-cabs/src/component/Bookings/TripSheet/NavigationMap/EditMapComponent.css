@@ -1,0 +1,24 @@
+.buttons-div{
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+margin-top: 20px;
+}
+.draw-route{
+    /* style={{background:'#ccc',color:"white"}} */
+    background-color: #034d8f;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+
+}
+
+.Capture-View{
+    /* style={{background:'#ccc',color:"white"}} */
+    background-color: #9e002f;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+}

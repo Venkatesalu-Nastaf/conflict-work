@@ -13,16 +13,16 @@ import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContex
 import { PermissionProvider } from "./component/context/permissionContext";
 // import { ReportProvider } from "./component/Registration/Report/Context/ReportContext";
 import { ReportProvider } from "./component/Billings/Report/Context/ReportContext";
-
+// import { EditMapProvider } from "./component/Bookings/TripSheet/NavigationMap/EditMapContext";
+import { EditMapProvider } from "./component/Bookings/TripSheet/NavigationMap/EditMapContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <BrowserRouter>
-
     <RefPdfDataProvider>
       <PdfDataProvider>
         <MailerTemplateDataProvider>
-
+          <EditMapProvider>
           <ReportProvider>
             <DataProvider2>
               <DataProvider>
@@ -36,11 +36,11 @@ root.render(
             </DataProvider2>
 
           </ReportProvider>
+          </EditMapProvider>
         </MailerTemplateDataProvider>
 
       </PdfDataProvider>
     </RefPdfDataProvider>
-
 
 
   </BrowserRouter>

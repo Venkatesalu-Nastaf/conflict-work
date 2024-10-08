@@ -78,6 +78,8 @@ const useTripsheet = () => {
     // const [EditMap, setEditMap] = useState(false)
     const [groupTripId, setGroupTripId] = useState()
     const [manualTripID, setManualTripID] = useState([])
+    const [editMap, setEditMap] = useState(false)
+    const [mapPopUp,setMapPopUp] = useState(false)
 
     //-------------------------calc-------------------
     let [calcPackage, setcalcPackage] = useState('')
@@ -4325,7 +4327,9 @@ const useTripsheet = () => {
     }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
 
     const handleEditMap = () => {
+        setMapPopUp(true)
         if (manualTripID.length > 0) {
+            // setEditMap(!EditMap);
             const editTrigger = "editMode"
             // Get the trip, time, and date details
             const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
@@ -4357,6 +4361,7 @@ const useTripsheet = () => {
             const wayLongitude = wayTrips?.map(li => li.Longitude)
 
 
+
             // Check if tripid is valid
             if (!tripid) {
                 setError(true);
@@ -4364,19 +4369,21 @@ const useTripsheet = () => {
             } else {
                 // Store the tripid in local storage
                 localStorage.setItem('selectedTripid', tripid);
+
                 // Serialize latitude and longitude arrays for the URL
                 const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
                 const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
                 const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
+
+
                 // Open new tab with serialized latitude and longitude arrays
-                const newTab = window.open(`/navigationmap?tripid=${tripid}&edit=${editTrigger}&starttime=${starttime}&endtime=${endtime}&startdate=${startdate}&closedate=${closedate}&latitude=${serializedLatitude}&longitude=${serializedLongitude}&row=${serializedRow}&startLatitude=${startLatitude}&startPlaceName=${startPlaceName}&endLatitude=${endLatitude}&startingTime=${startingTime}&startingDate=${startingDate}&startLongitude=${startLongitude}&endLongitude=${endLongitude}&endingDate=${endingDate}&endingTime=${endingTime}&endPlaceName=${endPlaceName}&wayLatitude=${wayLatitude}&wayLongitude=${wayLongitude}&wayDate=${wayDate}&wayTime=${wayTime}&wayPlaceName=${wayPlaceName}`, '_blank', 'noopener,noreferrer');
-                if (newTab) {
-                    newTab.focus();
-                }
+              
             }
         }
     };
 
+
+    const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
 
     useEffect(() => {
         const fetchData = async () => {
@@ -4392,8 +4399,7 @@ const useTripsheet = () => {
             }
         }
         fetchData()
-    }, [manualMarkTrigger])
-
+    }, [manualMarkTrigger,TripID])
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
@@ -4532,7 +4538,8 @@ const useTripsheet = () => {
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
-        handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId
+        handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId,mapPopUp,setMapPopUp,
+        manualTripID,setEditMap,editMap
 
     };
 };

@@ -261,7 +261,7 @@ function submitMapPopup() {
         const long = document.getElementById('lng')?.value || startLongitude || endLongitude || wayLongitude;
         // const latitude = parseFloat(lat) || latitude1
         // const longitude = parseFloat(long) || longitude1
-        let alpha;
+        let Location_Alpha;
 
 
         if (!date || !time || !tripTypeElement) {
@@ -271,22 +271,22 @@ function submitMapPopup() {
 
         const selectedTripType = tripTypeElement.value;
         if (selectedTripType === "start") {
-            alpha = "A"
+            Location_Alpha = "A"
         }
         if (selectedTripType === "waypoint") {
-            alpha = "B"
+            Location_Alpha = "B"
         }
         if (selectedTripType === "end") {
-            alpha = "C"
+            Location_Alpha = "C"
         }
-        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', latitude, longitude, alpha, editmode, typeof (latitude));
+        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', latitude, longitude, Location_Alpha, editmode, typeof (latitude));
         // gmappost-submitForm
         fetch(`${apiUrl}/gmappost-submitForm`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, alpha }),
+            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, Location_Alpha }),
         })
             .then(response => response.json())
             .then(data => {
@@ -328,6 +328,8 @@ function submitMapPopup() {
             }
         } else if (selectedTripType === 'waypoint') {
             const waypointLabel = getNextWaypointLabels(markerLabel) || getNextWaypointLabel();
+            console.log(waypointLabel,'waypointlabel');
+            
             markerLabel=waypointLabel
             console.log(waypointLabel,'wayss');
             
@@ -352,7 +354,7 @@ function submitMapPopup() {
         const long = document.getElementById('lng')?.value || startLongitude || endLongitude || wayLongitude;
         const latitude = parseFloat(lat) || latitude1
         const longitude = parseFloat(long) || longitude1
-        let alpha;
+        let Location_Alpha;
 
 
         if (!date || !time || !tripTypeElement) {
@@ -362,22 +364,22 @@ function submitMapPopup() {
 
         const selectedTripType = tripTypeElement.value;
         if (selectedTripType === "start") {
-            alpha = "A"
+            Location_Alpha = "A"
         }
         if (selectedTripType === "waypoint") {
-            alpha = "B"
+            Location_Alpha = "B"
         }
         if (selectedTripType === "end") {
-            alpha = "C"
+            Location_Alpha = "C"
         }
-        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', lat, long, latitude, longitude, latitude1, longitude1, alpha);
+        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', lat, long, latitude, longitude, latitude1, longitude1, Location_Alpha);
         // gmappost-submitForm
         fetch(`${apiUrl}/gmappost-submitForm`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, alpha }),
+            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, Location_Alpha }),
         })
             .then(response => response.json())
             .then(data => {
@@ -665,9 +667,9 @@ function clearMarkers() {
     }
     for (const waypoint of waypoints) {
         console.log(waypoints,'editwayp');
-        // waypoint.setMap(null);
+        waypoint.setMap(null);
     }
-    // markersMap = {}; // Clear the markers map
+    markersMap = {}; // Clear the markers map
 }
 
 function calculateAndDisplayRoutes(directionsService, directionsRenderer) {
@@ -683,7 +685,7 @@ function calculateAndDisplayRoutes(directionsService, directionsRenderer) {
 
         const startLocation = new google.maps.LatLng(startLatitude, startLongitude);
         const endLocation = new google.maps.LatLng(endLatitude, endLongitude);
-        console.log(startLatitude,endLatitude,wayPointLatitude,'aaaaa');
+        console.log(typeof(startLatitude),startLatitude,endLatitude,wayPointLatitude,'aaaaa');
 
         directionsService
             .route({
@@ -706,13 +708,14 @@ function calculateAndDisplayRoutes(directionsService, directionsRenderer) {
 
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+    console.log(startMarker,typeof(startMarker.getPosition()),'aaaaa');
     clearMarkers();
-    const waypointsPositions = waypoints.map((waypoint) => ({
+    const waypointsPositions = waypoints?.map((waypoint) => ({
         location: waypoint.getPosition(),
         stopover: true,
     }));
 
-    const waypointsPosition = wayPointLatitude.map((lat, index) => ({
+    const waypointsPosition = wayPointLatitude?.map((lat, index) => ({
         location: new google.maps.LatLng(lat, wayPointLongitude[index]), // Use LatLng constructor for each waypoint
         stopover: true,
     }));
@@ -727,6 +730,8 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
                 travelMode: google.maps.TravelMode.DRIVING,
             })
             .then((response) => {
+                console.log(response,'resp');
+                
                 directionsRenderer.setDirections(response);
             })
             .catch((e) => window.alert('Directions request failed due to ' + e));
@@ -766,7 +771,8 @@ function generateEditStaticMap() {
     if (startLatitude && startLongitude && endLatitude && endLongitude) {
         const startLocation = new google.maps.LatLng(startLatitude, startLongitude);
         const endLocation = new google.maps.LatLng(endLatitude, endLongitude);
-
+        console.log(startLatitude,startLongitude,startLocation,waypoints,'wwwwwwwwwww');
+        
         // Create waypoints array using wayPointLatitude and wayPointLongitude
         const waypointsPositions = wayPointLatitude.map((lat, index) => ({
             location: new google.maps.LatLng(lat, wayPointLongitude[index]),
@@ -872,6 +878,8 @@ function generateStaticMap() {
             location: waypoint.getPosition(),
             stopover: true,
         }));
+        console.log(sortedWaypoints,'zzzzzzzzzzs',waypointsPositions,waypoints);
+        
         directionsService.route({
             origin: startLocation,
             destination: endLocation,

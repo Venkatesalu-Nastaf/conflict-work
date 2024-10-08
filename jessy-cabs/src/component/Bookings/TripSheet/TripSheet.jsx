@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
+import EditMapComponent from './NavigationMap/EditMapComponent';
 import "./TripSheet.css";
 import {
   Apps,
@@ -128,6 +129,19 @@ const style = {
   p: 4,
 };
 
+const style1 = {
+  position: 'absolute',
+  top: '50%',
+  height: 600,
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1100,
+  bgcolor: 'background.paper',
+  // border: '1px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const TripSheet = ({ stationName, logoImage }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
@@ -233,7 +247,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate
+    handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
+    mapPopUp, setMapPopUp, manualTripID
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
 
@@ -508,7 +523,18 @@ const TripSheet = ({ stationName, logoImage }) => {
     return isEqual || isLessThan;
   };
 
+
+  const handleCloseMapPopUp = () => {
+    setMapPopUp(false)
+  }
+  const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+  const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
+  const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+  const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
+
+  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -1916,7 +1942,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                              
+
                                 <div style={{ display: "blocks" }}>
                                   <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
                                 </div>
@@ -3147,6 +3173,22 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div>
+              <Modal
+                open={mapPopUp}
+                onClose={handleCloseMapPopUp}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style1}>
+                  <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
+
+                  {/* <EditMapComponent startLatitude1={startLatitude} startLongitude1={startLongitude} endLatitude1={endLatitude} endLongitude1={endLongitude} wayLatitude1={wayLatitude} wayLongitude1={wayLongitude}tripid={tripid} edit="editMode" /> */}
+                  {/* <MapComponent startLatitude={startLatitude} startLongitude={startLongitude} endLatitude={endLatitude} endLongitude={endLongitude} wayLatitude={wayLatitude} wayLongitude={wayLongitude} edit="editMode" /> */}
+                </Box>
+              </Modal>
             </div>
 
             <div>

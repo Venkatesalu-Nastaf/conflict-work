@@ -1467,6 +1467,13 @@ router.post('/gmappost-submitForm', (req, res) => {
 // Delete marker Point by Latitude and Longitude
 router.delete('/deleteMapPoint', (req, res) => {
     const { latitude, longitude, tripid } = req.body;
+    console.log(latitude,longitude,tripid,'deletedata');
+    
+
+    // Validate the inputs
+    if (!latitude || !longitude || !tripid) {
+        return res.status(400).json({ error: 'Invalid request parameters' });
+    }
 
     const deleteQuery = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? AND tripid = ?";
     const deleteValues = [latitude, longitude, tripid];
@@ -1500,51 +1507,126 @@ router.get('/getGmapdataByTripId/:tripid',(req,res)=>{
 
 
 
-router.post('/gmap-submitForm', (req, res) => {
-    const date = req.body.date;
-    const time = req.body.time;
-    const tripType = req.body.tripType;
-    const placeName = req.body.placeName;
-    const tripid = req.body.tripid;
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
-    console.log(latitude, longitude, tripType, placeName, tripid, latitude, longitude, 'latt');
+router.post('/gmappost-submitForm', (req, res) => {
+    const { date, time, tripType, placeName, tripid, latitude, longitude, Location_Alpha } = req.body;
 
-    // Query to check if the tripid and trip_type exist
+    console.log(date, time, tripType, placeName, tripid, latitude, longitude, Location_Alpha, 'latt');
+
+    // Query to check existing waypoints for the given tripid and tripType
     const getquery = "SELECT * FROM gmapdata WHERE tripid = ? AND trip_type = ?";
 
-    db.query(getquery, [tripid, tripType], (err, results) => {
-        if (err) {
+    db.query(getquery, [tripid, tripType], (error, results) => {
+        if (error) {
+            console.error('Database Error:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        console.log(results, 'result');
 
-        if (results.length > 0) {
-            // Trip ID and trip type exist, delete the old row
-            const deleteQuery = `DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?`;
-            db.query(deleteQuery, [tripid], (err, deleteResults) => {
+        console.log(results, 'resultsss');
+
+        if (results.length === 0) {
+            // Only insert if no results are found
+            const insertQuery = "INSERT INTO gmapdata (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            db.query(insertQuery, [date, time, Location_Alpha, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
                 if (err) {
                     return res.status(500).json({ error: 'Internal Server Error' });
                 }
-
-                // Insert the new row
-                const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
-                db.query(insertQuery, [date, time, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
-                    if (err) {
-                        return res.status(500).json({ error: 'Internal Server Error' });
-                    }
-                    res.status(200).json({ message: 'Form data submitted successfully' });
-                });
+                return res.status(200).json({ message: 'Form data submitted successfully' });
             });
         } else {
-            // Trip ID and trip type do not exist, insert the new row directly
-            const insertQuery = "INSERT INTO gmapdata (date, time, trip_type, place_name, tripid,Latitude,Longitude) VALUES (?, ?, ?, ?, ?,?,?)";
-            db.query(insertQuery, [date, time, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Internal Server Error' });
+            // Handle update logic or waypoint insertion if data exists
+
+            let newAlpha = Location_Alpha; // Initialize with the incoming alpha value for start or end
+
+            if (tripType === 'waypoint') {
+                // Handle waypoint logic
+                const waypointAlphas = results?.map(row => row.Location_Alpha);
+                const latitudePoint = results?.map(row => row.Latitude);
+                const longitudePoint = results?.map(row => row.Longitude);
+
+                console.log(latitudePoint, longitudePoint, 'checking', latitude, longitude);
+
+                // Convert latitude and longitude to strings
+                const latitudeStr = latitude.toString();
+                const longitudeStr = longitude.toString();
+
+                // Check if the latitude and longitude exist in their respective arrays
+                const latitudeExists = latitudePoint.some(lat => lat.toString() === latitudeStr);
+                const longitudeExists = longitudePoint.some(lng => lng.toString() === longitudeStr);
+
+                console.log(latitudeExists, longitudeExists, latitudeStr, longitudeStr, 'all values');
+
+                // If the latitude and longitude exist, update and stop further execution
+                if (latitudeExists && longitudeExists) {
+                    const updateQuery = `
+                        UPDATE gmapdata
+                        SET date = ?, time = ?, Latitude = ?, Longitude = ?
+                        WHERE tripid = ? AND Latitude = ? AND Longitude = ?
+                    `;
+
+                    const updateValues = [date, time, latitudeStr, longitudeStr, tripid, latitudeStr, longitudeStr];
+
+                    db.query(updateQuery, updateValues, (err, updateResults) => {
+                        if (err) {
+                            console.log('Database Update Error:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+
+                        console.log(updateResults, 'urs');
+                        return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                    });
+
+                    // Stop further execution since the update is done
+                    return;
                 }
-                res.status(200).json({ message: 'Form data submitted successfully' });
-            });
+
+                // Logic for generating a new alpha for the waypoint
+                let maxAlphaNumber = 0;
+                waypointAlphas.forEach(a => {
+                    const match = a.match(/^B(\d+)$/); // Match alphas like "B1", "B2", etc.
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        if (num > maxAlphaNumber) {
+                            maxAlphaNumber = num;
+                        }
+                    }
+                });
+
+                newAlpha = `B${maxAlphaNumber + 1}`;
+
+                // Insert new waypoint if the latitude and longitude don't exist
+                const insertQuery = `
+                    INSERT INTO gmapdata 
+                    (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                `;
+                const values = [date, time, Location_Alpha, tripType, placeName, tripid, latitude, longitude];
+
+                db.query(insertQuery, values, (err, insertResults) => {
+                    if (err) {
+                        console.error('Database Error:', err);
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+
+                    return res.status(200).json({ message: 'Waypoint submitted successfully', Location_Alpha: newAlpha });
+                });
+            } else if (tripType === 'start' || tripType === 'end') {
+                // Handle start or end trip update logic
+                const updateQuery = `
+                    UPDATE gmapdata
+                    SET date = ?, time = ?, place_name = ?, Latitude = ?, Longitude = ?
+                    WHERE tripid = ? AND trip_type = ?
+                `;
+                const updateValues = [date, time, placeName, latitude, longitude, tripid, tripType];
+
+                db.query(updateQuery, updateValues, (err, updateResults) => {
+                    if (err) {
+                        console.error('Database Update Error:', err);
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+
+                    return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                });
+            }
         }
     });
 });

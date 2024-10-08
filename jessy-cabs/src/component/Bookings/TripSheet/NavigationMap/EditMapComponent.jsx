@@ -15,6 +15,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     const directionsRendererRef = useRef(null); // Directions renderer reference
     const [mapUpdate, setMapUpdate] = useState(false);
     const [manualTripID, setManualTripID] = useState([]);
+    const [success, setSuccess] = useState(false);
     const [refresh, setRefresh] = useState(0)
     const apiUrl = APIURL;
 
@@ -388,6 +389,13 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
         return Math.min(latZoom, lngZoom, ZOOM_MAX);
     }
 
+    const handleSuccessCapture = () => {
+        setSuccess(true)
+        setTimeout(() => {
+            setSuccess(false)
+        }, [1500])
+    }
+
     const handleMapCapture = async () => {
         const mapCenter = new window.google.maps.Map(document.getElementById('map'), {
             zoom: 15,
@@ -485,6 +493,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                     const formDataUpload = new FormData();
                     formDataUpload.append('file', new File([staticMapBlob], 'static_map.png'));
                     formDataUpload.append('tripid', tripid);
+                    handleSuccessCapture()
 
                     try {
                         const response = await axios.post(`${apiUrl}/mapuploads`, formDataUpload, {
@@ -515,10 +524,17 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                 <label style={{ fontWeight: 'bold' }}>Close Time : <span>{closetime}</span> </label>
             </div>
             <div id="map" style={{ height: "500px", width: "100%" }}></div>
-            <div className="buttons-div">
-                <button onClick={handleMapDraw} className="draw-route">Draw Route</button>
-                <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button>
+            <div style={{ position: "relative" }}>
+                <div className="buttons-div">
+                    <button onClick={handleMapDraw} className="draw-route">Draw Route</button>
+                    <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button>
+                </div>
+                <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+                    {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> : ""}
+
+                </div>
             </div>
+
 
         </div>
     );

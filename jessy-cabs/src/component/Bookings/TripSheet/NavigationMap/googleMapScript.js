@@ -248,99 +248,99 @@ console.log(latitude,longitude,'00000111111111');
 
 
 function submitMapPopup() {
-    if (editmode === "editMode") {
-        const position = popup.getPosition();
-        const latitude = position.lat();
-        const longitude = position.lng();
-        const date = document.getElementById('date').value;
-        const time = document.getElementById('time').value;
-        const placeName = document.getElementById('placeName')?.value;
-        const tripTypeElement = document.getElementById('tripType');
-        const tripid = localStorage.getItem('selectedTripid');
-        const lat = document.getElementById('lat')?.value || startLatitude || endLatitude || wayLatitude;
-        const long = document.getElementById('lng')?.value || startLongitude || endLongitude || wayLongitude;
-        // const latitude = parseFloat(lat) || latitude1
-        // const longitude = parseFloat(long) || longitude1
-        let Location_Alpha;
+    // if (editmode === "editMode") {
+    //     const position = popup.getPosition();
+    //     const latitude = position.lat();
+    //     const longitude = position.lng();
+    //     const date = document.getElementById('date').value;
+    //     const time = document.getElementById('time').value;
+    //     const placeName = document.getElementById('placeName')?.value;
+    //     const tripTypeElement = document.getElementById('tripType');
+    //     const tripid = localStorage.getItem('selectedTripid');
+    //     const lat = document.getElementById('lat')?.value || startLatitude || endLatitude || wayLatitude;
+    //     const long = document.getElementById('lng')?.value || startLongitude || endLongitude || wayLongitude;
+    //     // const latitude = parseFloat(lat) || latitude1
+    //     // const longitude = parseFloat(long) || longitude1
+    //     let Location_Alpha;
 
 
-        if (!date || !time || !tripTypeElement) {
-            alert('Please fill in all required fields.');
-            return;
-        }
+    //     if (!date || !time || !tripTypeElement) {
+    //         alert('Please fill in all required fields.');
+    //         return;
+    //     }
 
-        const selectedTripType = tripTypeElement.value;
-        if (selectedTripType === "start") {
-            Location_Alpha = "A"
-        }
-        if (selectedTripType === "waypoint") {
-            Location_Alpha = "B"
-        }
-        if (selectedTripType === "end") {
-            Location_Alpha = "C"
-        }
-        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', latitude, longitude, Location_Alpha, editmode, typeof (latitude));
-        // gmappost-submitForm
-        fetch(`${apiUrl}/gmappost-submitForm`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, Location_Alpha }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-                // Handle the response as needed
-            })
-            .catch(error => console.error('Error:', error));
-        // fetch(`${apiUrl}/gmap-submitForm`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('Server response:', data);
-        //         // Handle the response as needed
-        //     })
-        //     .catch(error => console.error('Error:', error));
-        console.log(waypoints, wayPlaceName, selectedTripType, 'waypoints');
+    //     const selectedTripType = tripTypeElement.value;
+    //     if (selectedTripType === "start") {
+    //         Location_Alpha = "A"
+    //     }
+    //     if (selectedTripType === "waypoint") {
+    //         Location_Alpha = "B"
+    //     }
+    //     if (selectedTripType === "end") {
+    //         Location_Alpha = "C"
+    //     }
+    //     console.log(date, time, selectedTripType, placeName, tripid, 'alpha', latitude, longitude, Location_Alpha, editmode, typeof (latitude));
+    //     // gmappost-submitForm
+    //     fetch(`${apiUrl}/gmappost-submitForm`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, Location_Alpha }),
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log('Server response:', data);
+    //             // Handle the response as needed
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    //     // fetch(`${apiUrl}/gmap-submitForm`, {
+    //     //     method: 'POST',
+    //     //     headers: {
+    //     //         'Content-Type': 'application/json',
+    //     //     },
+    //     //     body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
+    //     // })
+    //     //     .then(response => response.json())
+    //     //     .then(data => {
+    //     //         console.log('Server response:', data);
+    //     //         // Handle the response as needed
+    //     //     })
+    //     //     .catch(error => console.error('Error:', error));
+    //     console.log(waypoints, wayPlaceName, selectedTripType, 'waypoints');
 
-        popup.close();
-        if (selectedTripType === 'start') {
-            startMarker = createMarker(popup.getPosition(), 'A', date, time, selectedTripType, placeName);
-        } else if (selectedTripType === 'end') {
-            if (waypoints.length > 0 || wayPlaceName !== "") {
-                const lastWaypointLabel = waypoints[waypoints.length - 1]?.label;
-                const nextEndLabel = getNextAlphabeticLetter(lastWaypointLabel);
-                endMarker = createMarker(popup.getPosition(), nextEndLabel, date, time, selectedTripType, placeName);
-                document.getElementById('end').value = placeName;
-                console.log(placeName, nextEndLabel, lastWaypointLabel, 'wayp1234');
+    //     popup.close();
+    //     if (selectedTripType === 'start') {
+    //         startMarker = createMarker(popup.getPosition(), 'A', date, time, selectedTripType, placeName);
+    //     } else if (selectedTripType === 'end') {
+    //         if (waypoints.length > 0 || wayPlaceName !== "") {
+    //             const lastWaypointLabel = waypoints[waypoints.length - 1]?.label;
+    //             const nextEndLabel = getNextAlphabeticLetter(lastWaypointLabel);
+    //             endMarker = createMarker(popup.getPosition(), nextEndLabel, date, time, selectedTripType, placeName);
+    //             document.getElementById('end').value = placeName;
+    //             console.log(placeName, nextEndLabel, lastWaypointLabel, 'wayp1234');
 
-                calculateAndDisplayRoutes(directionsService, directionsRenderer);
-            } else {
-                endMarker = createMarker(popup.getPosition(), 'B', date, time, selectedTripType, placeName);
-                document.getElementById('end').value = placeName;
-                calculateAndDisplayRoutes(directionsService, directionsRenderer);
-            }
-        } else if (selectedTripType === 'waypoint') {
-            const waypointLabel = getNextWaypointLabels(markerLabel) || getNextWaypointLabel();
-            console.log(waypointLabel,'waypointlabel');
+    //             calculateAndDisplayRoutes(directionsService, directionsRenderer);
+    //         } else {
+    //             endMarker = createMarker(popup.getPosition(), 'B', date, time, selectedTripType, placeName);
+    //             document.getElementById('end').value = placeName;
+    //             calculateAndDisplayRoutes(directionsService, directionsRenderer);
+    //         }
+    //     } else if (selectedTripType === 'waypoint') {
+    //         const waypointLabel = getNextWaypointLabels(markerLabel) || getNextWaypointLabel();
+    //         console.log(waypointLabel,'waypointlabel');
             
-            markerLabel=waypointLabel
-            console.log(waypointLabel,'wayss');
+    //         markerLabel=waypointLabel
+    //         console.log(waypointLabel,'wayss');
             
-            const waypointMarker = createMarker(popup.getPosition(), waypointLabel, date, time, selectedTripType, placeName);
-            waypoints.push(waypointMarker);
-            if (startMarker && endMarker) {
-                calculateAndDisplayRoutes(directionsService, directionsRenderer);
-            }
-        }
-    }
-    else {
+    //         const waypointMarker = createMarker(popup.getPosition(), waypointLabel, date, time, selectedTripType, placeName);
+    //         waypoints.push(waypointMarker);
+    //         if (startMarker && endMarker) {
+    //             calculateAndDisplayRoutes(directionsService, directionsRenderer);
+    //         }
+    //     }
+    // }
+    // else {
 
         const position = popup.getPosition();
         const latitude1 = position.lat();
@@ -372,14 +372,14 @@ function submitMapPopup() {
         if (selectedTripType === "end") {
             Location_Alpha = "C"
         }
-        console.log(date, time, selectedTripType, placeName, tripid, 'alpha', lat, long, latitude, longitude, latitude1, longitude1, Location_Alpha);
+        console.log(date, time, selectedTripType, placeName, tripid,   latitude, longitude, Location_Alpha,'hiiiiiii');
         // gmappost-submitForm
         fetch(`${apiUrl}/gmappost-submitForm`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude, Location_Alpha }),
+            body: JSON.stringify({ date, time,Location_Alpha,  placeName,tripType: selectedTripType, tripid, latitude, longitude  }),
         })
             .then(response => response.json())
             .then(data => {
@@ -387,19 +387,19 @@ function submitMapPopup() {
                 // Handle the response as needed
             })
             .catch(error => console.error('Error:', error));
-        // fetch(`${apiUrl}/gmap-submitForm`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('Server response:', data);
-        //         // Handle the response as needed
-        //     })
-        //     .catch(error => console.error('Error:', error));
+        fetch(`${apiUrl}/gmap-submitForm`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                // Handle the response as needed
+            })
+            .catch(error => console.error('Error:', error));
         console.log(waypoints, wayPlaceName, selectedTripType, 'waypoints');
 
         popup.close();
@@ -428,7 +428,7 @@ function submitMapPopup() {
             }
         }
     }
-}
+// }
 
 
 function getNextAlphabeticLetter(currentLetter) {

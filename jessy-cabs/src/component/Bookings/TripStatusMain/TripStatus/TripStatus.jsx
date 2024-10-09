@@ -511,8 +511,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                 </Box>
             )}
         </Box>
-   
-
+            
             <Dialog open={popupOpen} onClose={handlePopupClose}> 
               <DialogTitle>Select an Option</DialogTitle>
               <DialogContent>

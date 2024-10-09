@@ -871,20 +871,14 @@ const handleShowImage = async (row) => {
             setImageDetails(rowsWithUniqueId);
         } else {
             setImageDetails([]);
-            throw new Error("No Image found");
+            // throw new Error("No Image found");
         }
     } catch (error) {
         setError(true);
-        setErrorMessage("An error occurred while fetching additional images.");
+        // setErrorMessage("An error occurred while fetching additional images.");
         throw error; // Re-throw to handle in Promise.all
     }
 };
-
-    
-     
-     
-    
-
 
     const handleShowCards = () => {
         //SetShowCards(!showCards);
@@ -896,6 +890,7 @@ const handleShowImage = async (row) => {
 
     const handleButtonClick = (row) => {
 
+
         if (row.status === "Cancelled") {
             setError(true);
             setErrorMessage("booking cancelled")
@@ -903,8 +898,9 @@ const handleShowImage = async (row) => {
 
         }
         setMapLoading(true)
-       
-       //setPopupOpen(true);
+        setSelectedRow(row);
+       setPopupOpen(true);
+
         console.log(row,'row data ')
     };
 
@@ -1020,6 +1016,7 @@ const handleShowImage = async (row) => {
     
         // Clear previous images
         setSignImageUrl("");
+        setSelectedRow(row);
         setMapImageUrl("");
         setImageDetails([]);
     
@@ -1030,30 +1027,30 @@ const handleShowImage = async (row) => {
             await Promise.all([
                 showSignature(row).catch(error => {
                     allFetchesSuccessful = false;
-                    console.error("Error fetching signature image:", error);
+                    // console.error("Error fetching signature image:", error);
                 }),
                 showMap(row).catch(error => {
                     allFetchesSuccessful = false;
-                    console.error("Error fetching map image:", error);
+                    // console.error("Error fetching map image:", error);
                 }),
                 handleShowImage(row).catch(error => {
                     allFetchesSuccessful = false;
-                    console.error("Error fetching additional images:", error);
+                    // console.error("Error fetching additional images:", error);
                 }),
             ]);
     
             // Only set success message if all fetches were successful
-            if (allFetchesSuccessful) {
-                setSuccess(true);
-                setSuccessMessage("All images fetched successfully!");
-            } else {
-                setError(true);
-                setErrorMessage("Some images could not be fetched.");
-            }
+            // if (allFetchesSuccessful) {
+            //     setSuccess(true);
+            //     setSuccessMessage("All images fetched successfully!");
+            // } else {
+            //     setError(true);
+            //     setErrorMessage("Some images could not be fetched.");
+            // }
         } catch (error) {
             console.error("Error fetching images:", error);
             setError(true);
-            setErrorMessage("An error occurred while fetching images.");
+            // setErrorMessage("An error occurred while fetching images.");
         } finally {
             setLoading(false); // Stop loading
         }
@@ -1061,12 +1058,20 @@ const handleShowImage = async (row) => {
      
 
 // show button
-      const handleShowButtonClick = () => {
-        if (selectedRow) {
-          setPopupOpen(true); // Open the popup with the selected row data
-          console.log(selectedRow, 'row data for popup');
-        }
-      };
+         
+          const handleShowButtonClick = () => {
+              if (selectedRow) {
+                  if (selectedRow.status === "Cancelled") {
+                      setError(true);
+                      setErrorMessage("Booking cancelled");
+                      return; // Exit the function if the booking is cancelled
+                  }
+
+                  setPopupOpen(true); // Open the dialog with the selected row data
+                  setSelectedRow(selectedRow);
+                  console.log(selectedRow, 'row data for popup');
+              }
+          };
 
     const handlePopupClose = () => {
         setSelectedRow(null);

@@ -36,27 +36,52 @@ router.get('/organizationoptions', (req, res) => {
 //         return res.status(200).json(result);
 //     });
 // });
+// router.get('/getBillnoFromIndividualBill', (req, res) => {
+//     const { billno } = req.query;
+//     console.log(billno, "billinggg")
+
+//     if (!billno) {
+//         return res.status(400).json({ error: 'Trip Id is required' });
+//     }
+//     const sqlquery = `SELECT Status,Customer,Trips,Invoice_no,Trip_id FROM Individual_Billing WHERE billing_no = ?`;
+
+//     db.query(sqlquery, [billno], (error, result) => {
+//         if (error) {
+//             console.error(error, 'error');
+//             return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
+//         }
+
+//         if (result.length === 0) {
+//             return res.status(404).json({ message: 'No Trip IDs found for the given Group ID' });
+//         }
+//         console.log(result, "result");
+        
+//         return res.status(200).json(result);
+//     });
+// });
 router.get('/getBillnoFromIndividualBill', (req, res) => {
     const { billingno } = req.query;
+    
+    let query = 'SELECT * FROM Individual_Billing WHERE 1=1';
+    let params = [];
 
-    if (!billingno) {
-        return res.status(400).json({ error: 'Trip Id is required' });
+    if (billingno) {
+        const columnsToSearch = [
+            'Trip_id',
+            'Status',
+            'Amount',
+            'billing_no'
+        ];
+
+        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+
+        query += ` AND (${likeConditions})`;
+        params = columnsToSearch.map(() => `${billingno}%`);
     }
-    const sqlquery = `SELECT Status,Customer,Trips,Invoice_no,Trip_id, FROM Individual_Billing WHERE billing_no = ?`;
 
-    db.query(sqlquery, [billingno], (error, result) => {
-        if (error) {
-            console.error(error, 'error');
-            return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
-        }
-
-        if (result.length === 0) {
-            return res.status(404).json({ message: 'No Trip IDs found for the given Group ID' });
-        }
-
-        return res.status(200).json(result);
-    });
+    res.send({ query, params }); // Example response for testing
 });
+
 router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
     const { transferTripId } = req.query;
 
@@ -93,11 +118,11 @@ router.get('/payment-details', (req, res) => {
     if (fromDate && toDate) {
         query += ' AND Bill_Date >= ? AND Bill_Date <= ?';
         params.push(fromDate, toDate);
-    }     
+    }
     db.query(query, params, (err, result) => {
         if (err) {
-            console.log(err,"error");
-            
+            console.log(err, "error");
+
             return res.status(500).json({ error: 'Failed to retrieve billing details from MySQL' });
         }
         return res.status(200).json(result);

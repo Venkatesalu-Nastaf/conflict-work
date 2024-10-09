@@ -1443,7 +1443,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* <br></br> */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && (
+                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && data === undefined && (
                     (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
                       <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                         Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}

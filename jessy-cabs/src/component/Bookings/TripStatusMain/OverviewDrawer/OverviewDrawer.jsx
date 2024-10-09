@@ -435,12 +435,12 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               </div>
             }
             <div className='table-top-buttons'>
-              <Button variant="outlined">Cancel</Button>
+              <Button variant="outlined">Cancel</Button>  
               <Button variant="contained">Verified</Button>
               {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
               {/* <Button onClick={handleButtonClick}>Show</Button> */}
               <Button onClick={handleShowButtonClick}>Show</Button>
-              
+
             </div>
             {/* <EtripSheetTable 
               rows1={reversedRows}
@@ -565,17 +565,16 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             </div>
         </Box>
         </Drawer>
-      </div>
-           
+      </div> 
       <Dialog open={popupOpen} onClose={handlePopupClose}>
-        <DialogTitle>Select an Option</DialogTitle  >
+        <DialogTitle>Select an Option</DialogTitle>
         <DialogContent>
           {selectedRow && (
             <div>
               <Button onClick={handleBookingClick}>Booking</Button>
               <Button onClick={handleTripsheetClick}>Tripsheet</Button>
             </div>
-          )}
+          )} 
         </DialogContent>
         <DialogActions>
           <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -583,6 +582,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      
     </>
     
   )

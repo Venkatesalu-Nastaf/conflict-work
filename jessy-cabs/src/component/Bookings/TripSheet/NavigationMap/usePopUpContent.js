@@ -1,11 +1,26 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import dayjs from 'dayjs';
 import { APIURL } from "../../../url";
 const usePopUpContent = (initialData) => { // Accept initial data
+    // const [mapContent, setMapContent] = useState({
+    //     tripid: initialData?.tripid || '',
+    //     time: initialData?.time || '',
+    //     date: initialData?.date || '',
+    //     place_name: initialData?.placeName || '',
+    //     Location_Alpha: '',
+    //     trip_type: initialData?.tripType || 'start',
+    //     Latitude: '',
+    //     Longitude: ''
+    // });
+
+
+    // In the component
     const [mapContent, setMapContent] = useState({
         tripid: initialData?.tripid || '',
-        time: initialData?.time || '',
-        date: initialData?.date || '',
+        time: initialData?.time || dayjs().format('HH:mm'),
+        // Format the initial date if present, otherwise format the current date or leave it empty
+        date: initialData?.date ? dayjs(initialData?.date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
         place_name: initialData?.placeName || '',
         Location_Alpha: '',
         trip_type: initialData?.tripType || 'start',
@@ -16,7 +31,7 @@ const usePopUpContent = (initialData) => { // Accept initial data
     const apiUrl = APIURL;
 
     const submitMapPopUp = async (lat) => {
-        
+
         let alpha = '';
 
         if (mapContent.trip_type === "start") {
@@ -47,6 +62,7 @@ const usePopUpContent = (initialData) => { // Accept initial data
             time: mapContent.time,
             tripType: mapContent.trip_type,
         };
+        console.log(payload, 'payload');
 
         // Send POST request to the backend
         try {
@@ -68,7 +84,7 @@ const usePopUpContent = (initialData) => { // Accept initial data
         deletePopUp,
         mapContent,
         setMapContent,
-   
+
 
     };
 };

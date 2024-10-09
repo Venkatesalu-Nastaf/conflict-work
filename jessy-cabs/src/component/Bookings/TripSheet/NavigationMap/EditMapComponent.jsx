@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import { APIURL } from "../../../url";
 import PopUpContent from "./PopupContent";
-import usePopUpContent from "./usePopUpContent";
-import { BooleanContext } from "./EditMapContext";
 import "./EditMapComponent.css"
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { useData1 } from "../../../Dashboard/Maindashboard/DataContext";
 const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, closetime }) => {
 
     const markersRef = useRef([]); // Store marker references
@@ -16,8 +16,13 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     const [mapUpdate, setMapUpdate] = useState(false);
     const [manualTripID, setManualTripID] = useState([]);
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
     const [refresh, setRefresh] = useState(0)
+    const [mapCaptureVerify, setMapCaptureVerify] = useState(false);
     const apiUrl = APIURL;
+    const { mapButtonTrigger, setMapButtonTrigger } = useData1()
+    const [address, setAddress] = useState('');
+    const [mapInstance, setMapInstance] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,6 +65,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     const startPlaceName = startingTrips.length > 0 ? startingTrips[0].place_name : '';
     const endPlaceName = endingTrips.length > 0 ? endingTrips[0].place_name : '';
     const wayPlaceName = wayTrips?.map(li => li.place_name)
+
     useEffect(() => {
         const loadGoogleMapsScript = (callback) => {
             const existingScript = document.getElementById('googleMaps');
@@ -75,7 +81,6 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
             } else if (existingScript && callback) callback();
         };
 
-
         const initMap = () => {
             const { Map, LatLng, Marker, InfoWindow, DirectionsService, DirectionsRenderer, Geocoder } = window.google.maps;
 
@@ -85,12 +90,16 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                 zoom: 10,
             });
 
+            setMapInstance(mapRef.current)
+
             infoWindowRef.current = new InfoWindow();
             directionsServiceRef.current = new DirectionsService();
             directionsRendererRef.current = new DirectionsRenderer();
             directionsRendererRef.current.setMap(mapRef.current);
 
-            // Create start marker
+            let waypointLabelCharCode = 'B'.charCodeAt(0); // Start label for waypoints from 'B'
+
+            // Create start marker with label "A"
             if (startLatitude && startLongitude) {
                 const startMarker = new Marker({
                     position: new LatLng(startLatitude, startLongitude),
@@ -105,45 +114,28 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                 });
             }
 
-            // Create end marker
-            if (endLatitude && endLongitude) {
-                const endMarker = new Marker({
-                    position: new LatLng(endLatitude, endLongitude),
-                    map: mapRef.current,
-                    label: "Z",
-                    title: endPlaceName,
-                });
-                markersRef.current.push({ marker: endMarker, placeName: endPlaceName, lat: endLatitude, lng: endLongitude });
-
-                endMarker.addListener("click", () => {
-                    showPopUpContent(endMarker, endPlaceName, endLatitude, endLongitude, endingDate, endingTime, endingTripType);
-                });
-            }
-
-            // Create waypoints
+            // Create waypoints with labels starting from "B", "C", "D", etc.
             wayLatitude?.forEach((lat, index) => {
                 if (wayLongitude[index]) {
                     const waypointMarker = new Marker({
                         position: new LatLng(lat, wayLongitude[index]),
                         map: mapRef.current,
-                        label: `B${index + 1}`,
+                        label: String.fromCharCode(waypointLabelCharCode++), // Increment the label character
                         title: `Waypoint ${index + 1}`,
                     });
 
-                    // If wayPlaceName is defined (from wayLatitude and wayLongitude context)
                     const waypointPlaceName = wayPlaceName ? wayPlaceName[index] : `Waypoint ${index + 1}`;
-
                     markersRef.current.push({
                         marker: waypointMarker,
-                        placeName: waypointPlaceName, // Use the defined wayPlaceName
+                        placeName: waypointPlaceName,
                         lat: lat,
-                        lng: wayLongitude[index]
+                        lng: wayLongitude[index],
                     });
 
                     waypointMarker.addListener("click", () => {
                         showPopUpContent(
                             waypointMarker,
-                            waypointPlaceName, // Pass waypointPlaceName instead of a default name
+                            waypointPlaceName,
                             lat,
                             wayLongitude[index],
                             wayDate[index],
@@ -153,21 +145,22 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                     });
                 }
             });
-            // wayLatitude?.forEach((lat, index) => {
-            //     if (wayLongitude[index]) {
-            //         const waypointMarker = new Marker({
-            //             position: new LatLng(lat, wayLongitude[index]),
-            //             map: mapRef.current,
-            //             label: `B${index + 1}`,
-            //             title: `Waypoint ${index + 1}`,
-            //         });
-            //         markersRef.current.push({ marker: waypointMarker, placeName: `Waypoint ${index + 1}`, lat: lat, lng: wayLongitude[index] });
 
-            //         waypointMarker.addListener("click", () => {
-            //             showPopUpContent(waypointMarker, `Waypoint ${index + 1}`, lat, wayLongitude[index], wayDate[index], wayTime[index], "waypoint");
-            //         });
-            //     }
-            // });
+            // Create end marker with the next available label after waypoints
+            const endMarkerLabel = String.fromCharCode(waypointLabelCharCode); // Use the next available letter after the last waypoint
+            if (endLatitude && endLongitude) {
+                const endMarker = new Marker({
+                    position: new LatLng(endLatitude, endLongitude),
+                    map: mapRef.current,
+                    label: endMarkerLabel, // Assign the next available label
+                    title: endPlaceName,
+                });
+                markersRef.current.push({ marker: endMarker, placeName: endPlaceName, lat: endLatitude, lng: endLongitude });
+
+                endMarker.addListener("click", () => {
+                    showPopUpContent(endMarker, endPlaceName, endLatitude, endLongitude, endingDate, endingTime, endingTripType);
+                });
+            }
 
             const geocoder = new Geocoder();
 
@@ -191,10 +184,10 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                                 placeName={placeName}
                                 tripid={tripid}
                                 refresh={() => RefreshFetch()}
-                                onAddMarker={addMarker}  // Pass addMarker function
-                                startTime={startingTime} // Pass the starting time
-                                date={startingDate} // Pass the starting date
-                                tripType={startingTripType} // Pass the starting trip type
+                                onAddMarker={addMarker}
+                                startTime={startingTime}
+                                date={startingDate}
+                                tripType={startingTripType}
                             />,
                             infoWindowContentDiv
                         );
@@ -212,23 +205,28 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
         loadGoogleMapsScript(initMap);
     }, [startLatitude, startLongitude, endLatitude, endLongitude, tripid, manualTripID]);
 
+
     const addMarker = (lat, lng, tripType, placeName, date, time, maptype) => {
         const { Marker, LatLng } = window.google.maps;
-
-        // const marker = new Marker({
-        //     position: new LatLng(lat, lng),
-        //     map: mapRef.current,
-        //     title: placeName,
-        //     label: `B${markersRef.current.length - 1}`,
-        // });
-
         let label;
+
+        // Determine the label for the marker based on the type (start, waypoint, end)
         if (maptype === "start") {
             label = "A"; // Label for start trip
         } else if (maptype === "end") {
-            label = "Z"; // Label for end trip
+            // Label for end trip: next letter after the last waypoint
+            const lastWaypointLabel = markersRef.current.length > 0
+                ? markersRef.current[markersRef.current.length - 1].marker.label?.text
+                : 'A'; // Fallback to 'A' if no previous markers
+
+            if (lastWaypointLabel) {
+                label = String.fromCharCode(lastWaypointLabel.charCodeAt(0) + 1);
+            } else {
+                label = 'A'; // Fallback in case of undefined lastWaypointLabel
+            }
         } else {
-            label = `B${markersRef.current.length - 1}`; // Label for waypoints
+            const waypointCount = markersRef.current.length;  // Use the current length of markersRef for indexing
+            label = String.fromCharCode('B'.charCodeAt(0) + (waypointCount - 1));
         }
 
         // Create the marker with the appropriate label
@@ -239,17 +237,22 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
             label: label,
         });
 
-
+        // Push the new marker to the markers array
         markersRef.current.push({ marker, placeName, lat, lng });
+        setMapButtonTrigger(!mapButtonTrigger)
 
+        // Add a click listener to the marker
         marker.addListener("click", () => {
             showPopUpContent(marker, placeName, lat, lng, date, time, tripType); // Pass the new parameters
-
         });
-        setMapUpdate(prev => !prev); // Toggle the map update state
 
+        // Force map update
+        setMapUpdate(prev => !prev);
+
+        // Close any open info windows
         infoWindowRef.current.close();
     };
+
 
 
     const showPopUpContent = (marker, placeName, lat, lng, date, time, tripType) => {
@@ -300,6 +303,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
             },
             (response, status) => {
                 if (status === "OK") {
+                    setMapCaptureVerify(true)
                     directionsRendererRef.current.setDirections(response);
                 } else {
                     console.error("Directions request failed due to " + status);
@@ -308,28 +312,6 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
         );
     };
 
-    // const removeMarker = async (markerToRemove) => {
-    //     const markerData = markersRef.current.find(({ marker }) => marker === markerToRemove);
-
-    //     console.log(markerData.lat, markerData.lng, 'markkk', tripid);
-
-    //     try {
-    //         const response = await axios.delete(`${apiUrl}/deleteMapPoint`, {
-    //             data: {
-    //                 latitude: markerData.lat, 
-    //                 longitude: markerData.lng,
-    //                 tripid: tripid
-    //             }
-    //         });
-
-    //         console.log(response.data);
-
-    //         markersRef.current = markersRef.current.filter(({ marker }) => marker !== markerToRemove);
-    //         markerToRemove.setMap(null);
-    //     } catch (error) {
-    //         console.error("Error deleting marker: ", error);
-    //     }
-    // };
     const removeMarker = async (markerToRemove) => {
         const markerData = markersRef.current.find(({ marker }) => marker === markerToRemove);
 
@@ -389,6 +371,12 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
         return Math.min(latZoom, lngZoom, ZOOM_MAX);
     }
 
+    const handleMapDrawRouteVerify = () => {
+        setTimeout(() => {
+            setError(false)
+        }, [1500])
+    }
+
     const handleSuccessCapture = () => {
         setSuccess(true)
         setTimeout(() => {
@@ -397,6 +385,11 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     }
 
     const handleMapCapture = async () => {
+        if (mapCaptureVerify === false) {
+            setError(true)
+            handleMapDrawRouteVerify()
+            return
+        }
         const mapCenter = new window.google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: { lat: 13.0827, lng: 80.2707 },
@@ -420,34 +413,20 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
             markers.push(`markers=color:red%7Clabel:A%7C${startLatitude},${startLongitude}`);
         }
 
-        // Add sorted waypoint markers
-        // for (let i = 0; i < wayTrips.length; i++) {
-        //     const label = wayTrips[i];
-        //     const waypointLat = wayLatitude[i]; // Assuming the latitude is stored here
-        //     const waypointLng = wayLongitude[i]; // Assuming the longitude is stored here
-
-        //     if (label && waypointLat && waypointLng) {
-        //         markers.push(`markers=color:red%7Clabel:${label}%7C${waypointLat},${waypointLng}`);
-        //     }
-        // }
+        let waypointLabelCharCode = 'B'.charCodeAt(0);
         for (let i = 0; i < wayTrips.length; i++) {
-            // Ensure labels start from 'B1' and continue sequentially
-            const label = `C${i + 1}`  // "B1", "B2", "B3", etc.
-            const waypointLat = wayLatitude[i];  // Assuming the latitude is stored here
-            const waypointLng = wayLongitude[i];  // Assuming the longitude is stored here
+            const label = String.fromCharCode(waypointLabelCharCode++);  // "B", "C", "D", etc.
+            const waypointLat = wayLatitude[i];  // Assuming latitude for waypoints is stored here
+            const waypointLng = wayLongitude[i];  // Assuming longitude for waypoints is stored here
 
             if (label && waypointLat && waypointLng) {
-                // Push the marker with the dynamically generated label
-                markers.push(`markers=color:red%7Clabel:${i + 1}%7C${waypointLat},${waypointLng}`);
+                markers.push(`markers=color:red%7Clabel:${label}%7C${waypointLat},${waypointLng}`);
             }
         }
 
-
-
-        // Add the end marker
+        // Add the end marker with the next letter after the last waypoint
         if (endLatitude && endLongitude) {
-            const lastWaypointLabel = sortedWaypoints.length > 0 ? sortedWaypoints[sortedWaypoints.length - 1]?.label : null;
-            const nextEndLabel = lastWaypointLabel ? String.fromCharCode(lastWaypointLabel.charCodeAt(0) + 1) : 'Z';
+            const nextEndLabel = String.fromCharCode(waypointLabelCharCode); // Next letter after the last waypoint
             markers.push(`markers=color:red%7Clabel:${nextEndLabel}%7C${endLatitude},${endLongitude}`);
         }
 
@@ -489,10 +468,11 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
 
                     const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
                     const staticMapBlob = await urlToBlob(finalStaticMapUrl);
-                    const tripid = localStorage.getItem('selectedTripid');
+                    // const tripid = localStorage.getItem('selectedTripid');
                     const formDataUpload = new FormData();
                     formDataUpload.append('file', new File([staticMapBlob], 'static_map.png'));
                     formDataUpload.append('tripid', tripid);
+                    setMapCaptureVerify(false)
                     handleSuccessCapture()
 
                     try {
@@ -512,10 +492,70 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
             });
         }
     };
+    const handleChange = (newAddress) => {
+        setAddress(newAddress);
+    };
 
+    const submitPopup = (latLng) => {
+        // Implement your logic for displaying a popup
+        console.log("Mappppppppppppppp", latLng);
+    };
+    const handleSelect = async (address) => {
+        const geocoder = new window.google.maps.Geocoder();
+
+        try {
+            const results = await new Promise((resolve, reject) => {
+                geocoder.geocode({ address: address }, (results, status) => {
+                    if (status === 'OK' && results && results.length > 0) {
+                        resolve(results);
+                    } else {
+                        reject(new Error(`Geocode failed: ${status}`)); // Include status in error
+                    }
+                });
+            });
+
+            if (results[0].geometry && results[0].geometry.location) {
+                const latLng = results[0].geometry.location;
+                console.log(latLng, results, 'Location found'); // Better log message
+
+                if (mapInstance) {
+                    mapInstance.setCenter(latLng);
+                    mapInstance.setZoom(14);
+                    submitPopup(latLng);
+                } else {
+                    console.log("Map instance not available");
+                }
+            }
+        } catch (error) {
+            console.error("Error occurred in handleSelect:", error.message);
+        }
+    };
 
     return (
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+            <PlacesAutocomplete
+                value={address}
+                onChange={handleChange}
+                onSelect={handleSelect}
+            >
+                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                    <div className="search-input-field">
+                        <input
+                            {...getInputProps({
+                                placeholder: 'Enter location',
+                            })}
+                        />
+                        <div>
+                            {suggestions.map((suggestion, index) => (
+                                <div key={index} {...getSuggestionItemProps(suggestion)}>
+                                    {suggestion.description}
+                                </div>
+                            ))}
+
+                        </div>
+                    </div>
+                )}
+            </PlacesAutocomplete>
             <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
                 <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
                 <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
@@ -530,7 +570,13 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                     <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button>
                 </div>
                 <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-                    {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> : ""}
+                    {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> :
+                        ""}
+
+                </div>
+                <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+                    {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
+                        ""}
 
                 </div>
             </div>

@@ -367,7 +367,7 @@ border-right: 1px solid transparent !important;
     /* align-items: flex-start;
     justify-content: space-evenly; */
     /* width: 68vw; */
-    gap: 10px;
+    gap: 20px;
     /* justify-content: center; */
 }
 
@@ -378,5 +378,3 @@ border-right: 1px solid transparent !important;
 .organisation-avatar-icon {
     font-size: 55px;
 }
-
-.organisation-details-input .organization-input {}

@@ -208,6 +208,8 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
     path: req.file.filename,
     tripid: req.body.tripid,
   };
+  console.log(fileData,'filed');
+  
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   const query2 = 'INSERT INTO mapimage SET ?';
   const updatequery = 'update mapimage set path=? where tripid = ?'
@@ -230,6 +232,8 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
         if (err) {
           return res.status(500).json({ error: 'Error storing file in the database.' });
         }
+        console.log(results,'resultimage');
+        
         return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
       });
     }

@@ -387,19 +387,19 @@ function submitMapPopup() {
                 // Handle the response as needed
             })
             .catch(error => console.error('Error:', error));
-        fetch(`${apiUrl}/gmap-submitForm`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-                // Handle the response as needed
-            })
-            .catch(error => console.error('Error:', error));
+        // fetch(`${apiUrl}/gmap-submitForm`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ date, time, tripType: selectedTripType, placeName, tripid, latitude, longitude }),
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('Server response:', data);
+        //         // Handle the response as needed
+        //     })
+        //     .catch(error => console.error('Error:', error));
         console.log(waypoints, wayPlaceName, selectedTripType, 'waypoints');
 
         popup.close();

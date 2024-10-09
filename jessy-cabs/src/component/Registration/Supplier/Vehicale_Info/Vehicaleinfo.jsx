@@ -211,10 +211,7 @@ const Vehicaleinfo = ({ stationName }) => {
         const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
         const data = response.data
         const names = data.map(res => res.VechicleNames)
-
         setVehilcNames(names)
-
-
       }
       catch (error) {
         console.log(error, "error");

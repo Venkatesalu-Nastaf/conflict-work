@@ -26,6 +26,7 @@ const usePaymentdetails = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [error, setError] = useState(false);
+  const [searchText, setSearchText] = useState("")
   const [warning, setWarning] = useState(false);
   const [info, setInfo] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -97,52 +98,109 @@ const usePaymentdetails = () => {
   }, [error, success, warning, info]);
 
   //------------------------------------------------
-  const handleKeyDown = async (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const Billno = event.target.value;
+  
+  
+  // const handleKeyDown = async (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault(); 
+  //     const Billno = event.target.value;
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getBillnoFromIndividualBill`, {
+  //         params: {
+  //         billno: Billno
+  //         }
+  //       });
+
+  //       if (response.data && response.data.length > 0) {
+  //         const transferTripId = response.data[0].Trip_id;
+  //         const fromDate = dayjs(response.data[0].fromDate).format('YYYY-MM-DD');
+  //         const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
+  //         setFromDate(fromDate);
+  //         setToDate(toDate);
+  //         setCustomer(response.data[0].customer);
+  //         // Second API call to get tripsheet details using transferTripId
+  //         const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
+  //           params: {
+  //             transferTripId: transferTripId
+  //           }
+  //         });
+  //         const data = tripsheetResponse.data;
+
+  //         // Filter out rows where tripid is 0
+  //         if (data.length > 0) {
+  //           const filteredData = data.filter(row => row.tripid !== 0);
+  //           const rowsWithUniqueId = filteredData.map((row, index) => ({
+  //             ...row,
+  //             id: index + 1,
+  //           }));
+
+  //           setRows(rowsWithUniqueId);
+  //           setSuccess(true);
+  //           setSuccessMessage("Successfully Listed");
+  //         }
+  //       } else {
+  //         console.log('No Trip_id found for the given GroupTripId');
+  //       }
+  //     } catch (error) {
+  //       console.log(error, 'error');
+  //     }
+  //   }
+  // };
+  // const handleKeyDown = async (e) => {
+  //   if (e.key === "Enter") {
+
+  //     try {
+  //       const response = await fetch(
+  //         `${apiUrl}/getBillnoFromIndividualBill${billingno}`
+  //       );
+  //       const data = await response.json();
+  //       if (data.length > 0) {
+  //         const rowsWithUniqueId = data.map((row, index) => ({
+  //           ...row,
+  //           id: index + 1,
+  //         }));
+  //         setRows(rowsWithUniqueId);
+  //         setSuccess(true);
+  //         setSuccessMessage("successfully listed");
+  //       } else {
+  //         setRows([]);
+  //         setError(true);
+  //         setErrorMessage("no data found");
+  //       }
+  //     } catch {
+  //       setError(true);
+  //       setErrorMessage("Check your Network Connection");
+  //     }
+  //   }
+  // };
+  const handleKeyDown= useCallback(async (e) => {
+    if (e.key === "Enter") {
       try {
-        const response = await axios.get(`${apiUrl}/getBillnoFromIndividualBill`, {
-          params: {
-          billno: Billno
-          }
-        });
-
-        if (response.data && response.data.length > 0) {
-          const transferTripId = response.data[0].Trip_id;
-          const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
-          const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
-          setFromDate(fromDate);
-          setToDate(toDate);
-          setCustomer(response.data[0].customer);
-          // Second API call to get tripsheet details using transferTripId
-          const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
-            params: {
-              transferTripId: transferTripId
-            }
-          });
-          const data = tripsheetResponse.data;
-
-          // Filter out rows where tripid is 0
-          if (data.length > 0) {
-            const filteredData = data.filter(row => row.tripid !== 0);
-            const rowsWithUniqueId = filteredData.map((row, index) => ({
-              ...row,
-              id: index + 1,
-            }));
-
-            setRows(rowsWithUniqueId);
-            setSuccess(true);
-            setSuccessMessage("Successfully Listed");
-          }
+        const response = await fetch(`${apiUrl}/getBillnoFromIndividualBill?billingno=${encodeURIComponent(billingno)}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
         } else {
-          console.log('No Trip_id found for the given GroupTripId');
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
         }
       } catch (error) {
-        console.log(error, 'error');
+        console.error("Fetch error:", error);
+        setError(true);
+        setErrorMessage("Check your Network Connection");
       }
     }
-  };
+  }, [apiUrl, billingno]);
   
   const handleInputChange = (event, value, name) => {
     if (name === "customer") {
@@ -206,6 +264,7 @@ const usePaymentdetails = () => {
     warningMessage,
     infoMessage,
     hidePopup,
+    setSearchText,
     billingno,
     handleInputChange,
     customer,

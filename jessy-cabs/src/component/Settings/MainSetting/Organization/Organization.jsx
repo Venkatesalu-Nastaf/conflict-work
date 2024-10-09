@@ -69,8 +69,16 @@ const Organization = ({ logoImage }) => {
                                     <div className="input-field">
                                         <div className="input">
                                             <Avatar
-                                                sx={{ width: "12ch", height: "12ch" }}
-                                                alt="userimage"
+                                                // sx={{ width: "12ch", height: "12ch" }}
+                                                style={{
+                                                    width: '12ch',
+                                                    height: '12ch',
+                                                    textAlign: 'center',
+                                                    objectFit: 'fill',
+                                                    color: 'transparent',
+                                                    textIndent: '10000px'
+                                                  }}
+                                                alt="logoimage"
                                                 src={logoImage}
                                             >
                                                 {logoImage ? null : (
@@ -260,6 +268,7 @@ const Organization = ({ logoImage }) => {
                                     />
                                 </div>
                                 <div className="input organization-input">
+                                    <label htmlFor="">Address:</label>
                                     <TextField
                                         size="small"
                                         sx={{ width: "225px" }}
@@ -267,7 +276,7 @@ const Organization = ({ logoImage }) => {
                                         className='address-field organisation-address-field'
                                         value={selectedCustomerData?.addressLine1 || book.addressLine1}
                                         onChange={handleChange}
-                                        label="Address"
+                                        // label="Address"
                                         id="remark"
                                         multiline
                                         rows={3}
@@ -328,7 +337,7 @@ const Organization = ({ logoImage }) => {
                                     />
                                 </div>
                                 <div className="input organization-input">
-                                    <label htmlFor="">Telephone no:</label>
+                                    <label htmlFor="">Telephone No:</label>
                                     <TextField
                                         sx={{ width: "100%" }}
                                         size="small"
@@ -371,13 +380,14 @@ const Organization = ({ logoImage }) => {
 
                                 <div className="input organization-input">
                                     <div>
-                                        <label htmlFor="">Bank Address:</label>
-                                        <textarea
+                                        <label htmlFor="">Bank Details:</label>
+                                        <TextField
+                                            sx={{ width: "225px" }}
                                             name="BankDetails"
                                             className='address-field organisation-address-field Scroll-Style-hide'
                                             value={selectedCustomerData?.BankDetails || book.BankDetails}
                                             onChange={handleChange}
-                                            label="BankDetails"
+                                            // label="BankDetails"
                                             id="Bank"
                                             multiline
                                             rows={5}

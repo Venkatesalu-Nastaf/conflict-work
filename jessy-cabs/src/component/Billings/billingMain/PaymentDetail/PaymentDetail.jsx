@@ -71,7 +71,7 @@ const PaymentDetail = ({ organizationNames }) => {
               <div className="input-field input-field-payment">
                 <div className="input input-payment"  >
                   <div className="icone">
-                    <ListAltIcon color="action" />
+                    <ListAltIcon color="action"/>
                   </div>
                   <TextField
                     size="small"
@@ -104,6 +104,7 @@ const PaymentDetail = ({ organizationNames }) => {
                         <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
                       );
                     }}
+
                   />
                 </div>
                 <div className="input" >

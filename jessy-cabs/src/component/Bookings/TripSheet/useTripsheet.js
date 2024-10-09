@@ -10,8 +10,10 @@ import { Button } from '@mui/material';
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 import { PermissionContext } from '../../context/permissionContext';
+import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
 
 const useTripsheet = () => {
+    const {mapButtonTrigger} = useData1()
     const { permissions } = useContext(PermissionContext)
     const Tripsheet_modify1 = permissions[3]?.modify;
     const Tripsheet_delete1 = permissions[3]?.delete;
@@ -4399,7 +4401,7 @@ const useTripsheet = () => {
             }
         }
         fetchData()
-    }, [manualMarkTrigger,TripID])
+    }, [manualMarkTrigger,TripID,mapButtonTrigger])
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {

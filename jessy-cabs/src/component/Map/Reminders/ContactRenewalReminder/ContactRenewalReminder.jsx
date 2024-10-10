@@ -67,7 +67,7 @@ const ContactRenewalReminder = () => {
   return (
     <div className='ContactRenewalReminder'>
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '20px', marginBottom: '20px',flexWrap:"wrap" }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '20px', marginBottom: '20px',flexWrap:"wrap",zoom:"85%" }}>
           <div>
             <Box sx={{ minWidth: 150 }}>
               <FormControl fullWidth>

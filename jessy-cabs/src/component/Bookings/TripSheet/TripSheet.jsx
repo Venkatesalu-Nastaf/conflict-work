@@ -136,7 +136,7 @@ const style = {
 const style1 = {
   position: 'absolute',
   top: '50%',
-  height: 600,
+  height: 'fit-content',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 1100,

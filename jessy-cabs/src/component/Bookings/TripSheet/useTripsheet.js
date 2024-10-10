@@ -4401,12 +4401,13 @@ const useTripsheet = () => {
             }
         }
         fetchData()
-    }, [manualMarkTrigger,TripID,mapButtonTrigger])
+    }, [manualMarkTrigger,TripID,mapButtonTrigger,mapimgpopupOpen])
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
             const respone = await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
             console.log(respone.data);
+            setManualTripID([])
             setError(true)
             setErrorMessage("Successfully Deleted")
             setMapimgPopupOpen(false)

@@ -67,7 +67,7 @@ const VehicleRenewalReminder = () => {
   return (
     <div className='VehicleRenewalReminder' >
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '20px', gap: '20px',flexWrap:"wrap" }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '20px', gap: '20px',flexWrap:"wrap" , zoom:"85%"}}>
           <div>
             <Box sx={{ minWidth: 150 }}>
               <FormControl fullWidth>

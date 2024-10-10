@@ -272,7 +272,9 @@ function App() {
             <div className="logo-loading">
               <img src={Logo} alt="logo" />
             </div>
+            
           </div>
+          
         ) : (
           <Routes>
             <Route path="/" element={<Login />} />

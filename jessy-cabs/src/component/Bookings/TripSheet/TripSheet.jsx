@@ -1848,9 +1848,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div> */}
                                   <div className="input">
-                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button>
+                                    { manualTripID.length ?
+                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
+                                    }
                                   </div>
-
                                 </div>
                               </div>
                               <div className="table-TripSheet right-buttons">

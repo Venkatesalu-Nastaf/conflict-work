@@ -14,5 +14,21 @@ router.get('/getFullBillWisedReport', (req, res) => {
     })
 })
 
+// get Month wise Total Amount
+router.post('/getMonthWiseTotal', (req, res) => {
+    const { selectMonth } = req.body;
+    console.log(selectMonth, 'selectmonth');
+
+    db.query("SELECT TotalAmount, Collected, TotalBalance FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
+        if (error) {
+            console.log(error, 'error');
+            return res.status(500).json({ error: 'Database query error' });
+        }
+        console.log(result, 'selectmonthresult');
+
+        return res.status(200).json(result);
+    });
+});
+
 
 module.exports = router;

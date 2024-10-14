@@ -130,7 +130,7 @@ const LogDetails = () => {
 
     <>
       <div className='main-content-form'>
-        <div className='input-field vendor-statement-input-field' style={{ alignItems: 'flex-end' }}>
+        <div className='input-field vendor-statement-input-field' style={{ alignItems: 'flex-end' , marginBottom:"15px"}}>
 
           <div className="input">
             <div className="icone">
@@ -157,7 +157,7 @@ const LogDetails = () => {
 
           <div className="input">
             <div style={{}}>
-              <label htmlFor="">Id</label>
+              <label htmlFor="" style={{fontSize:"20px", marginRight:"10px"}}>Id</label>
               <input type="text" value={selectbooking} style={{ backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px' }}
                 onChange={(e) => setSelectedBooking(e.target.value)}
               />

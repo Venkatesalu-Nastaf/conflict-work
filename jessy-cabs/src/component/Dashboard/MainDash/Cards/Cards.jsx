@@ -169,11 +169,12 @@ const Cards = () => {
     value: parseFloat(item.pendingamount) || 0,
   }));
   const handleMonthChange = (event) => {
+    console.log(event.target.value, 'selectmonth');
 
     setSelectedMonth2(event.target.value);
     // setSelectedmonth(event.target.value)
-    fetchDataFromBackend(event.target.value)
-    fetchMonthlyDataFromBackend(event.target.value)
+    // fetchDataFromBackend(event.target.value)
+    // fetchMonthlyDataFromBackend(event.target.value)
 
   };
   const calculatePercentageChange = (TotalAmount, previousValue) => {
@@ -235,20 +236,20 @@ const Cards = () => {
     },
   ];
 
-  useEffect(() => {
-    const fetchData2 = async () => {
-      try {
-        const result = await fetchDataFromBackend(selectedMonth2);
-        setBackendmonth(result);
-        const result2 = await fetchMonthlyDataFromBackend(selectedMonth2)
-        setBillingGraph(result2)
+  // useEffect(() => {
+  //   const fetchData2 = async () => {
+  //     try {
+  //       const result = await fetchDataFromBackend(selectedMonth2);
+  //       setBackendmonth(result);
+  //       const result2 = await fetchMonthlyDataFromBackend(selectedMonth2)
+  //       setBillingGraph(result2)
 
-      } catch {
+  //     } catch {
 
-      }
-    };
-    fetchData2();
-  }, [selectedMonth2]);
+  //     }
+  //   };
+  //   fetchData2();
+  // }, [selectedMonth2]);
 
   return (
     <div className="cards-container">
@@ -269,6 +270,7 @@ const Cards = () => {
           <option value="11">December</option>
         </select> */}
         <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
+          <option value="All">All</option>
           <option value="01">January</option>
           <option value="02">February</option>
           <option value="03">March</option>

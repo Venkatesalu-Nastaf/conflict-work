@@ -368,8 +368,7 @@ const useAccountinfo = () => {
 
   const handleenterSearch = useCallback(async (e) => {
     if (e.key === "Enter") {
-    
-
+      
       try {
         const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}`);
         const data = await response.json();

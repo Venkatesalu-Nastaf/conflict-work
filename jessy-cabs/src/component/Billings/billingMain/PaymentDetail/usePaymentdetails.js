@@ -98,8 +98,8 @@ const usePaymentdetails = () => {
   }, [error, success, warning, info]);
 
   //------------------------------------------------
-  
-  
+
+
   // const handleKeyDown = async (event) => {
   //   if (event.key === 'Enter') {
   //     event.preventDefault(); 
@@ -173,8 +173,11 @@ const usePaymentdetails = () => {
   //     }
   //   }
   // };
-  const handleKeyDown= useCallback(async (e) => {
+
+  const handleKeyDown = useCallback(async (e) => {
     if (e.key === "Enter") {
+      console.log(billingno, "billll");
+
       try {
         const response = await fetch(`${apiUrl}/getBillnoFromIndividualBill?billingno=${encodeURIComponent(billingno)}`);
         if (!response.ok) {
@@ -186,6 +189,8 @@ const usePaymentdetails = () => {
             ...row,
             id: index + 1,
           }));
+
+          setCustomer(rowsWithUniqueId[0].Customer)
           setRows(rowsWithUniqueId);
           setSuccess(true);
           setSuccessMessage("Successfully listed");
@@ -201,10 +206,10 @@ const usePaymentdetails = () => {
       }
     }
   }, [apiUrl, billingno]);
-  
+
   const handleInputChange = (event, value, name) => {
     if (name === "customer") {
-      const selectedlabel = value ? value.label : ""  
+      const selectedlabel = value ? value.label : ""
       setCustomer(selectedlabel);
     } else if (event.target.name === "billingno") {
       setBillingNo(event.target.value);

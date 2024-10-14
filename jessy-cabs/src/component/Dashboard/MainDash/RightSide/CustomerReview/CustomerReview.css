@@ -155,3 +155,12 @@
     height: fit-content;
     justify-content: center;
 }
+
+
+  .area-text-chart{
+    letter-spacing: .5px;
+    font-size: 20px;
+    color: #000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }

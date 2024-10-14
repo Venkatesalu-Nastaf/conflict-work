@@ -54,7 +54,8 @@ const todaybook = todaybooking?.map((data) => data.count)
 
   return (
     <div className="CustomerReview weekly-chart" id="areachart">
-
+ <h3  className="area-text-chart">Area Chart</h3>
+ {/* <p style={{margin:"0px"}}>zzzzzzzzzzzzz</p> */}
       <Chart options={data.options} series={data.series} type="bar" />
 
     </div>

@@ -438,6 +438,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                 location: new window.google.maps.LatLng(lat, wayLongitude[index]),
                 stopover: true,
             }));
+console.log('start',startLatitude,startLongitude,'end',endLatitude,endLongitude,'way',wayLatitude,wayLongitude);
 
             directionsService.route({
                 origin: startLocation,
@@ -465,8 +466,10 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                         const blob = await response.blob();
                         return blob;
                     }
-
+                    const a = markers.join('&')
                     const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
+                    console.log(markers.join('&'),a,markers,'nandhakalai');
+                    
                     const staticMapBlob = await urlToBlob(finalStaticMapUrl);
                     // const tripid = localStorage.getItem('selectedTripid');
                     const formDataUpload = new FormData();
@@ -532,11 +535,12 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly",padding:"10px" }}>
             <PlacesAutocomplete
                 value={address}
                 onChange={handleChange}
                 onSelect={handleSelect}
+                
             >
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                     <div className="search-input-field">
@@ -544,6 +548,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                             {...getInputProps({
                                 placeholder: 'Enter location',
                             })}
+                            className="search-input"
                         />
                         <div>
                             {suggestions.map((suggestion, index) => (
@@ -556,6 +561,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                     </div>
                 )}
             </PlacesAutocomplete>
+            
             <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
                 <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
                 <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>

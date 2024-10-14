@@ -22,3 +22,12 @@ margin-top: 20px;
     border: none;
     border-radius: 8px;
 }
+.search-input-field{
+    /* margin-left: 10px;
+    background-color: #9e002f; */
+    padding-left: 20ypx;
+}
+.search-input{
+    border: 2px solid black;
+    /* border-radius: ; */
+}

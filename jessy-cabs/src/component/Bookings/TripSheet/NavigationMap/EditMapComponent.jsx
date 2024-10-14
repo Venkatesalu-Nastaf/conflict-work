@@ -532,11 +532,12 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly",padding:"10px" }}>
             <PlacesAutocomplete
                 value={address}
                 onChange={handleChange}
                 onSelect={handleSelect}
+                
             >
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                     <div className="search-input-field">
@@ -544,6 +545,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                             {...getInputProps({
                                 placeholder: 'Enter location',
                             })}
+                            className="search-input"
                         />
                         <div>
                             {suggestions.map((suggestion, index) => (
@@ -556,6 +558,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                     </div>
                 )}
             </PlacesAutocomplete>
+            
             <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
                 <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
                 <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>

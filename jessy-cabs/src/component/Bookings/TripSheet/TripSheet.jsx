@@ -1,8 +1,9 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
 import EditMapComponent from './NavigationMap/EditMapComponent';
-import {  Typography, IconButton } from '@mui/material';
-import {  Snackbar, Alert } from '@mui/material';
+import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
+import { Typography, IconButton } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
 import "./TripSheet.css";
@@ -1760,10 +1761,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
                                     </DialogContent>
                                     <DialogActions>
-                                      <Button 
-                                      // onClick={handleDeleteMap}
-                                      onClick={handleOpen}
-                                      variant="contained" color="primary">
+                                      <Button
+                                        // onClick={handleDeleteMap}
+                                        onClick={handleOpen}
+                                        variant="contained" color="primary">
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -1893,9 +1894,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div> */}
                                   <div className="input">
-                                    { manualTripID.length ?
-                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
-                                    <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
+                                    {manualTripID.length ?
+                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
                                     }
                                   </div>
                                 </div>
@@ -1987,63 +1988,63 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                           <Modal
-        open={openmodal}
-        onClose={handleClosemodal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            borderRadius: 2,
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography id="modal-title" variant="h6" component="h2">
-              Modal Title
-            </Typography>
-            <IconButton onClick={handleClosemodal}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
+                            open={openmodal}
+                            onClose={handleClosemodal}
+                            aria-labelledby="modal-title"
+                            aria-describedby="modal-description"
+                          >
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 400,
+                                bgcolor: 'background.paper',
+                                borderRadius: 2,
+                                boxShadow: 24,
+                                p: 4,
+                              }}
+                            >
+                              <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography id="modal-title" variant="h6" component="h2">
+                                  Modal Title
+                                </Typography>
+                                <IconButton onClick={handleClosemodal}>
+                                  <CloseIcon />
+                                </IconButton>
+                              </Box>
 
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            This is the content of the modal.
-          </Typography>
+                              <Typography id="modal-description" sx={{ mt: 2 }}>
+                                This is the content of the modal.
+                              </Typography>
 
-          <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
-            <Button onClick={handleCancel} sx={{ mr: 2 }}>
-              Cancel
-            </Button>
-            <Button variant="contained"  onClick={() => {
-    handleOk();    // First function call
-    handleClicksnack(); // Second function call (for showing Snackbar)
-  }}>
-              OK
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+                              <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
+                                <Button onClick={handleCancel} sx={{ mr: 2 }}>
+                                  Cancel
+                                </Button>
+                                <Button variant="contained" onClick={() => {
+                                  handleOk();    // First function call
+                                  handleClicksnack(); // Second function call (for showing Snackbar)
+                                }}>
+                                  OK
+                                </Button>
+                              </Box>
+                            </Box>
+                          </Modal>
 
 
-      <Snackbar
-        open={opensnack}
-        autoHideDuration={3000} // Auto hide after 3 seconds
-        onClose={handleClosesnack}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Top-right position
+                          <Snackbar
+                            open={opensnack}
+                            autoHideDuration={3000} // Auto hide after 3 seconds
+                            onClose={handleClosesnack}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Top-right position
 
-      >
-        <Alert onClose={handleClosesnack} severity="success" sx={{ width: '100%' }}>
-          Deleted successfully
-        </Alert>
-      </Snackbar>
+                          >
+                            <Alert onClose={handleClosesnack} severity="success" sx={{ width: '100%' }}>
+                              Deleted successfully
+                            </Alert>
+                          </Snackbar>
 
 
                         </TabPanel>
@@ -3292,14 +3293,27 @@ const TripSheet = ({ stationName, logoImage }) => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style1}>
-               
-                <Box display="flex" justifyContent="flex-end">
-          <IconButton onClick={handleCloseMapPopUp}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
 
-                  <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
+                  <Box >
+                    <div style={{ display: 'flex', justifyContent:"space-between" }}>
+
+                   
+                  <div style={{ display: 'flex', gap: "20px", padding: '10px'}}>
+                <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
+                <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
+                <label style={{ fontWeight: 'bold' }}>Close Date : <span>{closedate}</span></label>
+                <label style={{ fontWeight: 'bold' }}>Start Time : <span>{starttime}</span></label>
+                <label style={{ fontWeight: 'bold' }}>Close Time : <span>{endtime}</span> </label>
+            </div>
+                    <IconButton onClick={handleCloseMapPopUp}>
+                      <CloseIcon />
+                    </IconButton>
+                    </div>
+                  </Box>
+                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
+
+
+                  {/* <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} /> */}
 
                   {/* <EditMapComponent startLatitude1={startLatitude} startLongitude1={startLongitude} endLatitude1={endLatitude} endLongitude1={endLongitude} wayLatitude1={wayLatitude} wayLongitude1={wayLongitude}tripid={tripid} edit="editMode" /> */}
                   {/* <MapComponent startLatitude={startLatitude} startLongitude={startLongitude} endLatitude={endLatitude} endLongitude={endLongitude} wayLatitude={wayLatitude} wayLongitude={wayLongitude} edit="editMode" /> */}

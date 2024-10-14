@@ -438,6 +438,7 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                 location: new window.google.maps.LatLng(lat, wayLongitude[index]),
                 stopover: true,
             }));
+console.log('start',startLatitude,startLongitude,'end',endLatitude,endLongitude,'way',wayLatitude,wayLongitude);
 
             directionsService.route({
                 origin: startLocation,
@@ -465,8 +466,10 @@ const EditMapComponent = ({ tripid, edit, startdate, closedate, starttime, close
                         const blob = await response.blob();
                         return blob;
                     }
-
+                    const a = markers.join('&')
                     const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
+                    console.log(markers.join('&'),a,markers,'nandhakalai');
+                    
                     const staticMapBlob = await urlToBlob(finalStaticMapUrl);
                     // const tripid = localStorage.getItem('selectedTripid');
                     const formDataUpload = new FormData();

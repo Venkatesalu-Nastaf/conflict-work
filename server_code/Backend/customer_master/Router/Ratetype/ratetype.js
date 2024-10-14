@@ -80,11 +80,13 @@ router.get('/ratetype', (req, res) => {
 //searchbar in Rate Type
 router.get('/searchRatetype', (req, res) => {
   const { searchText } = req.query; // Get the searchText from the query params
+  // console.log(searchText, "search")
   let query = 'SELECT * FROM ratetype WHERE 1=1'; // Ensure you query from the correct table
   let params = [];
 
   if (searchText) {
     const columnsToSearch = [
+      'driverid',
       'stations',
       'ratetype',
       'ratename',
@@ -92,13 +94,14 @@ router.get('/searchRatetype', (req, res) => {
       'starttime',
       'closetime'
     ];
-
+    console.log(columnsToSearch, "columns")
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
     query += ` AND (${likeConditions})`;
 
     // Add searchText to params for each column
     params = columnsToSearch.map(() => `${searchText}%`);
   }
+console.log(query,params, "fhjf");
 
   // Execute the query
   db.query(query, params, (err, results) => {

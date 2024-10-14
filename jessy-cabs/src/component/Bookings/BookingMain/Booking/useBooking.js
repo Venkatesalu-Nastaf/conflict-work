@@ -506,13 +506,11 @@ const useBooking = () => {
     fetchgetvehicleName()
   }, [apiUrl,])
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
-
           const userDataArray = await response.json();
           if (userDataArray.length > 0) {
             setOrganisationSendEmail(userDataArray[0])
@@ -538,7 +536,7 @@ const useBooking = () => {
     if (!booking_no) {
       setError(true);
       setErrorMessage("PLease Enter Booking No");
-      return;
+      return; 
     }
     setDeleteFile([])
     showPdf();
@@ -616,9 +614,9 @@ const useBooking = () => {
       }
     }
     getImageCount()
-  }, [file, triggerCount, apiUrl, booking_id])
+  }, [file, triggerCount, apiUrl, booking_id,])
 
-  //--------------------------------------------------------------
+    //--------------------------------------------------------------
 
   const handlecheck = async (lastBookingno) => {
     if (sendEmail || sendmailguestsms) {
@@ -989,6 +987,7 @@ const useBooking = () => {
         setEdit(true);
         setSendEmail(false);
         setDatatrigger(!datatrigger);
+        // setAvilableimageCount(bookingDetails.count)
       } catch {
         setError(true);
         setErrorMessage("Error retrieving booking details");

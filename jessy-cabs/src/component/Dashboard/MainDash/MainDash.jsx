@@ -3,6 +3,8 @@ import "./MainDash.css";
 import RightSide from "./RightSide/RightSide";
 import Cards from "./Cards/Cards";
 import Table from "./Table/Table";
+import { useData1 } from "../Maindashboard/DataContext";
+
 const MainDash = ({stationName}) => {
 
   const [isBelow768px, setIsBelow768px] = useState(false);
@@ -20,6 +22,9 @@ const MainDash = ({stationName}) => {
     };
     
   }, []);
+
+  const {expanded } = useData1();
+
   return (
     <>
       {isBelow768px ? (
@@ -42,9 +47,9 @@ const MainDash = ({stationName}) => {
             <RightSide />
           </div> */}
 
-          <div>
+          <div >
             <div className="first-div">
-              <div className="left-div">
+              <div className={`left-div ${expanded ? "extendedwidth" : ""}`}>
                 <Cards />
                 <Table  stationName={stationName}/>
               </div>

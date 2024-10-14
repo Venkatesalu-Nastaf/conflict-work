@@ -12,30 +12,6 @@ router.get('/organizationoptions', (req, res) => {
     });
 });
 
-// router.get('/payment-details', (req, res) => {
-//     const { billingno, customer, fromDate, toDate } = req.query;
-//     let query = 'SELECT * FROM billing WHERE 1=1';
-//     let params = [];
-//     if (billingno) {
-//         query += ' AND billingno = ?';
-//         params.push(billingno);
-//     }
-//     if (customer) {
-//         query += ' AND customer = ?';
-//         params.push(customer);
-//     }
-//     if (fromDate && toDate) {
-//         query += ' AND Billingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-//         params.push(fromDate);
-//         params.push(toDate);
-//     }
-//     db.query(query, params, (err, result) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//         }
-//         return res.status(200).json(result);
-//     });
-// });
 // router.get('/getBillnoFromIndividualBill', (req, res) => {
 //     const { billno } = req.query;
 //     console.log(billno, "billinggg")
@@ -59,27 +35,42 @@ router.get('/organizationoptions', (req, res) => {
 //         return res.status(200).json(result);
 //     });
 // });
-router.get('/getBillnoFromIndividualBill', (req, res) => {
-    const { billingno } = req.query;
+// router.get('/getBillnoFromIndividualBill', (req, res) => {
+//     const { billingno } = req.query;
+//     console.log(billingno, "billingno");
     
-    let query = 'SELECT * FROM Individual_Billing WHERE 1=1';
-    let params = [];
+//     let query = 'SELECT * FROM Individual_Billing WHERE 1=1';
+//     let params = [];
 
-    if (billingno) {
-        const columnsToSearch = [
-            'Trip_id',
-            'Status',
-            'Amount',
-            'billing_no'
-        ];
+//     if (billingno) {
+//         const columnsToSearch = [
+//             'Trip_id',  
+//             'Status',
+//             'Amount',
+//             'billing_no',
+//             'Customer',
+//             'guestname',
+//             'Bill_Date'
+//         ];
+//         console.log(columnsToSearch, "columns")
+//         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+//         query += ` AND (${likeConditions})`;
+//         params = columnsToSearch.map(() => `${billingno}%`);
+       
+//         }
+//     res.send({ query, params }); // Example response for testing
+// });
+router.get('/getBillnoFromIndividualBill', (req, res) => {
+    const { billingno } = req.query; 
+    let query = 'SELECT * FROM Individual_Billing WHERE billing_no = ?';
 
-        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
-
-        query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `${billingno}%`);
-    }
-
-    res.send({ query, params }); // Example response for testing
+    db.query(query, [billingno], (err, results) => {
+        if (err) {
+            console.error("Database query error:", err);
+            return res.status(500).json({ error: 'Error retrieving data' });
+        }
+        res.json(results); 
+    });
 });
 
 router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {

@@ -18,11 +18,58 @@ const useCard = () => {
     };
     const apiUrl = APIURL;
 
+    // useEffect(() => {
+    //     const fetchBillAmount = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/getFullBillWisedReport`);
+    //             const data = response.data;
+
+    //             const totalAmount = data.reduce((acc, item) => acc + parseFloat(item.TotalAmount), 0);
+    //             const totalCollected = data.reduce((acc, item) => acc + parseFloat(item.Collected), 0);
+    //             const totalBalance = data.reduce((acc, item) => acc + parseFloat(item.TotalBalance), 0);
+
+    //             setTotalAmountSum(totalAmount);
+    //             setTotalCollectedSum(totalCollected);
+    //             setTotalBalanceSum(totalBalance);
+
+    //             setBillAmount(data);
+
+    //             // Store the sums in local storage with the same key
+    //             const sums = {
+    //                 totalAmountSum: totalAmount,
+    //                 totalCollectedSum: totalCollected,
+    //                 totalBalanceSum: totalBalance
+    //             };
+    //             localStorage.setItem('sumValues', JSON.stringify(sums));
+
+
+    //         } catch (error) {
+    //             console.log('Error fetching BankAccount data:', error);
+    //         }
+    //     };
+    //     fetchBillAmount();
+    // }, [apiUrl]);
+
+    // getting monthly wise Amount
+
     useEffect(() => {
+        console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
+
         const fetchBillAmount = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/getFullBillWisedReport`);
-                const data = response.data;
+                let data = [];
+
+                if (selectedMonth2 === "All") {
+                    const response = await axios.get(`${apiUrl}/getFullBillWisedReport`);
+                    data = response.data;
+
+                } else if (selectedMonth2 !== "All") {
+                    const response = await axios.post(`${apiUrl}/getMonthWiseTotal`, {
+                        selectMonth: selectedMonth2,
+                    });
+                    console.log(response.data, 'select month response');
+                    data = response.data;
+                }
 
                 const totalAmount = data.reduce((acc, item) => acc + parseFloat(item.TotalAmount), 0);
                 const totalCollected = data.reduce((acc, item) => acc + parseFloat(item.Collected), 0);
@@ -31,24 +78,21 @@ const useCard = () => {
                 setTotalAmountSum(totalAmount);
                 setTotalCollectedSum(totalCollected);
                 setTotalBalanceSum(totalBalance);
-
                 setBillAmount(data);
-
-                // Store the sums in local storage with the same key
                 const sums = {
                     totalAmountSum: totalAmount,
                     totalCollectedSum: totalCollected,
                     totalBalanceSum: totalBalance
                 };
                 localStorage.setItem('sumValues', JSON.stringify(sums));
-
-
             } catch (error) {
-                console.log('Error fetching BankAccount data:', error);
+                console.log('Error fetching Bill Amount data:', error);
             }
         };
         fetchBillAmount();
-    }, [apiUrl]);
+    }, [apiUrl, selectedMonth2]);
+
+
 
     return {
         billAmount,

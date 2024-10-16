@@ -45,6 +45,7 @@ import { PdfData } from './PdfContext';
 import { PiMoneyBold } from "react-icons/pi";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {  CircularProgress } from '@mui/material';
+import { GiConsoleController } from 'react-icons/gi';
 
 export const PDFbill = [
   {
@@ -128,7 +129,9 @@ const TransferReport = ({ stationName }) => {
     setGroupTripid,
     // handleRemove,
     billedStatusCheck,
-    setBilledStatusCheck
+    setBilledStatusCheck,
+    loading,
+    setLoading
   } = useTransferreport();
   const {
     handleExcelDownload, error1, errormessage1,
@@ -152,6 +155,20 @@ const TransferReport = ({ stationName }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+  const CustomNoRowsOverlay = () => (
+    <Box
+        sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+        }}
+    >
+        <div></div>
+    </Box>
+);
+
 
 
   useEffect(() => {
@@ -180,6 +197,8 @@ const TransferReport = ({ stationName }) => {
     const fetchdata = async () => {
       try {
         const response = await fetch(`${apiUrl}/organisationpdfdata`);
+        console.log(response,'response');
+        
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -195,6 +214,7 @@ const TransferReport = ({ stationName }) => {
   }, [apiUrl, customer]);
   useEffect(() => {
     const fetchData = async () => {
+      
 
       try {
         const tripid = localStorage.getItem("selectedtripsheetid");
@@ -208,6 +228,8 @@ const TransferReport = ({ stationName }) => {
 
         const response = await fetch(
           `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripID}`);
+           
+          
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -657,7 +679,7 @@ const TransferReport = ({ stationName }) => {
                 selectionModel={rowSelectionModel}
               /> */}
 
-              <Box
+              {/* <Box
                 sx={{
                   height: 400, // Adjust this value to fit your needs
                   '& .MuiDataGrid-virtualScroller': {
@@ -692,7 +714,63 @@ const TransferReport = ({ stationName }) => {
                   disableRowSelectionOnClick
                   selectionModel={rowSelectionModel}
                 />
-              </Box>
+              </Box> */}
+
+             {/* code with loading  */}
+             <Box
+    sx={{
+        height: 400,
+        position: 'relative', // Make Box relative to position the spinner
+        '& .MuiDataGrid-virtualScroller': {
+            '&::-webkit-scrollbar': {
+                width: '8px',
+                height: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+                backgroundColor: '#f1f1f1',
+            },
+            '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#457cdc',
+                borderRadius: '20px',
+                minHeight: '60px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: '#3367d6',
+            },
+        },
+    }}
+>
+    {loading && (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1000, // Ensure the spinner is above other content
+            }}
+        >
+            <CircularProgress />
+        </Box>
+    )}
+    <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+            setRowSelectionModel(newRowSelectionModel);
+            handleRowSelection(newRowSelectionModel);
+        }}
+        checkboxSelection
+        disableRowSelectionOnClick
+        selectionModel={rowSelectionModel}
+        components={{
+          NoRowsOverlay: CustomNoRowsOverlay,
+      }}
+    />
+</Box>
+
+
             </div>
           </div>
           {/* <div className="tripsheet-table-transferReport"> */}

@@ -15,6 +15,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import Box from "@mui/material/Box";
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import {  CircularProgress } from '@mui/material';
 
 dayjs.extend(isBetween);
 
@@ -37,6 +38,7 @@ const SMSReport = () => {
   const [datafilter, setDatafilter] = useState(true)
   const [info, setInfo] = useState(false);
   const [infoMessage, setINFOMessage] = useState({});
+  const [loading, setLoading] = useState(false);
   const hidePopup = () => {
 
     setInfo(false);
@@ -51,7 +53,26 @@ const SMSReport = () => {
     }
   }, [info]);
 
+  // const fetchdata = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/smsreportdata`);
+  //     const data = response.data;
+  //     const rowsWithUniqueId = data.map((row, index) => ({
+  //       ...row,
+  //       id: index + 1,
+  //     }));
+  //     setSmsReport(rowsWithUniqueId);
+  //     console.log('datafetched')
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [apiurl]); // useCallback dependency array
+
+  // useEffect(() => {
+  //   fetchdata();
+  // }, [fetchdata]);
   const fetchdata = useCallback(async () => {
+    setLoading(true); // Step 2: Set loading to true before fetching data
     try {
       const response = await axios.get(`${apiurl}/smsreportdata`);
       const data = response.data;
@@ -60,38 +81,65 @@ const SMSReport = () => {
         id: index + 1,
       }));
       setSmsReport(rowsWithUniqueId);
+      console.log('data fetched');
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false); // Step 3: Set loading to false after fetching data
     }
-  }, [apiurl]); // useCallback dependency array
+  }, [apiurl]);
 
   useEffect(() => {
     fetchdata();
   }, [fetchdata]);
 
 
+
+  // const filterData = () => {
+
+  //   console.log(smsreport, "filterdatat")
+  //   const filtered = smsreport.filter(report => {
+
+
+  //     const submitDate = dayjs(report.SubmitDate, 'DD MMM YYYY');
+  //     const startDateWithoutTime = fromDate.startOf('day'); // Start of the day for fromDate
+  //     const endDateWithoutTime = toDate.endOf('day');
+
+  //     return submitDate.isBetween(startDateWithoutTime, endDateWithoutTime, null, '[]');
+
+  //   });
+  //   if (filtered.length === 0) {
+  //     console.log("errr")
+  //     setInfo(true)
+  //     setINFOMessage("Data Not Found")
+  //   }
+  //   setFilteredReport(filtered);
+  //   setDatafilter(false)
+  // }
   const filterData = () => {
-
-    console.log(smsreport, "filterdatat")
+    // setLoading(true); 
+  
+    console.log(smsreport, "filterdatat");
     const filtered = smsreport.filter(report => {
-
-
       const submitDate = dayjs(report.SubmitDate, 'DD MMM YYYY');
       const startDateWithoutTime = fromDate.startOf('day'); // Start of the day for fromDate
       const endDateWithoutTime = toDate.endOf('day');
-
+  
       return submitDate.isBetween(startDateWithoutTime, endDateWithoutTime, null, '[]');
-
     });
+  
     if (filtered.length === 0) {
-      console.log("errr")
-      setInfo(true)
-      setINFOMessage("Data Not Found")
+      console.log("errr");
+      setInfo(true);
+      setINFOMessage("Data Not Found");
+      setLoading(true)
     }
+    
     setFilteredReport(filtered);
-    setDatafilter(false)
-  }
-
+    setDatafilter(false);
+    setLoading(false); // Set loading to false after filtering is complete
+  };
+  
   const dataall = () => {
     setDatafilter(true)
     fetchdata()
@@ -237,7 +285,7 @@ const SMSReport = () => {
         <div className="table-bookingCopy-SMSReport">
           <div className='sms-report-table'>
 
-            <Box
+            {/* <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs
                 '& .MuiDataGrid-virtualScroller': {
@@ -265,7 +313,99 @@ const SMSReport = () => {
                 columns={columns}
                 pageSize={5}
               />
-            </Box>
+            </Box> */}
+             {/* <Box
+      sx={{
+        height: 400,
+        position: 'relative', // Make Box relative to position the spinner
+        '& .MuiDataGrid-virtualScroller': {
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#457cdc',
+            borderRadius: '20px',
+            minHeight: '60px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#3367d6',
+          },
+        },
+      }}
+    >
+      {loading ? (
+        <Box
+          sx={{
+            position: 'absolute', // Position the spinner absolutely
+            top: '50%', // Center vertically
+            left: '50%', // Center horizontally
+            transform: 'translate(-50%, -50%)', // Adjust for the spinner's dimensions
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <DataGrid
+          rows={datafilter ? smsreport : filteredReport}
+          columns={columns}
+          pageSize={5}
+          autoHeight
+        />
+      )}
+    </Box> */}
+    <Box
+  sx={{
+    height: 400,
+    position: 'relative', // Make Box relative to position the spinner
+    overflow: 'hidden', // Ensure no overflow from the Box itself
+    '& .MuiDataGrid-virtualScroller': {
+      '&::-webkit-scrollbar': {
+        width: '8px',
+        height: '8px',
+      },
+      '&::-webkit-scrollbar-track': {
+        backgroundColor: '#f1f1f1',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#457cdc',
+        borderRadius: '20px',
+        minHeight: '60px',
+      },
+      '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: '#3367d6',
+      },
+    },
+  }}
+>
+  {loading ? (
+    <Box
+      sx={{
+        position: 'absolute', // Position the spinner absolutely
+        top: '50%', // Center vertically
+        left: '50%', // Center horizontally
+        transform: 'translate(-50%, -50%)', // Adjust for the spinner's dimensions
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
+    <DataGrid
+      rows={datafilter ? smsreport : filteredReport}
+      columns={columns}
+      pageSize={5}
+      autoHeight={false} // Ensure autoHeight is false
+      sx={{
+        height: '100%', // Take full height of the parent Box
+        overflow: 'auto', // Allow overflow within the DataGrid
+      }}
+    />
+  )}
+</Box>
+
           </div>
         </div>
         <div className='alert-popup-main'>

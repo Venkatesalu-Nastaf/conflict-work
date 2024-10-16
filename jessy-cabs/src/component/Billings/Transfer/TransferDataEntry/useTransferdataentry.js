@@ -338,14 +338,84 @@ const useTransferdataentry = () => {
             setRowSelectionModel([])
         }
     }, [billingPage, setBillingPage])
+
+    //old code  without loading
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+
+    //             if (transferId?.length > 0 && transferId !== undefined) {
+
+    //                 const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
+    //                 const tripData = await response.data;
+    //                 console.log("Transferlist to data entry")
+    //                 if (Array.isArray(tripData)) {
+    //                     const rowsWithUniqueId = tripData.map((row, index) => ({
+    //                         ...row,
+    //                         id: index + 1,
+    //                     }));
+    //                     setTripData(rowsWithUniqueId);
+    //                     setRows(rowsWithUniqueId);
+    //                 }
+    //             }
+    //         }
+    //         catch (error) {
+    //             console.log(error, "error");
+    //         }
+    //     }
+    //     fetchData()
+    // }, [transferId, billingPage, apiUrl, location])
+
+    // my code with loading 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         //setLoading(true); // Set loading to true at the start
+    
+    //         try {
+    //             if (transferId?.length > 0 && transferId !== undefined) {
+    //                 const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
+    //                 const tripData = await response.data;
+    //                 console.log("Transferlist to data entry");
+    
+    //                 if (Array.isArray(tripData)) {
+    //                     const rowsWithUniqueId = tripData.map((row, index) => ({
+    //                         ...row,
+    //                         id: index + 1,
+    //                     }));
+    //                     setTripData(rowsWithUniqueId);
+    //                     setRows(rowsWithUniqueId);
+    
+    //                     // Check the length of tripData to set loading
+    //                     if (rowsWithUniqueId.length !== 0) {
+    //                         setLoading(false); // Set loading to false if tripData has items
+    //                     } else {
+    //                         setLoading(true); // Set loading to true if tripData is empty
+    //                     }
+    //                 } else {
+    //                     setLoading(true); // Set loading to true if tripData is not an array
+    //                 }
+    //             } else {
+    //                 setLoading(true); // Set loading to true if transferId is invalid
+    //             }
+    //         } catch (error) {
+    //             console.log(error, "error");
+    //             setLoading(true); // Set loading to true on error
+    //         }
+    //     };
+        
+    //     fetchData();
+    // }, [transferId, billingPage, apiUrl, location]);
+
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // Set loading to true at the start
+    
             try {
-
-                if (transferId?.length > 0 && transferId !== undefined) {
-
+                if (transferId?.length > 0) {
                     const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
                     const tripData = await response.data;
+                    console.log("Transferlist to data entry");
+    
                     if (Array.isArray(tripData)) {
                         const rowsWithUniqueId = tripData.map((row, index) => ({
                             ...row,
@@ -354,14 +424,20 @@ const useTransferdataentry = () => {
                         setTripData(rowsWithUniqueId);
                         setRows(rowsWithUniqueId);
                     }
-                }
-            }
-            catch (error) {
+                    // No need to set loading here; it will be false at the end
+                } 
+            } catch (error) {
                 console.log(error, "error");
+            } finally {
+                // This will run after the try or catch block, ensuring loading is set to false when done
+                setLoading(false); // Set loading to false after fetching is complete
             }
-        }
-        fetchData()
-    }, [transferId, billingPage, apiUrl, location])
+        };
+    
+        fetchData();
+    }, [transferId, billingPage, apiUrl, location]);
+    
+    
 
     //calculate total amount in column
     useEffect(() => {

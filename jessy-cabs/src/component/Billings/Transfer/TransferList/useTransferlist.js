@@ -21,6 +21,7 @@ const useTransferlist = () => {
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
+  const [loading,setLoading] = useState(false)
 
 
 
@@ -272,11 +273,14 @@ const useTransferlist = () => {
     }
   }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
 
+  // Loading grid in the grid 
   useEffect(() => {
     const fetchdata = async () => {
+      setLoading(true)
       try {
         const response = await axios.get(`${apiUrl}/gettransfer_list`)
         const data = response.data;
+        console.log("Transfer loading");
 
 
         if (data.length > 0) {
@@ -287,14 +291,17 @@ const useTransferlist = () => {
           setRows(rowsWithUniqueId);
           // setSuccess(true);
           setSuccessMessage("Successfully listed");
+          setLoading(false)
         } else {
           setRows([]);
           setError(true);
           setErrorMessage("No data found");
+          setLoading(false)
         }
       } catch {
         setRows([]);
         setError(true);
+        setLoading(false)
         setErrorMessage("Check your Network Connection");
       }
     }
@@ -372,6 +379,8 @@ const useTransferlist = () => {
     handlePdfDownload,
     columns,
     handleButtonClickTripsheet,
+    setLoading,
+    loading
   };
 };
 

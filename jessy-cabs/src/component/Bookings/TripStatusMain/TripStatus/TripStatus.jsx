@@ -38,6 +38,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Checkbox from '@mui/material/Checkbox';
 import Skeleton from '@mui/material/Skeleton';
+import {  CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -462,52 +463,69 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             }}
             />
             {loading && (
+                // <Box
+                //     sx={{
+                //       position: 'absolute', // Position the loading spinner absolutely
+                //       top: '50%',
+                //       left: '50%',
+                //       transform: 'translate(-50%, -50%)', // Center the spinner
+                //       zIndex: 1, // Ensure it appears above the DataGrid
+                //       width: '100%', // Make it full width of the parent
+                //       height: '70%', // Make it full height of the parent
+                //     }}
+                // >
+                //     <Skeleton
+                //         variant="rectangular"
+                //         animation="wave"
+                //         width="100%"
+                //         height="10%"
+                //         sx={{ bgcolor: '#b0bec5', opacity: 0.7 }}
+                //     />
+                //     <Skeleton
+                //         variant="rectangular"
+                //         animation="wave"
+                //         width="100%"
+                //         height="20%"
+                //         sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                //     />
+                //     <Skeleton
+                //         variant="rectangular"
+                //         animation="wave"
+                //         width="100%"
+                //         height="20%"
+                //         sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                //     />
+                //     <Skeleton
+                //         variant="rectangular"
+                //         animation="wave"
+                //         width="100%"
+                //         height="20%"
+                //         sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                //     />
+                //     <Skeleton
+                //         variant="rectangular"
+                //         animation="wave"
+                //         width="100%"
+                //         height="20%"
+                //         sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
+                //     />
+                // </Box>
                 <Box
-                    sx={{
-                      position: 'absolute', // Position the loading spinner absolutely
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)', // Center the spinner
-                      zIndex: 1, // Ensure it appears above the DataGrid
-                      width: '100%', // Make it full width of the parent
-                      height: '70%', // Make it full height of the parent
-                    }}
-                >
-                    <Skeleton
-                        variant="rectangular"
-                        animation="wave"
-                        width="100%"
-                        height="10%"
-                        sx={{ bgcolor: '#b0bec5', opacity: 0.7 }}
-                    />
-                    <Skeleton
-                        variant="rectangular"
-                        animation="wave"
-                        width="100%"
-                        height="20%"
-                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
-                    />
-                    <Skeleton
-                        variant="rectangular"
-                        animation="wave"
-                        width="100%"
-                        height="20%"
-                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
-                    />
-                    <Skeleton
-                        variant="rectangular"
-                        animation="wave"
-                        width="100%"
-                        height="20%"
-                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
-                    />
-                    <Skeleton
-                        variant="rectangular"
-                        animation="wave"
-                        width="100%"
-                        height="20%"
-                        sx={{ bgcolor: '#b0bec5', opacity: 0.7, marginTop: '8px' }}
-                    />
+                sx={{
+                  position: 'absolute', // Position the loading spinner absolutely
+                  top: '50%', // Adjust this value based on your DataGrid header height
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)', // Center the spinner horizontally
+                  zIndex: 1, // Ensure it appears above the DataGrid
+                  width: '100%', // Make it full width of the parent
+                  height: '70%', // Make it full height of the parent
+                  display: 'flex', // Use flexbox for centering
+                  justifyContent: 'center', // Center horizontally
+                  alignItems: 'center', // Center vertically
+                }}
+              >
+                <CircularProgress />
+                    
                 </Box>
             )}
         </Box>

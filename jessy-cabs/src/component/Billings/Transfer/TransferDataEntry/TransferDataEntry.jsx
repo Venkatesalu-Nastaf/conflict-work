@@ -288,7 +288,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
           </div>
           <div className='amount-calculator'>
             <div className="total-inputs">
-              <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
+              {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button> */}
             </div>
             <div className="total-inputs">
               <Button variant="outlined" disabled={!Transfer_delete} onClick={handleRemove} >Remove Selected</Button>

@@ -355,7 +355,8 @@ const RateType = ({ stationName}) => {
                             )}
                         </PopupState>
                     </div>
-
+                             {console.log(searchText,"vbnm")
+                             }   
                     <div className="input-search-ratetype">
                         <div className="icone">
                             <AiOutlineFileSearch color="action" />
@@ -366,7 +367,7 @@ const RateType = ({ stationName}) => {
                             className='full-width'
                             label="Search"
                             name="searchText"
-                            value={searchText}
+                            value={searchText} 
                             onKeyDown={handleenterSearch}
                             onChange={(e) => setSearchText(e.target.value)}
                         />

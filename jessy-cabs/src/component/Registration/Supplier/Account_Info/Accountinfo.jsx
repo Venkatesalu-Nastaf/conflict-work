@@ -545,7 +545,6 @@ const Accuntinfo = ({ stationName }) => {
                     variant="contained"
                     endIcon={<ExpandCircleDownOutlinedIcon />}
                     {...bindTrigger(popupState)}
-                    style={{  marginLeft: "20px" }}
                   >
                     Download
                   </Button>

@@ -53,6 +53,8 @@
 .detail-container-main-account {
   display: flex;
   margin-bottom: 7px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
 }
 
 .detail-container-main-account .container-right-account {
@@ -169,19 +171,20 @@
   padding-top: 96px;
 } */
 
-.Download-btn-account-info{
-    padding-bottom: 15px;
-    padding-right: 20px;
+.Download-btn-account-info {
+  padding-bottom: 15px;
+  padding-right: 20px;
 }
 
-.download-search-account{
+.download-search-account {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
   align-items: center;
   margin-top: 25px;
 }
-.detail-container-account{
+
+.detail-container-account {
   display: flex;
-padding-bottom: 15px;
+  padding-bottom: 15px;
 }

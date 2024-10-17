@@ -1,4 +1,4 @@
-import React, {useContext } from 'react';
+import React, { useContext } from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -7,7 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
-import { RateType, PriceTag,Duty } from "./PackageRateEnteryData.js";
+import { RateType, PriceTag, Duty } from "./PackageRateEnteryData.js";
 import { PermissionContext } from '../../../context/permissionContext.js';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -42,7 +42,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const PackageRateEntery = ({vehileName,stationname }) => {
+const PackageRateEntery = ({ vehileName, stationname }) => {
 
   const {
     selectedCustomerId,
@@ -65,8 +65,8 @@ const PackageRateEntery = ({vehileName,stationname }) => {
     isEditMode,
     handleEdit,
     // datevalidity,
-     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename,validitydata
+    handleShow,
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata
 
   } = usePackagerateentry();
 
@@ -127,7 +127,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                     id="OrganizationName"
                     freeSolo
                     sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}              
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
                     options={ratename.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
@@ -163,29 +163,29 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                     }
                   />
                 </div>
-                         <div className="input">
-                                    <div className="icone">
-                                        <WarehouseIcon color="action" />
-                                    </div>
-                                    <Autocomplete
-                                        fullWidth
-                                        size="small"
-                                        id="stations"
-                                        freeSolo
-                                        onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                        value={stationname.find((option) => option.Option)?.label || commonData?.stations || ''}
-                                        options={stationname.map((option) => ({
-                                            label: option.Stationname,
-                                        }))}
-                                        getOptionLabel={(option) => option.label || commonData?.stations || ''}
-                                        renderInput={(params) => {
-                                            return (
-                                                <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
-                                            )
-                                        }
-                                        }
-                                    />
-                                </div>
+                <div className="input">
+                  <div className="icone">
+                    <WarehouseIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="stations"
+                    freeSolo
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
+                    value={stationname.find((option) => option.Option)?.label || commonData?.stations || ''}
+                    options={stationname.map((option) => ({
+                      label: option.Stationname,
+                    }))}
+                    getOptionLabel={(option) => option.label || commonData?.stations || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div>
                 <div className=" PackageRateEntery-input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
@@ -203,7 +203,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                   />
                 </div>
                 <div style={{ marginLeft: "10px" }}>
-                  <Button variant="contained"  onClick={handleShow} >Show</Button>
+                  <Button variant="contained" onClick={handleShow} >Show</Button>
                 </div>
               </div>
             </div>
@@ -387,7 +387,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                   {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
                     <MdCancelPresentation className='icon-cancel' />
                   </div>}
-                  <div className="input package-rate-entry-edit-division">
+                  <div className="input package-rate-entry-edit-division" style={{ justifyContent: 'start' }}>
                     {isEditMode ? (
                       <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
                     ) : (
@@ -444,7 +444,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
             )}
-            {RateManagement_modify === 1 && isEditMode &&(
+            {RateManagement_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -452,7 +452,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {RateManagement_delete === 1 &&  isEditMode &&(
+            {RateManagement_delete === 1 && isEditMode && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -466,7 +466,7 @@ const PackageRateEntery = ({vehileName,stationname }) => {
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-            {RateManagement_new === 1 &&  !isEditMode &&(
+            {RateManagement_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -488,23 +488,23 @@ const PackageRateEntery = ({vehileName,stationname }) => {
               sx={{
                 height: 400, // Adjust this value to fit your needs
                 '& .MuiDataGrid-virtualScroller': {
-                    '&::-webkit-scrollbar': {
-                        width: '8px', // Adjust the scrollbar width here
-                        height: '8px', // Adjust the scrollbar width here
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: '#f1f1f1',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#457cdc',
-                        borderRadius: '20px',
-                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#3367d6',
-                    },
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar width here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
                 },
-            }}
+              }}
             >
               <DataGrid
                 rows={rows}

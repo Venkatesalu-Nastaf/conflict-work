@@ -31,7 +31,7 @@
 
 .vehicaleinfo-container {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   margin-bottom: 10px;
 }
 
@@ -351,4 +351,8 @@ align-items: center;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.detail-container-main-vehicale{
+  border-bottom: 1px solid #ccc;
 }

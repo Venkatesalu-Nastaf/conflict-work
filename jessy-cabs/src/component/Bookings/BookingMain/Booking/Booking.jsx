@@ -931,14 +931,15 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 </div>
               </div>
             </div>
-
+            
             <div>
               <div className="input time booking-start-time-input">
                 <div className="icone icone-with-margin-top">
                   <MdOutlineAccessTimeFilled />
                 </div>
                 <div className="input-type-grid">
-                  <label>Shed Out Time</label>   <input
+                  <label>Shed Out Time</label>
+                  <input
                     type="time"
                     id="reporttime"
                     name="reporttime"
@@ -1302,7 +1303,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                 onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
-                onKeyDown={handleKeyEnterdriver}
+                // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                 options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
                 getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label

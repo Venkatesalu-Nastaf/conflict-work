@@ -16,6 +16,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
+import dayjs from "dayjs";
 import { pdf } from '@react-pdf/renderer';
 import PdfContent2 from './PdfContent2';
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2"
@@ -441,7 +442,9 @@ const TransferReport = ({ stationName }) => {
                     id="id"
                     className='full-width'
                     label="Invoice Date"
-                    value={invoiceDate}
+                    // value={dayjs(invoiceDate).format('DD-MM-YYYY')}
+                    value={invoiceDate ? dayjs(invoiceDate).format('DD-MM-YYYY') : ''}
+
                     name="Billdate"
                     autoComplete='off'
                   />
@@ -455,7 +458,8 @@ const TransferReport = ({ stationName }) => {
                     id="id"
                     className='full-width'
                     label="From Date"
-                    value={fromDate}
+                    // value={dayjs(fromDate).format('DD-MM-YYYY')}
+                    value={fromDate ? dayjs(fromDate).format('DD-MM-YYYY') : ''}
                     name="fromdate"
                     autoComplete='off'
                   />
@@ -469,7 +473,8 @@ const TransferReport = ({ stationName }) => {
                     id="id"
                     className='full-width'
                     label="To Date"
-                    value={endDate}
+                    // value={dayjs(endDate).format('DD-MM-YYYY')}
+                    value={endDate ? dayjs(endDate).format('DD-MM-YYYY') : ''}
                     name="todate"
                     autoComplete='off'
                   />

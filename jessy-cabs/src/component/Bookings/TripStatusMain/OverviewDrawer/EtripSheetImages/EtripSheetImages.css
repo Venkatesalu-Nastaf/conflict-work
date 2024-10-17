@@ -58,11 +58,12 @@
     font-size: 24px;
   }
   
-.loading-container {
+.loading-image-container {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;    /* Center vertically */
-    height: 300px;          /* Adjust based on your card height */
+    /* height: 300px; */
+    padding-bottom: 50%;
   }
   .no-images-container {
     display: flex;

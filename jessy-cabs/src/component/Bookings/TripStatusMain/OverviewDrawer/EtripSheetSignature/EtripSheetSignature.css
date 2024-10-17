@@ -19,11 +19,11 @@
     object-fit: contain;    /* Maintain aspect ratio */
 }
 
-.loading-container {
+.loading-sign-container {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;     /* Center vertically */
-    height: 300px;           /* Set to your desired height */
+    padding-bottom: 40px;         /* Set to your desired height */
 }
 
 .sign-heading {

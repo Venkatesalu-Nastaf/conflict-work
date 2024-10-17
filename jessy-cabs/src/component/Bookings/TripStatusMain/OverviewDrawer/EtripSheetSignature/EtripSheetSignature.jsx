@@ -45,7 +45,7 @@ const EtripSheetSignature = ({signImageUrl}) => {
           <p>No signature available</p>
         )} */}
          {loading ? (
-                    <div className="loading-container">
+                    <div className="loading-sign-container">
                       <CircularProgress />
                     </div>
                   ) : (

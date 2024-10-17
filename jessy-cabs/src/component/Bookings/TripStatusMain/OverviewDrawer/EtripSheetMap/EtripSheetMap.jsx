@@ -62,7 +62,7 @@ const EtripSheetMap = ({ mapImgUrl }) => {
             <p>No map available!</p>
           )} */}
            {loading ? (
-                    <div className="loading-container">
+                    <div className="loading-map-container">
                       <CircularProgress />
                     </div>
                   ) : (

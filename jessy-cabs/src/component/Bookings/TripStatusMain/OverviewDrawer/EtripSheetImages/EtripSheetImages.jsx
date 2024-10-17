@@ -427,7 +427,7 @@ const EtripSheetImages = ({ imageDetails }) => {
           </div> */}
                           <div className='image-container' onClick={openImageDialog}>
                   {loading ? (
-                    <div className="loading-container">
+                    <div className="loading-image-container">
                       <CircularProgress />
                     </div>
                   ) : (

@@ -602,59 +602,108 @@ const useTransferreport = () => {
 
   // my code with loading 
 
-  useEffect(() => {
-    const fetchData = async () => {
-        setLoading(true); // Start loading
-        setRows([]); // Clear rows to show an empty grid
+//   useEffect(() => {
+//     const fetchData = async () => {
+//         setLoading(true); // Start loading
+//         setRows([]); // Clear rows to show an empty grid
 
-        let formattedTripID = tripID;
-        console.log(tripID, 'response');
+//         let formattedTripID = tripID;
+//         console.log(tripID, 'response');
 
-        if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
-            formattedTripID = tripID[0].split(',').map(id => id.trim());
-        }
+//         if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
+//             formattedTripID = tripID[0].split(',').map(id => id.trim());
+//         }
 
-        let tripData = []; // Initialize tripData variable
+//         let tripData = []; // Initialize tripData variable
 
-        try {
-            const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
-                params: { tripID: formattedTripID }
-            });
+//         try {
+//             const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
+//                 params: { tripID: formattedTripID }
+//             });
 
-            tripData = response.data; // Assign fetched data to tripData
-            console.log(tripData, 'tripData');
-            setAllTripData(tripData);
+//             tripData = response.data; // Assign fetched data to tripData
+//             console.log(tripData, 'tripData');
+//             setAllTripData(tripData);
 
-            if (tripData.length > 0) {
-                const tripsheetNumbers = tripData.map((row, index) => ({
-                    id: index + 1,
-                    guestname: row.guestname,
-                    tripid: row.tripid,
-                    status: row.status,
-                    customer: row.customer
-                }));
+//             if (tripData.length > 0) {
+//                 const tripsheetNumbers = tripData.map((row, index) => ({
+//                     id: index + 1,
+//                     guestname: row.guestname,
+//                     tripid: row.tripid,
+//                     status: row.status,
+//                     customer: row.customer
+//                 }));
 
-                const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
-                const rowsWithUniqueId = filteredData.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-            } else {
-                setRows([]); // Ensure rows are cleared if no data
-            }
-        } catch (error) {
-            console.error('Error fetching trip data:', error);
-        } finally {
-            // Stop loading if tripData has data
-            if (tripData.length > 0) {
-                setLoading(false);
-            }
-        }
-    };
+//                 const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
+//                 const rowsWithUniqueId = filteredData.map((row, index) => ({
+//                     ...row,
+//                     id: index + 1,
+//                 }));
+//                 setRows(rowsWithUniqueId);
+//             } else {
+//                 setRows([]); // Ensure rows are cleared if no data
+//             }
+//         } catch (error) {
+//             console.error('Error fetching trip data:', error);
+//         } finally {
+//             // Stop loading if tripData has data
+//             if (tripData.length > 0) {
+//                 setLoading(false);
+//             }
+//         }
+//     };
 
-    fetchData();
+//     fetchData();
+// }, [tripID, apiUrl]);
+useEffect(() => {
+  const fetchData = async () => {
+      // Only set loading to true if it's a new tripID
+      setLoading(true);
+      setRows([]);
+
+      let formattedTripID = tripID;
+      console.log(tripID, 'response');
+
+      if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
+          formattedTripID = tripID[0].split(',').map(id => id.trim());
+      }
+
+      try {
+          const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
+              params: { tripID: formattedTripID }
+          });
+
+          const tripData = response.data;
+          console.log(tripData, 'tripData');
+          setAllTripData(tripData);
+
+          if (tripData.length > 0) {
+              const tripsheetNumbers = tripData.map((row, index) => ({
+                  id: index + 1,
+                  guestname: row.guestname,
+                  tripid: row.tripid,
+                  status: row.status,
+                  customer: row.customer
+              }));
+
+              const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
+              setRows(filteredData); // You can set the filtered data directly
+          } else {
+              setRows([]); // Ensure rows are cleared if no data
+          }
+      } catch (error) {
+          console.error('Error fetching trip data:', error);
+      } finally {
+          // Only stop loading if data was fetched or an error occurred
+          setLoading(false);
+      }
+  };
+
+  if (tripID) { // Check if tripID is not null or undefined
+      fetchData();
+  }
 }, [tripID, apiUrl]);
+
 
 
 

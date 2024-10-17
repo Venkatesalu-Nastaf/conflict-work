@@ -8,6 +8,8 @@ const useCard = () => {
     const [totalCollectedSum, setTotalCollectedSum] = useState(0);
     const [totalBalanceSum, setTotalBalanceSum] = useState(0);
     const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
+    const [billData, setBillData] = useState([]); 
+     
 
     function getCurrentMonth() {
         const currentDate = new Date();
@@ -51,9 +53,9 @@ const useCard = () => {
     // }, [apiUrl]);
 
     // getting monthly wise Amount
-
     useEffect(() => {
         console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
+       
 
         const fetchBillAmount = async () => {
             try {
@@ -62,6 +64,8 @@ const useCard = () => {
                 if (selectedMonth2 === "All") {
                     const response = await axios.get(`${apiUrl}/getFullBillWisedReport`);
                     data = response.data;
+                    console.log(response,'response')
+                    
 
                 } else if (selectedMonth2 !== "All") {
                     const response = await axios.post(`${apiUrl}/getMonthWiseTotal`, {
@@ -91,7 +95,22 @@ const useCard = () => {
         };
         fetchBillAmount();
     }, [apiUrl, selectedMonth2]);
+     
+   // my code for all data 
+   useEffect(() => {
+    const fetchBillData = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/getFullBillWisedReportcards`);
+            const data = response.data;
+            console.log(data, 'Bill datas');
+            setBillData(data); // Update state with the fetched data
+        } catch (error) {
+            console.error('Error fetching bill data:', error);
+        }
+    };
 
+    fetchBillData(); // Call the fetch function
+}, [apiUrl]);
 
 
     return {
@@ -100,7 +119,10 @@ const useCard = () => {
         totalCollectedSum,
         totalBalanceSum,
         selectedMonth2,
-        setSelectedMonth2
+        setSelectedMonth2,
+        billData,
+        setBillData
+       
     }
 }
 export default useCard;

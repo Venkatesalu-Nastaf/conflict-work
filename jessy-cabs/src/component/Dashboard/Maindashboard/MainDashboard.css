@@ -52,7 +52,8 @@
   background-color: white;
   color: #242d49;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: solid 1px #ccc;
   font-weight: 500;
   font-size: 20px;
 }

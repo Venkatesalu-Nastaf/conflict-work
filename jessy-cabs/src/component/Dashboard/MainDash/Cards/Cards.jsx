@@ -8,6 +8,7 @@ import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
 import numbro from 'numbro';
+import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 const apiUrl = APIURL;
 
 const Cards = () => {
@@ -18,6 +19,8 @@ const Cards = () => {
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
+
+  const {selectedMonths,setSelectedMonths} = PdfData();
 
 
   const TotalNumber = (number) => {
@@ -172,6 +175,7 @@ const Cards = () => {
     console.log(event.target.value, 'selectmonth');
 
     setSelectedMonth2(event.target.value);
+    setSelectedMonths(event.target.value)
     // setSelectedmonth(event.target.value)
     // fetchDataFromBackend(event.target.value)
     // fetchMonthlyDataFromBackend(event.target.value)

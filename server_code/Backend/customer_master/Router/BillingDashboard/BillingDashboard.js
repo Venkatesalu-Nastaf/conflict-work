@@ -15,7 +15,6 @@ router.get('/getFullBillWisedReport', (req, res) => {
 })
 
 // get all data for dashboard cards 
-
 router.get('/getFullBillWisedReportcards', (req, res) => {
     db.query("SELECT TotalAmount,Collected,TotalBalance,CustomerName,BillDate FROM  BillWiseReceipt", (error, result) => {
         if (error) {
@@ -29,6 +28,22 @@ router.get('/getFullBillWisedReportcards', (req, res) => {
 
     })
 })
+
+router.post('/getmonthwisedatas', (req, res) => {
+    const { selectMonth } = req.body;
+    console.log(selectMonth, 'selectmonthsbyme');
+
+    db.query("SELECT TotalAmount, Collected, TotalBalance, CustomerName, BillDate  FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
+        if (error) {
+            console.log(error, 'error');
+            return res.status(500).json({ error: 'Database query error' });
+        }
+        console.log(result, 'selectmonthresults');
+
+        return res.status(200).json(result);
+    });
+});
+
 
 // get Month wise Total Amount
 router.post('/getMonthWiseTotal', (req, res) => {

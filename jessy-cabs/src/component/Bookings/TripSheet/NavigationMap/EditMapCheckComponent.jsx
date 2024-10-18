@@ -158,6 +158,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         setWayRoutes(waypoints)
         setStartRoutes(start)
         setEndRoutes(end)
+        console.log(start, end, waypoints, tripid, 'wayyyyyyyyy555555555');
         setStartLat(start.lat)
         setStartLng(start.lng)
         setEndLat(end.lat)
@@ -179,6 +180,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     geocoder.geocode({ location: latLng }, (results, status) => {
       if (status === "OK") {
         if (results[0]) {
+          console.log(results[0].formatted_address, 'payloadadr');
           setPlaceName(results[0].formatted_address); // Get the first result for place name
         } else {
           setPlaceName('No results found');
@@ -191,6 +193,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   // Handle marker click to open modal and display clicked coordinates
   const handleMarkerClick = (point) => {
+    console.log(point, 'point');
 
     setClickedPoint(point);
     setMapContent((prevContent) => ({
@@ -259,6 +262,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       time: mapContent.time,
       tripType: mapContent.trip_type,
     };
+    console.log(payload, 'payload');
 
     // Send POST request to the backend
     try {
@@ -290,12 +294,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       // Check if it's the start marker, end marker, or a waypoint
       if (clickedPoint.tripType === 'start') {
         updatedTripData.start = null;
-        setStartLat()
-        setStartLng()
       } else if (clickedPoint.tripType === 'end') {
         updatedTripData.end = null;
-        setEndLat()
-        setEndLng()
       } else if (clickedPoint.tripType === 'waypoint') {
         updatedTripData.waypoints = updatedTripData.waypoints.filter(
           (point) => point.lat !== clickedPoint.lat || point.lng !== clickedPoint.lng
@@ -305,7 +305,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       setTripData(updatedTripData); // Update the state with the marker removed
 
 
-      // // Optional: Send a request to the backend to remove the marker from the database
+      // Optional: Send a request to the backend to remove the marker from the database
       try {
         const response = await axios.delete(`${apiUrl}/deleteMapPoint`, {
           data: {
@@ -343,6 +343,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const handletimeChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value, 'ccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
@@ -351,6 +352,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleChange = (value, name) => {
+    console.log(value, name, 'cccccccccccccccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
@@ -370,20 +372,37 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleMapDraw = async () => {
-
     const directionsService = new window.google.maps.DirectionsService();
+    const { start, end, waypoints } = tripData;
 
     try {
       const directionsResult = await directionsService.route({
         origin: new window.google.maps.LatLng(startLat, startLng),
         destination: new window.google.maps.LatLng(endLat, endLng),
-        // waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
-        waypoints: wayRoutes?.map(point => ({ location: new window.google.maps.LatLng(point.lat, point.lng), stopover: true })) || [],
-
+        waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
         travelMode: window.google.maps.TravelMode.DRIVING,
       });
 
-      setMapInstance()
+      // origin: new window.google.maps.LatLng(startLatitude, startLongitude),
+      // destination: new window.google.maps.LatLng(endLatitude, endLongitude),
+      // waypoints: waypoints,
+      // travelMode: window.google.maps.TravelMode.DRIVING,
+      const newWaypoints = directionsResult.routes[0].legs[0].via_waypoints.map(point => {
+        return {
+          lat: point.location.lat(),
+          lng: point.location.lng(),
+        };
+      });
+      // setTripData((prevTripData) => ({
+      //   ...prevTripData,
+
+      //   // waypoints: newWaypoints 
+      // }));
+      // setStartLat()
+      // setStartLng()
+      // setEndLat()
+      // setEndLng()
+      // setWayRoutes([])
       setWayDirection([])
       setDirections(directionsResult);
       setMapCaptureVerify(true)
@@ -395,8 +414,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   };
 
-
   const handleMapDrawRouteVerify = () => {
+    console.log('qqqqqqqqqqqqq[[[[[[');
 
     setTimeout(() => {
       setError(false)
@@ -435,6 +454,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   }
   const handleSuccessCapture = () => {
+    console.log('sucessssssssssssssss');
 
     setSuccess(true)
     setTimeout(() => {
@@ -443,16 +463,14 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
 
   const handleMapCapture = async () => {
-    setMapUpdate((prev) => !prev);
+    console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{');
 
-    // Wait for state to update
-    await new Promise((resolve) => setTimeout(resolve, 0));
     if (mapCaptureVerify === false) {
+      console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{/////');
       setError(true)
       handleMapDrawRouteVerify()
       return
     }
-
     const mapCenter = new window.google.maps.Map(document.getElementById('map'), {
       zoom: 15,
       center: { lat: 13.0827, lng: 80.2707 },
@@ -470,9 +488,11 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       return orderA - orderB || labelA.localeCompare(labelB);
     });
+    console.log('qqqqqqqqqq++++++++++++');
 
     // Add the start marker
     if (startLat && endLat) {
+      console.log('qqqqqqqqqq++++++++++++----------');
 
       markers.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
     }
@@ -532,6 +552,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           }
           const a = markers.join('&')
           const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
+          console.log(markers.join('&'), a, markers, 'nandhakalai');
 
           const staticMapBlob = await urlToBlob(finalStaticMapUrl);
           // const tripid = localStorage.getItem('selectedTripid');
@@ -550,6 +571,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               },
             });
             console.log('Uploaded file details', response.data);
+            console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
 
           } catch (error) {
             console.error('Error uploading file:', error);
@@ -591,6 +613,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const submitPopup = (latLng) => {
     // Implement your logic for displaying a popup
+    console.log("Mappppppppppppppp", latLng);
   };
   const handleSelect = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
@@ -608,6 +631,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       if (results[0].geometry && results[0].geometry.location) {
         const latLng = results[0].geometry.location;
+        console.log(latLng, results, 'Location found'); // Better log message
 
         if (mapInstance) {
           mapInstance.setCenter(latLng);
@@ -654,7 +678,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       <GoogleMap
         mapContainerStyle={mapStyles}
         zoom={10}
-        center={startLat && startLng ? { lat: '', lng: '' } : { lat: 13.0827, lng: 80.2707 }}
+        center={startLat && startLng ? { lat: '',lng:'' } : { lat: 13.0827, lng: 80.2707 }}
         id='map'
         onClick={handleMapClick} // Add the click handler here
         onLoad={(map) => {
@@ -663,9 +687,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           fitBoundsToMarkers(map); // Call the function to adjust the bounds on load
         }}
       >
-        {startLat && !directions && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-        {endLat && !directions && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
-        {wayRoutes && !directions && wayRoutes?.map((point, index) => (
+        {startLat && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
+        {endLat && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
+        {wayRoutes?.map((point, index) => (
           <Marker
             key={index}
             position={{ lat: point.lat, lng: point.lng }}

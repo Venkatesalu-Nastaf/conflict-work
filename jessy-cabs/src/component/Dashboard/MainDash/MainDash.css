@@ -93,10 +93,3 @@
     overflow-x: hidden;
     padding-bottom: 20px;
 }
-
-@media screen and (min-width: 769px) {
-
-.extendedwidth{
-    width: 95%;
-}
-}

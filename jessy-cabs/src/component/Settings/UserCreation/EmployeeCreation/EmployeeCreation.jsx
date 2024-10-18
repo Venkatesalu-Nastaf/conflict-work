@@ -163,7 +163,7 @@ const EmployeeCreation = ({ stationName }) => {
         <div className="EmployeeCreation-form-container">
           <form onSubmit={handleClick}>
             <div className="EmployeeCreation-header">
-              <div className="input-field employee-creation-inputfeilds" style={{ padding: '0px 10px' }}>
+              <div className="input-field employee-creation-inputfeilds" style={{ padding: '10px 10px' }}>
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />

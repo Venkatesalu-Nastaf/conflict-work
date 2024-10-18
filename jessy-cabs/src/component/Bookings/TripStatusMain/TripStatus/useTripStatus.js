@@ -273,6 +273,7 @@ const useDispatched = () => {
     if (!statusvalue) {
       setError(true);
       setErrorMessage("ENTER THE STATUS");
+      setLoading(false)
       return;
     }
     setRows([]); // Clear rows to show empty grid

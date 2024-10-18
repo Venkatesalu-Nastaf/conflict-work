@@ -29,12 +29,13 @@
     font-weight: bold;
     font-size: 24px;
 }
-.loading-container {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center;     /* Center vertically */
-    height: 300px;           /* Set to your desired height */
-  }
+.loading-map-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  /* height: 300px;            */
+  padding-bottom: 40px;
+}
   .no-map-container {
     display: flex;
     justify-content: center; /* Center horizontally */

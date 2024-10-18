@@ -22,6 +22,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useTransferlist from './useTransferlist';
 import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { CircularProgress } from '@mui/material';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
@@ -52,6 +53,8 @@ const TransferList = ({ stationName, organizationNames }) => {
         handlePdfDownload,
         columns,
         handleButtonClickTripsheet,
+        loading,
+        setLoading
 
     } = useTransferlist();
 
@@ -160,7 +163,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{ justifyContent: 'start', position: 'relative', left: '32px' }}>
                                     <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
@@ -228,7 +231,7 @@ const TransferList = ({ stationName, organizationNames }) => {
       />
     </Box>  */}
 
-                        <Box
+                        {/* <Box
                             sx={{
                                 height: 400, // Adjust this value to fit your needs
                                 '& .MuiDataGrid-virtualScroller': {
@@ -260,7 +263,56 @@ const TransferList = ({ stationName, organizationNames }) => {
                                 getRowId={(row) => row.id}
                                 disableRowSelectionOnClick
                             />
+                        </Box> */}
+
+                        {/* code with loading */}
+                        <Box
+                            sx={{
+                                height: 400,
+                                position: 'relative', // Make Box relative to position the spinner
+                                '& .MuiDataGrid-virtualScroller': {
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px',
+                                        height: '8px',
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        backgroundColor: '#f1f1f1',
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#457cdc',
+                                        borderRadius: '20px',
+                                        minHeight: '60px',
+                                    },
+                                    '&::-webkit-scrollbar-thumb:hover': {
+                                        backgroundColor: '#3367d6',
+                                    },
+                                },
+                            }}
+                        >
+                            {loading ? ( // Show loading spinner when loading
+                                <Box
+                                    sx={{
+                                        position: 'absolute', // Position the spinner absolutely
+                                        top: '50%', // Center vertically
+                                        left: '50%', // Center horizontally
+                                        transform: 'translate(-50%, -50%)', // Center the spinner
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    onRowClick={handleButtonClickTripsheet}
+                                    pageSize={5}
+                                    checkboxSelection
+                                    getRowId={(row) => row.id}
+                                    disableRowSelectionOnClick
+                                />
+                            )}
                         </Box>
+
                     </div>
                 </div>
 

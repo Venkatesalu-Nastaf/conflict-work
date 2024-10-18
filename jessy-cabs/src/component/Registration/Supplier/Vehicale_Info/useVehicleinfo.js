@@ -375,6 +375,7 @@ const useVehicleinfo = () => {
         fetchOrganizationnames()
     }, [apiUrl])
 
+
     // const handlePdfDownload = () => {
     //     // Convert Excel data to CSV format
     //     const csvData = convertToCSV(rows);
@@ -888,11 +889,11 @@ const useVehicleinfo = () => {
         }
     };
 
-    // useEffect(() => {
-    //     if (actionName === 'List') {
-    //         handleClick(null, 'List');
-    //     }
-    // });
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
 
     //search funtion
     const handleSearch = async () => {
@@ -935,7 +936,7 @@ const useVehicleinfo = () => {
                         id: index + 1,
                     }));
                     setRows(rowsWithUniqueId);
-                    setSuccess(true);
+                    setSuccess(true);   
                     setSuccessMessage("successfully listed");
                 } else {
                     setRows([]);

@@ -414,7 +414,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             {/* <p onClick={handleShowCards}>Show Cards</p> */}
             {showCards ?
               <div className='top-cards'>
-                 <IconButton onClick={handleCloseCards}  sx={{ position: 'absolute', right: '16px', top: '200px' }}>
+                 <IconButton onClick={handleCloseCards}  sx={{ position: 'absolute', right: '16px', top: '300px' }}>
                         <CloseIcon sx={{ fontSize: '2rem' }} />
                     </IconButton>
                 {/* <EtripSheetSignature /> */}

@@ -325,6 +325,9 @@ const Customer = ({ stationName }) => {
               </div>
 
               <div className="Customer-page-input-field-addbtn">
+                {/* <div className='customer-add-btn'>
+                  <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
+                </div> */}
                 <div>
 
                   {customerfieldSets.map((datafield, index) => (
@@ -375,6 +378,9 @@ const Customer = ({ stationName }) => {
                             onChange={(e) => handleChangecustomer(e, index)}
                           />
                         </div>
+                        {index == 0 && (
+                          <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
+                        )}
                         {index >= 1 && (
                           <Button variant="contained" color="error" onClick={handleClickOpen}>
                             x
@@ -382,6 +388,7 @@ const Customer = ({ stationName }) => {
                         )}
 
                       </div>
+
 
                       <Dialog open={deletedialogbox} onClose={handleClose}>
                         <DialogTitle>{"Are you sure you want to delete this item?"}</DialogTitle>
@@ -402,7 +409,6 @@ const Customer = ({ stationName }) => {
                     </>
                   ))}
 
-                  <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
                 </div>
               </div>
             </div>

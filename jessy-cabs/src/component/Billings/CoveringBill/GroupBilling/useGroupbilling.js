@@ -614,7 +614,7 @@ const useGroupbilling = () => {
         try {
             const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
                 tripids: tripid,
-                status: 'Opened',
+                status: 'Closed',
             });
             console.log(response, 'response');
             const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);

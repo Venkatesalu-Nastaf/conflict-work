@@ -145,7 +145,7 @@ router.put('/statusupdate', (req, res) => {
 
 router.post('/tripsheetstatusupdate', (req, res) => {
   const { tripids, status } = req.body;
-  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+  const query = 'UPDATE tripsheet SET status = ?,Billed_Status=NULL WHERE tripid IN (?)';
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
       res.status(500).json({ message: 'Internal server error' });

@@ -16,9 +16,13 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useGstReport from './useGstReport';
 import { Autocomplete } from "@mui/material";
 import dayjs from 'dayjs';
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+
 
 export const GstReport = () => {
-  const { organization, gstReport, setGstReport, department, handleShow, rows, columns, taxReport, handleDownloadPdf, handleDownloadExcel } = useGstReport();
+  const { organization, gstReport, setGstReport, department, handleShow,hidePopup,handleShowAll, rows, columns,
+     taxReport, handleDownloadPdf, handleDownloadExcel,success,successMessage,error,errorMessage } = useGstReport();
 
   const handleDateChange = (field, date) => {
     setGstReport(prevGstReport => ({
@@ -119,7 +123,7 @@ export const GstReport = () => {
               <Button onClick={handleShow} variant="outlined">Show</Button>
             </div>
             <div className="input">
-              <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+              <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</Button>
             </div>
           </div>
         </div>
@@ -224,6 +228,23 @@ export const GstReport = () => {
               },
             }}
           >
+             <div className='alert-popup-main'>
+            {error &&
+              <div className='alert-popup Error'>
+                <div className="popup-icon"><ClearIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success'>
+                <div className="popup-icon"><FileDownloadDoneIcon /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+        
+          </div>
             <DataGrid
               rows={rows}
               columns={columns}
@@ -237,6 +258,7 @@ export const GstReport = () => {
             />
           </Box>
         </div>
+       
 
       </div>
     </>

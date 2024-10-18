@@ -12,6 +12,114 @@ router.get('/allDepartment', (req, res) => {
     })
 })
 
+router.get('/getAllBilledDetails', async (req, res) => {
+    const { customer, fromDate, toDate } = req.query;
+
+    if (!customer || !fromDate || !toDate) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    const statusValues = ['Covering_Billed', 'Transfer_Billed', 'Billed'];
+
+    try {
+        const queries = [
+            new Promise((resolve, reject) => {
+                let query = "SELECT * FROM tripsheet WHERE tripsheetdate BETWEEN ? AND ? AND status IN (?)";
+                let params = [fromDate, toDate, statusValues];
+
+                if (customer !== "All") {
+                    query += " AND customer = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                let query = "SELECT InvoiceDate, Customer FROM Group_billing WHERE FromDate BETWEEN ? AND ?";
+                let params = [fromDate, toDate];
+
+                if (customer !== "All") {
+                    query += " AND customer = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                let query = "SELECT Billdate, Organization_name FROM Transfer_list WHERE FromDate BETWEEN ? AND ?";
+                let params = [fromDate, toDate];
+
+                if (customer !== "All") {
+                    query += " AND Organization_name = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                let query = "SELECT Bill_Date, Customer FROM Individual_Billing WHERE Bill_Date BETWEEN ? AND ?";
+                let params = [fromDate, toDate];
+
+                if (customer !== "All") {
+                    query += " AND Customer = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                let query = "SELECT gstTax, gstnumber, customer FROM customers";
+                let params = [];
+
+                if (customer !== "All") {
+                    query += " WHERE customer = ?";
+                    params.push(customer);
+                }
+
+                db.query(query, params, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            })
+        ];
+
+        const [tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults] = await Promise.all(queries);
+
+        res.status(200).json({
+            tripsheetResults,
+            coveringBilledResults,
+            transferBilledResults,
+            individualBilledResults,
+            customerResults
+        });
+    } catch (error) {
+        console.error('Failed to fetch data from MySQL:', error);
+        res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+});
+
 
 router.get('/getBilledDetails', async (req, res) => {
     const { customer, fromDate, toDate, department } = req.query;
@@ -59,6 +167,7 @@ router.get('/getBilledDetails', async (req, res) => {
                         return reject(error);
                     }
                     resolve(result);
+
                 });
             }),
             new Promise((resolve, reject) => {
@@ -111,7 +220,7 @@ router.get('/getBilledDetails', async (req, res) => {
             })
         ];
 
-        const [tripsheetResults, coveringBilledResults, transferBilledResults,individualBilledResults, customerResults] = await Promise.all(queries);
+        const [tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults] = await Promise.all(queries);
 
         const combinedResults = [
             ...tripsheetResults,

@@ -10,6 +10,7 @@ const useBillWiseReceipt = () => {
   const [pendingAmountList, setPendingAmountList] = useState([]);
   const [selectMatchList, setSelectMatchList] = useState([]);
   const [accountDetails, setAccountDetails] = useState([]);
+  const [invoiceNo, setInvoiceNo] = useState([])
   const [billWiseReport, setBillWiseReport] = useState({
     Date: dayjs().format("YYYY-MM-DD"),
     CustomerName: "",
@@ -57,11 +58,11 @@ const useBillWiseReceipt = () => {
     { field: "sno", headerName: "Sno", width: 30 },
     balanceAmount
       ? {
-          field: "Voucherid",
-          headerName: "Voucher ID",
-          type: "number",
-          width: 100,
-        }
+        field: "Voucherid",
+        headerName: "Voucher ID",
+        type: "number",
+        width: 100,
+      }
       : { field: "BillNo", headerName: "Bill No", type: "number", width: 120 },
     { field: "BillDate", headerName: "Bill Date", width: 120 },
     { field: "Amount", headerName: "Amount", width: 120 },
@@ -94,68 +95,158 @@ const useBillWiseReceipt = () => {
     };
     fetchBankDetails();
   }, [apiUrl]);
-  const handlePendingBills = (() => {
-    let currentId = 1; // Initialize the starting ID outside the function
-    return async (customerName) => {
-      try {
-        const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
-          params: { customer: customerName },
-        });
-        setBalanceAmount(false);
+  // const handlePendingBills = async() => {
+  //   if(billWiseReport.CustomerName===""){
+  //     setError(true)
+  //     setErrorMessage('Please Enter Customer')
+  //     return
+  //   }
+  //   let currentId = 1;
+  //   return async (customerName) => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
+  //         params: { customer: customerName },
+  //       });
+  //       setBalanceAmount(false);
 
-        const {
-          individualBilling = [],
-          groupBilling = [],
-          transferListBilling = [],
-        } = response.data;
+  //       const {
+  //         individualBilling = [],
+  //         groupBilling = [],
+  //         transferListBilling = [],
+  //       } = response.data;
 
-        const processBillingData = (data) => {
-          return data.map((item) => ({
-            BillNo: item.Invoice_No || item.InvoiceNo || item.Invoice_no,
-            BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
-            Amount: item.Amount,
-            ...item,
-          }));
-        };
+  //       const processBillingData = (data) => {
+  //         return data.map((item) => ({
+  //           BillNo: item.Invoice_No || item.InvoiceNo || item.Invoice_no,
+  //           BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
+  //           Amount: item.Amount,
+  //           ...item,
+  //         }));
+  //       };
 
-        const processedIndividualBilling =
-          processBillingData(individualBilling);
-        const processedGroupBilling = processBillingData(groupBilling);
-        const processedTransferList = processBillingData(transferListBilling);
+  //       const processedIndividualBilling =
+  //         processBillingData(individualBilling);
+  //       const processedGroupBilling = processBillingData(groupBilling);
+  //       const processedTransferList = processBillingData(transferListBilling);
 
-        const combinedPendingBill = [
-          ...processedIndividualBilling,
-          ...processedGroupBilling,
-          ...processedTransferList,
-        ];
+  //       const combinedPendingBill = [
+  //         ...processedIndividualBilling,
+  //         ...processedGroupBilling,
+  //         ...processedTransferList,
+  //       ];
+  //       console.log(combinedPendingBill, 'combined');
+  //       const invoice = combinedPendingBill.map(li => li.BillNo)
+  //       console.log(invoice, 'iiiiiiiiiiii');
 
-        // Add the 'sno' property sequentially and include an 'id' property for the DataGrid
-        const combinedPendingBillWithSnoAndId = combinedPendingBill.map(
-          (item, index) => ({
-            id: currentId++, // Unique ID for MUI DataGrid
-            sno: index + 1, // Sequential SNO
-            ...item,
-          })
-        );
+  //       setInvoiceNo(invoice)
 
-        setPendingBillRows(combinedPendingBillWithSnoAndId);
-        setRows([]);
-        setTotals({
-          amount: 0,
-          recieved: 0,
-          discount: 0,
-          balance: 0,
-          totalAmount: 0,
-          onAccount: 0,
-          totalBalance: 0,
-          tds: 0,
-          collectedAmount: 0,
-        });
-      } catch (error) {
-        console.log(error, "error");
+  //       const combinedPendingBillWithSnoAndId = combinedPendingBill.map(
+  //         (item, index) => ({
+  //           id: currentId++, // Unique ID for MUI DataGrid
+  //           sno: index + 1, // Sequential SNO
+  //           ...item,
+  //         })
+  //       );
+  //       console.log(combinedPendingBillWithSnoAndId, 'ccccccc');
+  //       if (combinedPendingBillWithSnoAndId.length === 0) {
+  //         setError(true)
+  //         setErrorMessage('No Data Found')
+  //         return
+  //       }
+  //       setPendingBillRows(combinedPendingBillWithSnoAndId);
+  //       setSuccess(true)
+  //       setSuccessMessage('Successfully Listed')
+  //       setRows([]);
+  //       setTotals({
+  //         amount: 0,
+  //         recieved: 0,
+  //         discount: 0,
+  //         balance: 0,
+  //         totalAmount: 0,
+  //         onAccount: 0,
+  //         totalBalance: 0,
+  //         tds: 0,
+  //         collectedAmount: 0,
+  //       });
+  //     } catch (error) {
+  //       console.log(error, "error");
+  //     }
+  //   };
+  // };
+  const handlePendingBills = async () => {
+    if (billWiseReport.CustomerName === "") {
+      setError(true);
+      setErrorMessage("Please Enter Customer");
+      return;
+    }
+
+    let currentId = 1;
+    try {
+      const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
+        params: { customer: billWiseReport.CustomerName },
+      });
+
+      setBalanceAmount(false);
+
+      const {
+        individualBilling = [],
+        groupBilling = [],
+        transferListBilling = [],
+      } = response.data;
+
+      const processBillingData = (data) => {
+        return data.map((item) => ({
+          BillNo: item.Invoice_No || item.InvoiceNo || item.Invoice_no,
+          BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
+          Amount: item.Amount,
+          ...item,
+        }));
+      };
+
+      const processedIndividualBilling = processBillingData(individualBilling);
+      const processedGroupBilling = processBillingData(groupBilling);
+      const processedTransferList = processBillingData(transferListBilling);
+
+      const combinedPendingBill = [
+        ...processedIndividualBilling,
+        ...processedGroupBilling,
+        ...processedTransferList,
+      ];
+
+      const invoice = combinedPendingBill.map((li) => li.BillNo);
+      setInvoiceNo(invoice);
+
+      const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
+        id: currentId++, // Unique ID for MUI DataGrid
+        sno: index + 1, // Sequential SNO
+        ...item,
+      }));
+
+      if (combinedPendingBillWithSnoAndId.length === 0) {
+        setError(true);
+        setErrorMessage("No Data Found");
+        return;
       }
-    };
-  })();
+
+      setPendingBillRows(combinedPendingBillWithSnoAndId);
+      setSuccess(true);
+      setSuccessMessage("Successfully Listed");
+      setRows([]);
+      setTotals({
+        amount: 0,
+        recieved: 0,
+        discount: 0,
+        balance: 0,
+        totalAmount: 0,
+        onAccount: 0,
+        totalBalance: 0,
+        tds: 0,
+        collectedAmount: 0,
+      });
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
 
   const handleRowSelection = (selectionModel) => {
     const selectedIDs = new Set(selectionModel);
@@ -170,8 +261,8 @@ const useBillWiseReceipt = () => {
       const tripid = selectedBillRow.flatMap((li) =>
         li.Trip_id.split(",").map(Number)
       );
-     
-      if(tripid.length === 0){
+
+      if (tripid.length === 0) {
         setError(true);
         setErrorMessage("Select the data");
         return;
@@ -311,11 +402,6 @@ const useBillWiseReceipt = () => {
           ...billWiseReport,
         };
 
-        console.log(
-          combinedData.collectedAmount,
-          combinedData.AccountDetails,
-          "anil"
-        );
 
         try {
           // First, this PUT request will be executed and awaited
@@ -405,6 +491,10 @@ const useBillWiseReceipt = () => {
         );
         console.log(postResponse.data, "response data");
 
+        await axios.put(`${apiUrl}/updateInvoiceStatus`, {
+          invoiceNo: invoiceNo
+        })
+
         await axios.post(`${apiUrl}/addCollect`, {
           collectedAmount: combinedData.collectedAmount || 0,
           bankname: combinedData.AccountDetails,
@@ -412,36 +502,38 @@ const useBillWiseReceipt = () => {
         setSuccess(true);
         setSuccessMessage("Successfully Added");
 
-        if (postResponse.data) {
-          const deleteResponse = await axios.delete(
-            `${apiUrl}/deleteBillWiseReport`,
-            { data: { BillNo } }
-          );
+        // if (postResponse.data) {
+        //   const deleteResponse = await axios.delete(
+        //     `${apiUrl}/deleteBillWiseReport`,
+        //     { data: { BillNo } }
+        //   );
 
-          if (deleteResponse.status === 200) {
-            setBillWiseReport({
-              CustomerName: "",
-              AccountDetails: "",
-              UniqueID: "",
-            });
-            setTotals({
-              amount: 0,
-              recieved: 0,
-              discount: 0,
-              balance: 0,
-              totalAmount: 0,
-              onAccount: 0,
-              totalBalance: 0,
-              tds: 0,
-              collectedAmount: 0,
-            });
-            setRows([]);
-            setPendingBillRows([]);
-          } else {
-            console.error("Failed to delete bill data");
-          }
-        }
-      } catch (error) {
+        // if (deleteResponse.status === 200) {
+        setBillWiseReport({
+          CustomerName: "",
+          AccountDetails: "",
+          UniqueID: "",
+        });
+        setTotals({
+          amount: 0,
+          recieved: 0,
+          discount: 0,
+          balance: 0,
+          totalAmount: 0,
+          onAccount: 0,
+          totalBalance: 0,
+          tds: 0,
+          collectedAmount: 0,
+        });
+        setRows([]);
+        setPendingBillRows([]);
+      }
+      //  else {
+      //   console.error("Failed to delete bill data");
+      // }
+      // }
+      // }
+      catch (error) {
         console.error(
           "Error posting bill amount received or deleting bill data:",
           error

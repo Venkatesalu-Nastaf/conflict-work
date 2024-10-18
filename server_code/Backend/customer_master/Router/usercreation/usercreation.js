@@ -31,6 +31,7 @@ router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail,created_at } = req.body;
   const { username, stationname, designation, organizationname, userpassword, active, email, mobileno,superAdmin } = book;
   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
+  const themesdata ="theme1"
   
 console.log(username, stationname, designation, organizationname, userpassword, active, email, mobileno,created_at);  
 console.log(Sender_Mail, EmailApp_Password,permissionsData)
@@ -38,8 +39,8 @@ console.log(stationname,"stt",typeof(stationname))
 const idString = stationname.join(',');
 console.log(idString,"ff")
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,created_at,superAdmin)
-VALUES (?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,created_at,superAdmin]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,theme,created_at,superAdmin)
+VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,themesdata,created_at,superAdmin]);
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {

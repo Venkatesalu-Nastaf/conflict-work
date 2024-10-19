@@ -26,7 +26,14 @@ export const PdfDataProvider = ({ children }) => {
         telephone: '',
         gstnumber: ''
     });
-    const [selectedMonths,setSelectedMonths] = useState("")
+    const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth)
+    function getCurrentMonth() {
+        const currentDate = new Date();
+
+        const currentMonth = currentDate.getMonth() + 1; // Returns a number between 0 and 11
+
+        return currentMonth.toString();
+    };
 
     useEffect(() => {
         const fetchdata = async () => {

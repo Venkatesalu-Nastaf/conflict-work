@@ -306,15 +306,19 @@ const useDispatched = () => {
           // Process tripsheet data
           const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
             ...row,
-            id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
+           // id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
           }));
           // Process booking data
           const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
             ...row,
-            id5: `booking-${index + 1}`, // Unique ID for booking
+           // id5: `booking-${index + 1}`, // Unique ID for booking
           }));
           // Combine both sets of data
-          const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+          // const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+          const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId].map((row, index) => ({
+            ...row,
+            id5: index + 1, // S.No for combined rows
+          }))
           setRows(combinedRows);
           setColumnShowall(false);
           setSuccess(true);

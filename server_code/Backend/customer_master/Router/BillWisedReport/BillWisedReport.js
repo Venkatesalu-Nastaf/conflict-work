@@ -68,6 +68,7 @@ router.post('/addBillAmountReceived', (req, res) => {
     const formattedUniqueId = uniqueId.toString().padStart(6, '0');
 
     totalBillReport.uniqueid = formattedUniqueId;
+    console.log(totalBillReport, 'billwiseeee');
 
     db.query("INSERT INTO BillWiseReceipt SET ?", [totalBillReport], (error, result) => {
         if (error) {
@@ -80,7 +81,7 @@ router.post('/addBillAmountReceived', (req, res) => {
 
 router.put('/updateInvoiceStatus', async (req, res) => {
     const { invoiceNo } = req.body; // Expecting an array of invoice numbers
-
+    console.log(invoiceNo, 'iiiiiiiiii');
     // Validate input
     if (!Array.isArray(invoiceNo) || invoiceNo.length === 0) {
         return res.status(400).json({ error: 'Invalid input: Invoice number(s) are required' });
@@ -137,7 +138,7 @@ router.put('/updateInvoiceStatus', async (req, res) => {
 
 router.post('/addCollect', (req, res) => {
     const { collectedAmount, bankname } = req.body;
-
+    console.log(collectedAmount, bankname, "bankkkkkkkkkkkkkk");
     if (!bankname || !collectedAmount) {
         return res.status(400).json({ message: 'Bank name and collected amount are required' });
     }
@@ -153,9 +154,14 @@ router.post('/addCollect', (req, res) => {
             return res.status(404).json({ message: 'Bank account not found' });
         }
 
-        const currentTotalin = results[0].totalin;
+        // const currentTotalin = results[0].totalin;
+        // const updatedTotalin = parseInt(currentTotalin) + parseInt(collectedAmount); // Add the collected amount to the current totalin
+        // const totalcapital = parseInt(collectedAmount) + parseInt(results[0].capital)
+        const currentTotalin = results[0].totalin || 0;
+        const capitalAmount = results[0].capital || 0;
         const updatedTotalin = parseInt(currentTotalin) + parseInt(collectedAmount); // Add the collected amount to the current totalin
-        const totalcapital = parseInt(collectedAmount) + parseInt(results[0].capital)
+        const totalcapital = parseInt(collectedAmount) + parseInt(capitalAmount)
+        console.log(updatedTotalin, totalcapital, 'bankkkkk', bankname);
 
         // Now, update the totalin value in the database
         const updateQuery = "UPDATE bankaccountdetails SET totalin = ?,capital=? WHERE bankname = ?";
@@ -164,7 +170,7 @@ router.post('/addCollect', (req, res) => {
                 console.error('Error updating totalin:', err);
                 return res.status(500).json({ message: 'Database error' });
             }
-
+            console.log(result, 'sssssssssssssss');
             res.status(200).json({ message: 'Totalin value updated successfully', result });
         });
     });

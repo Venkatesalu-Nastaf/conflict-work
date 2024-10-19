@@ -15,8 +15,14 @@ import { ReportData } from './Context/ReportContext';
 export const Reports = ({ stationName }) => {
     const { value, setValue } = ReportData()
     const handleChange = (event, newValue) => {
+        console.log(newValue,"valueinner")
         setValue(newValue);
     };
+    const reports = localStorage.getItem('reports');
+    if(reports !=='End'){
+        console.log(reports,'reporsts')
+      setValue(reports)
+    }
     return (
         <div className="form-container-Emplyes">
             <div className="main-content-container">
@@ -35,6 +41,7 @@ export const Reports = ({ stationName }) => {
                         </Box>
                         <TabPanel value="MonthlyWise"><MonthlyWise /></TabPanel>
                         <TabPanel value="GSTReports"><GstReport /></TabPanel>
+
                         <TabPanel value="BilledwiseReceipt"><BillWiseReceipt stationName={stationName} /></TabPanel>
                         <TabPanel value="Pendingbills"><PendingBills /></TabPanel>
                         <TabPanel value="VendorStatement"><VendorStatement /></TabPanel>

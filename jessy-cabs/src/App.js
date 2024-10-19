@@ -59,6 +59,7 @@ import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 // import Employee from "./component/Info/Employes/Employes";
 import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
+import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
 
 
 
@@ -422,6 +423,7 @@ function App() {
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
               </Route>
 
+             <Route path="/home/billing/reports/Pendingbills" element ={<PendingBills />}></Route>
               <Route path="/home/accounts" element={<Accounts />}>
 
               </Route>

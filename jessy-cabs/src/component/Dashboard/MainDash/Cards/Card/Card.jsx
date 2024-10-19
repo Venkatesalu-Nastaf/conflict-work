@@ -5,16 +5,16 @@ import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid
-import Chart from "react-apexcharts";
-import axios from "axios";
-import { APIURL } from "../../../../url";
+// import Chart from "react-apexcharts";
+// import axios from "axios";
+// import { APIURL } from "../../../../url";
 import useCard from "../useCard";
 
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
  // const [billData, setBillData] = useState([]);
   
-  const apiUrl = APIURL;
+  // const apiUrl = APIURL;
 
  
 
@@ -315,8 +315,9 @@ function CompactCard({ param, setExpanded }) {
 //   );
 // }
 function ExpandedCard({ param, setExpanded }) {
-  const { billData } = useCard();
+  const { billData,handleButtonClickCard } = useCard();
 
+const title = param.title
   useEffect(() => {
     console.log(billData, "Current Bill Data");
   }, [billData]);
@@ -354,7 +355,8 @@ function ExpandedCard({ param, setExpanded }) {
   const columns = getColumns();
 
   // Prepare the rows data by mapping the fetched data to include 'sno'
-  const rows = billData.map((item, index) => ({
+  const rows = billData.map((item, index,) => ({
+    title:title,
     id: index + 1,
     sno: index + 1,
     orgname: item.CustomerName || "N/A", // Ensure this key exists
@@ -365,7 +367,7 @@ function ExpandedCard({ param, setExpanded }) {
   }));
 
   // Log the rows to verify structure
-//  console.log(rows,billData , "Mapped Rows Dataaaaaaa");
+ console.log(rows , "Mapped Rows Dataaaaaaa");
 
   return (
     <motion.div
@@ -387,6 +389,7 @@ function ExpandedCard({ param, setExpanded }) {
         <DataGrid
           rows={rows}
           columns={columns}
+          onRowClick={handleButtonClickCard}
           pageSize={5}
           rowsPerPageOptions={[5]}
         />

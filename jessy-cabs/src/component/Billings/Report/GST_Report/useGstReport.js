@@ -5,11 +5,16 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import Excel from 'exceljs';
 import { saveAs } from 'file-saver';
+import { GiLog } from "react-icons/gi";
 
 
 const useGstReport = () => {
     const [organization, setOrganization] = useState([]);
     const [department, setDepartment] = useState([]);
+    const [success, setSuccess] = useState(false)
+    const [error, setError] = useState(false)
+    const [successMessage, setSuccessMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const [rows, setRows] = useState([]);
     const [gstReport, setGstReport] = useState({
         customer: '',
@@ -254,7 +259,7 @@ const useGstReport = () => {
             willDrawCell: function (data) {
                 // Check if this cell is part of the total row
                 if (data.row.index === tableRows.length - 1) {
-                    const { cell,  } = data;
+                    const { cell, } = data;
                     const { x, y, width, height } = cell;
 
                     // Set bold text and increased font size
@@ -275,15 +280,24 @@ const useGstReport = () => {
         doc.save('gst_report.pdf');
     };
 
+    const handleShowAll = async () => {
+        if (
+            !gstReport.customer ||
+            gstReport.customer === undefined
+        ) {
 
-    const handleShow = async () => {
+            setError(true)
+            setErrorMessage('Please Enter the Customer.')
+            return
+        }
+
         try {
-            const response = await axios.get(`${apiUrl}/getBilledDetails`, {
+            const response = await axios.get(`${apiUrl}/getAllBilledDetails`, {
                 params: gstReport
             });
-    
+
             const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
-    
+
             // Combine coveringBilledResults and transferBilledResults into a single array
             const combinedData = [
                 ...coveringBilledResults.map(item => ({
@@ -299,13 +313,13 @@ const useGstReport = () => {
                     customer: item.Customer,
                 }))
             ];
-    
+
             // Create a map from combinedData for easy lookup
             const billDateMap = combinedData.reduce((map, item) => {
                 map[item.customer] = item.billdate;
                 return map;
             }, {});
-    
+
             // Create a map from customerResults for easy lookup
             const customerMap = customerResults.reduce((map, item) => {
                 map[item.customer] = {
@@ -314,13 +328,13 @@ const useGstReport = () => {
                 };
                 return map;
             }, {});
-    
+
             // Initialize totals
             let totalCGST = 0;
             let totalSGST = 0;
             let totalGST = 0;
             let totalAmount = 0;
-    
+
             // Update tripsheetResults with the billdate and GST details from maps
             const updatedTripsheetResults = tripsheetResults.map((item, index) => {
                 const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
@@ -329,13 +343,13 @@ const useGstReport = () => {
                 const totalcalcAmount = item.totalcalcAmount || 0;
                 const cgst = Math.round((gstTax * totalcalcAmount) / 100);
                 const sgst = cgst;
-    
+
                 // Update totals
                 totalCGST += cgst;
                 totalSGST += sgst;
                 totalGST += cgst + sgst;
                 totalAmount += totalcalcAmount + cgst + sgst;
-    
+
                 return {
                     ...item,
                     id: index + 1,
@@ -351,6 +365,8 @@ const useGstReport = () => {
             });
             // Set rows and tax report state
             setRows(updatedTripsheetResults);
+            setSuccess(true)
+            setSuccessMessage('Successfully Listed')
             setTaxReport({
                 TaxableValue: Math.round(totalAmount - totalGST),
                 cgst: Math.round(totalCGST),
@@ -359,23 +375,157 @@ const useGstReport = () => {
                 totalGST: Math.round(totalGST),
                 totalAmount: Math.round(totalAmount)
             });
-    
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    const handleShow = async () => {
+        if (
+            !gstReport.customer ||
+            gstReport.customer === undefined
+        ) {
+            setError(true)
+            setErrorMessage('Please Enter Customer.')
+            return
+        }
+        if (
+
+            !gstReport.department ||
+            gstReport.department === undefined
+
+        ) {
+
+            setError(true)
+            setErrorMessage('Please Enter Department.')
+            return
+        }
+        try {
+            const response = await axios.get(`${apiUrl}/getBilledDetails`, {
+                params: gstReport
+            });
+
+            const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
+            if (tripsheetResults.length === 0) {
+                setError(true)
+                setErrorMessage('No Data Found')
+                return
+            }
+
+            // Combine coveringBilledResults and transferBilledResults into a single array
+            const combinedData = [
+                ...coveringBilledResults.map(item => ({
+                    billdate: dayjs(item.InvoiceDate).format('YYYY-MM-DD'),
+                    customer: item.Customer,
+                })),
+                ...transferBilledResults.map(item => ({
+                    billdate: dayjs(item.Billdate).format('YYYY-MM-DD'),
+                    customer: item.Organization_name,
+                })),
+                ...individualBilledResults.map(item => ({
+                    billdate: dayjs(item.Bill_Date).format('YYYY-MM-DD'),
+                    customer: item.Customer,
+                }))
+            ];
+
+            // Create a map from combinedData for easy lookup
+            const billDateMap = combinedData.reduce((map, item) => {
+                map[item.customer] = item.billdate;
+                return map;
+            }, {});
+
+            // Create a map from customerResults for easy lookup
+            const customerMap = customerResults.reduce((map, item) => {
+                map[item.customer] = {
+                    gstNumber: item.gstnumber,
+                    gstTax: item.gstTax
+                };
+                return map;
+            }, {});
+
+            // Initialize totals
+            let totalCGST = 0;
+            let totalSGST = 0;
+            let totalGST = 0;
+            let totalAmount = 0;
+
+            // Update tripsheetResults with the billdate and GST details from maps
+            const updatedTripsheetResults = tripsheetResults.map((item, index) => {
+                const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
+                const customerDetails = customerMap[item.customer] || {};
+                const gstTax = customerDetails.gstTax || 0;
+                const totalcalcAmount = item.totalcalcAmount || 0;
+                const cgst = Math.round((gstTax * totalcalcAmount) / 100);
+                const sgst = cgst;
+
+                // Update totals
+                totalCGST += cgst;
+                totalSGST += sgst;
+                totalGST += cgst + sgst;
+                totalAmount += totalcalcAmount + cgst + sgst;
+
+                return {
+                    ...item,
+                    id: index + 1,
+                    billdate: billdate,
+                    tripsheetdate: dayjs(item.tripsheetdate).format('YYYY-MM-DD'),
+                    billed: "Yes",
+                    gstNumber: customerDetails.gstNumber || '',
+                    gstTax: Math.round(gstTax),
+                    cgst: cgst,
+                    sgst: sgst,
+                    igst: 0
+                };
+            });
+            // Set rows and tax report state
+            setRows(updatedTripsheetResults);
+            setSuccess(true)
+            setSuccessMessage('Successfully Listed')
+            setTaxReport({
+                TaxableValue: Math.round(totalAmount - totalGST),
+                cgst: Math.round(totalCGST),
+                sgst: Math.round(totalSGST),
+                igst: 0,
+                totalGST: Math.round(totalGST),
+                totalAmount: Math.round(totalAmount)
+            });
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
+    const hidePopup = () => {
+        setError(false);
+        setSuccess(false);
 
+    };
+    useEffect(() => {
+        if (error || success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error, success]);
     return {
         organization,
         setGstReport,
         gstReport,
         department,
         handleShow,
+        handleShowAll,
         rows,
         columns,
         taxReport,
         handleDownloadPdf,
-        handleDownloadExcel
+        handleDownloadExcel,
+        success,
+        successMessage,
+        error,
+        errorMessage,
+        hidePopup
     };
 };
 export default useGstReport;

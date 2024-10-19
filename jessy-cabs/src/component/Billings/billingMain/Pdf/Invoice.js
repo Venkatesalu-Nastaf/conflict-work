@@ -8,15 +8,15 @@ const Invoice = () => {
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [signimageUrl, setSignImageUrl] = useState('');
     const [routeData, setRouteData] = useState('');
-    // const [IndividualBillData, setIndividualBillData] = useState({
-    //     Invoice_No: '',
-    //     Trip_id: '',
-    //     Status: '',
-    //     Amount: '',
-    //     Bill_Date: '',
-    //     Customer: '',
-    //     Trips: "1"
-    // })
+    const [IndividualBillData, setIndividualBillData] = useState({
+        Invoice_No: '',
+        Trip_id: '',
+        Status: '',
+        Amount: '',
+        Bill_Date: '',
+        Customer: '',
+        Trips: "1"
+    })
     //  const [IndividualBillData, setIndividualBillData] = useState(false)
 
     const apiUrl = APIURL;
@@ -108,8 +108,8 @@ const Invoice = () => {
         GmapimageUrl,
         signimageUrl,
         routeData,
-        // IndividualBillData,
-        // setIndividualBillData
+        IndividualBillData,
+        setIndividualBillData
       
     }
 }

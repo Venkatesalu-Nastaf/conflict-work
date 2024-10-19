@@ -6,16 +6,17 @@ router.get('/customerBilledDetails', (req, res) => {
     const { customer } = req.query;
 
     const individualBillingPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Individual_Billing WHERE Customer = ? AND Status='Billed'", [customer], (error, result) => {
+        db.query("SELECT * FROM Individual_Billing WHERE Customer = ? AND Status='Billed' AND BillReportStatus is null", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching individual billing details');
             }
             resolve(result);
+            
         });
     });
 
     const groupBillingPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Group_billing WHERE Customer = ? AND Status='Billed'", [customer], (error, result) => {
+        db.query("SELECT * FROM Group_billing WHERE Customer = ? AND Status='Billed' AND BillReportStatus  is null", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching group billing details');
             }
@@ -24,7 +25,7 @@ router.get('/customerBilledDetails', (req, res) => {
     });
 
     const transferListPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Transfer_list WHERE Organization_name = ? AND Status='Billed'", [customer], (error, result) => {
+        db.query("SELECT * FROM Transfer_list WHERE Organization_name = ? AND Status='Billed' AND BillReportStatus is null", [customer], (error, result) => {
             if (error) {
                 return reject('Error fetching transfer list details');
             }
@@ -76,6 +77,62 @@ router.post('/addBillAmountReceived', (req, res) => {
         return res.status(201).json({ message: 'Data inserted successfully', success: true });
     });
 });
+
+router.put('/updateInvoiceStatus', async (req, res) => {
+    const { invoiceNo } = req.body; // Expecting an array of invoice numbers
+
+    // Validate input
+    if (!Array.isArray(invoiceNo) || invoiceNo.length === 0) {
+        return res.status(400).json({ error: 'Invalid input: Invoice number(s) are required' });
+    }
+
+    // Prepare the queries
+    const updateTransferTable = `UPDATE Transfer_list SET BillReportStatus = "Success" WHERE Invoice_no IN (?)`;
+    const updateGroupTable = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE InvoiceNo IN (?)`;
+    const updateIndividualTable = `UPDATE Individual_Billing SET BillReportStatus = "Success" WHERE Invoice_No IN (?)`;
+
+    try {
+        // Use a transaction to ensure all updates are done together
+        await db.beginTransaction();
+
+        // Execute the three update queries for the same set of invoiceNos
+        await new Promise((resolve, reject) => {
+            db.query(updateTransferTable, [invoiceNo], (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result);
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            db.query(updateGroupTable, [invoiceNo], (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result);
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            db.query(updateIndividualTable, [invoiceNo], (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result);
+            });
+        });
+
+        // Commit transaction
+        await db.commit();
+        res.status(200).json({ message: 'Invoice status updated successfully' });
+    } catch (error) {
+        // Rollback transaction in case of an error
+        await db.rollback();
+        res.status(500).json({ error: 'Failed to update invoice status', details: error.message });
+    }
+});
+
 
 
 router.post('/addCollect', (req, res) => {

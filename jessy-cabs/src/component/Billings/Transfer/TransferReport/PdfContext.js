@@ -1,6 +1,7 @@
 // DataContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { APIURL } from '../../../url';
+import useCard from '../../../Dashboard/MainDash/Cards/useCard';
 
 const DataContext = createContext();
 
@@ -25,6 +26,7 @@ export const PdfDataProvider = ({ children }) => {
         telephone: '',
         gstnumber: ''
     });
+    const [selectedMonths,setSelectedMonths] = useState("")
 
     useEffect(() => {
         const fetchdata = async () => {
@@ -58,7 +60,8 @@ export const PdfDataProvider = ({ children }) => {
     return (
         <DataContext.Provider value={{
             pdfPrint, setPdfPrint, billingPage, setBillingPage, individualBilled, setIndividualBilled,billGenerate,setBillGenerate,
-            transferReport, setTransferReport, particularPdf, setParticularPdf, organizationDetail, particularRefNo, setParticularRefNo
+            transferReport, setTransferReport, particularPdf, setParticularPdf, organizationDetail, particularRefNo, setParticularRefNo,
+            selectedMonths,setSelectedMonths
         }}>
             {children}
         </DataContext.Provider>

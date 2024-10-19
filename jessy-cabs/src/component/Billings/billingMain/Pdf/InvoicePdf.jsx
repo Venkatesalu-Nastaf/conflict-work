@@ -7,23 +7,22 @@ import './InvoicePdf.css';
 import dayjs from "dayjs";
 import numWords from 'num-words'
 import Invoice from "./Invoice";
-// import { APIURL } from "../../../url";
+import { APIURL } from "../../../url";
 
 
-const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) => {
+const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }) => {
     // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
-    const { setParticularPdf, particularRefNo,setIndividualBilled,individualBilled} = PdfData();
+    const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const [billingDate] = useState(dayjs());
-    // const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
-    const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
-    // const apiUrl = APIURL;
+    const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
+    // const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
+    const apiUrl = APIURL;
     const targetRef = useRef();
 
     const handlePopupClose = () => {
         setParticularPdf(false);
     }
 
-    console.log(billdatadate,"date")
     const formatAddress = (address) => {
         return address?.split('\n').map((line, index) => <p key={index}>{line}</p>);
     }
@@ -41,48 +40,48 @@ const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) 
     const AmountInWords = numWords(parseInt(paymentValue)) || 0;
 
     // setting the Billed details
-    // useEffect(() => {
-    //     const Invoice_No = `RF${particularRefNo}`;
-    //     const Trip_id = particularRefNo;
-    //     const Status = "Billed";
-    //     const Amount = book.totalcalcAmount || 0;
-    //     // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
-    //     const Bill_Date = billingDate.format('YYYY-MM-DD');
-    //     const Customer = customerData.customer;
-    //     const billing_no = book.billingno;
-    //     const guestname = book.guestname;
+    useEffect(() => {
+        const Invoice_No = `RF${particularRefNo}`;
+        const Trip_id = particularRefNo;
+        const Status = "Billed";
+        const Amount = book.totalcalcAmount || 0;
+        // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
+        const Bill_Date = billingDate.format('YYYY-MM-DD');
+        const Customer = customerData.customer;
+        const billing_no = book.billingno;
+        const guestname = book.guestname;
 
-    //     setIndividualBillData({
-    //         Invoice_No,
-    //         Trip_id,
-    //         Status,
-    //         Amount,
-    //         Bill_Date,
-    //         Customer,
-    //         billing_no,
-    //         guestname
-    //     });
-    // }, [particularRefNo, book, customerData, setIndividualBillData]);
-
-    // const handlePrint = async () => {
-    //     try {
-    //         generatePDF(targetRef, { filename: 'page.pdf' });
-    //         await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
-    //         setIndividualBilled(!individualBilled);
-    //     } catch (error) {
-    //         console.log('An error occurred:', error);
-    //     } finally {
-    //         setParticularPdf(false);
-    //     }
-    // };
+        setIndividualBillData({
+            Invoice_No,
+            Trip_id,
+            Status,
+            Amount,
+            Bill_Date,
+            Customer,
+            billing_no,
+            guestname
+        });
+    }, [particularRefNo, book, customerData]);
 
     const handlePrint = async () => {
-        setIndividualBilled(!individualBilled);
-        setParticularPdf(false);
+        try {
             generatePDF(targetRef, { filename: 'page.pdf' });
-         
-            
+            setIndividualBilled(!individualBilled);
+            await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
+        } catch (error) {
+            console.log('An error occurred:', error);
+        } finally {
+            setParticularPdf(false);
+        }
     };
+
+    // const handlePrint = async () => {
+    //     setIndividualBilled(!individualBilled);
+    //     setParticularPdf(false);
+    //         generatePDF(targetRef, { filename: 'page.pdf' });
+
+
+    // };
     return (
         <>
             <div className="refdiv">
@@ -132,7 +131,7 @@ const InvoicePdf = ({ book, logo,organizationdata, customerData,billdatadate }) 
 
                                     <tr>
                                         <td className="tabledata" style={{ textAlign: '' }}>1</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.startdate ? dayjs(book.startdate).format("YYYY-MM-DD"):''}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.startdate ? dayjs(book.startdate).format("YYYY-MM-DD") : ''}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.tripid}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>
                                             {book.guestname} <br />

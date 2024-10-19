@@ -582,7 +582,7 @@ const useBilling = () => {
         // setBook(emptyBookvalues);
         // setCustomerData('');
         // setBillingDate('')
-        if(individualBilled && edit){
+        if(individualBilled){
              setBillingDate('')
               setInvoiceNo()
               setBook(emptyBookvalues);

@@ -190,11 +190,11 @@ const VehicleStatement = () => {
 
   const [Customerdata, setCustomerData] = useState([])
 
-  const showList = async (e) => {
+  const showList = async (e) => {    
     e.preventDefault();
     const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
-    setTableData(response.data)
-    const datas = response.data;
+    // setTableData(response.data)
+    const datas = response.data;    
 
     if (data.hireTypes === "Own  Vehicle") {
       const parseData = transformCustomer(datas)
@@ -263,7 +263,7 @@ const VehicleStatement = () => {
     } else {
       setCustomerData([])
       setError(true)
-      setErrorMessage("Please Fill All Fields")
+      setErrorMessage("Please Select Hire Types")
     }
   }
 

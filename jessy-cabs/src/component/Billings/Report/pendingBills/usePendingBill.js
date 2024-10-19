@@ -75,6 +75,12 @@ const usePendingBill = () => {
     };
 
     const fetchBills = async (endpoint, successMessage, errorMessage) => {
+        if (pendingBill.CustomerName === "") {
+            setError(true)
+            setErrorMessage('Enter Customer Name')
+            return
+        }
+
         try {
             const { TotalAmount, Balance, ...customerData } = pendingBill;
             const response = await axios.post(`${apiUrl}/${endpoint}`, { customerData });

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { APIURL } from "../../../url";
+import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 
 const useCard = () => {
     const [billAmount, setBillAmount] = useState(null);
@@ -8,9 +9,10 @@ const useCard = () => {
     const [totalCollectedSum, setTotalCollectedSum] = useState(0);
     const [totalBalanceSum, setTotalBalanceSum] = useState(0);
     const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
-    const [billData, setBillData] = useState([]); 
-     
 
+    const [billData, setBillData] = useState([]); 
+    const {selectedMonths}  = PdfData();
+ 
     function getCurrentMonth() {
         const currentDate = new Date();
 
@@ -97,22 +99,41 @@ const useCard = () => {
     }, [apiUrl, selectedMonth2]);
      
    // my code for all data 
-   useEffect(() => {
+
+console.log(selectedMonth2,'selecttt111111111',selectedMonths);
+useEffect(() => {
+    console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
+    
     const fetchBillData = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/getFullBillWisedReportcards`);
-            const data = response.data;
-            console.log(data, 'Bill datas');
-            setBillData(data); // Update state with the fetched data
-        } catch (error) {
-            console.error('Error fetching bill data:', error);
+      try {
+        let data = [];
+        if (selectedMonths === "All") {
+          const response = await axios.get(`${apiUrl}/getFullBillWisedReportcards`);
+          data = response.data; // Fetch all data
+          console.log(data, 'MaaFetched All Bill Data');
+          setBillData(data); // Update state with the fetched data
+          console.log(response.data, 'Maaaaaaaa');
+          return    
+        } else if (selectedMonths !== "All") {
+          const response = await axios.post(`${apiUrl}/getmonthwisedatas`, {
+            selectMonth: selectedMonths,
+          });
+          data = response.data; // Fetch month-specific data
+          console.log(data, 'Fetched Month-Wise Bill Data');
+          setBillData(data); // Update state with the fetched data
+          console.log(response.data, 'Maaaaaaaaaaannnnnnnn');
+
         }
+      } catch (error) {
+        console.error('Error fetching bill data:', error);
+      }
     };
-
+  
     fetchBillData(); // Call the fetch function
-}, [apiUrl]);
+  }, [apiUrl, selectedMonths]); // Dependencies
+  
 
-
+ 
     return {
         billAmount,
         totalAmountSum,

@@ -280,7 +280,6 @@ const useTransferlist = () => {
       try {
         const response = await axios.get(`${apiUrl}/gettransfer_list`)
         const data = response.data;
-        console.log("Transfer loading");
 
 
         if (data.length > 0) {
@@ -310,6 +309,7 @@ const useTransferlist = () => {
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
+    {field:'Grouptrip_id',headerName:"GroupID",width:120},
     { field: "Status", headerName: "Status", width: 130 },
     { field: "Invoice_no", headerName: "Invoice No", width: 130 },
     {

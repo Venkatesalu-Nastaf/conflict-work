@@ -19,9 +19,9 @@ const useEmplyeecreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
-    const [warningMessage,setWarningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
-    const [cerendentialdata,setCredentialData]=useState()
+    const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
 
 
@@ -93,12 +93,12 @@ const useEmplyeecreation = () => {
         { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
         { id: 21, name: 'Dashboard', read: false },
         // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
-        { id: 22, name: 'Map', read: false, new: false, modify: false, delete: false  },
-        { id: 23, name: 'RealTime', read: false, new: false, modify: false, delete: false  },
-        { id: 24, name: 'Vehicle', read: false, new: false, modify: false, delete: false  },
-        { id: 25, name: 'Reminders', read: false, new: false, modify: false, delete: false  },
-        { id: 26, name: 'History', read: false, new: false, modify: false, delete: false  },
-        { id: 27, name: 'Records', read: false, new: false, modify: false, delete: false  },
+        { id: 22, name: 'Map', read: false, new: false, modify: false, delete: false },
+        { id: 23, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+        { id: 24, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+        { id: 25, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+        { id: 26, name: 'History', read: false, new: false, modify: false, delete: false },
+        { id: 27, name: 'Records', read: false, new: false, modify: false, delete: false },
     ];
 
 
@@ -112,19 +112,24 @@ const useEmplyeecreation = () => {
 
 
     //-------------------------------------------------------------------------
-    // Function to update state based on permissions
-    const updatePermissionsState = () => {
-        setReadState(checkPermission('read'));
-        setNewState(checkPermission('new'));
-        setModifyState(checkPermission('modify'));
-        setDeleteState(checkPermission('delete'));
+   
+
+
+
+    const updatePermissionsState = (permissionsData1) => {
+    
+        const isReadAllOne = !permissionsData1.some(permission => permission.read === 0);
+        const isModifyAllOne = !permissionsData1.some(permission => permission.modify === 0);
+        const isNewAllOne = !permissionsData1.some(permission => permission.new === 0);
+        const isDeleteAllOne = !permissionsData1.some(permission => permission.delete === 0);
+
+
+        setReadState(isReadAllOne);
+        setNewState(isNewAllOne);
+        setModifyState(isModifyAllOne);
+        setDeleteState(isDeleteAllOne);
     };
 
-    // Function to check if any object in the array has the property set to true
-    const checkPermission = (property) => {
-        const data = permissionsData.some(permission => permission[property]);
-        return data;
-    }
 
     const handleSwitchChange = (permissionType) => () => {
 
@@ -172,61 +177,59 @@ const useEmplyeecreation = () => {
             }))
         );
     };
-    
 
-    const handleSwitchforthatrow = (id) => (event)=>{
+
+    const handleSwitchforthatrow = (id) => (event) => {
         // console.log(id,"iiiiii")
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
                 if (i === id) {
-                    return { ...permission,
+                    return {
+                        ...permission,
                         read: checked,
-              new: checked,  // Toggles all the fields together
-              modify: checked,
-              delete: checked
+                        new: checked,  // Toggles all the fields together
+                        modify: checked,
+                        delete: checked
+                    }
                 }
-            }
                 return permission;
             })
         );
     }
 
-const handleSwitchforallrows=(id1,id2)=>(event)=>{
-    console.log(id1,id2,"mainid")
+    const handleSwitchforallrows = (id1, id2) => (event) => {
+        // console.log(id1, id2, "mainid")
 
 
- const { checked } = event.target;
+        const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, id) => {
                 for (let i = id1; i <= id2; i++) {
                     // newState[i][field] = checked;
-                    console.log(i,"ll")
-                
-                if (id === i) {
-                    return { ...permission,
-                        read: checked,
-              new: checked,  // Toggles all the fields together
-              modify: checked,
-              delete: checked
+                    console.log(i, "ll")
+
+                    if (id === i) {
+                        return {
+                            ...permission,
+                            read: checked,
+                            new: checked,  // Toggles all the fields together
+                            modify: checked,
+                            delete: checked
+                        }
+                    }
                 }
-            }
-            }
                 return permission;
             })
         );
     }
 
-    
+
 
     //----------------------------------------------------
 
     const handleCheckboxChange = (index, field) => (event) => {
-        console.log(index,field,"main")
-        // if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
-        //     console.log(index,field,"maincheck")
-        //     handleMainCheckboxChange(index, field)
-        // }
+    
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
@@ -267,8 +270,8 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
     // };
 
 
-    const handleCheckboxChangealldata = (index1,index2,field) => (event) => {
-        console.log(index1,field,"main")
+    const handleCheckboxChangealldata = (index1, index2, field) => (event) => {
+        console.log(index1, field, "main")
         // if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
         //     console.log(index,field,"maincheck")
         //     handleMainCheckboxChange(index, field)
@@ -277,10 +280,10 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         setPermissionsData(prevData =>
             prevData.map((permission, id) => {
                 for (let i = index1; i <= index2; i++) {
-                if (id === i) {
-                    return { ...permission, [field]: checked };
+                    if (id === i) {
+                        return { ...permission, [field]: checked };
+                    }
                 }
-            }
                 return permission;
             })
         );
@@ -346,7 +349,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
             organizationname: '',
             userpassword: '',
             active: false,
-            superAdmin:false
+            superAdmin: false
         }));
 
         setPermissionsData(initialPermissionsData);
@@ -355,90 +358,90 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
-       
+
     };
 
     useEffect(() => {
         const fetchData = async () => {
-        //   const organizationname = localStorage.getItem('usercompany');
-    
-          try {
-            // if (!organizationname) return
-            const response = await fetch(`${apiUrl}/organizationdata`);
-            if (response.status === 200) {
-    
-              const userDataArray = await response.json();
-            //   console.log(userDataArray,'userdata');
-              if (userDataArray.length > 0) {
-                setOrganisationSendEmail(userDataArray[0])
-                // setDatatrigger(!datatrigger)
-    
-              } else {
-                setErrorMessage('User data not found.');
-                setError(true);
-              }
+            //   const organizationname = localStorage.getItem('usercompany');
+
+            try {
+                // if (!organizationname) return
+                const response = await fetch(`${apiUrl}/organizationdata`);
+                if (response.status === 200) {
+
+                    const userDataArray = await response.json();
+                    //   console.log(userDataArray,'userdata');
+                    if (userDataArray.length > 0) {
+                        setOrganisationSendEmail(userDataArray[0])
+                        // setDatatrigger(!datatrigger)
+
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
+                }
             }
-          }
-          catch {
-          }
+            catch {
+            }
         };
         fetchData();
-      }, [apiUrl]);
+    }, [apiUrl]);
     // add
 
 
-    const uniqueusercreationname=async(usernname)=>{
+    const uniqueusercreationname = async (usernname) => {
         // console.log(customerdataname,"namee")
-        if(usernname){
+        if (usernname) {
 
-            const response= await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
-            const responsedata=response.data;
-            
+            const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
+            const responsedata = response.data;
+
             // console.log(response,"data")
             // console.log(responsedata?.length,"reeee")
-           
-            if(responsedata?.length >=1){
+
+            if (responsedata?.length >= 1) {
                 setCredentialData(true)
                 // return true;
             }
-            else{
+            else {
                 setCredentialData(false)
                 // return false;
             }
         }
 
-    
-            
-      
+
+
+
     }
 
-    const handleChangeuniquecreation=(event)=>{
-        const { name, value} = event.target;
-        const datacrendital= uniqueusercreationname(value);
-        console.log(datacrendital,"cred")
+    const handleChangeuniquecreation = (event) => {
+        const { name, value } = event.target;
+        const datacrendital = uniqueusercreationname(value);
+        console.log(datacrendital, "cred")
         setBook((prevBook) => ({
             ...prevBook,
-            [name]:value,
+            [name]: value,
         }));
-     
+
 
 
     }
 
-     // show list
-     const handleList = useCallback(async () => {
+    // show list
+    const handleList = useCallback(async () => {
         try {
             const response = await axios.get(`${apiUrl}/usercreation`);
             const data = response.data;
             // const data = response.data;
-    //   const rowsWithUniqueId = data.map((row, index) => ({
-    //     ...row,
-    //     id: index + 1,
-    //   }));
-      console.log(data,"id")
+            //   const rowsWithUniqueId = data.map((row, index) => ({
+            //     ...row,
+            //     id: index + 1,
+            //   }));
+            console.log(data, "id")
 
-    
-       
+
+
             setRows(data);
             // return data;
         } catch {
@@ -446,8 +449,8 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
     }, [apiUrl])
     useEffect(() => {
         handleList();
-      }, [handleList]);
-    
+    }, [handleList]);
+
 
     const handleAdd = async () => {
         const username = book.username;
@@ -459,7 +462,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         const mobileno = book.mobileno
         const password = book.userpassword
 
-       
+
 
         if (!password) {
             setWarning(true);
@@ -517,15 +520,15 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
 
 
         try {
-            const created_at=dayjs().format("YYYY-MM-DD")
-            const data = { book, permissionsData,organistaionsendmail,created_at}
+            const created_at = dayjs().format("YYYY-MM-DD")
+            const data = { book, permissionsData, organistaionsendmail, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             handleList()
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             setCredentialData()
-            
+
         } catch (error) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -534,7 +537,7 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
 
     };
 
-// console.log(permissionsData,"ppp")
+    // console.log(permissionsData,"ppp")
     // edit
     const handleEdit = async (userid) => {
         try {
@@ -596,11 +599,11 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
                 setErrorMessage("Fill Active..");
                 return;
             }
-           
 
-            const selectedCustomer = rows.find((row) => row.userid === userid); 
+
+            const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book, };
-            const data = { updatedCustomer: updatedCustomer, permissionsData}
+            const data = { updatedCustomer: updatedCustomer, permissionsData }
 
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
@@ -609,8 +612,8 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
             setSuccessMessage("Successfully updated");
             handleCancel();
             // handleList()
-            
-            
+
+
 
         } catch {
             setError(true);
@@ -746,11 +749,13 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {
             setPermissionsData(user_permission);
+            updatePermissionsState(user_permission);
+
         }
 
         setSelectedCustomerId(params.customerId);
         setIsEditMode(true);
-        updatePermissionsState();
+        // updatePermissionsState();
         // setShowPermission(false)
     };
 
@@ -802,10 +807,10 @@ const handleSwitchforallrows=(id1,id2)=>(event)=>{
         handleClickShowPasswords,
         handleMouseDownPasswords,
         isEditMode,
-        handleEdit,handleChangeuniquecreation,cerendentialdata,showPermission, setShowPermission,handleCheckboxChangealldata,
+        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,handleSwitchforthatrow,handleSwitchforallrows
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };
 

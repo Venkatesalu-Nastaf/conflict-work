@@ -127,30 +127,7 @@ const StationCreation = () => {
                   />
 
                 </div>
-                {/* <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
-
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="Station-name"
-                    label="Station Name"
-                    sx={{ m: 1, width: "200ch" }}
-                    name="Stationname"
-                    value={selectedCustomerData?.Stationname || book.Stationname}
-                    autoComplete="new-password"
-                    // onChange={handleChange}
-                    onChange={handleChangeuniquestation}
-
-                  />
-
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{ color: "red" }}>{cerendentialdata ? `StationName Already Exist` : ""}</span>
-                  </div>
-                </div> */}
-
+              
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
@@ -207,18 +184,7 @@ const StationCreation = () => {
                     onChange={handleChange}
                     placeholder="Address"
                   />
-                  {/* <TextField
-                  size="small"
-                  name="remark"
-                  className='address-field'
-                  value={selectedCustomerData?.address || book.address}
-                  onChange={handleChange}
-                  label="Address"
-                  id="remark"
-                  multiline
-                  rows={4}
-                  autoComplete="password"
-                /> */}
+               
                 </div>
 
                 <div className='input' style={{ paddingRight: '15px' }}>
@@ -343,31 +309,31 @@ const StationCreation = () => {
                     key="list"
                     icon={<ChecklistIcon />}
                     tooltipTitle="List"
-                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "List")}
                   />
                 )}
-                {StationCreation_modify === 1 && (
+                {StationCreation_modify === 1 && isEditMode && (
                   <SpeedDialAction
                     key="edit"
                     icon={<ModeEditIcon />}
                     tooltipTitle="Edit"
-                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Edit")}
                   />
                 )}
-                {StationCreation_delete === 1 && (
+                {StationCreation_delete === 1 && isEditMode && (
                   <SpeedDialAction
                     key="delete"
                     icon={<DeleteIcon />}
                     tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Delete")}
                   />
                 )}
-                {StationCreation_new === 1 && (
+                {StationCreation_new === 1 && !isEditMode && (
                   <SpeedDialAction
                     key="Add"
                     icon={<BookmarkAddedIcon />}
                     tooltipTitle="Add"
-                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Add")}
                   />
                 )}
                 <SpeedDialAction
@@ -380,17 +346,7 @@ const StationCreation = () => {
             </Box>
             <div className="stationcreation-table-container">
               <div className="table-stationcreation">
-                {/* <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-              /> */}
+               
 
                 <Box
                   sx={{

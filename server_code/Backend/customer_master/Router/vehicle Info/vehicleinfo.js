@@ -54,7 +54,7 @@ router.get('/vechiclenameinfo', (req, res) => {
 
   db.query('SELECT * FROM vehicleinfo WHERE vehicleName LIKE ?', [`${vehicletypename}%`], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details ' });
     }
     if (result.length === 0) {
       return res.status(404).json({ error: 'Vehicle Not Found' });
@@ -70,7 +70,7 @@ router.post('/vehicleinfo', (req, res) => {
   db.query('INSERT INTO vehicleinfo SET ?', bookData, (err, result) => {
     if (err) {
       console.log(err)
-      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+      return res.status(500).json({ error: "Failed to insert data" });
     }
     console.log(result)
     return res.status(200).json({ message: "Data inserted successfully" });
@@ -195,8 +195,7 @@ router.post('/insurance-pdf/:vehicleId', Insurance_uploadfile.single("file"), as
     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) {
-        console.log(err)
-        return res.json({ Message: "Error" });
+        return res.status(500).json({ error: 'Failed to retrieve vehicle details ' });
       }
       return res.json({ Status: "success" });
     })
@@ -370,7 +369,8 @@ router.post("/getvehciledatauniquevehilcle",(req,res)=>{
   console.log(vechiclevalue,created_at,"vehhh")
   db.query("insert into VehicleName(VechicleNames,created_at) values(?,?)",[vechiclevalue,created_at],(err,result)=>{
     if (err) {
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+      return res.status(500).json({message: 'Failed to retrieve to data'});
+      // return res.status(500).json({error:err});
     }
    
     return res.status(200).json({message:"inserted succesfully"});

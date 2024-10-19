@@ -959,50 +959,46 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
 
 router.get('/gettransfer_listdatas', (req, res) => {
   const { Status, Organization_name, FromDate, EndDate } = req.query;
+  // console.log(Status,decodeURIComponent(Organization_name), FromDate, EndDate,"pppp")
+  const orgName =decodeURIComponent(Organization_name)
+
+ 
   // const { Status  } = req.query;
   if (Status === "all") {
-    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [Organization_name, FromDate, EndDate], (err, result) => {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [orgName, FromDate, EndDate], (err, result) => {
       // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
       // 
       if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        return res.status(500).json({message: 'Failed to retrieve to data'});
       }
       return res.status(200).json(result);
 
     });
   }
   else if (Status === "billed") {
-    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [Organization_name, FromDate, EndDate, Status], (err, result) => {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
 
       if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        return res.status(500).json({message: 'Failed to retrieve to data' });
       }
       return res.status(200).json(result);
 
     });
   }
   else if (Status === "notbilled") {
-    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [Organization_name, FromDate, EndDate, Status], (err, result) => {
+    db.query('SELECT * FROM Transfer_list1 where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
 
       if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        return res.status(500).json({message: 'Failed to retrieve to data' });
       }
       return res.status(200).json(result);
 
     });
   }
 
-  else {
-    db.query('SELECT * FROM Transfer_list where Status=? AND Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [Status, Organization_name, FromDate, EndDate], (err, result) => {
-      // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
-      // 
-      if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
-      }
-      return res.status(200).json(result);
-
-    });
-  }
+ 
 
 })
 

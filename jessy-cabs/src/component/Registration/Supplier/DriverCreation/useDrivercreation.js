@@ -362,15 +362,10 @@ const useDrivercreation = () => {
 
 
     const uniquedrivernameno=async(drivernamedata)=>{
-        // console.log(customerdataname,"namee")
-        // console.log(customerdataname,ratenamedata,"ratt")
         if(drivernamedata){
 
             const response= await axios.get(`${apiUrl}/getcreduniquedrivername/${drivernamedata}`)
             const responsedata=response.data;
-            
-            // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
            
             if(responsedata?.length >=1){
                 
@@ -384,8 +379,6 @@ const useDrivercreation = () => {
         } }
 
         const uniquedriverusername=async(driverusernamedata)=>{
-            // console.log(customerdataname,"namee")
-            // console.log(customerdataname,ratenamedata,"ratt")
             if(driverusernamedata){
     
                 const response= await axios.get(`${apiUrl}/getcreduniqueusername/${driverusernamedata}`)
@@ -484,13 +477,13 @@ const useDrivercreation = () => {
                 setFile(null); // Reset the file after successful upload
 
                 // Set success state and message
-                setSuccess(true);
-                setSuccessMessage("Mail Sent Successfully");
+                // setSuccess(true);
+                // setSuccessMessage(" Successfully");
             } catch (error) {
                 // Log the error and show error message
-                console.error("File upload failed:", error);
+                // console.error("File upload failed:", error);
                 setError(true);
-                setErrorMessage('Something went wrong');
+                setErrorMessage('PDF NOT UPLODAED');
             }
         } else {
             return;
@@ -515,7 +508,7 @@ const useDrivercreation = () => {
             }
             catch {
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('License Image not inserted');
             }
         } else {
             return
@@ -567,11 +560,10 @@ const useDrivercreation = () => {
     
   useEffect(() => {
     const fetchData = async () => {
-    //   const organizationname = localStorage.getItem('usercompany');
+  
 
       try {
-        // if (!organizationname) return
-        // const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+     
         const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
 
@@ -581,8 +573,8 @@ const useDrivercreation = () => {
             setDatatrigger(!datatrigger)
 
           } else {
-            setErrorMessage('User data not found.');
-            setError(true);
+            // setErrorMessage('User data not found.');
+            // setError(true);
           }
         }
       }
@@ -611,27 +603,14 @@ const useDrivercreation = () => {
     
     
             };
-            // const dataToSend = {
-            //     userid:lastBookingno,
-            //     Drivername:selectedCustomerData.drivername,
-            //     UserName:selectedCustomerData.username,
-            //     password:selectedCustomerData.userpassword,
-            //     Sendmailauth: organistaionsendmail.Sender_Mail,
-            //     Mailauthpass: organistaionsendmail.EmailApp_Password,
-            //     Email:selectedCustomerData.Email
-      
-      
-      
-            //   };
-           
-            console.log(dataToSend, "datta")
+            
             await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
             setSuccess(true);
             setSuccessMessage("Mail Sent Successfully");
           } catch (error) {
-            console.log(error,"dd")
+         
             setError(true);
-            setErrorMessage("An error occured while sending mail", error);
+            setErrorMessage("An error occured while sending mail");
           }
         }
         //  else {
@@ -686,12 +665,7 @@ const useDrivercreation = () => {
                 console.log(key,book[key])
                 formData.append(key, book[key]);
               }
-               // await axios.post(`${apiUrl}/drivercreation`, formData, {
-            //     headers: {
-            //       'x-auth-token': token,
-                  
-            //     }
-            //   })
+               
 
             await axios.post(`${apiUrl}/drivercreation`, formData,)
             
@@ -707,7 +681,7 @@ const useDrivercreation = () => {
             handleCancel();
         } catch (error) {
             setError(true)
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Insert Driver Data");
         }
     }
 
@@ -735,7 +709,7 @@ const useDrivercreation = () => {
             }
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Search Data");
         }
     };
 
@@ -762,12 +736,13 @@ const useDrivercreation = () => {
                 }
             } catch {
                 setError(true);
-                setErrorMessage("Check your Network Connection");
+                setErrorMessage("Failed to Search Data");
             }
         }
     };
 
     const handleEdit = async () => {
+        try{
         setEdit(true)
         const data = selectedCustomerData.driverid
         const formData = new FormData();
@@ -775,22 +750,6 @@ const useDrivercreation = () => {
         for (const key in restselected) {
             formData.append(key, restselected[key]);
           }
-        // const updatedriver = {
-        //     drivername: selectedCustomerData.drivername,
-        //     username: selectedCustomerData.username,
-        //     stations: selectedCustomerData.stations,
-        //     Mobileno: selectedCustomerData.Mobileno,
-        //     userpassword: selectedCustomerData.userpassword,
-        //     joiningdate: selectedCustomerData.joiningdate,
-        //     active: selectedCustomerData.active,
-        //     address1: selectedCustomerData.address1,
-        //     licenseno: selectedCustomerData.licenseno,
-        //     licenseexpdate: selectedCustomerData.licenseexpdate,
-        //     badgeno: selectedCustomerData.badgeno,
-        //     badgeexpdate: selectedCustomerData.badgeexpdate,
-        //     city: selectedCustomerData.city,
-        //     aadharno: selectedCustomerData.aadharno,
-        // }
 
 
         await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,formData);
@@ -800,14 +759,22 @@ const useDrivercreation = () => {
         handleCancel();
         addPdf(data);
         licenceSubmit(data);
+        
         // handlecheckmaildriver(data)
         setRows([]);
         setEdit(true)
+        handleList()
+        }
+        catch(err){
+            setError(true);
+            setErrorMessage("Failed to Edit Data");
+        }
+        
     };
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
-        try {
+        
             if (actionName === 'List') {
                 const response = await axios.get(`${apiUrl}/drivercreation`);
                 const data = response.data;
@@ -820,13 +787,13 @@ const useDrivercreation = () => {
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage('Successfully listed');
-                    handleList();
-                    setRows([]);
+                    // handleList();
+                    // setRows([]);
                 } else {
                     setRows([]);
                     setError(true);
                     setErrorMessage('No data found');
-                    handleList();
+                    // handleList();
                     setRows([]);
                 }
             }
@@ -849,21 +816,11 @@ const useDrivercreation = () => {
 
             else if (actionName === 'Edit') {
                 handleEdit()
-                // setSuccess(true);
-                // setSuccessMessage('Successfully updated');
-                // handleCancel();
-                // addPdf();
-                // licenceSubmit();
-                // setRows([]);
-            } else {
-                setInfo(true);
-                setInfoMessage('There is some issue ');
+
             }
-        } catch (error) {
-            setError(true);
-            setErrorMessage('Check your Network Connection');
-        }
-    };
+            
+        } 
+      
 
     //---------- popup------------------
     const hidePopup = () => {
@@ -882,13 +839,7 @@ const useDrivercreation = () => {
         }
     }, [error, success, warning, info]);
 
-    //------------------------------------
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);

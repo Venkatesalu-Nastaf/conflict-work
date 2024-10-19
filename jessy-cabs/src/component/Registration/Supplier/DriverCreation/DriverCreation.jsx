@@ -118,11 +118,7 @@ const DriverCreation = ({ stationName }) => {
         handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
     } = useDrivercreation();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
+  
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)

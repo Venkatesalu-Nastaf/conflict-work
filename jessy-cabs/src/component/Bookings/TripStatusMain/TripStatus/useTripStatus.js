@@ -332,10 +332,10 @@ const useDispatched = () => {
         }
       }
     } catch (error) {
-      console.error("Error retrieving data:", error); // Log the error for debugging
+      // console.error("Error retrieving data:", error); 
       setRows([]);
-      setError(true);
-      setErrorMessage("Error retrieving data");
+      // setError(true);
+      // setErrorMessage("Error retrieving data");
     }finally {
       setLoading(false); // Stop loading
     
@@ -383,8 +383,8 @@ const useDispatched = () => {
       }
     } catch {
       setRows([]);
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+      // setError(true);
+      // setErrorMessage("Check your Network Connection");
     }finally {
       setLoading(false); // Stop loading
     

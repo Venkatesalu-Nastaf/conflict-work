@@ -177,26 +177,7 @@ const Organization = ({ logoImage }) => {
                                             <ModeEditIcon />
                                         </IconButton>
                                     </div>
-                                    {/* {editMode ? (
-                                        <div className="input-field save-cancel-inputs">
-                                            <div className="input">
-                                                <Button variant="outlined" onClick={toggleEditMode}>
-                                                    Cancel
-                                                </Button>
-                                            </div>
-                                            <div className="input">
-                                                <Button variant="contained" onClick={handleUpdate} disabled={!MainSetting_modify}   >
-                                                    Update
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="user-photo-edit">
-                                            <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
-                                                <ModeEditIcon />
-                                            </IconButton>
-                                        </div>
-                                    )} */}
+                                 
                                     <div className='alert-popup-main'>
                                         {error &&
                                             <div className='alert-popup Error' >
@@ -394,35 +375,7 @@ const Organization = ({ logoImage }) => {
                                             autoComplete="password"
                                             disabled={!editMode} />
                                     </div>
-                                    {/* <TextField
-                                        size="small"
-                                        sx={{ width: "225px" }}
-                                        name="BankDetails"
-                                        className='address-field organisation-address-field'
-                                        value={selectedCustomerData?.BankDetails || book.BankDetails}
-                                        onChange={handleChange}
-                                        label="BankDetails"
-                                        id="Bank"
-                                        multiline
-                                        rows={5}
-                                        autoComplete="password"
-                                        disabled={!editMode}
-                                    /> */}
-
-                                    {/* <TextField
-                                        size="small"
-                                        sx={{ width: "225px" }}
-                                        name="addressLine1"
-                                        className='address-field organisation-address-field'
-                                        value={selectedCustomerData?.BankDetails || book.BankDetails}
-                                        onChange={handleChange}
-                                        // label="BankDetails"
-                                        id="Bank"
-                                        multiline
-                                        rows={3}
-                                        autoComplete="password"
-                                        disabled={!editMode}
-                                    /> */}
+                                  
 
 
                                 </div>
@@ -443,50 +396,9 @@ const Organization = ({ logoImage }) => {
                                 </div>
                             ) : (
                                 <div></div>
-                                // <div className="user-photo-edit">
-                                //     <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
-                                //         <ModeEditIcon />
-                                //     </IconButton>
-                                // </div>
+                             
                             )}
-                            {/* {
-                                selectedCustomerData.length < 0 ? 
-                                <div className="input organisation-btn">
-
-                                    <Button variant="contained" onClick={handleAdd} >
-                                        Save
-                                    </Button>
-                                </div>  : <></>
-                            } */}
-                            {/* <div className='organisation-input-row'>
-                                {selectedCustomerData?.length === 0 ?
-                                    <div className='organisation-btn-row'>
-                                        <div className="input organisation-btn">
-
-                                            <Button variant="contained" onClick={handleAdd} >
-                                                Save
-                                            </Button>
-                                        </div>
-                                    </div> :
-                                    <>
-                                        <div className='organisation-btn-row'>
-                                            <div className='organisation-btn'>
-                                                <div className="input">
-                                                    <Button variant="outlined" disabled={!MainSetting_modify} onClick={handleCancel}>
-                                                        Cancel
-                                                    </Button>
-                                                </div>
-
-                                                <div className="input">
-                                                    <Button variant="contained" disabled={!MainSetting_modify} onClick={handleUpdate}  >
-                                                        Update
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-                                }
-                            </div> */}
+        
                         </div>
                         <div className='alert-popup-main'>
                             {info &&

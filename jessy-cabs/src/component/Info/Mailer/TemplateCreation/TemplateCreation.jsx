@@ -165,6 +165,8 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
     } catch (err) {
       console.log(err);
+      setError(true);
+      setErrorMessage("Failed to Add Template");
     }
   };
 
@@ -181,6 +183,8 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
     }
     catch (err) {
       console.log(err)
+      setError(true);
+      setErrorMessage("Failed to Attach Image Template");
 
     }
   }
@@ -209,6 +213,8 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
     }
     catch (err) {
+      setError(true);
+      setErrorMessage("Failed to Edit Data");
       console.log(err)
     }
   }

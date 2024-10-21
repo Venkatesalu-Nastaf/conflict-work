@@ -17,7 +17,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
 import { PermissionContext } from '../../../context/permissionContext';
 
 import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
@@ -41,13 +41,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-// const actions = [
-//   { icon: <ChecklistIcon />, name: "List" },
-//   { icon: <CancelPresentationIcon />, name: "Cancel" },
-//   { icon: <DeleteIcon />, name: "Delete" },
-//   { icon: <ModeEditIcon />, name: "Edit" },
-//   { icon: <BookmarkAddedIcon />, name: "Add" },
-// ];
+
 
 
 const MailDetails = () => {
@@ -136,27 +130,6 @@ const MailDetails = () => {
     }
   }, [error, success]);
 
-  // useEffect(() => {
-  //   const fetchdata = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiurl}/templatedataall`)
-  //       const data = response.data
-  //       const rowuniqueid = data.map((row, index) => ({
-  //         ...row,
-  //         idno: index + 1
-
-
-  //       }))
-  //       setTemplateData(rowuniqueid)
-  //       // setTriggerData(false)
-  //       setTriggerData(!triggerdata)
-  //     }
-  //     catch (err) {
-  //       console.log(err)
-  //     }
-  //   }
-  //   fetchdata()
-  // }, [apiurl, triggerdata])
 
   const handleList = useCallback(async () => {
     try {
@@ -228,9 +201,12 @@ useEffect(() => {
       setSelectedData([])
 
       await axios.delete(`${apiurl}/templatedeleteimageedata/${Templateid}`)
+      setSuccess(true)
+      setSuccessMessage("Deleted Successfully")
     }
     catch (err) {
-      console.log(err)
+      setError(true)
+      setErrorMessage("Failed to Delete Data")
     }
 
   }
@@ -350,8 +326,8 @@ useEffect(() => {
             setOrganisationSendEmail(userDataArray[0])
             setDataTrigger(!datatrigger)
           } else {
-            setErrorMessage('User data not found.');
-            setError(true);
+            // setErrorMessage('User data not found.');
+            // setError(true);
           }
         }
       }
@@ -381,7 +357,7 @@ useEffect(() => {
       }
     } catch {
       setError(true);
-      setErrorMessage("sorry");
+      setErrorMessage("Failed to Retrive Data");
     }
   };
 

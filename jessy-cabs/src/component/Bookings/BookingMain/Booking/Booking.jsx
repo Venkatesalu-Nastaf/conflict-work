@@ -144,7 +144,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
     rowdriver,
     handleRowClickdriver,
     edit, AvilableimageCount,
-    handleKeyEnterdriver,
+    // handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
@@ -303,7 +303,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 selectedCustomerData.username ||
                 book.username ||
                 storedUsername ||
-                ""} />
+                ""} readOnly />
             </span>
 
             <span className="d-grid">

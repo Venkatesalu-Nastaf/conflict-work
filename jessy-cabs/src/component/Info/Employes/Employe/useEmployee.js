@@ -75,52 +75,6 @@ const useEmployee = () => {
     ];
     // TABLE END
 
-
-    // const convertToCSV = (data) => {
-    //     const header = columns.map((column) => column.headerName).join(",");
-    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //     return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //     const csvData = convertToCSV(rows);
-    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //     saveAs(blob, "customer_details.csv");
-    // };
-    // const handlePdfDownload = () => {
-    //     const pdf = new jsPDF('landscape');
-    //     pdf.setFontSize(12);
-    //     pdf.setFont('helvetica', 'normal');
-    //     pdf.text("Employee Details", 10, 10);
-
-    //     const tableData = rows.map((row) => [
-    //         row['id'],
-    //         row['empid'],
-    //         row['empname'],
-    //         row['empemailid'],
-    //         row['empmobile'],
-    //         row['jobroll'],
-    //         row['joiningdate'],
-    //         row['gender'],
-    //         row['bloodgroup'],
-    //         row['address1'],
-    //         row['aadharcard'],
-    //         row['pancard'],
-    //         row['address2'],
-    //         row['guardian'],
-    //         row['fixedsalary'],
-    //         row['uanid'],
-    //         row['esino'],
-    //         row['uanid']
-    //     ]);
-    //     pdf.autoTable({
-    //         head: [['Sno', 'Employe ID', 'Name', 'Email', 'Mobile', 'Job Roll', 'Joining Date', 'Gender', 'Blood Group', 'Guardian', 'UAN ID', 'ESI NO', 'Net Salary', 'Driving Licence No']],
-    //         body: tableData,
-    //         startY: 20,
-    //         columnWidth: 'auto',
-    //     });
-
-    //     const pdfBlob = pdf.output('blob');
-    //     saveAs(pdfBlob, 'Customer_Details.pdf');
     // };
 
     const handleExcelDownload = async () => {
@@ -435,6 +389,28 @@ const useEmployee = () => {
         }
     }
 
+    const handleList = useCallback(async () => {
+        try {
+           
+            const response = await axios.get(`${apiUrl}/employees`);
+            const data = response.data
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+       
+            
+           
+        } catch (err) {
+            console.log(err);
+        }
+    }, [apiUrl]); // Add any dependencies needed inside this array
+    
+    useEffect(() => {
+        handleList();
+    }, [handleList]);
+
     //----------------------------------------------
     const handleAdd = async () => {
         const empid = book.empid || selectedCustomerData.empid;
@@ -450,7 +426,10 @@ const useEmployee = () => {
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            handleList();
         } catch {
+            setError(true);
+            setErrorMessage("Failed to ADD Employee Data");
         }
     };
 
@@ -464,13 +443,15 @@ const useEmployee = () => {
         handleCancel();
         addPdf();
         setRows([]);
+        handleList()
     };
 
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
-        try {
+        
             if (actionName === 'List') {
+                try {
                 const response = await axios.get(`${apiUrl}/employees`);
                 const data = response.data;
                 if (data.length > 0) {
@@ -485,6 +466,11 @@ const useEmployee = () => {
                     setRows([]);
                     setError(true);
                     setErrorMessage("No data found");
+                }
+                }
+                catch {
+                    setError(true);
+                    setErrorMessage("Failed to Retrive Data");
                 }
             }
 
@@ -513,17 +499,14 @@ const useEmployee = () => {
                 setRows([]);
             }
 
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
+        
+        //  catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection");
+        // }
     };
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+  
 
     const handleShowAll = async () => {
         try {
@@ -544,7 +527,7 @@ const useEmployee = () => {
             }
         } catch {
             setError(true);
-            setErrorMessage("sorry")
+            setErrorMessage("Failed to Retrieve Data")
         }
     };
 

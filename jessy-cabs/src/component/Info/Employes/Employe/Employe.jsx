@@ -114,11 +114,7 @@ const Employe = () => {
 
   } = useEmployee();
 
-  useEffect(() => {
-    if (actionName === "List") {
-      handleClick(null, "List");
-    }
-  }, [actionName, handleClick]);
+
 
   // permissions
   const { permissions } = useContext(PermissionContext)
@@ -278,19 +274,7 @@ const Employe = () => {
                   onChange={handleChange}
                   placeholder="Address"
                 />
-                {/* <TextField
-                  margin="normal"
-                  id="address1"
-                  className="full-width"
-                  label="Address"
-                  name="address1"
-                  multiline
-                  rows={2}
-                  sx={{ width: "100%" }}
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  onChange={handleChange}
-                /> */}
+             
               </div>
               <div className="input">
                 <div className="icone">
@@ -430,15 +414,7 @@ const Employe = () => {
               </div>
             </div>
 
-            {/* <div className="input-field" >
-              <div className="input">
-                {isEditMode ? (
-                  <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
-                ) : (
-                  <Button variant="contained" disabled={!Employee_modify} onClick={handleAdd} >Add</Button>
-                )}
-              </div>
-            </div> */}
+         
           </div>
         </div>
         <div className='alert-popup-main'>
@@ -501,7 +477,7 @@ const Employe = () => {
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
-                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "List")}
               />
             )}
             {Employee_modify === 1 && isEditMode &&(
@@ -509,7 +485,7 @@ const Employe = () => {
                 key="edit"
                 icon={<ModeEditIcon />}
                 tooltipTitle="Edit"
-                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Edit")}
               />
             )}
             {Employee_delete === 1 && isEditMode && (
@@ -517,7 +493,7 @@ const Employe = () => {
                 key="delete"
                 icon={<DeleteIcon />}
                 tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Delete")}
               />
             )}
             {Employee_new === 1 && !isEditMode && (
@@ -525,39 +501,18 @@ const Employe = () => {
                 key="Add"
                 icon={<BookmarkAddedIcon />}
                 tooltipTitle="Add"
-                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Add")}
               />
             )}
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
-              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              onClick={(event) => handleClick(event, "Cancel")}
             />
           </StyledSpeedDial>
         </Box>
-        {/* <div className="Employe-search-container">
-          <div className="input-field Employe-search-input">
-            <div className="input">
-              <div className="icone">
-                <AiOutlineFileSearch
-                  color="action"
-                />
-              </div>
-              <TextField
-                size="small"
-                id="searchText"
-                label="Search"
-                name="searchText"
-                value={searchText || ''}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-            </div>
-            <div className="input">
-              <Button variant="contained" onClick={handleShowAll}>Search</Button>
-            </div>
-          </div>
-        </div> */}
+      
 
 
 

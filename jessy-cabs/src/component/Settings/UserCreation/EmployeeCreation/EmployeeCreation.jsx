@@ -121,10 +121,6 @@ const EmployeeCreation = ({ stationName }) => {
   }, [stationName]);
  
 
-
-  //  for showing table
-  // const [showPermission, setShowPermission] = useState(false);
-  // const [showPermission, setShowPermission] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
@@ -148,9 +144,7 @@ const EmployeeCreation = ({ stationName }) => {
     setSearchUser(e.target.value);
   }
   
-  // console.log(rows, "filter")
- 
-  // const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
+
   const filteruser = useMemo(() => {
     return rows.filter(user => 
       user.username.toLowerCase().includes(searchUser.toLowerCase())

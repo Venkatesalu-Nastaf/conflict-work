@@ -150,7 +150,7 @@ const useTaxsettings = () => {
             setSuccessMessage("Successfully Added");
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Add Data");
         }
     };
 
@@ -170,7 +170,7 @@ const useTaxsettings = () => {
 
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Update Data");
         }
     };
 
@@ -195,8 +195,9 @@ const useTaxsettings = () => {
 
     const handleClick = async (event, actionName, STax) => {
         event.preventDefault();
-        try {
+      
             if (actionName === 'List') {
+                try{
                 const response = await axios.get(`${apiUrl}/taxsetting`);
                 const data = response.data;
                 const rowsWithUniqueId = data.map((row, index) => ({
@@ -206,6 +207,14 @@ const useTaxsettings = () => {
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
+            }
+            catch(err){
+                setError(true);
+                setErrorMessage("Data Not Found");
+            
+            }
+
+                
             }
 
             else if (actionName === 'Delete') {
@@ -218,27 +227,12 @@ const useTaxsettings = () => {
 
             else if (actionName === 'Edit') {
                 handleEdit()
-            //     const selectedCustomer = rows.find((row) => row.STax === STax);
-            //     const updatedCustomer = {
-            //         ...selectedCustomer,
-            //         ...selectedCustomerData,
-            //     };
-            //     await axios.put(`${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
-            //     handleCancel();
-            //     setRows([]);
-            //     setSuccess(true);
-            //     setSuccessMessage("Successfully updated");
+          
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
+        
+        
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+    
 
     return {
         selectedCustomerData,

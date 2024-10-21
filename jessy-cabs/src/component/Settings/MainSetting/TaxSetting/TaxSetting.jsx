@@ -75,11 +75,6 @@ const TaxSetting = () => {
         handleEdit,
     } = useTaxsettings();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
 
     // Permission-------------------------------------------
     const { permissions } = useContext(PermissionContext)

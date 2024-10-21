@@ -66,14 +66,12 @@ const UserSetting = () => {
     handleClick,
     handleChange,
     hidePopup,
-    // selectedImage,
+ 
     editMode,
     toggleEditMode,
     showPasswords,
     handleClickShowPasswords,
-    // handleClickShowPassword,
-    // handleMouseDownPassword,
-    // handleUpload,
+   
     handleMouseDownPasswords,
     // showPassword,
     handleUpdate,
@@ -115,14 +113,11 @@ const UserSetting = () => {
 
   const avatarChangeValue = (value, avatarNumber) => {
     console.log(value,"ggggggg")
-    // const avatarElement = document.getElementById(`avatar-image-${avatarNumber}`);
-    // if (avatarElement) {
-    //   avatarElement.classList.add('selected-avatar');
-    // }
+
     setUserAvatarValue(value);
   }
 
-  // const [userAvatar, setUserAvatar] = useState('');
+  
 
   const avatarChange = async(avatarValue) => {
     const userid = localStorage.getItem('useridno');
@@ -133,7 +128,7 @@ const UserSetting = () => {
       userid: userid,
       profile_image: avatarValue
     });
-    // setUserAvatar(avatarValue);
+  
     handleClose();
   }
   
@@ -177,22 +172,7 @@ const UserSetting = () => {
 
                   </div>
                 </div>
-                {/* <div className="input-field">
-                  <div className="input">
-                    <div className="input-field">
-                      <Button
-                        color="primary"
-                        size="small"
-                        variant="contained"
-                        onClick={handleUpload}
-                        component="label"
-                      >
-                        {" "}
-                        update
-                      </Button>
-                    </div>
-                  </div>
-                </div> */}
+             
               </div>
               <div className="container-userinfo-right">
                 <div className=" userInfo-inputs-feilds input-field">
@@ -244,40 +224,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  {/* <div className="input">
-                    <div className="icone">
-                      <BadgeIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="first-name"
-                      label="First Name"
-                      name="ufirstname"
-                      autoComplete="new-password"
-                      value={
-                        selectedCustomerData?.ufirstname || book.ufirstname
-                      }
-                      onChange={handleChange}
-                      autoFocus
-                      disabled={!editMode}
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <BadgeIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="last-name"
-                      label="Last Name"
-                      name="ulastname"
-                      autoComplete="new-password"
-                      value={selectedCustomerData?.ulastname || book.ulastname}
-                      onChange={handleChange}
-                      autoFocus
-                      disabled={!editMode}
-                    />
-                  </div> */}
+                 
                   <div className="input">
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />

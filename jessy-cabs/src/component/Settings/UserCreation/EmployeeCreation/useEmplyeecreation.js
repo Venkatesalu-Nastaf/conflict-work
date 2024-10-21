@@ -112,12 +112,12 @@ const useEmplyeecreation = () => {
 
 
     //-------------------------------------------------------------------------
-   
+
 
 
 
     const updatePermissionsState = (permissionsData1) => {
-    
+
         const isReadAllOne = !permissionsData1.some(permission => permission.read === 0);
         const isModifyAllOne = !permissionsData1.some(permission => permission.modify === 0);
         const isNewAllOne = !permissionsData1.some(permission => permission.new === 0);
@@ -229,7 +229,7 @@ const useEmplyeecreation = () => {
     //----------------------------------------------------
 
     const handleCheckboxChange = (index, field) => (event) => {
-    
+
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
@@ -241,41 +241,10 @@ const useEmplyeecreation = () => {
         );
     }
 
-    // its for set main checkbox state 
-    // const handleMainCheckboxChange = (index, field) => {
-    //     console.log(field,index,"mainjjj")
-    //     setPermissionsData(prevData => {
-    //         const newState = prevData.map((item, idx) => {
-    //             console.log(item,idx,"mainidxxxx")
-    //             if (idx >= index && idx < index + 4) {
-    //                 console.log(idx,"kk",index+4)
-    //                 return {
-    //                     ...item,
-    //                     [field]: !item[field]
-    //                 };
-    //             }
-    //             return item;
-    //         });
-    //         console.log(newState,index,field,"filrdnewsatae")
-
-    //         const checked = newState[index][field];
-    //         // Set all checkboxes within the range to match the checked state of the main checkbox
-    //         for (let i = index + 1; i < index + 4; i++) {
-    //             newState[i][field] = checked;
-    //         }
-    //         return newState;
-
-    //     });
-    //     console.log(newState,"stae")
-    // };
-
+   
 
     const handleCheckboxChangealldata = (index1, index2, field) => (event) => {
-        console.log(index1, field, "main")
-        // if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
-        //     console.log(index,field,"maincheck")
-        //     handleMainCheckboxChange(index, field)
-        // }
+        
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, id) => {
@@ -391,14 +360,13 @@ const useEmplyeecreation = () => {
 
 
     const uniqueusercreationname = async (usernname) => {
-        // console.log(customerdataname,"namee")
+     
         if (usernname) {
 
             const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
             const responsedata = response.data;
 
-            // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
+      
 
             if (responsedata?.length >= 1) {
                 setCredentialData(true)
@@ -433,14 +401,6 @@ const useEmplyeecreation = () => {
         try {
             const response = await axios.get(`${apiUrl}/usercreation`);
             const data = response.data;
-            // const data = response.data;
-            //   const rowsWithUniqueId = data.map((row, index) => ({
-            //     ...row,
-            //     id: index + 1,
-            //   }));
-            console.log(data, "id")
-
-
 
             setRows(data);
             // return data;
@@ -531,7 +491,7 @@ const useEmplyeecreation = () => {
 
         } catch (error) {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed To Add Data");
         }
 
 
@@ -617,7 +577,7 @@ const useEmplyeecreation = () => {
 
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Update ");
         }
     };
 
@@ -632,26 +592,12 @@ const useEmplyeecreation = () => {
         }
         catch (err) {
             setError(true);
-            setErrorMessage("Error in deleting");
+            setErrorMessage("Failed to Delete Data");
         }
     }
 
 
-    // // show list
-    // const handleList = useCallback(async () => {
-    //     try {
-    //         const response = await axios.get(`${apiUrl}/usercreation`);
-    //         const data = response.data;
-    //         // const rowsWithUniqueId = data.map((row, index) => ({
-    //         //     ...row,
-    //         //     id: index + 1,
-    //         // }));
-    //         // setRows(rowsWithUniqueId);
-    //         setRows(data);
-    //         return data;
-    //     } catch {
-    //     }
-    // }, [apiUrl, setRows])
+
 
     //------------------------------------------------------
 
@@ -661,39 +607,41 @@ const useEmplyeecreation = () => {
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
 
-        try {
-            if (actionName === 'List') {
-                handleList().then((showlist) => {
 
-                    if (showlist?.length > 0) {
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
+        if (actionName === 'List') {
 
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
-                })
-            } else if (actionName === 'Cancel') {
 
-                handleCancel();
-                handleList();
-            } else if (actionName === 'Delete') {
+            try {
+                const response = await axios.get(`${apiUrl}/usercreation`);
+                const data = response.data;
 
-                handleDelete();
-                handleList();
-            } else if (actionName === 'Edit') {
-                handleEdit();
-                handleList();
+                setRows(data);
+                setSuccess(true);
+                setSuccessMessage("Successfully Listed");
+
+            } catch {
+                setError(true);
+                setErrorMessage("Failed to Retrive Data ");
             }
-            else if (actionName === 'Add') {
-                handleAdd();
-                handleList();
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+
+        } else if (actionName === 'Cancel') {
+
+            handleCancel();
+            handleList();
+        } else if (actionName === 'Delete') {
+
+            handleDelete();
+            handleList();
+        } else if (actionName === 'Edit') {
+            handleEdit();
+            handleList();
         }
+        else if (actionName === 'Add') {
+            handleAdd();
+            handleList();
+        }
+
+       
     };
 
 
@@ -715,11 +663,7 @@ const useEmplyeecreation = () => {
     }, [error, success, warning, info]);
     //-------------------------------------------------
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+
 
     const permissiondata = async (userId) => {
         const userid = userId;

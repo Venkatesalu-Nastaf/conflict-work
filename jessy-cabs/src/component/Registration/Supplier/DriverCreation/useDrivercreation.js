@@ -637,16 +637,18 @@ const useDrivercreation = () => {
             return
         }
 
-        if (!book.Mobileno && !book.licenseno) {
+        if (!book.Mobileno 
+            // && !book.licenseno
+        ) {
             setWarning(true);
             setWarningMessage("All fields are mandatory");
             return
         }
-        if (!book.licenseexpdate) {
-            setWarning(true);
-            setWarningMessage("All fields are mandatory");
-            return
-        }
+        // if (!book.licenseexpdate) {
+        //     setWarning(true);
+        //     setWarningMessage("All fields are mandatory");
+        //     return
+        // }
         if (cerendentialdata === true) {
             setWarning(true);
             setWarningMessage(" Drivername Already Exists");

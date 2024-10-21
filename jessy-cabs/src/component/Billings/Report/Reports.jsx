@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -14,15 +14,46 @@ import LogDetails from './LogDetails/LogDetails';
 import { ReportData } from './Context/ReportContext';
 export const Reports = ({ stationName }) => {
     const { value, setValue } = ReportData()
-    const handleChange = (event, newValue) => {
-        console.log(newValue,"valueinner")
-        setValue(newValue);
-    };
-    const reports = localStorage.getItem('reports');
-    if(reports !=='End'){
-        console.log(reports,'reporsts')
-      setValue(reports)
+//     const handleChange = (event, newValue) => {
+//         console.log(newValue,"valueinner")
+//         setValue(newValue);
+//     };
+//     const reports = localStorage.getItem('reports');
+//     // console.log(reports,'repotrs111111111111')
+
+// if (reports !== null) {
+//     console.log(reports, 'reports');
+//     setValue(reports); // Set value to the retrieved reports
+// } else {
+//     setValue("MonthlyWise"); // Set to the default value when reports is null
+//     // localStorage.removeItem('reports'); // Correctly remove the item using the key
+//     console.log(value,reports,'problem value')
+// }
+// let hasChanged = false; // Flag to track changes
+
+const [hasChanged,sethasChanged] = useState(false)
+
+const handleChange = (event, newValue) => {
+    console.log(newValue, "valueinner");
+    setValue(newValue);
+    sethasChanged(true)
+ 
+};
+
+// Check localStorage only if no change has been made
+const reports = localStorage.getItem('reports');
+// 
+// if (!hasChanged) { // Only check if hasChanged is false
+    if (reports !== null) {
+        // console.log(reports, 'reports');
+        setValue(reports); // Set value to the retrieved reports
+    } else if(reports === null && !hasChanged) {
+        setValue("MonthlyWise"); // Set to the default value when reports is null
+        // console.log("Default value set:", value);
+        // console.log(hasChanged,'chagned')
     }
+// }
+
     return (
         <div className="form-container-Emplyes">
             <div className="main-content-container">

@@ -18,7 +18,7 @@ const useCard = () => {
     const { value } = useContext(ReportContext);
 
 
-    console.log(value,'valuecard')
+    // console.log(value,'valuecard')
  
     function getCurrentMonth() {
         const currentDate = new Date();
@@ -63,7 +63,7 @@ const useCard = () => {
 
     // getting monthly wise Amount
     useEffect(() => {
-        console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
+        // console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
        
 
         const fetchBillAmount = async () => {
@@ -80,7 +80,7 @@ const useCard = () => {
                     const response = await axios.post(`${apiUrl}/getMonthWiseTotal`, {
                         selectMonth: selectedMonth2,
                     });
-                    console.log(response.data, 'select month response');
+                    // console.log(response.data, 'select month response');
                     data = response.data;
                 }
 
@@ -107,9 +107,9 @@ const useCard = () => {
      
    // my code for all data 
 
-console.log(selectedMonth2,'selecttt111111111',selectedMonths);
+// console.log(selectedMonth2,'selecttt111111111',selectedMonths);
 useEffect(() => {
-    console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
+    // console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
     
     const fetchBillData = async () => {
       try {
@@ -117,18 +117,18 @@ useEffect(() => {
         if (selectedMonths === "All") {
           const response = await axios.get(`${apiUrl}/getFullBillWisedReportcards`);
           data = response.data; // Fetch all data
-          console.log(data, 'MaaFetched All Bill Data');
+          // console.log(data, 'MaaFetched All Bill Data');
           setBillData(data); // Update state with the fetched data
-          console.log(response.data, 'Maaaaaaaa');
+          // console.log(response.data, 'Maaaaaaaa');
           return    
         } else if (selectedMonths !== "All") {
           const response = await axios.post(`${apiUrl}/getmonthwisedatas`, {
             selectMonth: selectedMonths,
           });
           data = response.data; // Fetch month-specific data
-          console.log(data, 'Fetched Month-Wise Bill Data');
+          // console.log(data, 'Fetched Month-Wise Bill Data');
           setBillData(data); // Update state with the fetched data
-          console.log(response.data, 'Maaaaaaaaaaannnnnnnn');
+          // console.log(response.data, 'Maaaaaaaaaaannnnnnnn');
 
         }
       } catch (error) {

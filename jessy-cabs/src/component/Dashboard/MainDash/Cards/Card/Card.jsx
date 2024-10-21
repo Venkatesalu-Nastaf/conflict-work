@@ -319,7 +319,7 @@ function ExpandedCard({ param, setExpanded }) {
 
 const title = param.title
   useEffect(() => {
-    console.log(billData, "Current Bill Data");
+    // console.log(billData, "Current Bill Data");
   }, [billData]);
 
   const getColumns = () => {
@@ -367,7 +367,7 @@ const title = param.title
   }));
 
   // Log the rows to verify structure
- console.log(rows , "Mapped Rows Dataaaaaaa");
+//  console.log(rows , "Mapped Rows Dataaaaaaa");
 
   return (
     <motion.div

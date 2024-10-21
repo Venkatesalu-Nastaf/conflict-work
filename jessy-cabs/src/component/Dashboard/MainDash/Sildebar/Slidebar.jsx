@@ -308,10 +308,13 @@ const Sidebar = () => {
   const Map_page_permission = permissions[22]?.read || permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
+    localStorage.removeItem('reports');
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setExpanded(false)
+    // console.log('billing cliucked')
+    // console.log("reports",'billing cliucked')
     e.preventDefault();
     var hasPermission = false;
     switch (name) {

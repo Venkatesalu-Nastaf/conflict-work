@@ -91,6 +91,7 @@ const MainDashboard = () => {
  
       localStorage.removeItem("SuperAdmin")
       // localStorage.removeItem("expiretime")
+      localStorage.removeItem('reports')
 
 
 

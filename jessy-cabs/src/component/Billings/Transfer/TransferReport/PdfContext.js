@@ -1,7 +1,7 @@
 // DataContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { APIURL } from '../../../url';
-import useCard from '../../../Dashboard/MainDash/Cards/useCard';
+//import useCard from '../../../Dashboard/MainDash/Cards/useCard';
 
 const DataContext = createContext();
 
@@ -62,7 +62,7 @@ export const PdfDataProvider = ({ children }) => {
         };
 
         fetchdata();
-    }, []); // Empty dependency array means this effect runs once when the component mounts
+    });
 
     return (
         <DataContext.Provider value={{

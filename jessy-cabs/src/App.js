@@ -34,7 +34,8 @@ import UserCreation from "./component/Settings/UserCreation/UserCreation";
 // import RateManagement from "./component/Registration/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
-import StationCreation from "./component/Settings/StationCreation/StationCreation";
+// import StationCreation from "./component/Settings/StationCreation/StationCreation";
+import StationCreation from "./component/Registration/StationCreation/StationCreation";
 import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
@@ -59,6 +60,7 @@ import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 // import Employee from "./component/Info/Employes/Employes";
 import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
+import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
 
 
 
@@ -422,6 +424,7 @@ function App() {
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
               </Route>
 
+             <Route path="/home/billing/reports/Pendingbills" element ={<PendingBills />}></Route>
               <Route path="/home/accounts" element={<Accounts />}>
 
               </Route>

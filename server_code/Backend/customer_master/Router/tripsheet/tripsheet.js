@@ -333,7 +333,7 @@ router.delete('/tripsheet/:tripid', (req, res) => {
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Customer not found" });
+            return res.status(404).json({ error: "Data Not Deleted " });
         }
         return res.status(200).json({ message: "Data deleted successfully" });
     });

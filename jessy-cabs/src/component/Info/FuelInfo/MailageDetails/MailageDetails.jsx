@@ -89,11 +89,6 @@ const MailageDetails = () => {
 
   } = useMailagedetails();
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
 
   // Permission ---------------------
   const { permissions } = useContext(PermissionContext)
@@ -333,7 +328,7 @@ const MailageDetails = () => {
                     key="list"
                     icon={<ChecklistIcon />}
                     tooltipTitle="List"
-                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "List")}
                   />
                 )}
                 {FuelInfo_modify === 1 && isEditMode && (
@@ -341,7 +336,7 @@ const MailageDetails = () => {
                     key="edit"
                     icon={<ModeEditIcon />}
                     tooltipTitle="Edit"
-                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Edit")}
                   />
                 )}
                 {FuelInfo_delete === 1 && isEditMode && (
@@ -349,7 +344,7 @@ const MailageDetails = () => {
                     key="delete"
                     icon={<DeleteIcon />}
                     tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Delete")}
                   />
                 )}
                 {FuelInfo_new === 1 &&  !isEditMode &&(
@@ -357,14 +352,14 @@ const MailageDetails = () => {
                     key="Add"
                     icon={<BookmarkAddedIcon />}
                     tooltipTitle="Add"
-                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                    onClick={(event) => handleClick(event, "Add")}
                   />
                 )}
                 <SpeedDialAction
                   key="Cancel"
                   icon={<CancelPresentationIcon />}
                   tooltipTitle="Cancel"
-                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                  onClick={(event) => handleClick(event, "Cancel")}
                 />
               </StyledSpeedDial>
             </Box>

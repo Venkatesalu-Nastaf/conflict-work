@@ -24,27 +24,40 @@ const columns = [
 ];
 // TABLE END
 const usePackagerateentry = () => {
+    // const [fieldSets, setFieldSets] = useState([{
+    //     // dinamic data
+    //     duty: '',
+    //     package: '',
+    //     Hours: '',
+    //     KMS: '',
+    //     Rate: '',
+    //     UptoHours: '',
+    //     UptoKMS: '',
+    //     extraHours: 0,
+    //     extraKMS: 0,
+    //     AKMS: 0,
+    //     NHalt: '',
+    //     Bata: '',
+    // }]);
     const [fieldSets, setFieldSets] = useState([{
         // dinamic data
         duty: '',
         package: '',
-        Hours: '',
-        KMS: '',
-        Rate: '',
-        UptoHours: '',
-        UptoKMS: '',
-        extraHours: '',
-        extraKMS: '',
-        AKMS: '',
-        NHalt: '',
-        Bata: '',
+        Hours: 0,
+        KMS: 0,
+        Rate: 0,
+        UptoHours: 0,
+        UptoKMS: 0,
+        extraHours: 0,
+        extraKMS: 0,
+        AKMS: 0,
+        NHalt: 0,
+        Bata: 0,
     }]);
 
     const [commonData, setCommonData] = useState({
-        //static data
         ratetype: '',
         OrganizationName: "",
-        // vehicleType: '',
         vehicleName: '',
         Validity: '',
         stations:'',
@@ -102,7 +115,7 @@ const usePackagerateentry = () => {
             if(!data){
                 return
             }
-            // if()
+         
             try {
                 const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);
                 const data = response.data
@@ -164,20 +177,37 @@ const usePackagerateentry = () => {
     };
 
     //----------------------------------------
+    // const handleAddExtra = () => {
+    //     setFieldSets([...fieldSets, {
+    //         duty: '',
+    //         package: '',
+    //         Hours: '',
+    //         KMS: '',
+    //         Rate: '',
+    //         UptoHours: '',
+    //         UptoKMS: '',
+    //         extraHours: '',
+    //         extraKMS: '',
+    //         AKMS: '',
+    //         NHalt: '',
+    //         Bata: '',
+    //     }]);
+    // };
+
     const handleAddExtra = () => {
         setFieldSets([...fieldSets, {
             duty: '',
             package: '',
-            Hours: '',
-            KMS: '',
-            Rate: '',
-            UptoHours: '',
-            UptoKMS: '',
-            extraHours: '',
-            extraKMS: '',
-            AKMS: '',
-            NHalt: '',
-            Bata: '',
+            Hours: 0,
+            KMS: 0,
+            Rate: 0,
+            UptoHours: 0,
+            UptoKMS: 0,
+            extraHours: 0,
+            extraKMS: 0,
+            AKMS: 0,
+            NHalt: 0,
+            Bata: 0,
         }]);
     };
 
@@ -266,15 +296,43 @@ const usePackagerateentry = () => {
     }, [handleList]);
 
     const handleAdd = async () => {
-        const dutys = fieldSets.map(fieldSet => fieldSet.duty); // Extract duties from fieldSets
+        const dutys = fieldSets.map(fieldSet => fieldSet.duty);
+         // Extract duties from fieldSets
         // Check if any duty is empty
+        const rateType = commonData?.ratetype;
+            const orgName = commonData?.OrganizationName;
+            const vehicleType = commonData?.vehicleName;
+            const stations=commonData?.stations;
+            if(!rateType){
+                setInfo(true)
+                setInfoMessage("Enter The Ratetype") 
+                return  
+            }
+            if(!orgName){
+                setInfo(true)
+                setInfoMessage("Enter The Ratename") 
+                return  
+            }
+            if(!vehicleType){
+                setInfo(true)
+                setInfoMessage("Enter The Vehicletype") 
+                return  
+            }
+            if(!stations){
+                setInfo(true)
+                setInfoMessage("Enter The Stations") 
+                return  
+            }
+
         if (dutys.some(duty => !duty)) {
             setError(true);
             setErrorMessage("Enter Duty field and others..!");
             return;
         }
         try {
+
             const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
+            // const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             // If successful, update state
             setSuccess(true);
@@ -295,13 +353,10 @@ const usePackagerateentry = () => {
             const payload = { rateType, orgName, vehicleType,stations }
             const response = await axios.get(`${apiUrl}/ratemanagement-show`, { params: payload });
             const data = response.data;
-            console.log("data", data)
             if (data.length > 0) {
                 setRows(data);
             } else {
                 setRows([]);
-                // setError(true);
-                // setErrorMessage("No Data Found..!");
                 setInfo(true)
                 setInfoMessage("No Data Found..!")
             }
@@ -338,13 +393,14 @@ const usePackagerateentry = () => {
             setSuccessMessage("Successfully Deleted");
             handleCancel();
             setRows([]);
+            handleList()
         }
         catch {
 
         }
     }
 
-    const handleClick = async (event, actionName, duty) => {
+    const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
@@ -383,7 +439,6 @@ const usePackagerateentry = () => {
     };
 
     return {
-        selectedCustomerId,
         rows,
         actionName,
         error,
@@ -402,7 +457,6 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
-        // datevalidity, 
         handleShow,
         handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata
     };

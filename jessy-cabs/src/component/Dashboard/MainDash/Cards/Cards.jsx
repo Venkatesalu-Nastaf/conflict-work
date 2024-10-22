@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Cards.css";
 // import { CardsData } from "./Cards-Data.js";
 import Card from "./Card/Card";
@@ -7,7 +7,7 @@ import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
 import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
-import numbro from 'numbro';
+//import numbro from 'numbro';
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 const apiUrl = APIURL;
 

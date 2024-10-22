@@ -21,11 +21,6 @@ const useUserinfo = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // useEffect(() => {
-    //     setSelectedImage(sharedData)
-    // }, [sharedData])
-
-    // const storeUserId = localStorage.getItem('useridno'); //for getting userid 
 
     const [book, setBook] = useState({
         userid: '',
@@ -43,7 +38,6 @@ const useUserinfo = () => {
         try {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            console.log(updatedCustomer,"vjjjjjj")
            const response= await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
            
            const dataresponse=response.data.affectedRows
@@ -55,19 +49,16 @@ const useUserinfo = () => {
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setEditMode((prevEditMode) => !prevEditMode);
-            // console.log(updatedCustomer.name,"local")
-            // localStorage.setItem("username",updatedCustomer.name)
+        
             
 
            }
            
-            // setSuccess(true);
-            // setSuccessMessage("Successfully updated");
-            // setEditMode((prevEditMode) => !prevEditMode);
+           
         }
         catch {
             setError(true);
-            setErrorMessage("Something went wrong");
+            setErrorMessage("Data Not Update");
         }
     };
 
@@ -138,14 +129,13 @@ const useUserinfo = () => {
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
-                    } else {
-                        setErrorMessage('User data not found.');
-                        setError(true);
-                    }
+                    } 
+                    
                 }
-            } catch {
-                setErrorMessage('Something Went Wrong');
-                setError(true);
+            
+            }
+            catch{
+
             }
         };
         fetchData();

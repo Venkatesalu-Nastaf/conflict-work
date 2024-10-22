@@ -55,9 +55,10 @@ const VehicleAddData = () => {
             
 
         }
-        catch(err){
+        catch(error){
+           
             setError1(true)
-            setErrorMessage("Check Your Network Connection")
+            setErrorMessage("failed to retrive data")
         }
     }
 

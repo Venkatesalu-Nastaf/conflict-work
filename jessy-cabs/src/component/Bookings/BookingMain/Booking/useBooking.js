@@ -447,8 +447,8 @@ const useBooking = () => {
           setBook(prev => ({ ...prev, orderedby: '', orderByEmail: '', orderByMobileNo: "" }))
         }
       } catch (error) {
-        setError(true);
-        setErrorMessage("Error retrieving vehicle details.");
+        // setError(true);
+        // setErrorMessage("Error retrieving vehicle details.");
       }
     }
     fetchcustomerData()
@@ -516,9 +516,10 @@ const useBooking = () => {
             setOrganisationSendEmail(userDataArray[0])
             setDatatrigger(!datatrigger)
 
-          } else {
-            setErrorMessage('User data not found.');
-            setError(true);
+          }
+           else {
+            // setErrorMessage('User data not found.');
+            // setError(true);
           }
         }
       }
@@ -548,19 +549,18 @@ const useBooking = () => {
   const showPdf = async () => {
     try {
       const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
-      console.log("response", response.data)
       if (response.data.files.length > 0) {
         setAllFile(response.data.files);
         setDialogOpen(true);
-      }
-      else {
-        setError(true);
-        setErrorMessage("No data found");
-      }
     }
+  }
     catch (err) {
-      console.log(err)
-    }
+      // const errdata=err.response;
+      // if(errdata.status === 404){
+        setError(true);
+          setErrorMessage("Image Not Found");
+      }
+    
   };
   const handleCloseDialog = () => {
     setDialogOpen(false);
@@ -610,7 +610,14 @@ const useBooking = () => {
         }
       }
       catch (err) {
-        console.log("err", err.message) 
+        // console.log(err,"rtyuiopoih")
+        // const errdata=err.response;
+        // console.log(errdata,"weeee")
+        // if(err.response.status === 404){
+          setAvilableimageCount(0)
+        // }
+       
+   
       }
     }
     getImageCount()
@@ -660,11 +667,12 @@ const useBooking = () => {
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         setError(true);
-        setErrorMessage("An error occured while sending mail", error);
+        setErrorMessage("An error occured while sending mail");
       }
-    } else {
+    } 
+    else {
       setError(true);
       setErrorMessage("Send mail checkbox is not checked. Email not sent.");
     }
@@ -718,7 +726,9 @@ const useBooking = () => {
       await axios.post(`${apiUrl}/bookinglogDetails`, updatedBooklogdetails)
     }
     catch (err) {
-      console.log(err, "err")
+      setError(true);
+      setErrorMessage("Failed To ADD BooklogDetails");
+      // console.log(err, "err")
     }
   }
   //------------------------------------------------------
@@ -833,9 +843,12 @@ const useBooking = () => {
       handlecheck(lastBookingno);
       setEdit(false)
     } catch (error) {
-      console.log("An error occurred:", error);
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+      // const errdata=error.response;
+      // if(errdata.status === 404){
+        setError(true);
+        setErrorMessage("Failed to Add Booking Data");
+        
+    
     }
   };
 
@@ -923,15 +936,15 @@ const useBooking = () => {
       handleCancel();
       setSendEmail(true)
     } catch (error) {
-      console.error("An error occurred:", error);
+      // console.error("An error occurred:", error);
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage("Failed to Edit Booking Data");
     }
   };
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
-    try {
+    // try {
 
       if (actionName === "Cancel") {
         handleCancel();
@@ -964,12 +977,14 @@ const useBooking = () => {
       } else if (actionName === "Add") {
         handleAdd();
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      setError(true);
-      setErrorMessage("Check Network Connection");
-    }
-  };
+    } 
+    
+    // catch (error) {
+    //   console.error("An error occurred:", error);
+    //   setError(true);
+    //   setErrorMessage("Check Network Connection");
+    // }
+  // };
 
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
@@ -980,19 +995,24 @@ const useBooking = () => {
           `${apiUrl}/booking/${event.target.value}`
         );
         const bookingDetails = response.data;
+        console.log(bookingDetails,"mmmmmmmmmmmmmmmmmmm")
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
-        setBookingStatus(bookingDetails.status);
+        setBookingStatus(bookingDetails?.status);
         setIsEditMode(true);
         setEdit(true);
         setSendEmail(false);
         setDatatrigger(!datatrigger);
         // setAvilableimageCount(bookingDetails.count)
-      } catch {
-        setError(true);
-        setErrorMessage("Error retrieving booking details");
-      }
+      } catch(err) {
+
+        // const errdata=err.response;
+        // if(errdata.status === 404){
+          setError(true);
+            setErrorMessage("Booking Not Found");
+   
     }
+  }
   };
 
   const [currentYear, setCurrentYear] = useState("");
@@ -1003,61 +1023,61 @@ const useBooking = () => {
     setCurrentYear(value);
   }, []);
 
-  const [enterPressCount, setEnterPressCount] = useState(0);
+  // const [enterPressCount, setEnterPressCount] = useState(0);
 
-  const handleKeyEnter = useCallback(
-    async (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        if (enterPressCount === 0) {
-          try {
-            const response = await axios.get(
-              `${apiUrl}/name-customers/${event.target.value}`
-            );
-            const vehicleData = response.data;
+  // const handleKeyEnter = useCallback(
+  //   async (event) => {
+  //     if (event.key === "Enter") {
+  //       event.preventDefault();
+  //       if (enterPressCount === 0) {
+  //         try {
+  //           const response = await axios.get(
+  //             `${apiUrl}/name-customers/${event.target.value}`
+  //           );
+  //           const vehicleData = response.data;
 
-            setRows([vehicleData]);
-          } catch (error) {
-            setError(true);
-            setErrorMessage("Error retrieving vehicle details.");
-          }
-        } else if (enterPressCount === 1) {
-          const selectedRow = rows[0];
-          if (selectedRow) {
-            setSelectedCustomerDatas(selectedRow);
-            handleChange({
-              target: { name: "customer", value: selectedRow.customer },
-            });
-          }
-        }
-        setEnterPressCount((prevCount) => prevCount + 1);
-      }
-      if (event.target.value === "") {
-        setEnterPressCount(0);
-      }
-    },
-    [handleChange, rows, enterPressCount, apiUrl]
-  );
+  //           setRows([vehicleData]);
+  //         } catch (error) {
+  //           setError(true);
+  //           setErrorMessage("Error retrieving vehicle details.");
+  //         }
+  //       } else if (enterPressCount === 1) {
+  //         const selectedRow = rows[0];
+  //         if (selectedRow) {
+  //           setSelectedCustomerDatas(selectedRow);
+  //           handleChange({
+  //             target: { name: "customer", value: selectedRow.customer },
+  //           });
+  //         }
+  //       }
+  //       setEnterPressCount((prevCount) => prevCount + 1);
+  //     }
+  //     if (event.target.value === "") {
+  //       setEnterPressCount(0);
+  //     }
+  //   },
+  //   [handleChange, rows, enterPressCount, apiUrl]
+  // );
 
-  const handleKeyEnterdriver = async (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      try {
-        setRowsdriver([])
-        const response = await axios.get(
-          `${apiUrl}/drivername-detailsaccountbooking/${event.target.value}`
-        );
-        const vehicleData = response.data;
-        setRowsdriver(vehicleData)
-        setSuccess(true);
-        setSuccessMessage("successfully listed");
+  // const handleKeyEnterdriver = async (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     try {
+  //       setRowsdriver([])
+  //       const response = await axios.get(
+  //         `${apiUrl}/drivername-detailsaccountbooking/${event.target.value}`
+  //       );
+  //       const vehicleData = response.data;
+  //       setRowsdriver(vehicleData)
+  //       setSuccess(true);
+  //       setSuccessMessage("successfully listed");
 
-      } catch (error) {
-        setError(true);
-        setErrorMessage("Error retrieving vehicle details.");
-      }
-    }
-  }
+  //     } catch (error) {
+  //       setError(true);
+  //       setErrorMessage("Error retrieving vehicle details.");
+  //     }
+  //   }
+  // }
   const handleRowClick = useCallback(
     (params) => {
       setSelectedCustomerDatas(params);
@@ -1167,9 +1187,14 @@ const useBooking = () => {
       setSuccessMessage("successfully listed");
 
     } catch (error) {
-      setError(true);
-      setErrorMessage("Error retrieving vehicle details.");
-    }
+   
+          setError(true);
+            setErrorMessage("Travles Data Not Found");
+        
+    
+    
+    
+  }
   }
 
   const handletravelsAutocompleteChange = (event, value, name) => {
@@ -1221,7 +1246,7 @@ const useBooking = () => {
     handleVehicleChange,
     setSelectedCustomerData,
     selectedCustomerDatas,
-    handleKeyEnter,
+    // handleKeyEnter,
     formValues,
     handleAutocompleteChange,
     setFormData,
@@ -1261,7 +1286,8 @@ const useBooking = () => {
     setEdit,
     reporttime,
     starttime,
-    handleKeyEnterdriver, orderByDropDown,
+    // handleKeyEnterdriver,
+     orderByDropDown,
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,

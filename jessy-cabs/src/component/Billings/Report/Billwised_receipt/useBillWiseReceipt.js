@@ -179,13 +179,15 @@ const useBillWiseReceipt = () => {
       setErrorMessage("Please Enter Customer");
       return;
     }
+    const customer = billWiseReport.CustomerName;
+    console.log(billWiseReport, 'billwisereport', billWiseReport.CustomerName, customer);
 
     let currentId = 1;
     try {
       const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
         params: { customer: billWiseReport.CustomerName },
       });
-
+      console.log(response, 'pending response');
       setBalanceAmount(false);
 
       const {
@@ -244,7 +246,8 @@ const useBillWiseReceipt = () => {
         collectedAmount: 0,
       });
     } catch (error) {
-      console.log(error, "error");
+      // console.log(error, "error");
+      console.log(error, "pending error");
     }
   };
 
@@ -253,7 +256,9 @@ const useBillWiseReceipt = () => {
     const selectedData = pendingBillRows.filter((row) =>
       selectedIDs.has(row.id)
     );
+    const selectedInvoiceNo = selectedData.map(li => li.BillNo)
     setSelectedBillRow(selectedData);
+    setInvoiceNo(selectedInvoiceNo)
   };
 
   const handleApplyBill = async () => {
@@ -409,7 +414,7 @@ const useBillWiseReceipt = () => {
             uniqueVoucherId,
             TotalCollectAmount,
           });
-
+          console.log(combinedData, combinedData.collectedAmount, 'bankkkkkkk', combinedData.AccountDetails);
           // Only after the PUT request finishes, this POST request will execute
           await axios.post(`${apiUrl}/addCollect`, {
             collectedAmount: combinedData.collectedAmount || 0,
@@ -494,7 +499,7 @@ const useBillWiseReceipt = () => {
         await axios.put(`${apiUrl}/updateInvoiceStatus`, {
           invoiceNo: invoiceNo
         })
-
+        console.log(combinedData.collectedAmount, combinedData.AccountDetails, 'accccc');
         await axios.post(`${apiUrl}/addCollect`, {
           collectedAmount: combinedData.collectedAmount || 0,
           bankname: combinedData.AccountDetails,

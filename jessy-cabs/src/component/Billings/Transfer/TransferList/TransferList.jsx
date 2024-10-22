@@ -36,7 +36,6 @@ const TransferList = ({ stationName, organizationNames }) => {
         successMessage,
         errorMessage,
         warningMessage,
-        handleClick,
         hidePopup,
         customer,
         setCustomer,
@@ -54,16 +53,11 @@ const TransferList = ({ stationName, organizationNames }) => {
         columns,
         handleButtonClickTripsheet,
         loading,
-        setLoading
+        // setLoading
+        info,
+        infoMessage
 
     } = useTransferlist();
-
-
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
@@ -142,7 +136,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         <option value="notbilled">Not Billed</option>
                                     </select>
                                 </div>
-                                <div className="input input-transferlist" >
+                                {/* <div className="input input-transferlist" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
@@ -152,6 +146,28 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         freeSolo
                                         size="small"
                                         value={servicestation}
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
+                                        }))}
+                                        onChange={(event, value) => handleserviceInputChange(event, value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                                            );
+                                        }}
+                                    />
+                                </div> */}
+                                <div className="input input-transferlist">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
+                                    </div>
+                                    <Autocomplete
+                                        fullWidth
+                                        id="free-Stations"
+                                        freeSolo
+                                        size="small"
+                                        value={servicestation || "All"}
+                                        // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,
                                         }))}
@@ -187,85 +203,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                 </div>
                 <div className="table-bookingCopy-TransferList">
                     <div className='transfer-list-table'>
-                        {/* <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            onRowClick={handleButtonClickTripsheet}
-                            pageSize={5}
-                            checkboxSelection
-                            getRowId={(row) => row.id}
-                            disableRowSelectionOnClick
-                            
-                        /> */}
-
-                        {/* <Box
-      sx={{
-        height: 400, // Adjust this value to fit your needs
-        '& .MuiDataGrid-virtualScroller': {
-          '&::-webkit-scrollbar': {
-            width: '2px', 
-          },
-          '&::-webkit-scrollbar-track': {
-            backgroundColor: '#f1f1f1',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#457cdc',
-            borderRadius: '20px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#3367d6',
-          },
-        },
-        scrollbarWidth: '30px',
-        scrollbarColor: '#457cdc #fff',
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        onRowClick={handleButtonClickTripsheet}
-        pageSize={5}
-        checkboxSelection
-        getRowId={(row) => row.id}
-        disableRowSelectionOnClick
-      />
-    </Box>  */}
-
-                        {/* <Box
-                            sx={{
-                                height: 400, // Adjust this value to fit your needs
-                                '& .MuiDataGrid-virtualScroller': {
-                                    '&::-webkit-scrollbar': {
-                                        width: '8px', // Adjust the scrollbar width here
-                                        height: '8px', // Adjust the scrollbar width here
-                                    },
-                                    '&::-webkit-scrollbar-track': {
-                                        backgroundColor: '#f1f1f1',
-                                    },
-                                    '&::-webkit-scrollbar-thumb': {
-                                        backgroundColor: '#457cdc',
-                                        borderRadius: '20px',
-                                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-
-                                    },
-                                    '&::-webkit-scrollbar-thumb:hover': {
-                                        backgroundColor: '#3367d6',
-                                    },
-                                },
-                            }}
-                        >
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                                onRowClick={handleButtonClickTripsheet}
-                                pageSize={5}
-                                checkboxSelection
-                                getRowId={(row) => row.id}
-                                disableRowSelectionOnClick
-                            />
-                        </Box> */}
-
-                        {/* code with loading */}
+                       
                         <Box
                             sx={{
                                 height: 400,
@@ -337,6 +275,13 @@ const TransferList = ({ stationName, organizationNames }) => {
                         <div className="popup-icon"> <ErrorOutlineIcon /> </div>
                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                         <p>{warningMessage}</p>
+                    </div>
+                }
+                 {info &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                        <p>{infoMessage}</p>
                     </div>
                 }
             </div>

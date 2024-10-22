@@ -91,6 +91,7 @@ const MainDashboard = () => {
  
       localStorage.removeItem("SuperAdmin")
       // localStorage.removeItem("expiretime")
+      localStorage.removeItem('reports')
 
 
 
@@ -271,7 +272,7 @@ const MainDashboard = () => {
     if (permissions.length > 1 && data1 !== undefined && data4 !== null  && storedusertheme !== null) {
       setTimeout(() => {
         setUserdashboard(false)
-      }, 3000);
+      }, 2000);
 
     }
   }, [data1,data4,setUserdashboard, data6, storedusertheme, permissions]);

@@ -37,7 +37,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Checkbox from '@mui/material/Checkbox';
-import Skeleton from '@mui/material/Skeleton';
+//import Skeleton from '@mui/material/Skeleton';
 import {  CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -88,7 +88,12 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     handleTripsheetClick,
     columns,
     filteredColumns,
-    columnshowall, setCutomerName, setVehNo, handleBookingClick,loading,setLoading
+    columnshowall,
+     //setCutomerName,
+     // setVehNo, 
+      handleBookingClick,
+      loading,
+     // setLoading
   } = useTripStatus();
   useEffect(() => {
     if (actionName === 'List') {
@@ -98,14 +103,22 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
   const [allCustomer, setAllCustomer] = useState([])
+  // useEffect(() => {
+  //   if (customer?.length > 1) {
+  //     setAllCustomer([...customer, { customer: "All" }])
+  //   }
+  //   else {
+  //     setAllCustomer(customer)
+  //   }
+  // })
   useEffect(() => {
     if (customer?.length > 1) {
-      setAllCustomer([...customer, { customer: "All" }])
+        setAllCustomer([...customer, { customer: "All" }]);
+    } else {
+        setAllCustomer(customer);
     }
-    else {
-      setAllCustomer(customer)
-    }
-  })
+}, [customer]); // Include customer as a dependency
+
 
   const CustomNoRowsOverlay = () => (
     <div style={{ textAlign: 'center', padding: '20px' }}>

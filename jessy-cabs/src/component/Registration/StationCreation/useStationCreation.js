@@ -162,7 +162,7 @@ const useStationCreation = () => {
             setSuccessMessage("Successfully Added");
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Add Stations");
         }
     };
 
@@ -181,7 +181,7 @@ const useStationCreation = () => {
 
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Edit StationS");
         }
     };
 
@@ -243,7 +243,7 @@ const useStationCreation = () => {
             }
         } catch (err) {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Retrive data");
         }
     };
     useEffect(() => {

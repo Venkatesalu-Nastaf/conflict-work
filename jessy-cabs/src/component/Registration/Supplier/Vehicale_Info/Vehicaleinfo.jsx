@@ -190,11 +190,11 @@ const Vehicaleinfo = ({ stationName }) => {
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
   } = VehicleAddData()
 
-  useEffect(() => {
+  // useEffect(() => {
     
-      handleClick('List');
+  //     handleClick('List');
     
-  }, [handleClick]);
+  // }, [handleClick]);
 
 
 

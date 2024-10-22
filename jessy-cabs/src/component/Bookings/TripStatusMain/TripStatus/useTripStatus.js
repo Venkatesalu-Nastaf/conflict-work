@@ -23,7 +23,7 @@ const columns = [
   { field: "address1", headerName: "Address", width: 130 },
   { field: "email", headerName: "Email", width: 130 },
   { field: "employeeno", headerName: "Employee No", width: 110 },
-  { field: "report", headerName: "Report", width: 130 },
+ // { field: "report", headerName: "Report", width: 130 },
   { field: "driverName", headerName: "Driver Name", width: 130 },
   { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
   { field: "vehType", headerName: "Rate For", width: 130 },
@@ -285,6 +285,8 @@ const useDispatched = () => {
       if(data && data.length > 0){
         setLoading(false); // Stop loading
     }
+    console.log(data,'booking datas');
+    
   
       if (statusvalue !== "All") {
         if (data.length > 0) {
@@ -306,15 +308,19 @@ const useDispatched = () => {
           // Process tripsheet data
           const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
             ...row,
-            id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
+           // id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
           }));
           // Process booking data
           const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
             ...row,
-            id5: `booking-${index + 1}`, // Unique ID for booking
+           // id5: `booking-${index + 1}`, // Unique ID for booking
           }));
           // Combine both sets of data
-          const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+          // const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+          const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId].map((row, index) => ({
+            ...row,
+            id5: index + 1, // S.No for combined rows
+          }))
           setRows(combinedRows);
           setColumnShowall(false);
           setSuccess(true);
@@ -326,10 +332,10 @@ const useDispatched = () => {
         }
       }
     } catch (error) {
-      console.error("Error retrieving data:", error); // Log the error for debugging
+      // console.error("Error retrieving data:", error); 
       setRows([]);
-      setError(true);
-      setErrorMessage("Error retrieving data");
+      // setError(true);
+      // setErrorMessage("Error retrieving data");
     }finally {
       setLoading(false); // Stop loading
     
@@ -377,8 +383,8 @@ const useDispatched = () => {
       }
     } catch {
       setRows([]);
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+      // setError(true);
+      // setErrorMessage("Check your Network Connection");
     }finally {
       setLoading(false); // Stop loading
     

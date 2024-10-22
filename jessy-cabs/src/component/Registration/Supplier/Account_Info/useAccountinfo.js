@@ -361,7 +361,7 @@ const useAccountinfo = () => {
       }
     } catch {
       setError(true);
-      setErrorMessage("Check your Network Connection")
+      setErrorMessage("Failed to Search Data")
     }
   };
 
@@ -388,7 +388,7 @@ const useAccountinfo = () => {
         }
       } catch {
         setError(true);
-        setErrorMessage("Check your Network Connection");
+        setErrorMessage("Failed to Search Data")
       }
     }
   }, [apiUrl, searchText]);
@@ -487,15 +487,6 @@ const useAccountinfo = () => {
                 const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
                 const responsedata = response.data;
 
-                // if (responsedata?.length === 0) {
-                //     setInfo(true);
-                //     setInfoMessage("Ratetype stations not registered");
-                //     setCredentialDataforstations(true);
-                // } else {
-                //     setSuccess(true);
-                //     setSuccessMessage("Ratetype stations registered");
-                //     setCredentialDataforstations(false);
-                // }
             } catch (error) {
                 console.error("Error fetching data", error);
                 // Handle the error as needed
@@ -555,11 +546,6 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Travel Mail fields");
       return;
     }
-    // if (!vehiclinfo) {
-    //   setWarning(true);
-    //   setWarningMessage("Fill Vehicle info fields");
-    //   return;
-    // }
     if (!ratetype) {
       setWarning(true);
       setWarningMessage("Fill Rate Type fields");
@@ -594,7 +580,7 @@ const useAccountinfo = () => {
       setCredentialDataforstations()
     } catch {
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage("Failed to Add Data");
     }
   };
 
@@ -624,7 +610,7 @@ const useAccountinfo = () => {
     } catch (err) {
       console.log(err)
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage("Failed to Edit Data");
     }
   };
 
@@ -665,7 +651,7 @@ const useAccountinfo = () => {
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
-    try {
+    
       if (actionName === 'List') {
         const response = await axios.get(`${apiUrl}/accountinfo`);
         const data = response.data;
@@ -682,7 +668,7 @@ const useAccountinfo = () => {
           setError(true);
           setErrorMessage("No data found");
         }
-        setSuccessMessage("Successfully listed");
+   
       }
 
       else if (actionName === 'Cancel') {
@@ -708,16 +694,8 @@ const useAccountinfo = () => {
       else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch {
-      setError(true);
-      setErrorMessage("Check your connection");
-    }
-  };
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  });
+    } 
+  
 
   return {
     selectedCustomerData,

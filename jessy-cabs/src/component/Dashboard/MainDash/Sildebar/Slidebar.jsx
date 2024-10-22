@@ -24,11 +24,11 @@ import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
 import { GrUserSettings } from "react-icons/gr";
 import { GrSettingsOption } from "react-icons/gr";
-import { FaCodeBranch } from "react-icons/fa6";
+//import { FaCodeBranch } from "react-icons/fa6";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
-import { GiDuration } from "react-icons/gi";
+//import { GiDuration } from "react-icons/gi";
 import { SiMinutemailer } from "react-icons/si";
 import { BsFillFuelPumpFill } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
@@ -38,7 +38,7 @@ import { BiTransfer } from "react-icons/bi";
 import { FaBookmark } from "react-icons/fa";
 import { MdOutlineMoving } from "react-icons/md";
 import { BiSpreadsheet } from "react-icons/bi";
-import { GiReceiveMoney } from "react-icons/gi";
+//import { GiReceiveMoney } from "react-icons/gi";
 import { MdGroup } from "react-icons/md";
 import { MdGroupRemove } from "react-icons/md";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -308,10 +308,13 @@ const Sidebar = () => {
   const Map_page_permission = permissions[22]?.read || permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
+    localStorage.removeItem('reports');
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setExpanded(false)
+    // console.log('billing cliucked')
+    // console.log("reports",'billing cliucked')
     e.preventDefault();
     var hasPermission = false;
     switch (name) {
@@ -436,7 +439,7 @@ const Sidebar = () => {
       setExpanded(true);
       navigate("/");
     },
-    [navigate]
+    [navigate,setExpanded]
   );
 
   const [openmodal, setOpenmodal] = useState(false);
@@ -697,7 +700,7 @@ const Sidebar = () => {
         )}
       </div>
 
-      <motion.div className={`sidebar mobile-view-sidebar ${expanded == false ? 'side-bar-closed' : ''}`} >
+      <motion.div className={`sidebar mobile-view-sidebar ${expanded === false ? 'side-bar-closed' : ''}`} >
         <div className="logo" onClick={closeMenuFunction}>
           {logo ? (
             <img
@@ -711,7 +714,7 @@ const Sidebar = () => {
         </div>
         <div className="menu menu-section-scroll">
           {Dashbord_read === 1 ? <MenuItem
-            label={`${expanded == false ? '' : 'Dashboard'}`}
+            label={`${expanded === false ? '' : 'Dashboard'}`}
             to="/home/dashboard"
             value="/home/dashboard"
             alt="/home/dashboard"
@@ -723,7 +726,7 @@ const Sidebar = () => {
           {booking_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Booking'}`}
+                label={`${expanded === false ? '' : 'Booking'}`}
                 // to={BOOKING && ("/home/bookings/booking")}
                 to={bookingdata ? "/home/bookings/booking" : Tripstatus ? "/home/bookings/tripstatus" : tripsheet ? "/home/bookings/tripsheet" : "/home/bookings/booking"}
                 alt={bookingdata ? "/home/bookings/booking" : Tripstatus ? "/home/bookings/tripstatus" : tripsheet ? "/home/bookings/tripsheet" : "/home/bookings/booking"}
@@ -803,7 +806,7 @@ const Sidebar = () => {
           {Billing_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Billing'}`}
+                label={`${expanded === false ? '' : 'Billing'}`}
                 // to={BILLING && ("/home/billing/billing")}
 
                 to={
@@ -915,7 +918,7 @@ const Sidebar = () => {
           {Register_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Register'}`}
+                label={`${expanded === false ? '' : 'Register'}`}
                 // to={REGISTER && ("/home/registration/ratetype")}
                 // alt="/home/registration/ratetype"
                 to={
@@ -953,7 +956,7 @@ const Sidebar = () => {
           {Info_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Info'}`}
+                label={`${expanded === false ? '' : 'Info'}`}
                 // to={INFO && ("/home/info/mailer")}
                 to={
                   mailer ?
@@ -987,7 +990,7 @@ const Sidebar = () => {
           {Map_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Map'}`}
+                label={`${expanded === false ? '' : 'Map'}`}
                 // to={Maps && ("/home/Map/RealTime")}
                 // alt="/home/Map/RealTime"
                 to={
@@ -1229,7 +1232,7 @@ const Sidebar = () => {
           {Setting_page_permission ?
             <div className='desktop-menu-without-dropdown'>
               <MenuItem
-                label={`${expanded == false ? '' : 'Settings'}`}
+                label={`${expanded === false ? '' : 'Settings'}`}
                 // to={SETTING && ("/home/settings/usercreation")}
                 // alt="/home/settings/usercreation"
                 to={
@@ -1306,7 +1309,7 @@ const Sidebar = () => {
 
 
  <MenuItem
-            label={`${expanded == false ? '' : 'User'}`}
+            label={`${expanded === false ? '' : 'User'}`}
             to="/home/usersettings/usersetting"
             alt="/home/usersettings/usersetting"
             value="/home/usersettings"

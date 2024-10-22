@@ -866,7 +866,7 @@ const useTripsheet = () => {
 
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Data Not Deleted ");
         }
     };
 
@@ -949,7 +949,9 @@ const useTripsheet = () => {
             await axios.post(`${apiUrl}/TripsheetlogDetailslogged`, updatedBooklogdetails);
         }
         catch (err) {
-            console.log(err, "err")
+            setError(true);
+            setErrorMessage("Tripsheetlog Data not Added ");
+            // console.log(err, "err")
         }
     }
 
@@ -4131,7 +4133,7 @@ const useTripsheet = () => {
                 }
             }
             catch (error) {
-                console.error("Error fetching trip data", error);
+                // console.error("Error fetching trip data", error);
                 // Handle error (optional)
             }
         }
@@ -4271,7 +4273,7 @@ const useTripsheet = () => {
             }
             catch (err) {
                 setRowsSignature([])
-                console.log(err)
+                // console.log(err)
             }
         }
         else {
@@ -4413,7 +4415,7 @@ const useTripsheet = () => {
             setMapimgPopupOpen(false)
         }
         catch (error) {
-            console.log(error, 'error');
+            // console.log(error, 'error');
 
         }
 

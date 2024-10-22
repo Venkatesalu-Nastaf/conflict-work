@@ -285,7 +285,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         freeSolo
                                         size="small"
                                         // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                                        value={servicestation || selectedCustomerDatas.station || ''}
+                                        value={servicestation || selectedCustomerDatas.station || 'All'}
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,
                                         }))}

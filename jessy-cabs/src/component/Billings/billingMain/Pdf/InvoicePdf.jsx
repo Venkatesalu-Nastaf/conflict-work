@@ -104,8 +104,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                         </div>
                         <div className="receiver-div">
                             <div>
-                                <p className="details-receiver">Details of Receiver :</p>
-                                <p className="receiver-details">{customerData.customer}</p>
+                                <p className="details-receiver">Details of Receiver : {customerData.customer}</p>
+                                {/* <p className="receiver-details">{customerData.customer}</p> */}
                                 {formatAddress(customerData.address1)}
                                 <p className="receiver-details">{customerData.gstnumber}</p>
                             </div>
@@ -123,7 +123,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                                         <th>TRIP DT</th>
                                         <th>TRIP NO</th>
                                         <th>PARTICULARS</th>
-                                        <th>PARK/PERMIT</th>
+                                        <th>PARKING/PERMIT</th>
                                         <th>AMOUNT</th>
                                     </tr>
                                 </thead>
@@ -166,10 +166,11 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                         <div className="sign-div">
                             <div style={{ display: 'flex', flexDirection: 'column', width: "70%" }}>
                                 <div>
-                                    <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} </p>{'\n'}
-                                    <p>Rupees Only</p>
+                                    <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} Rupees Only</p>{'\n'}
+                                    {/* <p>Rupees Only</p> */}
                                 </div>
                                 <div>
+
                                     {gstAmount === 0 ?
                                         <div >
                                             <h4 style={{ fontWeight: 600, margin: "2px" }}>NOTE:</h4>
@@ -182,9 +183,9 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                             </div>
 
                             <div style={{ paddingBottom: '10px', paddingRight: '10px', width: "30%", }}>
-                                <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>For JessyCabs</p>
+                                <p className="sign-text" style={{ display: "flex", marginLeft: "80px" }}>For JessyCabs</p>
                                 {signimageUrl !== "" ?
-                                    <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
+                                    <img className='dialogboximg' src={signimageUrl} alt=" " style={{ marginLeft:"100px"}} />: <div className='dialogboximg' ></div>}
                                 <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
                             </div>
 
@@ -196,13 +197,20 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
 
                             </div>
                             <div className="tripsheet-RouteSummary">
-                                <h2>Route Summary</h2>
-                                <ol type="1">
-                                    {routeData.length > 0 && routeData.map((data, index) => (
-                                        <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
-                                    ))}
-                                </ol>
+                                {routeData.length > 0 && (
+                                    <>
+                                        <h2>Route Summary</h2>
+                                        <ol type="1">
+                                            {routeData.map((data, index) => (
+                                                <li key={index}>
+                                                    <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                                                </li>
+                                            ))}
+                                        </ol>
+                                    </>
+                                )}
                             </div>
+
                         </div>
                         <div>
                             {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : ""}

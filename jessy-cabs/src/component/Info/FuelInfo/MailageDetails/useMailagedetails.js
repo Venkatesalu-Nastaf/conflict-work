@@ -178,9 +178,10 @@ const useMailagedetails = () => {
       setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
+      handleList()
     } catch {
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage("Failed to Add Data");
     }
   };
 
@@ -212,28 +213,51 @@ const useMailagedetails = () => {
       setSuccessMessage("Successfully updated");
       handleCancel();
       setRows([]);
+      handleList();
     } catch (error) {
-      console.error("Error updating data:", error);
+      // console.error("Error updating data:", error);
+      setError(true);
+      setErrorMessage("Failed to Edit Data");
     }
   };
 
-  useEffect(() => {
-    const handlelist = async () => {
+  // useEffect(() => {
+  //   const handlelist = async () => {
+  //     const response = await axios.get(`${apiUrl}/fueldetails`);
+  //     const data = response.data;
+  //     if (data.length > 0) {
+  //       setRows(data);
+  //     } else {
+  //       setRows([]);
+  //     }
+  //   };
+  //   handlelist();
+  // }, [apiUrl]);
+
+  const handleList = useCallback(async () => {
+    try {
       const response = await axios.get(`${apiUrl}/fueldetails`);
       const data = response.data;
       if (data.length > 0) {
         setRows(data);
-      } else {
-        setRows([]);
-      }
-    };
-    handlelist();
-  }, [apiUrl]);
+    }   else {
+      setRows([]);
+    }
+    }
+    catch(err){
+
+    }
+  }, [apiUrl]); // Add any dependencies needed inside this array
+
+useEffect(() => {
+    handleList();
+}, [handleList]);
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
-    try {
+    
       if (actionName === "List") {
+        try {
         const response = await axios.get(`${apiUrl}/fueldetails`);
         const data = response.data;
         if (data.length > 0) {
@@ -245,6 +269,11 @@ const useMailagedetails = () => {
           setError(true);
           setErrorMessage("No data found");
         }
+      }
+        catch {
+          setError(true);
+          setErrorMessage("Failed To Retrive Data");
+        }
       } else if (actionName === "Cancel") {
         handleCancel();
         setRows([]);
@@ -255,6 +284,7 @@ const useMailagedetails = () => {
         setSuccessMessage("Successfully Deleted");
         handleCancel();
         setRows([]);
+        handleList();
       } else if (actionName === "Edit") {
         const selectedCustomer = rows.find(
           (row) => row.VehicleNo === selectedCustomerData?.id
@@ -282,20 +312,18 @@ const useMailagedetails = () => {
           setSuccessMessage("Successfully updated");
           handleCancel();
           setRows([]);
+          handleList();
         } catch {}
       } else if (actionName === "Add") {
         handleAdd();
       }
-    } catch {
-      setError(true);
-      setErrorMessage("Check your Network Connection");
-    }
-  };
-  useEffect(() => {
-    if (actionName === "List") {
-      handleClick(null, "List");
-    }
-  });
+    } 
+  //   catch {
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // };
+ 
 
   const calculateMileage = () => {
     const distance =

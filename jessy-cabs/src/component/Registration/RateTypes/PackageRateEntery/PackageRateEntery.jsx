@@ -45,7 +45,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const PackageRateEntery = ({ vehileName, stationname }) => {
 
   const {
-    selectedCustomerId,
     rows,
     error,
     success,
@@ -70,12 +69,6 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
 
   } = usePackagerateentry();
 
-  // useEffect(() => {
-  //   if (actionName === 'List') {
-  //     handleClick(null, 'List');
-  //   }
-  // }, [actionName, handleClick]);
-  // console.log(stationname,"name")
 
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
   const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
@@ -441,7 +434,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
-                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "List")}
               />
             )}
             {RateManagement_modify === 1 && isEditMode && (
@@ -449,7 +442,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 key="edit"
                 icon={<ModeEditIcon />}
                 tooltipTitle="Edit"
-                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Edit")}
               />
             )}
             {RateManagement_delete === 1 && isEditMode && (
@@ -457,33 +450,28 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 key="delete"
                 icon={<DeleteIcon />}
                 tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Delete")}
               />
             )}
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
-              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              onClick={(event) => handleClick(event, "Cancel")}
             />
             {RateManagement_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
                 tooltipTitle="Add"
-                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                onClick={(event) => handleClick(event, "Add")}
               />
             )}
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">
           <div className='package-rate-entry-table'>
-            {/* <DataGrid
-              rows={rows}
-              columns={columns}
-              onRowClick={handleRowClick}
-              pageSize={5}
-            /> */}
+  
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs

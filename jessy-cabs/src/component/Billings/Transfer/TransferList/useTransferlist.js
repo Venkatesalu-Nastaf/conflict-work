@@ -3,7 +3,6 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
-// import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 const useTransferlist = () => {
@@ -13,15 +12,16 @@ const useTransferlist = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [customer, setCustomer] = useState("");
-  // const [bankOptions, setBankOptions] = useState([]);
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
+  const [info, setInfo] = useState(false);
+  const [infoMessage, setInfoMessage] = useState({});
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
 
 
@@ -213,16 +213,17 @@ const useTransferlist = () => {
     setError(false);
     setSuccess(false);
     setWarning(false);
+    setInfo(false)
   };
 
   useEffect(() => {
-    if (error || success || warning) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error, success, warning]);
+  }, [error, success, warning, info]);
 
   //--------------------------------------------------
 
@@ -230,19 +231,21 @@ const useTransferlist = () => {
     setServiceStation(newValue ? decodeURIComponent(newValue.label) : "");
   };
 
-  // useEffect(() => {
-  //   Organization()
-  //     .then((data) => {
-  //       if (data) {
-  //         setBankOptions(data);
-  //       } else {
-  //       }
-  //     })
-  //     .catch(() => { });
-  // }, []);
 
   const handleShow = useCallback(async () => {
-    try {
+    if (!customer) {
+      setInfo(true);
+      setInfoMessage("Enter The Customer")
+      return
+
+    }
+
+    if (!selectedStatus) {
+      setInfo(true);
+      setInfoMessage("Enter The Status")
+      return
+
+    } try {
       const response = await axios.get(`${apiUrl}/gettransfer_listdatas`, {
         params: {
           Status: selectedStatus,
@@ -266,10 +269,11 @@ const useTransferlist = () => {
         setError(true);
         setErrorMessage("No data found");
       }
-    } catch {
+    } catch (err) {
+      const errdata=err.response?.data;
       setRows([]);
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage(errdata.message);
     }
   }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
 
@@ -288,8 +292,6 @@ const useTransferlist = () => {
             id: index + 1,
           }));
           setRows(rowsWithUniqueId);
-          // setSuccess(true);
-          setSuccessMessage("Successfully listed");
           setLoading(false)
         } else {
           setRows([]);
@@ -299,9 +301,8 @@ const useTransferlist = () => {
         }
       } catch {
         setRows([]);
-        setError(true);
         setLoading(false)
-        setErrorMessage("Check your Network Connection");
+
       }
     }
     fetchdata()
@@ -309,7 +310,7 @@ const useTransferlist = () => {
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    {field:'Grouptrip_id',headerName:"GroupID",width:120},
+    { field: 'Grouptrip_id', headerName: "GroupID", width: 120 },
     { field: "Status", headerName: "Status", width: 130 },
     { field: "Invoice_no", headerName: "Invoice No", width: 130 },
     {
@@ -320,7 +321,7 @@ const useTransferlist = () => {
     },
     { field: "Organization_name", headerName: "Customer", width: 130 },
     {
-      field: "  FromDate",
+      field: "FromDate",
       headerName: "From Date",
       width: 130,
       valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
@@ -364,7 +365,6 @@ const useTransferlist = () => {
     warningMessage,
     hidePopup,
     customer,
-    // bankOptions,
     setCustomer,
     fromDate,
     setFromDate,
@@ -380,7 +380,9 @@ const useTransferlist = () => {
     columns,
     handleButtonClickTripsheet,
     setLoading,
-    loading
+    loading,
+    info,
+    infoMessage
   };
 };
 

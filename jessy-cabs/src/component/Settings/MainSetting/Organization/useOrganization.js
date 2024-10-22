@@ -80,9 +80,6 @@ const useOrganization = () => {
     }, [apiUrl]);
 
 
-
-    // console.log(book,"orgobook")
-    // console.log(selectedCustomerData,"orgoDta")
     const handleAdd = async () => {
         const name = selectedCustomerData?.organizationname || book.organizationname;
         if (!name) {
@@ -91,13 +88,13 @@ const useOrganization = () => {
             return;
         }
         try {
-            console.log(book, "ookk")
+          
             await axios.post(`${apiUrl}/addcompany`, book);
             setSuccess(true);
             setSuccessMessage("Organization Added Successfully");
         } catch {
             setError(true);
-            setErrorMessage("Something went wrong");
+            setErrorMessage("Failed To Add Data");
         }
     };
 
@@ -105,9 +102,6 @@ const useOrganization = () => {
         try {
             
             const updatedCustomer = {...selectedCustomerData };
-            // const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-            // const encode = companyname;
-            // const decode = decodeURIComponent(encode);
             console.log(updatedCustomer, "SELECT ID")
             await axios.put(`${apiUrl}/companyupdate/${updatedCustomer.id}`, updatedCustomer);
             setLogoTrigger(true)
@@ -118,7 +112,7 @@ const useOrganization = () => {
         }
         catch {
             setError(true);
-            setErrorMessage("Something went wrong");
+            setErrorMessage("Failed to Update Data");
         }
     };
 
@@ -153,8 +147,8 @@ const useOrganization = () => {
                         setSelectedCustomerData(userDataArray[0]);
                         setDataclose(false)
                     } else {
-                        setErrorMessage('User data not found.');
-                        setError(true);
+                        // setErrorMessage('User data not found.');
+                        // setError(true);
                     }
                 }
             }
@@ -180,9 +174,7 @@ const useOrganization = () => {
     };
 
     const handleFileChange = async (event) => {
-        // try {
-            // const organizationname = localStorage.getItem('usercompany');
-            // const organizationname = selectedCustomerData?.organizationname || book.organizationname;
+       
 
             const file = event.target.files[0];
             if (!file) return;

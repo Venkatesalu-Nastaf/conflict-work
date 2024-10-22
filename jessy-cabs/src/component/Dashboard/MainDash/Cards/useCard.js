@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import { APIURL } from "../../../url";
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
+import { ReportContext } from "../../../Billings/Report/Context/ReportContext";
 
 const useCard = () => {
     const [billAmount, setBillAmount] = useState(null);
@@ -12,6 +13,12 @@ const useCard = () => {
 
     const [billData, setBillData] = useState([]); 
     const {selectedMonths}  = PdfData();
+
+    // const {value} = ReportContext();
+    const { value } = useContext(ReportContext);
+
+
+    // console.log(value,'valuecard')
  
     function getCurrentMonth() {
         const currentDate = new Date();
@@ -56,7 +63,7 @@ const useCard = () => {
 
     // getting monthly wise Amount
     useEffect(() => {
-        console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
+        // console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
        
 
         const fetchBillAmount = async () => {
@@ -73,7 +80,7 @@ const useCard = () => {
                     const response = await axios.post(`${apiUrl}/getMonthWiseTotal`, {
                         selectMonth: selectedMonth2,
                     });
-                    console.log(response.data, 'select month response');
+                    // console.log(response.data, 'select month response');
                     data = response.data;
                 }
 
@@ -100,9 +107,9 @@ const useCard = () => {
      
    // my code for all data 
 
-console.log(selectedMonth2,'selecttt111111111',selectedMonths);
+// console.log(selectedMonth2,'selecttt111111111',selectedMonths);
 useEffect(() => {
-    console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
+    // console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
     
     const fetchBillData = async () => {
       try {
@@ -110,18 +117,18 @@ useEffect(() => {
         if (selectedMonths === "All") {
           const response = await axios.get(`${apiUrl}/getFullBillWisedReportcards`);
           data = response.data; // Fetch all data
-          console.log(data, 'MaaFetched All Bill Data');
+          // console.log(data, 'MaaFetched All Bill Data');
           setBillData(data); // Update state with the fetched data
-          console.log(response.data, 'Maaaaaaaa');
+          // console.log(response.data, 'Maaaaaaaa');
           return    
         } else if (selectedMonths !== "All") {
           const response = await axios.post(`${apiUrl}/getmonthwisedatas`, {
             selectMonth: selectedMonths,
           });
           data = response.data; // Fetch month-specific data
-          console.log(data, 'Fetched Month-Wise Bill Data');
+          // console.log(data, 'Fetched Month-Wise Bill Data');
           setBillData(data); // Update state with the fetched data
-          console.log(response.data, 'Maaaaaaaaaaannnnnnnn');
+          // console.log(response.data, 'Maaaaaaaaaaannnnnnnn');
 
         }
       } catch (error) {
@@ -131,6 +138,67 @@ useEffect(() => {
   
     fetchBillData(); // Call the fetch function
   }, [apiUrl, selectedMonths]); // Dependencies
+
+  // const handleButtonClickCard = (params) => {
+  //   const data = params.row;
+  //   localStorage.setItem("selectedtripsheetid", data.Trip_id);
+  //   const customer = encodeURIComponent(data.Organization_name)
+  //   localStorage.setItem("selectedcustomerdata", customer)
+    
+  //     // const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&billingsheet=true`
+  //     // window.location.href = billingPageUrl
+  //     //  const reportPageUrl = `/home/billing/reports?Pendingbills`
+  //     const reportPageUrl = `/home/billing/reports?tab=Pendingbills`;
+  //     window.location.href = reportPageUrl
+    
+  //   // else {
+  //   //   const billingPageUrl = `/home/billing/reports?tab=&Group_id=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=Billed&BillDate=${data.Billdate || ''}&Customer=${data.Organization_name || ''}&TripId=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&TransferReport=true`;
+  //   //   window.location.href = billingPageUrl
+  //   // }
+
+  // };
+  const handleButtonClickCard = (params) => {
+    // const data = params.row;
+    // localStorage.setItem("selectedtripsheetid", data.Trip_id);
+    // const customer = encodeURIComponent(data.Organization_name);
+    // localStorage.setItem("selectedcustomerdata", customer);
+     
+    // setValue("Pendingbills");
+    // localStorage.setItem('reports',"Pendingbills")
+    // const reportPageUrl = `/home/billing/reports?orgname=${data.CustomerName || ''}
+    // &BillingDate=${data.BillDate || ''}&Customer=${data.CustomerName || ''}
+    // &Amount=${data.TotalAmount || 0}`;
+    // console.log(data.title,'titkle')
+    localStorage.setItem('reports','Pendingbills')
+    // setValue('Pendingbills');
+    const reportPageUrl = `/home/billing/reports`
+    window.location.href = reportPageUrl;
+    
+  //   if (data.title === 'Billing') {
+  //         localStorage.setItem('reports','MonthlyWise')
+  //         const reportPageUrl = `/home/billing/reports`
+  //         window.location.href = reportPageUrl;
+  //           // setValue('Monthly Wise');
+  //   //          const reportPageUrl = `/home/billing/reports?orgname=${data.CustomerName || ''}
+  //   // &BillingDate=${data.BillDate || ''}&Customer=${data.CustomerName || ''}
+  //   // &Amount=${data.TotalAmount || 0}`;
+  //   // window.location.href = reportPageUrl;
+  // } else if(data.title === 'Recived'){
+  //   localStorage.setItem('reports','BilledwiseReceipt')
+  //   // setValue('BilledwiseReceipt');
+  //    const reportPageUrl = `/home/billing/reports`
+  //    window.location.href = reportPageUrl;
+  // }else{
+  //   localStorage.setItem('reports','Pendingbills')
+  //   // setValue('Pendingbills');
+  //   const reportPageUrl = `/home/billing/reports`
+  //   window.location.href = reportPageUrl;
+  // }
+  //    console.log(data,'titkle')
+  //    console.log(setValue,'setValuefromcard')
+
+  //   // window.location.href = reportPageUrl
+  };
   
 
  
@@ -142,7 +210,8 @@ useEffect(() => {
         selectedMonth2,
         setSelectedMonth2,
         billData,
-        setBillData
+        setBillData,
+        handleButtonClickCard
        
     }
 }

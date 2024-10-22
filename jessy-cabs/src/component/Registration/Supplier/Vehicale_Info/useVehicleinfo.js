@@ -376,23 +376,6 @@ const useVehicleinfo = () => {
     }, [apiUrl])
 
 
-    // const handlePdfDownload = () => {
-    //     // Convert Excel data to CSV format
-    //     const csvData = convertToCSV(rows);
-
-    //     // Generate PDF from CSV data
-    //     const pdf = new jsPDF('p', 'pt', 'letter');
-    //     pdf.setFontSize(12);
-    //     pdf.text("Vehicle Statement Reports", 40, 40);
-
-    //     // Parse CSV data to fit the details properly in the PDF
-    //     const splitText = pdf.splitTextToSize(csvData, 500);
-    //     pdf.text(splitText, 40, 60);
-
-    //     // Save the PDF file
-    //     pdf.save("VehicleStatementReports.pdf");
-    // };
-
     const [book, setBook] = useState({
 
         vehicleName: '',
@@ -562,7 +545,6 @@ const useVehicleinfo = () => {
                             setRows1([])
                             setError(true);
                             setSelectedCustomerData({})
-                            console.log(error.response.data.error, "enter")
                             setErrorMessage(error.response.data.error);
                         }
                     }
@@ -599,9 +581,10 @@ const useVehicleinfo = () => {
                 await axios.post(`${apiUrl}/insurance-pdf/${vehicleid}`, formData)
                 setInsurance(null)
             }
-            catch {
+            catch(err) {
+                console.log(err)
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage("failed to insert Insurance pdf");
             }
         } else {
             return
@@ -622,7 +605,7 @@ const useVehicleinfo = () => {
             }
             catch {
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('"failed to insert NationalPermit pdf');
             }
         } else {
             return
@@ -643,7 +626,7 @@ const useVehicleinfo = () => {
             }
             catch {
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('failed to insert StatePermit pdf');
             }
         } else {
             return
@@ -674,7 +657,7 @@ const useVehicleinfo = () => {
             }
             catch {
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('failed to insert rcBook-pdf ');
             }
         } else {
             return
@@ -695,7 +678,7 @@ const useVehicleinfo = () => {
             }
             catch {
                 setError(true);
-                setErrorMessage('something wrong');
+                setErrorMessage('failed to insert fcCopy-pdf');
             }
         } else {
             return
@@ -773,11 +756,12 @@ const useVehicleinfo = () => {
             handleCancel();
             setCredentialData()
             setRows([]);
+            handleList();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Add vehicle details");
         }
     };
 
@@ -814,12 +798,14 @@ const useVehicleinfo = () => {
                 };
             }
         } catch (error) {
-            console.error('Error downloading files:', error);
+            // console.error('Error downloading files:', error);
+            setError(true)
+            setErrorMessage("Failed to print Documnet")
             // Handle error if needed
         }
     };
 
-    const handleEdit = async (vehicleId) => {
+    const handleEdit = async () => {
         try {
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
@@ -834,14 +820,15 @@ const useVehicleinfo = () => {
             setRows([])
             setSuccess(true);
             setSuccessMessage("Successfully Updated");
+            handleList();
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Failed to Edit Vehicle Detials");
         }
     };
 
     const handleClick = async (actionName, vehicleId) => {
-        try {
+        // try{
             if (actionName === 'List') {
                 const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
                 const data = response.data;
@@ -852,8 +839,8 @@ const useVehicleinfo = () => {
                         id: index + 1,
                     }));
                     setRows(rowsWithUniqueId);
-                    // setSuccess(true);
-                    // setSuccessMessage('Successfully listed');
+                    setSuccess(true);
+                    setSuccessMessage('Successfully listed');
                 } else {
                     setRows([]);
                     setError(true);
@@ -865,8 +852,7 @@ const useVehicleinfo = () => {
                 handleCancel();
                 setRows1([]);
                 setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
+             
             }
             else if (actionName === 'Delete') {
                 await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
@@ -883,17 +869,38 @@ const useVehicleinfo = () => {
             else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+    // };
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // });
+
+
+    const handleList = useCallback(async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+          const data = response.data;
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+        //   setRows(rowsWithUniqueId);
+          setRows(rowsWithUniqueId);
+        } catch (err) {
+          console.log(err);
         }
-    });
+      }, [apiUrl]); // Add dependencies like apiUrl
+    
+      useEffect(() => {
+        handleList();
+      }, [handleList]);
 
     //search funtion
     const handleSearch = async () => {
@@ -917,7 +924,7 @@ const useVehicleinfo = () => {
             }
         } catch {
             setError(true);
-            setErrorMessage("Check your Network Connection")
+            setErrorMessage("failed to Fetch vehcile")
         }
     };
 
@@ -945,7 +952,7 @@ const useVehicleinfo = () => {
                 }
             } catch {
                 setError(true);
-                setErrorMessage("Check your Network Connection");
+                setErrorMessage("failed to Fetch vehcile");
             }
 
         }

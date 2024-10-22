@@ -20,15 +20,15 @@ router.post('/booking', async (req, res) => {
 
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
         if (err) {
-          
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+            return res.status(500).json({ error: "Failed to insert data " });
         }
 
         // Check if the insertion was successful (affectedRows > 0)
+       
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: "Data inserted successfully", data: result });
         } else {
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+            return res.status(404).json({ error: "Failed to Add Booking Details" });
         }
     });
 
@@ -423,11 +423,10 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
 
     db.query(query, [travelname], (err, result) => {
         if (err) {
-            console.log(err)
-            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+            return res.status(500).json({ error: 'Failed to retrieve customer details' });
         }
         if (result.length === 0) {
-            return res.status(404).json({ error: 'Customer not found' });
+            return res.status(404).json({ error: 'Travels Data not found' });
         }
         return res.status(200).json(result);
     });
@@ -463,11 +462,10 @@ router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
 
     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
         if (err) {
-            console.log(err)
-            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+            return res.status(500).json({ error: 'Failed to retrieve customer details ' });
         }
         if (result.length === 0) {
-            return res.status(404).json({ error: 'Customer not found' });
+            return res.status(404).json({ error: 'Data not found' });
         }
         return res.status(200).json(result);
     });

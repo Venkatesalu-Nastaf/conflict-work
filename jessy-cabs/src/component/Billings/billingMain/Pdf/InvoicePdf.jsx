@@ -106,13 +106,15 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                             <div>
                                 <p className="details-receiver">Details of Receiver : {customerData.customer}</p>
                                 {/* <p className="receiver-details">{customerData.customer}</p> */}
-                                {formatAddress(customerData.address1)}
-                                <p className="receiver-details">{customerData.gstnumber}</p>
+                                <div style={{ width: '300px' }}>
+                                    {formatAddress(customerData.address1)}
+                                </div>
+                                <p className="receiver-details">GSTIN : {customerData.gstnumber}</p>
                             </div>
                             <div className="invno-div">
-                                <p className="receiver-details">Invoice No : <span className="invoiceno">RF{particularRefNo}</span> </p>
+                                <p className="receiver-details">Invoice No : RF{particularRefNo}</p>
                                 {/* <p className="receiver-details">Invoice Date : {billingDate.format('YYYY-MM-DD')} </p> */}
-                                <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('YYYY-MM-DD')} </p>
+                                <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('DD-MM-YYYY')} </p>
                             </div>
                         </div>
                         <div className="table-div">
@@ -128,10 +130,9 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <tr>
                                         <td className="tabledata" style={{ textAlign: '' }}>1</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.startdate ? dayjs(book.startdate).format("YYYY-MM-DD") : ''}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.startdate ? dayjs(book.startdate).format("DD-MM-YYYY") : ''}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.tripid}</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>
                                             {book.guestname} <br />
@@ -145,30 +146,35 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                                             Driver Bata {book.driverbeta_Count} @ Rs . {book.driverBeta} <br />
                                             {book.pickup}
                                         </td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) || 0}</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) || 0}.00</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div className="total-div">
-                            <div >
+                        <div className="total-div" style={{marginLeft: '50px'}}>
+                            <div style={{marginLeft: "100px"}}>
                                 <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>Total Amount :</h4>
                             </div>
                             <div className="amount-div">
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}</p>
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}</p>
-                                <h4>{paymentValue.toFixed(0)}</h4>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
                             </div>
+                        </div>
+                        <div>
+                            <p style={{ fontWeight: 'bold' }}>E.& O.E In Words-Rupees</p>
                         </div>
                         <div className="sign-div">
                             <div style={{ display: 'flex', flexDirection: 'column', width: "70%" }}>
-                                <div>
-                                    <p className="rupees">{AmountInWords.charAt(0).toUpperCase() + AmountInWords.slice(1)} Rupees Only</p>{'\n'}
-                                    {/* <p>Rupees Only</p> */}
-                                </div>
+                                <p className="rupees" style={{ fontWeight: "normal" }}>
+                                    {AmountInWords.split(' ')
+                                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                        .join(' ')}{' '}
+                                    Rupees Only
+                                </p>
                                 <div>
 
                                     {gstAmount === 0 ?

@@ -1744,7 +1744,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             },
                           }}
                         >
-                          {billing_read ? <Tab>Bill</Tab> : <> </>}
+                          {billing_read ? <Tab>Bill cccc</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
@@ -2848,6 +2848,37 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </DialogActions>
                     </div>
 
+                    <div className='alert-popup-main'>
+                      {error &&
+                        <div className='alert-popup Error' >
+                          <div className="popup-icon"> <ClearIcon /> </div>
+                          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                          <p>{errorMessage}</p>
+                        </div>
+                      }
+                      {warning &&
+                        <div className='alert-popup Warning' >
+                          <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                          <p>{warningMessage}</p>
+                        </div>
+                      }
+                      {success &&
+                        <div className='alert-popup Success' >
+                          <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                          <p>{successMessage}</p>
+                        </div>
+                      }
+                      {info &&
+                        <div className='alert-popup Info' >
+                          <div className="popup-icon"> <BsInfo /> </div>
+                          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                          <p>{infoMessage}</p>
+                        </div>
+                      }
+                    </div>
+
                   </Dialog>
                 </React.Fragment>
 
@@ -3295,19 +3326,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                 <Box sx={style1}>
 
                   <Box >
-                    <div style={{ display: 'flex', justifyContent:"space-between" }}>
+                    <div style={{ display: 'flex', justifyContent: "space-between" }}>
 
-                   
-                  <div style={{ display: 'flex', gap: "20px", padding: '10px'}}>
-                <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
-                <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
-                <label style={{ fontWeight: 'bold' }}>Close Date : <span>{closedate}</span></label>
-                <label style={{ fontWeight: 'bold' }}>Start Time : <span>{starttime}</span></label>
-                <label style={{ fontWeight: 'bold' }}>Close Time : <span>{endtime}</span> </label>
-            </div>
-                    <IconButton onClick={handleCloseMapPopUp}>
-                      <CloseIcon />
-                    </IconButton>
+
+                      <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
+                        <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
+                        <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Close Date : <span>{closedate}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Start Time : <span>{starttime}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Close Time : <span>{endtime}</span> </label>
+                      </div>
+                      <IconButton onClick={handleCloseMapPopUp}>
+                        <CloseIcon />
+                      </IconButton>
                     </div>
                   </Box>
                   <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
@@ -3363,36 +3394,41 @@ const TripSheet = ({ stationName, logoImage }) => {
             </div>
           </div>
 
-          <div className='alert-popup-main'>
-            {error &&
-              <div className='alert-popup Error' >
-                <div className="popup-icon"> <ClearIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{errorMessage}</p>
-              </div>
-            }
-            {warning &&
-              <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{warningMessage}</p>
-              </div>
-            }
-            {success &&
-              <div className='alert-popup Success' >
-                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{successMessage}</p>
-              </div>
-            }
-            {info &&
-              <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{infoMessage}</p>
-              </div>
-            }
-          </div>
+          {open == false &&
+            <div className='alert-popup-main'>
+              {error &&
+                <div className='alert-popup Error' >
+                  <div className="popup-icon"> <ClearIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{errorMessage}</p>
+                </div>
+              }
+              {warning &&
+                <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{warningMessage}</p>
+                </div>
+              }
+              {success &&
+                <div className='alert-popup Success' >
+                  <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{successMessage}</p>
+                </div>
+              }
+              {info &&
+                <div className='alert-popup Info' >
+                  <div className="popup-icon"> <BsInfo /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{infoMessage}</p>
+                </div>
+              }
+            </div>
+
+          }
+
+
         </form>
       </div >
     </div >

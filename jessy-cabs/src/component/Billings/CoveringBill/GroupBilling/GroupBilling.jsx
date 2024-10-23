@@ -87,6 +87,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const { sharedData } = useData();
     const apiUrl = APIURL
 
+console.log(refPdfPrint,'rrrr');
 
     useEffect(() => {
         setSelectedImageorganisation(sharedData)

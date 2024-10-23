@@ -226,6 +226,8 @@ const useGroupbilling = () => {
                 // const RefId = GroupReference.map((li) => li.Trip_id)
                 // setParticularId(RefId)
                 const RefId = GroupReference.map((li) => li.Trip_id.split(','));
+                console.log(RefId,'idddddddddd');
+                
                 setParticularId(RefId.flat());
                 const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
                 setRefInvNo(RefInvoiceNo)

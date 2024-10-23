@@ -386,22 +386,14 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   <View>
                     {/* <Text style={styles.gstno}>GSTIN:33AALCC0190M1ZK</Text> */}
                     <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text>
-
                   </View>
-
                 </View>
-
-
-
                 <View style={styles.taxinvoice}>
                   <Text style={styles.invoicetext}>
                     TAX INVOICE
                   </Text>
 
                 </View>
-
-
-
                 <View style={styles.seconddivision}>
                   <View >
                     <Text style={styles.underlinetext}>
@@ -449,10 +441,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
                       <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
                       <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
-
                     </View>
-
-
                     <View style={[styles.tablevalue,{fontSize:"10px"}]}>
                       {invdata.map((item, index) => (
 
@@ -462,23 +451,29 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
                             <View style={styles.tablecellparticular}>
-                              <Text>
-                                {item.guestname}
-                              </Text>
+                              <Text>{item.guestname}</Text>
                               <Text>{item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}</Text>
                               <Text>Vehicle Hire Charges For : {item.calcPackage}</Text>
-                              {item.extraKM ?
-                                <Text>{item.extraKM ? `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount} \n` : ''}</Text> : ""}
-                              {item.extraHR ?
-                                <Text>{item.extraHR ? `Extra Hrs : ${item.extraHR} hrs  @ Rs.${item.extrahr_amount} \n` : ''}</Text> : ""}
-                              {item.nightBta ?
-                                <Text>{item.nightBta ? `Night Bata : ${item.nightCount} Night @ Rs.${item.nightBta} \n` : ''}</Text> : ""}
-                              {
-                                item.driverBeta ?
-                                  <Text>{item.driverBeta ? `Driver Bata :${item.driverbeta_Count} Days @ Rs. ${item.driverBeta} \n` : ''}</Text> : ""
-                              }
+
+                              {item.extraKM > 0 && item.extrakm_amount > 0 ? (
+                                <Text>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
+                              ) : null}
+
+                              {item.extraHR > 0 && item.extrahr_amount > 0 ? (
+                                <Text>Extra Hrs : {item.extraHR} hrs  @ Rs.{item.extrahr_amount}</Text>
+                              ) : null}
+
+                              {item.nightBta > 0 && item.nightCount > 0 ? (
+                                <Text>Night Bata : {item.nightCount} Night @ Rs.{item.nightBta}</Text>
+                              ) : null}
+
+                              {item.driverBeta > 0 && item.driverbeta_Count > 0 ? (
+                                <Text>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
+                              ) : null}
+
                               <Text>{item.pickup}</Text>
                             </View>
+
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
                               <Text>{'\n'}</Text>
@@ -486,44 +481,47 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00</Text>
                             </View>
                             <View style={styles.tableCell}>
-                              {/* <Text style={styles.amounttext}> {'\n'}  {'\n'}  {'\n'}  {'\n'}  </Text> */}
                               <Text>{'\n'}</Text>
                               <Text>{'\n'}</Text>
-                              <Text>{item.package_amount}.00</Text>
-                              {item.extraKM ? <Text>{item.ex_kmAmount}.00</Text> : ""}
-                              {item.extraHR ? <Text style={{ marginLeft: 3}}>{item.ex_hrAmount}.00</Text> : ""}
-                              {item.nightBta ? <Text>{item.night_totalAmount}.00</Text> : ""}
-                              {item.driverBeta ? <Text>{item.driverBeta_amount}.00</Text> : ""}
+                              {item.package_amount > 0 && <Text>{item.package_amount}.00</Text>}
+                              {item.extraKM > 0 && item.ex_kmAmount > 0 && <Text>{item.ex_kmAmount}.00</Text>}
+                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
+                                <Text style={{ marginLeft: 3 }}>{item.ex_hrAmount}.00</Text>
+                              )}
+                              {item.nightBta > 0 && item.night_totalAmount > 0 && <Text>{item.night_totalAmount}.00</Text>}
+                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && <Text>{item.driverBeta_amount}.00</Text>}
                             </View>
+
                           </React.Fragment>
                         </View>
                       ))}
-
-
                     </View>
-
                   </View>
                 </View>
-
               </View>
-
               <View style={styles.totalsum}>
                 <View style={styles.totalsuminitial}>
                   {gstAmount === 0 ? (
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
-                      <Text style={{ fontSize: 11, }}>NOTE:</Text>
+                      <Text style={{ fontSize: 11 }}>NOTE:</Text>
                       <Text style={{ fontSize: 10 }}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
                       </Text>
                       <View>
-                        <Text style={{ width: '200px', fontSize: '12.5px', paddingTop: "70" }}>E.& O.E In Words-Rupees</Text>
+                        <Text style={{ width: 200, fontSize: 12.5, paddingTop:75, paddingLeft: 7 }}>
+                          E.& O.E In Words-Rupees
+                        </Text>
                       </View>
                     </View>
-                  ) : null}
+                  ) : (
+                    <View>
+                      <Text style={{ width: 200, fontSize: 12.5, paddingTop: 150, paddingLeft: 7 }}>
+                        E.& O.E In Words-Rupees
+                      </Text>
+                    </View>
+                  )}
                 </View>
                 <View style={styles.grandtotal}>
-
-
                   {/* <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
                     <Text style={styles.text2}>CGST {gstAmount} on {fullAmount}:</Text>
@@ -585,19 +583,22 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   < View style={styles.rupees}>
                     <View style={styles.totalrupeesword}>
                     <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
-                      {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Only
+                      {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                     </Text>
                   </View> 
-                     
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
                     <Text style={styles.underlinetext}>Bank Details</Text>
 
                     <Text style={styles.text2}>{organisationdetailfill  [0].BankDetails} </Text>
                   </View>
                 </View>
+
                 <View style={styles.signaturesection}>
+                  
                   <View style={[styles.companyName, { flexDirection: 'row' }]}>
+                      
                     <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs</Text>
+
                   </View>
                   {/* <View style={[styles.companyName, { marginBottom: 100 }]}>  
                     <Text style={styles.jessytext}>For jessy Cabs</Text>

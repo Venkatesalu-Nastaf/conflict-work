@@ -367,9 +367,14 @@ const EmployeeCreation = ({ stationName }) => {
                     <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
                     <div className='add-permission'>
-                      <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
+                      {/* <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button> */}
                     </div>
                   )}
+                  {!isEditMode &&
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -498,11 +503,11 @@ const EmployeeCreation = ({ stationName }) => {
                   handleCheckboxChangealldata={handleCheckboxChangealldata}
                 />}
               </div>
-              {!isEditMode &&
+              {/* {!isEditMode &&
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
                 </div>
-              }
+              } */}
             </div>
           </form>
         </div>

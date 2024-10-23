@@ -51,7 +51,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         let fullamount = 0
 
         if (Array.isArray(pdfData)) {
-            pdfData.forEach((li) => {
+            pdfData?.forEach((li) => {
                 address = li.address1
                 customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
@@ -90,10 +90,26 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
     const { logo } = useData()
     // Convert number to words
+    // const convertToWords = (num) => {
+    //     if (!num) return '';
+    //     const [integerPart, decimalPart] = num.toString().split('.');
+    //     let words = numWords(parseInt(integerPart));
+    //     if (decimalPart) {
+    //         words += ' point';
+    //         for (let digit of decimalPart) {
+    //             words += ` ${numWords(parseInt(digit))}`;
+    //         }
+    //     }
+    //     return words;
+    // };
     const convertToWords = (num) => {
+        if(num >= 0){
+        
         if (!num) return '';
-        const [integerPart, decimalPart] = num.toString().split('.');
+        const [integerPart, decimalPart] = num?.toString().split('.');
         let words = numWords(parseInt(integerPart));
+        // console.log(words,integerPart,'words');
+        
         if (decimalPart) {
             words += ' point';
             for (let digit of decimalPart) {
@@ -101,9 +117,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
             }
         }
         return words;
+    }
     };
-
-    const rupeestext = convertToWords(fullTotal);
+    const rupeestext = convertToWords(fullTotal) || '------';
+    // const rupeestext = convertToWords(fullTotal);
 
     return (
         <>
@@ -168,7 +185,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                             </tr>
                         </thead>
                         <tbody className="tablebody" style={{ height: pdfData.length <= 2 ? '180px' : '100%' }}>
-                            {pdfData.map((li, index) => (
+                            {pdfData?.map((li, index) => (
                                 <tr key={index} className="tabledata-ref">
                                     <td className="tdata">{index + 1}</td>
                                     <td className="tdata">{li.InvoiceNo}</td>

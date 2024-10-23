@@ -704,10 +704,6 @@ useEffect(() => {
   }
 }, [tripID, apiUrl]);
 
-
-
-
-
   const handleKeyDown = async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -755,10 +751,15 @@ useEffect(() => {
             GroupTripId: GroupId
           }
         });
-
         const Result = response.data;
-        setSuccess(true)
-        setSuccessMessage("successfully listed");
+
+        if (Result) { 
+          setSuccess(true);
+          setSuccessMessage("successfully listed");
+        } else {
+          setError(true);
+          setErrorMessage("No data found");
+        }
         const fromdate = Result?.map(li => li.FromDate);
         setFromDate(fromdate)
         const enddate = Result?.map(li => li.EndDate);

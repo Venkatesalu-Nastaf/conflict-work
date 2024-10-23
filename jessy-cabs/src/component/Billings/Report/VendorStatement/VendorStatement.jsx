@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from 'dayjs';
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -119,7 +120,8 @@ const VendorStatement = () => {
                         id="fromDate"
                         label="From Date"
                         value={fromDate}
-                        onChange={(date) => setFromDate(date)}
+                        onChange={(date) => setFromDate(dayjs(date).format('DD-MM-YYYY'))}
+                        format="DD-MM-YYYY"
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -134,7 +136,8 @@ const VendorStatement = () => {
                         id="dateTo"
                         label="To Date"
                         value={toDate}
-                        onChange={(date) => setToDate(date)}
+                        onChange={(date) => setToDate(dayjs(date).format('DD-MM-YYYY'))}
+                        format='DD-MM-YYYY'
                       />
                     </DemoContainer>
                   </LocalizationProvider>

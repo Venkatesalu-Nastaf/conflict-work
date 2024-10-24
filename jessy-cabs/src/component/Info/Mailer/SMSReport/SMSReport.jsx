@@ -243,6 +243,7 @@ const SMSReport = () => {
                       label="From Date"
                       value={fromDate}
                       onChange={(newValue) => setFromDate(newValue)}
+                      format='DD-MM-YYYY'
                     />
                   </LocalizationProvider>
                 </div>
@@ -254,6 +255,7 @@ const SMSReport = () => {
                       label="To Date"
                       value={toDate}
                       onChange={(newValue) => setToDate(newValue)}
+                      format='DD-MM-YYYY'
                     />
                   </LocalizationProvider>
                 </div>

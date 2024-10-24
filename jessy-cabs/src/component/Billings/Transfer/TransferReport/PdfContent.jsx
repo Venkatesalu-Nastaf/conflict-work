@@ -395,16 +395,14 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                 </View>
                 <View style={styles.seconddivision}>
-                  <View >
+                  <View style={{ width: 200 }}>
                     <Text style={styles.underlinetext}>
                       Details of Receiver | Billed to:
                     </Text>
-                    <Text style={styles.customername}>{organizationname}</Text>
+                    <Text style={[styles.customername, { width: 200 }]}>{organizationname}</Text>
                     <Text style={styles.text2}>{address1}</Text>
                     <Text style={styles.text2}>GSTIN: {gst} </Text>
-
                   </View>
-
 
                   <View style={styles.invoicediv}>
                     {/* <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Invoice No :</Text> {invoiceno}</Text>
@@ -446,7 +444,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       {invdata.map((item, index) => (
 
                         <View style={styles.tablevalueRow} key={index}>
-                          <React.Fragment >
+                          <React.Fragment>
                             <View style={styles.tablecellsno}><Text>{index + 1}</Text></View>
                             <View style={styles.tableCell}><Text>{dayjs(item.startdate).format('MM/DD/YY')}</Text></View>
                             <View style={styles.tablecelltripno}><Text>{item.tripid}</Text></View>
@@ -470,26 +468,33 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               {item.driverBeta > 0 && item.driverbeta_Count > 0 ? (
                                 <Text>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
                               ) : null}
-
                               <Text>{item.pickup}</Text>
-                            </View>
-
+                            </View>                         
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
                               <Text>{'\n'}</Text>
                               <Text>{'\n'}</Text>
                               <Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00</Text>
                             </View>
-                            <View style={styles.tableCell}>
+
+                            <View style={[styles.tableCell, { paddingRight: 5 }]}>
                               <Text>{'\n'}</Text>
                               <Text>{'\n'}</Text>
-                              {item.package_amount > 0 && <Text>{item.package_amount}.00</Text>}
-                              {item.extraKM > 0 && item.ex_kmAmount > 0 && <Text>{item.ex_kmAmount}.00</Text>}
-                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
-                                <Text style={{ marginLeft: 3 }}>{item.ex_hrAmount}.00</Text>
+                              {item.package_amount > 0 && (
+                                <Text style={{ textAlign: 'right', paddingRight: 18 }}>{item.package_amount}.00</Text>
+                              )}  
+                              {item.extraKM > 0 && item.ex_kmAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18}}>{item.ex_kmAmount}.00</Text>
                               )}
-                              {item.nightBta > 0 && item.night_totalAmount > 0 && <Text>{item.night_totalAmount}.00</Text>}
-                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && <Text>{item.driverBeta_amount}.00</Text>}
+                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18 }}>{item.ex_hrAmount}.00</Text>
+                              )}
+                              {item.nightBta > 0 && item.night_totalAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18 }}>{item.night_totalAmount}.00</Text>
+                              )}
+                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18}}>{item.driverBeta_amount}.00</Text>
+                              )}
                             </View>
 
                           </React.Fragment>
@@ -587,9 +592,18 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     </Text>
                   </View> 
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
-                    <Text style={styles.underlinetext}>Bank Details</Text>
+                    <Text style={[styles.underlinetext,{fontSize:12}]}>Bank Details</Text>
 
-                    <Text style={styles.text2}>{organisationdetailfill  [0].BankDetails} </Text>
+                    <Text style={[styles.text2, { fontSize: 10 }]}>
+                      {organisationdetailfill[0].BankDetails}
+                    </Text>
+                    <Text style={[styles.text2, { fontSize: 10, width: 320, marginTop: 10 }]}>
+                      GST is to be paid by Service Recipient Under RCM as per Notification
+                      22/2019 - Central tax (Rate) dated 30-09-2019
+                    </Text>
+
+                    {/* <Text>GST is to be paid by Service Recepient Under RCM as per Notification 22/2019 - Central tax (Rate) dated 30-09-2019</Text> */}
+
                   </View>
                 </View>
 
@@ -612,10 +626,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   </View>
                 </View>
               </View>
-
+              {/* <Text>GST is to be paid by Service Recepient Under RCM as per Notification 22/2019 - Central tax (Rate) dated 30-09-2019</Text> */}
             </View>
 
           </View>
+
 
         </Page>
       </PDFDocument>

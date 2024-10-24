@@ -636,9 +636,28 @@ const useTransferdataentry = () => {
 
             // Redirecting to billing page
             window.location.href = billingPageUrl;
-        } catch (error) {
-            // Handle any errors that occurred during the requests
-            console.error('Error:', error.message); // You can add custom error handling here
+        } 
+        // catch (error) {
+        //     // Handle any errors that occurred during the requests
+        //     console.error('Error:', error.message); // You can add custom error handling here
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your internet connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -1190,7 +1209,7 @@ const useTransferdataentry = () => {
 
                 setRows([]);
                 setError(true);
-                // setErrorMessage("Check your Network Connection");
+                setErrorMessage("Check your Network Connection");
             } finally {
                 setLoading(false); // Stop loading
             }
@@ -1265,7 +1284,7 @@ const useTransferdataentry = () => {
                 console.log('Error Details:', error);
                 setRows([]);
                 setError(true);
-                // setErrorMessage("Check your Network Connection");
+                setErrorMessage("Check your Network Connection");
             } finally {
                 setLoading(false); // Stop loading
             }
@@ -1633,10 +1652,30 @@ const useTransferdataentry = () => {
                 setSuccessMessage("Successfully added");
                 console.log(transferlist, 'listtransfer');
 
-            } catch (error) {
-                console.error("Error occurred:", error);
-                setErrorMessage("Failed to add organization: " + error.message);
+            } 
+            // catch (error) {
+            //     console.error("Error occurred:", error);
+            //     setErrorMessage("Failed to add organization: " + error.message);
+            // }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+             
+                // Check if there's no response, indicating a network error
+                if (error.message ) {
+                    setError(true);
+                    setErrorMessage("Check your internet connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    setError(true);
+                    // Handle other Axios errors (like 4xx or 5xx responses)
+                    setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
             }
+            
         }
         else if (groupId !== "") {
             // updateTransferListTrip'
@@ -1705,10 +1744,30 @@ console.log(transferlist,'adddtrans');
 
 
 
-            } catch (error) {
-                console.error("Error occurred:", error);
-                setErrorMessage("Failed to add organization: " + error.message);
+            } 
+            // catch (error) {
+            //     console.error("Error occurred:", error);
+            //     setErrorMessage("Failed to add organization: " + error.message);
+            // }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+             
+                // Check if there's no response, indicating a network error
+                if (error.message ) {
+                    setError(true);
+                    setErrorMessage("Check your internet connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    setError(true);
+                    // Handle other Axios errors (like 4xx or 5xx responses)
+                    setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
             }
+            
         }
     }
 

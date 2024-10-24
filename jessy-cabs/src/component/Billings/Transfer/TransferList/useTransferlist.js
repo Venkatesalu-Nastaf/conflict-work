@@ -232,20 +232,65 @@ const useTransferlist = () => {
   };
 
 
+  // const handleShow = useCallback(async () => {
+  //   if (!customer) {
+  //     setInfo(true);
+  //     setInfoMessage("Enter The Customer")
+  //     return
+
+  //   }
+
+  //   if (!selectedStatus) {
+  //     setInfo(true);
+  //     setInfoMessage("Enter The Status")
+  //     return
+
+  //   } try {
+  //     const response = await axios.get(`${apiUrl}/gettransfer_listdatas`, {
+  //       params: {
+  //         Status: selectedStatus,
+  //         Organization_name: encodeURIComponent(customer),
+  //         FromDate: fromDate.format("YYYY-MM-DD"),
+  //         EndDate: toDate.format("YYYY-MM-DD"),
+  //       },
+
+  //     });
+  //     const data = response.data;
+  //     if (data.length > 0) {
+  //       const rowsWithUniqueId = data.map((row, index) => ({
+  //         ...row,
+  //         id: index + 1,
+  //       }));
+  //       setRows(rowsWithUniqueId);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (err) {
+  //     const errdata=err.response?.data;
+  //     setRows([]);
+  //     setError(true);
+  //     setErrorMessage(errdata.message);
+  //   }
+  // }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
+
   const handleShow = useCallback(async () => {
     if (!customer) {
       setInfo(true);
-      setInfoMessage("Enter The Customer")
-      return
-
+      setInfoMessage("Enter The Customer");
+      return;
     }
-
+  
     if (!selectedStatus) {
       setInfo(true);
-      setInfoMessage("Enter The Status")
-      return
-
-    } try {
+      setInfoMessage("Enter The Status");
+      return;
+    }
+  
+    try {
       const response = await axios.get(`${apiUrl}/gettransfer_listdatas`, {
         params: {
           Status: selectedStatus,
@@ -253,8 +298,8 @@ const useTransferlist = () => {
           FromDate: fromDate.format("YYYY-MM-DD"),
           EndDate: toDate.format("YYYY-MM-DD"),
         },
-
       });
+  
       const data = response.data;
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
@@ -268,14 +313,25 @@ const useTransferlist = () => {
         setRows([]);
         setError(true);
         setErrorMessage("No data found");
+        console.log(errorMessage,'Error Mesage')
       }
     } catch (err) {
-      const errdata=err.response?.data;
-      setRows([]);
-      setError(true);
-      setErrorMessage(errdata.message);
+      // Check if the error is due to a network issue
+      if (err.message) {
+        setRows([]);
+        setError(true);
+        setErrorMessage("Check your network");
+      } else {
+        const errdata = err.response?.data;
+        setRows([]);
+        setError(true);
+        setErrorMessage(errdata?.message || "An error occurred");
+      }
+      console.log(err,'erro message')
     }
+   
   }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
+  
 
   // Loading grid in the grid 
   useEffect(() => {

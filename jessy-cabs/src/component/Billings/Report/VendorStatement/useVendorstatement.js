@@ -274,7 +274,6 @@ const useVehiclestatement = () => {
             fontdata = 2;
         }
 
-
         pdf.autoTable({
             head: [header],
             body: rowValues,

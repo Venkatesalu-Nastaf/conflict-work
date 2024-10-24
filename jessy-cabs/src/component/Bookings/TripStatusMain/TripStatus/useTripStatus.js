@@ -331,12 +331,32 @@ const useDispatched = () => {
           setErrorMessage("No data found");
         }
       }
-    } catch (error) {
-      // console.error("Error retrieving data:", error); 
-      setRows([]);
-      // setError(true);
-      // setErrorMessage("Error retrieving data");
-    }finally {
+    }
+    //  catch (error) {
+    //   // console.error("Error retrieving data:", error); 
+    //   setRows([]);
+    //   // setError(true);
+    //   // setErrorMessage("Error retrieving data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Show: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
+    finally {
       setLoading(false); // Stop loading
     
    }
@@ -381,11 +401,31 @@ const useDispatched = () => {
         setError(true);
         setErrorMessage("no data found")
       }
-    } catch {
-      setRows([]);
-      // setError(true);
-      // setErrorMessage("Check your Network Connection");
-    }finally {
+    } 
+    // catch {
+    //   setRows([]);
+    //   // setError(true);
+    //   // setErrorMessage("Check your Network Connection");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
+    finally {
       setLoading(false); // Stop loading
     
    

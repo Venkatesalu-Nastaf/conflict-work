@@ -355,10 +355,29 @@ useEffect(() => {
         setError(true);
         setErrorMessage("no data found");
       }
-    } catch {
-      setError(true);
-      setErrorMessage("Failed to Retrive Data");
-    }
+    } 
+    // catch {
+    //   setError(true);
+    //   setErrorMessage("Failed to Retrive Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   return (

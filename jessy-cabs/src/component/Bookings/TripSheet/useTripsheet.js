@@ -1317,9 +1317,28 @@ const useTripsheet = () => {
             setLockData(false)
             setLockDatavendorBill(false)
             setLockDatacustomerBill(false)
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -2805,7 +2824,8 @@ const useTripsheet = () => {
                     setErrorMessage("Tripsheet not found");
                 } else {
                     setError(true);
-                    setErrorMessage("Failed to fetch data");
+                    // setErrorMessage("Failed to fetch data");
+                    setErrorMessage("Check your Network Connection");
                 }
             }
         }

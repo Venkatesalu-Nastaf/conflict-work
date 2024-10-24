@@ -160,9 +160,28 @@ const useStationCreation = () => {
             // setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to Add Stations");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to Add Stations");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add Stations: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -179,9 +198,28 @@ const useStationCreation = () => {
             setSuccessMessage("Successfully updated");
             handleCancel();
 
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to Edit StationS");
+        }
+        //  catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to Edit StationS");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 

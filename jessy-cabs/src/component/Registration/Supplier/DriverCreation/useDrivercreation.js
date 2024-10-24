@@ -681,9 +681,28 @@ const useDrivercreation = () => {
             setSuccessMessage("Successfully Added");
             // addPdf(lastdriveridno);
             handleCancel();
-        } catch (error) {
-            setError(true)
-            setErrorMessage("Failed to Insert Driver Data");
+        }
+        //  catch (error) {
+        //     setError(true)
+        //     setErrorMessage("Failed to Insert Driver Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     }
 
@@ -709,9 +728,28 @@ const useDrivercreation = () => {
                 setError(true);
                 setErrorMessage("no data found");
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to Search Data");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to Search Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -767,9 +805,27 @@ const useDrivercreation = () => {
         setEdit(true)
         handleList()
         }
-        catch(err){
-            setError(true);
-            setErrorMessage("Failed to Edit Data");
+        // catch(err){
+        //     setError(true);
+        //     setErrorMessage("Failed to Edit Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Edit Driver Details: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
         
     };

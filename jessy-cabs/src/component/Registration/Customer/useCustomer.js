@@ -289,15 +289,15 @@ const memoizedFetchStations = useMemo(() => {
             try {
                 const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
                 const responsedata = response.data;
-                // if (responsedata?.length === 0) {
-                //     setInfo(true);
-                //     setInfoMessage("Ratetype stations not registered");
-                //     setCredentialDataforstations(true);
-                // } else {
-                //     setSuccess(true);
-                //     setSuccessMessage("Ratetype stations registered");
-                //     setCredentialDataforstations(false);
-                // }
+                if (responsedata?.length === 0) {
+                    setInfo(true);
+                    setInfoMessage("Ratetype stations not registered");
+                    setCredentialDataforstations(true);
+                } else {
+                    setSuccess(true);
+                    setSuccessMessage("Ratetype stations registered");
+                    setCredentialDataforstations(false);
+                }
             } catch (error) {
                 console.error("Error fetching data", error);
                 // Handle the error as needed

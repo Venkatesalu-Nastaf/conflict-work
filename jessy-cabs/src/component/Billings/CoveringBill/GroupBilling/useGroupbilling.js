@@ -323,10 +323,32 @@ const useGroupbilling = () => {
                     setError(true);
                     setErrorMessage("No data found");
                 }
-            } catch {
-                setRows([]);
-                setError(true);
-                setErrorMessage("Please fill All Fields");
+            } 
+            // catch {
+            //     setRows([]);
+            //     setError(true);
+            //     setErrorMessage("Please fill All Fields");
+            // }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+             
+                // Check if there's no response, indicating a network error
+                if (error.message ) {
+                    setError(true);
+                    setErrorMessage("Check your internet connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    // setError(true);
+                    // // Handle other Axios errors (like 4xx or 5xx responses)
+                    // setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+                        setRows([]);
+                        setError(true);
+                        setErrorMessage("Please fill All Fields");
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
             }
         } else if (servicestation === "" || servicestation === "All") {
 
@@ -367,10 +389,32 @@ const useGroupbilling = () => {
                     setError(true);
                     setErrorMessage("No data found");
                 }
-            } catch {
-                setRows([]);
-                setError(true);
-                setErrorMessage("Please fill All Fields");
+            }
+            //  catch {
+            //     setRows([]);
+            //     setError(true);
+            //     setErrorMessage("Please fill All Fields");
+            // }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+             
+                // Check if there's no response, indicating a network error
+                if (error.message ) {
+                    setError(true);
+                    setErrorMessage("Check your internet connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    // setError(true);
+                    // Handle other Axios errors (like 4xx or 5xx responses)
+                    // setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+                    setRows([]);
+                        setError(true);
+                        setErrorMessage("Please fill All Fields");
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
             }
         }
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
@@ -591,47 +635,123 @@ const useGroupbilling = () => {
         setRefPdfPrint(true)
     }
 
+    // const handleRemoveData = async () => {
+    //     const selectedIds = rowSelectionModel.map(row => row.id);
+    //     // const tripIds = rowSelectionModel.map(row => row.tripid);
+    //     const tripIds = rowSelectionModel.map(row => row.tripid.toString());
+
+    //     // const tripid = rowSelectionModel?.map((li) => li.tripid.toString().replace(/,/g, ''));
+    //     const tripid = rowSelectionModel?.map(li => li.tripid);
+    //     // const tripIdArray = rowSelectionModel?.Trip_id.split(',').map(tripId => tripId.trim());
+
+
+    //     const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split the varchar field into an array and flatten it
+    //     // Summing up the amounts
+    //     const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
+    //     const Amount = groupBillAmount - totalAmount;
+
+    //     const TripCount = trips - rowSelectionModel.length
+    //     const Tripcounts = TripCount.toString()
+    //     const groupUpdateList = {
+    //         Trips: Tripcounts,
+    //         Amount: Amount,
+    //         Trip_id: tripIds
+    //     }
+    //     try {
+    //         const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
+    //             tripids: tripid,
+    //             status: 'Closed',
+    //         });
+    //         console.log(response, 'response');
+    //         const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
+    //         console.log(updatelist, 'uplist');
+    //         const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`)
+    //         const result = Details.data;
+    //         const tripno = result?.map((li) => li.Trip_id)
+    //         const groupid = result?.map((li) => li.id)
+    //         if (tripno[0] === "") {
+    //             const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`)
+    //             console.log(getresponse, 'Deleted Successfully');
+    //         }
+    //     } 
+    //     // catch (error) {
+    //     //     console.error('Error updating status:', error);
+    //     // }
+    //     catch (error) {
+    //         // console.error("Error occurredddddd:", error);
+    //         // Check if there's no response, indicating a network error
+    //         if (error.message === "Network error") {
+    //             setError(true);
+    //             setErrorMessage("Check your internet connection");
+    //             // console.log('Network error');
+    //         } else if (error.response) {
+    //             setError(true);
+    //             // Handle other Axios errors (like 4xx or 5xx responses)
+    //             setErrorMessage("Failed to Remove: " + (error.response.data.message || error.message));
+    //         } else {
+    //             // Fallback for other errors
+    //             setError(true);
+    //             setErrorMessage("An unexpected error occurred: " + error.message);
+    //         }
+    //     }
     const handleRemoveData = async () => {
         const selectedIds = rowSelectionModel.map(row => row.id);
-        // const tripIds = rowSelectionModel.map(row => row.tripid);
+        
+        // Check if no rows are selected
+        if (selectedIds.length === 0) {
+            setError(true);
+            setErrorMessage("No rows selected. Please select a row to remove.");
+            return; // Exit the function early
+        }
+    
         const tripIds = rowSelectionModel.map(row => row.tripid.toString());
-
-        // const tripid = rowSelectionModel?.map((li) => li.tripid.toString().replace(/,/g, ''));
-        const tripid = rowSelectionModel?.map(li => li.tripid);
-        // const tripIdArray = rowSelectionModel?.Trip_id.split(',').map(tripId => tripId.trim());
-
-
-        const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split the varchar field into an array and flatten it
-        // Summing up the amounts
+        const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split and flatten
         const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
         const Amount = groupBillAmount - totalAmount;
-
-        const TripCount = trips - rowSelectionModel.length
-        const Tripcounts = TripCount.toString()
+    
+        const TripCount = trips - rowSelectionModel.length;
+        const Tripcounts = TripCount.toString();
         const groupUpdateList = {
             Trips: Tripcounts,
             Amount: Amount,
             Trip_id: tripIds
-        }
+        };
+    
         try {
             const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
-                tripids: tripid,
+                tripids: tripIds,
                 status: 'Closed',
             });
             console.log(response, 'response');
+    
             const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
             console.log(updatelist, 'uplist');
-            const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`)
+    
+            const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
             const result = Details.data;
-            const tripno = result?.map((li) => li.Trip_id)
-            const groupid = result?.map((li) => li.id)
+            const tripno = result?.map(li => li.Trip_id);
+            const groupid = result?.map(li => li.id);
+    
             if (tripno[0] === "") {
-                const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`)
-                console.log(getresponse, 'Deleted Successfully');
+                const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
+                console.log(getresponse, 'Removed Successfully');
             }
         } catch (error) {
-            console.error('Error updating status:', error);
+            // Handle errors
+            console.error("Error occurred:", error);
+    
+            if (error.message === "Network Error") {
+                // Handle network errors
+                setError(true);
+                setErrorMessage("Check your internet connection");
+            } else {
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setError(true);
+                setErrorMessage("Failed to Remove: " + (error.response.data.message || error.message));
+            }
         }
+    // };
+    
 
         const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
         setRows(updatedRows);
@@ -670,8 +790,27 @@ const useGroupbilling = () => {
             setSuccess(true)
             setSuccessMessage("Successfully Added")
             setRows([])
-        } catch (err) {
-            console.log(err, "errordetails");
+        } 
+        // catch (err) {
+        //     console.log(err, "errordetails");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your internet connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed To Save: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     }
 

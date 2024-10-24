@@ -110,14 +110,20 @@ const usePendingBill = () => {
             }
         } catch (error) {
             console.log(`Error fetching bills:`, error);
+            if (error.message ) {
+                setRows([])
+                setError(true);
+                setErrorMessage("Check your internet connection");
+                // console.log('Network error');
+            }else{  
             setPendingBill(prevState => ({
                 ...prevState,
                 TotalAmount: "",
                 Balance: ""
-            }));
-            setRows([]);
-            setError(true);
-            setErrorMessage("Error fetching bills");
+            }))};
+            // setRows([]);
+            // setError(true);
+            // setErrorMessage("Error fetching bills");
         }
     };
 

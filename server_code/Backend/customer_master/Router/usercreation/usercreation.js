@@ -53,7 +53,7 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationna
       from: Sender_Mail,
       to: email,
       subject: 'Credential Details',
-      html: `<p>Hi ${username},<br>UserName: ${email}<br>Password: ${userpassword}</p>`
+      html: `<p>Hi ${username},<br>UserName: ${username}<br>Password: ${userpassword}</p>`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {

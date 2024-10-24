@@ -399,12 +399,10 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.underlinetext}>
                       Details of Receiver | Billed to:
                     </Text>
-                    <Text style={styles.customername}>{organizationname}</Text>
+                    <Text style={[styles.customername, { width: 200 }]}>{organizationname}</Text>
                     <Text style={styles.text2}>{address1}</Text>
                     <Text style={styles.text2}>GSTIN: {gst} </Text>
                   </View>
-
-
 
                   <View style={styles.invoicediv}>
                     {/* <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Invoice No :</Text> {invoiceno}</Text>
@@ -478,17 +476,27 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <Text>{'\n'}</Text>
                               <Text style={styles.permittext}>{(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00</Text>
                             </View>
-                            <View style={[styles.tableCell, { flexDirection: 'column', justifyContent: 'flex-end' }]}>
+
+                            <View style={[styles.tableCell, { paddingRight: 5 }]}>
                               <Text>{'\n'}</Text>
                               <Text>{'\n'}</Text>
-                              {item.package_amount > 0 && <Text>{item.package_amount}.00</Text>}
-                              {item.extraKM > 0 && item.ex_kmAmount > 0 && <Text>{item.ex_kmAmount}.00</Text>}
-                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
-                                <Text style={{ marginLeft: 3 }}>{item.ex_hrAmount}.00</Text>
+                              {item.package_amount > 0 && (
+                                <Text style={{ textAlign: 'right', paddingRight: 18 }}>{item.package_amount}.00</Text>
+                              )}  
+                              {item.extraKM > 0 && item.ex_kmAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18}}>{item.ex_kmAmount}.00</Text>
                               )}
-                              {item.nightBta > 0 && item.night_totalAmount > 0 && <Text>{item.night_totalAmount}.00</Text>}
-                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && <Text>{item.driverBeta_amount}.00</Text>}
+                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18 }}>{item.ex_hrAmount}.00</Text>
+                              )}
+                              {item.nightBta > 0 && item.night_totalAmount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18 }}>{item.night_totalAmount}.00</Text>
+                              )}
+                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
+                                <Text style={{ textAlign: 'right',paddingRight: 18}}>{item.driverBeta_amount}.00</Text>
+                              )}
                             </View>
+
                           </React.Fragment>
                         </View>
                       ))}

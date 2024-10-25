@@ -1744,7 +1744,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             },
                           }}
                         >
-                          {billing_read ? <Tab>Bill cccc</Tab> : <> </>}
+                          {billing_read ? <Tab>Bill</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>

@@ -159,11 +159,11 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         setStartRoutes(start)
         setEndRoutes(end)
         console.log(start, end, waypoints, tripid, 'wayyyyyyyyy555555555');
-        setStartLat(start.lat)
-        setStartLng(start.lng)
-        setEndLat(end.lat)
-        setEndLng(end.lng)
-        setEndLabel(end.label)
+        setStartLat(start?.lat)
+        setStartLng(start?.lng)
+        setEndLat(end?.lat)
+        setEndLng(end?.lng)
+        setEndLabel(end?.label)
 
         setTripData({ start, end, waypoints });
       } catch (error) {
@@ -615,9 +615,40 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Implement your logic for displaying a popup
     console.log("Mappppppppppppppp", latLng);
   };
+  // const handleSelect = async (address) => {
+  //   const geocoder = new window.google.maps.Geocoder();
+
+  //   try {
+  //     const results = await new Promise((resolve, reject) => {
+  //       geocoder.geocode({ address: address }, (results, status) => {
+  //         if (status === 'OK' && results && results.length > 0) {
+  //           resolve(results);
+  //         } else {
+  //           reject(new Error(`Geocode failed: ${status}`)); // Include status in error
+  //         }
+  //       });
+  //     });
+
+  //     if (results[0].geometry && results[0].geometry.location) {
+  //       const latLng = results[0].geometry.location;
+  //       console.log(latLng, results, 'Location found'); // Better log message
+
+  //       if (mapInstance) {
+  //         mapInstance.setCenter(latLng);
+  //         mapInstance.setZoom(14);
+  //         submitPopup(latLng);
+  //       } else {
+  //         console.log("Map instance not available");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred in handleSelect:", error.message);
+  //   }
+  // };
+
   const handleSelect = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
-
+  
     try {
       const results = await new Promise((resolve, reject) => {
         geocoder.geocode({ address: address }, (results, status) => {
@@ -628,15 +659,17 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           }
         });
       });
-
+  
       if (results[0].geometry && results[0].geometry.location) {
         const latLng = results[0].geometry.location;
-        console.log(latLng, results, 'Location found'); // Better log message
-
+        const lat = latLng.lat(); // Get latitude
+        const lng = latLng.lng(); // Get longitude
+        console.log({ lat, lng }, results, 'Location found'); // Better log message
+  
         if (mapInstance) {
-          mapInstance.setCenter(latLng);
-          mapInstance.setZoom(14);
-          submitPopup(latLng);
+          mapInstance.setCenter({ lat, lng });
+          mapInstance.setZoom(16); // Set to desired zoom level
+          submitPopup({ lat, lng }); // Pass the correct lat/lng values
         } else {
           console.log("Map instance not available");
         }
@@ -645,8 +678,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       console.error("Error occurred in handleSelect:", error.message);
     }
   };
-
-
+  
+  
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* <LoadScript googleMapsApiKey="AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk"> */}
@@ -678,7 +711,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       <GoogleMap
         mapContainerStyle={mapStyles}
         zoom={10}
-        center={startLat && startLng ? { lat: '',lng:'' } : { lat: 13.0827, lng: 80.2707 }}
+        center={startLat && startLng ? { lat: '',lng:'' } : { lat: '', lng: '' }}
         id='map'
         onClick={handleMapClick} // Add the click handler here
         onLoad={(map) => {

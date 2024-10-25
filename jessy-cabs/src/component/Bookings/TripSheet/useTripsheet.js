@@ -2821,7 +2821,7 @@ const useTripsheet = () => {
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError(true);
-                    setErrorMessage("Tripsheet not found");
+                    setErrorMessage(`${error.response.data.error}`);
                 } else {
                     setError(true);
                     // setErrorMessage("Failed to fetch data");

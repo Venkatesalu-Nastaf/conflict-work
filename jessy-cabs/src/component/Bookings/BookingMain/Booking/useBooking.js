@@ -1010,10 +1010,14 @@ const useBooking = () => {
     if (event.key === "Enter") {
       event.preventDefault();
       setTriggerCount(prev => !prev)
+      const loginUserName = await localStorage.getItem("username")
+      
       try {
+        // const response = await axios.get(
+        //   `${apiUrl}/booking/${event.target.value}`
+        // );
         const response = await axios.get(
-          `${apiUrl}/booking/${event.target.value}`
-        );
+          `${apiUrl}/booking/${event.target.value}`,{ params: { loginUserName } } );
         const bookingDetails = response.data;
         console.log(bookingDetails,"mmmmmmmmmmmmmmmmmmm")
         setSelectedCustomerData(bookingDetails);
@@ -1024,14 +1028,25 @@ const useBooking = () => {
         setSendEmail(false);
         setDatatrigger(!datatrigger);
         // setAvilableimageCount(bookingDetails.count)
-      } catch(err) {
-
-        // const errdata=err.response;
-        // if(errdata.status === 404){
-          setError(true);
-            setErrorMessage("Booking Not Found");
-   
+      } 
+      catch (error) {
+        if (error.response && error.response.status === 404) {
+            setError(true);
+            setErrorMessage(`${error.response.data.error}`);
+        } else {
+            setError(true);
+            // setErrorMessage("Failed to fetch data");
+            setErrorMessage("Check your Network Connection");
+        }
     }
+      
+      // catch(err) {
+
+     
+      //     setError(true);
+      //       setErrorMessage("Booking Not Found");
+   
+  
   }
   };
 

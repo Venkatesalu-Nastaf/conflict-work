@@ -66,6 +66,8 @@ const useDispatched = () => {
   const [columnshowall, setColumnShowall] = useState(true)
 
   const [loading, setLoading] = useState(false);
+  const [isStations, setisStations] = useState([])
+
 
   //---------------------popup----------------------------
 
@@ -268,8 +270,12 @@ const useDispatched = () => {
 
   // new working code
   const handleShow = useCallback(async () => {
+   
 
+
+    
     setLoading(true)
+    console.log(isStations,"Station names ")
     if (!statusvalue) {
       setError(true);
       setErrorMessage("ENTER THE STATUS");
@@ -278,9 +284,23 @@ const useDispatched = () => {
     }
     setRows([]); // Clear rows to show empty grid
     try {
+      // const response = await axios.get(
+      //   `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
+      // );
+     
+      //  console.log(stationsParam ,'stationsParam')
+       console.log(isStations ,'isstationsParam')
+       const filteredStations = isStations
+    .filter(station => station.Stationname !== 'All')
+    .map(station => station.Stationname);
+
+console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
+
+
       const response = await axios.get(
-        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
+        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}&isStations=${filteredStations}`
       );
+     
       const data = response.data;
       if(data && data.length > 0){
         setLoading(false); // Stop loading
@@ -504,7 +524,7 @@ const useDispatched = () => {
     handleTripsheetClick,
     columns, handleBookingClick,
     filteredColumns,
-    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading
+    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading,isStations,setisStations
   };
 };
 

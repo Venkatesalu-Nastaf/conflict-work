@@ -93,6 +93,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
      // setVehNo, 
       handleBookingClick,
       loading,
+      isStations,setisStations
      // setLoading
   } = useTripStatus();
   useEffect(() => {
@@ -118,6 +119,13 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
         setAllCustomer(customer);
     }
 }, [customer]); // Include customer as a dependency
+
+useEffect(() => {
+
+  if (stationName?.length > 0) {
+    setisStations(stationName)
+  }
+}, [stationName])
 
 
   const CustomNoRowsOverlay = () => (

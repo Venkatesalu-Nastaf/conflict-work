@@ -383,74 +383,144 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
   }, [department, fromDate, toDate, apiUrl, statusvalue, cutomerName, VehNo]);
   
 
-  const handleShowAll = async () => {
-    setLoading(true)
-    setColumnShowall(false)
-    setRows([]); // Clear rows to show empty grid
-    try {
-      const response = await axios.get(
-        `${apiUrl}/tripsheet-showall`
-      );
-      const data = response.data;
-      if(data && data.length > 0){
-        setLoading(false); // Stop loading
-    }
+//   const handleShowAll = async () => {
+//     setLoading(true)
+//     setColumnShowall(false)
+//     setRows([]); // Clear rows to show empty grid
+//     try {
+//       const filteredStations = isStations
+//       .filter(station => station.Stationname !== 'All')
+//       .map(station => station.Stationname);
+//       // const response = await axios.get( `${apiUrl}/tripsheet-showall}?isStations=${filteredStations}` );
+//       const response = await axios.get(`${apiUrl}/tripsheet-showall?isStations=${filteredStations}`);
 
+//       const data = response.data;
+//       if(data && data.length > 0){
+//         setLoading(false); // Stop loading
+//     }
+
+//       if (data && data.tripsheet && data.booking) {
+//         // Process tripsheet data
+//         const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
+//           ...row,
+//           id1: index + 1,
+//         }));
+//         // Process booking data
+//         const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
+//           ...row,
+//           id1: index + 1,
+//         }));
+//         // Combine both sets of data
+//         const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+//         const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
+//           ...row,
+//           id5: index + 1,
+//         }));
+//         setRows(tripsheetRowsWithUniqueId2);
+//         setSuccess(true);
+//         setSuccessMessage("Successfully listed");
+//       } else {
+//         setRows([]);
+//         setError(true);
+//         setErrorMessage("no data found")
+//       }
+//     } 
+//     // catch {
+//     //   setRows([]);
+//     //   // setError(true);
+//     //   // setErrorMessage("Check your Network Connection");
+//     // }
+//     catch (error) {
+//       // console.error("Error occurredddddd:", error);
+   
+//       // Check if there's no response, indicating a network error
+//       if (error.message ) {
+//           setError(true);
+//           setErrorMessage("Check your Network Connection");
+//           // console.log('Network error');
+//       } else if (error.response) {
+//           setError(true);
+//           // Handle other Axios errors (like 4xx or 5xx responses)
+//           setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
+//       } else {
+//           // Fallback for other errors
+//           setError(true);
+//           setErrorMessage("An unexpected error occurred: " + error.message);
+//       }
+//   }
+//     finally {
+//       setLoading(false); // Stop loading
+    
+   
+// }
+  // };
+  const handleShowAll = async () => {
+    setLoading(true);
+    setColumnShowall(false);
+    setRows([]); // Clear rows to show empty grid
+  
+    try {
+      const filteredStations = isStations
+        .filter(station => station.Stationname !== 'All')
+        .map(station => station.Stationname);
+  
+      // Convert the array of station names to a comma-separated string
+      const stationQueryString = filteredStations.join(',');
+  
+      const response = await axios.get(`${apiUrl}/tripsheet-showall?isStation=${stationQueryString}`);
+  
+      const data = response.data;
+  
+      if (data && data.length > 0) {
+        setLoading(false); // Stop loading
+      }
+  
       if (data && data.tripsheet && data.booking) {
         // Process tripsheet data
         const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
           ...row,
           id1: index + 1,
         }));
+  
         // Process booking data
         const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
           ...row,
           id1: index + 1,
         }));
+  
         // Combine both sets of data
         const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+  
         const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
           ...row,
           id5: index + 1,
         }));
+  
         setRows(tripsheetRowsWithUniqueId2);
         setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("no data found")
+        setErrorMessage("No data found");
       }
-    } 
-    // catch {
-    //   setRows([]);
-    //   // setError(true);
-    //   // setErrorMessage("Check your Network Connection");
-    // }
-    catch (error) {
-      // console.error("Error occurredddddd:", error);
-   
-      // Check if there's no response, indicating a network error
-      if (error.message ) {
-          setError(true);
-          setErrorMessage("Check your Network Connection");
-          // console.log('Network error');
+    } catch (error) {
+      // Handle errors
+      if (error.message) {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
       } else if (error.response) {
-          setError(true);
-          // Handle other Axios errors (like 4xx or 5xx responses)
-          setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
+        setError(true);
+        setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
       } else {
-          // Fallback for other errors
-          setError(true);
-          setErrorMessage("An unexpected error occurred: " + error.message);
+        setError(true);
+        setErrorMessage("An unexpected error occurred: " + error.message);
       }
-  }
-    finally {
+    } finally {
       setLoading(false); // Stop loading
-    
-   
-}
+    }
   };
+  
   const handleButtonClick = (row) => {
     if (row.status === "Cancelled") {
       setError(true);

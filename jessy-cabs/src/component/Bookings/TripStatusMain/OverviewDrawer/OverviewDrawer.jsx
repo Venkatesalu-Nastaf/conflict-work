@@ -124,7 +124,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     imageDetails,
     setImageDetails,
     setLoading,
-    loading
+    loading,isStations,setisStations
 
 
   } = useOverviewDrawer();
@@ -141,6 +141,12 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
       setAllCustomer(customer)
     }
   })
+  useEffect(() => {
+
+    if (stationName?.length > 0) {
+      setisStations(stationName)
+    }
+  }, [stationName])
 
   const CustomNoRowsOverlay = () => (
     <div style={{ textAlign: 'center', padding: '20px' }}>

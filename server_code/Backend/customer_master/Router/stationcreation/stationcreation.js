@@ -80,6 +80,7 @@ router.get('/getStation-name', (req, res) => {
       }
       else {
         console.log("data", data)
+        data.push({ Stationname: 'All' });
         return res.status(200).json(data);
       }
     }

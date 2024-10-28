@@ -47,6 +47,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const apiUrl = APIURL;
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   const [placeName, setPlaceName] = useState(''); // To store place name
   const [directions, setDirections] = useState(null); // New state for directions
   const [mapCaptureVerify, setMapCaptureVerify] = useState(false);
@@ -60,6 +61,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [wayDirection, setWayDirection] = useState([])
   const [address, setAddress] = useState('');
   const [mapInstance, setMapInstance] = useState(null);
+  const [center, setCenter] = useState({ lat: 22.00, lng: 77.00 }); // India's initial center
 
   const [mapContent, setMapContent] = useState({
     tripid: '',
@@ -105,7 +107,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         const waypoints = [];
 
         data.forEach((item) => {
-          console.log(typeof (item.Latitude), 'item11', Number(item.Latitude));
 
           if (item.trip_type === 'start') {
             start = {
@@ -158,7 +159,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         setWayRoutes(waypoints)
         setStartRoutes(start)
         setEndRoutes(end)
-        console.log(start, end, waypoints, tripid, 'wayyyyyyyyy555555555');
         setStartLat(start?.lat)
         setStartLng(start?.lng)
         setEndLat(end?.lat)
@@ -193,7 +193,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   // Handle marker click to open modal and display clicked coordinates
   const handleMarkerClick = (point) => {
-    console.log(point, 'point');
 
     setClickedPoint(point);
     setMapContent((prevContent) => ({
@@ -343,7 +342,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const handletimeChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value, 'ccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
@@ -352,7 +350,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleChange = (value, name) => {
-    console.log(value, name, 'cccccccccccccccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
@@ -362,6 +359,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const handleMapClick = (event) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
+    setCenter({ lat, lng }); // Update center to clicked location
 
     // Set clicked point with lat and lng
     setClickedPoint({ lat, lng });
@@ -374,6 +372,29 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const handleMapDraw = async () => {
     const directionsService = new window.google.maps.DirectionsService();
     const { start, end, waypoints } = tripData;
+
+    if (startLat === "" || startLat === undefined) {
+      setTimeout(() => {
+        setErrorMessage(true);
+
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 1000);
+
+      }, 1000);
+      return;
+    }
+    if (endLat === "" || endLat === undefined) {
+      setTimeout(() => {
+        setErrorMessage(true);
+
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 1000);
+
+      }, 1000);
+      return;
+    }
 
     try {
       const directionsResult = await directionsService.route({
@@ -415,7 +436,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleMapDrawRouteVerify = () => {
-    console.log('qqqqqqqqqqqqq[[[[[[');
 
     setTimeout(() => {
       setError(false)
@@ -454,7 +474,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   }
   const handleSuccessCapture = () => {
-    console.log('sucessssssssssssssss');
 
     setSuccess(true)
     setTimeout(() => {
@@ -463,10 +482,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
 
   const handleMapCapture = async () => {
-    console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{');
 
     if (mapCaptureVerify === false) {
-      console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{/////');
       setError(true)
       handleMapDrawRouteVerify()
       return
@@ -488,11 +505,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       return orderA - orderB || labelA.localeCompare(labelB);
     });
-    console.log('qqqqqqqqqq++++++++++++');
 
     // Add the start marker
     if (startLat && endLat) {
-      console.log('qqqqqqqqqq++++++++++++----------');
 
       markers.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
     }
@@ -552,7 +567,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           }
           const a = markers.join('&')
           const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
-          console.log(markers.join('&'), a, markers, 'nandhakalai');
 
           const staticMapBlob = await urlToBlob(finalStaticMapUrl);
           // const tripid = localStorage.getItem('selectedTripid');
@@ -571,7 +585,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               },
             });
             console.log('Uploaded file details', response.data);
-            console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
 
           } catch (error) {
             console.error('Error uploading file:', error);
@@ -583,23 +596,50 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     }
 
   };
+  // const fitBoundsToMarkers = (map) => {
+  //   const bounds = new window.google.maps.LatLngBounds();
+
+  //   if (startLat && startLng) {
+  //     bounds.extend(new window.google.maps.LatLng(startLat, startLng));
+  //   }
+  //   if (endLat && endLng) {
+  //     bounds.extend(new window.google.maps.LatLng(endLat, endLng));
+  //   }
+  //   if (wayRoutes && wayRoutes.length > 0) {
+  //     wayRoutes.forEach((point) => {
+  //       bounds.extend(new window.google.maps.LatLng(point.lat, point.lng));
+  //     });
+  //   }
+
+  //   map.fitBounds(bounds);
+  // };
+
   const fitBoundsToMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds();
 
+    // Include start point
     if (startLat && startLng) {
-      bounds.extend(new window.google.maps.LatLng(startLat, startLng));
+      bounds.extend({ lat: startLat, lng: startLng });
     }
+
+    // Include end point
     if (endLat && endLng) {
-      bounds.extend(new window.google.maps.LatLng(endLat, endLng));
+      bounds.extend({ lat: endLat, lng: endLng });
     }
-    if (wayRoutes && wayRoutes.length > 0) {
+
+    // Include all waypoints
+    if (wayRoutes) {
       wayRoutes.forEach((point) => {
-        bounds.extend(new window.google.maps.LatLng(point.lat, point.lng));
+        bounds.extend({ lat: point.lat, lng: point.lng });
       });
     }
 
-    map.fitBounds(bounds);
+    // Adjust the map to fit all markers
+    if (!bounds.isEmpty()) {
+      map.fitBounds(bounds);
+    }
   };
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk",
   });
@@ -613,7 +653,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const submitPopup = (latLng) => {
     // Implement your logic for displaying a popup
-    console.log("Mappppppppppppppp", latLng);
   };
   // const handleSelect = async (address) => {
   //   const geocoder = new window.google.maps.Geocoder();
@@ -648,7 +687,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const handleSelect = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
-  
+
     try {
       const results = await new Promise((resolve, reject) => {
         geocoder.geocode({ address: address }, (results, status) => {
@@ -659,13 +698,12 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           }
         });
       });
-  
+
       if (results[0].geometry && results[0].geometry.location) {
         const latLng = results[0].geometry.location;
         const lat = latLng.lat(); // Get latitude
         const lng = latLng.lng(); // Get longitude
-        console.log({ lat, lng }, results, 'Location found'); // Better log message
-  
+
         if (mapInstance) {
           mapInstance.setCenter({ lat, lng });
           mapInstance.setZoom(16); // Set to desired zoom level
@@ -678,8 +716,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       console.error("Error occurred in handleSelect:", error.message);
     }
   };
-  
-  
+
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* <LoadScript googleMapsApiKey="AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk"> */}
@@ -710,14 +748,14 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       </PlacesAutocomplete>
       <GoogleMap
         mapContainerStyle={mapStyles}
-        zoom={10}
-        center={startLat && startLng ? { lat: '',lng:'' } : { lat: '', lng: '' }}
+        zoom={5}
+        center={center}
         id='map'
-        onClick={handleMapClick} // Add the click handler here
+        onClick={handleMapClick}
         onLoad={(map) => {
           mapRef.current = map;
           setMapInstance(mapRef.current)
-          fitBoundsToMarkers(map); // Call the function to adjust the bounds on load
+          fitBoundsToMarkers(map);
         }}
       >
         {startLat && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
@@ -822,6 +860,23 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
             ""}
         </div>
+        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+          {(errorMessage && (startLat === "" || startLat === undefined)) ? (
+            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+              Mark Your StartPoint
+            </p>
+          ) : null}
+        </div>
+        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+          {(errorMessage && (startLat !== "" && startLat !== undefined) && (endLat === "" || endLat === undefined)) ? (
+            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+              Mark Your EndPoint
+            </p>
+          ) : null}
+        </div>
+
+
+
       </div>
     </LocalizationProvider>
   );

@@ -35,7 +35,7 @@ const useMonthlyWise = () => {
         { field: 'totalAmount', headerName: 'Amount', width: 130 },
         { field: 'orderbyemail', headerName: 'Email', width: 180 },
         { field: 'customertype', headerName: 'CustomerType', width: 130 },
-        { field: 'customerId', headerName: 'CustomerID', width: 70 },
+        { field: 'customerId', headerName: 'CustomerID', width: 130 },
     
     ];
    

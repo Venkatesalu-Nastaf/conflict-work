@@ -17,7 +17,7 @@ const useTripsheet = () => {
     const { permissions } = useContext(PermissionContext)
     const Tripsheet_modify1 = permissions[3]?.modify;
     const Tripsheet_delete1 = permissions[3]?.delete;
-    const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
+    const signatureurlinkurl = "http://jessycabs.com/SignatureGenerate"
     const apiUrl = APIURL;
     // THIS APIURL TRANSFER FRO DRIVER APP
     const apiurltransfer = Apiurltransfer;
@@ -25,7 +25,7 @@ const useTripsheet = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
-        
+
         driverName: '',
         vehRegNo: '',
         mobileNo: '',

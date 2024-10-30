@@ -127,7 +127,7 @@ const SignatureGenerate = () => {
     }
     const handleTollParkinglink = () => {
         const tripdata = tripId;
-        const uploadtollaprk = `http://taaftechnology.com/UploadtollPark?Tripid=${tripdata}`
+        const uploadtollaprk = `http://jessycabs.com/UploadtollPark?Tripid=${tripdata}`
         // const uploadtollaprk=`http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
         // window.open(uploadtollaprk,'_blank')
         window.location.href = uploadtollaprk;

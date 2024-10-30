@@ -22,10 +22,11 @@ const columns = [
     { field: "vendorTotaltime", headerName: "Run-Hours", width: 130 },
     { field: "vpermettovendor", headerName: "Vehicle-Permit", width: 130 },
     { field: "vendortoll", headerName: "Vehicle-Toll", width: 130 },
+    { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 90 },
     { field: "totalvendoramount", headerName: "Total Amount", width: 130 },
     { field: "advancepaidtovendor", headerName: "Driver Advance", width: 130 },
     { field: "Vendor_FULLTotalAmount", headerName: "Balance", width: 130 },
-    { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 130 },
+   
 ];
 
 const useVehiclestatement = () => {

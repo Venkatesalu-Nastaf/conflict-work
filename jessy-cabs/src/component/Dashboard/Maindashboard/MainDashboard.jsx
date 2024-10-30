@@ -12,7 +12,7 @@ import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
 import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
 import { useData1 } from "./DataContext"; //- data contaxt
-import Logo from "../../../assets/img/logonas.png"
+import Logo from "../../../assets/img/logo.png"
 import { PiWarningCircleBold } from "react-icons/pi";
 import { IoPower } from "react-icons/io5";
 import { PermissionContext } from "../../context/permissionContext";

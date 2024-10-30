@@ -330,58 +330,66 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate, "f", formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate);
 
-  db.query('select * from customers where customerType=?', [customer], (err, results) => {
-    if (err) {
-      return res.status(400).json(err)
-    }
-    console.log(results)
-    const datas = results?.map((data) => data.customer)
-    //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
-    //    const sql=`SELECT 
-    //     customer, 
-    //     SUM(totalcalcAmount) AS totalAmount
-    // FROM 
-    //     tripsheet
-    // WHERE 
-    //     tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-    //     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    //     AND customer IN (?)
-    // GROUP BY 
-    //     customer `;
+  // Check if "All" is selected, and skip customer filtering if true
+  if (customer === "All") {
     const sql = `
-  SELECT 
-    customer,orderbyemail,billingno,
-    SUM(totalcalcAmount) AS totalAmount
-  FROM 
-    tripsheet
-  WHERE 
-   tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-   AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    AND customer IN (?)
-  GROUP BY 
-    customer
-`;
-    db.query(sql, [fromDate, toDate, datas], (err, results1) => {
+      SELECT 
+        customer, orderbyemail,billingno,
+        SUM(totalcalcAmount) AS totalAmount
+      FROM 
+        tripsheet
+      WHERE 
+        tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+      GROUP BY 
+        customer
+    `;
+    db.query(sql, [fromDate, toDate], (err, results1) => {
       if (err) {
-        console.log(err)
+        console.log(err);
+        return res.status(500).json({ message: "Error retrieving data" });
       }
-
-      const combinedResults = results1?.map(trip => {
-        const customerDetail = results?.find(detail => detail.customer === trip.customer);
-        return {
-          ...trip,
-          customerId: customerDetail ? customerDetail.customerId : null,
-          customertype: customerDetail ? customerDetail.customerType : null,
-          address: customerDetail ? customerDetail.address1 : null,
-        };
+      return res.status(200).json(results1);
+    });
+  } else {
+    db.query('SELECT * FROM customers WHERE customerType = ?', [customer], (err, results) => {
+      if (err) {
+        return res.status(400).json(err);
+      }
+      const datas = results?.map((data) => data.customer);
+      const sql = `
+        SELECT 
+          customer, orderbyemail, billingno,
+          SUM(totalcalcAmount) AS totalAmount
+        FROM 
+          tripsheet
+        WHERE 
+          tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+          AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+          AND customer IN (?)
+        GROUP BY 
+          customer
+      `;
+      db.query(sql, [fromDate, toDate, datas], (err, results1) => {
+        if (err) {
+          console.log(err);
+        }
+        const combinedResults = results1?.map(trip => {
+          const customerDetail = results?.find(detail => detail.customer === trip.customer);
+          return {
+            ...trip,
+            customerId: customerDetail ? customerDetail.customerId : null,
+            customertype: customerDetail ? customerDetail.customerType : null,
+            address: customerDetail ? customerDetail.address1 : null,
+          };
+        });
+        return res.status(200).json(combinedResults);
       });
-      
-      return res.status(200).json(combinedResults)
-    })
-  })
-})
+    });
+  }
+});
 
 router.get('/montlywisedataall', (req, res) => {
   db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer", (err, result) => {

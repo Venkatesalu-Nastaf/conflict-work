@@ -356,6 +356,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       [name]: value // Dynamically update the field based on the input name
     }));
   };
+
   const handleMapClick = (event) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
@@ -414,6 +415,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           lng: point.location.lng(),
         };
       });
+
       // setTripData((prevTripData) => ({
       //   ...prevTripData,
 
@@ -482,7 +484,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
 
   const handleMapCapture = async () => {
-
     if (mapCaptureVerify === false) {
       setError(true)
       handleMapDrawRouteVerify()
@@ -585,7 +586,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               },
             });
             console.log('Uploaded file details', response.data);
-
+            localStorage.setItem('MapBoxClose', 1);
           } catch (error) {
             console.error('Error uploading file:', error);
           }
@@ -706,7 +707,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
         if (mapInstance) {
           mapInstance.setCenter({ lat, lng });
-          mapInstance.setZoom(16); // Set to desired zoom level
+          mapInstance.setZoom(18); // Set to desired zoom level
           submitPopup({ lat, lng }); // Pass the correct lat/lng values
         } else {
           console.log("Map instance not available");
@@ -758,9 +759,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           fitBoundsToMarkers(map);
         }}
       >
-        {startLat && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-        {endLat && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
-        {wayRoutes?.map((point, index) => (
+        {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
+        {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
+        {directions === null && wayRoutes?.map((point, index) => (
           <Marker
             key={index}
             position={{ lat: point.lat, lng: point.lng }}
@@ -768,7 +769,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             onClick={() => handleMarkerClick(point)}
           />
         ))}
-        {directions && <DirectionsRenderer directions={directions} />} {/* Render directions */}
+        {directions && <DirectionsRenderer directions={directions} />}
 
       </GoogleMap>
 

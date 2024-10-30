@@ -398,7 +398,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }
 
+  // Map PopUp Close
+  const mapPopUpbox = localStorage.getItem('MapBoxClose');
 
+  useEffect(() => {
+    if (mapPopUpbox === '1') {
+      setMapPopUp(false)
+      localStorage.removeItem('MapBoxClose')
+    }
+  }, [mapPopUpbox])
 
   const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
@@ -1892,7 +1900,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div> */}
                                   <div className="input">
-                                    {manualTripID.length ?
+                                    {manualTripID.length > 0 ?
                                       <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
                                       <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
                                     }

@@ -883,7 +883,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
         return res.status(500).json({ error: "username is undefined" })
     }
 
-let query = 'SELECT * FROM tripsheet WHERE tripid = ? ';
+    let query = 'SELECT * FROM tripsheet WHERE tripid = ? ';
 
     db.query(query, [tripid], (err, results) => {
         if (err) {
@@ -1696,7 +1696,6 @@ router.post('/gmappost-submitForm', (req, res) => {
         console.log(results, 'resultsss');
 
         if (results.length === 0) {
-            // Only insert if no results are found
             const insertQuery = "INSERT INTO gmapdata (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             db.query(insertQuery, [date, time, Location_Alpha, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
                 if (err) {
@@ -1705,12 +1704,10 @@ router.post('/gmappost-submitForm', (req, res) => {
                 return res.status(200).json({ message: 'Form data submitted successfully' });
             });
         } else {
-            // Handle update logic or waypoint insertion if data exists
 
-            let newAlpha = Location_Alpha; // Initialize with the incoming alpha value for start or end
+            let newAlpha = Location_Alpha;
 
             if (tripType === 'waypoint') {
-                // Handle waypoint logic
                 const waypointAlphas = results?.map(row => row.Location_Alpha);
                 const latitudePoint = results?.map(row => row.Latitude);
                 const longitudePoint = results?.map(row => row.Longitude);
@@ -1782,22 +1779,81 @@ router.post('/gmappost-submitForm', (req, res) => {
                     return res.status(200).json({ message: 'Waypoint submitted successfully', Location_Alpha: newAlpha });
                 });
             } else if (tripType === 'start' || tripType === 'end') {
-                // Handle start or end trip update logic
+
+                const latitudePoint = results?.map(row => row.Latitude);
+                const longitudePoint = results?.map(row => row.Longitude);
+
+                console.log(latitudePoint, longitudePoint, 'checking', latitude, longitude);
+
+                const latitudeStr = latitude.toString();
+                const longitudeStr = longitude.toString();
+
+                const latitudeExists = latitudePoint.map(lat => lat.toString() === latitudeStr);
+                const longitudeExists = longitudePoint.some(lng => lng.toString() === longitudeStr);
+
+                console.log(latitudeExists, longitudeExists, latitudeStr, longitudeStr, 'all values');
+                if (latitudeStr !== "") {
+                    console.log('Starting deletion and insertion process');
+
+                    // First DELETE query: delete records matching latitude, longitude, and tripType
+                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? ";
+                    const deleteValues1 = [latitude, longitude];
+
+                    db.query(deleteQuery1, deleteValues1, (err, deleteResults1) => {
+                        if (err) {
+                            console.error('Database Delete Error for first query:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        console.log('First deletion successful:', deleteResults1);
+
+                        const deleteQuery2 = "DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+                        const deleteValues2 = [tripid, tripType]; // Replace "another_trip_type" with the specific type you want to delete
+
+                        db.query(deleteQuery2, deleteValues2, (err, deleteResults2) => {
+                            if (err) {
+                                console.error('Database Delete Error for second query:', err);
+                                return res.status(500).json({ error: 'Internal Server Error' });
+                            }
+                            console.log('Second deletion successful:', deleteResults2);
+
+                            // Insert the new record after both deletions are complete
+                            const insertQuery = `
+                                INSERT INTO gmapdata (Location_Alpha, date, trip_type, time, place_name, tripid, Latitude, Longitude)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                            `;
+                            const insertValues = [Location_Alpha, date, tripType, time, placeName, tripid, latitude, longitude];
+
+                            db.query(insertQuery, insertValues, (err, insertResults) => {
+                                if (err) {
+                                    console.error('Database Insert Error:', err);
+                                    return res.status(500).json({ error: 'Internal Server Error' });
+                                }
+                                console.log('Insertion successful:', insertResults);
+
+                                return res.status(200).json({ message: `${tripType} trip updated successfully with new data` });
+                            });
+                        });
+                    });
+                }
+
+
+
                 const updateQuery = `
                     UPDATE gmapdata
                     SET date = ?, time = ?, place_name = ?, Latitude = ?, Longitude = ?
                     WHERE tripid = ? AND trip_type = ?
                 `;
                 const updateValues = [date, time, placeName, latitude, longitude, tripid, tripType];
+                if (latitudeStr === "") {
+                    db.query(updateQuery, updateValues, (err, updateResults) => {
+                        if (err) {
+                            console.error('Database Update Error:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
 
-                db.query(updateQuery, updateValues, (err, updateResults) => {
-                    if (err) {
-                        console.error('Database Update Error:', err);
-                        return res.status(500).json({ error: 'Internal Server Error' });
-                    }
-
-                    return res.status(200).json({ message: `${tripType} trip updated successfully` });
-                });
+                        return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                    });
+                }
             }
         }
     });

@@ -269,11 +269,7 @@ const useDispatched = () => {
   const reversedRows = [...rows].reverse();  // to reverse 
 
   // new working code
-  const handleShow = useCallback(async () => {
-   
-
-
-    
+  const handleShow = useCallback(async () => {  
     setLoading(true)
     console.log(isStations,"Station names ")
     if (!statusvalue) {

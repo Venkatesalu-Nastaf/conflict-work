@@ -25,6 +25,7 @@ const useTripsheet = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
+        
         driverName: '',
         vehRegNo: '',
         mobileNo: '',

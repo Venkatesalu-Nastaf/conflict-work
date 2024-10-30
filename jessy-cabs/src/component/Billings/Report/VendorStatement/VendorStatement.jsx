@@ -110,7 +110,7 @@ const VendorStatement = () => {
                     }
                   />
                 </div>
-                <div className="input vehiecle-date">
+                {/* <div className="input vehiecle-date">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -125,8 +125,22 @@ const VendorStatement = () => {
                       />
                     </DemoContainer>
                   </LocalizationProvider>
+                </div> */}
+                 <div className="input vehiecle-date">
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      id="fromDate"
+                      label="From Date"
+                      value={fromDate} 
+                      onChange={(date) => setFromDate(date)} 
+                      format="DD-MM-YYYY" 
+                    />
+                  </LocalizationProvider>
                 </div>
-                <div className="input vehiecle-date">
+                {/* <div className="input vehiecle-date">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -141,6 +155,20 @@ const VendorStatement = () => {
                       />
                     </DemoContainer>
                   </LocalizationProvider>
+                </div> */}
+                  <div className="input vehiecle-date">
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        id="dateTo"
+                        label="To Date"
+                        value={toDate} 
+                        onChange={(date) => setToDate(date)} 
+                        format="DD-MM-YYYY" 
+                      />
+                    </LocalizationProvider>
                 </div>
                 <div className="input" style={{ gap: '15px' }}>
                   <div className="">

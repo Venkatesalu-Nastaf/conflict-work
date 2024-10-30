@@ -576,8 +576,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     setOpensnack(false); // Close the Snackbar
   };
 
-
-
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -586,7 +584,7 @@ const TripSheet = ({ stationName, logoImage }) => {
             <span className="Title-Name">Trip Sheet</span>
           </p>
           <div className="Tripsheet-header main-content-form">
-
+            
             <div>
               <div className='tripsheet-top-division'>
                 <span className="d-grid">
@@ -597,7 +595,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
                   // onChange={handleChange}
                   />
-                </span>
+                </span> 
 
                 <span className="d-grid">
                   <label>Billing No</label>

@@ -147,6 +147,9 @@ const TransferReport = ({ stationName }) => {
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
   const [billId, setBillId] = useState()
+  const [stateDetails, setStateDetails] = useState([]);
+  const [comparisonResult, setComparisonResult] = useState(null);
+  
   // useEffect(() => {
   //   setSelectedImageorganisation(sharedData)
   // }, [sharedData])
@@ -179,19 +182,56 @@ const TransferReport = ({ stationName }) => {
         if (!customer) return
 
         const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
-
+        
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const addressdetail = await response.json();
         setAddressDetails(addressdetail);
+        
+       
       } catch (err) {
         console.error('Error fetching customer address:', err);
       }
     };
 
     fetchdata();
+    
   }, [apiUrl, customer]);
+
+  //console.log(addressDetails,"Address detailssss ")
+
+  useEffect(() => {
+    const fetchStateDetails = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/statedetails'); // Replace with your API URL
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to fetch state details');
+            }
+
+            const data = await response.json();
+            setStateDetails(data); // Save the retrieved state details in state
+
+            console.log(data, 'State details fetched'); // Log the fetched data
+        } catch (err) {
+            setError(err.message); // Handle errors
+            console.error('Error fetching state details:', err); // Log the error for debugging
+        }
+    };
+
+   
+
+    fetchStateDetails(); // Call the fetch function when the component mounts
+   
+  
+    
+}, [customer]); // Empty dependency array ensures this runs once on mount
+
+
+ 
+
 
 
   useEffect(() => {
@@ -206,12 +246,16 @@ const TransferReport = ({ stationName }) => {
         const organizationdetails = await response.json();
         setOrganisationDetail(organizationdetails)
 
+        console.log(organizationdetails,"Organization detauillsssss")
+
+
       } catch (err) {
         console.error('Error fetching customer address:', err);
       }
     };
 
     fetchdata();
+    
   }, [apiUrl, customer]);
   useEffect(() => {
     const fetchData = async () => {
@@ -252,25 +296,59 @@ const TransferReport = ({ stationName }) => {
   }, [pdfBillList])
 
   const handleDownloadPdf = async () => {
+    
+    console.log(addressDetails[0].state,'address details of ')
+
+     
+      // const commonState = stateDetails.find(item => 
+      //     item.state === addressDetails[0].state
+          
+         
+      // );
+      // console.log(stateDetails,"State details ")
+      // console.log(commonState, "Common State");
+      // console.log(commonState.length, "Common State Length");
+
+    //   const commonState = stateDetails?.find(item => 
+    //     item.state === addressDetails[0]?.state;
+    //     setComparisonResult(commonState)
+    // );
+
+    // const commonState = stateDetails?.find(item => item.state === addressDetails[0]?.state);
+      
+
+    const commonState = stateDetails?.filter(item => item.state === addressDetails[0]?.state) || [];
+console.log(commonState);   
+     
+    console.log(stateDetails, "State details");
+    console.log(commonState, "Common State",commonState.length);
+    
+    // Check if commonState exists and log its "length"
+    // console.log(commonState ? 1 : 0, "Common State Length");
+    
+ 
+
     if (!pdfBillList) {
       setError(true)
       setErrorMessage('Select PDF Format')
       return
-    }
+    } 
 
     else if (pdfBillList === "PDF 1") {
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} commonStateAdress ={commonState} />).toBlob();
       saveAs(blob, fileName);
-      // localStorage.removeItem("selectedcustomerdata");
-      // localStorage.removeItem("selectedtripsheetid");
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
+      console.log( commonState,'Address for output')
+      setComparisonResult(commonState);
     }
     else if (pdfBillList === "PDF 2") {
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress ={commonState} />).toBlob();
       saveAs(blob, fileName);
-      // localStorage.removeItem("selectedcustomerdata");
-      // localStorage.removeItem("selectedtripsheetid");
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
     }
 
   }

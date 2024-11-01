@@ -6,7 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import {Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { UnderGroup, states, Customertype, Select } from "../Customer/Customerdata";
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -49,6 +50,7 @@ const columns = [
   { field: "stationid", headerName: "Station_Id", width: 80 },
   { field: "gstno", headerName: "GST No", width: 130 },
   { field: "Stationname", headerName: "Station_Name", width: 120 },
+  { field: "state", headerName: "State", width: 120 },
   { field: "active", headerName: "Active", width: 60 },
   { field: "shortname", headerName: "Station", width: 100 },
   { field: "ownbranch", headerName: "Own Branch", width: 100 },
@@ -155,7 +157,7 @@ const StationCreation = () => {
                 </div>
 
 
-                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                {/* <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
@@ -163,14 +165,45 @@ const StationCreation = () => {
                     margin="normal"
                     size="small"
                     id="short-name"
-                    label="Short Name"
+                    label="State Name"
                     sx={{ m: 1, width: "200ch" }}
                     name="shortname"
                     value={selectedCustomerData?.shortname || book.shortname}
                     autoComplete="new-password"
                     onChange={handleChange}
                   />
-                </div>
+                </div> */}
+                 <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+      <div className="icone">
+        <ListAltIcon color="action" />
+      </div>
+      <Autocomplete
+        fullWidth
+        size="small"
+        id="state-autocomplete"
+        freeSolo
+        value={selectedCustomerData?.states || book.states}
+        options={states.map((option) => ({
+          label: option.state,
+        }))}
+        getOptionLabel={(option) => option.label || ""}
+        onChange={(event, value) => handleChange({
+          target: { name: "state", value: value ? value.label : "" }
+        })}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="State Name"
+            margin="normal"
+             size="small"
+            sx={{ m: 1, width: "200px" }}
+            name="state"
+            autoComplete="new-password"
+            onChange={handleChange}
+          />
+        )}
+      />
+    </div>
                 <div className='input' style={{ paddingRight: '15px' }}>
                   <div className='icone'>
                     <AddHomeWorkIcon color='action' />

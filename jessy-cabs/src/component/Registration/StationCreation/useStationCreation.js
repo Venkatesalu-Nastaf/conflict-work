@@ -45,6 +45,7 @@ const useStationCreation = () => {
         // stationid: '',
         Stationname: '',
         shortname: '',
+        state:'',
         active: '',
         ownbranch: '',
         address: '',
@@ -81,6 +82,7 @@ const useStationCreation = () => {
             ...prevBook,
             // stationid: '',
             Stationname: '',
+            state:'',
             shortname: '',
             active: '',
             ownbranch: '',
@@ -139,6 +141,7 @@ const useStationCreation = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
+        console.log(customerData,"Customer data")
     }, []);
 
     const handleAdd = async () => {
@@ -172,6 +175,7 @@ const useStationCreation = () => {
             if (error.message ) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
+                console.log(book,'Datas of stations')
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);
@@ -235,12 +239,15 @@ const useStationCreation = () => {
                     id: index + 1,
                 }));
                 setRows(rowsWithUniqueId);
+                console.log(data,"Station Dtaaaytaa")
             } else {
                 setRows([]);
             }
         }
+      
         handlelist();
     }, [apiUrl,rows]);
+
 
     const handleClick = async (event, actionName, stationid) => {
         event.preventDefault();

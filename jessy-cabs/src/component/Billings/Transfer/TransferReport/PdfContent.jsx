@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images }) => {
+const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images ,customStateDetails}) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -270,6 +270,26 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const organizationname = customer
   const organisationdetailfill = organisationdetails
   const organisationimage = images
+  const newStateforpdf = customStateDetails
+  // console.log(customStateDetails,'custommm');
+//   console.log(newStateforpdf,'Custom state datas ',newStateforpdf.length)
+//   console.log(newStateforpdf[0]?.Stationname,'Custom state stationname ')
+//   console.log(newStateforpdf.address,'Custom state address')
+//   console.log(newStateforpdf.gstno,'Custom state gstno ')
+
+ 
+//   if (newStateforpdf) {
+    
+//     if (newStateforpdf.length === 0) {
+//         console.log("newStateforpdf is empty");
+//     } else {
+//         console.log("newStateforpdf is not empty, length:", newStateforpdf.length);
+//     }
+// } else {
+//     console.log("newStateforpdf is null or undefined.");
+// }
+
+  
   const apiUrl = APIURL;
 
   useEffect(() => {
@@ -361,12 +381,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
             <View style={styles.borderoutsite}>
               <View style={styles.section}>
                 <View style={styles.headingsection}>
-                  <View>
+                  {/* <View> */}
                     {/* <Text style={styles.text1}> JESSY CABS</Text>
                     <Text style={styles.text2}> No:8/7, 11th Street,Nandanam(Extn.)</Text>
                     <Text style={styles.text2}> Nadanam,Chennai-600 035</Text>
                     <Text style={styles.text2}> booking@jessycabs.in</Text> */}
-                    <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+
+                    {/* <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
                     <Text style={[styles.text2, { fontSize: 11.5 }]}>
                       {organisationdetailfill[0].addressLine1}
                     </Text>
@@ -376,7 +397,45 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={[styles.text2, { fontSize: 11.5 }]}>
                       {organisationdetailfill[0].contactEmail}
                     </Text>
-                  </View>
+                    
+                    
+                  </View> */}
+
+
+                    <View>
+                      {newStateforpdf && newStateforpdf.length > 0 ? (
+                        // Render this view if newStateforpdf has values
+                        
+                        <>
+                          <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {newStateforpdf[0]?.address }
+                          </Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {newStateforpdf[0]?.Stationname }
+                          </Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {organisationdetailfill[0].contactEmail}
+                          </Text>
+                        </>
+                      ) : (
+                        // Render this view if newStateforpdf is null or empty
+                        <>
+                          <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {organisationdetailfill[0]?.addressLine1}
+                          </Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {organisationdetailfill[0]?.location}
+                          </Text>
+                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                            {organisationdetailfill[0]?.contactEmail}
+                          </Text>
+                        </>
+                      )}
+                    </View>
+
+
                   <View style={styles.logodiv}>
                     {/* <Image src={Logo} style={styles.logo} /> */}
                     {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
@@ -392,9 +451,16 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   </View>
                   <View>
                     {/* <Text style={styles.gstno}>GSTIN:33AALCC0190M1ZK</Text> */}
+                    {newStateforpdf && newStateforpdf.length > 0 ? (
+                       <Text style={[styles.gstno, { fontSize: 10 }]}>
+                       GSTIN: {newStateforpdf[0]?.gstno}
+                     </Text>
+                    ):(
                       <Text style={[styles.gstno, { fontSize: 10 }]}>
                       GSTIN: {organisationdetailfill[0].gstnumber}
                     </Text>
+                    )
+                  }
                   </View>
                 </View>
                 <View style={styles.taxinvoice}>

@@ -140,6 +140,16 @@ const useCoversubmit = () => {
     const handleShow = async () => {
         const startDate = dayjs(fromDate).format('YYYY-MM-DD')
         const endDate = dayjs(toDate).format('YYYY-MM-DD')
+        if (!customer) {
+            setError(true)
+            setErrorMessage('Select a Orgaization')
+            return
+          } 
+          if (!servicestation) {
+            setError(true)
+            setErrorMessage('Select a Station')
+            return
+          } 
         if (servicestation === "" || servicestation === "All") {
             try {
                 const response = await axios.get(`${apiUrl}/ListDetails`,

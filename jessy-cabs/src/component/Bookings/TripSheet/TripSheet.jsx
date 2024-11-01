@@ -557,13 +557,12 @@ const TripSheet = ({ stationName, logoImage }) => {
   const handleClosemodal = () => setOpenmodal(false);
 
   const handleOk = () => {
-    // Handle the OK button action here
+    handleDeleteMap()
     console.log('OK button clicked');
     handleClosemodal();
   };
 
   const handleCancel = () => {
-    // Handle the Cancel button action here
     console.log('Cancel button clicked');
     handleClosemodal();
   };
@@ -2014,7 +2013,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             >
                               <Box display="flex" justifyContent="space-between" alignItems="center">
                                 <Typography id="modal-title" variant="h6" component="h2">
-                                  Modal Title
+                                  DELETE MAP
                                 </Typography>
                                 <IconButton onClick={handleClosemodal}>
                                   <CloseIcon />
@@ -2022,7 +2021,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </Box>
 
                               <Typography id="modal-description" sx={{ mt: 2 }}>
-                                This is the content of the modal.
+                                Are You Sure Want To Delete ?
                               </Typography>
 
                               <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>

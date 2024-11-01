@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer, useJsApiLoader, Polygon, Polyline, Circle } from '@react-google-maps/api';
 import axios from 'axios';
 import "./EditMapComponent.css"
 import { APIURL } from '../../../url';
@@ -62,6 +62,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [address, setAddress] = useState('');
   const [mapInstance, setMapInstance] = useState(null);
   const [center, setCenter] = useState({ lat: 22.00, lng: 77.00 }); // India's initial center
+  const [polygonPath, setPolygonPath] = useState([]);
+  const [polylinePath, setPolylinePath] = useState([])
+  const [markerPosition, setMarkerPosition] = useState(null); // Store single marker position
 
   const [mapContent, setMapContent] = useState({
     tripid: '',
@@ -365,7 +368,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Set clicked point with lat and lng
     setClickedPoint({ lat, lng });
     getPlaceName(lat, lng); // Fetch place name using Geocoding
-
+    setPolygonPath([])
+    setMarkerPosition(null)
+    setPolylinePath([])
 
     setPopupOpen(true);
   };
@@ -650,6 +655,10 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
   const handleChanges = (newAddress) => {
     setAddress(newAddress);
+    setPolygonPath([])
+    setPolylinePath([])
+    setMarkerPosition(null)
+
   };
 
   const submitPopup = (latLng) => {
@@ -687,6 +696,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   // };
 
   const handleSelect = async (address) => {
+    console.log(address, 'newaddress');
+    setAddress(address);
+
     const geocoder = new window.google.maps.Geocoder();
 
     try {
@@ -695,20 +707,43 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           if (status === 'OK' && results && results.length > 0) {
             resolve(results);
           } else {
-            reject(new Error(`Geocode failed: ${status}`)); // Include status in error
+            reject(new Error(`Geocode failed: ${status}`));
           }
         });
       });
 
       if (results[0].geometry && results[0].geometry.location) {
         const latLng = results[0].geometry.location;
-        const lat = latLng.lat(); // Get latitude
-        const lng = latLng.lng(); // Get longitude
+        const lat = latLng.lat();
+        const lng = latLng.lng();
 
         if (mapInstance) {
           mapInstance.setCenter({ lat, lng });
-          mapInstance.setZoom(18); // Set to desired zoom level
-          submitPopup({ lat, lng }); // Pass the correct lat/lng values
+          mapInstance.setZoom(16); // Set desired zoom level
+          submitPopup({ lat, lng });
+          setMarkerPosition({ lat, lng }); // Set marker position to the geocoded location
+
+          const bounds = results[0].geometry.bounds;
+          if (bounds) {
+            const ne = bounds.getNorthEast();
+            const sw = bounds.getSouthWest();
+
+            // Define polyline path for dotted line around bounds
+            const path = [
+              { lat: ne.lat(), lng: ne.lng() },
+              { lat: ne.lat(), lng: sw.lng() },
+              { lat: sw.lat(), lng: sw.lng() },
+              { lat: sw.lat(), lng: ne.lng() },
+              { lat: ne.lat(), lng: ne.lng() } // Close the path
+            ];
+
+            console.log("Setting polyline path:", path);
+            setPolylinePath(path);
+
+            mapInstance.setZoom(13)
+          } else {
+            console.log("Bounds not available");
+          }
         } else {
           console.log("Map instance not available");
         }
@@ -729,14 +764,14 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div className="search-input-field">
+          <div className="search-input-field" style={{ position: "relative", zIndex: "999" }}>
             <input
               {...getInputProps({
                 placeholder: 'Enter location',
               })}
               className="search-input"
             />
-            <div>
+            <div className={suggestions.length > 0 ? 'suggestion-box' : ''}>
               {suggestions.map((suggestion, index) => (
                 <div key={index} {...getSuggestionItemProps(suggestion)}>
                   {suggestion.description}
@@ -759,6 +794,47 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           fitBoundsToMarkers(map);
         }}
       >
+        {/* {polygonPath.length > 0 && (
+          <Polygon
+            onClick={handleMapClick}
+            paths={polygonPath}
+            options={{
+              // fillColor: "#FF0000",
+              // fillOpacity: 0.3,
+              // strokeColor: "#FF0000",
+              // strokeOpacity: 0.8,
+              strokeWeight: 0.2,
+            }}
+          />
+        )} */}
+        {polylinePath.length > 0 && (
+          <Polyline
+            path={polylinePath}
+            options={{
+              // strokeColor: "#000000", 
+              // strokeOpacity: 1, 
+              // strokeWeight: 2,
+          
+              // Add dashed line pattern using icons
+              icons: [
+                {
+                  icon: {
+                    path: "M 0,-1 0,1", // Creates a dash segment
+                    strokeOpacity: 1,
+                    scale: 2, // Adjust size of dashes
+                  },
+                  offset: "0",
+                  repeat: "20px", // Controls spacing between dashes
+                },
+              ],
+            }}
+          />
+        )}
+        {markerPosition !== "" || markerPosition !== null ? <Marker
+          position={markerPosition}
+          onClick={handleMapClick}
+        /> : ""
+        }
         {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
         {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
         {directions === null && wayRoutes?.map((point, index) => (
@@ -823,7 +899,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                     value={mapContent.time}
                     onChange={handletimeChange}
                     required
-                    style={{ border: '1px solid' }}
+                    style={{ border: '1px solid', }}
                   />
                 </div>
                 {/* </FormControl> */}

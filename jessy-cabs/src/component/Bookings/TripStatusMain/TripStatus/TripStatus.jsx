@@ -325,7 +325,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        <div className="SpeedDial">
+        {/* <div className="SpeedDial">
           <Box className='common-speed-dail'>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -348,7 +348,7 @@ useEffect(() => {
               />
             </StyledSpeedDial>
           </Box>
-        </div>
+        </div> */}
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (

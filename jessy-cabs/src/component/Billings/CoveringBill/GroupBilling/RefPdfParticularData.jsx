@@ -4,6 +4,7 @@ import generatePDF from 'react-to-pdf';
 import useGroupbilling from "./useGroupbilling";
 // import { APIURL } from "../../../url";
 import numWords from 'num-words'
+import dayjs from 'dayjs';
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
 import { green } from "@mui/material/colors";
 
@@ -162,10 +163,11 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="Datediv">
-                    <p>From: <span className="Datetext">{FromDate}</span></p>
-                    <p>To: <span className="Datetext">{ToDate}</span></p>
-                </div>
+                    {/* <p>From: <span className="Datetext">{FromDate}</span></p> */}
+                    <p>From: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
 
+                    <p>To: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
+                </div>
                 <div>
                     <table className="table-ref">
                         <thead>

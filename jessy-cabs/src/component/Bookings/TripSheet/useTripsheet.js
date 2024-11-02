@@ -43,6 +43,7 @@ const useTripsheet = () => {
     const [formData, setFormData] = useState({});  ////-------------
     const [calcCheck, setCalcCheck] = useState(false);
     const location = useLocation();
+    const [selectedStatus, setSelectedStatus] = useState('Opened');
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
     const [additionalTime, setAdditionalTime] = useState('');
@@ -1366,7 +1367,9 @@ const useTripsheet = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-
+    
+        setSelectedStatus(value?.label || 'Opened');
+    
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -1387,15 +1390,15 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
-
+    
         // if (!lockdata) {
         //     setVendorinfodata((prevValues) => ({
         //         ...prevValues,
         //         [name]: selectedOption,
-        //     }))
+        //     }));
         // }
     };
-
+    
     const travelsdatafetch = async (travelsnamedata) => {
         try {
             const response = await axios.get(`${apiUrl}/travelsnamedetailfetch/${travelsnamedata}`)
@@ -2741,7 +2744,7 @@ const useTripsheet = () => {
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
 
-
+                
             try {
                 setManualMarkTrigger(!manualMarkTrigger)
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
@@ -2762,6 +2765,8 @@ const useTripsheet = () => {
                             const { duty, shedInDate, reporttime, shedintime, shedout, shedin, remark, vehicleName, ...restdatavendor } = bookingDetails
                             setSelectedCustomerData(bookingDetails);
                             setSelectedCustomerId(bookingDetails.tripid);
+                            setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
+
                             if (!lockdata) {
 
 
@@ -4542,6 +4547,8 @@ const useTripsheet = () => {
         // generateLink,
         selectedRow,
         imageUrl,
+        selectedStatus,
+        setSelectedStatus,
         link,
         isSignatureSubmitted, checkCloseKM,
         isEditMode,

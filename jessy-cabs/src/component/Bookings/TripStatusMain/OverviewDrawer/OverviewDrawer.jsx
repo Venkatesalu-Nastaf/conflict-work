@@ -336,30 +336,6 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               </div>
             </div>
           </div>
-          <div className="SpeedDial">
-            <Box className='common-speed-dail'>
-              <StyledSpeedDial
-                ariaLabel="SpeedDial playground example"
-                icon={<SpeedDialIcon />}
-                direction="left"
-              >
-                {TripStatus_read === 1 && (
-                  <SpeedDialAction
-                    key="list"
-                    icon={<ChecklistIcon />}
-                    tooltipTitle="List"
-                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
-                  />
-                )}
-                <SpeedDialAction
-                  key="Cancel"
-                  icon={<CancelPresentationIcon />}
-                  tooltipTitle="Cancel"
-                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
-                />
-              </StyledSpeedDial>
-            </Box>
-          </div>
           {/* <div className="SpeedDial">
             <Box className='common-speed-dail'>
               <StyledSpeedDial

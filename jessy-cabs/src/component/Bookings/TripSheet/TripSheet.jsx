@@ -3158,8 +3158,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => {
-                          handleAutocompleteChange(event, value, "vehicleName")
-                          if (!lockdata) {
+                          handleAutocompleteChange(event, value,"vehicleName");
+                          if (!lockdata && value) {
                             setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
                           }
                         }}
@@ -3171,7 +3171,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <TextField {...params} label="Rate For" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
                         )}
                       />
-
                     </div>
 
                     <div className="input">
@@ -3280,8 +3279,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>
                   {selectedStatus === "Temporary Closed" && (      
-                  <div>
-                              <p className='bill-topi'style={{paddingBottom:'25px',paddingLeft:'250px',fontWeight: 600,fontSize:'22px'}}>Vendor Info</p>
+                  <div className='box-Container'>
+                              <div className='bill-topi'style={{paddingBottom:'6px',paddingLeft:'250px',fontWeight: 600,fontSize:'20px',}}>Vendor Info</div>
                               <div className="input-field tripsheet-vendor-info-first-input-field">
                                 <div className="input-g">
                                   <Autocomplete
@@ -3502,7 +3501,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     size="small"
                                     sx={{ my: 1, width: "100%" }}
                                   />
-                                </div>
+                                </div>  
                               </div>
                               <div className="input-field">
                                 <div className="input-g">

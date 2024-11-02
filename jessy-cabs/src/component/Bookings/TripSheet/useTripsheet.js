@@ -1367,9 +1367,11 @@ const useTripsheet = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-    
-        setSelectedStatus(value?.label || 'Opened');
-    
+        
+        if (name === "status") { // Or any specific criteria
+            setSelectedStatus(selectedOption || 'Opened');
+        }
+        
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -1391,6 +1393,7 @@ const useTripsheet = () => {
             [name]: selectedOption,
         }));
     
+        // Uncomment if you want to control VendorInfo visibility based on `lockdata`
         // if (!lockdata) {
         //     setVendorinfodata((prevValues) => ({
         //         ...prevValues,

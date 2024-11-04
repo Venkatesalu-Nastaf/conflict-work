@@ -33,9 +33,11 @@ const useGstReport = () => {
 
     const columns = [
         { field: 'id', headerName: 'Sno', width: 70 },
+        { field: "", headerName: "Invoice No", width: 130 },
+        { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
         { field: 'billingno', headerName: 'Bill No', width: 90 },
-        { field: 'billdate', headerName: 'Bill Date', width: 130 },
-        { field: 'tripsheetdate', headerName: 'Trip Date', width: 130 },
+        { field: 'billdate', headerName: 'Bill Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
+        { field: 'tripsheetdate', headerName: 'Trip Date', width: 130 ,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY')},
         { field: 'customer', headerName: 'Customer Name', width: 130 },
         { field: 'gstNumber', headerName: 'GSTIN', width: 130 },
         { field: 'totalcalcAmount', headerName: 'GROSS', width: 130 },
@@ -43,6 +45,7 @@ const useGstReport = () => {
         { field: 'cgst', headerName: 'CGST', width: 130 },
         { field: 'sgst', headerName: 'SGST', width: 130 },
         { field: 'igst', headerName: 'IGST', width: 130 },
+        { field: "Trips", headerName: "Trip No", width: 130 },
         { field: 'billed', headerName: 'Billed', width: 130 },
     ];
 
@@ -99,6 +102,8 @@ const useGstReport = () => {
             // Define column widths
             const columnWidths = {
                 id: 10,
+                Invoice_no:20,
+                invoicedate:20,
                 billingno: 20,
                 billdate: 20,
                 tripsheetdate: 20,
@@ -109,6 +114,7 @@ const useGstReport = () => {
                 cgst: 15,
                 sgst: 15,
                 igst: 15,
+                Trips:20,
                 billed: 10
             };
 
@@ -138,6 +144,8 @@ const useGstReport = () => {
             rows.forEach(row => {
                 const newRow = worksheet.addRow({
                     id: row.id,
+                    Invoice_no: row.Invoice_no,
+                    invoicedate: row.invoicedate,
                     billingno: row.billingno,
                     billdate: row.billdate,
                     tripsheetdate: row.tripsheetdate,
@@ -148,6 +156,7 @@ const useGstReport = () => {
                     cgst: row.cgst,
                     sgst: row.sgst,
                     igst: row.igst,
+                    Trips:row.Trips,
                     billed: row.billed
                 });
 
@@ -166,6 +175,8 @@ const useGstReport = () => {
             // Add totals row at the bottom
             const totalsRow = worksheet.addRow({
                 id: '',
+                Invoice_no: '',
+                invoicedate: '',
                 billingno: '',
                 billdate: '',
                 tripsheetdate: '',
@@ -176,6 +187,7 @@ const useGstReport = () => {
                 cgst: totalCGST,
                 sgst: totalSGST,
                 igst: '',
+                Trips:'',
                 billed: ''
             });
 
@@ -221,8 +233,8 @@ const useGstReport = () => {
 
         // Map the rows to the format needed for autoTable
         const tableRows = rows.map(row => [
-            row.id, row.billingno, row.billdate, row.tripsheetdate, row.customer,
-            row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.billed
+            row.id, row.Invoice_no, row.invoicedate,row.billingno, row.billdate, row.tripsheetdate, row.customer,
+            row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.Trips,row.billed
         ]);
 
         // Add the total row to the end of the table rows
@@ -290,7 +302,6 @@ const useGstReport = () => {
             setErrorMessage('Please Enter the Customer.')
             return
         }
-
         try {
             const response = await axios.get(`${apiUrl}/getAllBilledDetails`, {
                 params: gstReport
@@ -354,7 +365,7 @@ const useGstReport = () => {
                     ...item,
                     id: index + 1,
                     billdate: billdate,
-                    tripsheetdate: dayjs(item.tripsheetdate).format('YYYY-MM-DD'),
+                    tripsheetdate: dayjs(item.tripsheetdate).format('DD-MM-YYYY'),
                     billed: "Yes",
                     gstNumber: customerDetails.gstNumber || '',
                     gstTax: Math.round(gstTax),
@@ -436,15 +447,15 @@ const useGstReport = () => {
             // Combine coveringBilledResults and transferBilledResults into a single array
             const combinedData = [
                 ...coveringBilledResults.map(item => ({
-                    billdate: dayjs(item.InvoiceDate).format('YYYY-MM-DD'),
+                    billdate: dayjs(item.InvoiceDate).format('DD-MM-YYYY'),
                     customer: item.Customer,
                 })),
                 ...transferBilledResults.map(item => ({
-                    billdate: dayjs(item.Billdate).format('YYYY-MM-DD'),
+                    billdate: dayjs(item.Billdate).format('DD-MM-YYYY'),
                     customer: item.Organization_name,
                 })),
                 ...individualBilledResults.map(item => ({
-                    billdate: dayjs(item.Bill_Date).format('YYYY-MM-DD'),
+                    billdate: dayjs(item.Bill_Date).format('DD-MM-YYYY'),
                     customer: item.Customer,
                 }))
             ];

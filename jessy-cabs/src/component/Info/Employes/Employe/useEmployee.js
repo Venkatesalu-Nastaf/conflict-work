@@ -427,9 +427,28 @@ const useEmployee = () => {
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             handleList();
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to ADD Employee Data");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to ADD Employee Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add Employee Data: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -525,9 +544,28 @@ const useEmployee = () => {
                 setError(true);
                 setErrorMessage("no data found")
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to Retrieve Data")
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to Retrieve Data")
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Retrieve Data: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 

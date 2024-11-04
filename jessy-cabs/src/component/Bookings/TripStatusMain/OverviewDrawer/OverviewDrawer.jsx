@@ -124,7 +124,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     imageDetails,
     setImageDetails,
     setLoading,
-    loading
+    loading,isStations,setisStations
 
 
   } = useOverviewDrawer();
@@ -141,6 +141,12 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
       setAllCustomer(customer)
     }
   })
+  useEffect(() => {
+
+    if (stationName?.length > 0) {
+      setisStations(stationName)
+    }
+  }, [stationName])
 
   const CustomNoRowsOverlay = () => (
     <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -329,30 +335,6 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
               </div>
             </div>
-          </div>
-          <div className="SpeedDial">
-            <Box className='common-speed-dail'>
-              <StyledSpeedDial
-                ariaLabel="SpeedDial playground example"
-                icon={<SpeedDialIcon />}
-                direction="left"
-              >
-                {TripStatus_read === 1 && (
-                  <SpeedDialAction
-                    key="list"
-                    icon={<ChecklistIcon />}
-                    tooltipTitle="List"
-                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
-                  />
-                )}
-                <SpeedDialAction
-                  key="Cancel"
-                  icon={<CancelPresentationIcon />}
-                  tooltipTitle="Cancel"
-                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
-                />
-              </StyledSpeedDial>
-            </Box>
           </div>
           {/* <div className="SpeedDial">
             <Box className='common-speed-dail'>

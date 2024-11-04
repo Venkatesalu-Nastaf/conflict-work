@@ -194,6 +194,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     setBook,
     setFormData,
     setSelectedCustomerData,
+    selectedStatus,
+    setSelectedStatus, 
     setCloseTime,
     organizationdata,
     popupOpen,
@@ -398,7 +400,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }
 
+  // Map PopUp Close
+  const mapPopUpbox = localStorage.getItem('MapBoxClose');
 
+  useEffect(() => {
+    if (mapPopUpbox === '1') {
+      setMapPopUp(false)
+      localStorage.removeItem('MapBoxClose')
+    }
+  }, [mapPopUpbox])
 
   const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
@@ -549,13 +559,12 @@ const TripSheet = ({ stationName, logoImage }) => {
   const handleClosemodal = () => setOpenmodal(false);
 
   const handleOk = () => {
-    // Handle the OK button action here
+    handleDeleteMap()
     console.log('OK button clicked');
     handleClosemodal();
   };
 
   const handleCancel = () => {
-    // Handle the Cancel button action here
     console.log('Cancel button clicked');
     handleClosemodal();
   };
@@ -576,8 +585,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     setOpensnack(false); // Close the Snackbar
   };
 
-
-
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -586,7 +593,7 @@ const TripSheet = ({ stationName, logoImage }) => {
             <span className="Title-Name">Trip Sheet</span>
           </p>
           <div className="Tripsheet-header main-content-form">
-
+            
             <div>
               <div className='tripsheet-top-division'>
                 <span className="d-grid">
@@ -597,7 +604,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
                   // onChange={handleChange}
                   />
-                </span>
+                </span> 
 
                 <span className="d-grid">
                   <label>Billing No</label>
@@ -1744,7 +1751,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             },
                           }}
                         >
-                          {billing_read ? <Tab>Bill cccc</Tab> : <> </>}
+                          {billing_read ? <Tab>Bill</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
@@ -1894,7 +1901,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button disabled={!Tripsheet_modify} onClick={handleButtonClick} variant='outlined' className='full-width'>Manual Marking</Button>
                                   </div> */}
                                   <div className="input">
-                                    {manualTripID.length ?
+                                    {manualTripID.length > 0 ?
                                       <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
                                       <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
                                     }
@@ -2008,7 +2015,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             >
                               <Box display="flex" justifyContent="space-between" alignItems="center">
                                 <Typography id="modal-title" variant="h6" component="h2">
-                                  Modal Title
+                                  DELETE MAP
                                 </Typography>
                                 <IconButton onClick={handleClosemodal}>
                                   <CloseIcon />
@@ -2016,7 +2023,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </Box>
 
                               <Typography id="modal-description" sx={{ mt: 2 }}>
-                                This is the content of the modal.
+                                Are You Sure Want To Delete ?
                               </Typography>
 
                               <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
@@ -3151,8 +3158,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => {
-                          handleAutocompleteChange(event, value, "vehicleName")
-                          if (!lockdata) {
+                          handleAutocompleteChange(event, value,"vehicleName");
+                          if (!lockdata && value) {
                             setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
                           }
                         }}
@@ -3164,7 +3171,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <TextField {...params} label="Rate For" autoComplete="password" name="vehicleName" inputRef={params.inputRef} />
                         )}
                       />
-
                     </div>
 
                     <div className="input">
@@ -3272,45 +3278,287 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
+                  {selectedStatus === "Temporary Closed" && (      
+                  <div className='box-Container'>
+                              <div className='bill-topi'style={{paddingBottom:'6px',paddingLeft:'250px',fontWeight: 600,fontSize:'20px',}}>Vendor Info</div>
+                              <div className="input-field tripsheet-vendor-info-first-input-field">
+                                <div className="input-g">
+                                  <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    id="free-solo-vendor_vehicle"
+                                    freeSolo
+                                    onChange={(event, value) => {
+                                      if (lockdata) {
+                                        handleAutocompleteVendor(event, value, "vendor_vehicle");
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    value={vendorinfo?.vendor_vehicle}
+                                    options={vehileNames?.map((option) => ({
+                                      label: option,
+                                    }))}
+                                    renderInput={(params) => (
+                                      <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
+                                    )}
+                                  />
+                                </div>
+                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    id="free-solo-duty"
+                                    freeSolo
+                                    sx={{ width: "100%" }}
+                                    onChange={(event, value) => {
+                                      if (lockdata) {
+                                        handleAutocompleteVendor(event, value, "vendor_duty")
+                                      } else {
+                                        setWarning(true);
+                                        setWarningMessage("IS not locked,locked Enter Again");
+                                      }
+                                    }}
+                                    value={vendorinfo?.vendor_duty}
+                                    options={Duty.map((option) => ({
+                                      label: option.option,
+                                    }))}
+                                    renderInput={(params) => {
+                                      return (
+                                        <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
+                                      )
+                                    }
+                                    }
+                                  />
+                                </div>
+
+                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                  <Checkbox
+                                    size="small"
+                                    checked={lockdata}
+                                    onChange={(event) => setLockData(event.target.checked)}
+                                  />
+                                  <p style={{ margin: "0px" }}>Lock</p>
+                                </div>
+                              </div>
+                              <div className="input-field" style={{ marginTop: '15px' }}>
+                                <div className="input-g" >
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                      label="StartDate"
+                                      id="vendorshedOutDate"
+                                      // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                      value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                                      format="DD/MM/YYYY"
+                                      // onChange={(date) => {
+                                      onChange={(date) => {
+                                        if (lockdata) {
+                                          handleDatevendorChange(date, 'vendorshedOutDate')
+                                        } else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
+                                      }}
+                                    >
+                                      {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} />
+                                      )}
+                                    </DatePicker>
+                                  </LocalizationProvider>
+
+                                </div>
+                                <div className="input-g">
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                      label="CloseDate"
+                                      id="vendorshedInDate"
+
+
+                                      // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                      value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                                      format="DD/MM/YYYY"
+                                      // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                                      onChange={(date) => {
+                                        if (lockdata) {
+                                          handleDatevendorChange(date, 'vendorshedInDate')
+                                        } else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
+                                      }}
+                                    >
+                                      {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} />
+                                      )}
+                                    </DatePicker>
+                                  </LocalizationProvider>
+                                </div>
+
+                                <div className="input-g">
+                                  <TextField
+                                    name="vendortotaldays"
+                                    value={calculatevendorTotalDays()}
+                                    label="Total Days"
+                                    size="small"
+                                    type="number"
+                                    id="totaldays"
+                                    sx={{ width: "100%" }}
+                                  />
+                                </div>
+
+                              </div>
+                              <div className="input-field" style={{ marginBottom: '10px' }}>
+                                <div className="input-g">
+                                  <div className='input-g'>
+                                    <div className='full-width' style={{ display: 'grid' }}>
+                                      <label>Start Time</label>
+                                      <input
+                                        type="time"
+                                        name="venodrreporttime"
+                                        value={vendorinfo?.vendorreporttime}
+                                        onChange={(event) => {
+                                          if (lockdata) {
+                                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+
+                                        style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                                      // }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="input-g">
+                                  <div className='closetime tripsheet-shed-in-time'>
+                                    <label>Close Time</label>
+
+                                    <input
+                                      type="time"
+                                      name="vendorshedintime"
+                                      value={vendorinfo?.vendorshedintime}
+                                      onChange={(event) => {
+                                        if (lockdata) {
+                                          setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                        }
+                                        else {
+                                          setWarning(true);
+                                          setWarningMessage("IS not locked,locked Enter Again");
+                                        }
+                                      }
+                                      }
+                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="input-g">
+                                  <TextField
+                                    name="vendorTotaltime"
+                                    value={calculatevendorTotalTime() || ""}
+                                    label="Total Time"
+                                    id="pack5"
+                                    size="small"
+                                    sx={{ width: "100%" }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="input-field">
+
+                                <div className="input-g" >
+                                  <TextField
+                                    name="vendorshedoutkm"
+                                    value={vendorinfo?.vendorshedoutkm || ""}
+                                    onChange={handlevendorinfofata}
+                                    label="starting Kilometers"
+                                    id="vendorshedoutkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+                                                                                                
+                                <div className="input-g" >
+                                  <TextField
+                                    name="vendorshedinkm"
+                                    value={vendorinfo?.vendorshedinkm || ""}
+                                    label="closing Kilometers"
+                                    onChange={handlevendorinfofata}
+                                    id="vendorshedinkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+                                <div className="input-g" >
+                                  <TextField
+                                    name="vendortotalkm"
+                                    value={calculatevendorTotalKilometers() || ''}
+                                    label="Total kilometers"
+                                    id="vendortotalkm"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>  
+                              </div>
+                              <div className="input-field">
+                                <div className="input-g">
+                                  <TextField
+                                    name="vendorRemarks"
+                                    value={vendorinfo?.vendorRemarks || ""}
+                                    onChange={handlevendorinfofata}
+                                    label="Remarks"
+                                    id="vendorRemarks"
+                                    size="small"
+                                    sx={{ my: 1, width: "100%" }}
+                                  />
+                                </div>
+                                <div className="input-g">
+                                  <Button
+                                    variant='contained'
+                                    onClick={handleVendorcalc}
+                                    disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
+                                  >
+                                    Update
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                  )}
+
                   <div>
-                    <div class="tripsheet-table1">
-                      <table class="table-condensed table-striped fixed_header">
-                        <thead class="BI_tablehead">
-                          <tr>
-                            <th className="table-head-booking table-heading-1"> Driver name</th>
-                            {/* <th className="table-head-booking">Driver phone</th> */}
-                            <th className="table-head-booking">Vehicle Name</th>
-                            {/* <th className="table-head-booking">Vehicle Type</th> */}
-                            <th className="table-head-booking">Vehicle Reg No</th>
-                            {/* <th className="table-head-booking">HireTypes</th> */}
-                            {/* <th className="table-head-booking">Grouphs</th> */}
-                            {/* <th className="table-head-booking">Active</th> */}
-                            <th className="table-head-booking">Travels Name</th>
-                          </tr>
-                        </thead>
-                        <tbody class="BI_tablebody Scroll-Style">
-                          {driverdetails.length === 0 ? (
-                            <tr>
-                              <td colSpan={7}>No data available.</td>
-                            </tr>
-                          ) : (
-                            driverdetails.map((row) => (
-                              <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                <td>{row.driverName}</td>
-                                {/* <td>{row.mobileNo}</td> */}
-                                <td>{row.vehicleName}</td>
-                                {/* <td>{row.vechtype}</td> */}
-                                <td>{row.vehRegNo}</td>
-                                {/* <td>{row.hiretypes}</td> */}
-                                {/* <td>{row.Groups}</td> */}
-                                {/* <td>{row.active}</td> */}
-                                <td>{row.travelsname}</td>
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
+                  {selectedStatus !== "Temporary Closed" && (
+  <div className="tripsheet-table1">
+    <table className="table-condensed table-striped fixed_header">
+      <thead className="BI_tablehead">
+        <tr>
+          <th className="table-head-booking table-heading-1">Driver name</th>
+          <th className="table-head-booking">Vehicle Name</th>
+          <th className="table-head-booking">Vehicle Reg No</th>
+          <th className="table-head-booking">Travels Name</th>
+        </tr>
+      </thead>
+      <tbody className="BI_tablebody Scroll-Style">
+        {driverdetails.length === 0 ? (
+          <tr>
+            <td colSpan={4}>No data available.</td>
+          </tr>
+        ) : (
+          driverdetails.map((row) => (
+            <tr key={row.id} onClick={() => handleRowClick(row)}>
+              <td>{row.driverName}</td>
+              <td>{row.vehicleName}</td>
+              <td>{row.vehRegNo}</td>
+              <td>{row.travelsname}</td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+)}
                   </div>
                 </div>
               </div>

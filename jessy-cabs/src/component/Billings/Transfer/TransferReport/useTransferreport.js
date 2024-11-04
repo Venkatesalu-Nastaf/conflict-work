@@ -487,6 +487,8 @@ const useTransferreport = () => {
       })
       .filter((tripid) => tripid !== null);
 
+      console.log("Selected Trip IDs:", selectedTripIds);
+
     const selectedTrips = newSelectionModel
       .filter((selectedId) => selectedId !== null)
       .map((selectedId) => {
@@ -494,9 +496,13 @@ const useTransferreport = () => {
         return selectedRow ? selectedRow : null;
       })
       .filter((tripid) => tripid !== null);
+
+      console.log("Selected Trips:", selectedTrips);
     setSelectedRow(selectedTrips)
     const tripsheetid = selectedTripIds;
     setRowSelectionModel(tripsheetid);
+
+    console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
 
 
@@ -508,7 +514,7 @@ const useTransferreport = () => {
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
-        // console.log(rowSelectionModel,'Transferreport response')
+        console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
 
         if (tripid.length >= 1) {

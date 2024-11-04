@@ -320,7 +320,7 @@ const useTransferlist = () => {
       if (err.message) {
         setRows([]);
         setError(true);
-        setErrorMessage("Check your network");
+        setErrorMessage("Check your Network Connection");
       } else {
         const errdata = err.response?.data;
         setRows([]);

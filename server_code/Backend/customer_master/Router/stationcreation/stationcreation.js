@@ -2,15 +2,44 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 
+// router.post('/stationcreation', (req, res) => {
+//   const bookData = req.body;
+//   db.query('INSERT INTO stationcreation SET ?', bookData, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//     }
+//     return res.status(200).json({ message: "Data inserted successfully" });
+//     console.log(result,'Station creation datas')
+//   });
+ 
+// });
+
+// For creating the new station
+// router.post('/stationcreation', (req, res) => {
+//   const bookData = req.body;
+//   db.query('INSERT INTO stationcreation SET ?', bookData, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//     }
+    
+//     console.log(result, 'Station creation datas'); // Log the result here
+    
+//     return res.status(200).json({ message: "Data inserted successfully" });
+//   });
+// });
 router.post('/stationcreation', (req, res) => {
   const bookData = req.body;
   db.query('INSERT INTO stationcreation SET ?', bookData, (err, result) => {
     if (err) {
-      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+      console.error("Database insertion error:", err); // Log full error details
+      return res.status(500).json({ error: "Failed to insert data into MySQL", details: err.message });
     }
+    
+    console.log(result, 'Station creation data inserted successfully');
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
+
 // delete Station Creation data
 router.delete('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
@@ -80,6 +109,7 @@ router.get('/getStation-name', (req, res) => {
       }
       else {
         console.log("data", data)
+        data.push({ Stationname: 'All' });
         return res.status(200).json(data);
       }
     }

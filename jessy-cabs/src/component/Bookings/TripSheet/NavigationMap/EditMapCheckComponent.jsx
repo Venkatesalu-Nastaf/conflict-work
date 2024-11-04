@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer, useJsApiLoader, Polygon, Polyline, Circle } from '@react-google-maps/api';
 import axios from 'axios';
 import "./EditMapComponent.css"
 import { APIURL } from '../../../url';
@@ -47,6 +47,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const apiUrl = APIURL;
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   const [placeName, setPlaceName] = useState(''); // To store place name
   const [directions, setDirections] = useState(null); // New state for directions
   const [mapCaptureVerify, setMapCaptureVerify] = useState(false);
@@ -60,6 +61,10 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [wayDirection, setWayDirection] = useState([])
   const [address, setAddress] = useState('');
   const [mapInstance, setMapInstance] = useState(null);
+  const [center, setCenter] = useState({ lat: 22.00, lng: 77.00 }); // India's initial center
+  const [polygonPath, setPolygonPath] = useState([]);
+  const [polylinePath, setPolylinePath] = useState([])
+  const [markerPosition, setMarkerPosition] = useState(null); // Store single marker position
 
   const [mapContent, setMapContent] = useState({
     tripid: '',
@@ -105,7 +110,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         const waypoints = [];
 
         data.forEach((item) => {
-          console.log(typeof (item.Latitude), 'item11', Number(item.Latitude));
 
           if (item.trip_type === 'start') {
             start = {
@@ -158,12 +162,11 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         setWayRoutes(waypoints)
         setStartRoutes(start)
         setEndRoutes(end)
-        console.log(start, end, waypoints, tripid, 'wayyyyyyyyy555555555');
-        setStartLat(start.lat)
-        setStartLng(start.lng)
-        setEndLat(end.lat)
-        setEndLng(end.lng)
-        setEndLabel(end.label)
+        setStartLat(start?.lat)
+        setStartLng(start?.lng)
+        setEndLat(end?.lat)
+        setEndLng(end?.lng)
+        setEndLabel(end?.label)
 
         setTripData({ start, end, waypoints });
       } catch (error) {
@@ -193,7 +196,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   // Handle marker click to open modal and display clicked coordinates
   const handleMarkerClick = (point) => {
-    console.log(point, 'point');
 
     setClickedPoint(point);
     setMapContent((prevContent) => ({
@@ -343,7 +345,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   const handletimeChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value, 'ccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
@@ -352,21 +353,24 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleChange = (value, name) => {
-    console.log(value, name, 'cccccccccccccccccccc');
 
     setMapContent((prevState) => ({
       ...prevState,
       [name]: value // Dynamically update the field based on the input name
     }));
   };
+
   const handleMapClick = (event) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
+    setCenter({ lat, lng }); // Update center to clicked location
 
     // Set clicked point with lat and lng
     setClickedPoint({ lat, lng });
     getPlaceName(lat, lng); // Fetch place name using Geocoding
-
+    setPolygonPath([])
+    setMarkerPosition(null)
+    setPolylinePath([])
 
     setPopupOpen(true);
   };
@@ -374,6 +378,29 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const handleMapDraw = async () => {
     const directionsService = new window.google.maps.DirectionsService();
     const { start, end, waypoints } = tripData;
+
+    if (startLat === "" || startLat === undefined) {
+      setTimeout(() => {
+        setErrorMessage(true);
+
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 1000);
+
+      }, 1000);
+      return;
+    }
+    if (endLat === "" || endLat === undefined) {
+      setTimeout(() => {
+        setErrorMessage(true);
+
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 1000);
+
+      }, 1000);
+      return;
+    }
 
     try {
       const directionsResult = await directionsService.route({
@@ -393,6 +420,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           lng: point.location.lng(),
         };
       });
+
       // setTripData((prevTripData) => ({
       //   ...prevTripData,
 
@@ -415,7 +443,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleMapDrawRouteVerify = () => {
-    console.log('qqqqqqqqqqqqq[[[[[[');
 
     setTimeout(() => {
       setError(false)
@@ -454,7 +481,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   }
   const handleSuccessCapture = () => {
-    console.log('sucessssssssssssssss');
 
     setSuccess(true)
     setTimeout(() => {
@@ -463,10 +489,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
 
   const handleMapCapture = async () => {
-    console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{');
-
     if (mapCaptureVerify === false) {
-      console.log('qqqqqqqqqqqqqqqq{{{{{{{{{{{{/////');
       setError(true)
       handleMapDrawRouteVerify()
       return
@@ -488,11 +511,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       return orderA - orderB || labelA.localeCompare(labelB);
     });
-    console.log('qqqqqqqqqq++++++++++++');
 
     // Add the start marker
     if (startLat && endLat) {
-      console.log('qqqqqqqqqq++++++++++++----------');
 
       markers.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
     }
@@ -552,7 +573,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           }
           const a = markers.join('&')
           const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
-          console.log(markers.join('&'), a, markers, 'nandhakalai');
 
           const staticMapBlob = await urlToBlob(finalStaticMapUrl);
           // const tripid = localStorage.getItem('selectedTripid');
@@ -571,8 +591,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               },
             });
             console.log('Uploaded file details', response.data);
-            console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
-
+            localStorage.setItem('MapBoxClose', 1);
           } catch (error) {
             console.error('Error uploading file:', error);
           }
@@ -583,23 +602,50 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     }
 
   };
+  // const fitBoundsToMarkers = (map) => {
+  //   const bounds = new window.google.maps.LatLngBounds();
+
+  //   if (startLat && startLng) {
+  //     bounds.extend(new window.google.maps.LatLng(startLat, startLng));
+  //   }
+  //   if (endLat && endLng) {
+  //     bounds.extend(new window.google.maps.LatLng(endLat, endLng));
+  //   }
+  //   if (wayRoutes && wayRoutes.length > 0) {
+  //     wayRoutes.forEach((point) => {
+  //       bounds.extend(new window.google.maps.LatLng(point.lat, point.lng));
+  //     });
+  //   }
+
+  //   map.fitBounds(bounds);
+  // };
+
   const fitBoundsToMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds();
 
+    // Include start point
     if (startLat && startLng) {
-      bounds.extend(new window.google.maps.LatLng(startLat, startLng));
+      bounds.extend({ lat: startLat, lng: startLng });
     }
+
+    // Include end point
     if (endLat && endLng) {
-      bounds.extend(new window.google.maps.LatLng(endLat, endLng));
+      bounds.extend({ lat: endLat, lng: endLng });
     }
-    if (wayRoutes && wayRoutes.length > 0) {
+
+    // Include all waypoints
+    if (wayRoutes) {
       wayRoutes.forEach((point) => {
-        bounds.extend(new window.google.maps.LatLng(point.lat, point.lng));
+        bounds.extend({ lat: point.lat, lng: point.lng });
       });
     }
 
-    map.fitBounds(bounds);
+    // Adjust the map to fit all markers
+    if (!bounds.isEmpty()) {
+      map.fitBounds(bounds);
+    }
   };
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk",
   });
@@ -609,13 +655,50 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   }
   const handleChanges = (newAddress) => {
     setAddress(newAddress);
+    setPolygonPath([])
+    setPolylinePath([])
+    setMarkerPosition(null)
+
   };
 
   const submitPopup = (latLng) => {
     // Implement your logic for displaying a popup
-    console.log("Mappppppppppppppp", latLng);
   };
+  // const handleSelect = async (address) => {
+  //   const geocoder = new window.google.maps.Geocoder();
+
+  //   try {
+  //     const results = await new Promise((resolve, reject) => {
+  //       geocoder.geocode({ address: address }, (results, status) => {
+  //         if (status === 'OK' && results && results.length > 0) {
+  //           resolve(results);
+  //         } else {
+  //           reject(new Error(`Geocode failed: ${status}`)); // Include status in error
+  //         }
+  //       });
+  //     });
+
+  //     if (results[0].geometry && results[0].geometry.location) {
+  //       const latLng = results[0].geometry.location;
+  //       console.log(latLng, results, 'Location found'); // Better log message
+
+  //       if (mapInstance) {
+  //         mapInstance.setCenter(latLng);
+  //         mapInstance.setZoom(14);
+  //         submitPopup(latLng);
+  //       } else {
+  //         console.log("Map instance not available");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred in handleSelect:", error.message);
+  //   }
+  // };
+
   const handleSelect = async (address) => {
+    console.log(address, 'newaddress');
+    setAddress(address);
+
     const geocoder = new window.google.maps.Geocoder();
 
     try {
@@ -624,19 +707,43 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           if (status === 'OK' && results && results.length > 0) {
             resolve(results);
           } else {
-            reject(new Error(`Geocode failed: ${status}`)); // Include status in error
+            reject(new Error(`Geocode failed: ${status}`));
           }
         });
       });
 
       if (results[0].geometry && results[0].geometry.location) {
         const latLng = results[0].geometry.location;
-        console.log(latLng, results, 'Location found'); // Better log message
+        const lat = latLng.lat();
+        const lng = latLng.lng();
 
         if (mapInstance) {
-          mapInstance.setCenter(latLng);
-          mapInstance.setZoom(14);
-          submitPopup(latLng);
+          mapInstance.setCenter({ lat, lng });
+          mapInstance.setZoom(16); // Set desired zoom level
+          submitPopup({ lat, lng });
+          setMarkerPosition({ lat, lng }); // Set marker position to the geocoded location
+
+          const bounds = results[0].geometry.bounds;
+          if (bounds) {
+            const ne = bounds.getNorthEast();
+            const sw = bounds.getSouthWest();
+
+            // Define polyline path for dotted line around bounds
+            const path = [
+              { lat: ne.lat(), lng: ne.lng() },
+              { lat: ne.lat(), lng: sw.lng() },
+              { lat: sw.lat(), lng: sw.lng() },
+              { lat: sw.lat(), lng: ne.lng() },
+              { lat: ne.lat(), lng: ne.lng() } // Close the path
+            ];
+
+            console.log("Setting polyline path:", path);
+            setPolylinePath(path);
+
+            mapInstance.setZoom(13)
+          } else {
+            console.log("Bounds not available");
+          }
         } else {
           console.log("Map instance not available");
         }
@@ -657,14 +764,14 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div className="search-input-field">
+          <div className="search-input-field" style={{ position: "relative", zIndex: "999" }}>
             <input
               {...getInputProps({
                 placeholder: 'Enter location',
               })}
               className="search-input"
             />
-            <div>
+            <div className={suggestions.length > 0 ? 'suggestion-box' : ''}>
               {suggestions.map((suggestion, index) => (
                 <div key={index} {...getSuggestionItemProps(suggestion)}>
                   {suggestion.description}
@@ -677,19 +784,60 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       </PlacesAutocomplete>
       <GoogleMap
         mapContainerStyle={mapStyles}
-        zoom={10}
-        center={startLat && startLng ? { lat: '',lng:'' } : { lat: 13.0827, lng: 80.2707 }}
+        zoom={5}
+        center={center}
         id='map'
-        onClick={handleMapClick} // Add the click handler here
+        onClick={handleMapClick}
         onLoad={(map) => {
           mapRef.current = map;
           setMapInstance(mapRef.current)
-          fitBoundsToMarkers(map); // Call the function to adjust the bounds on load
+          fitBoundsToMarkers(map);
         }}
       >
-        {startLat && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-        {endLat && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
-        {wayRoutes?.map((point, index) => (
+        {/* {polygonPath.length > 0 && (
+          <Polygon
+            onClick={handleMapClick}
+            paths={polygonPath}
+            options={{
+              // fillColor: "#FF0000",
+              // fillOpacity: 0.3,
+              // strokeColor: "#FF0000",
+              // strokeOpacity: 0.8,
+              strokeWeight: 0.2,
+            }}
+          />
+        )} */}
+        {polylinePath.length > 0 && (
+          <Polyline
+            path={polylinePath}
+            options={{
+              // strokeColor: "#000000", 
+              // strokeOpacity: 1, 
+              // strokeWeight: 2,
+          
+              // Add dashed line pattern using icons
+              icons: [
+                {
+                  icon: {
+                    path: "M 0,-1 0,1", // Creates a dash segment
+                    strokeOpacity: 1,
+                    scale: 2, // Adjust size of dashes
+                  },
+                  offset: "0",
+                  repeat: "20px", // Controls spacing between dashes
+                },
+              ],
+            }}
+          />
+        )}
+        {markerPosition !== "" || markerPosition !== null ? <Marker
+          position={markerPosition}
+          onClick={handleMapClick}
+        /> : ""
+        }
+        {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
+        {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
+        {directions === null && wayRoutes?.map((point, index) => (
           <Marker
             key={index}
             position={{ lat: point.lat, lng: point.lng }}
@@ -697,7 +845,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             onClick={() => handleMarkerClick(point)}
           />
         ))}
-        {directions && <DirectionsRenderer directions={directions} />} {/* Render directions */}
+        {directions && <DirectionsRenderer directions={directions} />}
 
       </GoogleMap>
 
@@ -751,7 +899,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                     value={mapContent.time}
                     onChange={handletimeChange}
                     required
-                    style={{ border: '1px solid' }}
+                    style={{ border: '1px solid', }}
                   />
                 </div>
                 {/* </FormControl> */}
@@ -789,6 +937,23 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
           {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
             ""}
         </div>
+        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+          {(errorMessage && (startLat === "" || startLat === undefined)) ? (
+            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+              Mark Your StartPoint
+            </p>
+          ) : null}
+        </div>
+        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+          {(errorMessage && (startLat !== "" && startLat !== undefined) && (endLat === "" || endLat === undefined)) ? (
+            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+              Mark Your EndPoint
+            </p>
+          ) : null}
+        </div>
+
+
+
       </div>
     </LocalizationProvider>
   );

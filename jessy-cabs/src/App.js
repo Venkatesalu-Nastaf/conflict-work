@@ -4,7 +4,7 @@ import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-import Logo from "./assets/img/logonas.png";
+import Logo from "./assets/img/logo.png";
 import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
@@ -292,14 +292,22 @@ function App() {
               //     )
               //   )
               // }
+              // (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+              //     (
+              //       Billing_permission ? (<Navigate to="/home/billing/billing" />) :
+              //         (
+              //           Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):<MainDash stationName={stationName} />)
+              //         )
+              //     )
+              //   )
               (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+              (
+                Billing_permission ? (<Navigate to="/home/billing/billing" />) :
                   (
-                    Billing_permission ? (<Navigate to="/home/billing/billing" />) :
-                      (
-                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):<MainDash stationName={stationName} />)
-                      )
+                    Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):(<Navigate to="/home/usersettings/usersetting" />) )
                   )
-                )
+              )
+            )
               }
               />
               <Route path="/home/bookings" element={ BOOKING !== 0 ? <Bookings /> : <NoPermission />}>

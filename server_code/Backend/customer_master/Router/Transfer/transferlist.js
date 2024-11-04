@@ -32,6 +32,37 @@ router.get('/payment-detail', (req, res) => {
     return res.status(200).json(result);
   });
 });
+
+// router.get('/statedetails',(req,res)=>{
+//   const { state } = req.query;
+//   db.query('SELECT * FROM stationcreation WHERE state = ? ', [state], (err, result) => {
+//     if(err){
+//       return res.status(500).json({ error: 'Failed to retrieve state from MySQL' });
+//     }
+    
+//       console.log(result, 'results fromn the state')
+//       return res.status(200).json(result);
+      
+//   })
+// })
+router.get('/statedetails', (req, res) => {
+  const { state } = req.query; // Get the state from the query parameters
+  db.query('SELECT * FROM stationcreation ', (err, result) => {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to retrieve state from MySQL' });
+      }
+
+      console.log(result, 'results from the state'); // Log the results
+
+      if (result.length === 0) {
+          // If no results were found for the given state
+          return res.status(404).json({ error: 'No records found for this state' });
+      }
+
+      return res.status(200).json(result); // Send back the results if found
+  });
+});
+
 // newww one-----------------------------------------
 router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;

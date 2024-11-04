@@ -17,7 +17,7 @@ const useTripsheet = () => {
     const { permissions } = useContext(PermissionContext)
     const Tripsheet_modify1 = permissions[3]?.modify;
     const Tripsheet_delete1 = permissions[3]?.delete;
-    const signatureurlinkurl = "http://taaftechnology.com/SignatureGenerate"
+    const signatureurlinkurl = "http://jessycabs.com/SignatureGenerate"
     const apiUrl = APIURL;
     // THIS APIURL TRANSFER FRO DRIVER APP
     const apiurltransfer = Apiurltransfer;
@@ -25,6 +25,7 @@ const useTripsheet = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
+
         driverName: '',
         vehRegNo: '',
         mobileNo: '',
@@ -42,6 +43,7 @@ const useTripsheet = () => {
     const [formData, setFormData] = useState({});  ////-------------
     const [calcCheck, setCalcCheck] = useState(false);
     const location = useLocation();
+    const [selectedStatus, setSelectedStatus] = useState('Opened');
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
     const [additionalTime, setAdditionalTime] = useState('');
@@ -1317,9 +1319,28 @@ const useTripsheet = () => {
             setLockData(false)
             setLockDatavendorBill(false)
             setLockDatacustomerBill(false)
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -1346,7 +1367,11 @@ const useTripsheet = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-
+        
+        if (name === "status") { // Or any specific criteria
+            setSelectedStatus(selectedOption || 'Opened');
+        }
+        
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -1367,15 +1392,16 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
-
+    
+        // Uncomment if you want to control VendorInfo visibility based on `lockdata`
         // if (!lockdata) {
         //     setVendorinfodata((prevValues) => ({
         //         ...prevValues,
         //         [name]: selectedOption,
-        //     }))
+        //     }));
         // }
     };
-
+    
     const travelsdatafetch = async (travelsnamedata) => {
         try {
             const response = await axios.get(`${apiUrl}/travelsnamedetailfetch/${travelsnamedata}`)
@@ -2721,7 +2747,7 @@ const useTripsheet = () => {
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
 
-
+                
             try {
                 setManualMarkTrigger(!manualMarkTrigger)
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
@@ -2742,6 +2768,8 @@ const useTripsheet = () => {
                             const { duty, shedInDate, reporttime, shedintime, shedout, shedin, remark, vehicleName, ...restdatavendor } = bookingDetails
                             setSelectedCustomerData(bookingDetails);
                             setSelectedCustomerId(bookingDetails.tripid);
+                            setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
+
                             if (!lockdata) {
 
 
@@ -2802,10 +2830,11 @@ const useTripsheet = () => {
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError(true);
-                    setErrorMessage("Tripsheet not found");
+                    setErrorMessage(`${error.response.data.error}`);
                 } else {
                     setError(true);
-                    setErrorMessage("Failed to fetch data");
+                    // setErrorMessage("Failed to fetch data");
+                    setErrorMessage("Check your Network Connection");
                 }
             }
         }
@@ -4521,6 +4550,8 @@ const useTripsheet = () => {
         // generateLink,
         selectedRow,
         imageUrl,
+        selectedStatus,
+        setSelectedStatus,
         link,
         isSignatureSubmitted, checkCloseKM,
         isEditMode,

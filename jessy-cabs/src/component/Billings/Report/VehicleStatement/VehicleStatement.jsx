@@ -190,82 +190,187 @@ const VehicleStatement = () => {
 
   const [Customerdata, setCustomerData] = useState([])
 
+  // const showList = async (e) => {    
+  //   e.preventDefault();
+  //   const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
+  //   // setTableData(response.data)
+  //   const datas = response.data;    
+
+  //   if (data.hireTypes === "Own  Vehicle") {
+  //     const parseData = transformCustomer(datas)
+  //     const reducedData = reduceFun(parseData)
+
+  //     if (reducedData &&
+  //       reducedData.totalKilometers !== 0 &&
+  //       reducedData.totalTime !== 0 &&
+  //       reducedData.totalPackageAmount !== 0 &&
+  //       reducedData.totalAdvance !== 0 &&
+  //       reducedData.totaalBalance !== 0 &&
+  //       reducedData.totalBeta !== 0) {
+  //       setTotalValues(prev => ({
+  //         ...prev, fullTotalKM: reducedData.totalKilometers,
+  //         fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+  //         totalAmount: reducedData.totalPackageAmount,
+  //         totalAdvance: reducedData.totalAdvance,
+  //         totalBalance: reducedData.totaalBalance,
+  //         totalBeta: reducedData.totalBeta,
+  //       }))
+
+  //       setSuccess(true)
+  //       setSuccessMessage("Successfully Listed")
+  //     } else {
+  //       setTotalValues({})
+  //     }
+
+  //     if (parseData.length > 0) {
+  //       setCustomerData(parseData)
+  //       const reducedData = reduceFun(parseData)
+
+  //     } else {
+  //       setCustomerData([])
+  //       setError(true)
+  //       setErrorMessage("No Data Found")
+  //     }
+
+  //   } else if (data.hireTypes === "Attached Vehicle") {
+  //     const parseData = transformAtached(datas)
+  //     if (parseData.length > 0) {
+  //       const reducedData = reduceFun(parseData)
+
+  //       if (reducedData) {
+  //         setTotalValues(prev => ({
+  //           ...prev, fullTotalKM: reducedData.totalKilometers,
+  //           fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+  //           totalAmount: reducedData.totalPackageAmount,
+  //           totalAdvance: reducedData.totalAdvance,
+  //           totalBalance: reducedData.totaalBalance,
+  //           totalBeta: reducedData.totalBeta,
+  //         }))
+  //         setSuccess(true)
+  //         setSuccessMessage("Successfully Listed")
+  //       } else {
+  //         setTotalValues({})
+  //       }
+
+  //       setCustomerData(parseData)
+  //       setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }))
+  //     } else {
+  //       setCustomerData([])
+  //       setError(true)
+  //       setErrorMessage("No Data Found")
+  //     }
+
+  //   } else {
+  //     setCustomerData([])
+  //     setError(true)
+  //     setErrorMessage("Please Select Hire Types")
+  //   }
+  // }
+
+  // with try catch block
   const showList = async (e) => {    
     e.preventDefault();
-    const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
-    // setTableData(response.data)
-    const datas = response.data;    
+    
+    try {
+        const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
+        const datas = response.data;    
 
-    if (data.hireTypes === "Own  Vehicle") {
-      const parseData = transformCustomer(datas)
-      const reducedData = reduceFun(parseData)
+        if (data.hireTypes === "Own Vehicle") {
+            const parseData = transformCustomer(datas);
+            const reducedData = reduceFun(parseData);
 
-      if (reducedData &&
-        reducedData.totalKilometers !== 0 &&
-        reducedData.totalTime !== 0 &&
-        reducedData.totalPackageAmount !== 0 &&
-        reducedData.totalAdvance !== 0 &&
-        reducedData.totaalBalance !== 0 &&
-        reducedData.totalBeta !== 0) {
-        setTotalValues(prev => ({
-          ...prev, fullTotalKM: reducedData.totalKilometers,
-          fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-          totalAmount: reducedData.totalPackageAmount,
-          totalAdvance: reducedData.totalAdvance,
-          totalBalance: reducedData.totaalBalance,
-          totalBeta: reducedData.totalBeta,
-        }))
+            if (reducedData &&
+                reducedData.totalKilometers !== 0 &&
+                reducedData.totalTime !== 0 &&
+                reducedData.totalPackageAmount !== 0 &&
+                reducedData.totalAdvance !== 0 &&
+                reducedData.totaalBalance !== 0 &&
+                reducedData.totalBeta !== 0) {
+                
+                setTotalValues(prev => ({
+                    ...prev,
+                    fullTotalKM: reducedData.totalKilometers,
+                    fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+                    totalAmount: reducedData.totalPackageAmount,
+                    totalAdvance: reducedData.totalAdvance,
+                    totalBalance: reducedData.totaalBalance,
+                    totalBeta: reducedData.totalBeta,
+                }));
 
-        setSuccess(true)
-        setSuccessMessage("Successfully Listed")
-      } else {
-        setTotalValues({})
-      }
+                setSuccess(true);
+                setSuccessMessage("Successfully Listed");
+            } else {
+                setTotalValues({});
+            }
 
-      if (parseData.length > 0) {
-        setCustomerData(parseData)
-        const reducedData = reduceFun(parseData)
+            if (parseData.length > 0) {
+                setCustomerData(parseData);
+            } else {
+                setCustomerData([]);
+                setError(true);
+                setErrorMessage("No Data Found");
+            }
 
-      } else {
-        setCustomerData([])
-        setError(true)
-        setErrorMessage("No Data Found")
-      }
+        } else if (data.hireTypes === "Attached Vehicle") {
+            const parseData = transformAtached(datas);
+            if (parseData.length > 0) {
+                const reducedData = reduceFun(parseData);
 
-    } else if (data.hireTypes === "Attached Vehicle") {
-      const parseData = transformAtached(datas)
-      if (parseData.length > 0) {
-        const reducedData = reduceFun(parseData)
+                if (reducedData) {
+                    setTotalValues(prev => ({
+                        ...prev,
+                        fullTotalKM: reducedData.totalKilometers,
+                        fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+                        totalAmount: reducedData.totalPackageAmount,
+                        totalAdvance: reducedData.totalAdvance,
+                        totalBalance: reducedData.totaalBalance,
+                        totalBeta: reducedData.totalBeta,
+                    }));
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Listed");
+                } else {
+                    setTotalValues({});
+                }
 
-        if (reducedData) {
-          setTotalValues(prev => ({
-            ...prev, fullTotalKM: reducedData.totalKilometers,
-            fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-            totalAmount: reducedData.totalPackageAmount,
-            totalAdvance: reducedData.totalAdvance,
-            totalBalance: reducedData.totaalBalance,
-            totalBeta: reducedData.totalBeta,
-          }))
-          setSuccess(true)
-          setSuccessMessage("Successfully Listed")
+                setCustomerData(parseData);
+                setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
+            } else {
+                setCustomerData([]);
+                setError(true);
+                setErrorMessage("No Data Found");
+            }
+
         } else {
-          setTotalValues({})
+            setCustomerData([]);
+            setError(true);
+            setErrorMessage("Please Select Hire Types");
         }
 
-        setCustomerData(parseData)
-        setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }))
+    } 
+    // catch (error) {
+    //     setError(true);
+    //     setErrorMessage("An error occurred: " + error.message);
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
       } else {
-        setCustomerData([])
-        setError(true)
-        setErrorMessage("No Data Found")
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
       }
-
-    } else {
-      setCustomerData([])
-      setError(true)
-      setErrorMessage("Please Select Hire Types")
-    }
   }
+};
+
 
   //Excel
 

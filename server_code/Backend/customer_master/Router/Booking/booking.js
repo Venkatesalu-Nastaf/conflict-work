@@ -52,8 +52,30 @@ router.post('/bookinglogDetails', async (req, res) => {
 })
 
 // collect details from Booking
+// router.get('/booking/:bookingno', (req, res) => {
+//     const bookingno = req.params.bookingno;
+//     db.query('SELECT * FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'Booking not found' });
+//         }
+//         const bookingDetails = result[0]; // Assuming there is only one matching booking
+//         return res.status(200).json(bookingDetails);
+//     });
+// });
+
+
 router.get('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
+    const username = req.query.loginUserName;
+
+    let data = '';
+
+    if (!username) {
+        return res.status(500).json({ error: "username is undefined" })
+    }
     db.query('SELECT * FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
@@ -61,9 +83,53 @@ router.get('/booking/:bookingno', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Booking not found' });
         }
-        const bookingDetails = result[0]; // Assuming there is only one matching booking
-        return res.status(200).json(bookingDetails);
-    });
+        if (result.length > 0) {
+            
+
+            db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+                if (err) {
+                    return res.status(500).json({ error: "there some issue ffetching station name " })
+                }
+
+                data = await results[0]?.Stationname;
+
+                console.log("data", data)
+                const arryData = data.split(',');
+                console.log("arryData", arryData)
+                if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
+                    // its for fetch by All
+                    await db.query(`SELECT * FROM booking WHERE bookingno = ? `,bookingno, (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                        }
+                        if (result.length === 0) {
+
+                            return res.status(404).json({ error: 'status is billed all' });
+                        }
+                        const bookingDetails = result[0]; // Assuming there is only one matching booking
+                        return res.status(200).json(bookingDetails);
+                    });
+                }
+
+                else if (arryData) {
+                    await db.query(`SELECT * FROM booking WHERE bookingno = ? AND servicestation IN (?)  `, [bookingno, arryData], (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                        }
+                        if (result.length === 0) {
+
+                            return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                        }
+                       
+                        const bookingDetails = result[0]; // Assuming there is only one matching booking
+                        return res.status(200).json(bookingDetails);
+
+                    });
+                }
+     
+            });
+        }
+    })
 });
 
 router.get('/drivernamedrivercreation', (req, res) => {

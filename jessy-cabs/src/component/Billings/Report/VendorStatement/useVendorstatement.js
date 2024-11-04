@@ -9,7 +9,7 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "TripNo", width: 130 },
-    { field: "tripsheetdate", headerName: "Date", width: 130 },
+    { field: "tripsheetdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },
     { field: "duty", headerName: "Duty", width: 160 },
@@ -22,10 +22,11 @@ const columns = [
     { field: "vendorTotaltime", headerName: "Run-Hours", width: 130 },
     { field: "vpermettovendor", headerName: "Vehicle-Permit", width: 130 },
     { field: "vendortoll", headerName: "Vehicle-Toll", width: 130 },
+    { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 90 },
     { field: "totalvendoramount", headerName: "Total Amount", width: 130 },
     { field: "advancepaidtovendor", headerName: "Driver Advance", width: 130 },
     { field: "Vendor_FULLTotalAmount", headerName: "Balance", width: 130 },
-    { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 130 },
+   
 ];
 
 const useVehiclestatement = () => {
@@ -379,16 +380,35 @@ const useVehiclestatement = () => {
                 setError(true);
                 setErrorMessage("no data found")
             }
-        } catch {
-            setRows([]);
-            setErrorMessage("Check your Network Connection");
+        } 
+        // catch {
+        //     setRows([]);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Show Vendor Statement : " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
 
     }
          const handleShowAll = async () => {
 
         try {
-            const response = await axios.get(
+            const    response = await axios.get(
                 `${apiUrl}/tripsheetvendordata`
             );
             const data = response.data;
@@ -408,9 +428,28 @@ const useVehiclestatement = () => {
                 setError(true);
                 setErrorMessage("no data found")
             }
-        } catch {
-            setRows([]);
-            setErrorMessage("Check your Network Connection");
+        }
+        //  catch {
+        //     setRows([]);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Show Vendor Statement: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
 
     }

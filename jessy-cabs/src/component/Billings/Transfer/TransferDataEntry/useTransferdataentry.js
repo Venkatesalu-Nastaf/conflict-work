@@ -647,7 +647,7 @@ const useTransferdataentry = () => {
             // Check if there's no response, indicating a network error
             if (error.message ) {
                 setError(true);
-                setErrorMessage("Check your internet connection");
+                setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);

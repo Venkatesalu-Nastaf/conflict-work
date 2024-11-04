@@ -359,10 +359,29 @@ const useAccountinfo = () => {
         setError(true);
         setErrorMessage("No data found")
       }
-    } catch {
-      setError(true);
-      setErrorMessage("Failed to Search Data")
-    }
+    } 
+    // catch {
+    //   setError(true);
+    //   setErrorMessage("Failed to Search Data")
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
 
@@ -578,10 +597,29 @@ const useAccountinfo = () => {
       setSuccessMessage("Successfully Added");
       setCredentialData()
       setCredentialDataforstations()
-    } catch {
-      setError(true);
-      setErrorMessage("Failed to Add Data");
     }
+    // catch {
+    //   setError(true);
+    //   setErrorMessage("Failed to Add Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   const handleEdit = async () => {
@@ -607,11 +645,30 @@ const useAccountinfo = () => {
       setCredentialDataforstations()
       setRows([]);
       handleList()
-    } catch (err) {
-      console.log(err)
-      setError(true);
-      setErrorMessage("Failed to Edit Data");
-    }
+    } 
+    // catch (err) {
+    //   console.log(err)
+    //   setError(true);
+    //   setErrorMessage("Failed to Edit Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Edit Account Info: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   const handleList = useCallback(async () => {

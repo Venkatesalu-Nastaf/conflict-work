@@ -110,11 +110,13 @@ const moment = require('moment');
 
 // new  working code 
 router.get('/pending_tripsheet-show', (req, res) => {
-  const { fromDate, toDate, status, department, VehNo, cutomerName } = req.query;
+  const { fromDate, toDate, status, department, VehNo, cutomerName, isStations} = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
   const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
   const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
+  const isStation = isStations ? isStations.split(',').map(name => name.trim()).filter(name => name) : [];
+  console.log('Is Stations departs:', datadepartment);
   
   let sqlQuery = '';
   let Tripquery = '';
@@ -297,12 +299,31 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
 
   // Handle 'pending' and 'Cancelled' statuses
   if (status === 'pending' || status === 'Cancelled') {
-    sqlQuery = `
+    // sqlQuery = `
+    //   SELECT *
+    //   FROM booking
+    //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
+    // `;
+    // queryParams = [formattedFromDate, formattedToDate, status];
+     if(datadepartment.length === 0){
+      sqlQuery = `
       SELECT *
       FROM booking
       WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
+      AND servicestation IN (?)
     `;
-    queryParams = [formattedFromDate, formattedToDate, status];
+    queryParams = [formattedFromDate, formattedToDate, status,isStation];
+    // console.log(isStations,isStations)
+    }
+    else{
+
+      sqlQuery = `
+        SELECT *
+        FROM booking
+        WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?   AND servicestation IN (?)
+      `;
+      queryParams = [formattedFromDate, formattedToDate, status,isStation];
+    }
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND servicestation IN (?)';
       queryParams.push(datadepartment);
@@ -317,14 +338,44 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
     }
   } else {
     // Handle other statuses
-    sqlQuery = `
-      SELECT booking.*, tripsheet.*
-      FROM tripsheet
-      LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
-      WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-      AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    `;
-    queryParams = [formattedFromDate, formattedToDate];
+  //   sqlQuery = `
+  //     SELECT booking.*, tripsheet.*
+  //     FROM tripsheet
+  //     LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+  //     WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  //     AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  //     AND tripsheet.department IN (?)
+  //   `;
+  //   queryParams = [formattedFromDate, formattedToDate,status];
+  //   if (datadepartment.length === 0  || datadepartment.includes('All')) {
+  //     sqlQuery += ' AND servicestation IN (?)';
+  //     queryParams.push(isStation);
+  // } else {
+  //     sqlQuery += ' AND servicestation IN (?)';
+  //     queryParams.push(isStation);
+  // }
+  sqlQuery = `
+  SELECT booking.*, tripsheet.*
+  FROM tripsheet
+  LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+  WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+`;
+
+// Initialize query parameters
+queryParams = [formattedFromDate, formattedToDate];
+
+// If the department is 'All' or not specified, we skip the department filter
+if (datadepartment.length === 0 || datadepartment.includes('All')) {
+  // Ensure we filter only by servicestation
+  sqlQuery += ' AND servicestation IN (?)';
+  queryParams.push(isStation);
+} else {
+  // If specific departments are provided, use them as a filter
+  sqlQuery += ' AND tripsheet.department IN (?)';
+  queryParams.push(datadepartment);
+}
+
 
     // if (status === "Billed") {
     //   sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
@@ -375,29 +426,105 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
 //     return res.status(200).json(results);
 //   });
 // });
+
+// router.get('/tripsheet-showall', (req, res) => {
+
+//   let tripsheetResults, bookingResults;
+//   // Query to fetch tripsheet data
+//   db.query("SELECT * FROM tripsheet where status != 'Cancelled'", (err, tripsheetData) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
+//     }
+//     tripsheetResults = tripsheetData;
+//     // Query to fetch booking data with status 'pending'
+//     db.query("SELECT * FROM booking WHERE status = 'pending' or status='Cancelled'", (err, bookingData) => {
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+//       }
+//       bookingResults = bookingData;
+//       // Combine both results and send response
+//       const combinedResults = {
+//         tripsheet: tripsheetResults,
+//         booking: bookingResults
+//       };
+//       return res.status(200).json(combinedResults);
+//     });
+//   });
+// });
+
+// my code
+// router.get('/tripsheet-showall', (req, res) => {
+//   const { isStation} = req.query;
+
+//   let tripsheetResults, bookingResults;
+//   // Query to fetch tripsheet data
+//   db.query("SELECT * FROM tripsheet where status != 'Cancelled' AND department IN  ",[isStation] ,(err, tripsheetData) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
+//     }
+//     tripsheetResults = tripsheetData;
+//     // Query to fetch booking data with status 'pending'
+//     db.query("SELECT * FROM booking WHERE status = 'pending' or status='Cancelled' AND servicestation IN (?) ",[isStation] ,(err, bookingData) => {
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+//       }
+//       bookingResults = bookingData;
+//       // Combine both results and send response
+//       const combinedResults = {
+//         tripsheet: tripsheetResults,
+//         booking: bookingResults
+//       };
+//       return res.status(200).json(combinedResults);
+//     });
+//   });
+// });
 router.get('/tripsheet-showall', (req, res) => {
+  const { isStation } = req.query;
+
+  // Validate isStation input
+  if (!isStation) {
+    return res.status(400).json({ error: "isStation parameter is required" });
+  }
+
+  // Convert isStation to an array
+  const stationsArray = isStation.split(',').map(station => station.trim());
+
   let tripsheetResults, bookingResults;
+
   // Query to fetch tripsheet data
-  db.query("SELECT * FROM tripsheet where status != 'Cancelled'", (err, tripsheetData) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
-    }
-    tripsheetResults = tripsheetData;
-    // Query to fetch booking data with status 'pending'
-    db.query("SELECT * FROM booking WHERE status = 'pending' or status='Cancelled'", (err, bookingData) => {
+  db.query(
+    "SELECT * FROM tripsheet WHERE status != 'Cancelled' AND department IN (?)",
+    [stationsArray],
+    (err, tripsheetData) => {
       if (err) {
-        return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+        return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
       }
-      bookingResults = bookingData;
-      // Combine both results and send response
-      const combinedResults = {
-        tripsheet: tripsheetResults,
-        booking: bookingResults
-      };
-      return res.status(200).json(combinedResults);
-    });
-  });
+      tripsheetResults = tripsheetData;
+
+      // Query to fetch booking data with status 'pending' or 'Cancelled'
+      db.query(
+        "SELECT * FROM booking WHERE (status = 'pending' OR status = 'Cancelled') AND servicestation IN (?)",
+        [stationsArray],
+        (err, bookingData) => {
+          if (err) {
+            return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+          }
+          bookingResults = bookingData;
+
+          // Combine both results and send response
+          const combinedResults = {
+            tripsheet: tripsheetResults,
+            booking: bookingResults
+          };
+          return res.status(200).json(combinedResults);
+        }
+      );
+    }
+  );
 });
+
+
+
 
 router.get('/getdatafromboookingvalue/:bookingno',(req,res)=>{
   const bookingno = req.params.bookingno;

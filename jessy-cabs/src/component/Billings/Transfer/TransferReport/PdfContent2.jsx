@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename }) => {
+const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename ,commonStateAdress}) => {
     const [address1, setAddress1] = useState('')
     const [totalAmount, setTotalAmount] = useState('')
     const [extraKmAmount, setExtraKmAmount] = useState('')
@@ -166,6 +166,10 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const apiUrl = APIURL;
     const organisationdetailfill = organisationname
     const organisationimage = imagename
+    const customStateDatas = commonStateAdress
+
+    console.log(customStateDatas,'customStateDatas',customStateDatas.length)
+    console.log(customStateDatas[0].gstno,'Custom state gstno ')
     useEffect(() => {
         if (invdata) {
             let totalamount = 0
@@ -232,11 +236,44 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             <Text style={styles.text2}>Nadanam,Chennai-600 035</Text>
                             <Text style={styles.text2}>booking@jessycabs.in</Text>
                             <Text style={styles.text2}>Tel:044-24354247,Mob:9841505689 </Text> */}
-                            <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+{/*                           
+                          {console.log('organisationdetailfill:', organisationdetailfill)}
+{console.log('newStateforpdf:', customStateDatas)} */}
+
+{customStateDatas && customStateDatas.length > 0 ? (
+  // Render this view if newStateforpdf has values
+  <>
+    
+      <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+
+    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+      {customStateDatas[0]?.address}
+    </Text>
+    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+      {customStateDatas[0]?.Stationname}
+    </Text>
+    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+      {organisationdetailfill[0]?.contactEmail}
+    </Text>
+  </>
+) : (
+  
+      <>
+        <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+        <Text style={styles.text2}>{organisationdetailfill[0].addressLine1}</Text>
+        <Text style={styles.text2}>{organisationdetailfill[0].location}</Text>
+        <Text style={styles.text2}>{organisationdetailfill[0].contactEmail}</Text>
+        <Text style={styles.text2}>
+          Tel: {organisationdetailfill[0].telephone || 'N/A'}, Mob: {organisationdetailfill[0].contactPhoneNumber || 'N/A'}
+        </Text>
+      </>
+)}
+
+                            {/* <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
                             <Text style={styles.text2}>{organisationdetailfill[0].addressLine1}</Text>
                             <Text style={styles.text2}>{organisationdetailfill[0].location}</Text>
                             <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
-                            <Text style={styles.text2}>Tel: {organisationdetailfill[0].telephone}, Mob: {organisationdetailfill[0].contactPhoneNumber} </Text>
+                            <Text style={styles.text2}>Tel: {organisationdetailfill[0].telephone}, Mob: {organisationdetailfill[0].contactPhoneNumber} </Text> */}
 
                         </View>
                         <View>
@@ -246,7 +283,17 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             </View>
                             <View style={{ flexDirection: 'row', marginRight: '0px', position: 'relative', top: '15px' }}>
                                 {/* <Text style={styles.gstno}>GSTIN  :  33AALCCn0190M1ZK</Text> */}
-                                <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text>
+                                {/* <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text> */}
+                                {customStateDatas && customStateDatas.length > 0 ? (
+                       <Text style={[styles.gstno, { fontSize: 10 }]}>
+                       GSTIN: {customStateDatas[0]?.gstno}
+                     </Text>
+                    ):(
+                      <Text style={[styles.gstno, { fontSize: 10 }]}>
+                      GSTIN: {organisationdetailfill[0].gstnumber}
+                    </Text>
+                    )
+                  }
                             </View>
                         </View>
                     </View>

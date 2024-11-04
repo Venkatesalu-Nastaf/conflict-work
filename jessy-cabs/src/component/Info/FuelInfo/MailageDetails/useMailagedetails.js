@@ -179,10 +179,29 @@ const useMailagedetails = () => {
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handleList()
-    } catch {
-      setError(true);
-      setErrorMessage("Failed to Add Data");
-    }
+    } 
+    // catch {
+    //   setError(true);
+    //   setErrorMessage("Failed to Add Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Add Data: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   const handleEdit = async () => {
@@ -214,11 +233,30 @@ const useMailagedetails = () => {
       handleCancel();
       setRows([]);
       handleList();
-    } catch (error) {
-      // console.error("Error updating data:", error);
-      setError(true);
-      setErrorMessage("Failed to Edit Data");
-    }
+    } 
+    // catch (error) {
+    //   // console.error("Error updating data:", error);
+    //   setError(true);
+    //   setErrorMessage("Failed to Edit Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Edit Data: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   // useEffect(() => {

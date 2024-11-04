@@ -169,7 +169,7 @@ const useGroupbilling = () => {
     }, [error, success, warning]);
 
     //------------------------------
-
+    
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
@@ -278,6 +278,14 @@ const useGroupbilling = () => {
     }, [particularId, apiUrl, groupInvoice, refInvDate, refInvNo]);
 
     const handleShow = useCallback(async () => {
+        
+    if (!customer) {
+        setError(true)
+        setErrorMessage('Select a Orgaization')
+        return
+      } 
+  
+
         setGroupInvoice(false);
 
         const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');

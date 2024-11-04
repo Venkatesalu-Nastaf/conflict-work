@@ -25,6 +25,10 @@ export const Customertype = [
     Option: "Gen Customers",
     optionvalue: "gencustomers",
   },
+  {
+    Option: "All",
+    optionvalue: "gencustomers",
+  },
 ];
 
 //service station

@@ -514,7 +514,7 @@ const useTransferreport = () => {
         const encoded = localStorage.getItem("selectedcustomerdata");
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
-        console.log(rowSelectionModel,'Transferreport response')
+        // console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
 
         if (tripid.length >= 1) {
@@ -668,7 +668,7 @@ useEffect(() => {
       setRows([]);
 
       let formattedTripID = tripID;
-      console.log(tripID, 'response');
+      // console.log(tripID, 'response');
 
       if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
           formattedTripID = tripID[0].split(',').map(id => id.trim());
@@ -680,7 +680,7 @@ useEffect(() => {
           });
 
           const tripData = response.data;
-          console.log(tripData, 'tripData');
+          // console.log(tripData, 'tripData');
           setAllTripData(tripData);
 
           if (tripData.length > 0) {

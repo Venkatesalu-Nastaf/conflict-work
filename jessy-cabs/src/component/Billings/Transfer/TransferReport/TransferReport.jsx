@@ -204,7 +204,8 @@ const TransferReport = ({ stationName }) => {
   useEffect(() => {
     const fetchStateDetails = async () => {
         try {
-            const response = await fetch('http://localhost:8081/statedetails'); // Replace with your API URL
+            // const response = await fetch('http://localhost:8081/statedetails')API URL
+            const response = await fetch(`${apiUrl}/statedetails`);
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -217,7 +218,7 @@ const TransferReport = ({ stationName }) => {
             console.log(data, 'State details fetched'); // Log the fetched data
         } catch (err) {
             setError(err.message); // Handle errors
-            console.error('Error fetching state details:', err); // Log the error for debugging
+            // console.error('Error fetching state details:', err); // Log the error for debugging
         }
     };
 
@@ -238,7 +239,7 @@ const TransferReport = ({ stationName }) => {
     const fetchdata = async () => {
       try {
         const response = await fetch(`${apiUrl}/organisationpdfdata`);
-        console.log(response,'response');
+        // console.log(response,'response');
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -246,7 +247,7 @@ const TransferReport = ({ stationName }) => {
         const organizationdetails = await response.json();
         setOrganisationDetail(organizationdetails)
 
-        console.log(organizationdetails,"Organization detauillsssss")
+        // console.log(organizationdetails,"Organization detauillsssss")
 
 
       } catch (err) {
@@ -318,10 +319,10 @@ const TransferReport = ({ stationName }) => {
       
 
     const commonState = stateDetails?.filter(item => item.state === addressDetails[0]?.state) || [];
-console.log(commonState);   
+    // console.log(commonState);   
      
-    console.log(stateDetails, "State details");
-    console.log(commonState, "Common State",commonState.length);
+    // console.log(stateDetails, "State details");
+    // console.log(commonState, "Common State",commonState.length);
     
     // Check if commonState exists and log its "length"
     // console.log(commonState ? 1 : 0, "Common State Length");
@@ -340,7 +341,7 @@ console.log(commonState);
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
-      console.log( commonState,'Address for output')
+      // console.log( commonState,'Address for output')
       setComparisonResult(commonState);
     }
     else if (pdfBillList === "PDF 2") {

@@ -30,11 +30,11 @@ margin-top: 20px;
     /* height: 300px; */
 }
 .search-input{
-    /* border: 2px solid rgb(245, 10, 10); */
-    border: 2px solid black;
-    border-radius:3px ;
-    width: 30%;
+    border: 2px solid #ccc;
+    border-radius: 4px;
     height: 30px;
+    width: 59%;
+    padding: 0px 10px;
 }
 
 /* .aaaaaaaaaaaaaaaaaaaaaa{
@@ -44,7 +44,7 @@ margin-top: 20px;
 .suggestion-box{
 background-color: #ffff;
 padding: 10px;
-height: 100px;
+height: 120px;
 position: absolute;
 width: 50%;
 overflow-y: scroll;

@@ -269,7 +269,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [advance, setAdvance] = useState();
   const organizationname = customer
   const organisationdetailfill = organisationdetails
-  const organisationimage = images
+  // const organisationimage = images
   const newStateforpdf = customStateDetails
   // console.log(customStateDetails,'custommm');
 //   console.log(newStateforpdf,'Custom state datas ',newStateforpdf.length)

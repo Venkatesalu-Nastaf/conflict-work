@@ -17,15 +17,12 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-
 import { PermissionContext } from '../../../context/permissionContext';
-
 import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
 import { APIURL } from "../../../url";
 import axios from 'axios'
 import * as XLSX from 'xlsx';
 import ClearIcon from '@mui/icons-material/Clear';
-
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 
@@ -49,7 +46,6 @@ const MailDetails = () => {
   const [templatedata, setTemplateData] = useState([])
   const [selecteddata, setSelectedData] = useState([])
   const [file, setFile] = useState(null);
- 
   const [data, setData] = useState({});
   const [templateimage, setTemplateimage] = useState([])
   const [error, setError] = useState(false);
@@ -61,7 +57,6 @@ const MailDetails = () => {
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
   const [datatrigger, setDataTrigger] = useState(false)
   const fileInputRef = useRef(null);
-
   const { permissions } = useContext(PermissionContext)
   const Mailer_create=permissions[18]?.new ;
   const Mailer_modify=permissions[18]?.modify ;
@@ -113,7 +108,6 @@ const MailDetails = () => {
         </Button>
       ),
     },
-
   ]
 
   const hidePopup = () => {

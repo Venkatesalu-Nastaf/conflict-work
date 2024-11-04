@@ -33,7 +33,7 @@ const MapSection = () => {
   // Load the Google Maps script with your API key and necessary libraries
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+    // googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
     libraries: ['places'], // Add any additional libraries you need
   });
 

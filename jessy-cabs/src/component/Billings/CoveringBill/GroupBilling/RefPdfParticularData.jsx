@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
 // import { green } from "@mui/material/colors";
 
-const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno }) => {
+const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno, Branchstate }) => {
 
     const { handlePopup } = useGroupbilling()
     const targetRef = useRef()
@@ -29,6 +29,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     // const ToDate = refToDate
     const refno = referenceno
 
+    const stateBranch = gstno[0].state;
+    const commonState = Branchstate?.find(item => item.state === stateBranch) || [];
+    console.log(commonState,'commonstate group');
+    
     useEffect(() => {
         if (Array.isArray(gstno) && gstno.length > 0) { // Check if gstno is an array and not empty
             let gstNo = "";
@@ -104,21 +108,21 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     //     return words;
     // };
     const convertToWords = (num) => {
-        if(num >= 0){
-        
-        if (!num) return '';
-        const [integerPart, decimalPart] = num?.toString().split('.');
-        let words = numWords(parseInt(integerPart));
-        // console.log(words,integerPart,'words');
-        
-        if (decimalPart) {
-            words += ' point';
-            for (let digit of decimalPart) {
-                words += ` ${numWords(parseInt(digit))}`;
+        if (num >= 0) {
+
+            if (!num) return '';
+            const [integerPart, decimalPart] = num?.toString().split('.');
+            let words = numWords(parseInt(integerPart));
+            // console.log(words,integerPart,'words');
+
+            if (decimalPart) {
+                words += ' point';
+                for (let digit of decimalPart) {
+                    words += ` ${numWords(parseInt(digit))}`;
+                }
             }
+            return words;
         }
-        return words;
-    }
     };
     const rupeestext = convertToWords(fullTotal) || '------';
     // const rupeestext = convertToWords(fullTotal);
@@ -127,9 +131,21 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         <>
             <div style={{ display: 'flex', flexDirection: 'column', width: '784px', padding: 20 }} ref={targetRef}>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px' }}>
-                    <div>
+                    {/* <div>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
                         <h2 className="organisationtext">{customerAddress}</h2>
+                    </div> */}
+                    <div>
+                        <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
+
+                        {commonState ? (
+                            <h2 className="organisationtext">{commonState.address}</h2>
+                        ) : (
+                            <>
+                                <h2 className="organisationtext">{orgaddress1}</h2>
+                                <h2 className="organisationtext">{orgaddress3}</h2>
+                            </>
+                        )}
                     </div>
                     <div className="Taxinvoicediv">
                         <h3 className="Taxinvoicetext">
@@ -151,8 +167,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px', borderBottom: '1px solid grey', paddingBottom: 5 }}>
                     <div>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{customer}</h2>
-                        <h2 className="organisationtext">{orgaddress1}</h2>
-                        <h2 className="organisationtext">{orgaddress3}</h2>
+                        {/* <h2 className="organisationtext">{orgaddress1}</h2>
+                        <h2 className="organisationtext">{orgaddress3}</h2> */}
+                        <h2 className="organisationtext">{gstno[0].address1}</h2>
                     </div>
                     <div className="Taxinvoicediv">
                         <h3 className="Refnotext">

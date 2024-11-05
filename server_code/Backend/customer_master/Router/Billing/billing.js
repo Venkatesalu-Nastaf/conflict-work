@@ -14,31 +14,244 @@ router.post('/billing', (req, res) => {
   });
 });
 
+// Update GroupBilling
+// router.post('/updateGroupBilling', (req, res) => {
+//   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo } = req.body;
+
+//   // Ensure that a ReferenceNo is provided to identify the row to update
+//   if (!ReferenceNo) {
+//     return res.status(400).json({ error: 'ReferenceNo is required to update the record' });
+//   }
+
+//   const updateQuery = `
+//       UPDATE Group_billing 
+//       SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+//           Trips = ?, Amount = ?, Trip_id = ?, station = ?
+//       WHERE ReferenceNo = ?`;
+
+//   db.query(updateQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station, ReferenceNo], (err, result) => {
+//     if (err) {
+//       console.log(err, 'error');
+//       return res.status(500).json({ error: 'Failed to update the record in MySQL' });
+//     }
+
+//     console.log(result, 'result');
+//     const updateQuery = "UPDATE tripsheet SET  status='Billed',Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
+
+//     if (result.affectedRows > 0) {
+//       return res.status(200).json({ message: 'Record updated successfully' });
+//     } else {
+//       return res.status(404).json({ error: 'No record found with the given ReferenceNo' });
+//     }
+//   });
+// });
+// router.post('/updateGroupBilling', (req, res) => {
+//   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo } = req.body;
+
+//   // Ensure that a ReferenceNo is provided to identify the row to update
+//   if (!ReferenceNo) {
+//     return res.status(400).json({ error: 'ReferenceNo is required to update the record' });
+//   }
+
+//   const updateGroupBillingQuery = `
+//       UPDATE Group_billing 
+//       SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+//           Trips = ?, Amount = ?, Trip_id = ?, station = ?
+//       WHERE ReferenceNo = ?`;
+
+//   const selectGroupTripIdQuery = `
+//       SELECT ReferenceNo AS Grouptrip_id FROM Group_billing WHERE Trip_id IN (?)`;
+//   const updateGroupTripIdInTripsheetQuery = `
+//     UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
+//   db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station, ReferenceNo], (err, result) => {
+//     if (err) {
+//       console.log(err, 'error');
+//       return res.status(500).json({ error: 'Failed to update the record in MySQL' });
+//     }
+
+//     if (result.affectedRows > 0) {
+//       // Proceed to the second query to update `tripsheet`
+//       const updateTripsheetQuery = "UPDATE tripsheet SET status='Billed', Billed_Status = 'Covering_Billed' WHERE tripid IN (?)";
+
+//       db.query(updateTripsheetQuery, [Trip_id], (err, result) => {
+//         if (err) {
+//           console.log(err, 'error');
+//           return res.status(500).json({ error: 'Failed to update the tripsheet records in MySQL' });
+//         }
+
+//         return res.status(200).json({ message: 'Record updated successfully in both Group_billing and tripsheet tables' });
+//       });
+//     } else {
+//       return res.status(404).json({ error: 'No record found with the given ReferenceNo' });
+//     }
+//   });
+// });
+
+router.post('/updateGroupBilling', (req, res) => {
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo } = req.body;
+console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo,'updateGroup');
+
+  // Ensure that a ReferenceNo is provided to identify the row to update
+  if (!ReferenceNo) {
+    return res.status(400).json({ error: 'ReferenceNo is required to update the record' });
+  }
+
+  const updateGroupBillingQuery = `
+      UPDATE Group_billing 
+      SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+          Trips = ?, Amount = ?, Trip_id = ?, station = ?
+      WHERE ReferenceNo = ?`;
+
+  const selectGroupTripIdQuery = `
+      SELECT ReferenceNo AS Grouptrip_id FROM Group_billing WHERE Trip_id IN (?)`;
+
+  const updateTripsheetStatusQuery = `
+      UPDATE tripsheet SET status = 'Billed', Billed_Status = 'Covering_Billed' WHERE tripid IN (?)`;
+
+  const updateGroupTripIdInTripsheetQuery = `
+      UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
+
+  // Step 1: Update Group_billing
+  db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station, ReferenceNo], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: 'Failed to update the record in MySQL' });
+    }
+   console.log(result,'result');
+   
+    if (result.affectedRows > 0) {
+      console.log('1111111111',Trip_id);
+      
+      // Step 2: Fetch Grouptrip_id after updating Group_billing
+      db.query(selectGroupTripIdQuery, [Trip_id.join(',')], (error, groupResult) => {
+        if (error) {
+          console.log(error, 'error');
+          return res.status(500).json({ error: 'Failed to fetch Grouptrip_id from MySQL' });
+        }
+         console.log(groupResult,'groupResultt');
+         
+        if (groupResult.length > 0) {
+          const groupTripId = groupResult[0].Grouptrip_id;
+
+          // Step 3: Update tripsheet status
+          db.query(updateTripsheetStatusQuery, [Trip_id], (err, result1) => {
+            if (err) {
+              console.log(err, 'error');
+              return res.status(500).json({ error: 'Failed to update tripsheet status in MySQL' });
+            }
+             console.log(result1,'resultupdate');
+             
+            // Step 4: Update GroupTripId in tripsheet with fetched Grouptrip_id
+            db.query(updateGroupTripIdInTripsheetQuery, [groupTripId, Trip_id], (updateError, finalResult) => {
+              if (updateError) {
+                console.log(updateError, 'error');
+                return res.status(500).json({ error: 'Failed to update GroupTripId in tripsheet' });
+              }
+              console.log(finalResult,'finalResult');
+              
+
+              // All operations succeeded
+              return res.status(200).json({ message: 'Record updated successfully in both Group_billing and tripsheet tables', groupTripId });
+            });
+          });
+        } else {
+          return res.status(404).json({ error: 'No Grouptrip_id found' });
+        }
+      });
+    } else {
+      return res.status(404).json({ error: 'No record found with the given ReferenceNo' });
+    }
+  });
+});
+
+
 router.post('/GroupBillingList', (req, res) => {
   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station } = req.body;
+  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, 'groupbill');
 
+  const insertBillingQuery = `
+    INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
-  const sqlquery1 = "UPDATE tripsheet SET status = 'Billed',Billed_Status='Covering_Billed' WHERE tripid IN (?)";
+  const selectGroupTripIdQuery = `
+    SELECT ReferenceNo AS Grouptrip_id FROM Group_billing WHERE Trip_id IN (?)`;
 
-  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station], (err, result) => {
+  const updateTripsheetStatusQuery = `
+    UPDATE tripsheet SET status = 'Billed', Billed_Status = 'Covering_Billed' WHERE tripid IN (?)`;
+
+  const updateGroupTripIdInTripsheetQuery = `
+    UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
+
+  // Step 1: Insert into Group_billing
+  db.query(insertBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }
 
-
     if (result.affectedRows >= 1) {
-      db.query(sqlquery1, [Trip_id], (err, result1) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to update tripsheet status in MySQL' });
+      // Step 2: Fetch the Grouptrip_id after successful insert
+      db.query(selectGroupTripIdQuery, [Trip_id], (error, groupResult) => {
+        if (error) {
+          return res.status(500).json({ error: 'Failed to fetch Grouptrip_id from MySQL' });
         }
 
+        if (groupResult.length > 0) {
+          const groupTripId = groupResult[0].Grouptrip_id;
 
-        return res.status(200).json({ message: 'Inserted and updated successfully' });
+          // Step 3: Update tripsheet status
+          db.query(updateTripsheetStatusQuery, [Trip_id], (err, result1) => {
+            if (err) {
+              return res.status(500).json({ error: 'Failed to update tripsheet status in MySQL' });
+            }
+
+            // Step 4: Update GroupTripId in tripsheet with fetched Grouptrip_id
+            db.query(updateGroupTripIdInTripsheetQuery, [groupTripId, Trip_id], (updateError, finalResult) => {
+              if (updateError) {
+                return res.status(500).json({ error: 'Failed to update GroupTripId in tripsheet' });
+              }
+              console.log(finalResult, 'finalResult');
+
+              return res.status(200).json({ message: 'Inserted and updated successfully', groupTripId });
+            });
+          });
+        } else {
+          return res.status(404).json({ error: 'No Grouptrip_id found' });
+        }
       });
     }
   });
 });
+
+
+
+// router.post('/GroupBillingList', (req, res) => {
+//   const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station } = req.body;
+
+
+//   const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,station) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
+//   const sqlquery1 = "UPDATE tripsheet SET status = 'Billed',Billed_Status='Covering_Billed' WHERE tripid IN (?)";
+//   const groupidquery = `SELECT ReferenceNo FROM Group_billing WHERE Trip_id IN (?)`;
+//   const tripsheetUpdateQuery = `UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
+
+//   db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Failed to insert into MySQL' });
+//     }
+
+
+//     if (result.affectedRows >= 1) {
+
+//       db.query(sqlquery1, [Trip_id], (err, result1) => {
+//         if (err) {
+//           return res.status(500).json({ error: 'Failed to update tripsheet status in MySQL' });
+//         }
+
+
+//         return res.status(200).json({ message: 'Inserted and updated successfully' });
+//       });
+//     }
+//   });
+// });
 
 router.get('/ListDetailsWithStation', (req, res) => {
   const { Customer, FromDate, ToDate, station } = req.query;
@@ -145,7 +358,7 @@ router.put('/statusupdate', (req, res) => {
 
 router.post('/tripsheetstatusupdate', (req, res) => {
   const { tripids, status } = req.body;
-  const query = 'UPDATE tripsheet SET status = ?,Billed_Status=NULL WHERE tripid IN (?)';
+  const query = 'UPDATE tripsheet SET status = ?,Billed_Status=NULL,GroupTripId=NULL WHERE tripid IN (?)';
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
       res.status(500).json({ message: 'Internal server error' });
@@ -487,7 +700,7 @@ router.get('/Group-Billing', (req, res) => {
 
 router.get('/tripsheet-keydown/:tripid', async (req, res) => {
   const tripid = req.params.tripid;
- 
+
 
   const query = `
     SELECT * FROM tripsheet 
@@ -585,7 +798,7 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
 //--------------------------------------------
 router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
   const tripid = req.params.tripid;
-  console.log(tripid,"tripplog")
+  console.log(tripid, "tripplog")
   // booking.customer, booking.guestname, booking.guestmobilno, booking.address1, booking.duty, booking.useage,TripsheetLog_Details.Log_id,TripsheetLog_Details.Log_Date,TripsheetLog_Details.Log_Time,TripsheetLog_Details.mode
   // TripsheetLog_Details.tripsheet_no,TripsheetLog_Details.status,TripsheetLog_Details.apps,TripsheetLog_Details.shedOutDate ,TripsheetLog_Details.startdate as Reportdate,TripsheetLog_Details.closedate,TripsheetLog_Details.shedInDate,TripsheetLog_Details.reporttime as Shed Out Time,TripsheetLog_Details.starttime,TripsheetLog_Details.closetime,TripsheetLog_Details.shedintime,TripsheetLog_Details.totaltime,
   // TripsheetLog_Details.additionaltime,TripsheetLog_Details.shedout,TripsheetLog_Details.startkm,TripsheetLog_Details.closekm,TripsheetLog_Details.shedin,TripsheetLog_Details.totalkm1,TripsheetLog_Details.shedkm,TripsheetLog_Details.vehRegNo,TripsheetLog_Details.vehicleName,TripsheetLog_Details.driverName,TripsheetLog_Details.mobileNo
@@ -599,7 +812,7 @@ router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
   //       TripsheetLog_Details   ON TripsheetLog_Details.tripsheet_no = booking.bookingno
   //   WHERE 
   //      TripsheetLog_Details.tripsheet_no = ?
-        
+
   // `;
   const sqlQuery = `
     SELECT 
@@ -620,13 +833,13 @@ router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
       TripsheetLog_Details.tripsheet_no = ?
   `;
 
-  db.query(sqlQuery,[tripid], (err, result) => {
+  db.query(sqlQuery, [tripid], (err, result) => {
     if (err) {
-     
+
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
-   
-     // Assuming there is only one matching booking
+
+    // Assuming there is only one matching booking
     return res.status(200).json(result);
   });
 
@@ -638,19 +851,19 @@ router.post("/TripsheetlogDetailslogged", (req, res) => {
   // console.log(bookData)
 
   db.query('INSERT INTO TripsheetLog_Details SET ?', bookData, (err, result) => {
-      if (err) {
-        console.log(err)
-          return res.status(500).json({ error: "Failed to insert data into MySQL" });
-      }
+    if (err) {
+      console.log(err)
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
 
-      // Check if the insertion was successful (affectedRows > 0)
-      if (result.affectedRows ===  0) {
-          return res.status(400).json("data not inserted succefully")
-      } 
-      // console.log(result,"log")
+    // Check if the insertion was successful (affectedRows > 0)
+    if (result.affectedRows === 0) {
+      return res.status(400).json("data not inserted succefully")
+    }
+    // console.log(result,"log")
 
-          return res.status(200).json("data inserted succefully")
-      
+    return res.status(200).json("data inserted succefully")
+
   });
 })
 

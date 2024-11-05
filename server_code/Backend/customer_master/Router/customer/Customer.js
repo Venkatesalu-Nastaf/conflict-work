@@ -170,15 +170,30 @@ router.get('/allCustomers', (req, res) => {
   })
 })
 
+// router.get('/gstdetails/:customer', (req, res) => {
+
+//   const customer = req.params.customer;
+//   const sqlquery = "select gstTax from customers where customer=?";
+//   db.query(sqlquery, [customer], (err, result) => {
+//     if (err) {
+//       console.log(err, 'error');
+//     }
+//     return res.status(200).json(result);
+
+//   })
+// })
+
 router.get('/gstdetails/:customer', (req, res) => {
 
   const customer = req.params.customer;
-  const sqlquery = "select gstTax from customers where customer=?";
+  const sqlquery = "select gstTax,state,address1 from customers where customer=?";
   db.query(sqlquery, [customer], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
+    console.log(result, 'Results')
     return res.status(200).json(result);
+
 
   })
 })
@@ -377,7 +392,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
           address: customerDetail ? customerDetail.address1 : null,
         };
       });
-      
+
       return res.status(200).json(combinedResults)
     })
   })
@@ -420,14 +435,14 @@ router.get("/getuniqueCustomerdata/:customer", (req, res) => {
 })
 router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
   const ratetype = req.params.ratetype;
-  const stations=req.params.stations;
-  const ratename=req.params.ratename;
-  console.log(ratetype, "params",stations,ratename)
-  db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype,ratename,stations], (err, results) => {
+  const stations = req.params.stations;
+  const ratename = req.params.ratename;
+  console.log(ratetype, "params", stations, ratename)
+  db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype, ratename, stations], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
-    console.log(results.length,"dddd")
+    console.log(results.length, "dddd")
     return res.status(200).json(results);
   })
 })

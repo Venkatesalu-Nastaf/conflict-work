@@ -9,14 +9,14 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
     padding: 10,
-    pageBreakInside: 'avoid', 
+    pageBreakInside: 'avoid',
     overflow: 'hidden'
   },
   heading: {
     border: '2px solid #000000',
     padding: '20px',
-    boxSizing: 'border-box', 
-    pageBreakInside: 'avoid', 
+    boxSizing: 'border-box',
+    pageBreakInside: 'avoid',
     overflow: 'hidden'
   },
 
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images ,customStateDetails}) => {
+const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images, customStateDetails }) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -266,30 +266,31 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const [gstAmount, setGstAmount] = useState(0)
+  const [fullGST,setFullGST] = useState(0)
   const [advance, setAdvance] = useState();
   const organizationname = customer
   const organisationdetailfill = organisationdetails
   // const organisationimage = images
   const newStateforpdf = customStateDetails
   // console.log(customStateDetails,'custommm');
-//   console.log(newStateforpdf,'Custom state datas ',newStateforpdf.length)
-//   console.log(newStateforpdf[0]?.Stationname,'Custom state stationname ')
-//   console.log(newStateforpdf.address,'Custom state address')
-//   console.log(newStateforpdf.gstno,'Custom state gstno ')
+  //   console.log(newStateforpdf,'Custom state datas ',newStateforpdf.length)
+  //   console.log(newStateforpdf[0]?.Stationname,'Custom state stationname ')
+  //   console.log(newStateforpdf.address,'Custom state address')
+  //   console.log(newStateforpdf.gstno,'Custom state gstno ')
 
- 
-//   if (newStateforpdf) {
-    
-//     if (newStateforpdf.length === 0) {
-//         console.log("newStateforpdf is empty");
-//     } else {
-//         console.log("newStateforpdf is not empty, length:", newStateforpdf.length);
-//     }
-// } else {
-//     console.log("newStateforpdf is null or undefined.");
-// }
 
-  
+  //   if (newStateforpdf) {
+
+  //     if (newStateforpdf.length === 0) {
+  //         console.log("newStateforpdf is empty");
+  //     } else {
+  //         console.log("newStateforpdf is not empty, length:", newStateforpdf.length);
+  //     }
+  // } else {
+  //     console.log("newStateforpdf is null or undefined.");
+  // }
+
+
   const apiUrl = APIURL;
 
   useEffect(() => {
@@ -319,6 +320,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
         driverBeta += parseInt(li.driverBeta_amount || 0)
         advanceamount += parseInt(li.customeradvance || 0)
         gstamount = parseFloat(li.gstTax / 2 || 0)
+        setFullGST(li.gstTax)
         return null
       })
       setTotalAmount(totalamount)
@@ -361,7 +363,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
-
+   const igst = Math.round(fullAmount * fullGST / 100);
   const cgst = Math.round(fullAmount * gstAmount / 100);
   const sgst = Math.round(fullAmount * gstAmount / 100);
   const park = parseInt(parking)
@@ -382,12 +384,12 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
               <View style={styles.section}>
                 <View style={styles.headingsection}>
                   {/* <View> */}
-                    {/* <Text style={styles.text1}> JESSY CABS</Text>
+                  {/* <Text style={styles.text1}> JESSY CABS</Text>
                     <Text style={styles.text2}> No:8/7, 11th Street,Nandanam(Extn.)</Text>
                     <Text style={styles.text2}> Nadanam,Chennai-600 035</Text>
                     <Text style={styles.text2}> booking@jessycabs.in</Text> */}
 
-                    {/* <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
+                  {/* <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
                     <Text style={[styles.text2, { fontSize: 11.5 }]}>
                       {organisationdetailfill[0].addressLine1}
                     </Text>
@@ -402,38 +404,38 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   </View> */}
 
 
-                    <View>
-                      {newStateforpdf && newStateforpdf.length > 0 ? (
-                        // Render this view if newStateforpdf has values
-                        
-                        <>
-                          <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {newStateforpdf[0]?.address }
-                          </Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {newStateforpdf[0]?.Stationname }
-                          </Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {organisationdetailfill[0].contactEmail}
-                          </Text>
-                        </>
-                      ) : (
-                        // Render this view if newStateforpdf is null or empty
-                        <>
-                          <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {organisationdetailfill[0]?.addressLine1}
-                          </Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {organisationdetailfill[0]?.location}
-                          </Text>
-                          <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                            {organisationdetailfill[0]?.contactEmail}
-                          </Text>
-                        </>
-                      )}
-                    </View>
+                  <View>
+                    {newStateforpdf && newStateforpdf.length > 0 ? (
+                      // Render this view if newStateforpdf has values
+
+                      <>
+                        <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {newStateforpdf[0]?.address}
+                        </Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {newStateforpdf[0]?.Stationname}
+                        </Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {organisationdetailfill[0].contactEmail}
+                        </Text>
+                      </>
+                    ) : (
+                      // Render this view if newStateforpdf is null or empty
+                      <>
+                        <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {organisationdetailfill[0]?.addressLine1}
+                        </Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {organisationdetailfill[0]?.location}
+                        </Text>
+                        <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                          {organisationdetailfill[0]?.contactEmail}
+                        </Text>
+                      </>
+                    )}
+                  </View>
 
 
                   <View style={styles.logodiv}>
@@ -452,15 +454,15 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   <View>
                     {/* <Text style={styles.gstno}>GSTIN:33AALCC0190M1ZK</Text> */}
                     {newStateforpdf && newStateforpdf.length > 0 ? (
-                       <Text style={[styles.gstno, { fontSize: 10 }]}>
-                       GSTIN: {newStateforpdf[0]?.gstno}
-                     </Text>
-                    ):(
                       <Text style={[styles.gstno, { fontSize: 10 }]}>
-                      GSTIN: {organisationdetailfill[0].gstnumber}
-                    </Text>
+                        GSTIN: {newStateforpdf[0]?.gstno}
+                      </Text>
+                    ) : (
+                      <Text style={[styles.gstno, { fontSize: 10 }]}>
+                        GSTIN: {organisationdetailfill[0].gstnumber}
+                      </Text>
                     )
-                  }
+                    }
                   </View>
                 </View>
                 <View style={styles.taxinvoice}>
@@ -471,11 +473,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 </View>
                 <View style={styles.seconddivision}>
                   <View style={{ width: 200 }}>
-                  <Text style={[styles.underlinetext, { fontSize: 11 }]}>
-                    Details of Receiver | Billed to:
-                  </Text>
-                    <Text style={[styles.customername, { width: 300,fontSize: 10.5 }]}>{organizationname}</Text>
-                    <Text style={[styles.text2, { fontSize: 10 ,width:220}]}>{address1}</Text>
+                    <Text style={[styles.underlinetext, { fontSize: 11 }]}>
+                      Details of Receiver | Billed to:
+                    </Text>
+                    <Text style={[styles.customername, { width: 300, fontSize: 10.5 }]}>{organizationname}</Text>
+                    <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{address1}</Text>
                     <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {gst}</Text>
                   </View>
 
@@ -484,20 +486,20 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Invoice Date :</Text> {invoiceDate}</Text>
                     <Text style={styles.invoicerightside}><Text style={styles.invoicerightsideHeading}>Group Ref No :</Text> {groupTripid}</Text> */}
 
-                  <View style={styles.grandtotal}>
-                    <View>
-                      <Text style={[styles.total, { fontSize: 10 }]}>Invoice No: </Text>
-                      <Text style={[styles.text2, { fontSize: 10 }]}>Invoice Date:</Text>
-                      <Text style={[styles.text2, { fontSize: 10 }]}>Group Ref No:</Text>
+                    <View style={styles.grandtotal}>
+                      <View>
+                        <Text style={[styles.total, { fontSize: 10 }]}>Invoice No: </Text>
+                        <Text style={[styles.text2, { fontSize: 10 }]}>Invoice Date:</Text>
+                        <Text style={[styles.text2, { fontSize: 10 }]}>Group Ref No:</Text>
+                      </View>
+                      <View>
+                        <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{invoiceno}</Text>
+                        <Text style={[styles.invoicerightside, { fontSize: 10 }]}>
+                          {dayjs(invoiceDate).format('DD-MM-YYYY')}
+                        </Text>
+                        <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{groupTripid}</Text>
+                      </View>
                     </View>
-                    <View>
-                      <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{invoiceno}</Text>
-                      <Text style={[styles.invoicerightside, { fontSize: 10 }]}>
-                        {dayjs(invoiceDate).format('DD-MM-YYYY')}
-                      </Text>
-                      <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{groupTripid}</Text>
-                    </View>
-                  </View>
 
                   </View>
                 </View>
@@ -513,73 +515,73 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
                       <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
                     </View>
-                    <View style={[styles.tablevalue,{fontSize:"10px"}]}>
+                    <View style={[styles.tablevalue, { fontSize: "10px" }]}>
                       {invdata.map((item, index) => (
 
                         <View style={styles.tablevalueRow} key={index}>
                           <React.Fragment>
                             <View style={styles.tablecellsno}>
-                            <Text style={{ fontSize: 10 }}>{index + 1}</Text>
-                          </View>
-                          <View style={styles.tableCell}>
-                            <Text style={{ fontSize: 10 }}>{dayjs(item.startdate).format('MM/DD/YY')}</Text>
-                          </View>
-                          <View style={styles.tablecelltripno}>
-                            <Text style={{ fontSize: 10 }}>{item.tripid}</Text>
-                          </View>
-                          <View style={styles.tablecellparticular}>
-                            <Text style={{ fontSize: 10 }}>{item.guestname}</Text>
-                            <Text style={{ fontSize: 10 }}>
-                              {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
-                            </Text>
-                            <Text style={{ fontSize: 10 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
+                              <Text style={{ fontSize: 10 }}>{index + 1}</Text>
+                            </View>
+                            <View style={styles.tableCell}>
+                              <Text style={{ fontSize: 10 }}>{dayjs(item.startdate).format('MM/DD/YY')}</Text>
+                            </View>
+                            <View style={styles.tablecelltripno}>
+                              <Text style={{ fontSize: 10 }}>{item.tripid}</Text>
+                            </View>
+                            <View style={styles.tablecellparticular}>
+                              <Text style={{ fontSize: 10 }}>{item.guestname}</Text>
+                              <Text style={{ fontSize: 10 }}>
+                                {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
-                            {item.extraKM > 0 && item.extrakm_amount > 0 ? (
-                              <Text style={{ fontSize: 10 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
-                            ) : null}
+                              {item.extraKM > 0 && item.extrakm_amount > 0 ? (
+                                <Text style={{ fontSize: 10 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
+                              ) : null}
 
-                            {item.extraHR > 0 && item.extrahr_amount > 0 ? (
-                              <Text style={{ fontSize: 10 }}>Extra Hrs : {item.extraHR} hrs @ Rs.{item.extrahr_amount}</Text>
-                            ) : null}
+                              {item.extraHR > 0 && item.extrahr_amount > 0 ? (
+                                <Text style={{ fontSize: 10 }}>Extra Hrs : {item.extraHR} hrs @ Rs.{item.extrahr_amount}</Text>
+                              ) : null}
 
-                            {item.nightBta > 0 && item.nightCount > 0 ? (
-                              <Text style={{ fontSize: 10 }}>Night Bata : {item.nightCount} Night @ Rs.{item.nightBta}</Text>
-                            ) : null}
+                              {item.nightBta > 0 && item.nightCount > 0 ? (
+                                <Text style={{ fontSize: 10 }}>Night Bata : {item.nightCount} Night @ Rs.{item.nightBta}</Text>
+                              ) : null}
 
-                            {item.driverBeta > 0 && item.driverbeta_Count > 0 ? (
-                              <Text style={{ fontSize: 10 }}>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
-                            ) : null}
+                              {item.driverBeta > 0 && item.driverbeta_Count > 0 ? (
+                                <Text style={{ fontSize: 10 }}>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
+                              ) : null}
 
-                            <Text style={{ fontSize: 10 }}>{item.pickup}</Text>
-                          </View>
-                         
+                              <Text style={{ fontSize: 10 }}>{item.pickup}</Text>
+                            </View>
+
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
-                            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                            <Text style={[styles.permittext, { fontSize: 10 }]}>
-                              {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
-                            </Text>
-                          </View>
-                          <View style={[styles.tableCell, { paddingRight: 5 }]}>
-                                  <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                                  <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                                  {item.package_amount > 0 && (
-                                    <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.package_amount}.00</Text>
-                                  )}
-                                  {item.extraKM > 0 && item.ex_kmAmount > 0 && (
-                                    <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_kmAmount}.00</Text>
-                                  )}
-                                  {item.extraHR > 0 && item.ex_hrAmount > 0 && (
-                                    <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_hrAmount}.00</Text>
-                                  )}
-                                  {item.nightBta > 0 && item.night_totalAmount > 0 && (
-                                    <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.night_totalAmount}.00</Text>
-                                  )}
-                                  {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
-                                    <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.driverBeta_amount}.00</Text>
-                                  )}
-                                </View>
+                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+                              <Text style={[styles.permittext, { fontSize: 10 }]}>
+                                {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
+                              </Text>
+                            </View>
+                            <View style={[styles.tableCell, { paddingRight: 5 }]}>
+                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+                              {item.package_amount > 0 && (
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.package_amount}.00</Text>
+                              )}
+                              {item.extraKM > 0 && item.ex_kmAmount > 0 && (
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_kmAmount}.00</Text>
+                              )}
+                              {item.extraHR > 0 && item.ex_hrAmount > 0 && (
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_hrAmount}.00</Text>
+                              )}
+                              {item.nightBta > 0 && item.night_totalAmount > 0 && (
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.night_totalAmount}.00</Text>
+                              )}
+                              {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.driverBeta_amount}.00</Text>
+                              )}
+                            </View>
                           </React.Fragment>
                         </View>
                       ))}
@@ -596,7 +598,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
                       </Text>
                       <View>
-                        <Text style={{ width: 200, fontSize: 11, paddingTop:75, paddingLeft: 7 }}>
+                        <Text style={{ width: 200, fontSize: 11, paddingTop: 75, paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
                         </Text>
                       </View>
@@ -632,20 +634,29 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{fullAmount}.00</Text>
                       </View>
                     )}
+                    {customStateDetails.length > 0 ?(
+                      <>
+                        {cgst > 0 && (
+                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                            <Text style={{ width: '130px', fontSize: 10 }}>CGST {gstAmount}% on {fullAmount}:</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgst}.00</Text>
+                          </View>
+                        )}
 
-                    {cgst > 0 && (
+                        {sgst > 0 && (
+                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                            <Text style={{ width: '130px', fontSize: 10 }}>SGST {gstAmount}% on {fullAmount}:</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{sgst}.00</Text>
+                          </View>
+                        )}
+                      </>
+                    ) : (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>CGST {gstAmount}% on {fullAmount}:</Text>
-                        <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgst}.00</Text>
+                        <Text style={{ width: '130px', fontSize: 10 }}>IGST {fullGST}% on {fullAmount}:</Text>
+                        <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igst}.00</Text>
                       </View>
-                    )}
+                    )  }
 
-                    {sgst > 0 && (
-                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>SGST {gstAmount}% on {fullAmount}:</Text>
-                        <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{sgst}.00</Text>
-                      </View>
-                    )}
 
                     {parkpermit > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
@@ -670,7 +681,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   </View>
 
 
-                </View> 
+                </View>
               </View>
 
               {/* <View style={styles.totalrupeesword}>
@@ -678,16 +689,16 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
               </View> */}
 
-              <View style={styles.lastsectiondiv}>   
+              <View style={styles.lastsectiondiv}>
                 <View style={styles.lastsection}>
                   < View style={styles.rupees}>
                     <View style={styles.totalrupeesword}>
-                    <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
-                      {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
-                    </Text>
-                  </View> 
+                      <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
+                        {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
+                      </Text>
+                    </View>
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
-                    <Text style={[styles.underlinetext,{fontSize:12}]}>Bank Details</Text>
+                    <Text style={[styles.underlinetext, { fontSize: 12 }]}>Bank Details</Text>
 
                     <Text style={[styles.text2, { fontSize: 10 }]}>
                       {organisationdetailfill[0].BankDetails}
@@ -699,11 +710,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     </Text>
                     ) */}
                     {gstAmount === 0 && (
-                    <Text style={[styles.text2, { fontSize: 10, width: 320, marginTop: 10 }]}>
-                      GST is to be paid by Service Recipient Under RCM as per Notification
-                      22/2019 - Central tax (Rate) dated 30-09-2019
-                    </Text>
-                     )}
+                      <Text style={[styles.text2, { fontSize: 10, width: 320, marginTop: 10 }]}>
+                        GST is to be paid by Service Recipient Under RCM as per Notification
+                        22/2019 - Central tax (Rate) dated 30-09-2019
+                      </Text>
+                    )}
 
                     {/* <Text>GST is to be paid by Service Recepient Under RCM as per Notification 22/2019 - Central tax (Rate) dated 30-09-2019</Text> */}
 
@@ -711,9 +722,9 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 </View>
 
                 <View style={styles.signaturesection}>
-                  
+
                   <View style={[styles.companyName, { flexDirection: 'row' }]}>
-                      
+
                     <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs</Text>
 
                   </View>

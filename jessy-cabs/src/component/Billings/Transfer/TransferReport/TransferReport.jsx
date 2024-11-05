@@ -319,7 +319,7 @@ const TransferReport = ({ stationName }) => {
       
 
     const commonState = stateDetails?.filter(item => item.state === addressDetails[0]?.state) || [];
-    // console.log(commonState);   
+    console.log(commonState,'common state');   
      
     // console.log(stateDetails, "State details");
     // console.log(commonState, "Common State",commonState.length);

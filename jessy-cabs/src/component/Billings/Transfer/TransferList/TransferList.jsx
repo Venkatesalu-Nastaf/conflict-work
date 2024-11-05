@@ -55,7 +55,8 @@ const TransferList = ({ stationName, organizationNames }) => {
         loading,
         // setLoading
         info,
-        infoMessage
+        infoMessage,
+        setUserStations
 
     } = useTransferlist();
 
@@ -63,6 +64,13 @@ const TransferList = ({ stationName, organizationNames }) => {
     const { permissions } = useContext(PermissionContext)
 
     const Transfer_read = permissions[6]?.read;
+    // console.log(stationName,"nn")
+    useEffect(() => {
+
+        if (stationName?.length > 0) {
+            setUserStations(stationName)
+        }
+      }, [stationName])
 
     return (
         <div className="TransferList-form main-content-form Scroll-Style-hide">
@@ -166,7 +174,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         id="free-Stations"
                                         freeSolo
                                         size="small"
-                                        value={servicestation || "All"}
+                                        value={servicestation}
                                         // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,

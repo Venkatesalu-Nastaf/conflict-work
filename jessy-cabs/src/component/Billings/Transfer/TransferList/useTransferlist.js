@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback,useMemo} from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
@@ -22,7 +22,8 @@ const useTransferlist = () => {
   const [warningMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
   const [loading, setLoading] = useState(false)
-
+  const [userastation,setUserStations]=useState([])
+  const  userdata = localStorage.getItem("username");
 
 
   const handleExcelDownload = async () => {
@@ -119,7 +120,24 @@ const useTransferlist = () => {
     }
 
   }
+  // useme
+  const filteredStationNames = userastation
+  .filter((option) => option.Stationname !== "All") // Remove "All"
+  .map((option) => option.Stationname);
 
+  // const filteredStationNames = useMemo(() => {
+  //   return userastation
+  //     .filter((option) => option.Stationname !== "All") // Remove "All"
+  //     .map((option) => option.Stationname); // Map to only get the station names
+  // }, [userastation]);
+
+  // const filteredStationNames = useMemo(() => {
+  //   return userastation
+  //     .filter((option) => option.Stationname !== "All") // Remove "All"
+  //     .flatMap((option) => option.Stationname.split(' ')); // Split multiple words into individual values
+  // }, [userastation]); 
+
+  // console.log(filteredStationNames,"ll")
 
   const handlePdfDownload = () => {
     const pdf = new jsPDF({
@@ -277,7 +295,7 @@ const useTransferlist = () => {
   //   }
   // }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
 
-  const handleShow = useCallback(async () => {
+  const handleShow = async () => {
     if (!customer) {
       setInfo(true);
       setInfoMessage("Enter The Customer");
@@ -291,12 +309,17 @@ const useTransferlist = () => {
     }
   
     try {
+      console.log(selectedStatus,customer,servicestation,"details")
       const response = await axios.get(`${apiUrl}/gettransfer_listdatas`, {
         params: {
           Status: selectedStatus,
           Organization_name: encodeURIComponent(customer),
           FromDate: fromDate.format("YYYY-MM-DD"),
           EndDate: toDate.format("YYYY-MM-DD"),
+          Station:servicestation,
+          userastationdata:filteredStationNames
+
+          
         },
       });
   
@@ -329,8 +352,9 @@ const useTransferlist = () => {
       }
       console.log(err,'erro message')
     }
+  }
    
-  }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
+  // }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
   
 
   // Loading grid in the grid 
@@ -338,7 +362,9 @@ const useTransferlist = () => {
     const fetchdata = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(`${apiUrl}/gettransfer_list`)
+      
+      
+        const response = await axios.get(`${apiUrl}/gettransfer_list/${userdata}`)
         const data = response.data;
 
 
@@ -369,6 +395,7 @@ const useTransferlist = () => {
     { field: 'Grouptrip_id', headerName: "GroupID", width: 120 },
     { field: "Status", headerName: "Status", width: 130 },
     { field: "Invoice_no", headerName: "Invoice No", width: 130 },
+    { field: "Stations", headerName: "Stations", width: 130 },
     {
       field: "Billdate",
       headerName: "Date",
@@ -401,7 +428,7 @@ const useTransferlist = () => {
     const customer = encodeURIComponent(data.Organization_name)
     localStorage.setItem("selectedcustomerdata", customer)
     if (data.Status === "notbilled") {
-      const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&billingsheet=true`
+      const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&Stations=${data.Stations || ''}&billingsheet=true`
       window.location.href = billingPageUrl
     }
     else {
@@ -438,7 +465,8 @@ const useTransferlist = () => {
     setLoading,
     loading,
     info,
-    infoMessage
+    infoMessage,
+    setUserStations
   };
 };
 

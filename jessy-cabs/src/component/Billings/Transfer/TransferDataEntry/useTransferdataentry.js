@@ -12,6 +12,7 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
+    { field: "department", headerName: "Station", width: 130 },
     { field: "apps", headerName: "Apps", width: 130 },
     { field: "startdate", headerName: "TripDate", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "tripid", headerName: "Trip No", width: 130 },
@@ -59,6 +60,7 @@ const useTransferdataentry = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
+    const [infoMessage, setINFOMessage] = useState({});
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
@@ -78,6 +80,7 @@ const useTransferdataentry = () => {
     const { billingPage, setBillingPage } = PdfData()
     const [selectTripid,setSelectTripid] = useState([])
     const [loading,setLoading] = useState(false)
+  
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -293,7 +296,7 @@ const useTransferdataentry = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const parameterKeys = [
-            "Groupid", "Invoice_no", "Status", "Billdate", "Organization_name", "Trip_id", "FromDate", "EndDate", "Amount", "billingsheet"
+            "Groupid", "Invoice_no", "Status", "Billdate", "Organization_name", "Trip_id", "FromDate", "EndDate", "Amount", "billingsheet","Stations"
         ];
 
         const updatedFormData = {}; // New object to hold updated form data
@@ -306,6 +309,7 @@ const useTransferdataentry = () => {
         });
         // setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
+        console.log(updatedFormData,"kkkk")
         const transferlist = updatedFormData.Trip_id?.split(',').filter(item => item.trim() !== '');
         console.log(transferlist, 'idddddddd');
         setTransferId(transferlist);
@@ -315,6 +319,7 @@ const useTransferdataentry = () => {
         setFromDate(updatedFormData.FromDate);
         setEndDate(updatedFormData.EndDate);
         setBillingdate(updatedFormData.Billdate);
+        setServiceStation(updatedFormData.Stations);
         setTotalValue(parseInt(updatedFormData.Amount));
         setBillingPage(updatedFormData?.billingsheet)
         return () => {
@@ -334,12 +339,14 @@ const useTransferdataentry = () => {
             setGroupId('');
             setBook('')
             setSelectedCustomerDatas('');
+            setServiceStation('');
             // setFormData({});
             setRows([])
             setRowSelectionModel([])
         }
     }, [billingPage, setBillingPage])
 
+  
     //old code  without loading
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -498,8 +505,10 @@ const useTransferdataentry = () => {
         setInvoiceno(event.target.value)
     }
     const handleserviceInputChange = (event, newValue) => {
+        console.log("sattaions added")
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
+    // console.log(servicestation,"consolenavi")
 
     const handleRowSelection = (newSelectionModel) => {
         const selectedTripIds = newSelectionModel
@@ -1520,6 +1529,7 @@ const useTransferdataentry = () => {
     //         }
     //     }
     // }
+    // console.log(rows,"kk")
     
     const handleAddGroup = async () => {
         if (rowSelectionModel.length === 0) {
@@ -1612,6 +1622,7 @@ const useTransferdataentry = () => {
                 }
 
                 const fromdate = rows[0]?.startdate;
+                const stationsName = rows[0]?.department;
                 const enddate = rows[rows.length - 1]?.startdate;
                 const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
                 const EndDate = dayjs(enddate).format('YYYY-MM-DD');
@@ -1633,6 +1644,7 @@ const useTransferdataentry = () => {
                     FromDate: fromDate,
                     EndDate: EndDate,
                     Trips: Trips,
+                    Stations:stationsName
                 };
 
                 setMisGroupTripId(validTrips.map(trip => trip.tripid));
@@ -1692,7 +1704,7 @@ const useTransferdataentry = () => {
                 const billDate = dayjs(billdate).format('YYYY-MM-DD');
 
                 const OrganizationName = selectedCustomerDatas.customer || customer;
-                const Trips = rowSelectionModel.length;
+                // const Trips = rowSelectionModel.length;
                 const billstatus = "notbilled";
                 const grouptripid = parseInt(groupId)
 
@@ -1708,19 +1720,33 @@ const useTransferdataentry = () => {
                 const tripid = response.data[0].Trip_id;
                 const fullTotalAmount = parseInt(amount) + parseInt(tripAmount)
 
-                const TotalTrips = parseInt(trips) + parseInt(Trips)
+                // const TotalTrips = parseInt(trips) + parseInt(Trips)
                 // Ensure rowSelectionModel is an array of strings
                 const rowSelectionModelAsStrings = rowSelectionModel.map(String); // Converts [1358] to ["1358"]
-
+                console.log(rowSelectionModelAsStrings,"tttttttt",tripid)
                 // Combine rowSelectionModelAsStrings and tripid into a new array
-                const combinedArray = [...rowSelectionModelAsStrings, tripid]; // Results in ["1358", "1358"]
+                const combinedArray = [...rowSelectionModelAsStrings, tripid];
+                const uniqueTripIds = [...new Set(combinedArray)];
+                console.log(uniqueTripIds,"com")
+                const dadatrip = uniqueTripIds.length
+                const TotalTrips =  parseInt(dadatrip) // Results in ["1358", "1358"]
                 const todate = dayjs(toDate).format('YYYY-MM-DD')
                 const totalamount = fullTotalAmount.toString()
                 const tripscount = TotalTrips.toString()
+                // const transferlist = {
+                //     Billdate: billDate,
+                //     Organization_name: OrganizationName,
+                //     Trip_id: combinedArray,
+                //     FromDate: fromDate,
+                //     EndDate: todate,
+                //     Trips: tripscount,
+                //     Amount: totalamount,
+                //     grouptripid: grouptripid
+                // }
                 const transferlist = {
                     Billdate: billDate,
                     Organization_name: OrganizationName,
-                    Trip_id: combinedArray,
+                    Trip_id: uniqueTripIds,
                     FromDate: fromDate,
                     EndDate: todate,
                     Trips: tripscount,
@@ -1776,7 +1802,9 @@ console.log(transferlist,'adddtrans');
         const fetchdata = async () => {
             try {
                 // Assuming `tripid` is the value you want to pass
-                const tripid = misGroupTripId;  // Use your actual `tripid` or state variable
+                const tripid = misGroupTripId; 
+                // console.log(tripid,"tttt")
+                 // Use your actual `tripid` or state variable
 
                 // Pass tripid as query parameter in the GET request
                 const response = await axios.get(`${apiUrl}/getparticulartransfer_list`, {
@@ -1867,6 +1895,7 @@ console.log(transferlist,'adddtrans');
 
                 if (response.data && response.data.length > 0) {
                     const transferTripId = response.data[0].Trip_id;
+                    console.log(response.data,"repondedata")
 
                     const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
@@ -1877,6 +1906,8 @@ console.log(transferlist,'adddtrans');
                     setCustomer(response.data[0].Organization_name);
                     setInvoiceno(response.data[0].Invoice_no);
                     setBillingdate(response.data[0].Billdate);
+                    setServiceStation(response.data[0].Stations)
+                    
 
                     // Second API call to get tripsheet details using transferTripId
                     const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
@@ -1886,15 +1917,15 @@ console.log(transferlist,'adddtrans');
                     });
                     const data = tripsheetResponse.data;
                     console.log(data, 'tripresponse');
-                    const allSameDepartment = data.every(item => item.department === data[0].department);
+                    // const allSameDepartment = data.every(item => item.department === data[0].department);
 
-                    if (allSameDepartment) {
-                        console.log("All department values are the same:", data[0].department);
-                        setServiceStation(data[0].department)
-                    } else {
-                        setServiceStation('All')
-                        console.log("Department values are not the same.");
-                    }
+                    // if (allSameDepartment) {
+                    //     console.log("All department values are the same:", data[0].department);
+                    //     setServiceStation(data[0].department)
+                    // } else {
+                    //     setServiceStation('All')
+                    //     console.log("Department values are not the same.");
+                    // }
 
 
                     // Filter out rows where tripid is 0
@@ -2008,7 +2039,10 @@ console.log(transferlist,'adddtrans');
         handleKeyDown,
         handleRemove,
         loading,
-        setLoading
+        setLoading,
+        setInfo,
+        infoMessage, setINFOMessage,
+    
     };
 };
 

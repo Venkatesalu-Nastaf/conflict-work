@@ -266,6 +266,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   const fileInputRefdata = useRef(null);
 
   // const Tripsheet_read = permissions[3]?.read;
+  const superpower = localStorage.getItem("SuperAdmin")
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
@@ -2531,6 +2532,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                               </div>
 
                             </div>
+                            {
+                              Number(superpower) === 1  && billing_read === 1 ?
                             <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                               <p className='bill-topics'>Customer Bill</p>
                               <div className="input-field">
@@ -2842,6 +2845,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 variant="standard"
                               />
                             </div>
+                            :
+                            <></>
+}
                           </div>
                         </TabPanel>
                           : <></>

@@ -101,7 +101,7 @@ router.get('/getStation-name', (req, res) => {
           if (err) {
             return res.status(500).json({ error: "Failed to fetch data" });
           }
-          results.push({ Stationname: 'All' });
+          // results.push({ Stationname: 'All' });
 
           console.log("results", results)
           return res.status(200).json(results);
@@ -109,7 +109,7 @@ router.get('/getStation-name', (req, res) => {
       }
       else {
         console.log("data", data)
-        data.push({ Stationname: 'All' });
+        // data.push({ Stationname: 'All' });
         return res.status(200).json(data);
       }
     }

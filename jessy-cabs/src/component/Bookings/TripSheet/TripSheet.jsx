@@ -2098,6 +2098,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
+
                               <p className='bill-topics'>Vendor Info</p>
                               <div className="input-field tripsheet-vendor-info-first-input-field">
                                 <div className="input-g">
@@ -2346,7 +2347,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                             </div>
-                            <div className="Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main">
+                            <div className={Number(superpower) === 1  && billing_read === 1 ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}>
                               <p className='bill-topics'>Vendor Bill</p>
                               <div className="input-field">
                                 <div className="input-g">

@@ -32,6 +32,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
+import { CircularProgress } from '@mui/material';
+
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -72,6 +74,8 @@ const DriverBataRate = () => {
     columns,
     isEditMode,
     handleEdit,
+    loading,
+    setLoading
   } = useDriverbatarate();
 
  
@@ -374,6 +378,7 @@ const DriverBataRate = () => {
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs
+                position: 'relative',
                 '& .MuiDataGrid-virtualScroller': {
                   '&::-webkit-scrollbar': {
                     width: '8px', // Adjust the scrollbar width here
@@ -394,12 +399,25 @@ const DriverBataRate = () => {
                 },
               }}
             >
+               {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
               <DataGrid
                 rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick}
                 pageSize={5}
               />
+                            )}
             </Box>
           </div>
         </div>

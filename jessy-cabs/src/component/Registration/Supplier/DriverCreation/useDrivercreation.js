@@ -47,6 +47,9 @@ const useDrivercreation = () => {
     // console.log(profileimage,"imagedata")
     // venkat
 
+    const [loading, setLoading] = useState(false)
+
+
 
    
     const handleSelectAll = () => {
@@ -1029,22 +1032,70 @@ const useDrivercreation = () => {
     };
 
 
+    // const handleList = useCallback(async () => {
+    //     setLoading(true)
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/getDriverDetails`);
+    //         const data = response.data;
+          
+    //             const rowsWithUniqueId = data.map((row, index) => ({
+    //                 ...row,
+    //                 id: index + 1,
+    //             }));
+    //             setRows(rowsWithUniqueId);
+    //             // console.log(data,"datas of drivers creation ")
+    //             if (data.length > 0) {
+    //                 setLoading(false)
+    //             }else{
+    //                 setLoading(false)
+    //             }     
+           
+    //     } catch (err) {
+    //         console.log(err);
+    //         setLoading(false)
+    //     }finally {
+    //         setLoading(false); // Set loading to false once the request is done, whether successful or not
+    //     }
+    // }, [apiUrl]); // Add any dependencies needed inside this array
+
     const handleList = useCallback(async () => {
+        setLoading(true);  
+        setError(false);   
+        setErrorMessage("");
+    
         try {
             const response = await axios.get(`${apiUrl}/getDriverDetails`);
             const data = response.data;
-          
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-            
-           
+    
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+    
+            setRows(rowsWithUniqueId);  
+    
+            if (data.length > 0) {
+                setLoading(false);  
+            } else {
+                setLoading(false);  
+            }
         } catch (err) {
-            console.log(err);
+            console.error(err);
+    
+            // Handle network errors separately
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            
+            setError(true);  
+            setLoading(false);  
+        } finally {
+            setLoading(false);  
         }
-    }, [apiUrl]); // Add any dependencies needed inside this array
+    }, [apiUrl]);
+    
 
     useEffect(() => {
         handleList();
@@ -1145,7 +1196,8 @@ const useDrivercreation = () => {
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
         handleExcelDownload,
-        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
+        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2,
+        loading,setLoading
         
         // venkat
     };

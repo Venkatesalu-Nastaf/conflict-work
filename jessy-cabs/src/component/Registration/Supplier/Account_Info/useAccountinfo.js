@@ -32,6 +32,9 @@ const useAccountinfo = () => {
   const [cerendentialdata, setCredentialData] = useState()
   const [cerendentialdataforstations, setCredentialDataforstations] = useState()
 
+  const [loading, setLoading] = useState(false)
+
+
 
   //----------popup----------------------
 
@@ -432,6 +435,8 @@ const useAccountinfo = () => {
         const response = await axios.get(`${apiUrl}/ratemanagmentSupplierdata`)
         const data = response.data
         setSupplierRatetpe(data.map(row => row.ratename))
+
+      
       }
       catch (err) {
         console.log(err)
@@ -671,19 +676,63 @@ const useAccountinfo = () => {
   }
   };
 
+  // const handleList = useCallback(async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/accountinfo`);
+  //     const data = response.data;
+  //     const rowsWithUniqueId = data.map((row, index) => ({
+  //       ...row,
+  //       id: index + 1,
+  //     }));
+  //     setRows(rowsWithUniqueId);
+  //     // console.log(data,'Datas of suplier  name ')
+  //     if (data.length > 0) {
+  //       setLoading(false)
+  //   }else{
+  //       setLoading(false)
+  //   }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }finally {
+  //     setLoading(false); // Set loading to false once the request is done, whether successful or not
+  // }
+  // }, [apiUrl]); // Add dependencies like apiUrl
+
   const handleList = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    setErrorMessage("");
+
     try {
-      const response = await axios.get(`${apiUrl}/accountinfo`);
-      const data = response.data;
-      const rowsWithUniqueId = data.map((row, index) => ({
-        ...row,
-        id: index + 1,
-      }));
-      setRows(rowsWithUniqueId);
+        const response = await axios.get(`${apiUrl}/accountinfo`);
+        const data = response.data;
+        const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+
+        if (data.length > 0) {
+            setLoading(false);
+        } else {
+            setLoading(false);
+        }
     } catch (err) {
-      console.log(err);
+        console.error(err);
+
+        if (err.message === 'Network Error') {
+            setErrorMessage("Check network connection.");
+        } else {
+            setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+        }
+        setError(true);
+        setLoading(false);
+    } finally {
+        setLoading(false);
     }
-  }, [apiUrl]); // Add dependencies like apiUrl
+}, [apiUrl]);
+
 
   useEffect(() => {
     handleList();
@@ -790,7 +839,8 @@ const useAccountinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, handleAutocompleteChangestations, infoMessage
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, handleAutocompleteChangestations, infoMessage,
+    loading,setLoading
   };
 };
 

@@ -56,6 +56,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Tooltip from '@mui/material/Tooltip';
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -115,7 +116,9 @@ const DriverCreation = ({ stationName }) => {
         handleSelectAll,
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
-        handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2
+        handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2,
+        loading, setLoading
+        
     } = useDrivercreation();
 
   
@@ -702,6 +705,8 @@ const DriverCreation = ({ stationName }) => {
                             <Box
                                 sx={{
                                     height: 400, // Adjust this value to fit your needs
+                                    position: 'relative',
+
                                     '& .MuiDataGrid-virtualScroller': {
                                         '&::-webkit-scrollbar': {
                                             width: '8px', // Adjust the scrollbar width here
@@ -722,6 +727,18 @@ const DriverCreation = ({ stationName }) => {
                                     },
                                 }}
                             >
+                                 {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                                 <DataGrid
                                     rows={rows}
                                     columns={columns}
@@ -733,6 +750,7 @@ const DriverCreation = ({ stationName }) => {
                                     }}
                                     pageSizeOptions={[5, 10]}
                                 />
+                            )}
                             </Box>
                         </div>
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >

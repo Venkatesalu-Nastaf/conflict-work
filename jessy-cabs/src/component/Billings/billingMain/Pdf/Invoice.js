@@ -90,6 +90,8 @@ const Invoice = () => {
                 if (response.status === 200) {
                     const routeData = await response.json();
                     setRouteData(routeData);
+
+                   
                 }
                 else {
                     setRouteData("")
@@ -103,6 +105,7 @@ const Invoice = () => {
         }
         fetchData()
     }, [apiUrl, particularRefNo])
+    
     return {
         attachedImage,
         GmapimageUrl,

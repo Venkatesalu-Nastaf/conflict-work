@@ -87,7 +87,7 @@ const Billing = () => {
         handleKeyenterinvoicdeno,
         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,
         discound_PercentageCalc,invoiceno,setInvoiceNo,
-        balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate
+        balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
 
         // ... (other state variables and functions)
     } = useBilling();
@@ -1256,6 +1256,7 @@ const Billing = () => {
                                 organizationdata={organizationDetail}
                                 customerData={customerData}
                                 billdatadate={billingdate}
+                                stateDetails={stateDetails}
                             />
                         </Box>
                         {/* <Paymentinvoice

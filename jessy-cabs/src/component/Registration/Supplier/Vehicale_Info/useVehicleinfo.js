@@ -32,6 +32,8 @@ const useVehicleinfo = () => {
     const [edit, setEdit] = useState(false)
     const [cerendentialdata,setCredentialData]=useState()
 
+    const [loading, setLoading] = useState(false)
+
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
         {
@@ -367,6 +369,7 @@ const useVehicleinfo = () => {
                 const data = response.data
                 const names = data.map(res => res.drivername)
                 setDrivername(names)
+               
             }
             catch (error) {
                 console.log(error, "error");
@@ -921,20 +924,66 @@ const useVehicleinfo = () => {
     // });
 
 
+    // const handleList = useCallback(async () => {
+    //     setLoading(true)
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+    //       const data = response.data;
+    //       const rowsWithUniqueId = data.map((row, index) => ({
+    //         ...row,
+    //         id: index + 1,
+    //       }));
+    //     //   setRows(rowsWithUniqueId);
+    //       setRows(rowsWithUniqueId);
+    //     //   console.log(data,'Datas of vehicle name ')
+    //     if (data.length > 0) {
+    //         setLoading(false)
+    //     }else{
+    //         setLoading(false)
+    //     }
+    //     } catch (err) {
+    //       console.log(err);
+    //       setLoading(false)
+    //     }
+    //     finally {
+    //         setLoading(false); // Set loading to false once the request is done, whether successful or not
+    //     }
+    //   }, [apiUrl]); // Add dependencies like apiUrl
+
     const handleList = useCallback(async () => {
+        setLoading(true);
+        setError(false);
+        setErrorMessage("");
+    
         try {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
-          const data = response.data;
-          const rowsWithUniqueId = data.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }));
-        //   setRows(rowsWithUniqueId);
-          setRows(rowsWithUniqueId);
+            const data = response.data;
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+    
+            if (data.length > 0) {
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         } catch (err) {
-          console.log(err);
+            console.error(err);
+    
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            setError(true);
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
-      }, [apiUrl]); // Add dependencies like apiUrl
+    }, [apiUrl]);
+    
     
       useEffect(() => {
         handleList();
@@ -1119,7 +1168,7 @@ const useVehicleinfo = () => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata,
-        vehiclenames,setVehilcNames
+        vehiclenames,setVehilcNames,loading,setLoading
     };
 };
 

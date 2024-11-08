@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import {  CircularProgress } from '@mui/material';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 dayjs.extend(isBetween);
 
@@ -39,6 +40,11 @@ const SMSReport = () => {
   const [info, setInfo] = useState(false);
   const [infoMessage, setINFOMessage] = useState({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+
   const hidePopup = () => {
 
     setInfo(false);
@@ -71,8 +77,34 @@ const SMSReport = () => {
   // useEffect(() => {
   //   fetchdata();
   // }, [fetchdata]);
+
+
+  // const fetchdata = useCallback(async () => {
+  //   setLoading(true); // Step 2: Set loading to true before fetching data
+  //   try {
+  //     const response = await axios.get(`${apiurl}/smsreportdata`);
+  //     const data = response.data;
+  //     const rowsWithUniqueId = data.map((row, index) => ({
+  //       ...row,
+  //       id: index + 1,
+  //     }));
+  //     setSmsReport(rowsWithUniqueId);
+  //     console.log('data fetched');
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setLoading(false); // Step 3: Set loading to false after fetching data
+  //   }
+  // }, [apiurl]);
+
+  // useEffect(() => {
+  //   fetchdata();
+  // }, [fetchdata]);
+
+
   const fetchdata = useCallback(async () => {
-    setLoading(true); // Step 2: Set loading to true before fetching data
+    setLoading(true); // Set loading to true before fetching data
+    setError(false); // Reset error state before making a new request
     try {
       const response = await axios.get(`${apiurl}/smsreportdata`);
       const data = response.data;
@@ -81,17 +113,23 @@ const SMSReport = () => {
         id: index + 1,
       }));
       setSmsReport(rowsWithUniqueId);
-      console.log('data fetched');
+      console.log('Data fetched');
     } catch (err) {
-      console.log(err);
+      if (err.message === 'Network Error') {
+        setErrorMessage("Check network connection.");
+      } else {
+        setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+      }
+      setError(true);
     } finally {
-      setLoading(false); // Step 3: Set loading to false after fetching data
+      setLoading(false); // Set loading to false after fetching data
     }
   }, [apiurl]);
 
   useEffect(() => {
     fetchdata();
   }, [fetchdata]);
+
 
 
 
@@ -419,6 +457,22 @@ const SMSReport = () => {
             </div>
           }
         </div>
+        <div className='alert-popup-main'>
+                  {success &&
+                    <div className='alert-popup Success' >
+                      <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                      <p>{successMessage}</p>
+                    </div>
+                  }
+                  {error &&
+                    <div className='alert-popup Error' >
+                      <div className="popup-icon"> <ClearIcon /> </div>
+                      <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                      <p>{errorMessage}</p>
+                    </div>
+                  }
+                  </div>
       </form>
     </div>
   )

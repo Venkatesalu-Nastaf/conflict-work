@@ -10,7 +10,7 @@ import Invoice from "./Invoice";
 import { APIURL } from "../../../url";
 
 
-const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }) => {
+const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,stateDetails}) => {
     // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const [billingDate] = useState(dayjs());
@@ -63,6 +63,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
         });
     }, [particularRefNo, book, customerData]);
 
+    // console.log(stateDetails,'State details of indiviul billing ')
+
     const handlePrint = async () => {
         try {
             generatePDF(targetRef, { filename: 'page.pdf' });
@@ -80,6 +82,11 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
     //     setParticularPdf(false);
     //         generatePDF(targetRef, { filename: 'page.pdf' });
 
+    const customerState = customerData.state;
+    const commonState = stateDetails?.find(item => item.state === customerState) || [];
+
+    console.log(commonState,"Common state of customers")
+
 
     // };
     return (
@@ -90,7 +97,16 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate }
                         <div className="header-div">
                             <div>
                                 <p className="org-name">{organizationdata.organizationname}</p>
-                                <p className="org-address">{organizationdata.addressLine1}</p>
+                                {commonState ? (
+                                <h2 className="organisationtext">{commonState.address}</h2>
+                            ) : (
+                                <>
+                                    <h2 className="org-address">{organizationdata.addressLine1}</h2>
+                                    {/* <h2 className="org-address">{orgaddress3}</h2> */}
+                                </>
+                            )}
+
+                                {/* <p className="org-address">{organizationdata.addressLine1}</p> */}
                                 <p className="org-address">{organizationdata.contactEmail}</p>
                                 <p className="org-mobile">Tel : {organizationdata.telephone} Mob : {organizationdata.contactPhoneNumber}</p>
                             </div>

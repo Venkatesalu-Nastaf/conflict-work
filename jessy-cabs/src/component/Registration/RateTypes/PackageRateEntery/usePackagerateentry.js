@@ -86,6 +86,8 @@ const usePackagerateentry = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     //------------------------------------------------
     const [validitydata, setValiditydata] = useState([])
+
+    const [loading, setLoading] = useState(false)
    
     const memoizedUrl = useMemo(() => {
         if (!commonData.ratetype || !commonData.OrganizationName) {
@@ -281,15 +283,65 @@ const usePackagerateentry = () => {
         setIsEditMode(true);
     }, []);
 
+    // const handleList = useCallback(async () => {
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/ratemanagement`);
+    //         const data = response.data;
+    //         setRows(data);
+    //         setLoading(tru)
+    //         // console.log(data,'data is received')
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }, [apiUrl]); // Add any dependencies needed inside this array
+
+    // const handleList = useCallback(async () => {
+    //     setLoading(true)
+    //     try {
+    //         setLoading(true); // Set loading to true before making the API call
+    //         const response = await axios.get(`${apiUrl}/ratemanagement`);
+    //         const data = response.data;
+    //         setRows(data); // Set the rows with the received data
+    //         if (data.length > 0) {
+    //             setLoading(false)
+    //         }else{
+    //             setLoading(false)
+    //         }
+    //     } catch (err) {
+    //         console.log(err); // Log any errors that occur
+    //         setLoading(false)
+    //     } finally {
+    //         setLoading(false); // Set loading to false once the request is done, whether successful or not
+    //     }
+    // }, [apiUrl]);
+
     const handleList = useCallback(async () => {
+        setLoading(true); // Set loading to true before making the API call
+    
         try {
             const response = await axios.get(`${apiUrl}/ratemanagement`);
             const data = response.data;
-            setRows(data);
+            setRows(data); // Set the rows with the received data
+            if (data.length > 0) {
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         } catch (err) {
-            console.log(err);
+            console.log(err); // Log any errors that occur
+    
+            // Check if it's a network error
+            if (err.message === 'Network Error') {
+                alert("Network Error: Please check your internet connection.");
+            }
+    
+            setLoading(false);
+        } finally {
+            setLoading(false); // Ensure loading is set to false once the request is done, whether successful or not
         }
-    }, [apiUrl]); // Add any dependencies needed inside this array
+    }, [apiUrl]);
+    
+    
 
     useEffect(() => {
         handleList();
@@ -496,7 +548,7 @@ const usePackagerateentry = () => {
         isEditMode,
         handleEdit,
         handleShow,
-        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata
+        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata,loading,setLoading
     };
 };
 

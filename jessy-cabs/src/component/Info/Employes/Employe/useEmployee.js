@@ -29,6 +29,8 @@ const useEmployee = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     const handleButtonClick = (params) => {
         const { empid } = params.row;
         if (!empid) {
@@ -389,23 +391,55 @@ const useEmployee = () => {
         }
     }
 
-    const handleList = useCallback(async () => {
-        try {
+    // const handleList = useCallback(async () => {
+    //     setLoading(true)
+    //     try {
            
+    //         const response = await axios.get(`${apiUrl}/employees`);
+    //         const data = response.data
+    //         const rowsWithUniqueId = data.map((row, index) => ({
+    //             ...row,
+    //             id: index + 1,
+    //         }));
+    //         setRows(rowsWithUniqueId);
+    //         if(data.length > 0){
+    //             setLoading(false)
+    //         } else{
+    //             setLoading(false)
+    //         }   
+    //     } catch (err) {
+    //         console.log(err);
+    //     }finally {
+    //         setLoading(false); 
+    //     }
+    // }, [apiUrl]); // Add any dependencies needed inside this array
+
+    const handleList = useCallback(async () => {
+        setLoading(true);
+        setError(false); // Reset error state before each request
+        try {
             const response = await axios.get(`${apiUrl}/employees`);
-            const data = response.data
+            const data = response.data;
+            
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id: index + 1,
             }));
-            setRows(rowsWithUniqueId);
-       
             
-           
+            setRows(rowsWithUniqueId);
+            
         } catch (err) {
-            console.log(err);
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            setError(true);
+        } finally {
+            setLoading(false); // Ensure loading is false in all cases
         }
-    }, [apiUrl]); // Add any dependencies needed inside this array
+    }, [apiUrl]);
+    
     
     useEffect(() => {
         handleList();
@@ -692,7 +726,9 @@ const useEmployee = () => {
         dialogdeleteOpen,
         setError,
         setErrorMessage,
-        deletefile
+        deletefile,
+        loading,
+        setLoading
     };
 };
 

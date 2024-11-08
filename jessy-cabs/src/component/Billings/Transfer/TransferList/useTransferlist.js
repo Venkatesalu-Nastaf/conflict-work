@@ -358,37 +358,77 @@ const useTransferlist = () => {
   
 
   // Loading grid in the grid 
+  // useEffect(() => {
+  //   const fetchdata = async () => {
+  //     setLoading(true)
+  //     try {
+      
+      
+  //       const response = await axios.get(`${apiUrl}/gettransfer_list/${userdata}`)
+  //       const data = response.data;
+
+
+  //       if (data.length > 0) {
+  //         const rowsWithUniqueId = data.map((row, index) => ({
+  //           ...row,
+  //           id: index + 1,
+  //         }));
+  //         setRows(rowsWithUniqueId);
+  //         setLoading(false)
+  //       } else {
+  //         setRows([]);
+  //         setError(true);
+  //         setErrorMessage("No data found");
+  //         setLoading(false)
+  //       }
+  //     } catch {
+  //       setRows([]);
+  //       setLoading(false)
+
+  //     }
+  //   }
+  //   fetchdata()
+  // }, [apiUrl])
+
   useEffect(() => {
     const fetchdata = async () => {
-      setLoading(true)
-      try {
-      
-      
-        const response = await axios.get(`${apiUrl}/gettransfer_list/${userdata}`)
-        const data = response.data;
+        setLoading(true);
+        setError(false);
+        setErrorMessage("");
 
+        try {
+            const response = await axios.get(`${apiUrl}/gettransfer_list/${userdata}`);
+            const data = response.data;
 
-        if (data.length > 0) {
-          const rowsWithUniqueId = data.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }));
-          setRows(rowsWithUniqueId);
-          setLoading(false)
-        } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("No data found");
-          setLoading(false)
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setLoading(false);
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("No data found");
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setRows([]);
+            setLoading(false);
+            setError(true);
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
         }
-      } catch {
-        setRows([]);
-        setLoading(false)
+    };
 
-      }
-    }
-    fetchdata()
-  }, [apiUrl])
+    fetchdata();
+}, [apiUrl, userdata]); // Added 'userdata' as dependency as it is used in the API call
+
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },

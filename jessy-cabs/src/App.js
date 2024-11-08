@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from "rea
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes ,useLocation,useNavigate} from "react-router-dom";
 import Page404 from "./component/Page404/page404";
 import Logo from "./assets/img/logo.png";
 import Mailer from "./component/Info/Mailer/Mailer";
@@ -61,21 +61,58 @@ import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
+import is from "date-fns/esm/locale/is/index.js";
 
 
 
 function App() {
   const apiUrl = APIURL;
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setTimeout(() => {
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setIsLoading(false);
+//     }, 3500);
+//   }, []);
+
+//   // useEffect(() => {
+    
+//   //   if (!isLoading && location.pathname !== '/') {
+//   //     navigate(location.pathname);
+//   //   }
+//   // }, [isLoading, location.pathname, navigate]);
+//  useEffect(() => {
+//     if (!isLoading && location.pathname !== '/') {
+//       // Prevent the page from being flashed during navigation
+//       if (location.pathname !== window.location.pathname) {
+//         navigate(location.pathname, { replace: true });
+//       }
+//     }
+//   }, [isLoading, location.pathname, navigate]);
+ useEffect(() => {
+    // Set the loading state to false after 3500ms
+    const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
-  }, []);
+    }, 3500);
+
+    // Handle redirection once isLoading is false
+    if (!isLoading && location.pathname !== '/') {
+      // Prevent flashing and redirect
+      if (location.pathname !== window.location.pathname) {
+        navigate(location.pathname, { replace: true });
+      }
+    }
+
+    // Cleanup the timer
+    return () => clearTimeout(timer);
+  }, [isLoading, location.pathname, navigate]);
 
 
   const { triggerCustomerAdd } = useData1()
+
+ 
 
   // Permission ----------------------------------------
 
@@ -153,12 +190,42 @@ function App() {
     fetchSattionName();
   }, [apiUrl, loginUserName])
 
+// console.log(permissions,'permissinon datas come')
+//     const auth = localStorage.getItem("auth") === 'true';
+//     console.log(auth);
 
  
 
   //---------------------------------------------------------------------
   //  fetching Organisation name (Customer )
   const [organizationNames, setOrganizationName] = useState([])
+
+   // Loading for permisson
+
+
+
+useEffect(() => {
+  const auth = localStorage.getItem("auth") === 'true';
+  if (!isLoading && location.pathname !== '/') {
+    // Prevent the page from being flashed during navigation
+    if (location.pathname !== window.location.pathname) {
+      navigate(location.pathname, { replace: true });
+    }
+  }
+
+  if (auth) {
+      // If permissions data is empty or undefined, keep loading
+      if (!permissions || permissions.length === 0) {
+          setIsLoading(true);
+      } else {
+          setIsLoading(false); // Stop loading once permissions are populated
+      }
+  } else {
+      setIsLoading(false); // Stop loading if not authenticated
+  }
+},);
+
+// console.log(permissions.length,' length of permissions')
 
   useEffect(() => {
     const organizationName = async () => {
@@ -312,7 +379,7 @@ function App() {
   return (
     <>
       <div className={isLoading ? "loading-container" : ""}>
-        {isLoading ? (
+        { isLoading ? (
           <div className="loading-spinners">
             <div className="logo-loading">
               <img src={Logo} alt="logo" />

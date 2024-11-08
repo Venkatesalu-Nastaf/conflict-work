@@ -43,6 +43,7 @@ export const PdfDataProvider = ({ children }) => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const organizationdetails = await response.json();
+                
 
                 // Assuming we are only interested in the first object in the array
                 if (organizationdetails.length > 0) {

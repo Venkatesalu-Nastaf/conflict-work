@@ -29,6 +29,8 @@ const useBilling = () => {
     const [billingdate,setBillingDate]=useState()
     const [invoiceno,setInvoiceNo]=useState();
     const dataempty = Number(localStorage.getItem("searchdataurl"))
+    const [stateDetails, setStateDetails] = useState([]);
+
     const { setParticularPdf, setParticularRefNo,setIndividualBilled, individualBilled } = PdfData();
 
     //for popup
@@ -326,6 +328,7 @@ const useBilling = () => {
     const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
     const bookingDetails = responsedata.data[0]; 
    setBook(() => ({ ...bookingDetails }));
+
     }
     else{
        
@@ -479,6 +482,8 @@ const useBilling = () => {
                     }
                     const customerData = await response.json();
                     setCustomerData(customerData);
+
+                    // console.log(response,'Response datas ',customerData)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
@@ -487,6 +492,32 @@ const useBilling = () => {
 
         fetchCustomerData();
     }, [memoizedCustomer, apiUrl]);
+
+    useEffect(() => {
+        const fetchStateDetails = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/statedetails`);
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch state details');
+                }
+    
+                const data = await response.json();
+                setStateDetails(data);
+    
+                console.log(data, 'State details fetched'); 
+            } 
+            catch (err) {
+                // setError(err.message); // Handle errors
+                console.error('Error fetching state details:', err);
+            }
+        };
+        fetchStateDetails();    
+    }, [customerData]);
+
+
+
 
     const organizationaddress1 = customerData.address1;
     // const organizationaddress2 = customerData.address2;
@@ -647,7 +678,8 @@ const useBilling = () => {
         setGMapImageUrl,
         handleKeyenterinvoicdeno,
         setInvoiceNo,
-        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate
+        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate,
+        stateDetails,setStateDetails
     };
 };
 

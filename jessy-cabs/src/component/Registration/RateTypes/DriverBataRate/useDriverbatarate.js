@@ -35,6 +35,8 @@ const useDriverbatarate = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
 
+    const [loading, setLoading] = useState(false)
+
     // -------popup--------------------------
     const hidePopup = () => {
         setSuccess(false);
@@ -178,14 +180,78 @@ const useDriverbatarate = () => {
         }
     };
 
+    // useEffect(() => {
+    //     const handlelist = async () => {
+    //         const response = await axios.get(`${apiUrl}/driverbatarate`);
+    //         const data = response.data;
+    //         setRows(data);
+    //         console.log(data,'Data in driver')
+    //     }
+    //     handlelist();
+    // }, [apiUrl]);
+
+    // useEffect(() => {
+    //     const handleList = async () => {
+    //         setLoading(true)
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/driverbatarate`);
+    //             const data = response.data;
+    //             setRows(data);
+    //             // console.log(data, 'Data in driver');
+    //             if (data.length > 0) {
+    //                 setLoading(false)
+    //             }else{
+    //                 setLoading(false)
+    //             }
+    //         } catch (err) {
+    //             console.error('Error fetching data:', err); // Handle any errors that occur during the API call
+    //             setLoading(false)
+    //         }finally {
+    //             setLoading(false); // Set loading to false once the request is done, whether successful or not
+    //         }
+    //     };
+    //     handleList();
+    // }, [apiUrl]);
+
     useEffect(() => {
-        const handlelist = async () => {
-            const response = await axios.get(`${apiUrl}/driverbatarate`);
-            const data = response.data;
-            setRows(data);
-        }
-        handlelist();
-    }, [apiUrl]);
+        const handleList = async () => {
+            setLoading(true);
+            setError(false);  
+            setErrorMessage("");  
+            
+            try {
+                const response = await axios.get(`${apiUrl}/driverbatarate`);
+                const data = response.data;
+    
+                // Set rows with the fetched data
+                setRows(data);
+    
+                // Check if data exists and update loading state
+                if (data.length > 0) {
+                    setLoading(false);
+                } else {
+                    setLoading(false);
+                }
+            } catch (err) {
+                console.error('Error fetching data:', err);
+    
+                // Check if it's a network error
+                if (err.message === 'Network Error') {
+                    setErrorMessage("Check network connection.");
+                } else {
+                    setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+                }
+                
+                setError(true);  
+            } finally {
+                setLoading(false);  
+            }
+        };
+    
+        handleList();
+    }, [apiUrl]);  
+    
+    
 
     const handleClick = async (event, actionName, id) => {
         event.preventDefault();
@@ -269,6 +335,7 @@ const useDriverbatarate = () => {
         columns,
         isEditMode,
         handleEdit,
+        setLoading,loading
     };
 };
 

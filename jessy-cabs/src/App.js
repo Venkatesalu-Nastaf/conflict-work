@@ -91,23 +91,26 @@ function App() {
 //       }
 //     }
 //   }, [isLoading, location.pathname, navigate]);
- useEffect(() => {
-    // Set the loading state to false after 3500ms
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3500);
 
-    // Handle redirection once isLoading is false
-    if (!isLoading && location.pathname !== '/') {
-      // Prevent flashing and redirect
-      if (location.pathname !== window.location.pathname) {
-        navigate(location.pathname, { replace: true });
-      }
-    }
 
-    // Cleanup the timer
-    return () => clearTimeout(timer);
-  }, [isLoading, location.pathname, navigate]);
+//  useEffect(() => {
+//     // Set the loading state to false after 3500ms
+//     const timer = setTimeout(() => {
+//       setIsLoading(false);
+//     }, 3500);
+
+//     // Handle redirection once isLoading is false
+//     if (!isLoading && location.pathname !== '/') {
+//       // Prevent flashing and redirect
+//       if (location.pathname !== window.location.pathname) {
+//         navigate(location.pathname, { replace: true });
+//       }
+//     }
+
+//     // Cleanup the timer
+//     return () => clearTimeout(timer);
+//   }, [isLoading, location.pathname, navigate]);
+
 
 
   const { triggerCustomerAdd } = useData1()
@@ -173,6 +176,73 @@ function App() {
 
   //--------   fetch station name ------------------------------------------------------------
 
+
+  // loading with correction
+
+  useEffect(() => {
+    const auth = localStorage.getItem("auth") === 'true';
+  
+    // Start a timer to stop loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500);
+  
+    // Check if the user is authenticated
+    if (auth) {
+      // Keep loading if permissions are empty or undefined
+      if (!permissions || permissions.length === 0) {
+        setIsLoading(true);
+      } else {
+        setIsLoading(false); // Stop loading once permissions are populated
+      }
+    } else {
+      setIsLoading(false); // Stop loading if not authenticated
+    }
+  
+    // Handle redirection once loading is complete
+    if (!isLoading && location.pathname !== '/') {
+      if (location.pathname !== window.location.pathname) {
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  
+    // Clean up the timer
+    return () => clearTimeout(timer);
+  }, [isLoading, location.pathname, navigate, permissions]);
+
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("auth") === 'true';
+  
+  //   // Fallback timer to stop loading after 3.5 seconds
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 3500);
+  
+  //   // Check if the user is authenticated and permissions are loaded
+  //   if (auth) {
+  //     if (!permissions || permissions.length === 0) {
+  //       setIsLoading(true); // Keep loading if permissions are empty
+  //     } else {
+  //       setIsLoading(false); // Stop loading when permissions are populated
+  //     }
+  //   } else {
+  //     setIsLoading(false); // Stop loading if the user is not authenticated
+  //   }
+  
+  //   // Only navigate when the user is authenticated and permissions are populated
+  //   if (!isLoading && auth && permissions && permissions.length > 0) {
+  //     // If trying to access a path without permissions, redirect to the loading page
+  //     if (location.pathname !== window.location.pathname) {
+  //       navigate(location.pathname, { replace: true });
+  //     }
+  //   }
+  
+  //   // Clean up the timer on unmount
+  //   return () => clearTimeout(timer);
+  // }, [ permissions, isLoading, location.pathname, navigate]);
+  
+  
+
   const loginUserName = localStorage.getItem("username")
 
   const [stationName, setStationName] = useState([]);
@@ -200,30 +270,37 @@ function App() {
   //  fetching Organisation name (Customer )
   const [organizationNames, setOrganizationName] = useState([])
 
+  
+  
+  
+
+
+
+
    // Loading for permisson
 
 
 
-useEffect(() => {
-  const auth = localStorage.getItem("auth") === 'true';
-  if (!isLoading && location.pathname !== '/') {
-    // Prevent the page from being flashed during navigation
-    if (location.pathname !== window.location.pathname) {
-      navigate(location.pathname, { replace: true });
-    }
-  }
+// useEffect(() => {
+//   const auth = localStorage.getItem("auth") === 'true';
+//   if (!isLoading && location.pathname !== '/') {
+//     // Prevent the page from being flashed during navigation
+//     if (location.pathname !== window.location.pathname) {
+//       navigate(location.pathname, { replace: true });
+//     }
+//   }
 
-  if (auth) {
-      // If permissions data is empty or undefined, keep loading
-      if (!permissions || permissions.length === 0) {
-          setIsLoading(true);
-      } else {
-          setIsLoading(false); // Stop loading once permissions are populated
-      }
-  } else {
-      setIsLoading(false); // Stop loading if not authenticated
-  }
-},);
+//   if (auth) {
+//       // If permissions data is empty or undefined, keep loading
+//       if (!permissions || permissions.length === 0) {
+//           setIsLoading(true);
+//       } else {
+//           setIsLoading(false); // Stop loading once permissions are populated
+//       }
+//   } else {
+//       setIsLoading(false); // Stop loading if not authenticated
+//   }
+// },);
 
 // console.log(permissions.length,' length of permissions')
 
@@ -241,6 +318,7 @@ useEffect(() => {
     organizationName();
 
   }, [apiUrl]); // Empty dependency array to ensure it runs only once
+
 
   //--------------------------------------------------------
   //fetch org logo

@@ -807,7 +807,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             }}
           />
         )} */}
-        {polylinePath.length > 0 && (
+        {/* {polylinePath.length > 0 && (
           <Polyline
             path={polylinePath}
             options={{
@@ -829,7 +829,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               ],
             }}
           />
-        )}
+        )} */}
         {markerPosition !== "" || markerPosition !== null ? <Marker
           position={markerPosition}
           onClick={handleMapClick}

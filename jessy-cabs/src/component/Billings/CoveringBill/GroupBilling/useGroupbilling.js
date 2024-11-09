@@ -52,9 +52,10 @@ const useGroupbilling = () => {
     const [groupBillAmount, setGroupBillAmount] = useState(0)
     const [trips, setTrips] = useState(0)
     const [department, setDepartment] = useState('')
+    const [groupAmount, setGroupAmount] = useState(0)
     const [stateDetails, setStateDetails] = useState([]);
-    const [billingGroupDetails,setBillingGroupDetails] = useState('')
-    const [groupBillingData,setGroupBillingData] = useState([])
+    const [billingGroupDetails, setBillingGroupDetails] = useState('')
+    const [groupBillingData, setGroupBillingData] = useState([])
     const [viewGroupBill, setViewGroupBill] = useState({
         InvoiceDate: '',
         FromDate: '',
@@ -172,7 +173,7 @@ const useGroupbilling = () => {
     }, [error, success, warning]);
 
     //------------------------------
-    
+
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
@@ -224,13 +225,15 @@ const useGroupbilling = () => {
             try {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
+                console.log(GroupReference, 'GroupBill=====');
+
                 setViewGroupBill(response.data)
                 // setRows(GroupReference)
                 // const RefId = GroupReference.map((li) => li.Trip_id)
                 // setParticularId(RefId)
                 const RefId = GroupReference.map((li) => li.Trip_id.split(','));
-                console.log(RefId,'idddddddddd');
-                
+                console.log(RefId, 'idddddddddd');
+
                 setParticularId(RefId.flat());
                 const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
                 setRefInvNo(RefInvoiceNo)
@@ -242,6 +245,8 @@ const useGroupbilling = () => {
                 setRefFromDate(fromdate)
                 const todate = GroupReference.map((li) => li.ToDate)
                 setRefToDate(todate)
+                const Amount = GroupReference.map((li) => li.Amount)
+                setGroupAmount(Amount)
                 // const Tripsid = GroupReference.map((li) => li.Trip_id)
             }
             catch (err) {
@@ -280,13 +285,13 @@ const useGroupbilling = () => {
     }, [particularId, apiUrl, refInvDate, refInvNo]);
 
     // const handleShow = useCallback(async () => {
-        
+
     // if (!customer) {
     //     setError(true)
     //     setErrorMessage('Select a Orgaization')
     //     return
     //   } 
-  
+
 
     //     setGroupInvoice(false);
 
@@ -301,7 +306,7 @@ const useGroupbilling = () => {
     //             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
     //             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
     //             console.log(customerValue,fromDateValue,toDateValue,servicestationValue,'groupbill');
-                
+
     //             const response = await axios.get(`${apiUrl}/Group-Billing`, {
     //                 params: {
     //                     customer: customerValue,
@@ -342,7 +347,7 @@ const useGroupbilling = () => {
     //         // }
     //         catch (error) {
     //             // console.error("Error occurredddddd:", error);
-             
+
     //             // Check if there's no response, indicating a network error
     //             if (error.message ) {
     //                 setError(true);
@@ -409,7 +414,7 @@ const useGroupbilling = () => {
     //         // }
     //         catch (error) {
     //             // console.error("Error occurredddddd:", error);
-             
+
     //             // Check if there's no response, indicating a network error
     //             if (error.message ) {
     //                 setError(true);
@@ -437,42 +442,42 @@ const useGroupbilling = () => {
             setErrorMessage('Select an Organization');
             return;
         }
-    
+
         setGroupInvoice(false);
-    
+
         const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
         const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
         const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
         const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-    console.log(servicestationValue,fromDateValue,toDateValue,'groupbill000');
-    
+        console.log(servicestationValue, fromDateValue, toDateValue, 'groupbill000');
+
         // Determine which API to call based on servicestationValue
         const apiEndpoint = servicestationValue !== "" ? `${apiUrl}/Group-Billing` : `${apiUrl}/allGroup-Billing`;
-        const params = servicestationValue !== "" 
+        const params = servicestationValue !== ""
             ? { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue }
             : { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue };
-    
+
         try {
             setRows([]);
 
             const response = await axios.get(apiEndpoint, { params });
             const data = response.data;
-            console.log(data,'group44');
+            console.log(data, 'group44');
             setRows(response.data);
 
             if (Array.isArray(data) && data.length > 0) {
-                console.log(data,'group4455');
+                console.log(data, 'group4455');
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
                 setTotalValue(netAmountSum);
-    
+
                 const roundedGrossAmount = Math.ceil(netAmountSum);
                 const roundOffValue = (roundedGrossAmount - netAmountSum).toFixed(2);
                 setRoundedAmount(roundOffValue);
-    
+
                 const sumTotalAndRounded = netAmountSum + parseFloat(roundOffValue);
                 setSumTotalAndRounded(sumTotalAndRounded);
-    
+
                 setTripData(data);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -484,7 +489,7 @@ const useGroupbilling = () => {
         } catch (error) {
             setRows([]);
             setError(true);
-    
+
             if (!error.response) {
                 setErrorMessage("Check your internet connection");
             } else {
@@ -492,8 +497,8 @@ const useGroupbilling = () => {
             }
         }
     };
-    
-    
+
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
@@ -670,7 +675,7 @@ const useGroupbilling = () => {
                 return selectedRow ? selectedRow.customer : null;
             })
             .filter((tripid) => tripid !== null);
-console.log(PdfSelectedcustomer,'pdf',invoiceno);
+        console.log(PdfSelectedcustomer, 'pdf', invoiceno, PdfSelectedTrips);
 
 
         setRowSelectionModel(PdfSelectedTrips);
@@ -699,7 +704,7 @@ console.log(PdfSelectedcustomer,'pdf',invoiceno);
             }
         }
         fetchData()
-    }, [rowSelectionModel, apiUrl, invoiceno])
+    }, [rowSelectionModel, apiUrl, invoiceno, rowSelectionModel])
 
 
 
@@ -771,37 +776,40 @@ console.log(PdfSelectedcustomer,'pdf',invoiceno);
     //     }
 
     // get GroupBilling All Datas
-    useEffect(()=>{
-        const fetchData = async()=>{
-            try{
-          const response = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
-          console.log(response.data,'groupresp');
-          setGroupBillingData(response.data)
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
+                console.log(response.data, 'groupresp');
+                setGroupBillingData(response.data)
             }
-            catch(err){
+            catch (err) {
                 console.log(err);
-                
+
             }
         }
         fetchData()
-    },[invoiceno])
+    }, [invoiceno])
 
 
     const handleRemoveData = async () => {
         const selectedIds = rowSelectionModel.map(row => row.id);
-        
+
         // Check if no rows are selected
         if (selectedIds.length === 0) {
             setError(true);
             setErrorMessage("No rows selected. Please select a row to remove.");
             return; // Exit the function early
         }
-    
+
         const tripIds = rowSelectionModel.map(row => row.tripid.toString());
         const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split and flatten
         const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
-        const Amount = groupBillAmount - totalAmount;
-    
+        const total = rows.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+        const selectedTotal = rowSelectedValues.reduce((sum, value) => sum + value, 0);
+        const Amount = total - selectedTotal;
+        console.log(amounts, totalAmount, Amount, 'remove-----', selectedTotal, total);
+
         const TripCount = trips - rowSelectionModel.length;
         const Tripcounts = TripCount.toString();
         const groupUpdateList = {
@@ -809,42 +817,46 @@ console.log(PdfSelectedcustomer,'pdf',invoiceno);
             Amount: Amount,
             Trip_id: tripIds
         };
-    
+        console.log(trips, rowSelectionModel.length, TripCount, typeof (TripCount), 'remove33');
+
+        console.log(groupUpdateList, 'removegroup');
+
+
         try {
             const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
                 tripids: tripIds,
                 status: 'Closed',
             });
             console.log(response, 'response');
-    
+
             const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
             console.log(updatelist, 'uplist');
-    
+
             const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
             const result = Details.data;
             const tripno = result?.map(li => li.Trip_id);
             const groupid = result?.map(li => li.id);
-    
+
             if (tripno[0] === "") {
                 const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
                 console.log(getresponse, 'Removed Successfully');
             }
         } catch (error) {
-            // Handle errors
-            console.error("Error occurred:", error);
-    
-            if (error.message === "Network Error") {
-                // Handle network errors
-                setError(true);
-                setErrorMessage("Check your internet connection");
-            } else {
-                // Handle other Axios errors (like 4xx or 5xx responses)
-                setError(true);
-                setErrorMessage("Failed to Remove: " + (error.response.data.message || error.message));
-            }
+            //     // Handle errors
+            //     console.error("Error occurred:", error);
+
+            //     if (error.message === "Network Error") {
+            //         // Handle network errors
+            //         setError(true);
+            //         setErrorMessage("Check your internet connection");
+            //     } else {
+            //         // Handle other Axios errors (like 4xx or 5xx responses)
+            //         setError(true);
+            //         setErrorMessage("Failed to Remove: " + (error.response.data.message || error.message));
+            //     }
         }
-    // };
-    
+        // };
+
 
         const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
         setRows(updatedRows);
@@ -853,114 +865,130 @@ console.log(PdfSelectedcustomer,'pdf',invoiceno);
     };
 
     const handlegroupData = async () => {
-        console.log(referenceNo,invoiceno,'reference');
-        
-        if(invoiceno===""){
-        const TripsCount = rowSelectionModel.length;
-        let TotalAmount = 0; // Change from const to let
-        rowSelectedValues?.forEach((li) => {
-            TotalAmount += li;
-        });
-        const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
-        const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-        const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
-        if (rowSelectionModel.length === 0) {
-            setError(true);
-            setErrorMessage("Please select the Row");
-            return;
+        const presentIds = selectedRow.filter(id => particularId.includes(id.toString()));
+        console.log(presentIds, 'present');
+        if (presentIds.length > 0) {
+            setError(true)
+            setErrorMessage("Already Entered This TripID.")
+            return
         }
-        try {
-            const groupbillList = {
-                status: "Billed",
-                InvoiceDate: InvoiceDate,
-                Customer: customer,
-                FromDate: FromDate,
-                ToDate: ToDate,
-                Trips: TripsCount,
-                Amount: TotalAmount,
-                Trip_id: selectedRow,
-                station: department
-            };
-console.log(groupbillList,'group========');
 
-            await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
-            setSuccess(true)
-            setSuccessMessage("Successfully Added")
-            setRows([])
-        } 
-        // catch (err) {
-        //     console.log(err, "errordetails");
-        // }
-        catch (error) {
-            // console.error("Error occurredddddd:", error);
-         
-            // Check if there's no response, indicating a network error
-            if (error.message ) {
+        console.log(referenceNo, invoiceno, 'reference');
+
+        if (invoiceno === "") {
+            const TripsCount = rowSelectionModel.length;
+            console.log(TripsCount, typeof (TripsCount), 'TripsCount');
+
+            let TotalAmount = 0; // Change from const to let
+            rowSelectedValues?.forEach((li) => {
+                TotalAmount += li;
+            });
+            const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+            const ToDate = dayjs(toDate).format('YYYY-MM-DD')
+            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            if (rowSelectionModel.length === 0) {
                 setError(true);
-                setErrorMessage("Check your internet connection");
-                // console.log('Network error');
-            } else if (error.response) {
-                setError(true);
-                // Handle other Axios errors (like 4xx or 5xx responses)
-                setErrorMessage("Failed To Save: " + (error.response.data.message || error.message));
-            } else {
-                // Fallback for other errors
-                setError(true);
-                setErrorMessage("An unexpected error occurred: " + error.message);
+                setErrorMessage("Please select the Row");
+                return;
+            }
+            try {
+                const groupbillList = {
+                    status: "Billed",
+                    InvoiceDate: InvoiceDate,
+                    Customer: customer,
+                    FromDate: FromDate,
+                    ToDate: ToDate,
+                    Trips: TripsCount,
+                    Amount: TotalAmount,
+                    Trip_id: selectedRow,
+                    station: department
+                };
+                console.log(groupbillList, 'group========');
+
+                await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
+                setSuccess(true)
+                setSuccessMessage("Successfully Added")
+                setRows([])
+            }
+            // catch (err) {
+            //     console.log(err, "errordetails");
+            // }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+
+                // Check if there's no response, indicating a network error
+                if (error.message) {
+                    setError(true);
+                    setErrorMessage("Check your internet connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    setError(true);
+                    // Handle other Axios errors (like 4xx or 5xx responses)
+                    setErrorMessage("Failed To Save: " + (error.response.data.message || error.message));
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
             }
         }
+        else {
+            const TripsCount = rowSelectionModel.length;
+            console.log(trips, 'tripssss', TripsCount, rows.length);
+
+            let TotalAmount = 0; // Change from const to let
+            rowSelectedValues?.forEach((li) => {
+                TotalAmount += li;
+            });
+            const selectedTotal = rowSelectedValues.reduce((sum, value) => sum + value, 0);
+            const groupTotal = groupAmount.reduce((sum, value) => sum + value, 0)
+            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal);
+
+            const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+            const ToDate = dayjs(toDate).format('YYYY-MM-DD')
+            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
+
+            if (rowSelectionModel.length === 0) {
+                setError(true);
+                setErrorMessage("Please select the Row");
+                return;
+            }
+            try {
+                const totalAmount = groupTotal + selectedTotal;
+                const trips = parseInt(groupBillingData[0].Trips)
+                const Trip = particularId.length + rowSelectionModel.length
+                const Trips = Trip.toString()
+                const tripid = groupBillingData[0].Trip_id
+                let tripIdArray = tripid.split(',');
+
+                // Step 2: Add the selectedRow array to tripIdArray, then flatten it
+                tripIdArray = [...tripIdArray, ...selectedRow.map(String)].flat();
+                console.log(tripIdArray);
+                const groupbillList = {
+                    status: "Billed",
+                    InvoiceDate: InvoiceDate,
+                    Customer: customer,
+                    FromDate: FromDate,
+                    ToDate: ToDate,
+                    Trips: Trips,
+                    Amount: totalAmount,
+                    Trip_id: tripIdArray,
+                    station: department,
+                    ReferenceNo: invoiceno
+                };
+
+                console.log(groupbillList, 'groupbill', groupBillingData, Trips, selectedRow, tripid, tripIdArray);
+                await axios.post(`${apiUrl}/updateGroupBilling`, groupbillList)
+                setSuccess(true)
+                setSuccessMessage("Successfully Added")
+                setRows([])
+            }
+            catch (err) {
+
+            }
         }
-    else{
-        const TripsCount = rowSelectionModel.length;
-        let TotalAmount = 0; // Change from const to let
-        rowSelectedValues?.forEach((li) => {
-            TotalAmount += li;
-        });
-        const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
-        const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-        const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
-        console.log(fromDate,ToDate,InvoiceDate,TripsCount,TotalAmount,'usegroup');
-        
-        if (rowSelectionModel.length === 0) {
-            setError(true);
-            setErrorMessage("Please select the Row");
-            return;
-        }
-        try {
-            const totalAmount = groupBillingData[0].Amount-TotalAmount;
-            const trips = parseInt(groupBillingData[0].Trips)
-            const Trip = trips - TripsCount
-            const Trips = Trip.toString()
-            const tripid = groupBillingData[0].Trip_id
-            let tripIdArray = tripid.split(',');
-
-            // Step 2: Add the selectedRow array to tripIdArray, then flatten it
-            tripIdArray = [...tripIdArray, ...selectedRow.map(String)].flat();
-            console.log(tripIdArray); 
-            const groupbillList = {
-                status: "Billed",
-                InvoiceDate: InvoiceDate,
-                Customer: customer,
-                FromDate: FromDate,
-                ToDate: ToDate,
-                Trips: Trips,
-                Amount: totalAmount,
-                Trip_id: tripIdArray,
-                station: department,
-                ReferenceNo:invoiceno
-            };
-
-console.log(groupbillList,'groupbill',groupBillingData,Trips,selectedRow,tripid,tripIdArray);
-  await axios.post(`${apiUrl}/updateGroupBilling`,groupbillList)
-  setSuccess(true)
-  setSuccessMessage("Successfully Added")
-  setRows([])
     }
-    catch(err){
-
-    }
-    }
-}
 
 
     return {

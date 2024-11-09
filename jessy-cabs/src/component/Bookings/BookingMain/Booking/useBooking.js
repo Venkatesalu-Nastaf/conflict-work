@@ -359,16 +359,19 @@ const useBooking = () => {
   }, [apiUrl])
 
   const handleAutocompleteChange = (event, value, name) => {
+  
     const selectedOption = value ? value.label : "";
+
     if (name === "orderedby") {
       const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
+      console.log(selectedOrder)
       if (selectedOrder) {
         setBook(prevState => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
 
         setSelectedCustomerData((prevState) => ({
@@ -376,39 +379,34 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
         setFormData((prevState) => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
 
-      } else { 
+      } 
+      else { 
         // If no match is found, clear the fields or handle it as necessary
         setBook(prevState => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+        
         }));
 
         setSelectedCustomerData((prevState) => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+      
         }));
         setFormData((prevState) => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+        
         }));
       }
     } else {
@@ -426,7 +424,7 @@ const useBooking = () => {
       }));
     }
   };
-
+// console.log(book,"book")
   const custmorName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
 
   useEffect(() => {
@@ -455,6 +453,7 @@ const useBooking = () => {
   }, [custmorName, apiUrl])
 
   const handleDriverChange = (event, value, name) => {
+    console.log(value,name,"driver")
     if (name === "driverName") {
       const manualInput = typeof value === "string" ? value : value?.label;
       if (manualInput) {

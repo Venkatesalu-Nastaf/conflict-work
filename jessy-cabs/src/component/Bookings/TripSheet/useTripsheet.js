@@ -3457,29 +3457,29 @@ const useTripsheet = () => {
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
 
-    const fetchdatasupplierraratenamestations = async () => {
+    // const fetchdatasupplierraratenamestations = async () => {
 
-        const supplierdata = vendorinfo.vendor_ratename || ratename;
+    //     const supplierdata = vendorinfo.vendor_ratename || ratename;
 
-        if (supplierdata) {
+    //     if (supplierdata) {
 
-            const response = await axios.get(`${apiUrl}/supplierratenamedatastations/${supplierdata}`)
-            const data = response.data
-            if (data.length > 0) {
-                console.log(data.length, "eneter")
-                const res = response.data[0].stations
-                console.log(res, "eneter")
-                return res
-            }
+    //         const response = await axios.get(`${apiUrl}/supplierratenamedatastations/${supplierdata}`)
+    //         const data = response.data
+    //         if (data.length > 0) {
+    //             console.log(data.length, "eneter")
+    //             const res = response.data[0].stations
+    //             console.log(res, "eneter")
+    //             return res
+    //         }
 
-            return ""
-        }
+    //         return ""
+    //     }
 
-        else {
-            return ''
-        }
+    //     else {
+    //         return ''
+    //     }
 
-    }
+    // }
 
     const handleVendorcalc = async () => {
         handleCalc()
@@ -3492,7 +3492,8 @@ const useTripsheet = () => {
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             vendorratetype = vendorinfo.vendor_ratename || ratename || "";
-            vendorstations = await fetchdatasupplierraratenamestations();
+            // vendorstations = await fetchdatasupplierraratenamestations();
+            vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department ;
 
 
 
@@ -3774,7 +3775,7 @@ const useTripsheet = () => {
 
     // calc function
 
-    let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname, totalamount;
+    let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname, totalamount,CustomerStatioms;
     const handleCalc = async () => {
 
         try {
@@ -3785,7 +3786,9 @@ const useTripsheet = () => {
             totkm = await (calculateTotalKilometers() || formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             tothr = await (calculateTotalTimes() || formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || '');
             // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            organizationname = await fetchdatacustomeraratename()
+            organizationname = await fetchdatacustomeraratename();
+            CustomerStatioms = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department ;
+
             console.log(organizationname, "ratetype")
 
 
@@ -3812,7 +3815,7 @@ const useTripsheet = () => {
                     duty: duty,
                     vehicleName: vehicleNames,
                     organizationname: organizationname.rateType,
-                    stations: organizationname.servicestation
+                    stations: CustomerStatioms
                 }
             });
             data = response.data;

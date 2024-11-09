@@ -186,8 +186,8 @@ router.get('/allCustomers', (req, res) => {
 router.get('/gstdetails/:customer', (req, res) => {
 
   const customer = req.params.customer;
-  const sqlquery = "select gstTax,state,address1 from customers where customer=?";
-  db.query(sqlquery, [customer], (err, result) => {
+  const sqlquery = "select gstTax,state,address1,gstnumber,servicestation,billingGroup from customers where customer=?";
+    db.query(sqlquery, [customer], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
@@ -433,18 +433,18 @@ router.get("/getuniqueCustomerdata/:customer", (req, res) => {
 
   })
 })
-router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
-  const ratetype = req.params.ratetype;
-  const stations = req.params.stations;
-  const ratename = req.params.ratename;
-  console.log(ratetype, "params", stations, ratename)
-  db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype, ratename, stations], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
-    }
-    console.log(results.length, "dddd")
-    return res.status(200).json(results);
-  })
-})
+// router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
+//   const ratetype = req.params.ratetype;
+//   const stations = req.params.stations;
+//   const ratename = req.params.ratename;
+//   console.log(ratetype, "params", stations, ratename)
+//   db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype, ratename, stations], (err, results) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+//     }
+//     console.log(results.length, "dddd")
+//     return res.status(200).json(results);
+//   })
+// })
 
 module.exports = router;

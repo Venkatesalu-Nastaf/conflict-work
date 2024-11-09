@@ -234,7 +234,7 @@ const useAccountinfo = () => {
     { field: "id", headerName: "Sno", width: 100 },
     { field: "cperson", headerName: "Supplier_Name", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
-    { field: "stations", headerName: "Stations", width: 160 },
+    // { field: "stations", headerName: "Stations", width: 160 },
     { field: "Accdate", headerName: "Acc_Date", width: 160 },
     { field: "accountNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
@@ -260,7 +260,7 @@ const useAccountinfo = () => {
     vehicleInfo: '',
     driverName: "",
     vehRegNo: "",
-    stations: ""
+    // stations: ""
 
   });
 
@@ -315,20 +315,20 @@ const useAccountinfo = () => {
         }));
       }
     }
-    else if(name === "rateType") {
+    // else if(name === "rateType") {
 
 
-      setBook((prevBook) => ({
-        ...prevBook,
-        stations: '', // Clear the servicestation
-        [name]: selectedOption,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        stations: '', // Clear the servicestation
-        [name]: selectedOption,
-      }));
-    }
+    //   setBook((prevBook) => ({
+    //     ...prevBook,
+    //     stations: '', // Clear the servicestation
+    //     [name]: selectedOption,
+    //   }));
+    //   setSelectedCustomerData((prevData) => ({
+    //     ...prevData,
+    //     stations: '', // Clear the servicestation
+    //     [name]: selectedOption,
+    //   }));
+    // }
     else {
 
 
@@ -463,7 +463,7 @@ const useAccountinfo = () => {
       cperson: '',
       driverName: "",
       vehRegNo: "",
-      stations: ""
+      // stations: ""
 
 
     }));
@@ -500,39 +500,39 @@ const useAccountinfo = () => {
 
   }
 
-  const memoizedFetchStations = useMemo(() => {
-    return async (stations) => {
-        const ratetype = selectedCustomerData?.rateType || book.rateType
-    const ratename = "Supplier"
+//   const memoizedFetchStations = useMemo(() => {
+//     return async (stations) => {
+//         const ratetype = selectedCustomerData?.rateType || book.rateType
+//     const ratename = "Supplier"
        
 
-        if (stations) {
-            try {
-                const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
-                const responsedata = response.data;
+//         if (stations) {
+//             try {
+//                 const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
+//                 const responsedata = response.data;
 
-            } catch (error) {
-                console.error("Error fetching data", error);
-                // Handle the error as needed
-            }
-        }
-    };
-}, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
+//             } catch (error) {
+//                 console.error("Error fetching data", error);
+//                 // Handle the error as needed
+//             }
+//         }
+//     };
+// }, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
 
  
-  const handleAutocompleteChangestations = async(event, value, name) => {
-    const selectedOption = value ? value.label : '';
+  // const handleAutocompleteChangestations = async(event, value, name) => {
+  //   const selectedOption = value ? value.label : '';
    
-   await memoizedFetchStations(selectedOption)
-      setBook((prevBook) => ({
-        ...prevBook,
-        [name]: selectedOption,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        [name]: selectedOption,
-      }));
-    }
+  // //  await memoizedFetchStations(selectedOption)
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: selectedOption,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: selectedOption,
+  //     }));
+  //   }
 
   
 
@@ -558,7 +558,7 @@ const useAccountinfo = () => {
     // const Accdate = book.Accdate || dayjs().format('YYYY-MM-DD');
     const travelsemail = book.travelsemail;
     // const vehRegNo = book.vehRegNo;
-    const stations = book.stations;
+    // const stations = book.stations;
 
     if (!travelsname) {
       setWarning(true);
@@ -575,21 +575,21 @@ const useAccountinfo = () => {
       setWarningMessage("Fill Rate Type fields");
       return;
     }
-    if (!stations) {
-      setWarning(true);
-      setWarningMessage("Fill stations fields");
-      return;
-    }
+    // if (!stations) {
+    //   setWarning(true);
+    //   setWarningMessage("Fill stations fields");
+    //   return;
+    // }
     if (cerendentialdata === true) {
       setWarning(true);
       setWarningMessage(" travelsname Already Exists");
       return;
     }
-    if(cerendentialdataforstations === true){
-      setError(true);
-      setErrorMessage('RateType stations not registered ');
-      return;
-  }
+  //   if(cerendentialdataforstations === true){
+  //     setError(true);
+  //     setErrorMessage('RateType stations not registered ');
+  //     return;
+  // }
 
     try {
      
@@ -601,7 +601,7 @@ const useAccountinfo = () => {
       setRows([]);
       setSuccessMessage("Successfully Added");
       setCredentialData()
-      setCredentialDataforstations()
+      // setCredentialDataforstations()
     }
     // catch {
     //   setError(true);
@@ -633,11 +633,11 @@ const useAccountinfo = () => {
       setWarningMessage(" travelsname Already Exists");
       return;
     }
-    if(cerendentialdataforstations === true){
-      setError(true);
-      setErrorMessage('RateType stations not registered ');
-      return;
-  }
+  //   if(cerendentialdataforstations === true){
+  //     setError(true);
+  //     setErrorMessage('RateType stations not registered ');
+  //     return;
+  // }
     try {
     
       const { id, ...restselectedcustomer } = selectedCustomerData
@@ -647,7 +647,7 @@ const useAccountinfo = () => {
       setSuccessMessage("Successfully updated");
       handleCancel();
       setCredentialData()
-      setCredentialDataforstations()
+      // setCredentialDataforstations()
       setRows([]);
       handleList()
     } 
@@ -839,7 +839,9 @@ const useAccountinfo = () => {
     rows,
     columns,
     isEditMode,
-    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, handleAutocompleteChangestations, infoMessage,
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, 
+    // handleAutocompleteChangestations, 
+    infoMessage,
     loading,setLoading
   };
 };

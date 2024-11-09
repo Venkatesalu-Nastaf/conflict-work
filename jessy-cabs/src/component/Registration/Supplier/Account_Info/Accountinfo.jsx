@@ -102,9 +102,9 @@ const Accuntinfo = ({ stationName }) => {
     columns,
     isEditMode,
     // fields,
-     handleAutocompleteChangestations,
+    //  handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata,
-    loading,setLoading
+    loading,
   } = useAccountinfo();
 
 
@@ -309,7 +309,7 @@ const Accuntinfo = ({ stationName }) => {
                 // variant="standard"
                 />
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <div className='icone'>
                   <FaCarOn />
                 </div>
@@ -332,7 +332,7 @@ const Accuntinfo = ({ stationName }) => {
                   }
                   }
                 />
-              </div>
+              </div> */}
 
 
               <div className="input">
@@ -360,6 +360,30 @@ const Accuntinfo = ({ stationName }) => {
                 />
               </div>
               <div className="input">
+                <div className='icone'>
+                  <FaCarOn />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="vehicleInfo"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
+                  value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
+                  options={Vehicleinfo.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleInfo || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
+              {/* <div className="input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -382,7 +406,7 @@ const Accuntinfo = ({ stationName }) => {
                   }
                   }
                 />
-              </div>
+              </div> */}
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />

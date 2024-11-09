@@ -12,7 +12,6 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 ,headerAlign: 'center' },
     { field: "driverid", headerName: "Driver ID", width: 180 ,headerAlign: 'center'},
-    { field: "stations", headerName: "Station", width: 180 ,headerAlign: 'center'},
     { field: "ratetype", headerName: "Rate Type", width: 180 ,headerAlign: 'center'},
     { field: "ratename", headerName: "Ratename", width: 180 ,headerAlign: 'center'},
     { field: "active", headerName: "Active", width: 180 ,headerAlign: 'center'},
@@ -39,6 +38,7 @@ const useRatype = () => {
     const [warningMessage,setWarningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
+    const [loading, setLoading] = useState(false)
     
     // handlechange-----------------
     const handleDateChange = (date, name) => {
@@ -264,7 +264,6 @@ const useRatype = () => {
 
     const [book, setBook] = useState({
         driverid: '',
-        stations: '',
         ratetype:'',
         ratename: '',
         // validity: '',
@@ -380,7 +379,6 @@ const useRatype = () => {
             ...prevBook,
             driverid: '',
             ratetype:'',
-            stations: '',
             ratename: '',
             // validity: '',
             active: '',
@@ -400,13 +398,13 @@ const useRatype = () => {
 
     const handleAdd = async () => {
         const ratename = book.ratename;
-        const stations = book.stations;
+        // const stations = book.stations;
         const ratetype = book.ratetype;
-        if (!stations) {
-            setWarning(true);
-            setWarningMessage("Fill The Ratename");
-            return;
-        }
+        // if (!stations) {
+        //     setWarning(true);
+        //     setWarningMessage("Fill The Ratename");
+        //     return;
+        // }
         if (!ratetype) {
             setWarning(true);
             setWarningMessage("Fill The RateType");
@@ -428,7 +426,7 @@ const useRatype = () => {
            const  closetime=  book.closetime || selectedCustomerData.closetime|| dayjs();
            console.log(starttime,"start",closetime,"clos")
             const updatedBook = {
-                stations: book.stations || selectedCustomerData.stations,
+                // stations: book.stations || selectedCustomerData.stations,
                 ratetype:book.ratetype || selectedCustomerData.ratetype,
                 ratename: book.ratename || selectedCustomerData.ratename,
                 // validity: book.validity || selectedCustomerData.validity,
@@ -471,20 +469,32 @@ const useRatype = () => {
     };
 
     const handlelist = useCallback(async () => {
+        setLoading(true);
+        setError(false);
         try {
             const response = await axios.get(`${apiUrl}/ratetype`);
             const data = response.data;
-            if (data.length > 0) {
+            // if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
                     id: index + 1,
                 }));
-                setRows(rowsWithUniqueId);
-            } else {
-                setRows([]);
+                // setRows(rowsWithUniqueId);
+                setRows(data.length > 0 ? rowsWithUniqueId : []);
+               
+            // } else {
+            //     setRows([]);
             }
-        } catch (err) {
-            console.log(err);
+         catch (err) {
+            console.error(err);
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            setError(true);
+        } finally {
+            setLoading(false); // Ensure loading is false in all cases
         }
     }, [apiUrl]);
 
@@ -503,7 +513,7 @@ const useRatype = () => {
         const selectedCustomer = rows.find((row) => row.driverid === driverid);
         const updatedCustomer = {
             driverid: selectedCustomer,
-            stations: selectedCustomerData.stations,
+            // stations: selectedCustomerData.stations,
             ratetype:selectedCustomerData.ratetype,
             ratename: selectedCustomerData.ratename,
             // validity: selectedCustomerData.validity,
@@ -609,7 +619,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent
+        handleDateChange,cerendentialdata,handleChangecredent,loading
 
     };
 };

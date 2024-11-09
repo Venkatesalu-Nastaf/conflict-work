@@ -2371,7 +2371,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
     console.log(customer, "cusssssssssssssssssss")
-    db.query('select rateType,TimeToggle,servicestation from customers where customer = ?', [customer], (err, result) => {
+    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
@@ -2381,18 +2381,18 @@ router.get('/customerratenamedata/:customerdata', (req, res) => {
     })
 })
 
-router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
-    const supplier = req.params.supplierdata;
-    console.log(supplier, "cusssssssssssssssssss")
-    db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
-        if (err) {
-            res.status(500).json({ message: 'Internal server error' });
-            return;
-        }
-        console.log(result, "mm")
-        res.status(200).json(result);
-    })
-})
+// router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
+//     const supplier = req.params.supplierdata;
+//     console.log(supplier, "cusssssssssssssssssss")
+//     db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
+//         if (err) {
+//             res.status(500).json({ message: 'Internal server error' });
+//             return;
+//         }
+//         console.log(result, "mm")
+//         res.status(200).json(result);
+//     })
+// })
 router.get('/Checkstatusandappsclosed/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     console.log(tripid, "cusssssssssssssssssss")

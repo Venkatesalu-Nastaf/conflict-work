@@ -592,32 +592,47 @@ router.get('/All-Transfer-Billing', (req, res) => {
 
 //cover billing
 router.get('/Transfer-Billing', (req, res) => {
-  const { customer, fromDate, toDate, servicestation } = req.query;
+  // const { customer, fromDate, toDate, servicestation } = req.query;
+  const { customer, fromDate, toDate } = req.query;
 
   // Decode the URL-encoded query parameters
   const decodedCustomer = decodeURIComponent(customer);
-  const decodedServiceStation = decodeURIComponent(servicestation);
+  // const decodedServiceStation = decodeURIComponent(servicestation);
 
   // Validate required parameters
-  if (!decodedCustomer || !fromDate || !toDate || !decodedServiceStation) {
+  // if (!decodedCustomer || !fromDate || !toDate || !decodedServiceStation) {
+  //   return res.status(400).json({ error: 'Missing required query parameters' });
+  // }
+
+  if (!decodedCustomer || !fromDate || !toDate ) {
     return res.status(400).json({ error: 'Missing required query parameters' });
   }
 
   // SQL query
+  // const query = `
+  //   SELECT * 
+  //   FROM tripsheet 
+  //   WHERE apps = "Closed" 
+  //     AND status = "Closed" 
+  //     AND customer = ? 
+  //     AND department = ? 
+  //     AND tripsheetdate >= ? 
+  //     AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
+  //     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  // `;
   const query = `
-    SELECT * 
-    FROM tripsheet 
-    WHERE apps = "Closed" 
-      AND status = "Closed" 
-      AND customer = ? 
-      AND department = ? 
-      AND tripsheetdate >= ? 
-      AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
-      AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-  `;
+  SELECT * 
+  FROM tripsheet 
+  WHERE apps = "Closed" 
+    AND status = "Closed" 
+    AND customer = ? 
+    AND tripsheetdate >= ? 
+    AND (Billed_Status IS NULL OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed","Individual_Billed"))
+    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+`;
 
   // Execute query with parameterized values
-  db.query(query, [decodedCustomer, decodedServiceStation, fromDate, toDate], (err, result) => {
+  db.query(query, [decodedCustomer,fromDate, toDate], (err, result) => {
     if (err) {
       console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });

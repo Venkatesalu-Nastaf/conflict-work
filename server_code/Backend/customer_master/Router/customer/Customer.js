@@ -9,9 +9,9 @@ router.post('/customers', (req, res) => {
   // const customerData = req.body;
   console.log("customerData", customerData)
   // Convert billingGroup array to a comma-separated string
-  if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
-    customerData.billingGroup = customerData.billingGroup.join(', ');
-  }
+  // if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
+  //   customerData.billingGroup = customerData.billingGroup.join(', ');
+  // }
   db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {
       console.log("err", err);
@@ -60,9 +60,9 @@ router.get('/customers', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
-  if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
-    updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
-  }
+  // if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
+  //   updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
+  // }
   db.query('UPDATE customers SET ? WHERE customerId = ?', [updatedCustomerData, customerId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update data in MySQL' });

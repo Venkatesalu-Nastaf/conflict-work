@@ -42,7 +42,7 @@ const useCustomer = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [searchText, setSearchText] = useState('');
     const [warningMessage] = useState({});
-    const [isInputVisible, setIsInputVisible] = useState(false);
+    // const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [BillingGroup, setBillingGroup] = useState([]);
     const [customerratetype, setCustomerRatetype] = useState([])
@@ -53,9 +53,9 @@ const useCustomer = () => {
 
     //---------------------------------------
     const { triggerCustomerAdd, setTriggerCustomerAdd } = useData1()
-    const handleButtonClick = () => {
-        setIsInputVisible(!isInputVisible);
-    };
+    // const handleButtonClick = () => {
+    //     setIsInputVisible(!isInputVisible);
+    // };
     const [customerfieldSets, setCustomerFieldSets] = useState([{
         // dinamic data
         orderedby: '',
@@ -254,7 +254,8 @@ const useCustomer = () => {
         gstnumber: '',
         SalesPerson: '',
         salesPercentage: '',
-        billingGroup: [],
+        // billingGroup: [],
+        billingGroup:'',
         hybrid: false,
         TimeToggle: false,
     });
@@ -395,7 +396,8 @@ const useCustomer = () => {
             gstnumber: '',
             SalesPerson: '',
             salesPercentage: '',
-            billingGroup: [],
+            // billingGroup: [],
+            billingGroup:'',
             hybrid: false,
             TimeToggle: false,
         }));
@@ -406,7 +408,7 @@ const useCustomer = () => {
             orderByMobileNo: '',
 
         }])
-        setIsInputVisible(!isInputVisible)
+        // setIsInputVisible(!isInputVisible)
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
@@ -457,10 +459,10 @@ const useCustomer = () => {
     const handleRowClick = (params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-        const datta = customerData.billingGroup.split(',')
-        if (datta.length >= 2) {
-            setIsInputVisible(!isInputVisible);
-        }
+        // const datta = customerData.billingGroup.split(',')
+        // if (datta.length >= 2) {
+        //     setIsInputVisible(!isInputVisible);
+        // }
         setSelectedCustomerId(params.row.customerId);
         getcustomerdata(customerData.customer)
         setIsEditMode(true);
@@ -736,7 +738,7 @@ const useCustomer = () => {
         if (datasets.length > 0) {
             await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
         }
-        setIsInputVisible(!isInputVisible);
+        // setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
         handleCancel();
         setRows([]);
@@ -877,9 +879,9 @@ const useCustomer = () => {
         hidePopup,
         handleAutocompleteChange,
         handleDateChange,
-        handleButtonClick,
+        // handleButtonClick,
         setSearchText,
-        isInputVisible,
+        // isInputVisible,
         handleExcelDownload,
         handlePdfDownload,
         handleenterSearch,

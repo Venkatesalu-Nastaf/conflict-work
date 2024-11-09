@@ -1313,6 +1313,43 @@ router.get('/togetSelectTripsheetDetails', (req, res) => {
     res.status(200).send(results);
   });
 });
+router.get('/customerdatamothergroup/:customers', (req, res) => {
+  const {customers} = req.params;
+
+
+  const query = 'SELECT * FROM customers where customer = ?';
+  const sql1='SELECT servicestation FROM customers where customer = ?';
+
+  db.query(query, [customers], (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send({ error: 'Database query failed' });
+    }
+    
+    if(results.length > 0){
+      const data = results[0].billingGroup || null;
+    if(data === null){
+      const datas =results[0].servicestation || null ;
+        return  res.status(200).json(datas);
+    }
+    else{
+      db.query(sql1, [data], (err, results1) => {
+        if (err) {
+          console.log(err,"sql1")
+          return res.status(500).send({ error: 'Database query failed' });
+        }
+        const datas =results1[0].servicestation || null ;
+        return  res.status(200).json(datas);
+    })
+    }
+  }
+  else{
+  return  res.status(500).json([]);
+  }
+
+    // res.status(200).send(results);
+  });
+});
 
 
 

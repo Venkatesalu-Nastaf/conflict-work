@@ -88,8 +88,8 @@ const Customer = ({ stationName }) => {
     setToDate,
     handleAutocompleteChange,
     handleDateChange,
-    handleButtonClick,
-    isInputVisible,
+    // handleButtonClick,
+    // isInputVisible,
     handleExcelDownload,
     handlePdfDownload,
     rows,
@@ -588,6 +588,7 @@ const Customer = ({ stationName }) => {
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Billing Group" />}
                     onChange={(event, value) => handleAutocompleteChangebilling(event, value, "billingGroup")}
+                    value={selectedCustomerData?.billingGroup ||book.billingGroup}
                     />
 
                   {/* {isInputVisible && (

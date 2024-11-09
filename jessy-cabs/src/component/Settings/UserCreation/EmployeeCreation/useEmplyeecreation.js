@@ -20,6 +20,7 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage, setWarningMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState(null);
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
@@ -327,24 +328,21 @@ const useEmplyeecreation = () => {
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
-
     };
-
+    
     useEffect(() => {
         const fetchData = async () => {
             //   const organizationname = localStorage.getItem('usercompany');
-
             try {
                 // if (!organizationname) return
                 const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
-
+                     
                     const userDataArray = await response.json();
                     //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)
-
                     } else {
                         setErrorMessage('User data not found.');
                         setError(true);
@@ -356,7 +354,55 @@ const useEmplyeecreation = () => {
         };
         fetchData();
     }, [apiUrl]);
-    // add
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateUser--Creation`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    console.log("Fetched data:", userDataArray);
+                    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
+
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl]);   
+    console.log(templateMessageData,"shh")
+
+    // useEffect(() => {
+    //     const fetchTemplateMessage = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/TemplateMessage`, {
+    //                 method: 'POST',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //                 body: JSON.stringify({ templateInfo: 'credential_template' }) // Use an identifier for the specific template
+    //             });
+    //             if (response.status === 200) {
+    //                 const data = await response.json();
+    //                 setTemplateMessageData(data); // Assuming this state holds the template message
+    //             } else {
+    //                 setErrorMessage('Template message not found.');
+    //                 setError(true);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching template message:', error);
+    //         }
+    //     };
+    //     fetchTemplateMessage();
+    // }, [apiUrl]);
 
 
     const uniqueusercreationname = async (usernname) => {
@@ -379,10 +425,7 @@ const useEmplyeecreation = () => {
         }
 
 
-
-
     }
-
     const handleChangeuniquecreation = (event) => {
         const { name, value } = event.target;
         const datacrendital = uniqueusercreationname(value);
@@ -481,7 +524,7 @@ const useEmplyeecreation = () => {
 
         try {
             const created_at = dayjs().format("YYYY-MM-DD")
-            const data = { book, permissionsData, organistaionsendmail, created_at }
+            const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             handleList()

@@ -12,6 +12,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { CircularProgress } from '@mui/material';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -24,7 +25,6 @@ import axios from 'axios'
 import * as XLSX from 'xlsx';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -52,6 +52,9 @@ const MailDetails = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
+  // const [templateMessageData, setTemplateMessageData] = useState(null);
+
+  const [loading, setLoading] = useState(false)
   const [searchname, setSearchname] = useState('')
   const navigate = useNavigate();
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
@@ -65,18 +68,17 @@ const MailDetails = () => {
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 50 },
-    { field: "Templateid", headerName: "Templateid", width: 90 },
-    { field: "TemplateName", headerName: "Template Name", width: 150 },
+    { field: "Templateid", headerName: "Templateid", width: 80 },
+    { field: "TemplateName", headerName: "Template Name", width: 120 },
+    { field: "TemplateInfo", headerName: "Template Info", width: 120 },  
     { field: "TemplateSubject", headerName: "Template Subject", width: 170 },
     {
       field: 'TemplateMessageData',
       headerName: 'Template Message',
-      width: 450,
-      renderCell: (params) => {
-        return (
-          <span>{convertToPlain(params.value)}</span>
-        );
-      }
+      width: 350,
+      renderCell: (params) => (
+        <span>{convertToPlain(params.value)}</span>
+      ),
     },
     {
       field: 'Edit',
@@ -84,7 +86,7 @@ const MailDetails = () => {
       width: 90,
       renderCell: (params) => (
         <Button
-        disabled={!Mailer_modify}
+          disabled={!Mailer_modify}
           onClick={() => handleButtonEditClick(params)}
           aria-label="edit"
           sx={{ color: '#1976d2' }}
@@ -98,23 +100,29 @@ const MailDetails = () => {
       headerName: 'Delete',
       width: 90,
       renderCell: (params) => (
-        <Button
-        disabled={!Mailer_delete}
-          onClick={() => handleButtondeleteClick(params)}
-          aria-label="delete"
-          sx={{ color: 'red' }}
-        >
-          <DeleteIcon />
-        </Button>
+        params.row.TemplateInfo ? null : (
+          <Button
+            disabled={!Mailer_delete}
+            onClick={() => handleButtondeleteClick(params)}
+            aria-label="delete"
+            sx={{ color: 'red' }}
+          >
+            <DeleteIcon />
+          </Button>
+        )
       ),
     },
-  ]
+  ];
 
+  // useEffect(()=>{
+
+  // })
+  
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
   };
-
+ 
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(() => {
@@ -125,22 +133,51 @@ const MailDetails = () => {
   }, [error, success]);
 
 
-  const handleList = useCallback(async () => {
-    try {
-        const response = await axios.get(`${apiurl}/templatedataall`)
-        const data = response.data
-        const rowuniqueid = data.map((row, index) => ({
+//   const handleList = useCallback(async () => {
+//     try {
+//         const response = await axios.get(`${apiurl}/templatedataall`)
+//         const data = response.data 
+//         const rowuniqueid = data.map((row, index) => ({
+//           ...row,
+//           idno: index + 1
+//         }))
+
+//         setTemplateData(rowuniqueid)
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }, [apiurl]); // Add any dependencies needed inside this array
+
+const handleList = useCallback(async () => {
+  setLoading(true);
+  setError(false); // Reset error state before making a new request
+  try {
+      const response = await axios.get(`${apiurl}/templatedataall`);
+      const data = response.data;
+      
+      const rowuniqueid = data.map((row, index) => ({
           ...row,
-          idno: index + 1
-
-
-        }))
-        
-        setTemplateData(rowuniqueid)
-    } catch (err) {
-        console.log(err);
-    }
-}, [apiurl]); // Add any dependencies needed inside this array
+          idno: index + 1,
+      }));
+      
+      setTemplateData(rowuniqueid);
+      
+      if (data.length > 0) {
+          setLoading(false);
+      } else {
+          setLoading(false);
+      }
+  } catch (err) {
+      if (err.message === 'Network Error') {
+          setErrorMessage("Check network connection.");
+      } else {
+          setErrorMessage("Failed to Show: " + (err.response?.data?.message || err.message));
+      }
+      setError(true);
+  } finally {
+      setLoading(false);
+  }
+}, [apiurl]);
 
 useEffect(() => {
     handleList();
@@ -208,7 +245,7 @@ useEffect(() => {
 
   const handleButtonEditClick = async (params) => {
     const Templatecheck = "true"
-    const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateMessageData=${params.row.TemplateMessageData}&TemplateimageData=${templateimage}`
+    const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateInfo=${params.row.TemplateInfo}&TemplateMessageData=${params.row.TemplateMessageData}&TemplateimageData=${templateimage}`
 
     window.location.href = mailerPageUrl
   }
@@ -401,6 +438,7 @@ useEffect(() => {
                   <div className=" input-mailer">
                     <div className="icone">
                       <SmsIcon color="action" />
+
                     </div>
                     <TextField
                       multiline
@@ -432,6 +470,7 @@ useEffect(() => {
                       <p>{successMessage}</p>
                     </div>
                   }
+                  
                   {error &&
                     <div className='alert-popup Error' >
                       <div className="popup-icon"> <ClearIcon /> </div>
@@ -477,6 +516,7 @@ useEffect(() => {
                         <Box
                           sx={{
                             height: 400, // Adjust this value to fit your needs
+                            position: 'relative',
                             '& .MuiDataGrid-virtualScroller': {
                               '&::-webkit-scrollbar': {
                                 width: '8px', // Adjust the scrollbar width here
@@ -497,11 +537,25 @@ useEffect(() => {
                             },
                           }}
                         >
+                            {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+
                           <DataGrid
                             rows={templatedata}
                             columns={columns}
                             onRowClick={handletableClick}
                           />
+                            )}
                         </Box>
                       </div>
                     </div>
@@ -510,6 +564,25 @@ useEffect(() => {
               </div>
             </div>
           </div>
+
+          <div className="input-field full-width" style={{marginLeft:'60px'}}>
+            <div className="inputs sms-format-keyword-input">
+            <span className="Title-Name" style={{ fontWeight: 600 }}>Key-Words</span>
+                <TextField
+                    className="sms-box"
+                    fullWidth
+                    id="outlined-7"
+                    multiline
+                    sx={{ mt: 1, width: "100%" }}
+                    rows={4}
+                    defaultValue=""
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </div>
+        </div>
+
           {/* <Box className='common-speed-dail'>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

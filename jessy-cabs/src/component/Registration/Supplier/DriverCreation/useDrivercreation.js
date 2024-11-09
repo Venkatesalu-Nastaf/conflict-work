@@ -28,6 +28,7 @@ const useDrivercreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage,setWarningMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState('');
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [searchText, setSearchText] = useState("")
@@ -561,12 +562,41 @@ const useDrivercreation = () => {
         setDialogOpen(false);
     };
     
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateForDriverCreation`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    console.log("Fetched data:", userDataArray);
+    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } else {
+                        setErrorMessage('No template data found.');
+                        setError(true);
+                    }
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+    
+    // Additional useEffect to monitor state changes
+    // useEffect(() => {
+    //     if (templateMessageData) {
+    //         console.log("templateMessageData after fetch:", templateMessageData, 'TemplateDriver');
+        
+    // }, [templateMessageData]);
+    
+
   useEffect(() => {
     const fetchData = async () => {
-  
-
       try {
-     
         const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
 
@@ -588,41 +618,38 @@ const useDrivercreation = () => {
   }, [apiUrl, datatrigger]);
 //   console.log(organistaionsendmail,"dataatatta")
 
+const handlecheckmaildriver = async (lastBookingno) => {
+    try {
+        // Add templateMessageData to the dataToSend object
+        const dataToSend = {
+            userid: lastBookingno,
+            Drivername: book.drivername,
+            UserName: book.username,
+            password: book.userpassword,
+            Sendmailauth: organistaionsendmail.Sender_Mail,
+            Mailauthpass: organistaionsendmail.EmailApp_Password,
+            Email: book.Email,
+            templateMessageData
+        };
 
-    const handlecheckmaildriver = async (lastBookingno) => {
-      
-         
-          try {
-          
-            const dataToSend = {
-              userid:lastBookingno,
-              Drivername:book.drivername,
-              UserName:book.username,
-              password:book.userpassword,
-              Sendmailauth: organistaionsendmail.Sender_Mail,
-              Mailauthpass: organistaionsendmail.EmailApp_Password,
-              Email:book.Email
-    
-    
-    
-            };
-            
-            await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
-            setSuccess(true);
-            setSuccessMessage("Mail Sent Successfully");
-          } catch (error) {
-         
-            setError(true);
-            setErrorMessage("An error occured while sending mail");
-          }
-        }
+        console.log("Sending data:", dataToSend); // For debugging purposes
+        await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
+
+        setSuccess(true);
+        setSuccessMessage("Mail Sent Successfully");
+    } catch (error) {
+        console.error("Error sending email:", error); // Added console log for debugging
+        setError(true);
+        setErrorMessage("An error occurred while sending mail");
+    }
+};
+
         //  else {
         //   setError(true);
         //   setErrorMessage("Send mail checkbox is not checked. Email not sent.");
         // }
     //   };
     
-
     const handleAdd = async () => {
         if (!book.stations && !book.drivername) {
             setWarning(true);
@@ -1162,6 +1189,8 @@ const useDrivercreation = () => {
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
+        templateMessageData,
+        setTemplateMessageData,
         // passwordsMatch,
         columns,
         showPassword,

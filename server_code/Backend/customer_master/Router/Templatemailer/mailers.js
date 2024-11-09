@@ -19,8 +19,6 @@ const storage = multer.diskStorage({
         cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
     },
 
-
-
 })
 const uploadattachement = multer({ storage: storage });
 router.post('/templateattachmentimage/:templateid', uploadattachement.array('imagestemplate'), (req, res) => {
@@ -91,7 +89,6 @@ router.get('/templatedataall', (req, res) => {
         return res.status(200).json(result);
     });
 });
-
 
 router.put('/templatedataypdate/:templateid', (req, res) => {
     const templateid = req.params.templateid;

@@ -582,7 +582,6 @@ router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
 //     }
 // });
 
-
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
@@ -678,7 +677,6 @@ router.post('/send-email', async (req, res) => {
             res.status(200).json({ message: 'Email sent successfully' });
         }
         else {
-
 
             const customerMailOptions1 = {
                 // from: 'foxfahad386@gmail.com',

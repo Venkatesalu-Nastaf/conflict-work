@@ -289,6 +289,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // } else {
   //     console.log("newStateforpdf is null or undefined.");
   // }
+console.log(customStateDetails,'sssss');
 
 
   const apiUrl = APIURL;

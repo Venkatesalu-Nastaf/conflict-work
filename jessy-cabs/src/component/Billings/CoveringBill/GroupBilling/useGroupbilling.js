@@ -53,6 +53,7 @@ const useGroupbilling = () => {
     const [trips, setTrips] = useState(0)
     const [department, setDepartment] = useState('')
     const [stateDetails, setStateDetails] = useState([]);
+    const [billingGroupDetails,setBillingGroupDetails] = useState('')
     const [groupBillingData,setGroupBillingData] = useState([])
     const [viewGroupBill, setViewGroupBill] = useState({
         InvoiceDate: '',
@@ -1011,7 +1012,10 @@ console.log(groupbillList,'groupbill',groupBillingData,Trips,selectedRow,tripid,
         setBillingDate,
         setServiceStation,
         stateDetails,
-        setStateDetails
+        setStateDetails,
+        billingGroupDetails,
+        setBillingGroupDetails,
+
     };
 };
 

@@ -11,7 +11,7 @@ const db = require('../../../db');
 //     return res.status(200).json({ message: "Data inserted successfully" });
 //     console.log(result,'Station creation datas')
 //   });
- 
+
 // });
 
 // For creating the new station
@@ -21,9 +21,9 @@ const db = require('../../../db');
 //     if (err) {
 //       return res.status(500).json({ error: "Failed to insert data into MySQL" });
 //     }
-    
+
 //     console.log(result, 'Station creation datas'); // Log the result here
-    
+
 //     return res.status(200).json({ message: "Data inserted successfully" });
 //   });
 // });
@@ -34,7 +34,7 @@ router.post('/stationcreation', (req, res) => {
       console.error("Database insertion error:", err); // Log full error details
       return res.status(500).json({ error: "Failed to insert data into MySQL", details: err.message });
     }
-    
+
     console.log(result, 'Station creation data inserted successfully');
     return res.status(200).json({ message: "Data inserted successfully" });
   });
@@ -57,7 +57,7 @@ router.delete('/stationcreation/:stationid', (req, res) => {
 router.put('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
   const updatedCustomerData = req.body;
-  
+
   db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -119,9 +119,9 @@ router.get('/getStation-name', (req, res) => {
   });
 });
 
-router.get("/getcreduniquestationname/:stationname",(req,res)=>{
-  const stationname=req.params.stationname;
-  db.query("select Stationname  from stationcreation where Stationname=?",[stationname],(err,results)=>{
+router.get("/getcreduniquestationname/:stationname", (req, res) => {
+  const stationname = req.params.stationname;
+  db.query("select Stationname  from stationcreation where Stationname=?", [stationname], (err, results) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
@@ -130,7 +130,20 @@ router.get("/getcreduniquestationname/:stationname",(req,res)=>{
   })
 })
 
+// get station details 
+router.get("/getAllStationDetails/:stateName", (req, res) => {
+  const { stateName } = req.params;
+  console.log(stateName, 'AllStations');
 
+  db.query("SELECT * FROM stationcreation WHERE state = ?", [stateName], (error, result) => {
+    if (error) {
+      console.log(error, 'error'); // Log the error for debugging
+      return res.status(500).json({ message: "Database query error", error });
+    }
+
+    res.status(200).json(result);
+  });
+});
 
 
 

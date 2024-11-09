@@ -662,6 +662,19 @@ router.get('/allGroup-Billing', (req, res) => {
   });
 })
 
+// get chennai address
+router.get('/getChennaiAddress', (req, res) => {
+  const chennaiQuery = `SELECT * FROM stationcreation WHERE Stationname = 'chennai'`;
+  
+  db.query(chennaiQuery, (error, results) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'Database query failed' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 router.get('/Group-Billing', (req, res) => {
   const { customer, fromDate, toDate, servicestation } = req.query;

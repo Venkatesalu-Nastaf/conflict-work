@@ -6,9 +6,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import {Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { UnderGroup, states, Customertype, Select } from "../Customer/Customerdata";
-
+import { CircularProgress } from '@mui/material';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -81,7 +81,10 @@ const StationCreation = () => {
     hidePopup,
     isEditMode,
     handleEdit, cerendentialdata,
-    handleChangeuniquestation
+    handleChangeuniquestation,
+    getMainBrachDetails,
+    loading,
+    setLoading
   } = useStationCreation();
 
   useEffect(() => {
@@ -129,7 +132,7 @@ const StationCreation = () => {
                   />
 
                 </div>
-              
+
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
@@ -142,7 +145,7 @@ const StationCreation = () => {
                         id="Station-name"
                         label="Station Name"
                         name="Stationname"
-                         className='full-width'
+                        className='full-width'
                         value={selectedCustomerData?.Stationname || book.Stationname}
                         autoComplete="new-password"
                         // onChange={handleChange}
@@ -173,37 +176,38 @@ const StationCreation = () => {
                     onChange={handleChange}
                   />
                 </div> */}
-                 <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
-      <div className="icone">
-        <ListAltIcon color="action" />
-      </div>
-      <Autocomplete
-        fullWidth
-        size="small"
-        id="state-autocomplete"
-        freeSolo
-        value={selectedCustomerData?.states || book.states}
-        options={states.map((option) => ({
-          label: option.state,
-        }))}
-        getOptionLabel={(option) => option.label || ""}
-        onChange={(event, value) => handleChange({
-          target: { name: "state", value: value ? value.label : "" }
-        })}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="State Name"
-            margin="normal"
-             size="small"
-            sx={{ m: 1, width: "200px" }}
-            name="state"
-            autoComplete="new-password"
-            onChange={handleChange}
-          />
-        )}
-      />
-    </div>
+                <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="state-autocomplete"
+                    freeSolo
+                    value={selectedCustomerData?.state || book.state}
+                    options={states.map((option) => ({
+                      label: option.state,
+                    }))}
+                    // getOptionLabel={(option) => option.label || ""}
+                    onChange={(event, value) => handleChange({
+                      target: { name: "state", value: value ? value.label : "" }
+                    })}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="State Name"
+                        margin="normal"
+                        size="small"
+                        sx={{ m: 1, width: "200px" }}
+                        name="state"
+                        autoComplete="new-password"
+                        value={selectedCustomerData?.state || book?.state}
+                        onChange={handleChange}
+                      />
+                    )}
+                  />
+                </div>
                 <div className='input' style={{ paddingRight: '15px' }}>
                   <div className='icone'>
                     <AddHomeWorkIcon color='action' />
@@ -213,11 +217,12 @@ const StationCreation = () => {
                     className='textarea-input'
                     name="address"
                     rows="3"
+                    disabled={getMainBrachDetails.length > 0}
                     value={selectedCustomerData?.address || book.address}
                     onChange={handleChange}
                     placeholder="Address"
                   />
-               
+
                 </div>
 
                 <div className='input' style={{ paddingRight: '15px' }}>
@@ -228,8 +233,9 @@ const StationCreation = () => {
                     margin="normal"
                     size="small"
                     id="gstno"
-                    label="GST No"
+                    label=" Main Branch GST No"
                     name="gstno"
+                    disabled={getMainBrachDetails.length > 0}
                     value={selectedCustomerData?.gstno || book.gstno}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -379,7 +385,7 @@ const StationCreation = () => {
             </Box>
             <div className="stationcreation-table-container">
               <div className="table-stationcreation">
-               
+
 
                 <Box
                   sx={{
@@ -404,17 +410,30 @@ const StationCreation = () => {
                     },
                   }}
                 >
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    onRowClick={handleRowClick}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                      },
-                    }}
-                    pageSizeOptions={[5, 10]}
-                  />
+                  {loading ? (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    >
+                      <CircularProgress />
+                    </Box>
+                  ) : (
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      onRowClick={handleRowClick}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                    />
+                  )}
                 </Box>
               </div>
             </div>

@@ -192,6 +192,7 @@ const EmployeeCreation = ({ stationName }) => {
                         className='full-width'
                         value={book.username || ''}
                         // onChange={handleChange}
+                        style={{width:'183px'}}
                         onChange={handleChangeuniquecreation}
                       />
                     </span>
@@ -260,7 +261,6 @@ const EmployeeCreation = ({ stationName }) => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                   </div>
-
                   <Autocomplete
                     size='small'
                     multiple
@@ -274,7 +274,6 @@ const EmployeeCreation = ({ stationName }) => {
                       : []
                     }
                     isOptionEqualToValue={(option, value) => option === value}
-
                     disableCloseOnSelect
                     getOptionLabel={(option) => option}
                     renderOption={(props, option, { selected }) => (
@@ -290,11 +289,25 @@ const EmployeeCreation = ({ stationName }) => {
                     )}
                     // style={{ width: 170 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '330px' }} />
+                      <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '185px' ,marginRight:'150px'}} />
                     )}
-
                   />
                 </div>
+
+                <div className="input" style={{ paddingRight: '18px', marginLeft: '-150px' }}>
+                        <div className="icone">
+                          <ListAltIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name="employeeid"   
+                          value={book.employeeid || ''}
+                          onChange={handleChange}
+                          label="Employee ID"
+                          id="employeeid"
+                          style={{ width: '185px' }}
+                        />
+                  </div>
 
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">

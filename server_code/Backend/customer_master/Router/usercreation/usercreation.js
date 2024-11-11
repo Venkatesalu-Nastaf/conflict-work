@@ -38,19 +38,17 @@ router.get('/TemplateUser--Creation', async (req, res) => {
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
-  const { username, stationname, designation, organizationname, userpassword, active, email, mobileno, superAdmin } = book;
+  const { username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, superAdmin } = book;
   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
   const themesdata = "theme1";
-  
   console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
-  console.log(username, stationname, designation, organizationname, userpassword, active, email, mobileno, created_at);
-
+  console.log(username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, created_at);
   const idString = stationname.join(',');
   console.log(idString, "ff");
 
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,theme,created_at,superAdmin)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname, userpassword, active, email, mobileno, themesdata, created_at, superAdmin]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid, userpassword, active,email,mobileno,theme,created_at,superAdmin)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname,employeeid, userpassword, active, email, mobileno, themesdata, created_at, superAdmin]);
 
     // Set up the mail transporter
     var transporter = nodemailer.createTransport({
@@ -209,7 +207,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
     
-  const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email,created_at } = updatedCustomer;
+  const { userid, username, stationname, designation, organizationname,employeeid, userpassword, active, mobileno, email,created_at } = updatedCustomer;
 
 
   if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
@@ -299,6 +297,7 @@ router.get('/usercreationgetdata/:value', (req, res) => {
       'username',
       'stationname',
       'designation',
+      'employeeid',
       'organizationname',
       'ufirstname',
       'ulastname',
@@ -383,9 +382,9 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   const editid = req.params.editid
   const updatedata = req.body
 
-  const { username, designation, userpassword, email, mobileno } = updatedata
+  const { username, designation,employeeid, userpassword, email, mobileno } = updatedata
 
-  db.query("update usercreation set username=?,designation=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, userpassword, email, mobileno, editid], (err, results) => {
+  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation,employeeid,  userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
       return res.status(500).json({ Message: "Error updating data", err });
     }
@@ -394,7 +393,6 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   })
 
 })
-
 
 
 module.exports = router;

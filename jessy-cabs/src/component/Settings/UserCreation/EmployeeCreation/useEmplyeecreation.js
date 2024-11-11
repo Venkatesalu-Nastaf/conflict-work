@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
+import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -268,6 +269,7 @@ const useEmplyeecreation = () => {
         stationname: '',
         designation: '',
         organizationname: '',
+        employeeid:'',
         userpassword: '',
         active: false,
         superAdmin: false,
@@ -317,6 +319,7 @@ const useEmplyeecreation = () => {
             stationname: '',
             designation: '',
             organizationname: '',
+            employeeid:'',
             userpassword: '',
             active: false,
             superAdmin: false
@@ -347,7 +350,7 @@ const useEmplyeecreation = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                }
+                }   
             }
             catch {
             }
@@ -412,8 +415,6 @@ const useEmplyeecreation = () => {
             const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
             const responsedata = response.data;
 
-      
-
             if (responsedata?.length >= 1) {
                 setCredentialData(true)
                 // return true;
@@ -423,7 +424,6 @@ const useEmplyeecreation = () => {
                 // return false;
             }
         }
-
 
     }
     const handleChangeuniquecreation = (event) => {
@@ -460,6 +460,7 @@ const useEmplyeecreation = () => {
         const branchName = book.stationname;
         const designation = book.designation;
         const organisation = book.organizationname
+        const employeeid=book.employeeid
         const active = book.active
         const email = book.email
         const mobileno = book.mobileno
@@ -500,14 +501,17 @@ const useEmplyeecreation = () => {
             setWarningMessage("Fill Designation..");
             return;
         }
+        if (!employeeid) {
+            setWarning(true);
+            setWarningMessage("Fill Employee ID..");
+            return;
+        }
 
         if (!organisation) {
             setWarning(true);
             setWarningMessage("Fill Organisation..");
             return;
         }
-
-
         if (!active) {
             setWarning(true);
             setWarningMessage("Fill Active..");
@@ -519,8 +523,6 @@ const useEmplyeecreation = () => {
             setWarningMessage(" User Name Already Exists");
             return;
         }
-
-
 
         try {
             const created_at = dayjs().format("YYYY-MM-DD")
@@ -547,8 +549,9 @@ const useEmplyeecreation = () => {
 
             const username = book.username;
             const branchName = book.stationname;
-            const designation = book.designation;
+            const designation = book.designation;        
             const organisation = book.organizationname
+            const employeeid=book.employeeid
             const active = book.active
             const email = book.email
             const mobileno = book.mobileno
@@ -588,6 +591,11 @@ const useEmplyeecreation = () => {
             if (!designation) {
                 setError(true);
                 setErrorMessage("Fill Designation..");
+                return;
+            }
+            if (!employeeid) {
+                setError(true);
+                setErrorMessage("Fill Employee ID..");
                 return;
             }
 

@@ -31,6 +31,436 @@ export const Customertype = [
   },
 ];
 
+// dummy values for the state
+
+export const allStations = [
+  "anantapur", "chittoor", "east godavari", "guntur", "krishna", "kurnool", "prakasam", "srikakulam", 
+  "visakhapatnam", "west godavari", "ysr kadapa", "anjaw", "changlang", "east kameng", "east siang", 
+  "kurung kumey", "lohit", "longding", "lower dibang valley", "lower subansiri", "namsai", "papum pare", 
+  "tawang", "tirap", "upper siang", "upper subansiri", "west kameng", "west siang", "baksa", "barpeta", 
+  "biswanath", "bongaigaon", "cachar", "charaideo", "chirang", "darrang", "dhemaji", "dhubri", "dibrugarh", 
+  "goalpara", "golaghat", "hailakandi", "hojai", "jorhat", "kamrup", "kamrup metropolitan", "karbi anglong", 
+  "karimganj", "kokrajhar", "lakhimpur", "morigaon", "nagaon", "nalbari", "sivasagar", "sonitpur", 
+  "south salmara-mankachar", "tinsukia", "udalguri", "west karbi anglong", "araria", "arwal", 
+  "banka", "begusarai", "bhagalpur", "bhojpur", "buxar", "darbhanga", "east champaran", "gaya", "gopalganj", 
+  "jamui", "jehanabad", "kaimur", "katihar", "khagaria", "kishanganj", "lakhisarai", "madhepura", "madhubani", 
+  "munger", "muzaffarpur", "nalanda", "nawada", "patna", "purnia", "rohtas", "saharsa", "samastipur", "saran", 
+  "sheikhpura", "sheohar", "sitamarhi", "supaul", "vaishali", "west champaran", "balod", "baloda bazar", "balrampur", 
+  "bastar", "bemetara", "bijapur", "dantewada", "dhamtari", "durg", "gariaband", "janjgir-champa", 
+  "jashpur", "kabirdham", "kanker", "korba", "kondagaon", "mahasamund", "mungeli", "narayanpur", "raigarh", 
+  "raipur", "rajnandgaon", "sukma", "surajpur", "surguja", "north goa", "south goa", "ahmedabad", "amreli", "anand", 
+  "aravalli", "banas kantha", "bharuch", "bhavnagar", "botad", "chhota udepur", "dahod", "dangs", "gandhinagar", 
+  "gir somnath", "jamnagar", "junagadh", "kutch", "kheda", "mahisagar", "mehsana", "morbi", "narmada", "navsari", 
+  "panchmahal", "patan", "porbandar", "rajkot", "sabarkantha", "surat", "surendranagar", "tapi", "vadodara", 
+  "valsad", "ambala", "bhiwani", "charkhi dadri", "faridabad", "gurugram", "hisar", "jhajjar", "jind", "kaithal", 
+  "karnal", "kurukshetra", "mahendragarh", "mewat", "palwal", "panchkula", "panipat", "rewari", "rohtak", "sirsa", 
+  "sonipat", "yamunanagar", "bilaspur", "chamba", "hamirpur", "kangra", "kullu", "kinnaur", "mandi", "shimla", "sirmaur", 
+  "solan", "una", "bokaro", "chatra", "deoghar", "dhanbad", "dumka", "giridih", "godda", "gumla", "hazaribagh", 
+  "jamtara", "khunti", "koderma", "latehar", "lohardaga", "pakur", "palamu", "ramgarh", "ranchi", "sahebganj", 
+  "seraikela kharsawan", "simdega", "west singhbhum", "bagalkot", "ballari", "belagavi", "banglore", "bidar", "chamarajanagar", "chikkaballapur", "chikkamagaluru", "chitradurga", "dakshina kannada", 
+  "davanagere", "dharwad", "gadag", "hassan", "haveri", "kalaburagi", "kodagu", "kolar", "koppal", "mandya", "mysuru", 
+  "raichur", "ramanagara", "shivamogga", "tumakuru", "udupi", "uttara kannada", "vijayapura", "yadgir", "alappuzha", 
+  "ernakulam", "idukki", "kannur", "kasaragod", "kottayam", "kollam", "kozhikode", "malappuram", "palakkad", 
+  "pathanamthitta", "thiruvananthapuram", "thrissur", "wayanad", 
+  // **Tamil Nadu districts start here** 
+  "ariyalur", "chennai", "coimbatore", "cuddalore", "dharmapuri", "dindigul", "erode", "kanchipuram", "kanyakumari",
+   "karur", "krishnagiri", "madurai","nagapattinam", "namakkal", "nilgiris", "perambalur", "pudukkottai", "ramanathapuram",
+  "salem", "sivaganga", "thanjavur", "theni", "thoothukudi (tuticorin)", "tiruchirappalli",
+  "tirunelveli","tenkasi", "tiruppur", "tiruvallur", "tiruvannamalai", "tiruvarur", "vellore", "viluppuram", "virudhunagar", 
+  // **Tamil Nadu districts end here** 
+  "agar malwa", "alirajpur", "anuppur", "ashok nagar", "balaghat", "barwani", "betul", "bhind", "bhopal", "burhanpur", 
+  "chhatarpur", "chhindwara", "damoh", "datia", "dewas", "dhar", "dindori", "guna", "gwalior", "harda", "hoshangabad", 
+  "indore", "jabalpur", "jhabua", "katni", "khandwa", "khargone", "mandla", "mandsaur", "morena", "narsinghpur", 
+  "neemuch", "panna", "raisen", "rajgarh", "ratlam", "rewa", "sagar", "satna", "sehore", "seoni", "shahdol", 
+  "shajapur", "sheopur", "shivpuri", "sidhi", "singrauli", "tikamgarh", "ujjain", "umaria", "vidisha", 
+  "ahmednagar", "akola", "amravati", "aurangabad", "beed", "bhandara", "buldhana", "chandrapur", "dhule", "gadchiroli", 
+  "gondia", "hingoli", "jalgaon", "jalna", "kolhapur", "latur", "mumbai", "mumbai suburban", "nandurbar", "nashik", 
+  "osmanabad", "palghar", "parbhani", "pune", "raigad", "ratnagiri", "sangli", "satara", "sindhudurg", "solapur", 
+  "thane", "wardha", "washim", "yavatmal", "bishnupur", "chandel", "churachandpur", "imphal east", "imphal west", 
+  "jiribam", "kangpokpi", "noney", "senapati", "tamenglong", "tengnoupal", "thoubal", "ukhrul", "east garo hills", 
+  "east khasi hills", "jaintia hills", "ri bhoi", "west garo hills", "west khasi hills", "west jaintia hills"
+];
+
+
+export const stateToStations = {
+  "andhra pradesh": 
+   ["anantapur", "chittoor", "east godavari", "guntur", "krishna", "kurnool",
+     "prakasam", "srikakulam", "visakhapatnam", "west godavari", "ysr kadapa"],
+
+  "arunachal pradesh":
+   ["anjaw", "changlang", "east kameng", "east siang", "kurung kumey", "lohit",
+     "longding", "lower dibang valley", "lower subansiri", "namsai", "papum pare",
+     "tawang", "tirap", "upper siang", "upper subansiri", "west kameng", "west siang"],
+  "assam": 
+  ["baksa", "barpeta", "biswanath", "bongaigaon", "cachar", "charaideo", "chirang", "darrang", "dhemaji", "dhubri", "dibrugarh", "goalpara", "golaghat", "hailakandi", "hojai", "jorhat", "kamrup", "kamrup metropolitan", "karbi anglong", "karimganj", "kokrajhar", "lakhimpur", "morigaon", "nagaon", "nalbari", "sivasagar", "sonitpur", "south salmara-mankachar", "tinsukia", "udalguri", "west karbi anglong"],
+  "bihar": ["araria", "arwal", "aurangabad", "banka", "begusarai", "bhagalpur", "bhojpur", "buxar", "darbhanga", "east champaran", "gaya", "gopalganj", "jamui", "jehanabad", "kaimur", "katihar", "khagaria", "kishanganj", "lakhisarai", "madhepura", "madhubani", "munger", "muzaffarpur", "nalanda", "nawada", "patna", "purnia", "rohtas", "saharsa", "samastipur", "saran", "sheikhpura", "sheohar", "sitamarhi", "supaul", "vaishali", "west champaran"],
+  "chhattisgarh": ["balod", "baloda bazar", "balrampur", "bastar", "bemetara", "bijapur", "bilaspur", "dantewada", "dhamtari", "durg", "gariaband", "janjgir-champa", "jashpur", "kabirdham", "kanker", "korba", "kondagaon", "mahasamund", "mungeli", "narayanpur", "raigarh", "raipur", "rajnandgaon", "sukma", "surajpur", "surguja"],
+  "goa": ["north goa", "south goa"],
+  "gujarat": 
+  ["ahmedabad", "amreli", "anand", "aravalli", "banas kantha", "bharuch", "bhavnagar", 
+    "botad", "chhota udepur", "dahod", "dangs", "gandhinagar", "gir somnath", "jamnagar", 
+    "junagadh", "kutch", "kheda", "mahisagar", "mehsana", "morbi", "narmada", "navsari", "panchmahal", 
+    "patan", "porbandar", "rajkot", "sabarkantha", "surat", "surendranagar", "tapi", "vadodara", "valsad"],
+  "haryana":
+   ["ambala", "bhiwani", "charkhi dadri", "faridabad", "gurugram", "hisar", "jhajjar",
+     "jind", "kaithal", "karnal", "kurukshetra", "mahendragarh", "mewat", "palwal", "panchkula",
+      "panipat", "rewari", "rohtak", "sirsa", "sonipat", "yamunanagar"],
+  "himachal pradesh": 
+  ["bilaspur", "chamba", "hamirpur", "kangra", "kullu", "kinnaur", "mandi", "shimla", "sirmaur", "solan", "una"],
+  "jharkhand":
+   ["bokaro", "chatra", "deoghar", "dhanbad", "dumka",
+     "giridih", "godda", "gumla", "hazaribagh", "jamtara", "khunti", "koderma", "latehar", "lohardaga", 
+     "pakur", "palamu", "ramgarh", "ranchi", "sahebganj", "seraikela kharsawan", "simdega", "west singhbhum"],
+  "karnataka":
+   ["bagalkot", "ballari", "belagavi", "bengaluru rural", "bengaluru urban", "bidar", "chamarajanagar", 
+    "chikkaballapur", "chikkamagaluru", "chitradurga", "dakshina kannada", "davanagere", "dharwad", "gadag",
+     "hassan", "haveri", "kalaburagi", "kodagu", "kolar", "koppal", "mandya", "mysuru", "raichur", "ramanagara", 
+     "shivamogga", "tumakuru", "udupi", "uttara kannada", "vijayapura", "yadgir"],
+  "kerala":
+   ["alappuzha", "ernakulam", "idukki", "kannur", "kasaragod", "kottayam", "kollam", "kozhikode",
+     "malappuram", "palakkad", "pathanamthitta", "thiruvananthapuram", "thrissur", "wayanad"],
+  "madhya pradesh":
+   ["agar malwa", "alirajpur", "anuppur", "ashok nagar", "balaghat", "barwani", "betul", "bhind", "bhopal",
+     "burhanpur", "chhatarpur", "chhindwara", "damoh", "datia", "dewas", "dhar", "dindori", "guna", "gwalior", "harda", 
+     "hoshangabad", "indore", "jabalpur", "jhabua", "katni", "khandwa", "khargone", "mandla", "mandsaur", "morena", "narsinghpur", 
+     "neemuch", "panna", "raisen", "rajgarh", "ratlam", "rewa", "sagar", "satna", "sehore", "seoni", "shahdol", "shajapur", "sheopur",
+      "shivpuri", "sidhi", "singrauli", "tikamgarh", "ujjain", "umaria", "vidisha"],
+  "maharashtra": 
+  ["ahmednagar", "akola", "amravati", "aurangabad", "beed", "bhandara", "buldhana", 
+    "chandrapur", "dhule", "gadchiroli", "gondia", "hingoli", "jalgaon", "jalna", "kolhapur", "latur", 
+     "mumbai", "mumbai suburban", "nandurbar", "nashik", "osmanabad", "palghar", "parbhani", "pune",
+     "raigad", "ratnagiri", "sangli", "satara", "sindhudurg", "solapur", "thane", "wardha", "washim", "yavatmal"],
+  "manipur": 
+  ["bishnupur", "chandel", "churachandpur", "imphal east", "imphal west", "jiribam", "kangpokpi", 
+    "noney", "senapati", "tamenglong", "tengnoupal", "thoubal", "ukhrul"],
+  "meghalaya": 
+  ["east garo hills", "east khasi hills", "jaintia hills", "ri bhoi", "west garo hills", "west khasi hills"],
+  "mizoram":
+   ["aizawl", "champhai", "kolasib", "lawngtlai", "lunglei", "mamit", "saiha", "serchhip"],
+  "nagaland":
+   ["dimapur", "kohima", "mokokchung", "mon", "peren", "phek", "tuensang", "wokha", "zunheboto"],
+  "odisha":
+   ["angul", "balangir", "balasore", "bhadrak", "boudh", "cuttack", "deogarh", "dhenkanal", 
+     "ganjam", "gajapati", "kendrapara", "kalahandi", "kandhamal", "kendujhar", "khurda", "koraput", 
+     "malkangiri", "nabarangpur", "nayagarh", "nua khar", "rayagada", "sambalpur", "sonepur", "sundargarh"],
+  "punjab":
+   ["amritsar", "barnala", "bhatinda", "faridkot", "fatehgarh sahib", "fazilka", "gharinda", "gurdaspur", 
+    "hushiarpur", "jalandhar", "kapurthala", "ludhiana", "mansa", "moga", "muktsar", "patiala", "rupnagar",
+    "s.a.s nagar", "sangrur", "shaheed bhagat singh nagar", "sri muktsar sahib"],
+  "rajasthan":
+   ["ajmer", "alwar", "banswara", "baran", "bareilly", "bharatpur", "bhilwara", "bikaner", "bundi", "churu",
+    "dholpur", "dungarpur", "hanumangarh", "jaisalmer", "jalore", "jhalawar", "jhunjhunu", "jodhpur", 
+     "karauli", "kota", "nagaur", "pratapgarh", "rajsamand", "sawai madhopur", "sikar", "sirohi", "tonk", 
+     "udaipur"],
+  "sikkim":
+    ["east sikkim", "north sikkim", "south sikkim", "west sikkim"],
+  "tamil nadu": 
+  ["chennai", "coimbatore", "cuddalore", "dharmapuri", "dindigul", "erode", "kallakurichi", "kancheepuram", 
+    "karur", "krishnagiri", "madurai", "nagapattinam", "namakkal", "perambalur", "pudukkottai", "ramanathapuram", 
+     "salem", "sivagangai", "thanjavur", "theni", "theni", "tiruvarur", "tirunelveli","tenkasi", "tiruvarur", "tiruppur", 
+     "vellore", "virudhunagar"],
+  "telangana":
+   ["adilabad", "hyderabad", "jagtial", "jangaon", "janagaon", "khammam", "komaram bheem asifabad", "kothagudem",
+     "mahbubnagar", "mancherial", "medak", "medchal-malkajgiri", "mulugu", "nagarkurnool", "nalgonda", "narayanpet",
+     "nirmal", "nizamabad", "peddapalli", "rajanna sircilla", "ranga reddy", "sangareddy", "siddipet", "suryapet",
+      "warangal", "yadadri-bhongir"],
+  "tripura":
+   ["dhalai", "north tripura", "sipahijala", "south tripura", "west tripura"],
+  "uttar pradesh":
+   ["agra", "aligarh", "allahabad", "ambedkar nagar", "auraiya", "azamgarh", "baghpat", "bahraich", "ballia", 
+    "banda", "barabanki", "bareilly", "basti", "bhadohi", "bijnor", "bulandshahr", "chandauli", "chitrakoot", 
+    "deoria", "etah", "etawah", "faizabad", "farrukhabad", "fatehpur", "firozabad", "gautam buddha nagar", 
+    "ghaziabad", "ghazipur", "gonda", "hamirpur", "hathras", "jalaun", "jaunpur", "jhansi", "jind", "kanpur", 
+    "kanpur dehat", "kasganj", "kaushambi", "kushinagar", "lucknow", "mahooba", "maurawan", "mathura", "meerut", 
+    "mirzapur", "mau", "muzaffarnagar", "pilibhit", "pratapgarh", "raebareli", "rampur", "saharanpur", "sambhal", 
+    "sant kabir nagar", "shahjahanpur", "shamli", "siddharth nagar", "sitapur", "sonbhadra", "sultanpur", 
+    "unnao", "varanasi"],
+  "uttarakhand":
+   ["almora", "bageshwar", "bharatpur", "chamoli", "champawat", "dehradun", "haridwar", "nainital", "pauri garhwal",
+    "pithoragarh", "rudraprayag", "tehri garhwal", "udham singh nagar", "uttarkashi"],
+  "west bengal": 
+   ["hooghly", "howrah", "jalpaiguri", "kalimpong", "kochbihar", "malda", "maldah", "midnapore", "murshidabad", 
+    "north 24 parganas", "north dinajpur", "purba medinipur", "purulia", "south 24 parganas", "south dinajpur",
+    "west medinipur"]
+};
+
+// export const stateToStations = [
+//   {
+//     Option: "Andhra Pradesh",
+//     optionvalue: "andhra pradesh",
+//     stations: [
+//       "anantapur", "chittoor", "east godavari", "guntur", "krishna", "kurnool", 
+//       "prakasam", "srikakulam", "visakhapatnam", "west godavari", "ysr kadapa"
+//     ]
+//   },
+//   {
+//     Option: "Arunachal Pradesh",
+//     optionvalue: "arunachal pradesh",
+//     stations: [
+//       "anjaw", "changlang", "east kameng", "east siang", "kurung kumey", "lohit", 
+//       "longding", "lower dibang valley", "lower subansiri", "namsai", "papum pare", 
+//       "tawang", "tirap", "upper siang", "upper subansiri", "west kameng", "west siang"
+//     ]
+//   },
+//   {
+//     Option: "Assam",
+//     optionvalue: "assam",
+//     stations: [
+//       "baksa", "barpeta", "biswanath", "bongaigaon", "cachar", "charaideo", "chirang", 
+//       "darrang", "dhemaji", "dhubri", "dibrugarh", "goalpara", "golaghat", "hailakandi", 
+//       "hojai", "jorhat", "kamrup", "kamrup metropolitan", "karbi anglong", "karimganj", 
+//       "kokrajhar", "lakhimpur", "morigaon", "nagaon", "nalbari", "sivasagar", "sonitpur", 
+//       "south salmara-mankachar", "tinsukia", "udalguri", "west karbi anglong"
+//     ]
+//   },
+//   {
+//     Option: "Bihar",
+//     optionvalue: "bihar",
+//     stations: [
+//       "araria", "arwal", "aurangabad", "banka", "begusarai", "bhagalpur", "bhojpur", "buxar", 
+//       "darbhanga", "east champaran", "gaya", "gopalganj", "jamui", "jehanabad", "kaimur", 
+//       "katihar", "khagaria", "kishanganj", "lakhisarai", "madhepura", "madhubani", "munger", 
+//       "muzaffarpur", "nalanda", "nawada", "patna", "purnia", "rohtas", "saharsa", "samastipur", 
+//       "saran", "sheikhpura", "sheohar", "sitamarhi", "supaul", "vaishali", "west champaran"
+//     ]
+//   },
+//   {
+//     Option: "Chhattisgarh",
+//     optionvalue: "chhattisgarh",
+//     stations: [
+//       "balod", "baloda bazar", "balrampur", "bastar", "bemetara", "bijapur", "bilaspur", 
+//       "dantewada", "dhamtari", "durg", "gariaband", "janjgir-champa", "jashpur", "kabirdham", 
+//       "kanker", "korba", "kondagaon", "mahasamund", "mungeli", "narayanpur", "raigarh", "raipur", 
+//       "rajnandgaon", "sukma", "surajpur", "surguja"
+//     ]
+//   },
+//   {
+//     Option: "Goa",
+//     optionvalue: "goa",
+//     stations: [
+//       "north goa", "south goa"
+//     ]
+//   },
+//   {
+//     Option: "Gujarat",
+//     optionvalue: "gujarat",
+//     stations: [
+//       "ahmedabad", "amreli", "anand", "aravalli", "banas kantha", "bharuch", "bhavnagar", 
+//       "botad", "chhota udepur", "dahod", "dangs", "gandhinagar", "gir somnath", "jamnagar", 
+//       "junagadh", "kutch", "kheda", "mahisagar", "mehsana", "morbi", "narmada", "navsari", 
+//       "panchmahal", "patan", "porbandar", "rajkot", "sabarkantha", "surat", "surendranagar", 
+//       "tapi", "vadodara", "valsad"
+//     ]
+//   },
+//   {
+//     Option: "Haryana",
+//     optionvalue: "haryana",
+//     stations: [
+//       "ambala", "bhiwani", "charkhi dadri", "faridabad", "gurugram", "hisar", "jhajjar", 
+//       "jind", "kaithal", "karnal", "kurukshetra", "mahendragarh", "mewat", "palwal", "panchkula", 
+//       "panipat", "rewari", "rohtak", "sirsa", "sonipat", "yamunanagar"
+//     ]
+//   },
+//   {
+//     Option: "Himachal Pradesh",
+//     optionvalue: "himachal pradesh",
+//     stations: [
+//       "bilaspur", "chamba", "hamirpur", "kangra", "kullu", "kinnaur", "mandi", "shimla", 
+//       "sirmaur", "solan", "una"
+//     ]
+//   },
+//   {
+//     Option: "Jharkhand",
+//     optionvalue: "jharkhand",
+//     stations: [
+//       "bokaro", "chatra", "deoghar", "dhanbad", "dumka", "giridih", "godda", "gumla", 
+//       "hazaribagh", "jamtara", "khunti", "koderma", "latehar", "lohardaga", "pakur", "palamu", 
+//       "ramgarh", "ranchi", "sahebganj", "seraikela kharsawan", "simdega", "west singhbhum"
+//     ]
+//   },
+//   {
+//     Option: "Karnataka",
+//     optionvalue: "karnataka",
+//     stations: [
+//       "bagalkot", "ballari", "belagavi", "bengaluru rural", "bengaluru urban", "bidar", 
+//       "chamarajanagar", "chikkaballapur", "chikkamagaluru", "chitradurga", "dakshina kannada", 
+//       "davanagere", "dharwad", "gadag", "hassan", "haveri", "kalaburagi", "kodagu", "kolar", 
+//       "koppal", "mandya", "mysuru", "raichur", "ramanagara", "shivamogga", "tumakuru", "udupi", 
+//       "uttara kannada", "vijayapura", "yadgir"
+//     ]
+//   },
+//   {
+//     Option: "Kerala",
+//     optionvalue: "kerala",
+//     stations: [
+//       "alappuzha", "ernakulam", "idukki", "kannur", "kasaragod", "kottayam", "kollam", "kozhikode",
+//       "malappuram", "palakkad", "pathanamthitta", "thiruvananthapuram", "thrissur", "wayanad"
+//     ]
+//   },
+//   {
+//     Option: "Madhya Pradesh",
+//     optionvalue: "madhya pradesh",
+//     stations: [
+//       "agar malwa", "alirajpur", "anuppur", "ashok nagar", "balaghat", "barwani", "betul", "bhind", 
+//       "bhopal", "burhanpur", "chhatarpur", "chhindwara", "damoh", "datia", "dewas", "dhar", "dindori", 
+//       "guna", "gwalior", "harda", "hoshangabad", "indore", "jabalpur", "jhabua", "katni", "khandwa", 
+//       "khargone", "mandla", "mandsaur", "morena", "narsinghpur", "neemuch", "panna", "raisen", 
+//       "rajgarh", "ratlam", "rewa", "sagar", "satna", "sehore", "seoni", "shahdol", "shajapur", 
+//       "sheopur", "shivpuri", "sidhi", "singrauli", "tikamgarh", "ujjain", "umaria", "vidisha"
+//     ]
+//   },
+//   {
+//     Option: "Maharashtra",
+//     optionvalue: "maharashtra",
+//     stations: [
+//       "ahmednagar", "akola", "amravati", "aurangabad", "beed", "bhandara", "buldhana", "chandrapur", 
+//       "dhule", "gadchiroli", "gondia", "hatkanangle", "jalgaon", "jalna", "kolhapur", "latur", "mumbai", 
+//       "nagpur", "nanded", "nandurbar", "nashik", "osmanabad", "palghar", "parbhani", "pendharkar", 
+//       "pune", "raigad", "ratnagiri", "sangli", "satara", "sindhudurg", "solapur", "thane", "wardha", 
+//       "washim", "yavatmal"
+//     ]
+//   },
+//   {
+//     Option: "Manipur",
+//     optionvalue: "manipur",
+//     stations: [
+//       "bishnupur", "chandel", "churachandpur", "imphal east", "imphal west", "jiribam", "kakching", 
+//       "kamjong", "kangpokpi", "noney", "punchang", "senapati", "tengnoupal", "thoubal", "ukhrul"
+//     ]
+//   },
+//   {
+//     Option: "Meghalaya",
+//     optionvalue: "meghalaya",
+//     stations: [
+//       "east garo hills", "east khasi hills", "jaintia hills", "west garo hills", "west khasi hills"
+//     ]
+//   },
+//   {
+//     Option: "Mizoram",
+//     optionvalue: "mizoram",
+//     stations: [
+//       "aizawl", "champhai", "kolasib", "lawngtlai", "lungle", "mammit", "serchhip", "siaha", "southeast mizoram"
+//     ]
+//   },
+//   {
+//     Option: "Nagaland",
+//     optionvalue: "nagaland",
+//     stations: [
+//       "dimapur", "kohima", "mokokchung", "mon", "peren", "tuensang", "wokha", "zunheboto"
+//     ]
+//   },
+//   {
+//     Option: "Odisha",
+//     optionvalue: "odisha",
+//     stations: [
+//       "angul", "balangir", "balasore", "bargarh", "bhadrak", "cuttack", "deogarh", "dhenkanal", "ganjam", 
+//       "ganapati", "kalahandi", "kendrapara", "khurda", "koraput", "malkangiri", "mayurbhanj", "nabarangpur", 
+//       "nayagarh", "puri", "rayagada", "sambalpur", "sundargarh"
+//     ]
+//   },
+//   {
+//     Option: "Rajasthan",
+//     optionvalue: "rajasthan",
+//     stations: [
+//       "ajmer", "alwar", "banswara", "baran", "barmer", "bhilwara", "bikaner", "bundi", "chittorgarh", "churu",
+//       "dholpur", "dungarpur", "hanumangarh", "jaipur", "jaisalmer", "jalore", "jhalawar", "jodhpur", "karauli",
+//       "kota", "nagaur", "pali", "rajsamand", "sawai madhopur", "sikar", "sirohi", "tonk", "udaipur"
+//     ]
+//   },
+//   {
+//     Option: "Tamil Nadu",
+//     optionvalue: "tamil nadu",
+//     stations: [
+//       "ariyalur", "chennai", "coimbatore", "cuddalore", "dharmapuri", "dindigul", "erode", "kanchipuram", 
+//       "kangayam", "karur", "krishnagiri", "madurai", "nagapattinam", "namakkal", "perambalur", "pudukkottai", 
+//       "ramanathapuram", "salem", "sivaganga", "thanjavur", "the nilgiris", "theni", "thoothukudi", "tiruchirappalli", 
+//       "tirunelveli", "tiruvarur", "vellore", "villupuram", "virudhunagar"
+//     ]
+//   },
+//   {
+//     Option: "Telangana",
+//     optionvalue: "telangana",
+//     stations: [
+//       "adilabad", "hyderabad", "jagtial", "jangaon", "jayashankar", "jhagadia", "kamareddy", "karimnagar", 
+//       "khammam", "kothagudem", "mahaboobnagar", "mancherial", "medchal", "mulugu", "nagarkurnool", "nalgonda", 
+//       "nizamabad", "peddapalli", "rajanna sircilla", "ranga reddy", "sangareddy", "sarangapur", "suryapet", 
+//       "warangal", "west godavari"
+//     ]
+//   },
+//   {
+//     Option: "Uttar Pradesh",
+//     optionvalue: "uttar pradesh",
+//     stations: [
+//       "agra", "allahabad", "ambedkar nagar", "auraiya", "baghpat", "banda", "barabanki", "bareilly", "basti", 
+//       "bhadohi", "bijnor", "ballia", "ballabgarh", "bahraich", "bulandshahr", "chandauli", "chitrakoot", "deoria", 
+//       "etah", "etawah", "firozabad", "gorakhpur", "hamirpur", "hardoi", "hathras", "jalaun", "jaunpur", "kanpur", 
+//       "kanpur dehat", "khiri", "kushinagar", "lucknow", "mahoba", "mau", "meja", "mathura", "meerut", "mirzapur", 
+//       "moradabad", "muzaffarnagar", "raebareli", "ramabai nagar", "rampur", "saharanpur", "shahjahanpur", "shravasti", 
+//       "sonbhadra", "sultanpur", "unnao", "varanasi"
+//     ]
+//   },
+//   {
+//     Option: "Uttarakhand",
+//     optionvalue: "uttarakhand",
+//     stations: [
+//       "almora", "bageshwar", "bharatpur", "chamoli", "champawat", "dehradun", "haridwar", "nainital", 
+//       "pauri garhwal", "pithoragarh", "rudraprayag", "tehri garhwal", "udham singh nagar", "uttarkashi"
+//     ]
+//   },
+//   {
+//     Option: "West Bengal",
+//     optionvalue: "west bengal",
+//     stations: [
+//       "bankura", "bardhaman", "birbhum", "dakshin dinajpur", "darjeeling", "hugli", "howrah", "jalpaiguri", 
+//       "malda", "murshidabad", "north 24 parganas", "north dinajpur", "south 24 parganas", "south dinajpur", 
+//       "siliguri", "purulia", "hooghly", "kolkata"
+//     ]
+//   },
+//   {
+//     Option: "Andaman and Nicobar Islands",
+//     optionvalue: "andaman and nicobar islands",
+//     stations: [
+//       "andaman", "nicobar", "port blair"
+//     ]
+//   },
+//   {
+//     Option: "Chandigarh",
+//     optionvalue: "chandigarh",
+//     stations: [
+//       "chandigarh"
+//     ]
+//   },
+//   {
+//     Option: "Dadra and Nagar Haveli and Daman and Diu",
+//     optionvalue: "dadra and nagar haveli and daman and diu",
+//     stations: [
+//       "daman", "dadar", "silvassa"
+//     ]
+//   },
+//   {
+//     Option: "Lakshadweep",
+//     optionvalue: "lakshadweep",
+//     stations: [
+//       "kavaratti", "minicoy", "agatti"
+//     ]
+//   },
+//   {
+//     Option: "Delhi",
+//     optionvalue: "delhi",
+//     stations: [
+//       "new delhi"
+//     ]
+//   },
+//   {
+//     Option: "Puducherry",
+//     optionvalue: "puducherry",
+//     stations: [
+//       "puducherry", "karaikal", "mahe", "yanam"
+//     ]
+//   }
+// ];
+
+
 //service station
 
 

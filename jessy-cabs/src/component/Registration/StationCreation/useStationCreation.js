@@ -1,8 +1,9 @@
 // useStationCreation.js
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback ,useMemo} from 'react';
 import axios from 'axios';
 import { APIURL } from "../../url";
 import dayjs from 'dayjs';
+import { stateToStations,allStations } from "../Customer/Customerdata";
 
 const useStationCreation = () => {
     const apiUrl = APIURL;
@@ -23,6 +24,10 @@ const useStationCreation = () => {
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [cerendentialdata, setCredentialData] = useState()
+
+    const [selectedStation, setSelectedStation] = useState('');
+    const [selectedState, setSelectedState] = useState('');
+    const [stationUpdate,setstationUpdate] = useState(false)
 
     //-----------------popup---------------------
 
@@ -124,6 +129,111 @@ const useStationCreation = () => {
 
     }
 
+    // const getStateFromStation = (station) => {
+    //     // Loop through stateToStations to find which state includes the station
+    //     for (const [state, stations] of Object.entries(stateToStations)) {
+    //       if (stations.includes(station)) {
+    //         return state;
+    //       }
+    //     }
+    //     return "";
+    //   };
+
+    const getStateFromStation = useMemo(() => {
+        return (station) => {
+            for (const [state, stations] of Object.entries(stateToStations)) {
+                if (stations.includes(station)) {
+                    return state;
+                }
+            }
+            return '';
+        };
+    }, []);
+    
+      
+    //   const handleStationChange = (event, value) => {
+    //     const stationName = value ? value.label : "";
+    //     const stateName = getStateFromStation(stationName);
+        
+    //     handleChange({
+    //       target: { name: "Stationname", value: stationName },
+    //     });
+      
+    //     handleChange({
+    //       target: { name: "state", value: stateName },
+    //     });
+    //   };
+
+//     const handleStationChange = (event, value) => {
+//   const station = value ? value.label : ''; // Update station with value.label
+//   setSelectedStation(station);
+
+//   // Find and set the corresponding state for the selected station
+//   const foundState = Object.keys(stateToStations).find(state =>
+//     stateToStations[state].includes(station)
+//   );
+  
+//   setSelectedState(foundState || '');
+// };
+      
+// const handleStationChange = (event, value) => {
+//     const station = value ? value.label : ''; // Ensure the station is properly set
+//     setSelectedStation(station);
+    
+//     // Find and set the corresponding state for the selected station
+//     const foundState = Object.keys(stateToStations).find(state => 
+//       stateToStations[state].includes(station)
+//     );
+  
+//     if (foundState) {
+//         setSelectedState(foundState); // Set the state if found
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,  // Set only the Stationname property
+//             state: foundState      // Set only the state property
+//         }));
+//     } else {
+//         setSelectedState(''); // If no state is found, clear it
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station, // Set only the Stationname property
+//             state: ''             // Set the state to empty if not found
+//         }));
+//         setSelectedStation(''); // Reset the selected station field
+//         setSelectedState('');   // Reset the selected state field
+    
+//     }
+// };
+
+const handleStationChange = (event, value) => {
+    const station = value ? value.label : '';
+    setSelectedStation(station);
+
+    const foundState = Object.keys(stateToStations).find(state => 
+      stateToStations[state].includes(station)
+    );
+
+    if (foundState) {
+        setSelectedState(foundState);
+        setBook(prevBook => ({
+            ...prevBook,
+            Stationname: station,
+            state: foundState
+        }));
+    } else {
+        setSelectedState('');
+        setBook(prevBook => ({
+            ...prevBook,
+            Stationname: station,
+            state: ''
+        }));
+        setSelectedStation('');
+        setSelectedState('');
+    }
+};
+
+ 
+
     const handleChangeuniquestation = (event) => {
         const { name, value } = event.target;
         const datacrendital = uniquestation(value);
@@ -147,50 +257,112 @@ const useStationCreation = () => {
         console.log(customerData, "Customer data")
     }, []);
 
+    // const handleAdd = async () => {
+    //     const Stationname = book.Stationname;
+    //     if (!Stationname) {
+    //         setWarning(true);
+    //         setWarningMessage("Fill Mandatery Fields");
+    //         setstationUpdate(true)
+    //         return;
+            
+    //     }
+    //     if (cerendentialdata === true) {
+    //         setWarning(true);
+    //         setWarningMessage(" Station Name Already Exists");
+    //         return;
+    //     }
+
+    //     try {
+    //         await axios.post(`${apiUrl}/stationcreation`, book);
+    //         setBook({
+    //             Stationname: '',
+    //             shortname: '',
+    //             state: '',
+    //             active: '',
+    //             ownbranch: '',
+    //             address: '',
+    //             gstno: '',
+    //             created_at: dayjs(),
+    //         });
+    //         handleCancel();
+    //         // setRows([]);
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully Added");
+    //         setstationUpdate(true)
+    //     }
+    //     // catch {
+    //     //     setError(true);
+    //     //     setErrorMessage("Failed to Add Stations");
+    //     // }
+    //     catch (error) {
+    //         // console.error("Error occurredddddd:", error);
+
+    //         // Check if there's no response, indicating a network error
+    //         if (error.message) {
+    //             setError(true);
+    //             setErrorMessage("Check your Network Connection");
+    //             console.log(book, 'Datas of stations')
+    //             // console.log('Network error');
+    //         } else if (error.response) {
+    //             setError(true);
+    //             // Handle other Axios errors (like 4xx or 5xx responses)
+    //             setErrorMessage("Failed to Add Stations: " + (error.response.data.message || error.message));
+    //         } else {
+    //             // Fallback for other errors
+    //             setError(true);
+    //             setErrorMessage("An unexpected error occurred: " + error.message);
+    //         }
+    //     }
+    // };
+
     const handleAdd = async () => {
         const Stationname = book.Stationname;
         if (!Stationname) {
             setWarning(true);
-            setWarningMessage("Fill Mandatery Fields");
+            setWarningMessage("Fill Mandatory Fields");
+            setstationUpdate(true);
             return;
         }
         if (cerendentialdata === true) {
             setWarning(true);
-            setWarningMessage(" Station Name Already Exists");
+            setWarningMessage("Station Name Already Exists");
             return;
         }
-
+    
         try {
             await axios.post(`${apiUrl}/stationcreation`, book);
-            handleCancel();
-            // setRows([]);
+            setBook({
+                Stationname: '',
+                shortname: '',
+                state: '',
+                active: '',
+                ownbranch: '',
+                address: '',
+                gstno: '',
+                created_at: dayjs(),
+            });
+            setSelectedState(''); // Clear the selected state
+            setSelectedStation('');
+            setSelectedCustomerData({});
+            setIsEditMode(false);
+            setRows([]); // Optionally clear rows if needed
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        }
-        // catch {
-        //     setError(true);
-        //     setErrorMessage("Failed to Add Stations");
-        // }
-        catch (error) {
-            // console.error("Error occurredddddd:", error);
-
-            // Check if there's no response, indicating a network error
+            setstationUpdate(true);
+        } catch (error) {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
-                console.log(book, 'Datas of stations')
-                // console.log('Network error');
             } else if (error.response) {
                 setError(true);
-                // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add Stations: " + (error.response.data.message || error.message));
             } else {
-                // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
     };
+    
 
 
     const handleEdit = async () => {
@@ -306,7 +478,7 @@ const useStationCreation = () => {
         };
 
         handleList();
-    }, [apiUrl]);
+    }, [apiUrl,stationUpdate]);
 
     // useEffect(() => {
     //     const handlelist = async () => {
@@ -402,7 +574,10 @@ const useStationCreation = () => {
         handleChangeuniquestation,
         getMainBrachDetails,
         loading,
-        setLoading
+        setLoading,
+        getStateFromStation,
+        handleStationChange,
+        selectedStation, setSelectedStation,selectedState, setSelectedState
     };
 };
 

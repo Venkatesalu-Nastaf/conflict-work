@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
-import { UnderGroup, states, Customertype, Select } from "../Customer/Customerdata";
+import { UnderGroup, states, Customertype, Select,stateToStations,allStations } from "../Customer/Customerdata";
 import { CircularProgress } from '@mui/material';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -84,7 +84,9 @@ const StationCreation = () => {
     handleChangeuniquestation,
     getMainBrachDetails,
     loading,
-    setLoading
+    setLoading,
+    getStateFromStation,
+    handleStationChange, selectedStation, setSelectedStation,selectedState, setSelectedState,handleStateChange
   } = useStationCreation();
 
   useEffect(() => {
@@ -92,8 +94,9 @@ const StationCreation = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  
 
-
+  
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
@@ -139,7 +142,120 @@ const StationCreation = () => {
                       <div className="icone">
                         <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                       </div>
-                      <TextField
+                      {/* <Autocomplete
+  fullWidth
+  size="small"
+  id="state-autocomplete"
+  freeSolo
+  value={selectedCustomerData?.Stationname || book.Stationname || ""}
+  options={(allStations || []).map((option) => ({
+    label: option, // Ensure `option` is a string, or modify if it's an object
+  }))}
+  filterOptions={(options, state) => {
+    const inputValue = state.inputValue.trim().toLowerCase();
+    if (!inputValue) {
+      return []; // Show no options when input is empty
+    }
+
+    return options.filter(option => 
+      option.label && option.label.toLowerCase().includes(inputValue)
+    );
+  }}
+  onChange={(event, value) => handleChange({
+    target: { name: "Stationname", value: value ? value.label : "" },
+  })}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      margin="normal"
+      size="small"
+      id="Station-name"
+      label="Station Name"
+      name="Stationname"
+      className="full-width"
+      autoComplete="new-password"
+    />
+  )}
+/> */}
+
+
+{/* <Autocomplete
+        fullWidth
+        size="small"
+        id="station-autocomplete"
+        freeSolo
+        value={selectedStation || selectedCustomerData?.Stationname || book.Stationname || ""}
+        options={(allStations || []).map((option) => ({
+          label: option,
+        }))}
+        filterOptions={(options, state) => {
+          const inputValue = state.inputValue.trim().toLowerCase();
+          return options.filter(option =>
+            option.label && option.label.toLowerCase().includes(inputValue)
+          );
+        }}
+        onChange={handleStationChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            margin="normal"
+            size="small"
+            label="Station Name"
+            name="Stationname"
+            className="full-width"
+            autoComplete="new-password"
+          />
+        )}
+      /> */}
+
+<Autocomplete
+  fullWidth
+  size="small"
+  id="station-autocomplete"
+  freeSolo
+  value={selectedStation || selectedCustomerData?.Stationname || book.Stationname || ""}
+  options={(allStations || []).map((option) => ({
+    label: option,
+  }))}
+  // filterOptions={(options, state) => {
+  //   const inputValue = state.inputValue.trim().toLowerCase();
+  //   return options.filter(option =>
+  //     option.label && option.label.toLowerCase().includes(inputValue)
+  //   );
+   
+  // }}
+  filterOptions={(options, state) => {
+    const inputValue = state.inputValue.trim().toLowerCase();
+
+    // Filter based on input value - case-insensitive
+    return options.filter(option => {
+      const label = option.label.toLowerCase();
+      
+      // Match either the full label or a partial match at the start
+      return label.includes(inputValue); // Allow partial matching
+    });
+  }}
+  onChange={handleStationChange}  // Ensure `handleStationChange` is properly updating state
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      margin="normal"
+      size="small"
+      label="Station Name"
+      name="Stationname"
+      className="full-width"
+      autoComplete="new-password"
+    />
+  )}
+/>
+
+
+
+
+
+
+
+                      {/* <TextField
                         margin="normal"
                         size="small"
                         id="Station-name"
@@ -151,7 +267,7 @@ const StationCreation = () => {
                         // onChange={handleChange}
                         onChange={handleChangeuniquestation}
 
-                      />
+                      /> */}
                     </span>
                     <span style={{ textAlign: 'center' }}>
                       <span style={{ color: "red" }}>{cerendentialdata ? `StationName Already Exist` : ""}</span>
@@ -176,7 +292,7 @@ const StationCreation = () => {
                     onChange={handleChange}
                   />
                 </div> */}
-                <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+                {/* <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
@@ -207,7 +323,35 @@ const StationCreation = () => {
                       />
                     )}
                   />
+                </div> */}
+                     <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                 
+
+<Autocomplete
+  fullWidth
+  size="small"
+  id="state-autocomplete"
+  freeSolo
+  value={selectedState}
+  options={Object.keys(stateToStations)}
+  onChange={handleStateChange}  // Ensure `handleStateChange` updates `selectedState`
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="State"
+      margin="normal"
+      size="small"
+      name="state"
+      autoComplete="new-password"
+    />
+  )}
+/>
+
                 </div>
+
                 <div className='input' style={{ paddingRight: '15px' }}>
                   <div className='icone'>
                     <AddHomeWorkIcon color='action' />

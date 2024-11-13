@@ -437,17 +437,17 @@ router.post('/insertTransferListTrip', (req, res) => {
   });
 });
 router.post('/transferlistdatatrip', (req, res) => {
-  const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id,Stations } = req.body;
+  const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id,Stations,State } = req.body;
 
   if (!Array.isArray(Trip_id)) {
     return res.status(400).json({ error: 'Trip_id should be an array' });
   }
 
-  const sqlquery = 'INSERT INTO Transfer_list(Status, Billdate, Organization_name, Trip_id, FromDate, EndDate, Trips, Amount,Stations) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)';
+  const sqlquery = 'INSERT INTO Transfer_list(Status, Billdate, Organization_name, Trip_id, FromDate, EndDate, Trips, Amount,Stations,State) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)';
   const idString = Trip_id.join(',');
 
   // Insert into Transfer_list table
-  db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount,Stations], (err, result) => {
+  db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount,Stations,State], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert data into MySQL' });
     }
@@ -575,7 +575,7 @@ router.get('/getTripIdFromTransferList', (req, res) => {
   if (!groupid) {
     return res.status(400).json({ error: 'Group ID is required' });
   }
-  const sqlquery = `SELECT Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate,Stations FROM Transfer_list WHERE Grouptrip_id = ?`;
+  const sqlquery = `SELECT Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate,State FROM Transfer_list WHERE Grouptrip_id = ?`;
 
   db.query(sqlquery, [groupid], (error, result) => {
     if (error) {

@@ -435,7 +435,7 @@ const useTransferlist = () => {
     { field: 'Grouptrip_id', headerName: "GroupID", width: 120 },
     { field: "Status", headerName: "Status", width: 130 },
     { field: "Invoice_no", headerName: "Invoice No", width: 130 },
-    { field: "Stations", headerName: "Stations", width: 130 },
+    { field: "State", headerName: "State", width: 130 },
     {
       field: "Billdate",
       headerName: "Date",
@@ -468,11 +468,11 @@ const useTransferlist = () => {
     const customer = encodeURIComponent(data.Organization_name)
     localStorage.setItem("selectedcustomerdata", customer)
     if (data.Status === "notbilled") {
-      const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&Stations=${data.Stations || ''}&billingsheet=true`
+      const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&Stations=${data.State || ''}&billingsheet=true`
       window.location.href = billingPageUrl
     }
     else {
-      const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Group_id=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=Billed&BillDate=${data.Billdate || ''}&Customer=${data.Organization_name || ''}&TripId=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&TransferReport=true`;
+      const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Group_id=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=Billed&BillDate=${data.Billdate || ''}&Customer=${data.Organization_name || ''}&TripId=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&State=${data.State || ''}&TransferReport=true`;
       window.location.href = billingPageUrl
     }
 

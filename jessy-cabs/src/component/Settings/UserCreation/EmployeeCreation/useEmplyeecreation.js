@@ -230,18 +230,82 @@ const useEmplyeecreation = () => {
 
     //----------------------------------------------------
 
-    const handleCheckboxChange = (index, field) => (event) => {
+    // const handleCheckboxChange = (index, field) => (event) => {
+
+    //     const { checked } = event.target;
+    //     setPermissionsData(prevData =>
+    //         prevData.map((permission, i) => {
+    //             if (i === index) {
+    //                 return { ...permission, [field]: checked };
+    //             }
+    //             return permission;
+    //         })
+    //     );
+    // }
+
+    const handleCheckboxChange = useCallback((index, field) => (event) => {
 
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
+                // const start=0;
+              
+    
                 if (i === index) {
+                    // dataper()
+                    datacahnges()
                     return { ...permission, [field]: checked };
                 }
+               
                 return permission;
             })
+            
         );
-    }
+       
+    },[setPermissionsData])
+
+
+
+
+ const indexRanges = [
+        { start: 1, end: 3 },
+        { start: 5, end: 8 },
+        { start: 10, end: 13 },
+        { start: 15, end: 16 },
+        { start: 18, end: 20 },
+        { start: 23, end: 27 }
+      ];
+      
+      useEffect(()=>{
+        datacahnges()
+    },[permissionsData])
+
+    const datacahnges = () => {
+        
+        setPermissionsData(prevData => {
+        
+          const updatedData = [...prevData];
+     
+      
+          indexRanges.forEach(range => {
+            const readTrue = prevData.slice(range.start, range.end + 1).some(item => item.read === true || item.read === 1);
+            const newTrue = prevData.slice(range.start, range.end + 1).some(item => item.new === true || item.new === 1);
+            const modifyTrue = prevData.slice(range.start, range.end + 1).some(item => item.modify === true || item.modify === 1);
+            const deleteTrue = prevData.slice(range.start, range.end + 1).some(item => item.delete === true || item.delete === 1);
+    
+            updatedData[range.start - 1] = {
+              ...updatedData[range.start - 1],
+              read: readTrue,
+              new: newTrue,
+              modify: modifyTrue,
+              delete: deleteTrue
+            };
+          });
+      
+          return updatedData;
+        });
+      };
+      
 
    
 

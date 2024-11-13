@@ -307,6 +307,19 @@ const useBilling = () => {
 
     }
 
+
+    const customerMotherdatagroupstation = async(customer)=>{
+        console.log(customer,"enetr")
+        try{
+            const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+            const datas =resultresponse.data;
+            return datas
+          
+        }
+        catch(err){
+         
+        }
+    }
     // const addData = {
     //     ...book,
     //     nhamount: total_Nighthalt_Amount() || book.nhamount,
@@ -383,8 +396,8 @@ const useBilling = () => {
             return
         }
         try {
+            const statedata = await customerMotherdatagroupstation(book.customer ||  selectbillingdata.customer);
             const IndividualBillData = {
-                Invoice_No: `RF${book.tripid}`,
                 Trip_id: book.tripid,
                 Status: "Billed",
                 Amount: book?.totalcalcAmount || 0,
@@ -392,6 +405,7 @@ const useBilling = () => {
                 Customer: customerData?.customer,
                 billing_no: book?.billingno,
                 guestname: book?.guestname,
+                State:statedata
             }
             await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
             handleCancel();

@@ -110,13 +110,13 @@ const EmployeeCreation = ({ stationName }) => {
     // console.log("stationName--", stationName)
     if (stationName?.length > 1) {
     //   // const data = stationName?.map(el => el.map(el => el.Stationname));
-    //   const data = stationName?.map(el => el.Stationname);
+      const data = stationName?.map(el => el.Stationname);
 
-    //   setSationNameforUser([...data, "ALL"]);
+      setSationNameforUser([...data, "ALL"]);
     // }
     //  else {
-      const data = stationName.map(el => el.Stationname)
-      setSationNameforUser(data); // Set the original array when length is not greater than 1
+      // const data = stationName.map(el => el.Stationname)
+      // setSationNameforUser(data); // Set the original array when length is not greater than 1
     }
   }, [stationName]);
  

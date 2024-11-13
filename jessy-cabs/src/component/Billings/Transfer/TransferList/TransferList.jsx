@@ -182,7 +182,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                                                <TextField {...params} label="State" inputRef={params.inputRef} />
                                             );
                                         }}
                                     />

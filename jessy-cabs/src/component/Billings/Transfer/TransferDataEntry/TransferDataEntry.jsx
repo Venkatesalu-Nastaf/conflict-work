@@ -53,7 +53,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     info,
     infoMessage,
     servicestation,
-    handleserviceInputChange,
+    // handleserviceInputChange,
     handleShow,
     handleCancel,
     handleClickGenerateBill,
@@ -257,7 +257,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
                     </div>
-                    <Autocomplete
+                    {/* <Autocomplete
                       fullWidth
                       id="free-station"
                       className='full-width'
@@ -265,13 +265,13 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                      
                       size="small"
                       // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                      // value={servicestation || selectedCustomerDatas.station || ''}
+                      value={servicestation || selectedCustomerDatas.station || ''}
                       // value={groupId ? groupstation : servicestation }
                       // inputValue={groupId ? groupstation : servicestation || ""}
-                      inputValue={ servicestation || ""}
-                      options={stationName.map((option) => ({
-                          label:option.Stationname
-                        }))}
+                      // inputValue={ servicestation || ""}
+                      // options={stationName.map((option) => ({
+                      //     label:option.Stationname
+                      //   }))}
                         // options={stationName
                         //   .filter((option) => option.Stationname !== "All") // Filter out "All" before mapping
                         //   .map((option) => ({
@@ -290,7 +290,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       //   }
 
                       // }}
-                      onChange={(event, value) => handleserviceInputChange(event, value)}
+                      // onChange={(event, value) => handleserviceInputChange(event, value)}
                       renderInput={(params) => {
                         return (
                           <TextField {...params} label="Stations" name='station' inputRef={params.inputRef}
@@ -298,6 +298,20 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                              />
                         );
                       }}
+                    /> */}
+
+
+
+                   <TextField
+                      size="small"
+                       id="freet-station"
+                      className='full-width'
+                    
+                      label="State" 
+                      name='station'
+                      value={servicestation || ""}
+  
+                      autoComplete='off'
                     />
                   </div>
                   <div className="input">

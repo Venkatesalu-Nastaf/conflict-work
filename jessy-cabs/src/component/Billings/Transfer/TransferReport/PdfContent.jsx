@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images, customStateDetails }) => {
+const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images, customStateDetails, billingGroupDetails }) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -266,7 +266,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const [gstAmount, setGstAmount] = useState(0)
-  const [fullGST,setFullGST] = useState(0)
+  const [fullGST, setFullGST] = useState(0)
   const [advance, setAdvance] = useState();
   const organizationname = customer
   const organisationdetailfill = organisationdetails
@@ -289,7 +289,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // } else {
   //     console.log("newStateforpdf is null or undefined.");
   // }
-console.log(customStateDetails,'sssss');
+  console.log(customStateDetails, 'sssss2222');
+  console.log(billingGroupDetails, 'sssss22');
 
 
   const apiUrl = APIURL;
@@ -321,7 +322,7 @@ console.log(customStateDetails,'sssss');
         driverBeta += parseInt(li.driverBeta_amount || 0)
         advanceamount += parseInt(li.customeradvance || 0)
         gstamount = parseFloat(li.gstTax / 2 || 0)
-        setFullGST(li.gstTax)
+        setFullGST(li.gstTax || 0)
         return null
       })
       setTotalAmount(totalamount)
@@ -364,18 +365,26 @@ console.log(customStateDetails,'sssss');
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
-   const igst = Math.round(fullAmount * fullGST / 100);
+  const groupgst = billingGroupDetails[0]?.gstTax / 2;
+  const groupigst = billingGroupDetails[0]?.gstTax;
+  const igst = Math.round(fullAmount * fullGST / 100);
   const cgst = Math.round(fullAmount * gstAmount / 100);
   const sgst = Math.round(fullAmount * gstAmount / 100);
+  const billingGroupCGST = Math.round(fullAmount * groupgst/ 100 || 0)
+  const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
+
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
   const tollAmount = parseInt(toll)
 
   const parkpermit = park + permitcharge + tollAmount
-  const FullAmount = fullAmount + cgst + sgst + parkpermit - parseInt(advance)
+  // const FullAmount = fullAmount + cgst + sgst + parkpermit - parseInt(advance)
+  const FullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupCGST + billingGroupCGST + parkpermit - parseInt(advance) : fullAmount + cgst + sgst + parkpermit - parseInt(advance)
   const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
+  console.log(newStateforpdf, 'newstator');
+
   return (
     <>
       <PDFDocument>
@@ -406,19 +415,19 @@ console.log(customStateDetails,'sssss');
 
 
                   <View>
-                    {newStateforpdf && newStateforpdf.length > 0 ? (
+                    {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null ? (
                       // Render this view if newStateforpdf has values
 
                       <>
-                        <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                        <Text style={styles.underlinetext}>{organisationdetailfill[0]?.organizationname}</Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>
                           {newStateforpdf[0]?.address}
                         </Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                          {newStateforpdf[0]?.Stationname}
+                          {newStateforpdf[0]?.state?.toUpperCase()}
                         </Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                          {organisationdetailfill[0].contactEmail}
+                          {organisationdetailfill[0]?.contactEmail}
                         </Text>
                       </>
                     ) : (
@@ -429,7 +438,7 @@ console.log(customStateDetails,'sssss');
                           {organisationdetailfill[0]?.addressLine1}
                         </Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>
-                          {organisationdetailfill[0]?.location}
+                          {organisationdetailfill[0]?.location?.toUpperCase()}
                         </Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>
                           {organisationdetailfill[0]?.contactEmail}
@@ -454,7 +463,7 @@ console.log(customStateDetails,'sssss');
                   </View>
                   <View>
                     {/* <Text style={styles.gstno}>GSTIN:33AALCC0190M1ZK</Text> */}
-                    {newStateforpdf && newStateforpdf.length > 0 ? (
+                    {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null ? (
                       <Text style={[styles.gstno, { fontSize: 10 }]}>
                         GSTIN: {newStateforpdf[0]?.gstno}
                       </Text>
@@ -478,8 +487,9 @@ console.log(customStateDetails,'sssss');
                       Details of Receiver | Billed to:
                     </Text>
                     <Text style={[styles.customername, { width: 300, fontSize: 10.5 }]}>{organizationname}</Text>
-                    <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{address1}</Text>
-                    <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {gst}</Text>
+                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{billingGroupDetails[0]?.address1}</Text> : <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{address1}</Text>}
+                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10 }]}> {billingGroupDetails[0]?.state}</Text> : <Text style={[styles.text2, { fontSize: 10 }]}> {customeraddress[0]?.state}</Text>}
+                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {billingGroupDetails[0]?.gstnumber}</Text> : <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {gst}</Text>}
                   </View>
 
                   <View style={styles.invoicediv}>
@@ -635,28 +645,28 @@ console.log(customStateDetails,'sssss');
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{fullAmount}.00</Text>
                       </View>
                     )}
-                    {customStateDetails.length > 0 ?(
+                    {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null && newStateforpdf[0].gstno !== undefined ? (
                       <>
                         {cgst > 0 && (
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                            <Text style={{ width: '130px', fontSize: 10 }}>CGST {gstAmount}% on {fullAmount}:</Text>
-                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgst}.00</Text>
+                            {billingGroupDetails.length > 0 ? <Text style={{ width: '130px', fontSize: 10 }}>CGST {groupgst}% on {fullAmount}:</Text>  : <Text style={{ width: '130px', fontSize: 10 }}>CGST {gstAmount}% on {fullAmount}:</Text> }
+                            {billingGroupDetails.length > 0 ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{billingGroupCGST}.00</Text> :  <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgst}.00</Text> }
                           </View>
                         )}
 
                         {sgst > 0 && (
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                            <Text style={{ width: '130px', fontSize: 10 }}>SGST {gstAmount}% on {fullAmount}:</Text>
-                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{sgst}.00</Text>
+                           {billingGroupDetails.length > 0 ? <Text style={{ width: '130px', fontSize: 10 }}>SGST {groupgst}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}>SGST {gstAmount}% on {fullAmount}:</Text> }
+                           {billingGroupDetails.length > 0 ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{billingGroupCGST}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{sgst}.00</Text>}
                           </View>
                         )}
                       </>
                     ) : (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>IGST {fullGST}% on {fullAmount}:</Text>
-                        <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igst}.00</Text>
+                       {billingGroupDetails.length > 0 ? <Text style={{ width: '130px', fontSize: 10 }}>IGST {groupigst}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}>IGST {fullGST}% on {fullAmount}:</Text> }
+                       {billingGroupDetails.length > 0 ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{billingGroupIGST}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igst}.00</Text>}
                       </View>
-                    )  }
+                    )}
 
 
                     {parkpermit > 0 && (

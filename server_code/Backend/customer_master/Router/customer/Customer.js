@@ -128,10 +128,14 @@ router.get('/searchCustomer', (req, res) => {
 
 router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
-  db.query('select address1,gstnumber,state from customers where customer = ?', [customername], (err, result) => {
+  db.query('select address1,gstnumber,state,billingGroup,customer from customers where customer = ?', [customername], (err, result) => {
     if (err) {
+      console.log(err,'cust eror');
+      
       return res.status(500).json({ error: 'Failed to get data in MySQL' });
     }
+    console.log(result,'customer result');
+    
     return res.status(200).json(result)
   })
 })
@@ -186,7 +190,7 @@ router.get('/allCustomers', (req, res) => {
 router.get('/gstdetails/:customer', (req, res) => {
 
   const customer = req.params.customer;
-  const sqlquery = "select gstTax,state,address1,gstnumber,servicestation,billingGroup from customers where customer=?";
+  const sqlquery = "select gstTax,state,address1,gstnumber,servicestation,billingGroup,customer from customers where customer=?";
     db.query(sqlquery, [customer], (err, result) => {
     if (err) {
       console.log(err, 'error');

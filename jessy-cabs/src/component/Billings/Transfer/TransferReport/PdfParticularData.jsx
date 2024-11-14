@@ -323,6 +323,19 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const handlePopup = () => {
     setPdfPrint(false)
   }
+  function trimSeconds(time) {
+
+    // Split the time string by colon (:)
+    const timeParts = time?.split(':');
+
+    // Check if there are seconds (length 3), return hours:minutes
+    if (timeParts?.length === 3) {
+      return `${timeParts[0]}:${timeParts[1]}`;
+    }
+
+    // If there's only hours:minutes, return it as is
+    return time;
+  }
 
 
 
@@ -413,13 +426,14 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                   <tr>
                     <td>Reporting</td>
                     <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
-                    <td>{tripReporttime ? tripReporttime : 0.00}</td>
+                    <td>{tripReporttime ? trimSeconds(tripReporttime) : 0.00}</td>
                     <td>{'-'}</td>
                   </tr>
                   <tr>
                     <td>Releasing</td>
                     <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
-                    <td>{tripClosetime}</td>
+                    {/* <td>{tripClosetime}</td> */}
+                    <td>{trimSeconds(tripClosetime)}</td>
                     <td>{triptotalkms}</td>
                   </tr>
                   <tr>

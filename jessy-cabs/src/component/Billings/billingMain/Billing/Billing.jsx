@@ -85,8 +85,8 @@ const Billing = () => {
         handlePopupClose,
         organizationaddress1,
         handleKeyenterinvoicdeno,
-        total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,
-        discound_PercentageCalc,invoiceno,setInvoiceNo,
+        total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,invoicestate,
+        discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
 
         // ... (other state variables and functions)
@@ -144,6 +144,7 @@ const Billing = () => {
                                     // onKeyDown={handleKeyenterBilling}
                                 />
                             </div>
+                          
                          
                             <div className="input">
                                 <div className="icone">
@@ -156,7 +157,7 @@ const Billing = () => {
                                     label="Invoice NO"
                                     name="Invoice_No"
                                     autoComplete="new-password"
-                                    value={invoiceno || ''}
+                                    value={invoiceno || invoicestate ||''}
                                     onChange={(e)=>setInvoiceNo(e.target.value)}
                                     onKeyDown={handleKeyenterinvoicdeno}
                                 />
@@ -1257,6 +1258,7 @@ const Billing = () => {
                                 customerData={customerData}
                                 billdatadate={billingdate}
                                 stateDetails={stateDetails}
+                                otherStations={dataotherStations}
                             />
                         </Box>
                         {/* <Paymentinvoice
@@ -1330,7 +1332,7 @@ const Billing = () => {
                             direction="left"
                         >
 
-                            {Billing_new === 1 && !edit &&(
+                            {Billing_new === 1 && billadd &&(
                                 <SpeedDialAction
                                     key="Add"
                                     icon={<BookmarkAddedIcon />}
@@ -1361,7 +1363,7 @@ const Billing = () => {
                                 tooltipTitle="Cancel"
                                 onClick={(event) => handleClick(event, "Cancel")}
                             />
-                            {Billing_read === 1 && (
+                            {Billing_read === 1 && edit &&(
                                 <SpeedDialAction
                                     key="Print"
                                     icon={<PrintIcon />}

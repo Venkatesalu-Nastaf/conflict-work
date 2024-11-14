@@ -10,13 +10,13 @@ import Invoice from "./Invoice";
 import { APIURL } from "../../../url";
 
 
-const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,stateDetails}) => {
+const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,stateDetails,otherStations}) => {
     // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const [billingDate] = useState(dayjs());
     const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
     // const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
-    const apiUrl = APIURL;
+    // const apiUrl = APIURL;
     const targetRef = useRef();
 
     const handlePopupClose = () => {
@@ -26,6 +26,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
     const formatAddress = (address) => {
         return address?.split('\n').map((line, index) => <p key={index}>{line}</p>);
     }
+    console.log(otherStations,"pppp",otherStations?.data)
 
 
     // const startDate = dayjs(book.startdate);
@@ -33,35 +34,39 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
     // const startDate = dayjs(book.startdate);
     // const billingdate = book.startdate ? dayjs(book.startdate).format('YYYY-MM-DD') : boo
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
-    const gstAmount = customerData?.gstTax / 2
-    const cgst = totalAmount * gstAmount / 100 || 0;
-    const sgst = totalAmount * gstAmount / 100 || 0;
+    // const gstAmount = customerData?.gstTax / 2
+    const gstAmount1= otherStations?.data/ 2;
+    const othergst = otherStations?.data
+    // const cgst = totalAmount * gstAmount / 100 || 0;
+    // const sgst = totalAmount * gstAmount / 100 || 0;
+    const cgst = totalAmount * gstAmount1 / 100 || 0;
+    const sgst = totalAmount * gstAmount1 / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst || 0;
     const AmountInWords = numWords(parseInt(paymentValue)) || 0;
 
     // setting the Billed details
-    useEffect(() => {
-        const Invoice_No = `RF${particularRefNo}`;
-        const Trip_id = particularRefNo;
-        const Status = "Billed";
-        const Amount = book.totalcalcAmount || 0;
-        // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
-        const Bill_Date = billingDate.format('YYYY-MM-DD');
-        const Customer = customerData.customer;
-        const billing_no = book.billingno;
-        const guestname = book.guestname;
+    // useEffect(() => {
+    //     const Invoice_No = `RF${particularRefNo}`;
+    //     const Trip_id = particularRefNo;
+    //     const Status = "Billed";
+    //     const Amount = book.totalcalcAmount || 0;
+    //     // const Bill_Date = dayjs(book.startdate).format('YYYY-MM-DD');
+    //     const Bill_Date = billingDate.format('YYYY-MM-DD');
+    //     const Customer = customerData.customer;
+    //     const billing_no = book.billingno;
+    //     const guestname = book.guestname;
 
-        setIndividualBillData({
-            Invoice_No,
-            Trip_id,
-            Status,
-            Amount,
-            Bill_Date,
-            Customer,
-            billing_no,
-            guestname
-        });
-    }, [particularRefNo, book, customerData]);
+    //     setIndividualBillData({
+    //         Invoice_No,
+    //         Trip_id,
+    //         Status,
+    //         Amount,
+    //         Bill_Date,
+    //         Customer,
+    //         billing_no,
+    //         guestname
+    //     });
+    // }, [particularRefNo, book, customerData]);
 
     // console.log(stateDetails,'State details of indiviul billing ')
 
@@ -69,13 +74,14 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
         try {
             generatePDF(targetRef, { filename: 'page.pdf' });
             setIndividualBilled(!individualBilled);
-            await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
+            // await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
         } catch (error) {
             console.log('An error occurred:', error);
         } finally {
             setParticularPdf(false);
         }
     };
+    console.log(customerData,"ppdata")
 
     // const handlePrint = async () => {
     //     setIndividualBilled(!individualBilled);
@@ -123,12 +129,14 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                 <p className="details-receiver">Details of Receiver : {customerData.customer}</p>
                                 {/* <p className="receiver-details">{customerData.customer}</p> */}
                                 <div style={{ width: '300px' }}>
-                                    {formatAddress(customerData.address1)}
+                                    {/* {formatAddress(customerData.address1)} */}
+                                    {formatAddress(otherStations.data2)}
                                 </div>
-                                <p className="receiver-details">GSTIN : {customerData.gstnumber}</p>
+                                {/* <p className="receiver-details">GSTIN : {customerData.gstnumber}</p> */}
+                                <p className="receiver-details">GSTIN : {otherStations.data3}</p>
                             </div>
                             <div className="invno-div">
-                                <p className="receiver-details">Invoice No : RF{particularRefNo}</p>
+                                <p className="receiver-details">Invoice No : {particularRefNo}</p>
                                 {/* <p className="receiver-details">Invoice Date : {billingDate.format('YYYY-MM-DD')} </p> */}
                                 <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('DD-MM-YYYY')} </p>
                             </div>
@@ -169,9 +177,13 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                             </table>
                         </div>
                         <div className="total-div" style={{marginLeft: '50px'}}>
+                        {otherStations?.otherdata === "InStations" ?
+                        <>
                             <div style={{marginLeft: "100px"}}>
-                                <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
-                                <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                                {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
+                                <h4>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
                                 <h4>Total Amount :</h4>
                             </div>
                             <div className="amount-div">
@@ -179,6 +191,23 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                 <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p>
                                 <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
                             </div>
+                            </>
+                            :
+                            <>
+                             <div style={{marginLeft: "100px"}}>
+                                {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                                <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
+                                <h4>IGST {othergst}% on {book.totalcalcAmount} :</h4>
+                              
+                                <h4>Total Amount :</h4>
+                            </div>
+                            <div className="amount-div">
+                                {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                            </div>
+                            </>
+                            }
                         </div>
                         <div>
                             <p style={{ fontWeight: 'bold' }}>E.& O.E In Words-Rupees</p>
@@ -193,7 +222,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                 </p>
                                 <div>
 
-                                    {gstAmount === 0 ?
+                                    {gstAmount1 === 0 ?
                                         <div >
                                             <h4 style={{ fontWeight: 600, margin: "2px" }}>NOTE:</h4>
                                             <h4 style={{ padding: 2, wordSpacing: 3, margin: "2px" }}>

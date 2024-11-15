@@ -4,26 +4,33 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 
-const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book,Totaltimes,TotalDays,totalkm }) => {
+const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, TotalDays}) => {
 
-    const duty = tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty;
+   
     const date = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
     const shedOutDate = tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate;
     const startDate = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
-   
+    const startkm = tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm
+    const endkm = tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm
+    const Totalkm =Number(startkm) - Number(endkm)
+ 
+
 
     function removeSeconds(time) {
         // Split the time string by colon (:)
+        if(time !== "undefined"){
         const timeParts = time.split(':');
-      
+
         // Check if there are seconds (length 3), return hours:minutes
         if (timeParts.length === 3) {
-          return `${timeParts[0]}:${timeParts[1]}`;
+            return `${timeParts[0]}:${timeParts[1]}`;
         }
-      
+
         // If there's only hours:minutes, return it as is
         return time;
-      }
+    }
+
+    }
 
     const targetRef = useRef();
     return (
@@ -170,67 +177,33 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                         </tr>
                                     </thead>
 
-                                    {duty === 'Outstation' ? (<tbody>
-                                        <tr>
-                                            <td id='table-datas'><span >ShedOut</span></td>
-                                            <td id='table-datas'><span >{dayjs(shedOutDate).format('YYYY-MM-DD')}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td id='table-datas'><span >Starting</span></td>
-                                            <td id='table-datas'><span >{dayjs(startDate).format("YYYY-MM-DD")}</span></td>
-                                            {/* <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td> */}
-                                            <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime ? removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime):""}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm}</span></td>
-                                        </tr>
+                                     <tbody>
+
                                         <tr>
                                             <td id='table-datas'><span >Closing</span></td>
+                                            <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
+                                            <td id='table-datas'><span >-</span></td>
+                                            <td id='table-datas'><span >-</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td id='table-datas'><span >Releasing</span></td>
                                             <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime ? removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime) :""}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
+                                            <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
+                                            <td id='table-datas'><span >{Totalkm}</span></td>
                                         </tr>
                                         <tr>
-                                            <td id='table-datas'><span >ShedIn</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td id='table-datas'><span >Total</span></td>
-                                            {/* <td id='table-datas'><span >{TotalDays}</span>days</td> */}
-                                            <td id='table-datas'><span >{TotalDays}</span></td>
-                                            {/* <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td> */}
-                                            <td id='table-datas'><span >{Totaltimes}</span></td>
-                                            <td id='table-datas'><span >{totalkm}</span></td>
-                                        </tr>
-                                    </tbody>) : (<tbody>
-
-                                        <tr>
-                                            <td id='table-datas'><span >ShedOut</span></td>
-                                            <td id='table-datas'><span ></span></td>
-                                            <td id='table-datas'><span ></span></td>
-                                            <td id='table-datas'><span ></span></td>
+                                            <td id='table-datas'><span >Reporting</span></td>
+                                             <td id='table-datas'><span >{dayjs(startDate).format("YYYY-MM-DD")}</span></td>
+                                            <td id='table-datas'><span >{ removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
+                                            <td id='table-datas'><span >{}{0}</span></td>
                                         </tr>
 
                                         <tr>
                                             <td id='table-datas'><span >Starting</span></td>
-                                            <td id='table-datas'><span >{dayjs(startDate).format("YYYY-MM-DD")}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td id='table-datas'><span >Closing</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
-                                            <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td id='table-datas'><span >ShedIn</span></td>
-                                            <td id='table-datas'><span ></span></td>
-                                            <td id='table-datas'><span ></span></td>
-                                            <td id='table-datas'><span ></span></td>
+                                            <td id='table-datas'><span >{dayjs(shedOutDate).format('YYYY-MM-DD')}</span></td>
+                                            <td id='table-datas'><span >-</span></td>
+                                            <td id='table-datas'><span >-</span></td>
                                         </tr>
 
                                         <tr>
@@ -238,11 +211,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                             {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
                                             <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
                                             <td id='table-datas'><span >{totalhour}</span></td> */}
-                                                <td id='table-datas'><span >{TotalDays}</span></td>
+                                            <td id='table-datas'><span >{TotalDays}</span></td>
                                             <td id='table-datas'><span >{Totaltimes}</span></td>
-                                            <td id='table-datas'><span >{totalkm}</span></td>
+                                            <td id='table-datas'><span >{Totalkm}</span></td>
                                         </tr>
-                                    </tbody>)}
+                                    </tbody>
 
 
                                 </table>

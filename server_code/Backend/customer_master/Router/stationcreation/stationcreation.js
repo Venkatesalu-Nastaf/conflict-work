@@ -79,6 +79,18 @@ router.get('/stationcreation', (req, res) => {
 });
 
 
+
+router.get('/Statecreation', (req, res) => {
+  db.query('SELECT DISTINCT(state) FROM stationcreation where state is not null', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+  
+    return res.status(200).json(results);
+  });
+});
+
+
 // Fetch all station names
 router.get('/getStation-name', (req, res) => {
   const { username } = req.query;
@@ -120,8 +132,9 @@ router.get('/getStation-name', (req, res) => {
 });
 
 router.get("/getcreduniquestationname/:stationname", (req, res) => {
-  const stationname = req.params.stationname;
-  db.query("select Stationname  from stationcreation where Stationname=?", [stationname], (err, results) => {
+  // const stationname = req.params.stationname;
+  const Stationname = req.params;
+  db.query("select Stationname  from stationcreation where Stationname=?", [Stationname], (err, results) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }

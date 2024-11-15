@@ -362,6 +362,8 @@ function App() {
 
   //-------------------------------------------
   const [customer, setCustomer] = useState()
+  
+  const [Statename,setStateName] = useState([])
 
   useEffect(() => {
     const getCustomer = async () => {
@@ -369,6 +371,13 @@ function App() {
       setCustomer(response.data)
     }
     getCustomer()
+  }, [apiUrl])
+  useEffect(() => {
+    const getstationstate = async () => {
+      const response = await axios.get(`${apiUrl}/Statecreation`)
+      setStateName(response.data)
+    }
+    getstationstate()
   }, [apiUrl])
 
 
@@ -626,8 +635,8 @@ function App() {
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 
-                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 && BILLING_BillingMain !== undefined ? (<BillingMain organizationNames={organizationNames} />) : (<NoPermission />)} />
-                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName} organizationNames={organizationNames} /> ):( <NoPermission />)} />
+                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 && BILLING_BillingMain !== undefined ? (<BillingMain  Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName}  Statename={Statename} organizationNames={organizationNames} /> ):( <NoPermission />)} />
                 <Route
                   path="/home/billing/coveringbill"
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} organizationNames={organizationNames} />) : ( <NoPermission />)}

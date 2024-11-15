@@ -135,29 +135,58 @@ router.get('/totalAmount_from_billing', (req, res) => {
     });
 });
 
-router.get('/getdatafromtripsheetvaluebilling/:tripidno', (req, res) => {
-    const bookingno = req.params.tripidno;
-    db.query("select * from tripsheet where tripid = ?", [bookingno], (err, results) => {
+// router.get('/getdatafromtripsheetvaluebilling/:tripidno', (req, res) => {
+//     const bookingno = req.params.tripidno;
+//     db.query("select * from tripsheet where tripid = ?", [bookingno], (err, results) => {
 
-        if (err) {
-            return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
-        }
-        return res.status(200).json(results)
-    })
-})
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+//         }
+//         return res.status(200).json(results)
+//     })
+// })
 
-router.get("/INVOICEENTER_Billing/:invoiceno", (req, res) => {
+router.get("/getdatafromtripsheetvaluebilling/:invoiceno/:state", (req, res) => {
 
     const bookingno = req.params.invoiceno;
+    const statedata = req.params.state;
 
     const sql = `
-    SELECT ts.*, bill.Bill_Date, bill.Invoice_No as  invoiceno
+    SELECT ts.*, bill.Bill_Date, bill.Invoice_No as  invoiceno,bill.State as State
     FROM tripsheet AS ts
     LEFT JOIN Individual_Billing AS bill ON ts.tripid = bill.Trip_id
-    WHERE bill.Invoice_No = ?
+    WHERE bill.Invoice_No = ? and bill.State =? 
 `;
 
-    db.query(sql, [bookingno], (err, results) => {
+
+    db.query(sql, [bookingno,statedata], (err, results) => {
+
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+        }
+        console.log(results, 'ff')
+        return res.status(200).json(results)
+
+
+    })
+
+})
+
+router.get("/INVOICEENTER_Billing/:invoiceno/:state", (req, res) => {
+
+    const bookingno = req.params.invoiceno;
+    const statedata = req.params.state;
+
+    const sql = `
+    SELECT ts.*, bill.Bill_Date, bill.Invoice_No as  invoiceno,bill.State as State
+    FROM tripsheet AS ts
+    LEFT JOIN Individual_Billing AS bill ON ts.tripid = bill.Trip_id
+    WHERE bill.Invoice_No = ? and bill.State =?
+`;
+
+
+    db.query(sql, [bookingno,statedata], (err, results) => {
 
         if (err) {
             console.log(err)

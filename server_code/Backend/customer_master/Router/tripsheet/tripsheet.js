@@ -135,7 +135,7 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,
+        TotalTimeWithoutAddHours
 
     } = req.body
 
@@ -266,6 +266,7 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
+        TotalTimeWithoutAddHours
     }
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -467,7 +468,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount, } = req.body
+        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours } = req.body
 
 
     const updatedCustomerData = {
@@ -597,7 +598,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
+        TotalTimeWithoutAddHours
     }
+    // console.log(updatedCustomerData,"llll")
 
     console.log(driverBeta,
         driverbeta_Count,
@@ -2371,7 +2374,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
     console.log(customer, "cusssssssssssssssssss")
-    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
+    db.query('select rateType,TimeToggle,hybrid from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;

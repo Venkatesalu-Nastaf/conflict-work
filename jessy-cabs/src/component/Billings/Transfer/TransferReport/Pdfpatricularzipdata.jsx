@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
 });
 
 const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, }) => {
-  console.log(particularPdf, organisationdetail, imagename)
+  console.log(particularPdf, organisationdetail, imagename,'pdfZipData')
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
@@ -571,7 +571,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
     const { signature_path } = signatureimage
     const { map_path } = mapimage
-    setAddress1(addressone)
+    setAddress1(customeraddress1)
     setCustomer(customers)
     setFuel(fueltype)
     setEmpno(employeeno)

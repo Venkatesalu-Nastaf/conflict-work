@@ -523,8 +523,6 @@ const Sidebar = () => {
       return;
     }
   }
- 
-
   //------------------------------------------------------------------
 
   return (
@@ -550,7 +548,8 @@ const Sidebar = () => {
             </div>)}
 
         </div>
-        <div className="menu">
+        {/* i */}
+        {/* <div className="menu">
           {Dashbord_read === 1 ? <MenuItem
             label="Dashboard"
             to="/home/dashboard"
@@ -564,8 +563,10 @@ const Sidebar = () => {
 
           {booking_page_permission ? <MenuItem
             label="Booking"
-            to={BOOKING && ("/home/bookings/booking")}
-            alt="/home/bookings/booking"
+            // to={BOOKING && ("/home/bookings/booking")}
+            to={bookingdata && ("/home/bookings/booking")}
+              alt={bookingdata && ("/home/bookings/booking")}
+            // alt="/home/bookings/booking"
             value="/home/bookings"
             menuItemKey="/home/bookings"
             name="Booking page"
@@ -683,7 +684,7 @@ const Sidebar = () => {
               </StyledBadge>
             </div>
           </div>
-        </div>
+        </div> */}
       </motion.div>
       <div className="alert-popup-main">
         {info && (
@@ -715,9 +716,11 @@ const Sidebar = () => {
         <div className="menu menu-section-scroll">
           {Dashbord_read === 1 ? <MenuItem
             label={`${expanded === false ? '' : 'Dashboard'}`}
-            to="/home/dashboard"
+            // to="/home/dashboard"
+             to={Dashbord_read && "/home/dashboard"}
             value="/home/dashboard"
-            alt="/home/dashboard"
+            alt={Dashbord_read && "/home/dashboard"}
+             // alt="/home/dashboard"
             name="Dashboard page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}

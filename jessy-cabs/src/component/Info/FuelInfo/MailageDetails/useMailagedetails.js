@@ -58,6 +58,8 @@ const useMailagedetails = () => {
   const [warningMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const [loading, setLoading] = useState(false)
+
   //----------------------popup-----------------
   const hidePopup = () => {
     setSuccess(false);
@@ -179,10 +181,29 @@ const useMailagedetails = () => {
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handleList()
-    } catch {
-      setError(true);
-      setErrorMessage("Failed to Add Data");
-    }
+    } 
+    // catch {
+    //   setError(true);
+    //   setErrorMessage("Failed to Add Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Add Data: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   const handleEdit = async () => {
@@ -214,11 +235,30 @@ const useMailagedetails = () => {
       handleCancel();
       setRows([]);
       handleList();
-    } catch (error) {
-      // console.error("Error updating data:", error);
-      setError(true);
-      setErrorMessage("Failed to Edit Data");
-    }
+    } 
+    // catch (error) {
+    //   // console.error("Error updating data:", error);
+    //   setError(true);
+    //   setErrorMessage("Failed to Edit Data");
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to Edit Data: " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   // useEffect(() => {
@@ -234,20 +274,52 @@ const useMailagedetails = () => {
   //   handlelist();
   // }, [apiUrl]);
 
+  // const handleList = useCallback(async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/fueldetails`);
+  //     const data = response.data;
+  //     if (data.length > 0) {
+  //       setRows(data);
+  //       setLoading(false)
+  //       // console.log(data,'datas of milage')
+  //   }   else {
+  //     setRows([]);
+  //     setLoading(false)
+  //   }
+  //   }
+  //   catch(err){
+  //     console.log(err);
+  //   }finally {
+  //     setLoading(false); 
+  // }
+  // }, [apiUrl]); // Add any dependencies needed inside this array
+
+
   const handleList = useCallback(async () => {
+    setLoading(true); 
+    setError(false); // Reset error state before each request
     try {
       const response = await axios.get(`${apiUrl}/fueldetails`);
       const data = response.data;
+
       if (data.length > 0) {
         setRows(data);
-    }   else {
-      setRows([]);
+      } else {
+        setRows([]);
+      }
+    } catch (err) {
+      if (err.message === 'Network Error') {
+        setErrorMessage("Check network connection.");
+      } else {
+        setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+      }
+      setError(true);
+    } finally {
+      setLoading(false); 
     }
-    }
-    catch(err){
+  }, [apiUrl]);
 
-    }
-  }, [apiUrl]); // Add any dependencies needed inside this array
 
 useEffect(() => {
     handleList();
@@ -366,6 +438,8 @@ useEffect(() => {
     columns,
     isEditMode,
     handleEdit,
+    loading,
+    setLoading
   };
 };
 

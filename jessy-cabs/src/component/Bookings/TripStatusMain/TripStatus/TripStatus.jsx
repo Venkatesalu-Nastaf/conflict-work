@@ -93,6 +93,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
      // setVehNo, 
       handleBookingClick,
       loading,
+      isStations,setisStations
      // setLoading
   } = useTripStatus();
   useEffect(() => {
@@ -118,6 +119,13 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
         setAllCustomer(customer);
     }
 }, [customer]); // Include customer as a dependency
+
+useEffect(() => {
+
+  if (stationName?.length > 0) {
+    setisStations(stationName)
+  }
+}, [stationName])
 
 
   const CustomNoRowsOverlay = () => (
@@ -317,7 +325,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
             </div>
           </div>
         </div>
-        <div className="SpeedDial">
+        {/* <div className="SpeedDial">
           <Box className='common-speed-dail'>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -340,7 +348,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
               />
             </StyledSpeedDial>
           </Box>
-        </div>
+        </div> */}
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (

@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from "rea
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes ,useLocation,useNavigate} from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-import Logo from "./assets/img/logonas.png";
+import Logo from "./assets/img/logo.png";
 import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
@@ -61,21 +61,61 @@ import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
+import is from "date-fns/esm/locale/is/index.js";
 
 
 
 function App() {
   const apiUrl = APIURL;
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setIsLoading(false);
+//     }, 3500);
+//   }, []);
+
+//   // useEffect(() => {
+    
+//   //   if (!isLoading && location.pathname !== '/') {
+//   //     navigate(location.pathname);
+//   //   }
+//   // }, [isLoading, location.pathname, navigate]);
+//  useEffect(() => {
+//     if (!isLoading && location.pathname !== '/') {
+//       // Prevent the page from being flashed during navigation
+//       if (location.pathname !== window.location.pathname) {
+//         navigate(location.pathname, { replace: true });
+//       }
+//     }
+//   }, [isLoading, location.pathname, navigate]);
+
+
+//  useEffect(() => {
+//     // Set the loading state to false after 3500ms
+//     const timer = setTimeout(() => {
+//       setIsLoading(false);
+//     }, 3500);
+
+//     // Handle redirection once isLoading is false
+//     if (!isLoading && location.pathname !== '/') {
+//       // Prevent flashing and redirect
+//       if (location.pathname !== window.location.pathname) {
+//         navigate(location.pathname, { replace: true });
+//       }
+//     }
+
+//     // Cleanup the timer
+//     return () => clearTimeout(timer);
+//   }, [isLoading, location.pathname, navigate]);
+
 
 
   const { triggerCustomerAdd } = useData1()
+
+ 
 
   // Permission ----------------------------------------
 
@@ -99,8 +139,7 @@ function App() {
   const R_Supllier = permissions[12]?.read 
   const R_Station = permissions[13]?.read 
   
-  
-
+ 
   const SETTING = permissions[14]?.read 
   const Main_Setting = permissions[16]?.read
   const userCreation1=permissions[15]?.read ;
@@ -137,6 +176,73 @@ function App() {
 
   //--------   fetch station name ------------------------------------------------------------
 
+
+  // loading with correction
+
+  useEffect(() => {
+    const auth = localStorage.getItem("auth") === 'true';
+  
+    // Start a timer to stop loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500);
+  
+    // Check if the user is authenticated
+    if (auth) {
+      // Keep loading if permissions are empty or undefined
+      if (!permissions || permissions.length === 0) {
+        setIsLoading(true);
+      } else {
+        setIsLoading(false); // Stop loading once permissions are populated
+      }
+    } else {
+      setIsLoading(false); // Stop loading if not authenticated
+    }
+  
+    // Handle redirection once loading is complete
+    if (!isLoading && location.pathname !== '/') {
+      if (location.pathname !== window.location.pathname) {
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  
+    // Clean up the timer
+    return () => clearTimeout(timer);
+  }, [isLoading, location.pathname, navigate, permissions]);
+
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("auth") === 'true';
+  
+  //   // Fallback timer to stop loading after 3.5 seconds
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 3500);
+  
+  //   // Check if the user is authenticated and permissions are loaded
+  //   if (auth) {
+  //     if (!permissions || permissions.length === 0) {
+  //       setIsLoading(true); // Keep loading if permissions are empty
+  //     } else {
+  //       setIsLoading(false); // Stop loading when permissions are populated
+  //     }
+  //   } else {
+  //     setIsLoading(false); // Stop loading if the user is not authenticated
+  //   }
+  
+  //   // Only navigate when the user is authenticated and permissions are populated
+  //   if (!isLoading && auth && permissions && permissions.length > 0) {
+  //     // If trying to access a path without permissions, redirect to the loading page
+  //     if (location.pathname !== window.location.pathname) {
+  //       navigate(location.pathname, { replace: true });
+  //     }
+  //   }
+  
+  //   // Clean up the timer on unmount
+  //   return () => clearTimeout(timer);
+  // }, [ permissions, isLoading, location.pathname, navigate]);
+  
+  
+
   const loginUserName = localStorage.getItem("username")
 
   const [stationName, setStationName] = useState([]);
@@ -154,9 +260,49 @@ function App() {
     fetchSattionName();
   }, [apiUrl, loginUserName])
 
+// console.log(permissions,'permissinon datas come')
+//     const auth = localStorage.getItem("auth") === 'true';
+//     console.log(auth);
+
+ 
+
   //---------------------------------------------------------------------
   //  fetching Organisation name (Customer )
   const [organizationNames, setOrganizationName] = useState([])
+
+  
+  
+  
+
+
+
+
+   // Loading for permisson
+
+
+
+// useEffect(() => {
+//   const auth = localStorage.getItem("auth") === 'true';
+//   if (!isLoading && location.pathname !== '/') {
+//     // Prevent the page from being flashed during navigation
+//     if (location.pathname !== window.location.pathname) {
+//       navigate(location.pathname, { replace: true });
+//     }
+//   }
+
+//   if (auth) {
+//       // If permissions data is empty or undefined, keep loading
+//       if (!permissions || permissions.length === 0) {
+//           setIsLoading(true);
+//       } else {
+//           setIsLoading(false); // Stop loading once permissions are populated
+//       }
+//   } else {
+//       setIsLoading(false); // Stop loading if not authenticated
+//   }
+// },);
+
+// console.log(permissions.length,' length of permissions')
 
   useEffect(() => {
     const organizationName = async () => {
@@ -172,6 +318,7 @@ function App() {
     organizationName();
 
   }, [apiUrl]); // Empty dependency array to ensure it runs only once
+
 
   //--------------------------------------------------------
   //fetch org logo
@@ -266,10 +413,51 @@ function App() {
     fetchgetvehicleName()
   }, [apiUrl, vehileName])
 
+
+  // const getElement = () => {
+  //   if (Dashbord_read) return <MainDash stationName={stationName} />;
+  
+  //   if (booking_page_permission) {
+  //     if (bookingdata) return <Navigate to="/home/bookings/booking" />;
+  //     if (TripStatus) return <Navigate to="/home/bookings/tripstatus" />;
+  //     if (TriSheet) return <Navigate to="/home/bookings/tripsheet" />;
+  //   }
+  
+  //   if (Billing_permission) {
+  //     if (BILLING_BillingMain) return <Navigate to="/home/billing/billing" />;
+  //     if (Billing_Transfer) return <Navigate to="/home/billing/transfer" />;
+  //     if (Billing_CoveringBill) return <Navigate to="/home/billing/coveringbill" />;
+  //     if (Billing_Reports) return <Navigate to="/home/billing/reports" />;
+  //   }
+  
+  //   if (Register_page_permission) {
+  //     if (R_RATEtype) return <Navigate to="/home/registration/ratetype" />;
+  //     if (R_Customer) return <Navigate to="/home/registration/customer" />;
+  //     if (R_Supllier) return <Navigate to="/home/registration/supplier" />;
+  //     if (R_Station) return <Navigate to="/home/registration/stationcreation" />;
+  //   }
+  
+  //   if (Setting_page_permission) {
+  //     if (userCreation1) return <Navigate to="/home/settings/usercreation" />;
+  //     if (Main_Setting) return <Navigate to="/home/settings/mainsetting" />;
+  //   }
+  
+  //   if (Map_page_permission) return <Navigate to="/home/Map/RealTime" />;
+  
+  //   if (Info_page_permission) {
+  //     if (INFO_MAILER) return <Navigate to="/home/info/mailer" />;
+  //     if (INFO_FuelInfo) return <Navigate to="/home/info/fuelinfo" />;
+  //     if (INFO_Employee) return <Navigate to="/home/info/employee" />;
+  //   }
+  
+  //   // Default fallback
+  //   return <Navigate to="/home/usersettings/usersetting" />;
+  // };
+
   return (
     <>
       <div className={isLoading ? "loading-container" : ""}>
-        {isLoading ? (
+        { isLoading ? (
           <div className="loading-spinners">
             <div className="logo-loading">
               <img src={Logo} alt="logo" />
@@ -282,6 +470,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={Dashbord_read ? <MainDash stationName={stationName} /> :
+              // <Route path="/home/dashboard" element={ getElement()
 
               //   (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
               //     (
@@ -292,29 +481,51 @@ function App() {
               //     )
               //   )
               // }
-              (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
-                  (
-                    Billing_permission ? (<Navigate to="/home/billing/billing" />) :
-                      (
-                        Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):<MainDash stationName={stationName} />)
-                      )
-                  )
+              // (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+              //     (
+              //       Billing_permission ? (<Navigate to="/home/billing/billing" />) :
+              //         (
+              //           Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):<MainDash stationName={stationName} />)
+              //         )
+              //     )
+              //   )
+            //   (booking_page_permission ? (<Navigate to="/home/bookings/booking" />) :
+            //   (
+            //     Billing_permission ? (<Navigate to="/home/billing/billing" />) :
+            //       (
+            //         Register_page_permission ? (<Navigate to="/home/registration/customer" />) : (Setting_page_permission ? (<Navigate to="/home/settings/usercreation" />) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (<Navigate to="/home/info/mailer" />):(<Navigate to="/home/usersettings/usersetting" />) )
+            //       )
+            //   )
+            // )
+
+          
+         
+           
+            
+            (booking_page_permission ? ( bookingdata ? <Navigate to="/home/bookings/booking" /> : TripStatus ? <Navigate to="/home/bookings/tripstatus" /> : TriSheet ? <Navigate to="/home/bookings/tripsheet" />:<></>) :
+            (
+              Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> :<></> ) :
+                (
+                  Register_page_permission ? ( R_RATEtype ? <Navigate to="/home/registration/ratetype" /> :  R_Customer ? <Navigate to= "/home/registration/customer" /> : R_Supllier ? <Navigate to= "/home/registration/supplier" /> : R_Station ? <Navigate to= "/home/registration/stationcreation" />:<></>  ) : (Setting_page_permission ? ( userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ?    <Navigate to="/home/settings/mainsetting" /> :<></> ) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (INFO_MAILER ?   <Navigate to= "/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/fuelinfo" /> :INFO_Employee ?   <Navigate to= "/home/info/employee" /> : <></>):(<Navigate to="/home/usersettings/usersetting" />) )
                 )
+            )
+          )
+
               }
               />
               <Route path="/home/bookings" element={ BOOKING !== 0 ? <Bookings /> : <NoPermission />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={bookingdata !== 0 ? <BookingMain stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={bookingdata !== 0  && bookingdata !== undefined ? (<BookingMain stationName={stationName} customerData={customerData} />) : (<NoPermission />)}
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={TriSheet !== 0 ? <TripSheet stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={TriSheet !== 0 && TriSheet !== undefined ? (<TripSheet stationName={stationName} logoImage={logo} />) : (<NoPermission />)}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> : <NoPermission />}
+                  element={TripStatus !== 0 &&  TripStatus !==  undefined ? (<TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} /> ): (<NoPermission />)}
                 />
               </Route>
 
@@ -322,30 +533,30 @@ function App() {
               <Route path="/home/Map" element={ Maps !== 0 ? <Map /> : <NoPermission />}>
                 <Route
                   path="/home/Map/RealTime"
-                  element={Map_Realtime !== 0 ? <RealTime stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={Map_Realtime !== 0 && Map_Realtime !== undefined  ? (<RealTime stationName={stationName} customerData={customerData} />) : (<NoPermission />)}
                 />
                 <Route
                   path="/home/Map/History"
-                  element={Map_History !== 0 ? <History stationName={stationName} customerData={customerData} /> : <NoPermission />}
+                  element={Map_History !== 0 && Map_History !== undefined ? (<History stationName={stationName} customerData={customerData} />) : (<NoPermission />)}
                 />
                 <Route
                   path="/home/Map/Vehicle"
-                  element={Map_Vehicle !== 0 ? <Vehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Vehicle !== 0 && Map_Vehicle !== undefined ? (<Vehicle stationName={stationName} logoImage={logo} /> ):(<NoPermission />)}
                 />
 
                 <Route
                   path="/home/Map/Reminders"
-                  element={Map_Reminders !== 0 ? <Reminders stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Reminders !== 0  && Map_Reminders !== undefined ? (<Reminders stationName={stationName} logoImage={logo} />) : (<NoPermission />)}
                 />
 
                 <Route
                   path="/home/Map/Records"
-                  element={Map_Records !== 0 ? <Records stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Map_Records !== 0  && Map_Records !== undefined ? (<Records stationName={stationName} logoImage={logo} />) : (<NoPermission />)}
                 />
 
                 <Route
                   path="/home/Map/Vehicle/AddVehicle"
-                  element={Maps !== 0 ? <AddVehicle stationName={stationName} logoImage={logo} /> : <NoPermission />}
+                  element={Maps !== 0 && Maps !== undefined ? (<AddVehicle stationName={stationName} logoImage={logo} /> ):( <NoPermission />)}
                 />
 
               </Route>
@@ -358,15 +569,15 @@ function App() {
               <Route path="/home/registration" element={ REGISTER !== 0 ? <Registration /> : <NoPermission /> }>
               <Route
                   path="/home/registration/ratetype"
-                  element={R_RATEtype !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} /> : <NoPermission />}
+                  element={R_RATEtype !== 0 && R_RATEtype !== undefined ? (<RateTypes stationName={stationName} organizationNames={organizationNames} vehileName={vehileName} />) : (<NoPermission />)}
                 />
                 <Route
                   path="/home/registration/customer"
-                  element={R_Customer !== 0 ? <Customer stationName={stationName} /> : <NoPermission />}
+                  element={R_Customer !== 0  &&  R_Customer !== undefined ? (<Customer stationName={stationName} />) : (<NoPermission />)}
                 />
                 <Route
                   path="/home/registration/supplier"
-                  element={R_Supllier !== 0 ? <Suppliers stationName={stationName} /> : <NoPermission />}
+                  element={R_Supllier !== 0 && R_Supllier !== undefined ? (<Suppliers stationName={stationName} />) : (<NoPermission />)}
                 />
                 {/* <Route
                   path="/home/registration/employes"
@@ -384,7 +595,7 @@ function App() {
                 /> */}
                  <Route
                   path="/home/registration/stationcreation"
-                  element={R_Station !== 0 ? <StationCreation /> : <NoPermission />}
+                  element={R_Station !== 0  && R_Station !== undefined  ? (<StationCreation /> ): (<NoPermission />)}
                 />
 
                 {/* <Route
@@ -406,22 +617,22 @@ function App() {
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
                 <Route path="/home/info/employee" element={INFO_FuelInfo !== 0 ? <Employee /> : <NoPermission />} /> */}
-                 <Route path="/home/info/mailer" element={INFO_MAILER !== 0 ? <Mailer /> : <NoPermission />} />
+                 <Route path="/home/info/mailer" element={INFO_MAILER !== 0  && INFO_MAILER !== undefined ? (<Mailer />): (<NoPermission />)} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
-                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : <NoPermission />} />
-                <Route path="/home/info/employee" element={INFO_Employee !== 0 ? <Employes /> : <NoPermission />} />
+                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined  ? (<FuelInfo />) : (<NoPermission /> )} />
+                <Route path="/home/info/employee" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <Employes />):(<NoPermission />)} />
                 
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 
-                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 ? <BillingMain organizationNames={organizationNames} /> : <NoPermission />} />
-                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 && BILLING_BillingMain !== undefined ? (<BillingMain organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName} organizationNames={organizationNames} /> ):( <NoPermission />)} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />}
+                  element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} organizationNames={organizationNames} />) : ( <NoPermission />)}
                 />
-                <Route path="/home/billing/reports" element={Billing_Reports !== 0 ? <Reports stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} organizationNames={organizationNames} />) : (<NoPermission />)} />
               </Route>
 
              <Route path="/home/billing/reports/Pendingbills" element ={<PendingBills />}></Route>
@@ -431,7 +642,7 @@ function App() {
               <Route path="/home/settings" element={SETTING !==0 ? <Settings /> : <NoPermission />}>
                 <Route
                   path="/home/settings/usercreation"
-                  element={userCreation1 !== 0 ? <UserCreation stationName={stationName} /> : <NoPermission />}
+                  element={userCreation1 !== 0 && userCreation1 !== undefined ? (<UserCreation stationName={stationName} />) :( <NoPermission />)}
                 />
                 {/* <Route
                   path="/home/settings/stationcreation"
@@ -443,7 +654,7 @@ function App() {
                 />
                 <Route
                   path="/home/settings/mainsetting"
-                  element={Main_Setting !== 0 ? <MainSetting logoImage={logo} /> : <NoPermission />}
+                  element={Main_Setting !== 0  && Main_Setting !== undefined ? (<MainSetting logoImage={logo} />) : (<NoPermission />)}
                 />
               </Route>
               <Route path="/home/usersettings" element={<UserSettings />}>

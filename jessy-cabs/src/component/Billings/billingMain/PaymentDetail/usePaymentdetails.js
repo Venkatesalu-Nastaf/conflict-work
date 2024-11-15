@@ -9,6 +9,7 @@ import { APIURL } from "../../../url";
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "Trip_id", headerName: "TripSheet No", width: 130 },
+  { field: "State", headerName: "State", width: 130 },
   { field: "Invoice_No", headerName: "Invoice No", width: 130 },
   { field: "billing_no", headerName: "Billing_no", width: 150 },
   { field: "Customer", headerName: "Organization", width: 130 },

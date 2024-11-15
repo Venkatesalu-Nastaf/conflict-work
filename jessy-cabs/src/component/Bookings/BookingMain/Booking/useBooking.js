@@ -359,16 +359,19 @@ const useBooking = () => {
   }, [apiUrl])
 
   const handleAutocompleteChange = (event, value, name) => {
+  
     const selectedOption = value ? value.label : "";
+
     if (name === "orderedby") {
       const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
+      console.log(selectedOrder)
       if (selectedOrder) {
         setBook(prevState => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
 
         setSelectedCustomerData((prevState) => ({
@@ -376,39 +379,34 @@ const useBooking = () => {
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
         setFormData((prevState) => ({
           ...prevState,
           orderedby: value?.label,
           orderByMobileNo: selectedOrder.orderByMobileNo,
           orderByEmail: selectedOrder.orderByEmail,
-          servicestation: selectedOrder.servicestation
+          // servicestation: selectedOrder.servicestation
         }));
 
-      } else { 
+      } 
+      else { 
         // If no match is found, clear the fields or handle it as necessary
         setBook(prevState => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+        
         }));
 
         setSelectedCustomerData((prevState) => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+      
         }));
         setFormData((prevState) => ({
           ...prevState,
-          orderedby: value?.label,
-          orderByMobileNo: '',
-          orderByEmail: '',
-          servicestation: '',
+          orderedby: value,
+        
         }));
       }
     } else {
@@ -426,7 +424,7 @@ const useBooking = () => {
       }));
     }
   };
-
+// console.log(book,"book")
   const custmorName = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer;
 
   useEffect(() => {
@@ -455,6 +453,7 @@ const useBooking = () => {
   }, [custmorName, apiUrl])
 
   const handleDriverChange = (event, value, name) => {
+    console.log(value,name,"driver")
     if (name === "driverName") {
       const manualInput = typeof value === "string" ? value : value?.label;
       if (manualInput) {
@@ -733,6 +732,7 @@ const useBooking = () => {
   }
   //------------------------------------------------------
   const handleAdd = async () => {
+   
 
     if (!selectedCustomerData.guestmobileno) {
       setError(true);
@@ -842,14 +842,33 @@ const useBooking = () => {
       setSuccessMessage("Successfully Added");
       handlecheck(lastBookingno);
       setEdit(false)
-    } catch (error) {
-      // const errdata=error.response;
-      // if(errdata.status === 404){
-        setError(true);
-        setErrorMessage("Failed to Add Booking Data");
+    } 
+    // catch (error) {
+    //   // const errdata=error.response;
+    //   // if(errdata.status === 404){
+    //     setError(true);
+    //     setErrorMessage("Failed to Add Booking Data");
         
     
-    }
+    // }
+    catch (error) {
+      // console.error("Error occurredddddd:", error);
+   
+      // Check if there's no response, indicating a network error
+      if (error.message ) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+          // console.log('Network error');
+      } else if (error.response) {
+          setError(true);
+          // Handle other Axios errors (like 4xx or 5xx responses)
+          setErrorMessage("Failed to add : " + (error.response.data.message || error.message));
+      } else {
+          // Fallback for other errors
+          setError(true);
+          setErrorMessage("An unexpected error occurred: " + error.message);
+      }
+  }
   };
 
   const handleEdit = async (userid) => {
@@ -990,10 +1009,14 @@ const useBooking = () => {
     if (event.key === "Enter") {
       event.preventDefault();
       setTriggerCount(prev => !prev)
+      const loginUserName = await localStorage.getItem("username")
+      
       try {
+        // const response = await axios.get(
+        //   `${apiUrl}/booking/${event.target.value}`
+        // );
         const response = await axios.get(
-          `${apiUrl}/booking/${event.target.value}`
-        );
+          `${apiUrl}/booking/${event.target.value}`,{ params: { loginUserName } } );
         const bookingDetails = response.data;
         console.log(bookingDetails,"mmmmmmmmmmmmmmmmmmm")
         setSelectedCustomerData(bookingDetails);
@@ -1004,14 +1027,25 @@ const useBooking = () => {
         setSendEmail(false);
         setDatatrigger(!datatrigger);
         // setAvilableimageCount(bookingDetails.count)
-      } catch(err) {
-
-        // const errdata=err.response;
-        // if(errdata.status === 404){
-          setError(true);
-            setErrorMessage("Booking Not Found");
-   
+      } 
+      catch (error) {
+        if (error.response && error.response.status === 404) {
+            setError(true);
+            setErrorMessage(`${error.response.data.error}`);
+        } else {
+            setError(true);
+            // setErrorMessage("Failed to fetch data");
+            setErrorMessage("Check your Network Connection");
+        }
     }
+      
+      // catch(err) {
+
+     
+      //     setError(true);
+      //       setErrorMessage("Booking Not Found");
+   
+  
   }
   };
 

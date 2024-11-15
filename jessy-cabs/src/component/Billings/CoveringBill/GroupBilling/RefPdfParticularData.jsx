@@ -4,10 +4,11 @@ import generatePDF from 'react-to-pdf';
 import useGroupbilling from "./useGroupbilling";
 // import { APIURL } from "../../../url";
 import numWords from 'num-words'
+import dayjs from 'dayjs';
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2";
-import { green } from "@mui/material/colors";
+// import { green } from "@mui/material/colors";
 
-const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno }) => {
+const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagename, refFromDate, refToDate, gstno, referenceno, Branchstate,billingGroupData, }) => {
 
     const { handlePopup } = useGroupbilling()
     const targetRef = useRef()
@@ -20,23 +21,51 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     const [gst, setGst] = useState('')
     const [fullAmount, setFullAmount] = useState('')
     const [totalCgst, setTotalCgst] = useState(0)
+    const [totalIGST, setTotalIGST] = useState(0);
     const [advance, setAdvance] = useState();
     const [fullTotal, setFullTotal] = useState(0)
     // const apiUrl = APIURL;
     // const organisationimage = imagename
     const FromDate = refFromDate
-    const ToDate = refToDate
+    // const ToDate = refToDate
     const refno = referenceno
+    const BranchList = ['chennai','Bangalore','Hydrebad']
+    const stateBranch = gstno[0].state;
+    const servicestationname = gstno[0].servicestation
+    // const commonState = Branchstate?.filter(item => item.state === stateBranch) || [];
 
+    const commonState = Branchstate?.filter(item => 
+        item.state === stateBranch 
+      ) || [];
+
+      const billingGroupMatch = billingGroupData[0]?.state;
+
+      const stateToUse = billingGroupMatch ? billingGroupMatch : stateBranch;
+      console.log(billingGroupMatch,'commonbillingmatch',stateToUse,'commonbr',Branchstate);
+
+const commonStates = Branchstate?.filter(item => 
+    item.state === stateToUse
+) || [];
+console.log(commonStates,'common0000');
+
+console.log(billingGroupMatch, 'commonbillingmatch');
+
+      
+    console.log(stateBranch, commonState, 'commonstate group', commonState.length,gstno,billingGroupData);
+    console.log(Branchstate,'stationfromjessy');
+    console.log(gstno,'stationcustomer details');
+    console.log(commonState,'stationmatching details');
+    
+    
     useEffect(() => {
         if (Array.isArray(gstno) && gstno.length > 0) { // Check if gstno is an array and not empty
             let gstNo = "";
             gstno.forEach((li) => {
-                gstNo = li.gstTax;
+                gstNo = li.gstTax; 
             });
             setGst(gstNo);
         }
-    }, [gstno]); // Add gstno as a dependency
+    }, [gstno]); 
 
     const Gst = gst / 2;
 
@@ -47,6 +76,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         let customer = ""
         let totalamount = 0
         let totalcgst = 0
+        let totaligst = 0
         let advanceamount = 0
         let fullamount = 0
 
@@ -56,6 +86,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
                 totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
+                totaligst += parseInt(li.totalcalcAmount) * gst / 100
                 advanceamount += parseInt(li.customeradvance || 0)
                 fullamount += parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100 - (parseInt(li.customeradvance) || 0)
             })
@@ -65,6 +96,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         setCustomer(customer)
         setFullAmount(totalamount.toFixed(0))
         setTotalCgst(totalcgst.toFixed(0))
+        setTotalIGST(totaligst.toFixed(0))
         setAdvance(advanceamount)
         setFullTotal(fullamount.toFixed(0))
     }, [pdfData, Gst])
@@ -103,32 +135,46 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     //     return words;
     // };
     const convertToWords = (num) => {
-        if(num >= 0){
-        
-        if (!num) return '';
-        const [integerPart, decimalPart] = num?.toString().split('.');
-        let words = numWords(parseInt(integerPart));
-        // console.log(words,integerPart,'words');
-        
-        if (decimalPart) {
-            words += ' point';
-            for (let digit of decimalPart) {
-                words += ` ${numWords(parseInt(digit))}`;
+        if (num >= 0) {
+
+            if (!num) return '';
+            const [integerPart, decimalPart] = num?.toString().split('.');
+            let words = numWords(parseInt(integerPart));
+            // console.log(words,integerPart,'words');
+
+            if (decimalPart) {
+                words += ' point';
+                for (let digit of decimalPart) {
+                    words += ` ${numWords(parseInt(digit))}`;
+                }
             }
+            return words;
         }
-        return words;
-    }
     };
     const rupeestext = convertToWords(fullTotal) || '------';
     // const rupeestext = convertToWords(fullTotal);
-
+      const commonBillingState = commonStates.length > 0 ? commonStates : commonState;
+      console.log(commonBillingState,'common--------');
+      
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', width: '784px', padding: 20 }} ref={targetRef}>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px' }}>
-                    <div>
+                    {/* <div>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
                         <h2 className="organisationtext">{customerAddress}</h2>
+                    </div> */}
+                    <div>
+                        <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
+
+                        {commonBillingState.length > 0 ?  (
+                            <h2 className="organisationtext">{commonBillingState[0].address}</h2>
+                        ) : (
+                            <>
+                                <h2 className="organisationtext">{orgaddress1}</h2>
+                                <h2 className="organisationtext">{orgaddress3}</h2>
+                            </>
+                        )}
                     </div>
                     <div className="Taxinvoicediv">
                         <h3 className="Taxinvoicetext">
@@ -144,14 +190,28 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                 <div className="mobilediv">
                     <h2 className="organisationtext">Tel : {organizationdetails[0]?.telephone} Mob : {organizationdetails[0]?.contactPhoneNumber}</h2>
-                    <h2 className="organisationtext">GST : {organizationdetails[0]?.gstnumber}</h2>
+                    {commonBillingState.length > 0  ? <h2 className="organisationtext">GST : {commonBillingState[0].gstno}</h2> :
+                    <h2 className="organisationtext">GST : {organizationdetails[0]?.gstnumber}</h2> }
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px', borderBottom: '1px solid grey', paddingBottom: 5 }}>
                     <div>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{customer}</h2>
-                        <h2 className="organisationtext">{orgaddress1}</h2>
-                        <h2 className="organisationtext">{orgaddress3}</h2>
+                        {/* <h2 className="organisationtext">{orgaddress1}</h2>
+                        <h2 className="organisationtext">{orgaddress3}</h2> */}
+                        {
+                        billingGroupData.length > 0 ?
+                        <>
+                        <h2 className="organisationtext">{billingGroupData[0]?.address1}</h2>
+                        <h2 className="organisationtext">{billingGroupData[0]?.servicestation} {billingGroupData[0]?.state}</h2>
+                        <h2 className="organisationtext">GST : {billingGroupData[0]?.gstnumber}</h2>
+                        </> :
+                        <>
+                        <h2 className="organisationtext">{gstno[0]?.address1}</h2>
+                        <h2 className="organisationtext">{gstno[0]?.servicestation} {gstno[0]?.state}</h2>
+                        <h2 className="organisationtext">GST : {gstno[0]?.gstnumber}</h2>
+                        </>
+                        }
                     </div>
                     <div className="Taxinvoicediv">
                         <h3 className="Refnotext">
@@ -162,10 +222,11 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="Datediv">
-                    <p>From: <span className="Datetext">{FromDate}</span></p>
-                    <p>To: <span className="Datetext">{ToDate}</span></p>
-                </div>
+                    {/* <p>From: <span className="Datetext">{FromDate}</span></p> */}
+                    <p>From: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
 
+                    <p>To: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
+                </div>
                 <div>
                     <table className="table-ref">
                         <thead>
@@ -176,8 +237,15 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <th className="tableheadtext">Ordered By</th>
                                 <th className="tableheadtext">Reported To</th>
                                 <th className="tableheadtext">Amount</th>
-                                <th className="tableheadtext">CGST</th>
-                                <th className="tableheadtext">SGST</th>
+                                {
+                                    commonStates.length > 0 ?
+                                        <>
+                                            <th className="tableheadtext">CGST</th>
+                                            <th className="tableheadtext">SGST</th>
+                                        </>
+                                        :
+                                        <th className="tableheadtext">IGST</th>
+                                }
                                 {pdfData.some(li => parseInt(li.customeradvance) > 0) && (
                                     <th className="tableheadtext">Cus Adv</th>
                                 )}
@@ -193,11 +261,18 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <td className="tdata">{li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
                                     <td className="tdata">{li.totalcalcAmount}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
-                                    <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
-                                    {parseInt(li.customeradvance) > 0 && (
-                                        <td className="tdata">{parseInt(li.customeradvance)}</td>
-                                    )}
+                                    {
+                                        commonStates.length > 0 ?
+                                            <>
+                                                <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
+                                                <td className="tdata">{(parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0)}</td>
+                                            </>
+                                            :
+                                            <td className="tdata">{(parseInt(li.totalcalcAmount) * gst / 100).toFixed(0)}</td>
+                                    }
+                                    
+                                        <td className="tdata">{parseInt(li.customeradvance || 0)}</td>
+                                    
                                     <td className="tdata">
                                         {(parseInt(li.totalcalcAmount) + parseInt(li.totalcalcAmount) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100).toFixed(0) - parseInt(li.customeradvance || 0)}
                                     </td>
@@ -212,8 +287,14 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <td className="tdata"></td>
                                 <td className="tdata">Total</td>
                                 <td className="tdata">{fullAmount}</td>
-                                <td className="tdata">{totalCgst}</td>
-                                <td className="tdata">{totalCgst}</td>
+                                {commonStates.length > 0 ?
+                                    <>
+                                        <td className="tdata">{totalCgst}</td>
+                                        <td className="tdata">{totalCgst}</td>
+                                    </>
+                                    :
+                                    <td className="tdata">{totalIGST}</td>
+                                }
                                 {advance > 0 && (
                                     <td className="tdata">{advance}</td>
                                 )}

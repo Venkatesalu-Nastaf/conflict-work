@@ -29,8 +29,17 @@
   margin-top: 20px;
   /* border: 1px solid #ccc; */
   /* padding: 20px; */
-  width: fit-content;
+  /* width: fit-content; */
+  height: 400px;
+  width: 100%;
   background-color: transparent !important;
+}
+.table-FuelRate {
+  background-color: var(--glass);
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
 }
 
 @media screen and (max-width: 950px) {

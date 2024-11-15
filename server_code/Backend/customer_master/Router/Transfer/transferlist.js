@@ -32,6 +32,37 @@ router.get('/payment-detail', (req, res) => {
     return res.status(200).json(result);
   });
 });
+
+// router.get('/statedetails',(req,res)=>{
+//   const { state } = req.query;
+//   db.query('SELECT * FROM stationcreation WHERE state = ? ', [state], (err, result) => {
+//     if(err){
+//       return res.status(500).json({ error: 'Failed to retrieve state from MySQL' });
+//     }
+    
+//       console.log(result, 'results fromn the state')
+//       return res.status(200).json(result);
+      
+//   })
+// })
+router.get('/statedetails', (req, res) => {
+  const { state } = req.query; // Get the state from the query parameters
+  db.query('SELECT * FROM stationcreation ', (err, result) => {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to retrieve state from MySQL' });
+      }
+
+      console.log(result, 'results from the state'); // Log the results
+
+      if (result.length === 0) {
+          // If no results were found for the given state
+          return res.status(404).json({ error: 'No records found for this state' });
+      }
+
+      return res.status(200).json(result); // Send back the results if found
+  });
+});
+
 // newww one-----------------------------------------
 router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
@@ -406,31 +437,31 @@ router.post('/insertTransferListTrip', (req, res) => {
   });
 });
 router.post('/transferlistdatatrip', (req, res) => {
-  const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id } = req.body;
+  const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id,Stations,State } = req.body;
 
   if (!Array.isArray(Trip_id)) {
     return res.status(400).json({ error: 'Trip_id should be an array' });
   }
 
-  const sqlquery = 'INSERT INTO Transfer_list(Status, Billdate, Organization_name, Trip_id, FromDate, EndDate, Trips, Amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const sqlquery = 'INSERT INTO Transfer_list(Status, Billdate, Organization_name, Trip_id, FromDate, EndDate, Trips, Amount,Stations,State) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)';
   const idString = Trip_id.join(',');
 
   // Insert into Transfer_list table
-  db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount], (err, result) => {
+  db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount,Stations,State], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert data into MySQL' });
     }
 
     // Update tripsheet to set Billed_Status
-    const updateQuery = "UPDATE tripsheet SET  status='Billed',Billed_Status = 'Transfer_Closed' WHERE tripid IN (?)";
+    const updateQuery = "UPDATE tripsheet SET  status='Billed',Billed_Status = 'Transfer_Closed' WHERE tripid IN (?) ";
     db.query(updateQuery, [Trip_id], (err, updateResult) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to update Billed_Status in MySQL' });
       }
 
       // Fetch Grouptrip_id from Transfer_list
-      const groupidquery = `SELECT Grouptrip_id FROM Transfer_list WHERE Trip_id IN (?)`;
-      db.query(groupidquery, [idString], (error, groupResult) => {
+      const groupidquery = `SELECT Grouptrip_id FROM Transfer_list WHERE Trip_id IN (?) AND Stations = ?`;
+      db.query(groupidquery, [idString,Stations], (error, groupResult) => {
         if (error) {
           return res.status(500).json({ error: 'Failed to fetch Grouptrip_id from MySQL' });
         }
@@ -499,7 +530,7 @@ router.get('/getparticulartransfer_list', (req, res) => {
   // Build the final query
   const sqlquery = `SELECT Grouptrip_id FROM Transfer_list WHERE ${conditions}`;
 
-  // Execute the query with tripidArray
+  // Execute the query with tripidArray     
   db.query(sqlquery, tripidArray, (err, result) => {
     if (err) {
       console.log(err, 'error');
@@ -544,7 +575,7 @@ router.get('/getTripIdFromTransferList', (req, res) => {
   if (!groupid) {
     return res.status(400).json({ error: 'Group ID is required' });
   }
-  const sqlquery = `SELECT Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate FROM Transfer_list WHERE Grouptrip_id = ?`;
+  const sqlquery = `SELECT Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate,State FROM Transfer_list WHERE Grouptrip_id = ?`;
 
   db.query(sqlquery, [groupid], (error, result) => {
     if (error) {
@@ -561,16 +592,69 @@ router.get('/getTripIdFromTransferList', (req, res) => {
 });
 
 
-router.get('/gettransfer_list', (req, res) => {
-  db.query('SELECT * FROM Transfer_list', (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
-    }
-    return res.status(200).json(result);
 
-  });
+router.get('/gettransfer_list/:userdata', (req, res) => {
+  const {userdata} = req.params;
+ //  console.log(filteredStationNames,"jjj")
+ 
+  db.query("SELECT Stationname FROM usercreation WHERE username = ?", [userdata], (err, result) => {
+   if (err) {
+     return res.status(500).json({ error: "Failed to fetch data" });
+   }
+ 
+   if (result && result.length > 0) {
+ 
+     const station = result[0]?.Stationname;
+     const stationArr = station.split(',')
+ 
+     const data = stationArr.map(el => ({ Stationname: el }))
+ 
+     if (station?.toLowerCase() === "all" || stationArr.includes("ALL")) {
+         db.query('SELECT * FROM Transfer_list ', (err, result) => {
+           if (err) {
+             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+           }
+           return res.status(200).json(result);
+       
+         })
+       }
+       else {
+        
+         db.query('SELECT * FROM Transfer_list where Stations IN (?)',[stationArr],(err, result) => {
+           if (err) {
+             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+           }
+           return res.status(200).json(result);
+       
+         });
+       
+       }
+     }
+     else {
+       return res.status(200).json([]);
+     }
+   
+   // db.query('SELECT * FROM Transfer_list', (err, result) => {
+   //   if (err) {
+   //     return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+   //   }
+   //   return res.status(200).json(result);
+ 
+   // });
+ 
+ })
+ });
+ 
+// router.get('/gettransfer_list', (req, res) => {
+//   db.query('SELECT * FROM Transfer_list', (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+//     }
+//     return res.status(200).json(result);
 
-})
+//   });
+
+// })
 
 // update remove list in Transferlist
 router.get('/EmptyRowDelete', (req, res) => {
@@ -954,18 +1038,18 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
   });
 });
 
-
-
-
 router.get('/gettransfer_listdatas', (req, res) => {
-  const { Status, Organization_name, FromDate, EndDate } = req.query;
-  // console.log(Status,decodeURIComponent(Organization_name), FromDate, EndDate,"pppp")
+  const { Status, Organization_name, FromDate, EndDate,Station,userastationdata } = req.query;
+  console.log(Status,decodeURIComponent(Organization_name), FromDate, EndDate,"pppp",userastationdata,Station)
   const orgName =decodeURIComponent(Organization_name)
 
- 
-  // const { Status  } = req.query;
+  // console.log(data,"ll")
+
+ if(Station === "all" || Station === "All")
+{  // const { Status  } = req.query;
+  console.log(Station,"SSALLLL")
   if (Status === "all") {
-    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [orgName, FromDate, EndDate], (err, result) => {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Stations IN (?)', [orgName, FromDate, EndDate,userastationdata], (err, result) => {
       // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
       // 
       if (err) {
@@ -976,7 +1060,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
     });
   }
   else if (Status === "billed") {
-    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations IN (?)', [orgName, FromDate, EndDate,Status,userastationdata], (err, result) => {
 
       if (err) {
         // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
@@ -1002,7 +1086,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
   //   });
   // }
   else if (Status === "notbilled") {
-    db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+    db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND  Status = ? AND  Stations IN (?)', [orgName, FromDate, EndDate,Status,userastationdata], (err, result) => {
       
       if (err) {
         console.error(err); // Log the error for debugging
@@ -1016,11 +1100,135 @@ router.get('/gettransfer_listdatas', (req, res) => {
       return res.status(200).json({ result, message: 'Listed Successfully' });
     });
   }
-  
+}
+else  if (Station !== "all" || Station !== "All"){
+  console.log("s",Station)
+  if (Status === "all") {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Stations = ?', [orgName, FromDate, EndDate,Station], (err, result) => {
+      // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
+      // 
+      if (err) {
+        return res.status(500).json({message: 'Failed to retrieve to data'});
+      }
+      return res.status(200).json(result);
+
+    });
+  }
+  else if (Status === "billed") {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations = ?', [orgName, FromDate, EndDate, Status,Station], (err, result) => {
+
+      if (err) {
+        // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        return res.status(500).json({message: 'Failed to retrieve to data' });
+      }
+      
+      return res.status(200).json(result);
+
+    });
+  }
+  // else if (Status === "notbilled") {
+  //   db.query('SELECT * FROM Transfer_list1 where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+
+  //     if (err) {
+  //       // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+  //       console.log(orgName, FromDate, EndDate, Status);
+  //       return res.status(500).json({message: 'Failed to retrieve to data' });
+       
+  //     }
+  //     //return res.status(200).json(result);
+  //     return res.status(200).json({ result, message: 'Listed Sucessfully' });
+
+
+  //   });
+  // }
+  else if (Status === "notbilled") {
+    db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations = ?', [orgName, FromDate, EndDate, Status,Station], (err, result) => {
+      
+      if (err) {
+        console.error(err); // Log the error for debugging
+        return res.status(500).json({ message: 'Failed to retrieve data' });
+      }
+      
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'No data found' });
+      }
+      
+      return res.status(200).json({ result, message: 'Listed Successfully' });
+    });
+  }
+
+}
 
  
 
 })
+
+
+
+// router.get('/gettransfer_listdatas', (req, res) => {
+//   const { Status, Organization_name, FromDate, EndDate } = req.query;
+//   // console.log(Status,decodeURIComponent(Organization_name), FromDate, EndDate,"pppp")
+//   const orgName =decodeURIComponent(Organization_name)
+
+ 
+//   // const { Status  } = req.query;
+//   if (Status === "all") {
+//     db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [orgName, FromDate, EndDate], (err, result) => {
+//       // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
+//       // 
+//       if (err) {
+//         return res.status(500).json({message: 'Failed to retrieve to data'});
+//       }
+//       return res.status(200).json(result);
+
+//     });
+//   }
+//   else if (Status === "billed") {
+//     db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+
+//       if (err) {
+//         // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+//         return res.status(500).json({message: 'Failed to retrieve to data' });
+//       }
+//       return res.status(200).json(result);
+
+//     });
+//   }
+//   // else if (Status === "notbilled") {
+//   //   db.query('SELECT * FROM Transfer_list1 where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+
+//   //     if (err) {
+//   //       // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+//   //       console.log(orgName, FromDate, EndDate, Status);
+//   //       return res.status(500).json({message: 'Failed to retrieve to data' });
+       
+//   //     }
+//   //     //return res.status(200).json(result);
+//   //     return res.status(200).json({ result, message: 'Listed Sucessfully' });
+
+
+//   //   });
+//   // }
+//   else if (Status === "notbilled") {
+//     db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ?', [orgName, FromDate, EndDate, Status], (err, result) => {
+      
+//       if (err) {
+//         console.error(err); // Log the error for debugging
+//         return res.status(500).json({ message: 'Failed to retrieve data' });
+//       }
+      
+//       if (result.length === 0) {
+//         return res.status(404).json({ message: 'No data found' });
+//       }
+      
+//       return res.status(200).json({ result, message: 'Listed Successfully' });
+//     });
+//   }
+  
+
+ 
+
+// })
 
 
 
@@ -1103,6 +1311,131 @@ router.get('/togetSelectTripsheetDetails', (req, res) => {
       return res.status(500).send({ error: 'Database query failed' });
     }
     res.status(200).send(results);
+  });
+});
+router.get('/customerdatamothergroup/:customers', (req, res) => {
+  const {customers} = req.params;
+
+
+  const query = 'SELECT * FROM customers where customer = ?';
+  const sql1='SELECT state FROM customers where customer = ?';
+
+  db.query(query, [customers], (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send({ error: 'Database query failed' });
+    }
+    
+    if(results.length > 0){
+      const data = results[0].billingGroup || null;
+    if(data === null){
+      const datas =results[0].state || null ;
+        return  res.status(200).json(datas);
+    }
+    else{
+      db.query(sql1, [data], (err, results1) => {
+        if (err) {
+          console.log(err,"sql1")
+          return res.status(500).send({ error: 'Database query failed' });
+        }
+        const datas =results1[0].state || null ;
+        return  res.status(200).json(datas);
+    })
+    }
+  }
+  else{
+  return  res.status(500).json([]);
+  }
+
+    // res.status(200).send(results);
+  });
+});
+
+
+
+router.get('/customerdatgst/:customers', (req, res) => {
+  const {customers} = req.params;
+
+
+  const query = 'SELECT * FROM customers where customer = ?';
+  const sql1='SELECT state,gstTax,address1,gstnumber FROM customers where customer = ?';
+  // const sql2='SELECT * FROM stationcreation where state = ? and  gstno is not null'
+  const sql2 = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+
+  // const sql3 = 'SELECT organizationname,addressLine1,contactPhoneNumber,gstnumber from organizationdetails';
+
+  db.query(query, [customers], (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send({ error: 'Database query failed' });
+    }
+    
+    if(results.length > 0){
+      const data = results[0].billingGroup || null;
+    if(data === null){
+      const datas =results[0].state || null ;
+      db.query(sql2, [datas], (err, results3) => {
+        if (err) {
+          console.log(err,"sql1")
+          return res.status(500).send({ error: 'Database query failed' });
+        }
+        if(results3.length > 0){
+             const resultgst =results[0].gstTax || 0
+             const resultaddress =results[0].address1|| null
+             const resultgstnumber =results[0].gstnumber|| null
+             
+          return  res.status(200).json({data:resultgst,data2:resultaddress,data3:resultgstnumber,otherdata:"InStations"});
+        }
+        else{
+        
+          const resultgst1 =results[0].gstTax || 0
+          const resultaddress =results[0].address1|| null
+          const resultgstnumber =results[0].gstnumber|| null
+        return  res.status(200).json({data:resultgst1,data2:resultaddress,data3:resultgstnumber,otherdata:"OutStations"});
+        
+        
+      }
+      })
+    
+    }
+    else{
+      db.query(sql1, [data], (err, results1) => {
+        if (err) {
+          console.log(err,"sql1")
+          return res.status(500).send({ error: 'Database query failed' });
+        }
+        const datas =results1[0].state || null ;
+        console.log(results1,"lll")
+        console.log(datas)
+        if(results1.length > 0){
+          db.query(sql2, [datas], (err, result5) => {
+            if (err) {
+              console.log(err,"sql1")
+              return res.status(500).send({ error: 'Database query failed' });
+            }
+            if(result5.length > 0){
+              const resultgst =results1[0].gstTax || 0
+              const resultaddress =results1[0].address1|| null
+              const resultgstnumber =results1[0].gstnumber|| null
+              return  res.status(200).json({data:resultgst,data2:resultaddress,data3:resultgstnumber,otherdata:"InStations"});
+            }
+            else{
+              const resultgst1 =results1[0].gstTax || 0
+              const resultaddress =results1[0].address1|| null
+              const resultgstnumber =results1[0].gstnumber|| null
+              return  res.status(200).json({data:resultgst1,data2:resultaddress,data3:resultgstnumber,otherdata:"OutStations"});
+           }
+          })
+        }
+        // return  res.status(200).json(datas);
+    })
+    }
+  }
+  else{
+  return  res.status(500).json([]);
+  }
+
+    // res.status(200).send(results);
   });
 });
 

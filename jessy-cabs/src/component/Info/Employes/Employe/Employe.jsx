@@ -49,6 +49,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import { CircularProgress } from '@mui/material';
+
 import { APIURL } from "../../../url";
 
 // import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -111,6 +113,8 @@ const Employe = () => {
     setErrorMessage,
     deletefile,
     handlecheckbox,
+    loading,
+    setLoading
 
   } = useEmployee();
 
@@ -581,6 +585,7 @@ const Employe = () => {
               <Box
                 sx={{
                   height: 400, // Adjust this value to fit your needs
+                  position: 'relative',
                   '& .MuiDataGrid-virtualScroller': {
                     '&::-webkit-scrollbar': {
                       width: '8px', // Adjust the scrollbar width here
@@ -601,6 +606,18 @@ const Employe = () => {
                   },
                 }}
               >
+                 {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                 <DataGrid
                   className="Scroll-Style"
                   rows={rows}
@@ -608,6 +625,7 @@ const Employe = () => {
                   onRowClick={handleRowClick}
                   pageSize={5}
                 />
+                            )}
               </Box>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog} >

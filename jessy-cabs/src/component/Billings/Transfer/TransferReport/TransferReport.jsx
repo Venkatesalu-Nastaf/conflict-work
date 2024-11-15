@@ -26,7 +26,7 @@ import { Box } from '@mui/material';
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-
+import axios from 'axios';
 //for pdf
 
 //dialog box
@@ -45,7 +45,7 @@ import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
 import { PiMoneyBold } from "react-icons/pi";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import {  CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { GiConsoleController } from 'react-icons/gi';
 
 export const PDFbill = [
@@ -132,7 +132,10 @@ const TransferReport = ({ stationName }) => {
     billedStatusCheck,
     setBilledStatusCheck,
     loading,
-    setLoading
+    setLoading,
+    billingGroupDetails,
+    setBillingGroupDetails,
+    setServiceStation
   } = useTransferreport();
   const {
     handleExcelDownload, error1, errormessage1,
@@ -147,6 +150,9 @@ const TransferReport = ({ stationName }) => {
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
   const [billId, setBillId] = useState()
+  const [stateDetails, setStateDetails] = useState([]);
+  const [comparisonResult, setComparisonResult] = useState(null);
+
   // useEffect(() => {
   //   setSelectedImageorganisation(sharedData)
   // }, [sharedData])
@@ -159,16 +165,16 @@ const TransferReport = ({ stationName }) => {
 
   const CustomNoRowsOverlay = () => (
     <Box
-        sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-        }}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+      }}
     >
-        <div></div>
+      <div></div>
     </Box>
-);
+  );
 
 
 
@@ -178,12 +184,11 @@ const TransferReport = ({ stationName }) => {
 
         if (!customer) return
 
-        const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
+        const response = await axios.get(`${apiUrl}/customeraddress/${customer}`);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const addressdetail = await response.json();
+        const addressdetail = await response.data;
+        console.log(addressDetails, 'addressdetails');
+
         setAddressDetails(addressdetail);
       } catch (err) {
         console.error('Error fetching customer address:', err);
@@ -191,20 +196,54 @@ const TransferReport = ({ stationName }) => {
     };
 
     fetchdata();
-  }, [apiUrl, customer]);
+
+  }, [apiUrl, customer, groupTripid, pdfBillList]);
+
+
+  useEffect(() => {
+    const fetchStateDetails = async () => {
+      try {
+        // const response = await fetch('http://localhost:8081/statedetails')API URL
+        const response = await fetch(`${apiUrl}/statedetails`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch state details');
+        }
+
+        const data = await response.json();
+        setStateDetails(data); // Save the retrieved state details in state
+
+        console.log(data, 'State details fetched'); // Log the fetched data
+      } catch (err) {
+        setError(err.message); // Handle errors
+        // console.error('Error fetching state details:', err); // Log the error for debugging
+      }
+    };
+
+
+
+    fetchStateDetails(); // Call the fetch function when the component mounts
+
+  }, [customer]); // Empty dependency array ensures this runs once on mount
+
+
 
 
   useEffect(() => {
     const fetchdata = async () => {
       try {
         const response = await fetch(`${apiUrl}/organisationpdfdata`);
-        console.log(response,'response');
-        
+        // console.log(response,'response');
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const organizationdetails = await response.json();
         setOrganisationDetail(organizationdetails)
+
+        // console.log(organizationdetails,"Organization detauillsssss")
+
 
       } catch (err) {
         console.error('Error fetching customer address:', err);
@@ -212,10 +251,11 @@ const TransferReport = ({ stationName }) => {
     };
 
     fetchdata();
+
   }, [apiUrl, customer]);
   useEffect(() => {
     const fetchData = async () => {
-      
+
 
       try {
         const tripid = localStorage.getItem("selectedtripsheetid");
@@ -229,8 +269,8 @@ const TransferReport = ({ stationName }) => {
 
         const response = await fetch(
           `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripID}`);
-           
-          
+
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -246,12 +286,85 @@ const TransferReport = ({ stationName }) => {
   }, [apiUrl, billGenerate, misformat])
 
   useEffect(() => {
+    if (addressDetails[0]?.billingGroup !== "") {
+      const fetchData = async () => {
+        const billingGroupCustomer = addressDetails[0]?.billingGroup
+        console.log('GroupBillCustomer', billingGroupCustomer);
+        try {
+          const response = await axios.get(`${apiUrl}/gstdetails/${billingGroupCustomer}`);
+          console.log(response.data, 'common state response data');
+          setBillingGroupDetails(response.data)
+        }
+        catch (error) {
+          console.log(error, 'error')
+
+        }
+      }
+      fetchData()
+    }
+  }, [apiUrl, groupTripid, pdfBillList, addressDetails, billGenerate])
+
+  useEffect(() => {
     if (pdfBillList === "PDF 1" || pdfBillList === "PDF 2") {
       setBillGenerate(!billGenerate)
     }
   }, [pdfBillList])
 
+
   const handleDownloadPdf = async () => {
+
+    console.log(addressDetails[0]?.state, 'address details of ')
+    if (groupTripid === "" || groupTripid === null || groupTripid === undefined) {
+      setError(true)
+      setErrorMessage(" Group Trip ID is empty")
+      return
+    }
+    if (invoiceno === "" || invoiceno === null || invoiceno === undefined) {
+      setError(true)
+      setErrorMessage("Invoice No is empty")
+      return
+    }
+    if (tripData === " ") {
+      setError(true)
+      setErrorMessage("Data's Empty")
+      return
+    }
+
+    // const commonState = stateDetails.find(item => 
+    //     item.state === addressDetails[0].state
+
+
+    // );
+    // console.log(stateDetails,"State details ")
+    // console.log(commonState, "Common State");
+    // console.log(commonState.length, "Common State Length");
+
+    //   const commonState = stateDetails?.find(item => 
+    //     item.state === addressDetails[0]?.state;
+    //     setComparisonResult(commonState)
+    // );
+
+    // const commonState = stateDetails?.find(item => item.state === addressDetails[0]?.state);
+    console.log(billingGroupDetails, 'common state====');
+    console.log(stateDetails, 'common all state');
+
+
+    const commonStates = stateDetails?.filter(item => item.state === addressDetails[0]?.state) || [];
+    const groupBillingMatchState = stateDetails?.filter(item => item.state === billingGroupDetails[0]?.state) || [];
+    console.log(commonStates, 'common all state', groupBillingMatchState, addressDetails);
+    const commonState = billingGroupDetails.length > 0 ? groupBillingMatchState : commonStates
+
+    console.log(commonState, 'common state', 'common state ', organizationsdetail1);
+    console.log(groupBillingMatchState, 'groupmatching', commonStates);
+
+    // console.log(stateDetails, "State details");
+    // console.log(commonState, "Common State",commonState.length);
+
+    // Check if commonState exists and log its "length"
+    // console.log(commonState ? 1 : 0, "Common State Length");
+
+
+
     if (!pdfBillList) {
       setError(true)
       setErrorMessage('Select PDF Format')
@@ -259,18 +372,30 @@ const TransferReport = ({ stationName }) => {
     }
 
     else if (pdfBillList === "PDF 1") {
+      if (invoicedata === "" || invoicedata === null || invoicedata === undefined) {
+        setError(true)
+        setErrorMessage("Invoice Data is empty")
+        return
+      }
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} />).toBlob();
       saveAs(blob, fileName);
-      // localStorage.removeItem("selectedcustomerdata");
-      // localStorage.removeItem("selectedtripsheetid");
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
+      // console.log( commonState,'Address for output')
+      setComparisonResult(commonState);
     }
     else if (pdfBillList === "PDF 2") {
+      if (invoicedata === "" || invoicedata === null || invoicedata === undefined) {
+        setError(true)
+        setErrorMessage("Invoice Data is empty")
+        return
+      }
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} />).toBlob();
+      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} />).toBlob();
       saveAs(blob, fileName);
-      // localStorage.removeItem("selectedcustomerdata");
-      // localStorage.removeItem("selectedtripsheetid");
+      localStorage.removeItem("selectedcustomerdata");
+      localStorage.removeItem("selectedtripsheetid");
     }
 
   }
@@ -480,14 +605,26 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-                  <div className="icone">
+                  {/* <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
-                  </div>
-                  <Autocomplete
+                  </div> */}
+
+                  <TextField
+                    size="small"
+                    id="id"
+                    className='full-width'
+                    label="State"
+                    // value={dayjs(endDate).format('DD-MM-YYYY')}
+                    value={servicestation}
+                    // onChange={(e)=>setServiceStation(e.target.value)}
+                    name="State"
+                    autoComplete='off'
+                  />
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     className='full-width'
-                    freeSolo
+                    freeSolos
                     size="small"
                     value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
                     options={stationName.map((option) => ({
@@ -496,10 +633,10 @@ const TransferReport = ({ stationName }) => {
                     onChange={(event, value) => handleserviceInputChange(event, value)}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                        <TextField {...params} label="State" inputRef={params.inputRef} />
                       );
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="input input-transfer-report" >
                   <div className="icone">
@@ -721,59 +858,59 @@ const TransferReport = ({ stationName }) => {
                 />
               </Box> */}
 
-             {/* code with loading  */}
-             <Box
-    sx={{
-        height: 400,
-        position: 'relative', // Make Box relative to position the spinner
-        '& .MuiDataGrid-virtualScroller': {
-            '&::-webkit-scrollbar': {
-                width: '8px',
-                height: '8px',
-            },
-            '&::-webkit-scrollbar-track': {
-                backgroundColor: '#f1f1f1',
-            },
-            '&::-webkit-scrollbar-thumb': {
-                backgroundColor: '#457cdc',
-                borderRadius: '20px',
-                minHeight: '60px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-                backgroundColor: '#3367d6',
-            },
-        },
-    }}
->
-    {loading && (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 1000, // Ensure the spinner is above other content
-            }}
-        >
-            <CircularProgress />
-        </Box>
-    )}
-    <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-            setRowSelectionModel(newRowSelectionModel);
-            handleRowSelection(newRowSelectionModel);
-        }}
-        checkboxSelection
-        disableRowSelectionOnClick
-        selectionModel={rowSelectionModel}
-        components={{
-          NoRowsOverlay: CustomNoRowsOverlay,
-      }}
-    />
-</Box>
+              {/* code with loading  */}
+              <Box
+                sx={{
+                  height: 400,
+                  position: 'relative', // Make Box relative to position the spinner
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px',
+                      height: '8px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                      minHeight: '60px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                {loading && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      zIndex: 1000, // Ensure the spinner is above other content
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                )}
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={5}
+                  onRowSelectionModelChange={(newRowSelectionModel) => {
+                    setRowSelectionModel(newRowSelectionModel);
+                    handleRowSelection(newRowSelectionModel);
+                  }}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                  selectionModel={rowSelectionModel}
+                  components={{
+                    NoRowsOverlay: CustomNoRowsOverlay,
+                  }}
+                />
+              </Box>
 
 
             </div>

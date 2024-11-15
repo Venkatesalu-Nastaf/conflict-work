@@ -446,12 +446,13 @@
 }
 @media screen and (max-width: 1300px) {
   .menu-section-scroll{
-    height: 400px !important;
+    height: 85% !important;
     overflow-y: scroll;
   } 
 }
 .menu-section-scroll{
-  height: 580px;
+  /* height: 580px; */
+  height: 85%;
   overflow-y: scroll;
 }  
 

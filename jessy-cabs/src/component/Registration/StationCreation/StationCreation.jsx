@@ -6,8 +6,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
-
+import { Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { UnderGroup, states, Customertype, Select,stateToStations,allStations } from "../Customer/Customerdata";
+import { CircularProgress } from '@mui/material';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -49,6 +50,7 @@ const columns = [
   { field: "stationid", headerName: "Station_Id", width: 80 },
   { field: "gstno", headerName: "GST No", width: 130 },
   { field: "Stationname", headerName: "Station_Name", width: 120 },
+  { field: "state", headerName: "State", width: 120 },
   { field: "active", headerName: "Active", width: 60 },
   { field: "shortname", headerName: "Station", width: 100 },
   { field: "ownbranch", headerName: "Own Branch", width: 100 },
@@ -79,7 +81,12 @@ const StationCreation = () => {
     hidePopup,
     isEditMode,
     handleEdit, cerendentialdata,
-    handleChangeuniquestation
+    handleChangeuniquestation,
+    getMainBrachDetails,
+    loading,
+    setLoading,
+    getStateFromStation,
+    handleStationChange, selectedStation, setSelectedStation,selectedState, setSelectedState,handleStateChange
   } = useStationCreation();
 
   useEffect(() => {
@@ -87,8 +94,9 @@ const StationCreation = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  
 
-
+  
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
@@ -127,26 +135,139 @@ const StationCreation = () => {
                   />
 
                 </div>
-              
+
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                       </div>
-                      <TextField
+                      {/* <Autocomplete
+  fullWidth
+  size="small"
+  id="state-autocomplete"
+  freeSolo
+  value={selectedCustomerData?.Stationname || book.Stationname || ""}
+  options={(allStations || []).map((option) => ({
+    label: option, // Ensure `option` is a string, or modify if it's an object
+  }))}
+  filterOptions={(options, state) => {
+    const inputValue = state.inputValue.trim().toLowerCase();
+    if (!inputValue) {
+      return []; // Show no options when input is empty
+    }
+
+    return options.filter(option => 
+      option.label && option.label.toLowerCase().includes(inputValue)
+    );
+  }}
+  onChange={(event, value) => handleChange({
+    target: { name: "Stationname", value: value ? value.label : "" },
+  })}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      margin="normal"
+      size="small"
+      id="Station-name"
+      label="Station Name"
+      name="Stationname"
+      className="full-width"
+      autoComplete="new-password"
+    />
+  )}
+/> */}
+
+
+{/* <Autocomplete
+        fullWidth
+        size="small"
+        id="station-autocomplete"
+        freeSolo
+        value={selectedStation || selectedCustomerData?.Stationname || book.Stationname || ""}
+        options={(allStations || []).map((option) => ({
+          label: option,
+        }))}
+        filterOptions={(options, state) => {
+          const inputValue = state.inputValue.trim().toLowerCase();
+          return options.filter(option =>
+            option.label && option.label.toLowerCase().includes(inputValue)
+          );
+        }}
+        onChange={handleStationChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            margin="normal"
+            size="small"
+            label="Station Name"
+            name="Stationname"
+            className="full-width"
+            autoComplete="new-password"
+          />
+        )}
+      /> */}
+
+<Autocomplete
+  fullWidth
+  size="small"
+  id="station-autocomplete"
+  freeSolo
+  value={selectedStation || selectedCustomerData?.Stationname || book.Stationname || ""}
+  options={(allStations || []).map((option) => ({
+    label: option,
+  }))}
+  // filterOptions={(options, state) => {
+  //   const inputValue = state.inputValue.trim().toLowerCase();
+  //   return options.filter(option =>
+  //     option.label && option.label.toLowerCase().includes(inputValue)
+  //   );
+   
+  // }}
+  filterOptions={(options, state) => {
+    const inputValue = state.inputValue.trim().toLowerCase();
+
+    // Filter based on input value - case-insensitive
+    return options.filter(option => {
+      const label = option.label.toLowerCase();
+      
+      // Match either the full label or a partial match at the start
+      return label.includes(inputValue); // Allow partial matching
+    });
+  }}
+  onChange={handleStationChange}  // Ensure `handleStationChange` is properly updating state
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      margin="normal"
+      size="small"
+      label="Station Name"
+      name="Stationname"
+      className="full-width"
+      autoComplete="new-password"
+    />
+  )}
+/>
+
+
+
+
+
+
+
+                      {/* <TextField
                         margin="normal"
                         size="small"
                         id="Station-name"
                         label="Station Name"
                         name="Stationname"
-                         className='full-width'
+                        className='full-width'
                         value={selectedCustomerData?.Stationname || book.Stationname}
                         autoComplete="new-password"
                         // onChange={handleChange}
                         onChange={handleChangeuniquestation}
 
-                      />
+                      /> */}
                     </span>
                     <span style={{ textAlign: 'center' }}>
                       <span style={{ color: "red" }}>{cerendentialdata ? `StationName Already Exist` : ""}</span>
@@ -155,7 +276,7 @@ const StationCreation = () => {
                 </div>
 
 
-                <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
+                {/* <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
@@ -163,14 +284,74 @@ const StationCreation = () => {
                     margin="normal"
                     size="small"
                     id="short-name"
-                    label="Short Name"
+                    label="State Name"
                     sx={{ m: 1, width: "200ch" }}
                     name="shortname"
                     value={selectedCustomerData?.shortname || book.shortname}
                     autoComplete="new-password"
                     onChange={handleChange}
                   />
+                </div> */}
+                {/* <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="state-autocomplete"
+                    freeSolo
+                    value={selectedCustomerData?.state || book.state}
+                    options={states.map((option) => ({
+                      label: option.state,
+                    }))}
+                    // getOptionLabel={(option) => option.label || ""}
+                    onChange={(event, value) => handleChange({
+                      target: { name: "state", value: value ? value.label : "" }
+                    })}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="State Name"
+                        margin="normal"
+                        size="small"
+                        sx={{ m: 1, width: "200px" }}
+                        name="state"
+                        autoComplete="new-password"
+                        value={selectedCustomerData?.state || book?.state}
+                        onChange={handleChange}
+                      />
+                    )}
+                  />
+                </div> */}
+                     <div className="input input-station-creation" style={{ paddingRight: '15px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
+                  </div>
+                 
+
+<Autocomplete
+  fullWidth
+  size="small"
+  id="state-autocomplete"
+  freeSolo
+  value={selectedState}
+  options={Object.keys(stateToStations)}
+  onChange={handleStateChange}  // Ensure `handleStateChange` updates `selectedState`
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="State"
+      margin="normal"
+      size="small"
+      name="state"
+      autoComplete="new-password"
+    />
+  )}
+/>
+
                 </div>
+
                 <div className='input' style={{ paddingRight: '15px' }}>
                   <div className='icone'>
                     <AddHomeWorkIcon color='action' />
@@ -180,11 +361,12 @@ const StationCreation = () => {
                     className='textarea-input'
                     name="address"
                     rows="3"
+                    disabled={getMainBrachDetails.length > 0}
                     value={selectedCustomerData?.address || book.address}
                     onChange={handleChange}
                     placeholder="Address"
                   />
-               
+
                 </div>
 
                 <div className='input' style={{ paddingRight: '15px' }}>
@@ -195,8 +377,9 @@ const StationCreation = () => {
                     margin="normal"
                     size="small"
                     id="gstno"
-                    label="GST No"
+                    label=" Main Branch GST No"
                     name="gstno"
+                    disabled={getMainBrachDetails.length > 0}
                     value={selectedCustomerData?.gstno || book.gstno}
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -346,7 +529,7 @@ const StationCreation = () => {
             </Box>
             <div className="stationcreation-table-container">
               <div className="table-stationcreation">
-               
+
 
                 <Box
                   sx={{
@@ -371,17 +554,30 @@ const StationCreation = () => {
                     },
                   }}
                 >
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    onRowClick={handleRowClick}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                      },
-                    }}
-                    pageSizeOptions={[5, 10]}
-                  />
+                  {loading ? (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    >
+                      <CircularProgress />
+                    </Box>
+                  ) : (
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      onRowClick={handleRowClick}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                    />
+                  )}
                 </Box>
               </div>
             </div>

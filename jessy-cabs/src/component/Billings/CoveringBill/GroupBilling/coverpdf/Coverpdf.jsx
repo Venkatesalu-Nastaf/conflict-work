@@ -17,7 +17,7 @@ const PrintableInvoice = ({ tripData, totalValue, roundedAmount, sumTotalAndRoun
                             <h1>Tax Invoice</h1>
                         </div>
                     </div>
-                    <div className="header-title">
+                    <div className="header-title"> 
                         <div className="left-title">
                             <dl className="dl-horizontal">
                                 <dt>Customer</dt>

@@ -9,12 +9,16 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { Box } from '@mui/material';
-
+import { CircularProgress } from '@mui/material';
 const FuelRate = () => {
     // API start
     const [selectedState, setSelectedState] = useState(StationName[0].optionvalue);
     const [fuelData, setFuelData] = useState({});
     const currentDate = new Date().toLocaleDateString();
+
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState({});
+
     const handleStateChange = (event) => {
         const state = event.target.value;
         setSelectedState(state);
@@ -25,7 +29,32 @@ const FuelRate = () => {
         }
     };
 
+    // const fetchFuelPrices = (state) => {
+    //     const options = {
+    //         method: 'GET',
+    //         url: `https://daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com/v1/fuel-prices/today/india/${state}`,
+    //         headers: {
+    //             'X-RapidAPI-Key': '35105408abmsh28530e641922d31p15534djsnae867e807eb8',
+    //             'X-RapidAPI-Host': 'daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com'
+    //         }
+    //     };
+
+    //     axios.request(options)
+    //         .then(response => {
+    //             const fuelData = response.data.fuel;
+    //             const { petrol, diesel } = fuelData;
+    //             setFuelData({ petrol, diesel });
+    //             console.log(fuelData,'fuel data for grid ')
+    //         })
+    //         .catch();
+    // };
+
+    // const capitalizeFirstLetter = (string) => {
+    //     return string.charAt(0).toUpperCase() + string.slice(1);
+    // };
+
     const fetchFuelPrices = (state) => {
+        setLoading(true); // Set loading to true at the start of the request
         const options = {
             method: 'GET',
             url: `https://daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com/v1/fuel-prices/today/india/${state}`,
@@ -40,8 +69,18 @@ const FuelRate = () => {
                 const fuelData = response.data.fuel;
                 const { petrol, diesel } = fuelData;
                 setFuelData({ petrol, diesel });
+                // console.log(fuelData, 'fuel data for grid');
             })
-            .catch();
+            .catch(error => {
+                console.error("Error fetching fuel prices:", error);
+                setLoading(false);
+                if (error.message === 'Network Error') {
+                    setErrorMessage("Check network connection.");
+                  } 
+            })
+            .finally(() => {
+                setLoading(false); 
+            });
     };
 
     const capitalizeFirstLetter = (string) => {
@@ -115,7 +154,9 @@ const FuelRate = () => {
 
                         <Box
                             sx={{
-                                height: 400, // Adjust this value to fit your needs
+                                height: 400, 
+                                width:900,
+                                position: 'relative',
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {
                                         width: '8px', // Adjust the scrollbar width here
@@ -136,10 +177,23 @@ const FuelRate = () => {
                                 },
                             }}
                         >
+                             {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                             <DataGrid
                                 rows={rows}
                                 columns={columns}
                             />
+                            )}
                         </Box>
                     </div>
                 </div>

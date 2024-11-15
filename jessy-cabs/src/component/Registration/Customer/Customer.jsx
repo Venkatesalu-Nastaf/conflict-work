@@ -47,6 +47,7 @@ import { GrSelect } from "react-icons/gr";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -61,6 +62,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Customer = ({ stationName }) => {
+ 
 
   const {
     selectedCustomerData,
@@ -86,8 +88,8 @@ const Customer = ({ stationName }) => {
     setToDate,
     handleAutocompleteChange,
     handleDateChange,
-    handleButtonClick,
-    isInputVisible,
+    // handleButtonClick,
+    // isInputVisible,
     handleExcelDownload,
     handlePdfDownload,
     rows,
@@ -99,7 +101,8 @@ const Customer = ({ stationName }) => {
     setSearchText,
     handleenterSearch,
     customerfieldSets,
-    handleChangecustomer, deletedialogbox, setDeletedDialog, handleAutocompleteChangestations, setInfo, setInfoMessage,
+    handleChangecustomer, deletedialogbox, setDeletedDialog,
+     setInfo, setInfoMessage,loading,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
   } = useCustomer();
 
@@ -331,7 +334,7 @@ const Customer = ({ stationName }) => {
                 <div>
 
                   {customerfieldSets.map((datafield, index) => (
-                    <>
+                     <React.Fragment key={datafield.id || index}>
                       <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap', marginBottom: '20px' }}>
                         <div className="input" key={index}>
                           <div className="icone">
@@ -406,7 +409,8 @@ const Customer = ({ stationName }) => {
                           </Button>
                         </DialogActions>
                       </Dialog>
-                    </>
+                      </React.Fragment>
+                    // </>
                   ))}
 
                 </div>
@@ -430,7 +434,7 @@ const Customer = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <DomainAddIcon color="action" />
                   </div>
@@ -441,6 +445,30 @@ const Customer = ({ stationName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChangestations(event, value, "servicestation")}
+                    value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                    options={stationName?.map((option) => ({
+                      label: option.Stationname,
+                    }))}
+                    getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
+                </div> */}
+                 <div className="input">
+                  <div className="icone">
+                    <DomainAddIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="servicestation"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
                     value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
                     options={stationName?.map((option) => ({
                       label: option.Stationname,
@@ -550,10 +578,20 @@ const Customer = ({ stationName }) => {
                 </div>
                 <div className="input customer-billing-group-input">
                   <div className='customer-billing-group-input-division'>
-                    <FormLabel htmlFor='billinggrouph'>Billing Group</FormLabel>
-                    <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} />
+                    {/* <FormLabel htmlFor='billinggrouph'>Billing Group</FormLabel>
+                    <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} /> */}
                   </div>
-                  {isInputVisible && (
+                  <Autocomplete
+                  size='small'
+                  style={{ width: 180 }}
+                    options={BillingGroup}  
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Billing Group" />}
+                    onChange={(event, value) => handleAutocompleteChangebilling(event, value, "billingGroup")}
+                    value={selectedCustomerData?.billingGroup ||book.billingGroup}
+                    />
+
+                  {/* {isInputVisible && (
                     <Autocomplete
                       size='small'
                       multiple
@@ -585,7 +623,7 @@ const Customer = ({ stationName }) => {
                         <TextField {...params} label="Billing Group" placeholder="Organization" />
                       )}
                     />
-                  )}
+                  )} */}
                 </div>
                 <div className="input">
                   <div className='icone'>
@@ -808,9 +846,11 @@ const Customer = ({ stationName }) => {
                 </div>
               </div>
               <div className="table-customer-lists">
+            
                 <Box
                   sx={{
-                    height: 400, // Adjust this value to fit your needs
+                    height: 400, 
+                    position: 'relative',// Adjust this value to fit your needs
                     '& .MuiDataGrid-virtualScroller': {
                       '&::-webkit-scrollbar': {
                         width: '8px', // Adjust the scrollbar width here
@@ -830,6 +870,18 @@ const Customer = ({ stationName }) => {
                     },
                   }}
                 >
+                  {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                   <DataGrid
                     rows={rows}
                     columns={columns}
@@ -841,7 +893,9 @@ const Customer = ({ stationName }) => {
                     }}
                     pageSizeOptions={[5, 10]}
                   />
+                            )}
                 </Box>
+                          
               </div>
             </div>
           </div>

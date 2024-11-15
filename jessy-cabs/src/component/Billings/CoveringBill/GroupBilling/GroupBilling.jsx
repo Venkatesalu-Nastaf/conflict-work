@@ -77,7 +77,11 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         handleRemoveData,
         viewGroupBill,
         setBillingDate,
-        setServiceStation
+        setServiceStation,
+        stateDetails,
+        setStateDetails,
+        billingGroupDetails,
+        setBillingGroupDetails,
     } = useGroupbilling();
 
 
@@ -87,7 +91,30 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const { sharedData } = useData();
     const apiUrl = APIURL
 
-console.log(refPdfPrint,'rrrr');
+    // console.log(refPdfPrint,'rrrr');
+
+    useEffect(() => {
+        const fetchStateDetails = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/statedetails`);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch state details');
+                }
+
+                const data = await response.json();
+                setStateDetails(data);
+
+                console.log(data, 'State details fetched');
+            }
+            catch (err) {
+                // setError(err.message); // Handle errors
+                console.error('Error fetching state details:', err);
+            }
+        };
+        fetchStateDetails();
+    }, [customer]);
 
     useEffect(() => {
         setSelectedImageorganisation(sharedData)
@@ -135,6 +162,26 @@ console.log(refPdfPrint,'rrrr');
         fetchData()
     }, [apiUrl, refCustomer, setGstno])
 
+    // get billingGroupDetailss
+    useEffect(() => {
+        if (gstno[0]?.billingGroup !== "") {
+            const fetchData = async () => {
+                const billingGroupCustomer = gstno[0]?.billingGroup
+                console.log('GroupBillCustomer', billingGroupCustomer);
+                try {
+                    const response = await axios.get(`${apiUrl}/gstdetails/${billingGroupCustomer}`);
+                    console.log(response.data, 'response data');
+                    setBillingGroupDetails(response.data)
+                }
+                catch (error) {
+                    console.log(error, 'error');
+
+                }
+            }
+            fetchData()
+        }
+    }, [apiUrl, refCustomer, gstno])
+
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
     const CoveringBill_read = permissions[7]?.read;
@@ -169,7 +216,8 @@ console.log(refPdfPrint,'rrrr');
                                         className="full-width"
                                         freeSolo
                                         size="small"
-                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
+                                        // value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
+                                        inputValue={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
                                         options={referenceNo || []}
                                         onInputChange={(event, newInputValue) => setInvoiceno(newInputValue)}
                                         onChange={(event, newValue) => setInvoiceno(newValue || '')}
@@ -286,7 +334,7 @@ console.log(refPdfPrint,'rrrr');
                                         freeSolo
                                         size="small"
                                         // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                                        value={servicestation || selectedCustomerDatas.station || 'All'}
+                                        value={servicestation || selectedCustomerDatas.station}
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,
                                         }))}
@@ -299,7 +347,7 @@ console.log(refPdfPrint,'rrrr');
                                     />
                                 </div>
                                 <div className="input">
-                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >View Bill</Button>
+                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={() => handleShow()} >View Bill</Button>
                                 </div>
                             </div>
                             {/* <div className="input-field">
@@ -436,7 +484,7 @@ console.log(refPdfPrint,'rrrr');
                             overflowY: 'auto'
                         }}
                     >
-                        <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} referenceno={referNo} />
+                        <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} billingGroupData={billingGroupDetails} referenceno={referNo} Branchstate={stateDetails} />
                     </Box>
                 </Modal>
             </form>

@@ -9,9 +9,9 @@ router.post('/customers', (req, res) => {
   // const customerData = req.body;
   console.log("customerData", customerData)
   // Convert billingGroup array to a comma-separated string
-  if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
-    customerData.billingGroup = customerData.billingGroup.join(', ');
-  }
+  // if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
+  //   customerData.billingGroup = customerData.billingGroup.join(', ');
+  // }
   db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {
       console.log("err", err);
@@ -60,9 +60,9 @@ router.get('/customers', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
-  if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
-    updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
-  }
+  // if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
+  //   updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
+  // }
   db.query('UPDATE customers SET ? WHERE customerId = ?', [updatedCustomerData, customerId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update data in MySQL' });
@@ -128,10 +128,14 @@ router.get('/searchCustomer', (req, res) => {
 
 router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
-  db.query('select address1,gstnumber from customers where customer = ?', [customername], (err, result) => {
+  db.query('select address1,gstnumber,state,billingGroup,customer from customers where customer = ?', [customername], (err, result) => {
     if (err) {
+      console.log(err,'cust eror');
+      
       return res.status(500).json({ error: 'Failed to get data in MySQL' });
     }
+    console.log(result,'customer result');
+    
     return res.status(200).json(result)
   })
 })
@@ -170,15 +174,30 @@ router.get('/allCustomers', (req, res) => {
   })
 })
 
+// router.get('/gstdetails/:customer', (req, res) => {
+
+//   const customer = req.params.customer;
+//   const sqlquery = "select gstTax from customers where customer=?";
+//   db.query(sqlquery, [customer], (err, result) => {
+//     if (err) {
+//       console.log(err, 'error');
+//     }
+//     return res.status(200).json(result);
+
+//   })
+// })
+
 router.get('/gstdetails/:customer', (req, res) => {
 
   const customer = req.params.customer;
-  const sqlquery = "select gstTax from customers where customer=?";
-  db.query(sqlquery, [customer], (err, result) => {
+  const sqlquery = "select gstTax,state,address1,gstnumber,servicestation,billingGroup,customer from customers where customer=?";
+    db.query(sqlquery, [customer], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
+    console.log(result, 'Results')
     return res.status(200).json(result);
+
 
   })
 })
@@ -377,7 +396,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
           address: customerDetail ? customerDetail.address1 : null,
         };
       });
-      
+
       return res.status(200).json(combinedResults)
     })
   })
@@ -418,18 +437,18 @@ router.get("/getuniqueCustomerdata/:customer", (req, res) => {
 
   })
 })
-router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
-  const ratetype = req.params.ratetype;
-  const stations=req.params.stations;
-  const ratename=req.params.ratename;
-  console.log(ratetype, "params",stations,ratename)
-  db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype,ratename,stations], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
-    }
-    console.log(results.length,"dddd")
-    return res.status(200).json(results);
-  })
-})
+// router.get("/getratetypemanagentCustomerdatastations/:ratetype/:ratename/:stations", (req, res) => {
+//   const ratetype = req.params.ratetype;
+//   const stations = req.params.stations;
+//   const ratename = req.params.ratename;
+//   console.log(ratetype, "params", stations, ratename)
+//   db.query("select stations from ratemanagement where ratetype = ? and  OrganizationName=? and stations =?", [ratetype, ratename, stations], (err, results) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+//     }
+//     console.log(results.length, "dddd")
+//     return res.status(200).json(results);
+//   })
+// })
 
 module.exports = router;

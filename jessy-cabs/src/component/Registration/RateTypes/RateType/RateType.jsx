@@ -38,6 +38,7 @@ import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RateTypevendor } from '../RateType/RateTypeData.js';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -51,7 +52,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const RateType = ({ stationName}) => {
+const RateType = () => {
     const {
         selectedCustomerData,
         selectedCustomerId,
@@ -79,7 +80,8 @@ const RateType = ({ stationName}) => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange, cerendentialdata, handleChangecredent
+        handleDateChange, cerendentialdata, handleChangecredent,
+        loading
     } = useRatype();
 
     // Permission ------------
@@ -111,7 +113,7 @@ const RateType = ({ stationName}) => {
                                         onChange={handleChangecredent}
                                     />
                                 </div>
-                                <div className="input">
+                                {/* <div className="input">
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -133,7 +135,7 @@ const RateType = ({ stationName}) => {
                                         }
                                         }
                                     />
-                                </div>
+                                </div> */}
                                 <div className="input">
 
                                     <div className="icone">
@@ -449,7 +451,8 @@ const RateType = ({ stationName}) => {
 
                         <Box
                             sx={{
-                                height: 400, // Adjust this value to fit your needs
+                                height: 400,
+                                position: 'relative', // Adjust this value to fit your needs
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {
                                         width: '8px', // Adjust the scrollbar width here
@@ -470,6 +473,18 @@ const RateType = ({ stationName}) => {
                                 },
                             }}
                         >
+                            {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                             <DataGrid
                                 rows={rows}
                                 columns={columns}
@@ -491,6 +506,7 @@ const RateType = ({ stationName}) => {
                                     },
                                 }}
                             />
+                            )}
                         </Box>
                     </div>
                 </div>

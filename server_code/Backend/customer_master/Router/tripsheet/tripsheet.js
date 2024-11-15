@@ -883,56 +883,228 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
         return res.status(500).json({ error: "username is undefined" })
     }
 
-    db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+    let query = 'SELECT * FROM tripsheet WHERE tripid = ? ';
+
+    db.query(query, [tripid], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: "there some issue ffetching station name " })
+            return res.status(500).json({ error: 'Failed to fetch permission from MySQL' });
         }
-
-        data = await results[0]?.Stationname;
-
-        console.log("data", data)
-        const arryData = data.split(',');
-        console.log("arryData", arryData)
-        //------------------------------------------------------------
-
-        if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
-            // its for fetch by All
-            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"`, tripid, (err, result) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-                }
-                if (result.length === 0) {
-
-                    return res.status(404).json({ error: 'Booking not found' });
-                }
-                const bookingDetails = result[0]; // Assuming there is only one matching booking
-                return res.status(200).json(bookingDetails);
-            });
+        if (results.length === 0) {
+            return res.status(404).json({ error: "Tripsheet not found" });
         }
-        else if (arryData) {
-            // its for fetch by All
+        if (results.length > 0) {
 
-            // const placeholders = arryData?.map(() => '?').join(', ');
-            // console.log(placeholders,"place")
-            console.log(arryData)
-            // console.log(data,"adtata")
-            // const queryParams = [tripid, data]
-            // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (${placeholders})`, queryParams, (err, result) => {
-            await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+            db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                    return res.status(500).json({ error: "there some issue ffetching station name " })
                 }
-                if (result.length === 0) {
-                    return res.status(404).json({ error: 'Booking not found' });
+
+                data = await results[0]?.Stationname;
+
+                console.log("data", data)
+                const arryData = data.split(',');
+                console.log("arryData", arryData)
+                //------------------------------------------------------------
+
+                if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
+                    // its for fetch by All
+                    await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                        }
+                        if (result.length === 0) {
+
+                            return res.status(404).json({ error: 'status is billed all' });
+                        }
+                        const bookingDetails = result[0]; // Assuming there is only one matching booking
+                        return res.status(200).json(bookingDetails);
+                    });
                 }
-                const bookingDetails = result[0]; // Assuming there is only one matching booking
-                return res.status(200).json(bookingDetails);
-            });
-        } else {
-            return res.status(500).json({ error: 'there is some ISSUE ' });
+                else if (arryData) {
+                    await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND department IN (?)  `, [tripid, arryData], (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                        }
+                        if (result.length === 0) {
+
+                            return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                        }
+                        else if (result.length > 0) {
+                            db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+                                if (err) {
+                                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                                }
+                                if (result.length === 0) {
+                                    return res.status(404).json({ error: 'status is billed' });
+                                }
+                                const bookingDetails = result[0];
+                                console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
+                                return res.status(200).json(bookingDetails);
+                            });
+                        }
+
+                    });
+                }
+
+            })
+
         }
     })
-});
+})
+
+//   router.get('/tripsheet-enter11/:tripid', async (req, res) => {
+//     const tripid = req.params.tripid;
+//     const username = req.query.loginUserName;
+//     console.log("tripid", tripid, "username", username)
+
+//     let data = '';
+
+//     if (!username) {
+//         return res.status(500).json({ error: "username is undefined" })
+//     }
+
+
+
+//     let query = 'SELECT * FROM tripsheet WHERE tripid = ? ';
+
+//     db.query(query, [userid], (err, results) => {
+//       if (err) {
+//         return res.status(500).json({ error: 'Failed to fetch permission from MySQL' });
+//       }
+//       if(results.length === 0){
+//         return res.status(404).json({ error: "Tripsheet not found"});
+//       }
+//       else{
+//         if(results.length > 0){
+
+//             db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+//                 if (err) {
+//                     return res.status(500).json({ error: "there some issue ffetching station name " })
+//                 }
+
+//                 data = await results[0]?.Stationname;
+
+//                 console.log("data", data)
+//                 const arryData = data.split(',');
+//                 console.log("arryData", arryData)
+//                 //------------------------------------------------------------
+
+//                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
+//                     // its for fetch by All
+//                     await db.query(`SELECT * FROM tripsheet WHERE tripid = ? `, tripid, (err, result) => {
+//                         if (err) {
+//                             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//                         }
+//                         if (result.length === 0) {
+
+//                             return res.status(404).json({ error: 'Booking not found' });
+//                         }
+//                         const bookingDetails = result[0]; // Assuming there is only one matching booking
+//                         return res.status(200).json(bookingDetails);
+//                     });
+//                 }
+//                 else if (arryData) {
+//                     await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND department IN (?)  `, [tripid,arryData], (err, result) => {
+//                         if (err) {
+//                             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//                         }
+//                         if (result.length === 0) {
+
+//                             return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+//                         }
+//                         else if(result.length > 0){
+//                             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+//                                 if (err) {
+//                                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//                                 }
+//                                 if (result.length === 0) {
+//                                     return res.status(404).json({ error: 'status is billed' });
+//                                 }
+//                                 const bookingDetails = result[0];
+//                                 console.log(bookingDetails,"mmmm") // Assuming there is only one matching booking
+//                                 return res.status(200).json(bookingDetails);
+//                             });
+//                         }
+
+//                     });
+
+//                 }
+
+//         }
+//       }
+//     });
+
+
+// });
+
+
+
+
+
+
+
+// router.get('/tripsheet-enter/:tripid', async (req, res) => {
+//     const tripid = req.params.tripid;
+//     const username = req.query.loginUserName;
+//     console.log("tripid", tripid, "username", username)
+
+//     let data = '';
+
+//     if (!username) {
+//         return res.status(500).json({ error: "username is undefined" })
+//     }
+
+//     db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: "there some issue ffetching station name " })
+//         }
+
+//         data = await results[0]?.Stationname;
+
+//         console.log("data", data)
+//         const arryData = data.split(',');
+//         console.log("arryData", arryData)
+//         //------------------------------------------------------------
+
+//         if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
+//             // its for fetch by All
+//             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"`, tripid, (err, result) => {
+//                 if (err) {
+//                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//                 }
+//                 if (result.length === 0) {
+
+//                     return res.status(404).json({ error: 'Booking not found' });
+//                 }
+//                 const bookingDetails = result[0]; // Assuming there is only one matching booking
+//                 return res.status(200).json(bookingDetails);
+//             });
+//         }
+//         else if (arryData) {
+//             // its for fetch by All
+
+//             // const placeholders = arryData?.map(() => '?').join(', ');
+//             // console.log(placeholders,"place")
+//             console.log(arryData)
+//             // console.log(data,"adtata")
+//             // const queryParams = [tripid, data]
+//             // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (${placeholders})`, queryParams, (err, result) => {
+//             await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+//                 if (err) {
+//                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//                 }
+//                 if (result.length === 0) {
+//                     return res.status(404).json({ error: 'Booking not found' });
+//                 }
+//                 const bookingDetails = result[0];
+//                 console.log(bookingDetails,"mmmm") // Assuming there is only one matching booking
+//                 return res.status(200).json(bookingDetails);
+//             });
+//         } else {
+//             return res.status(500).json({ error: 'there is some ISSUE ' });
+//         }
+//     })
+// });
 
 // --------------------------------------------------------------
 router.get('/tripsheet-maindash', (req, res) => {
@@ -1467,8 +1639,8 @@ router.get('/tripuploadcollect/:tripid/:bookingno', (req, res) => {
 // Delete marker Point by Latitude and Longitude
 router.delete('/deleteMapPoint', (req, res) => {
     const { latitude, longitude, tripid } = req.body;
-    console.log(latitude,longitude,tripid,'deletedata');
-    
+    console.log(latitude, longitude, tripid, 'deletedata');
+
 
     // Validate the inputs
     if (!latitude || !longitude || !tripid) {
@@ -1493,11 +1665,11 @@ router.delete('/deleteMapPoint', (req, res) => {
 });
 
 // get the gmapdata by tripid
-router.get('/getGmapdataByTripId/:tripid',(req,res)=>{
+router.get('/getGmapdataByTripId/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     const sqlquery = `SELECT * FROM gmapdata WHERE tripid = ?`
-    db.query(sqlquery,[tripid],(error,result)=>{
-        if(error){
+    db.query(sqlquery, [tripid], (error, result) => {
+        if (error) {
             console.log(error);
         }
         return res.status(200).json(result);
@@ -1508,7 +1680,7 @@ router.get('/getGmapdataByTripId/:tripid',(req,res)=>{
 
 
 router.post('/gmappost-submitForm', (req, res) => {
-    const { date, time, Location_Alpha,tripType, placeName, tripid, latitude, longitude,  } = req.body;
+    const { date, time, Location_Alpha, tripType, placeName, tripid, latitude, longitude, } = req.body;
 
     console.log(date, time, tripType, placeName, tripid, latitude, longitude, Location_Alpha, 'latt');
 
@@ -1524,7 +1696,6 @@ router.post('/gmappost-submitForm', (req, res) => {
         console.log(results, 'resultsss');
 
         if (results.length === 0) {
-            // Only insert if no results are found
             const insertQuery = "INSERT INTO gmapdata (date, time, Location_Alpha, trip_type, place_name, tripid, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             db.query(insertQuery, [date, time, Location_Alpha, tripType, placeName, tripid, latitude, longitude], (err, insertResults) => {
                 if (err) {
@@ -1533,12 +1704,10 @@ router.post('/gmappost-submitForm', (req, res) => {
                 return res.status(200).json({ message: 'Form data submitted successfully' });
             });
         } else {
-            // Handle update logic or waypoint insertion if data exists
 
-            let newAlpha = Location_Alpha; // Initialize with the incoming alpha value for start or end
+            let newAlpha = Location_Alpha;
 
             if (tripType === 'waypoint') {
-                // Handle waypoint logic
                 const waypointAlphas = results?.map(row => row.Location_Alpha);
                 const latitudePoint = results?.map(row => row.Latitude);
                 const longitudePoint = results?.map(row => row.Longitude);
@@ -1610,22 +1779,81 @@ router.post('/gmappost-submitForm', (req, res) => {
                     return res.status(200).json({ message: 'Waypoint submitted successfully', Location_Alpha: newAlpha });
                 });
             } else if (tripType === 'start' || tripType === 'end') {
-                // Handle start or end trip update logic
+
+                const latitudePoint = results?.map(row => row.Latitude);
+                const longitudePoint = results?.map(row => row.Longitude);
+
+                console.log(latitudePoint, longitudePoint, 'checking', latitude, longitude);
+
+                const latitudeStr = latitude.toString();
+                const longitudeStr = longitude.toString();
+
+                const latitudeExists = latitudePoint.map(lat => lat.toString() === latitudeStr);
+                const longitudeExists = longitudePoint.some(lng => lng.toString() === longitudeStr);
+
+                console.log(latitudeExists, longitudeExists, latitudeStr, longitudeStr, 'all values');
+                if (latitudeStr !== "") {
+                    console.log('Starting deletion and insertion process');
+
+                    // First DELETE query: delete records matching latitude, longitude, and tripType
+                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? ";
+                    const deleteValues1 = [latitude, longitude];
+
+                    db.query(deleteQuery1, deleteValues1, (err, deleteResults1) => {
+                        if (err) {
+                            console.error('Database Delete Error for first query:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        console.log('First deletion successful:', deleteResults1);
+
+                        const deleteQuery2 = "DELETE FROM gmapdata WHERE tripid = ? AND trip_type = ?";
+                        const deleteValues2 = [tripid, tripType]; // Replace "another_trip_type" with the specific type you want to delete
+
+                        db.query(deleteQuery2, deleteValues2, (err, deleteResults2) => {
+                            if (err) {
+                                console.error('Database Delete Error for second query:', err);
+                                return res.status(500).json({ error: 'Internal Server Error' });
+                            }
+                            console.log('Second deletion successful:', deleteResults2);
+
+                            // Insert the new record after both deletions are complete
+                            const insertQuery = `
+                                INSERT INTO gmapdata (Location_Alpha, date, trip_type, time, place_name, tripid, Latitude, Longitude)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                            `;
+                            const insertValues = [Location_Alpha, date, tripType, time, placeName, tripid, latitude, longitude];
+
+                            db.query(insertQuery, insertValues, (err, insertResults) => {
+                                if (err) {
+                                    console.error('Database Insert Error:', err);
+                                    return res.status(500).json({ error: 'Internal Server Error' });
+                                }
+                                console.log('Insertion successful:', insertResults);
+
+                                return res.status(200).json({ message: `${tripType} trip updated successfully with new data` });
+                            });
+                        });
+                    });
+                }
+
+
+
                 const updateQuery = `
                     UPDATE gmapdata
                     SET date = ?, time = ?, place_name = ?, Latitude = ?, Longitude = ?
                     WHERE tripid = ? AND trip_type = ?
                 `;
                 const updateValues = [date, time, placeName, latitude, longitude, tripid, tripType];
+                if (latitudeStr === "") {
+                    db.query(updateQuery, updateValues, (err, updateResults) => {
+                        if (err) {
+                            console.error('Database Update Error:', err);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
 
-                db.query(updateQuery, updateValues, (err, updateResults) => {
-                    if (err) {
-                        console.error('Database Update Error:', err);
-                        return res.status(500).json({ error: 'Internal Server Error' });
-                    }
-
-                    return res.status(200).json({ message: `${tripType} trip updated successfully` });
-                });
+                        return res.status(200).json({ message: `${tripType} trip updated successfully` });
+                    });
+                }
             }
         }
     });
@@ -1655,28 +1883,28 @@ router.get('/getAllGmapdata', (req, res) => {
 // Delete Map Query
 router.post('/deleteMapByTripid/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-  
+
     // First delete query for mapimage
     const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
     db.query(deleteQuery, [tripid], (error, result) => {
-      if (error) {
-        console.log(error, 'error');
-        return res.status(500).json({ message: 'Error deleting from mapimage', error });
-      }
-  
-      // Second delete query for gmapdata
-      const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
-      db.query(deleteMapDataQuery, [tripid], (error, result) => {
         if (error) {
-          console.log(error, 'error');
-          return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+            console.log(error, 'error');
+            return res.status(500).json({ message: 'Error deleting from mapimage', error });
         }
-  
-        return res.status(200).json({ message: 'Deletion successful', result });
-      });
+
+        // Second delete query for gmapdata
+        const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+        db.query(deleteMapDataQuery, [tripid], (error, result) => {
+            if (error) {
+                console.log(error, 'error');
+                return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+            }
+
+            return res.status(200).json({ message: 'Deletion successful', result });
+        });
     });
-  });
-  
+});
+
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL
@@ -2143,7 +2371,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
     console.log(customer, "cusssssssssssssssssss")
-    db.query('select rateType,TimeToggle,servicestation from customers where customer = ?', [customer], (err, result) => {
+    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
@@ -2153,18 +2381,18 @@ router.get('/customerratenamedata/:customerdata', (req, res) => {
     })
 })
 
-router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
-    const supplier = req.params.supplierdata;
-    console.log(supplier, "cusssssssssssssssssss")
-    db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
-        if (err) {
-            res.status(500).json({ message: 'Internal server error' });
-            return;
-        }
-        console.log(result, "mm")
-        res.status(200).json(result);
-    })
-})
+// router.get('/supplierratenamedatastations/:supplierdata', (req, res) => {
+//     const supplier = req.params.supplierdata;
+//     console.log(supplier, "cusssssssssssssssssss")
+//     db.query('select stations from accountinfo where rateType = ?', [supplier], (err, result) => {
+//         if (err) {
+//             res.status(500).json({ message: 'Internal server error' });
+//             return;
+//         }
+//         console.log(result, "mm")
+//         res.status(200).json(result);
+//     })
+// })
 router.get('/Checkstatusandappsclosed/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     console.log(tripid, "cusssssssssssssssssss")

@@ -10,7 +10,7 @@ const usePendingBill = () => {
     const columns = [
         { field: 'sno', headerName: 'S.no', width: 100 },
         { field: 'uniqueid', headerName: 'Bill No', width: 180 },
-        { field: 'BillDate', headerName: 'Bill Date', width: 180 },
+        { field: 'BillDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
         { field: 'CustomerName', headerName: 'Customer Name', width: 180 },
         { field: 'TotalAmount', headerName: 'Bill Amount', width: 180 },
         { field: 'Collected', headerName: 'Collected', width: 180 },

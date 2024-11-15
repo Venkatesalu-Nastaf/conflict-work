@@ -100,7 +100,7 @@ const MonthlyWise = () => {
                                 }
                             />
                         </div>
-
+ 
                         <div className='show-all-button'>
                             <div className="input" >
                                 <Button variant="outlined" onClick={handleShow} >Show</Button>

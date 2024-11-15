@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
+import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -20,6 +21,7 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage, setWarningMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState(null);
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
@@ -228,18 +230,82 @@ const useEmplyeecreation = () => {
 
     //----------------------------------------------------
 
-    const handleCheckboxChange = (index, field) => (event) => {
+    // const handleCheckboxChange = (index, field) => (event) => {
+
+    //     const { checked } = event.target;
+    //     setPermissionsData(prevData =>
+    //         prevData.map((permission, i) => {
+    //             if (i === index) {
+    //                 return { ...permission, [field]: checked };
+    //             }
+    //             return permission;
+    //         })
+    //     );
+    // }
+
+    const handleCheckboxChange = useCallback((index, field) => (event) => {
 
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
+                // const start=0;
+              
+    
                 if (i === index) {
+                    // dataper()
+                    datacahnges()
                     return { ...permission, [field]: checked };
                 }
+               
                 return permission;
             })
+            
         );
-    }
+       
+    },[setPermissionsData])
+
+
+
+
+ const indexRanges = [
+        { start: 1, end: 3 },
+        { start: 5, end: 8 },
+        { start: 10, end: 13 },
+        { start: 15, end: 16 },
+        { start: 18, end: 20 },
+        { start: 23, end: 27 }
+      ];
+      
+      useEffect(()=>{
+        datacahnges()
+    },[permissionsData])
+
+    const datacahnges = () => {
+        
+        setPermissionsData(prevData => {
+        
+          const updatedData = [...prevData];
+     
+      
+          indexRanges.forEach(range => {
+            const readTrue = prevData.slice(range.start, range.end + 1).some(item => item.read === true || item.read === 1);
+            const newTrue = prevData.slice(range.start, range.end + 1).some(item => item.new === true || item.new === 1);
+            const modifyTrue = prevData.slice(range.start, range.end + 1).some(item => item.modify === true || item.modify === 1);
+            const deleteTrue = prevData.slice(range.start, range.end + 1).some(item => item.delete === true || item.delete === 1);
+    
+            updatedData[range.start - 1] = {
+              ...updatedData[range.start - 1],
+              read: readTrue,
+              new: newTrue,
+              modify: modifyTrue,
+              delete: deleteTrue
+            };
+          });
+      
+          return updatedData;
+        });
+      };
+      
 
    
 
@@ -267,6 +333,7 @@ const useEmplyeecreation = () => {
         stationname: '',
         designation: '',
         organizationname: '',
+        employeeid:'',
         userpassword: '',
         active: false,
         superAdmin: false,
@@ -316,6 +383,7 @@ const useEmplyeecreation = () => {
             stationname: '',
             designation: '',
             organizationname: '',
+            employeeid:'',
             userpassword: '',
             active: false,
             superAdmin: false
@@ -327,36 +395,81 @@ const useEmplyeecreation = () => {
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
-
     };
-
+    
     useEffect(() => {
         const fetchData = async () => {
             //   const organizationname = localStorage.getItem('usercompany');
-
             try {
                 // if (!organizationname) return
                 const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
-
+                     
                     const userDataArray = await response.json();
                     //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)
-
                     } else {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                }
+                }   
             }
             catch {
             }
         };
         fetchData();
     }, [apiUrl]);
-    // add
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateUser--Creation`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    console.log("Fetched data:", userDataArray);
+                    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
+
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl]);   
+    console.log(templateMessageData,"shh")
+
+    // useEffect(() => {
+    //     const fetchTemplateMessage = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/TemplateMessage`, {
+    //                 method: 'POST',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //                 body: JSON.stringify({ templateInfo: 'credential_template' }) // Use an identifier for the specific template
+    //             });
+    //             if (response.status === 200) {
+    //                 const data = await response.json();
+    //                 setTemplateMessageData(data); // Assuming this state holds the template message
+    //             } else {
+    //                 setErrorMessage('Template message not found.');
+    //                 setError(true);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching template message:', error);
+    //         }
+    //     };
+    //     fetchTemplateMessage();
+    // }, [apiUrl]);
 
 
     const uniqueusercreationname = async (usernname) => {
@@ -365,8 +478,6 @@ const useEmplyeecreation = () => {
 
             const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
             const responsedata = response.data;
-
-      
 
             if (responsedata?.length >= 1) {
                 setCredentialData(true)
@@ -378,11 +489,7 @@ const useEmplyeecreation = () => {
             }
         }
 
-
-
-
     }
-
     const handleChangeuniquecreation = (event) => {
         const { name, value } = event.target;
         const datacrendital = uniqueusercreationname(value);
@@ -417,6 +524,7 @@ const useEmplyeecreation = () => {
         const branchName = book.stationname;
         const designation = book.designation;
         const organisation = book.organizationname
+        const employeeid=book.employeeid
         const active = book.active
         const email = book.email
         const mobileno = book.mobileno
@@ -457,14 +565,17 @@ const useEmplyeecreation = () => {
             setWarningMessage("Fill Designation..");
             return;
         }
+        if (!employeeid) {
+            setWarning(true);
+            setWarningMessage("Fill Employee ID..");
+            return;
+        }
 
         if (!organisation) {
             setWarning(true);
             setWarningMessage("Fill Organisation..");
             return;
         }
-
-
         if (!active) {
             setWarning(true);
             setWarningMessage("Fill Active..");
@@ -477,11 +588,9 @@ const useEmplyeecreation = () => {
             return;
         }
 
-
-
         try {
             const created_at = dayjs().format("YYYY-MM-DD")
-            const data = { book, permissionsData, organistaionsendmail, created_at }
+            const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
             handleCancel();
             handleList()
@@ -504,8 +613,9 @@ const useEmplyeecreation = () => {
 
             const username = book.username;
             const branchName = book.stationname;
-            const designation = book.designation;
+            const designation = book.designation;        
             const organisation = book.organizationname
+            const employeeid=book.employeeid
             const active = book.active
             const email = book.email
             const mobileno = book.mobileno
@@ -545,6 +655,11 @@ const useEmplyeecreation = () => {
             if (!designation) {
                 setError(true);
                 setErrorMessage("Fill Designation..");
+                return;
+            }
+            if (!employeeid) {
+                setError(true);
+                setErrorMessage("Fill Employee ID..");
                 return;
             }
 

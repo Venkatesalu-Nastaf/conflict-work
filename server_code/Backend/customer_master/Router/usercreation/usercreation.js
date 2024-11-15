@@ -8,7 +8,6 @@ const fs = require('fs');
 const cors = require('cors'); // Import the cors middleware
 const nodemailer = require('nodemailer');
 
-
 router.use(cors());
 router.use(express.static('customer_master'));
 
@@ -25,22 +24,33 @@ const upload = multer({
   storage: storage
 })
 
-
+router.get('/TemplateUser--Creation', async (req, res) => {
+    const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "UserCreation"'
+    db.query(query,(err, results) => {
+      if (err) {
+        console.log(err,'errorrrr')
+        return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log(results,"reesss")
+      return res.status(200).json(results);
+})
+})
 
 router.post('/usercreation-add', async (req, res) => {
-  const { book, permissionsData, organistaionsendmail,created_at } = req.body;
-  const { username, stationname, designation, organizationname, userpassword, active, email, mobileno,superAdmin } = book;
+  const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
+  const { username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, superAdmin } = book;
   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
-  const themesdata ="theme1"
-  
-console.log(username, stationname, designation, organizationname, userpassword, active, email, mobileno,created_at);  
-console.log(Sender_Mail, EmailApp_Password,permissionsData)
-console.log(stationname,"stt",typeof(stationname))
-const idString = stationname.join(',');
-console.log(idString,"ff")
+  const themesdata = "theme1";
+  console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
+  console.log(username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, created_at);
+  const idString = stationname.join(',');
+  console.log(idString, "ff");
+
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname, userpassword, active,email,mobileno,theme,created_at,superAdmin)
-VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationname, userpassword, active, email, mobileno,themesdata,created_at,superAdmin]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid, userpassword, active,email,mobileno,theme,created_at,superAdmin)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname,employeeid, userpassword, active, email, mobileno, themesdata, created_at, superAdmin]);
+
+    // Set up the mail transporter
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -49,11 +59,16 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationna
       }
     });
 
+    // If templateMessageData exists, replace both username and userpassword placeholders
+    const emailContent = templateMessageData 
+      ? templateMessageData.replace(/\${username}/g, username).replace(/\${userpassword}/g, userpassword) // Global replacement
+      : `<p>Hi ${username},<br>UserName: ${username}<br>Password: ${userpassword}</p>`;
+
     const mailOptions = {
       from: Sender_Mail,
       to: email,
       subject: 'Credential Details',
-      html: `<p>Hi ${username},<br>UserName: ${username}<br>Password: ${userpassword}</p>`
+      html: emailContent // Use the modified emailContent
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -63,30 +78,97 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [username,idString, designation, organizationna
         console.log('Email sent: ' + info.response);
       }
     });
-    db.query(
-      'SELECT userid FROM usercreation WHERE username = ?', [username], (err, result) => {
 
-        const userid = result[0]?.userid
+    db.query('SELECT userid FROM usercreation WHERE username = ?', [username], (err, result) => {
+      const userid = result[0]?.userid;
 
-        if (userid) {
-          for (const permission of permissionsData) {
-            db.query(
-              'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`,`created_at`) VALUES (?, ?, ?, ?, ?, ?,?)',
-              [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete,created_at]
-            );
-          }
-
-          res.status(200).json({ message: 'Permissions saved successfully' });
-
+      if (userid) {
+        for (const permission of permissionsData) {
+          db.query(
+            'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`, `created_at`) VALUES (?, ?, ?, ?, ?, ?,?)',
+            [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete, created_at]
+          );
         }
-      });
 
+        res.status(200).json({ message: 'Permissions saved successfully' });
+      }
+    });
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
+// router.post('/usercreation-add', async (req, res) => {
+//   const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
+//   const { username, stationname, designation, organizationname, userpassword, active, email, mobileno, superAdmin } = book;
+//   const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
+//   const themesdata = "theme1";
+
+//   try {
+//     await db.query(
+//       `INSERT INTO usercreation (username, stationname, designation, organizationname, userpassword, active, email, mobileno, theme, created_at, superAdmin)
+//        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+//       [username, stationname.join(','), designation, organizationname, userpassword, active, email, mobileno, themesdata, created_at, superAdmin]
+//     );
+
+//     const transporter = nodemailer.createTransport({
+//       service: 'gmail',
+//       auth: {
+//         user: Sender_Mail,
+//         pass: EmailApp_Password
+//       }
+//     });
+
+//     // Ensure that templateMessageData and email are valid
+//     const messageContent = (templateMessageData || `<p>Hi ${username},<br>UserName: ${username}<br>Password: ${userpassword}</p>`)
+//       .replace('${username}', username)
+//       .replace('${userpassword}', userpassword);
+
+//     if (email) {  // Only send email if email is defined
+//       const mailOptions = {
+//         from: Sender_Mail,
+//         to: email,
+//         subject: 'Credential Details',
+//         html: messageContent
+//       };
+
+//       transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//           console.log(error);
+//         } else {
+//           console.log('Email sent: ' + info.response);
+//         }
+//       });
+//     } else {
+//       console.log('No recipient email defined');
+//     }
+
+//     // Insert permissions if permissionsData is an array
+//     const [result] = await db.query('SELECT userid FROM usercreation WHERE username = ?', [username]);
+//     const userid = result[0]?.userid;
+
+//     if (userid && Array.isArray(permissionsData)) {  // Check if permissionsData is an array
+//       for (const permission of permissionsData) {
+//         await db.query(
+//           'INSERT INTO user_permissions (user_id, name, `read`, `new`, `modify`, `delete`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?)',
+//           [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete, created_at]
+//         );
+//       }
+//       res.status(200).json({ message: 'Permissions saved successfully' });
+//     } else {
+//       console.log('No permissions to insert or permissionsData is not an array');
+//     }
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+
+
 
 
 // user Deletion
@@ -125,7 +207,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
     
-  const { userid, username, stationname, designation, organizationname, userpassword, active, mobileno, email,created_at } = updatedCustomer;
+  const { userid, username, stationname, designation, organizationname,employeeid, userpassword, active, mobileno, email,created_at } = updatedCustomer;
 
 
   if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
@@ -186,7 +268,6 @@ router.get('/user-permissionget/:userid', (req, res) => {
 
 });
 
-
 //  -----------------------------------------------
 
 router.get('/usercreation', (req, res) => {
@@ -216,6 +297,7 @@ router.get('/usercreationgetdata/:value', (req, res) => {
       'username',
       'stationname',
       'designation',
+      'employeeid',
       'organizationname',
       'ufirstname',
       'ulastname',
@@ -236,9 +318,6 @@ router.get('/usercreationgetdata/:value', (req, res) => {
     return res.status(200).json(result);
   });
 });
-
-
-
 
 // router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
 //   const userId = req.params.id;
@@ -303,9 +382,9 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   const editid = req.params.editid
   const updatedata = req.body
 
-  const { username, designation, userpassword, email, mobileno } = updatedata
+  const { username, designation,employeeid, userpassword, email, mobileno } = updatedata
 
-  db.query("update usercreation set username=?,designation=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, userpassword, email, mobileno, editid], (err, results) => {
+  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation,employeeid,  userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
       return res.status(500).json({ Message: "Error updating data", err });
     }
@@ -314,7 +393,6 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   })
 
 })
-
 
 
 module.exports = router;

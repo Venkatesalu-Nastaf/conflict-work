@@ -26,6 +26,8 @@ const TemplateCreation = () => {
   const [templatedata, setTemplateData] = useState({
     TemplateName: '',
     TemplateSubject: '',
+    TemplateInfo:'',
+    // TemplateInfo:'',
     TemplateMessageData: '',
   });
 
@@ -54,7 +56,7 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const parameterKeys = ["Templatecheck", "Templateid", "TemplateName", "TemplateSubject", "TemplateMessageData"];
+    const parameterKeys = ["Templatecheck", "Templateid", "TemplateName", "TemplateSubject","TemplateInfo","TemplateMessageData"];
     const TemplateFormData = {};
 
     parameterKeys.forEach(key => {
@@ -69,8 +71,6 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
     } else {
       setEditmode(false);
     }
-
-
 
     setTemplateData(TemplateFormData);
     const attacheimagedataedit = async (templateid) => {
@@ -117,7 +117,6 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
   };
 
-
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -132,17 +131,25 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
     }
   }, [error, success]);
 
+  
+
   const handleADD = async () => {
     if (!templatedata.TemplateName) {
       setError(true);
       setErrorMessage("Please fill TemplateName");
       return;
     }
+
     if (!templatedata.TemplateSubject) {
       setError(true);
       setErrorMessage("Please fill TemplateSubject");
       return;
     }
+    // if (!templatedata.TemplateInfo) {
+    //   setError(true);
+    //   setErrorMessage("Please fill TemplateInfo");
+    //   return;
+    // }
     if (!templatedata.TemplateMessageData) {
       setError(true);
       setErrorMessage("Please fill TemplateMessageData");
@@ -188,7 +195,6 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
     }
   }
-
 
   const handleEdit = async () => {
     const formDataeditToSend = new FormData();
@@ -249,7 +255,6 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
   };
 
 
-
   const handleCancel = (indexToRemove) => {
     setImageData(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
   };
@@ -262,7 +267,6 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
     }
   };
-
 
   return (
     <>
@@ -280,6 +284,9 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
                 </div>
               </div>
             </div>
+            <div className='template-info'style={{marginLeft:'500px',padding:'10px'}}>
+                  <input type="text" className='template-name' style={{padding:'5px'}}name="TemplateInfo" value={templatedata.TemplateInfo || ''} onChange={handleChange} placeholder='Enter a template Info' />
+                </div>
             <div className='right-header'>
               <div className='flex items-center'>
                 {/* <Button disabled={!Template_create || !Temaplate_modify}onClick={handleFileUploadClick}  className='attachments template-creation-attachments'>
@@ -373,16 +380,17 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
             className='quill-editor'
             modules={{
               toolbar: [
-                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ 'header': '1' },{ 'header': '2' },{ 'font': [] }],
                 [{ 'size': [] }],
                 ['bold', 'italic', 'underline', 'strike', 'blockquote'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 ['link', 'image', 'video'],
-                ['clean']
+                ['clean'],
               ],
             }}
           />
           {editmode ?
+          
             <>
               {imagedataedit.length > 0 && (
                 <div className='template-creation-document-main-division'>

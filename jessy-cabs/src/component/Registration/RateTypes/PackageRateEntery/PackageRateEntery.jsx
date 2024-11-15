@@ -29,6 +29,7 @@ import usePackagerateentry from './usePackagerateentry.js';
 import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -65,7 +66,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleEdit,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading
 
   } = usePackagerateentry();
 
@@ -474,11 +475,12 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
   
             <Box
               sx={{
-                height: 400, // Adjust this value to fit your needs
+                height: 400, 
+                position: 'relative',
                 '& .MuiDataGrid-virtualScroller': {
                   '&::-webkit-scrollbar': {
-                    width: '8px', // Adjust the scrollbar width here
-                    height: '8px', // Adjust the scrollbar width here
+                    width: '8px', 
+                    height: '8px',
                   },
                   '&::-webkit-scrollbar-track': {
                     backgroundColor: '#f1f1f1',
@@ -486,7 +488,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   '&::-webkit-scrollbar-thumb': {
                     backgroundColor: '#457cdc',
                     borderRadius: '20px',
-                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                    minHeight: '60px', 
                   },
                   '&::-webkit-scrollbar-thumb:hover': {
                     backgroundColor: '#3367d6',
@@ -494,12 +496,25 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 },
               }}
             >
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick}
-                pageSize={5}
-              />
+                {loading ? (
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%', 
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+                          <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            onRowClick={handleRowClick}
+                            pageSize={5}
+                          />
+                            )}
             </Box>
           </div>
         </div>

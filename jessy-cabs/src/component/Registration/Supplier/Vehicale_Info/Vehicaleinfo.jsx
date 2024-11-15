@@ -63,6 +63,7 @@ import { RiFileUploadLine } from "react-icons/ri";
 import { FaBuilding } from "react-icons/fa";
 import VehicleAddData from './VehicleAdddata';
 import axios from 'axios'
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -185,7 +186,8 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames
+    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
+    loading,setLoading
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
   } = VehicleAddData()
@@ -1258,6 +1260,7 @@ const Vehicaleinfo = ({ stationName }) => {
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs
+                position: 'relative',
                 '& .MuiDataGrid-virtualScroller': {
                   '&::-webkit-scrollbar': {
                     width: '8px', // Adjust the scrollbar width here
@@ -1278,12 +1281,26 @@ const Vehicaleinfo = ({ stationName }) => {
                 },
               }}
             >
+               {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+
               <DataGrid
                 rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick1}
                 pageSize={5}
               />
+                            )}
             </Box>
 
           </div>

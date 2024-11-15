@@ -439,6 +439,8 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
                 }
+                onInputChange={(event, value) => handleAutocompleteChange(event, value, "orderedby")} 
+  
                 value={
                   formData.orderedby ||
                   selectedCustomerData.orderedby ||
@@ -511,6 +513,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 size="small"
               />
             </div>
+       
             <div className="input service-station-input">
               <div className="icone">
                 <DomainAddIcon color="action" />
@@ -522,10 +525,14 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 size="small"
                 value={book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
 
-                options={stationOptions}
+                // options={stationOptions}
+                options={stationOptions.map((option) => ({
+                  label: option,
+                }))}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "servicestation")
                 }
+                getOptionLabel={(option) => option.label || book.servicestation || selectedCustomerData.servicestation || formData.servicestation || selectedCustomerDatas.servicestation || ''}
                 renderInput={(params) => {
                   return (
                     <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />

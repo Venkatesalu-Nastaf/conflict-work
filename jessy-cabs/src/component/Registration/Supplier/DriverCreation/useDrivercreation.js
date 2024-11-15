@@ -28,6 +28,7 @@ const useDrivercreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage,setWarningMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState('');
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [searchText, setSearchText] = useState("")
@@ -46,6 +47,9 @@ const useDrivercreation = () => {
     // const [profileimage,setProfileimage]=useState('')
     // console.log(profileimage,"imagedata")
     // venkat
+
+    const [loading, setLoading] = useState(false)
+
 
 
    
@@ -558,12 +562,41 @@ const useDrivercreation = () => {
         setDialogOpen(false);
     };
     
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateForDriverCreation`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    console.log("Fetched data:", userDataArray);
+    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } else {
+                        setErrorMessage('No template data found.');
+                        setError(true);
+                    }
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+    
+    // Additional useEffect to monitor state changes
+    // useEffect(() => {
+    //     if (templateMessageData) {
+    //         console.log("templateMessageData after fetch:", templateMessageData, 'TemplateDriver');
+        
+    // }, [templateMessageData]);
+    
+
   useEffect(() => {
     const fetchData = async () => {
-  
-
       try {
-     
         const response = await fetch(`${apiUrl}/organizationdata`);
         if (response.status === 200) {
 
@@ -585,41 +618,38 @@ const useDrivercreation = () => {
   }, [apiUrl, datatrigger]);
 //   console.log(organistaionsendmail,"dataatatta")
 
+const handlecheckmaildriver = async (lastBookingno) => {
+    try {
+        // Add templateMessageData to the dataToSend object
+        const dataToSend = {
+            userid: lastBookingno,
+            Drivername: book.drivername,
+            UserName: book.username,
+            password: book.userpassword,
+            Sendmailauth: organistaionsendmail.Sender_Mail,
+            Mailauthpass: organistaionsendmail.EmailApp_Password,
+            Email: book.Email,
+            templateMessageData
+        };
 
-    const handlecheckmaildriver = async (lastBookingno) => {
-      
-         
-          try {
-          
-            const dataToSend = {
-              userid:lastBookingno,
-              Drivername:book.drivername,
-              UserName:book.username,
-              password:book.userpassword,
-              Sendmailauth: organistaionsendmail.Sender_Mail,
-              Mailauthpass: organistaionsendmail.EmailApp_Password,
-              Email:book.Email
-    
-    
-    
-            };
-            
-            await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
-            setSuccess(true);
-            setSuccessMessage("Mail Sent Successfully");
-          } catch (error) {
-         
-            setError(true);
-            setErrorMessage("An error occured while sending mail");
-          }
-        }
+        console.log("Sending data:", dataToSend); // For debugging purposes
+        await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
+
+        setSuccess(true);
+        setSuccessMessage("Mail Sent Successfully");
+    } catch (error) {
+        console.error("Error sending email:", error); // Added console log for debugging
+        setError(true);
+        setErrorMessage("An error occurred while sending mail");
+    }
+};
+
         //  else {
         //   setError(true);
         //   setErrorMessage("Send mail checkbox is not checked. Email not sent.");
         // }
     //   };
     
-
     const handleAdd = async () => {
         if (!book.stations && !book.drivername) {
             setWarning(true);
@@ -681,9 +711,28 @@ const useDrivercreation = () => {
             setSuccessMessage("Successfully Added");
             // addPdf(lastdriveridno);
             handleCancel();
-        } catch (error) {
-            setError(true)
-            setErrorMessage("Failed to Insert Driver Data");
+        }
+        //  catch (error) {
+        //     setError(true)
+        //     setErrorMessage("Failed to Insert Driver Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     }
 
@@ -709,9 +758,28 @@ const useDrivercreation = () => {
                 setError(true);
                 setErrorMessage("no data found");
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Failed to Search Data");
+        } 
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Failed to Search Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
@@ -767,9 +835,27 @@ const useDrivercreation = () => {
         setEdit(true)
         handleList()
         }
-        catch(err){
-            setError(true);
-            setErrorMessage("Failed to Edit Data");
+        // catch(err){
+        //     setError(true);
+        //     setErrorMessage("Failed to Edit Data");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+         
+            // Check if there's no response, indicating a network error
+            if (error.message ) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Edit Driver Details: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
         
     };
@@ -973,22 +1059,70 @@ const useDrivercreation = () => {
     };
 
 
+    // const handleList = useCallback(async () => {
+    //     setLoading(true)
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/getDriverDetails`);
+    //         const data = response.data;
+          
+    //             const rowsWithUniqueId = data.map((row, index) => ({
+    //                 ...row,
+    //                 id: index + 1,
+    //             }));
+    //             setRows(rowsWithUniqueId);
+    //             // console.log(data,"datas of drivers creation ")
+    //             if (data.length > 0) {
+    //                 setLoading(false)
+    //             }else{
+    //                 setLoading(false)
+    //             }     
+           
+    //     } catch (err) {
+    //         console.log(err);
+    //         setLoading(false)
+    //     }finally {
+    //         setLoading(false); // Set loading to false once the request is done, whether successful or not
+    //     }
+    // }, [apiUrl]); // Add any dependencies needed inside this array
+
     const handleList = useCallback(async () => {
+        setLoading(true);  
+        setError(false);   
+        setErrorMessage("");
+    
         try {
             const response = await axios.get(`${apiUrl}/getDriverDetails`);
             const data = response.data;
-          
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-            
-           
+    
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+    
+            setRows(rowsWithUniqueId);  
+    
+            if (data.length > 0) {
+                setLoading(false);  
+            } else {
+                setLoading(false);  
+            }
         } catch (err) {
-            console.log(err);
+            console.error(err);
+    
+            // Handle network errors separately
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            
+            setError(true);  
+            setLoading(false);  
+        } finally {
+            setLoading(false);  
         }
-    }, [apiUrl]); // Add any dependencies needed inside this array
+    }, [apiUrl]);
+    
 
     useEffect(() => {
         handleList();
@@ -1055,6 +1189,8 @@ const useDrivercreation = () => {
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
+        templateMessageData,
+        setTemplateMessageData,
         // passwordsMatch,
         columns,
         showPassword,
@@ -1089,7 +1225,8 @@ const useDrivercreation = () => {
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
         handleExcelDownload,
-        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2
+        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2,
+        loading,setLoading
         
         // venkat
     };

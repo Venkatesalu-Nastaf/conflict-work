@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback,useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
-import { Organization } from './Customerdata';
+import { Organization ,stateToStations} from './Customerdata';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext'
 
 // TABLE START
@@ -42,19 +42,20 @@ const useCustomer = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [searchText, setSearchText] = useState('');
     const [warningMessage] = useState({});
-    const [isInputVisible, setIsInputVisible] = useState(false);
+    // const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [BillingGroup, setBillingGroup] = useState([]);
-    const [customerratetype,setCustomerRatetype]=useState([])
-    const [cerendentialdata,setCredentialData]=useState()
-    const [deletedialogbox,setDeletedDialog]=useState(false)
-    const [cerendentialdataforstations,setCredentialDataforstations]=useState()
+    const [customerratetype, setCustomerRatetype] = useState([])
+    const [cerendentialdata, setCredentialData] = useState()
+    const [deletedialogbox, setDeletedDialog] = useState(false)
+    const [loading, setLoading] = useState(false)
+    // const [cerendentialdataforstations,setCredentialDataforstations]=useState()
 
     //---------------------------------------
     const { triggerCustomerAdd, setTriggerCustomerAdd } = useData1()
-    const handleButtonClick = () => {
-        setIsInputVisible(!isInputVisible);
-    };
+    // const handleButtonClick = () => {
+    //     setIsInputVisible(!isInputVisible);
+    // };
     const [customerfieldSets, setCustomerFieldSets] = useState([{
         // dinamic data
         orderedby: '',
@@ -213,7 +214,7 @@ const useCustomer = () => {
 
         });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-      // Scale content
+        // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
@@ -253,9 +254,10 @@ const useCustomer = () => {
         gstnumber: '',
         SalesPerson: '',
         salesPercentage: '',
-        billingGroup: [],
+        // billingGroup: [],
+        billingGroup:'',
         hybrid: false,
-        TimeToggle:false,
+        TimeToggle: false,
     });
 
     const handleChange = (event) => {
@@ -281,70 +283,70 @@ const useCustomer = () => {
         }
     };
 
-const memoizedFetchStations = useMemo(() => {
-    return async (stations) => {
-        const ratetype = selectedCustomerData?.rateType || book.rateType;
-        const ratename = "Customer";
-        if (stations) {
-            try {
-                const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
-                const responsedata = response.data;
-                // if (responsedata?.length === 0) {
-                //     setInfo(true);
-                //     setInfoMessage("Ratetype stations not registered");
-                //     setCredentialDataforstations(true);
-                // } else {
-                //     setSuccess(true);
-                //     setSuccessMessage("Ratetype stations registered");
-                //     setCredentialDataforstations(false);
-                // }
-            } catch (error) {
-                console.error("Error fetching data", error);
-                // Handle the error as needed
-            }
-        }
-    };
-}, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
-const handleAutocompleteChangestations=async(event, newValue, name) => {
-    const selectedOption = newValue ? newValue.label : '';
-    if(name === "servicestation"){
-            await memoizedFetchStations(selectedOption)
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: selectedOption,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: selectedOption,
-            }));
-        }
-    }
+    // const memoizedFetchStations = useMemo(() => {
+    //     return async (stations) => {
+    //         const ratetype = selectedCustomerData?.rateType || book.rateType;
+    //         const ratename = "Customer";
+    //         if (stations) {
+    //             try {
+    //                 const response = await axios.get(`${apiUrl}/getratetypemanagentCustomerdatastations/${ratename}/${ratetype}/${stations}`);
+    //                 const responsedata = response.data;
+    //                 // if (responsedata?.length === 0) {
+    //                 //     setInfo(true);
+    //                 //     setInfoMessage("Ratetype stations not registered");
+    //                 //     setCredentialDataforstations(true);
+    //                 // } else {
+    //                 //     setSuccess(true);
+    //                 //     setSuccessMessage("Ratetype stations registered");
+    //                 //     setCredentialDataforstations(false);
+    //                 // }
+    //             } catch (error) {
+    //                 console.error("Error fetching data", error);
+    //                 // Handle the error as needed
+    //             }
+    //         }
+    //     };
+    // }, [selectedCustomerData?.rateType, book.rateType,selectedCustomerData.stations,book.stations, apiUrl]);
+    // const handleAutocompleteChangestations=async(event, newValue, name) => {
+    //     const selectedOption = newValue ? newValue.label : '';
+    //     if(name === "servicestation"){
+    //             await memoizedFetchStations(selectedOption)
+    //             setBook((prevBook) => ({
+    //                 ...prevBook,
+    //                 [name]: selectedOption,
+    //             }));
+    //             setSelectedCustomerData((prevData) => ({
+    //                 ...prevData,
+    //                 [name]: selectedOption,
+    //             }));
+    //         }
+    //     }
 
-    const handleAutocompleteChange = async(event, newValue, name) => {
+    const handleAutocompleteChange = async (event, newValue, name) => {
         const selectedOption = newValue ? newValue.label : '';
-        if(name === "rateType"){
-        
-                setBook((prevBook) => ({
-                    ...prevBook,
-                    servicestation: '', // Clear the servicestation
-                    [name]: selectedOption, // Update the ratetype
-                }));
-                setSelectedCustomerData((prevData) => ({
-                    ...prevData,
-                    servicestation: '', // Clear the servicestation
-                    [name]: selectedOption, // Update the ratetype
-                }));
-            }
-        else{
-           setBook((prevBook) => ({
+        // if(name === "rateType"){
+
+        //         setBook((prevBook) => ({
+        //             ...prevBook,
+        //             servicestation: '', // Clear the servicestation
+        //             [name]: selectedOption, // Update the ratetype
+        //         }));
+        //         setSelectedCustomerData((prevData) => ({
+        //             ...prevData,
+        //             servicestation: '', // Clear the servicestation
+        //             [name]: selectedOption, // Update the ratetype
+        //         }));
+        //     }
+        // else{
+        setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-             [name]: selectedOption,
+            [name]: selectedOption,
         }));
-    }
+        // }
     };
     const handleAutocompleteChangebilling = (event, newValue, name) => {
 
@@ -394,9 +396,10 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             gstnumber: '',
             SalesPerson: '',
             salesPercentage: '',
-            billingGroup: [],
+            // billingGroup: [],
+            billingGroup:'',
             hybrid: false,
-            TimeToggle:false,
+            TimeToggle: false,
         }));
         setCustomerFieldSets([{
             // dinamic data
@@ -405,7 +408,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             orderByMobileNo: '',
 
         }])
-        setIsInputVisible(!isInputVisible)
+        // setIsInputVisible(!isInputVisible)
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
@@ -414,47 +417,52 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         try {
             const response = await axios.get(`${apiUrl}/getcustomerorderdata/${datacustomer}`)
             const data = response.data
-            setCustomerFieldSets(data)
+            if (data.length > 0) {
+                setCustomerFieldSets(data)
+            }
+            else {
+                setCustomerFieldSets(customerfieldSets)
+            }
         }
         catch (err) {
             console.log(err)
         }
     }
-    const uniquecustomer=async(customerdataname)=>{
-        if(customerdataname){
-            const response= await axios.get(`${apiUrl}/getuniqueCustomerdata/${customerdataname}`)
-            const responsedata=response.data;
-            if(responsedata?.length >=1){
+    const uniquecustomer = async (customerdataname) => {
+        if (customerdataname) {
+            const response = await axios.get(`${apiUrl}/getuniqueCustomerdata/${customerdataname}`)
+            const responsedata = response.data;
+            if (responsedata?.length >= 1) {
                 setCredentialData(true)
                 // return true;
             }
-            else{
+            else {
                 setCredentialData(false)
                 // return false;
             }
         }
     }
 
-    const handleChangeuniquecustomer=(event)=>{
-        const { name, value} = event.target;
-         uniquecustomer(value);
+    const handleChangeuniquecustomer = (event) => {
+        const { name, value } = event.target;
+        uniquecustomer(value);
         setBook((prevBook) => ({
             ...prevBook,
-            [name]:value,
+            [name]: value,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            [name]:value,
+            [name]: value,
         }));
     }
 
     const handleRowClick = (params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-        const datta = customerData.billingGroup.split(',')
-        if (datta.length >= 2) {
-            setIsInputVisible(!isInputVisible);
-        }
+        // const datta = customerData.billingGroup.split(',')
+        // if (datta.length >= 2) {
+        //     setIsInputVisible(!isInputVisible);
+        // }
         setSelectedCustomerId(params.row.customerId);
         getcustomerdata(customerData.customer)
         setIsEditMode(true);
@@ -478,15 +486,34 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 setError(true);
                 setErrorMessage("No data found")
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection")
+        }
+        // catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection")
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+
+            // Check if there's no response, indicating a network error
+            if (error.message) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
     const handleenterSearch = useCallback(async (e) => {
         if (e.key === "Enter") {
-           try {
+            try {
                 const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(searchText)}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -514,14 +541,24 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
     }, [apiUrl, searchText]);
 
     const addCustomerToObjects = (arr, customerProp) => {
+        console.log(arr)
         return arr.map(obj => ({
             ...obj,
             customer: customerProp
         }));
     };
 
+    const removeEmptyObjects = (arr) => {
+        return arr.filter(obj => {
+            // Check if all specified fields are empty
+            return obj.orderedby !== "" && obj.orderByEmail !== "" && obj.orderByMobileNo !== "";
+        });
+    };
+
+
     // Call the function to add customer property to each object
     const handleList = useCallback(async () => {
+        setLoading(true)
         try {
             const response = await axios.get(`${apiUrl}/customersgroup`);
             const data = response.data;
@@ -530,8 +567,16 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 id: index + 1,
             }));
             setRows(rowsWithUniqueId);
+            if (data.length > 0) {
+                setLoading(false)
+            } else {
+                setLoading(false)
+            }
         } catch (err) {
             console.log(err);
+            setLoading(false)
+        } finally {
+            setLoading(false); // Set loading to false once the request is done, whether successful or not
         }
     }, [apiUrl]); // Add dependencies like apiUrl
 
@@ -539,11 +584,17 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         handleList(); // Call the handleList function
     }, [handleList]);
     const handleAdd = async () => {
-        const hasEmptyFields = customerfieldSets.some(fieldSet =>
-            !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
-        );
+        // const hasEmptyFields = customerfieldSets.some(fieldSet =>
+        //     !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+        // );
         const name = book.name;
-        const customer = book.customer
+        const servicestation = book.servicestation;
+        const rateType = book.rateType;
+        const customer = book.customer;
+        const address = book.address1;
+        const gst = book.gstnumber;
+        const stationstate = book.state;
+
         if (!name) {
             setError(true);
             setErrorMessage("fill mantatory fields");
@@ -554,26 +605,72 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setErrorMessage("fill mantatory fields");
             return;
         }
-        if (hasEmptyFields) {
+        if (!rateType) {
             setError(true);
-            setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
+            setErrorMessage("fill RateType fields");
             return;
         }
-        if(cerendentialdata === true){
+        if (!servicestation) {
+            setError(true);
+            setErrorMessage("fill Station fields");
+            return;
+        }
+        if (!address) {
+            setError(true);
+            setErrorMessage("fill Address fields");
+            return;
+        }
+        if (!gst) {
+            setError(true);
+            setErrorMessage("fill GstNumber fields");
+            return;
+        }
+        if (!stationstate) {
+            setError(true);
+            setErrorMessage("fill State fields");
+            return;
+        }
+        // if (hasEmptyFields) {
+        //     setError(true);
+        //     setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
+        //     return;
+        // }
+        if (cerendentialdata === true) {
             setError(true);
             setErrorMessage('customer aldrreay exist.');
             return;
         }
-        if(cerendentialdataforstations === true){
-            setError(true);
-            setErrorMessage('RateType stations not registered ');
-            return;
-        }
+        // if(cerendentialdataforstations === true){
+        //     setError(true);
+        //     setErrorMessage('RateType stations not registered ');
+        //     return;
+        // }
+        // const removeEmptyObjects = (arr) => {
+        //     return arr.filter(obj => {
+        //         // Check if all specified fields are empty
+        //         return obj.orderedby !== "" && obj.orderByEmail !== "" && obj.orderByMobileNo !== "";
+        //     });
+        // };
+
+        //   console.log(removeEmptyObjects(customerfieldSets),"ppp")
+        const dataordereddata = removeEmptyObjects(customerfieldSets)
+        console.log(dataordereddata, "datat")
         try {
-            const datasets = addCustomerToObjects(customerfieldSets, book.customer);
+            let datasets = [];
+            if (dataordereddata.length > 0) {
+                console.log(dataordereddata, "enetrr")
+
+                datasets = addCustomerToObjects(dataordereddata, book.customer);
+            }
+
+
+            console.log(book, "booked",)
+            console.log(datasets, "ppppp")
             const response = await axios.post(`${apiUrl}/customers`, book);
             if (response.data.success) {
-                await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
+                if (datasets.length > 0) {
+                    await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
+                }
                 handleCancel();
                 setTriggerCustomerAdd(prev => !prev)
                 setRows([]);
@@ -581,82 +678,126 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 setSuccess(true);
                 setSuccessMessage(response.data.message);
                 setCredentialData()
-                setCredentialDataforstations()
+                // setCredentialDataforstations()
             } else {
                 setError(true);
                 setErrorMessage(response.data.message);
+                // }
             }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+        }
+        //  catch {
+        //     setError(true);
+        //     setErrorMessage("Check your Network Connection");
+        // }
+        catch (error) {
+            // console.error("Error occurredddddd:", error);
+
+            // Check if there's no response, indicating a network error
+            if (error.message) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                // console.log('Network error');
+            } else if (error.response) {
+                setError(true);
+                // Handle other Axios errors (like 4xx or 5xx responses)
+                setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+            } else {
+                // Fallback for other errors
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+            }
         }
     };
 
     const handleEdit = async () => {
-        const hasEmptyFields = customerfieldSets.some(fieldSet =>
-            !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
-        );
-        if (hasEmptyFields) {
-            setError(true);
-            setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
-            return;
-        }
-        if(cerendentialdataforstations === true){
-            setError(true);
-            setErrorMessage('RateType stations not registered ');
-            return;
-        }
-        const { id, orderByEmail, orderedby, orderByMobileNo,customerId, ...restselectedcustomerdata } = selectedCustomerData
+        // const hasEmptyFields = customerfieldSets.some(fieldSet =>
+        //     !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+        // );
+        // if (hasEmptyFields) {
+        //     setError(true);
+        //     setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
+        //     return;
+        // }
+        // if(cerendentialdataforstations === true){
+        //     setError(true);
+        //     setErrorMessage('RateType stations not registered ');
+        //     return;
+        // }
+        const { id, orderByEmail, orderedby, orderByMobileNo, customerId, ...restselectedcustomerdata } = selectedCustomerData
         const updatedCustomer = {
             ...restselectedcustomerdata,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-
-        const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
+        const dataordereddata = removeEmptyObjects(customerfieldSets)
+        let datasets = [];
+        if (dataordereddata.length > 0) {
+            datasets = addCustomerToObjects(dataordereddata, selectedCustomerData?.customer || book.customer);
+        }
+        // const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
         await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
-        await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
-        setIsInputVisible(!isInputVisible);
+        if (datasets.length > 0) {
+            await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
+        }
+        // setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);
         handleCancel();
         setRows([]);
         handleList();
     };
-    const deletedatecustomerorder=async(id)=>{
-        try{
+    const deletedatecustomerorder = async (id) => {
+        try {
             await axios.delete(`${apiUrl}/deletecustomerorderdatasdata/${id}`);
             setDeletedDialog(false)
         }
-        catch(err){
+        catch (err) {
             console.log(err)
         }
     }
 
-    const handleRemove = (index,id) => {
+    const handleRemove = (index, id) => {
         setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
-        if(id){
+        if (id) {
             setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
-             deletedatecustomerorder(id)
+            deletedatecustomerorder(id)
         }
-        else{
+        else {
             setCustomerFieldSets(customerfieldSets.filter((_, i) => i !== index));
             setDeletedDialog(false)
         }
     }
-    useEffect(()=>{
-        const fetchcustomerratedata=async()=>{
-          try{
-         const response= await axios.get(`${apiUrl}/ratemanagmentCustomerdata`)
-          const data=response.data
-          setCustomerRatetype(data.map(row=>row.ratename))
-          }
-          catch(err){
-            console.log(err)
-          }
+    useEffect(() => {
+        const fetchcustomerratedata = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/ratemanagmentCustomerdata`)
+                const data = response.data
+                setCustomerRatetype(data.map(row => row.ratename))
+            }
+            //   catch(err){
+            //     console.log(err)
+            //   }
+            catch (error) {
+                // console.error("Error occurredddddd:", error);
+
+                // Check if there's no response, indicating a network error
+                if (error.message) {
+                    setError(true);
+                    setErrorMessage("Check your Network Connection");
+                    // console.log('Network error');
+                } else if (error.response) {
+                    setError(true);
+                    // Handle other Axios errors (like 4xx or 5xx responses)
+                    setErrorMessage("Failed to Edit Customer: " + (error.response.data.message || error.message));
+                } else {
+                    // Fallback for other errors
+                    setError(true);
+                    setErrorMessage("An unexpected error occurred: " + error.message);
+                }
+            }
         }
         fetchcustomerratedata()
-      },[apiUrl])
+    }, [apiUrl])
 
-    
+
 
     // Use handleList as a dependency
     const handleClick = async (event, actionName, customerId) => {
@@ -682,7 +823,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
 
             else if (actionName === 'Cancel') {
                 handleCancel();
-                handleList(); 
+                handleList();
                 setRows([]);
             }
 
@@ -694,7 +835,7 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
                 setTriggerCustomerAdd(prev => !prev)
                 setRows([]);
             }
-            
+
             else if (actionName === 'Edit') {
                 handleEdit()
             }
@@ -707,11 +848,11 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
             setErrorMessage("Check Network connection");
         }
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // });
 
     return {
         selectedCustomerData,
@@ -738,9 +879,9 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         hidePopup,
         handleAutocompleteChange,
         handleDateChange,
-        handleButtonClick,
+        // handleButtonClick,
         setSearchText,
-        isInputVisible,
+        // isInputVisible,
         handleExcelDownload,
         handlePdfDownload,
         handleenterSearch,
@@ -748,8 +889,10 @@ const handleAutocompleteChangestations=async(event, newValue, name) => {
         columns,
         isEditMode, setSelectedCustomerData,
         handleEdit,
-        customerfieldSets, setBook,deletedialogbox,setDeletedDialog,handleAutocompleteChangestations,setInfo,setInfoMessage,
-        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling,handleRemove,customerratetype,handleChangeuniquecustomer,cerendentialdata
+        customerfieldSets, setBook, deletedialogbox, setDeletedDialog,loading,
+        // handleAutocompleteChangestations,
+        setInfo, setInfoMessage,
+        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
     };
 };
 

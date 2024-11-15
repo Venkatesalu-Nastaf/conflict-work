@@ -41,7 +41,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     Billingdate,
     selectedCustomerDatas,
     invoiceno,
-    handleKeyenter,
+    // handleKeyenter,
     customer,
     tripData,
     setCustomer,
@@ -53,7 +53,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     info,
     infoMessage,
     servicestation,
-    handleserviceInputChange,
+    // handleserviceInputChange,
     handleShow,
     handleCancel,
     handleClickGenerateBill,
@@ -75,7 +75,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleKeyDown,
     handleRemove,
     loading,
-    setLoading
+    setLoading,
+    // setServiceStation,
+    setInfo,
+     setINFOMessage,
+    //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
 
@@ -90,6 +94,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   const Transfer_read = permissions[6]?.read;
   const Transfer_new = permissions[6]?.new;
   const Transfer_delete = permissions[6]?.new;
+  const groupdisable =groupId ? true : false
+//  const ddd = groupId ? "uedd" : "moo"
+//   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
+//   console.log(ddd,"sttenary",groupstation)
+
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -146,7 +155,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       value={invoiceno || ''}
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
-                      onKeyDown={handleKeyenter}
+                      // onKeyDown={handleKeyenter}
+                      disabled={groupdisable}
+                     
                     />
                   </div>
                   <div className="input">
@@ -161,10 +172,21 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       size="small"
                       value={customer || ''}
                       options={organizationNames}
-                      onChange={(event, value) => setCustomer(value)}
+                      disabled={groupdisable} 
+
+                       onChange={(event, value) => {
+                        if (!groupId) {
+                          setCustomer(value)
+                        } else {
+                        
+                          setInfo(true)
+                          setINFOMessage("not change customer ")
+                        }
+                        }}
+                      // onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
+                          <TextField {...params} label="Organization" name='customer'  disabled={groupdisable} inputRef={params.inputRef} />
                         );
                       }}
                     />
@@ -235,22 +257,61 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
                     </div>
-                    <Autocomplete
+                    {/* <Autocomplete
                       fullWidth
                       id="free-station"
                       className='full-width'
                       freeSolo
+                     
                       size="small"
-                      value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                      options={stationName.map((option) => ({
-                        label: option.Stationname,
-                      }))}
-                      onChange={(event, value) => handleserviceInputChange(event, value)}
+                      // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
+                      value={servicestation || selectedCustomerDatas.station || ''}
+                      // value={groupId ? groupstation : servicestation }
+                      // inputValue={groupId ? groupstation : servicestation || ""}
+                      // inputValue={ servicestation || ""}
+                      // options={stationName.map((option) => ({
+                      //     label:option.Stationname
+                      //   }))}
+                        // options={stationName
+                        //   .filter((option) => option.Stationname !== "All") // Filter out "All" before mapping
+                        //   .map((option) => ({
+                        //     label:option.Stationname
+                        //   }))}
+                      // options={stationName.map((option) => ({
+                      //   label: option.Stationname,
+                      // }))}
+                      // onChange={(event, value) => {
+                      //   if (!groupId) {
+                      //     handleserviceInputChange(event, value)
+                      //   } else {
+                        
+                      //     setInfo(true)
+                      //     setINFOMessage("not change stations ")
+                      //   }
+
+                      // }}
+                      // onChange={(event, value) => handleserviceInputChange(event, value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Stations" name='station' inputRef={params.inputRef} />
+                          <TextField {...params} label="Stations" name='station' inputRef={params.inputRef}
+                          //  value={groupId ? groupstation : servicestation }  
+                             />
                         );
                       }}
+                    /> */}
+
+
+
+                   <TextField
+                      size="small"
+                       id="freet-station"
+                      className='full-width'
+                    
+                      label="State" 
+                      name='station'
+                      value={servicestation || ""}
+  
+                      autoComplete='off'
                     />
                   </div>
                   <div className="input">

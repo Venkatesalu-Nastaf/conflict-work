@@ -47,12 +47,13 @@ const useTransferreport = () => {
   const [allTripData, setAllTripData] = useState([])
   const [removeUpdate, setRemoveUpdate] = useState(false)
   const [totalTransferAmount, setTotalTransferAmount] = useState()
+  const [billingGroupDetails, setBillingGroupDetails] = useState('')
 
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId", "Status",
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate", "TransferReport", "TripId", "Status", "State"
     ];
 
     const formData = {};
@@ -62,6 +63,7 @@ const useTransferreport = () => {
         formData[key] = value;
       }
     });
+    console.log(formData.State, 'state999');
 
     setCustomer(formData.Customer)
     setFromDate(formData.FromDate)
@@ -72,6 +74,7 @@ const useTransferreport = () => {
     setTransferReport(formData.TransferReport)
     setTripID(formData.TripId)
     setBilledStatusCheck(formData.Status)
+    setServiceStation(formData.State)
     setRatetypeforpage('')
   }, [location, setTransferReport])
 
@@ -80,6 +83,8 @@ const useTransferreport = () => {
       setTransferReport(false)
     }
   });
+  console.log(servicestation, 'stateee');
+
   useEffect(() => {
     if (transferReport === false || transferReport === undefined) {
       setCustomer('')
@@ -487,6 +492,8 @@ const useTransferreport = () => {
       })
       .filter((tripid) => tripid !== null);
 
+    console.log("Selected Trip IDs:", selectedTripIds);
+
     const selectedTrips = newSelectionModel
       .filter((selectedId) => selectedId !== null)
       .map((selectedId) => {
@@ -494,15 +501,19 @@ const useTransferreport = () => {
         return selectedRow ? selectedRow : null;
       })
       .filter((tripid) => tripid !== null);
+
+    console.log("Selected Trips:", selectedTrips);
     setSelectedRow(selectedTrips)
     const tripsheetid = selectedTripIds;
     setRowSelectionModel(tripsheetid);
+
+    console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
 
 
   useEffect(() => {
     const fetchData = async () => {
-     // console.log('loading in transperreposr')
+      // console.log('loading in transperreposr')
       try {
         const tripid = rowSelectionModel
         const encoded = localStorage.getItem("selectedcustomerdata");
@@ -524,7 +535,7 @@ const useTransferreport = () => {
               customer
             )}/${tripID}`
           );
-        
+
 
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -602,107 +613,107 @@ const useTransferreport = () => {
 
   // my code with loading 
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//         setLoading(true); // Start loading
-//         setRows([]); // Clear rows to show an empty grid
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //         setLoading(true); // Start loading
+  //         setRows([]); // Clear rows to show an empty grid
 
-//         let formattedTripID = tripID;
-//         console.log(tripID, 'response');
+  //         let formattedTripID = tripID;
+  //         console.log(tripID, 'response');
 
-//         if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
-//             formattedTripID = tripID[0].split(',').map(id => id.trim());
-//         }
+  //         if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
+  //             formattedTripID = tripID[0].split(',').map(id => id.trim());
+  //         }
 
-//         let tripData = []; // Initialize tripData variable
+  //         let tripData = []; // Initialize tripData variable
 
-//         try {
-//             const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
-//                 params: { tripID: formattedTripID }
-//             });
+  //         try {
+  //             const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
+  //                 params: { tripID: formattedTripID }
+  //             });
 
-//             tripData = response.data; // Assign fetched data to tripData
-//             console.log(tripData, 'tripData');
-//             setAllTripData(tripData);
+  //             tripData = response.data; // Assign fetched data to tripData
+  //             console.log(tripData, 'tripData');
+  //             setAllTripData(tripData);
 
-//             if (tripData.length > 0) {
-//                 const tripsheetNumbers = tripData.map((row, index) => ({
-//                     id: index + 1,
-//                     guestname: row.guestname,
-//                     tripid: row.tripid,
-//                     status: row.status,
-//                     customer: row.customer
-//                 }));
+  //             if (tripData.length > 0) {
+  //                 const tripsheetNumbers = tripData.map((row, index) => ({
+  //                     id: index + 1,
+  //                     guestname: row.guestname,
+  //                     tripid: row.tripid,
+  //                     status: row.status,
+  //                     customer: row.customer
+  //                 }));
 
-//                 const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
-//                 const rowsWithUniqueId = filteredData.map((row, index) => ({
-//                     ...row,
-//                     id: index + 1,
-//                 }));
-//                 setRows(rowsWithUniqueId);
-//             } else {
-//                 setRows([]); // Ensure rows are cleared if no data
-//             }
-//         } catch (error) {
-//             console.error('Error fetching trip data:', error);
-//         } finally {
-//             // Stop loading if tripData has data
-//             if (tripData.length > 0) {
-//                 setLoading(false);
-//             }
-//         }
-//     };
+  //                 const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
+  //                 const rowsWithUniqueId = filteredData.map((row, index) => ({
+  //                     ...row,
+  //                     id: index + 1,
+  //                 }));
+  //                 setRows(rowsWithUniqueId);
+  //             } else {
+  //                 setRows([]); // Ensure rows are cleared if no data
+  //             }
+  //         } catch (error) {
+  //             console.error('Error fetching trip data:', error);
+  //         } finally {
+  //             // Stop loading if tripData has data
+  //             if (tripData.length > 0) {
+  //                 setLoading(false);
+  //             }
+  //         }
+  //     };
 
-//     fetchData();
-// }, [tripID, apiUrl]);
-useEffect(() => {
-  const fetchData = async () => {
+  //     fetchData();
+  // }, [tripID, apiUrl]);
+  useEffect(() => {
+    const fetchData = async () => {
       // Only set loading to true if it's a new tripID
       setLoading(true);
       setRows([]);
 
       let formattedTripID = tripID;
-      console.log(tripID, 'response');
+      // console.log(tripID, 'response');
 
       if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
-          formattedTripID = tripID[0].split(',').map(id => id.trim());
+        formattedTripID = tripID[0].split(',').map(id => id.trim());
       }
 
       try {
-          const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
-              params: { tripID: formattedTripID }
-          });
+        const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
+          params: { tripID: formattedTripID }
+        });
 
-          const tripData = response.data;
-          console.log(tripData, 'tripData');
-          setAllTripData(tripData);
+        const tripData = response.data;
+        // console.log(tripData, 'tripData');
+        setAllTripData(tripData);
 
-          if (tripData.length > 0) {
-              const tripsheetNumbers = tripData.map((row, index) => ({
-                  id: index + 1,
-                  guestname: row.guestname,
-                  tripid: row.tripid,
-                  status: row.status,
-                  customer: row.customer
-              }));
+        if (tripData.length > 0) {
+          const tripsheetNumbers = tripData.map((row, index) => ({
+            id: index + 1,
+            guestname: row.guestname,
+            tripid: row.tripid,
+            status: row.status,
+            customer: row.customer
+          }));
 
-              const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
-              setRows(filteredData); // You can set the filtered data directly
-          } else {
-              setRows([]); // Ensure rows are cleared if no data
-          }
+          const filteredData = tripsheetNumbers.filter(row => row.tripid !== 0);
+          setRows(filteredData); // You can set the filtered data directly
+        } else {
+          setRows([]); // Ensure rows are cleared if no data
+        }
       } catch (error) {
-          console.error('Error fetching trip data:', error);
+        console.error('Error fetching trip data:', error);
       } finally {
-          // Only stop loading if data was fetched or an error occurred
-          setLoading(false);
+        // Only stop loading if data was fetched or an error occurred
+        setLoading(false);
       }
-  };
+    };
 
-  if (tripID) { // Check if tripID is not null or undefined
+    if (tripID) { // Check if tripID is not null or undefined
       fetchData();
-  }
-}, [tripID, apiUrl]);
+    }
+  }, [tripID, apiUrl]);
 
   const handleKeyDown = async (event) => {
     if (event.key === 'Enter') {
@@ -714,26 +725,40 @@ useEffect(() => {
             InvoiceNo: InvoiceNo
           }
         });
-
         const Result = response.data;
-        setSuccess(true)
-        setSuccessMessage("successfully listed");
-        const fromdate = Result?.map(li => li.FromDate);
-        setFromDate(fromdate)
-        const enddate = Result?.map(li => li.EndDate);
-        setEndDate(enddate)
-        const organization = Result?.map(li => li.Organization_name);
+        if (Result.length > 0) {
 
-        setCustomer(organization[0])
-        const InvoiceDate = Result?.map(li => li.Billdate)
-        setInvoiceDate(InvoiceDate)
-        const groupTripid = Result?.map(li => li.Grouptrip_id)
-        setGroupTripid(groupTripid)
-        // const tripid = Result?.map(li =>li.Trip_id)
-        const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
+          setSuccess(true)
+          setSuccessMessage("successfully listed");
+          const state = Result[0]?.State;
+          setServiceStation(state)
+          const fromdate = Result?.map(li => li.FromDate);
+          setFromDate(fromdate)
+          const enddate = Result?.map(li => li.EndDate);
+          setEndDate(enddate)
+          const organization = Result?.map(li => li.Organization_name);
 
-        setTripID(tripid)
+          setCustomer(organization[0])
+          const InvoiceDate = Result?.map(li => li.Billdate)
+          setInvoiceDate(InvoiceDate)
+          const groupTripid = Result?.map(li => li.Grouptrip_id)
+          setGroupTripid(groupTripid)
+          // const tripid = Result?.map(li =>li.Trip_id)
+          const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
+          setTripID(tripid)
+        }
+        else {
+          setError(true)
+          setErrorMessage("No Data Found")
+          setRows([])
+          setServiceStation('')
+          setFromDate('')
+          setEndDate('')
+          setCustomer('')
+          setInvoiceDate('')
+          setGroupTripid('')
+        }
       } catch (error) {
         console.log(error, 'error');
       }
@@ -752,36 +777,38 @@ useEffect(() => {
           }
         });
         const Result = response.data;
-
-        if (Result) { 
+        if (Result.length > 0) {
           setSuccess(true);
           setSuccessMessage("successfully listed");
+
+          const state = Result[0]?.State;
+          setServiceStation(state)
+          const fromdate = Result?.map(li => li.FromDate);
+          setFromDate(fromdate)
+          const enddate = Result?.map(li => li.EndDate);
+          setEndDate(enddate)
+          const organization = Result?.map(li => li.Organization_name);
+
+          setCustomer(organization[0])
+          const InvoiceDate = Result?.map(li => li.Billdate)
+          setInvoiceDate(InvoiceDate)
+          const groupTripid = Result?.map(li => li.Grouptrip_id)
+          setGroupTripid(groupTripid)
+          const Invoice_no = Result?.map(li => li.Invoice_no)
+          setInvoiceno(Invoice_no)
+          const Amount = Result?.map(li => li.Amount)
+          setTotalTransferAmount(Amount)
+          const Status = Result?.map(li => li.Status)
+
+          const checkStatus = Status[0];
+          setBilledStatusCheck(checkStatus)
+          const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
+
+          setTripID(tripid)
         } else {
           setError(true);
           setErrorMessage("No data found");
         }
-        const fromdate = Result?.map(li => li.FromDate);
-        setFromDate(fromdate)
-        const enddate = Result?.map(li => li.EndDate);
-        setEndDate(enddate)
-        const organization = Result?.map(li => li.Organization_name);
-
-        setCustomer(organization[0])
-        const InvoiceDate = Result?.map(li => li.Billdate)
-        setInvoiceDate(InvoiceDate)
-        const groupTripid = Result?.map(li => li.Grouptrip_id)
-        setGroupTripid(groupTripid)
-        const Invoice_no = Result?.map(li => li.Invoice_no)
-        setInvoiceno(Invoice_no)
-        const Amount = Result?.map(li => li.Amount)
-        setTotalTransferAmount(Amount)
-        const Status = Result?.map(li => li.Status)
-
-        const checkStatus = Status[0];
-        setBilledStatusCheck(checkStatus)
-        const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
-
-        setTripID(tripid)
       } catch (error) {
         console.log(error, 'error');
       }
@@ -864,6 +891,7 @@ useEffect(() => {
     attachedImage,
     setCustomer,
     servicestation,
+    setServiceStation,
     selectedImage,
     handleserviceInputChange,
     handleEInvoiceClick,
@@ -909,7 +937,9 @@ useEffect(() => {
     // handleRemove,
     billedStatusCheck,
     setBilledStatusCheck,
-    loading,setLoading
+    loading, setLoading,
+    billingGroupDetails,
+    setBillingGroupDetails
   };
 };
 

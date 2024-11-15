@@ -18,6 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
+import { CircularProgress } from '@mui/material';
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -101,8 +102,9 @@ const Accuntinfo = ({ stationName }) => {
     columns,
     isEditMode,
     // fields,
-     handleAutocompleteChangestations,
-    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata
+    //  handleAutocompleteChangestations,
+    handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata,
+    loading,
   } = useAccountinfo();
 
 
@@ -307,7 +309,7 @@ const Accuntinfo = ({ stationName }) => {
                 // variant="standard"
                 />
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <div className='icone'>
                   <FaCarOn />
                 </div>
@@ -330,7 +332,7 @@ const Accuntinfo = ({ stationName }) => {
                   }
                   }
                 />
-              </div>
+              </div> */}
 
 
               <div className="input">
@@ -358,6 +360,30 @@ const Accuntinfo = ({ stationName }) => {
                 />
               </div>
               <div className="input">
+                <div className='icone'>
+                  <FaCarOn />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="vehicleInfo"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
+                  value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
+                  options={Vehicleinfo.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleInfo || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
+              {/* <div className="input">
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -380,7 +406,7 @@ const Accuntinfo = ({ stationName }) => {
                   }
                   }
                 />
-              </div>
+              </div> */}
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
@@ -629,6 +655,7 @@ const Accuntinfo = ({ stationName }) => {
           <Box
             sx={{
               height: 400, // Adjust this value to fit your needs
+              position: 'relative',
               '& .MuiDataGrid-virtualScroller': {
                 '&::-webkit-scrollbar': {
                   width: '8px', // Adjust the scrollbar width here
@@ -649,6 +676,19 @@ const Accuntinfo = ({ stationName }) => {
               },
             }}
           >
+             {loading ? ( 
+                                <Box
+                                    sx={{
+                                        position: 'absolute', 
+                                        top: '50%',
+                                        left: '50%', 
+                                        transform: 'translate(-50%, -50%)', 
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+
             <DataGrid
               rows={rows}
               columns={columns}
@@ -660,6 +700,7 @@ const Accuntinfo = ({ stationName }) => {
               }}
               pageSizeOptions={[5, 10]}
             />
+                            )}
           </Box>
         </div>
       </form>

@@ -64,7 +64,12 @@ const useBillWiseReceipt = () => {
         width: 100,
       }
       : { field: "BillNo", headerName: "Bill No", type: "number", width: 120 },
-    { field: "BillDate", headerName: "Bill Date", width: 120 },
+      {
+        field: "BillDate",
+        headerName: "Bill Date",
+        width: 120,
+        valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),
+      },
     { field: "Amount", headerName: "Amount", width: 120 },
   ];
 
@@ -406,20 +411,20 @@ const useBillWiseReceipt = () => {
           ...totals,
           ...billWiseReport,
         };
-
-
         try {
           // First, this PUT request will be executed and awaited
           const response = await axios.put(`${apiUrl}/updateBalanceAmount`, {
             uniqueVoucherId,
             TotalCollectAmount,
           });
-          console.log(combinedData, combinedData.collectedAmount, 'bankkkkkkk', combinedData.AccountDetails);
           // Only after the PUT request finishes, this POST request will execute
           await axios.post(`${apiUrl}/addCollect`, {
             collectedAmount: combinedData.collectedAmount || 0,
             bankname: combinedData.AccountDetails,
           });
+           // Display success message after both requests complete
+        setSuccess(true);
+        setSuccessMessage("Successfully Added");
 
           // Logging and state updates occur after both requests have completed
           console.log(response.data.message);
@@ -469,6 +474,16 @@ const useBillWiseReceipt = () => {
         ...totals,
         ...billWiseReport,
       };
+
+    try {
+      // Your logic for handling the non-balanceAmount case goes here
+
+      // Display success message after successful handling
+      setSuccess(true);
+      setSuccessMessage("Successfully Added");
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
 
       // Format data for the API request
       const formattedData = {

@@ -28,7 +28,12 @@ const useBilling = () => {
     const [selectbillingdata,setselectBillingData]=useState({})
     const [billingdate,setBillingDate]=useState()
     const [invoiceno,setInvoiceNo]=useState();
+    const[invoicestate,setINvoicestate]=useState('')
     const dataempty = Number(localStorage.getItem("searchdataurl"))
+    const [stateDetails, setStateDetails] = useState([]);
+    const [billadd,setBillAdd]=useState(false)
+    const [dataotherStations,setDataOtherStations]=useState([])
+
     const { setParticularPdf, setParticularRefNo,setIndividualBilled, individualBilled } = PdfData();
 
     //for popup
@@ -48,16 +53,20 @@ const useBilling = () => {
     }, [error, success, warning, info]);
 
     // for pdf print
-    const handleEInvoiceClick = (row) => {
-        const tripid = book.tripid;
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Please enter TripID");
-        } else {
-            setParticularRefNo(tripid)
-            setParticularPdf(true);
-        }
-    };
+    // const handleEInvoiceClick = (row) => {
+    //     const tripid = book.invoiceno;
+    //     if (!tripid) {
+    //         setError(true);
+    //         setErrorMessage("Please enter Invoice No");
+    //     } else {
+    //         setParticularRefNo()
+    //         setParticularPdf(true);
+    //     }
+    // };
+
+   
+
+
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -159,6 +168,57 @@ const useBilling = () => {
             OtherChargesamount: total_otherCharge_Amount({ ...prevBook, [name]: newValue }),
 
         }));
+    };
+
+
+
+    const memoizedCustomer = useMemo(() => book?.customer, [book?.customer]);
+    // const fetchDataOtherStations = async()=>{
+    //     try{
+    //             const response = await axios.get(`${apiUrl}/customerdatgst/${encodeURIComponent(memoizedCustomer)}`);
+             
+    //             const data=response.data;
+    //            setDataOtherStations(data)
+
+    //             // console.log(response,'Response datas ',customerData)
+    //         }
+    //      catch (error) {
+    //         console.error('Error fetching customer data:', error);
+    //     }
+    // };
+
+    useEffect(() => {
+        const fetchDataOtherStations = async () => {
+            try {
+                if (memoizedCustomer) {
+                    const response = await axios.get(`${apiUrl}/customerdatgst/${encodeURIComponent(memoizedCustomer)}`);
+             
+                    const data=response.data;
+                   setDataOtherStations(data)
+
+                    // console.log(response,'Response datas ',customerData)
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+            }
+        };
+
+        fetchDataOtherStations();
+    }, [memoizedCustomer, apiUrl]);
+    
+    console.log(dataotherStations,"llll")
+
+    
+    const handleEInvoiceClick = (row) => {
+        const tripid = book.invoiceno;
+        // if (!tripid) {
+        //     setError(true);
+        //     setErrorMessage("Please enter Invoice No");
+        // } else {
+          
+            setParticularRefNo(tripid)
+            setParticularPdf(true);
+        // }
     };
 
 
@@ -305,6 +365,19 @@ const useBilling = () => {
 
     }
 
+
+    const customerMotherdatagroupstation = async(customer)=>{
+        console.log(customer,"enetr")
+        try{
+            const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+            const datas =resultresponse.data;
+            return datas
+          
+        }
+        catch(err){
+         
+        }
+    }
     // const addData = {
     //     ...book,
     //     nhamount: total_Nighthalt_Amount() || book.nhamount,
@@ -326,12 +399,14 @@ const useBilling = () => {
     const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
     const bookingDetails = responsedata.data[0]; 
    setBook(() => ({ ...bookingDetails }));
+
     }
     else{
        
         setBook(() => ({  }));
     }
   }
+//   console.log(invoiceno,"jsss")
  
     useEffect(() => {
          const params = dataempty === 0 ? new URLSearchParams(location.search): new URLSearchParams();
@@ -339,11 +414,14 @@ const useBilling = () => {
         const tripid = params.get("tripid");
         const billingdate1 = params.get("Billingdate");
         const Invoicedata = params.get("Invoicedata")
+        // console.log(Invoicedata,"PPPs")
         if (dispath && dataempty === 0) {
             dataget(tripid)
             setEdit(true)
             setBillingDate(billingdate1)
+            // console.log(Invoicedata,"eetr")
             setInvoiceNo(Invoicedata)
+            setINvoicestate(Invoicedata)
             setIndividualBilled(false)
         }
         else{
@@ -380,8 +458,8 @@ const useBilling = () => {
             return
         }
         try {
+            const statedata = await customerMotherdatagroupstation(book.customer ||  selectbillingdata.customer);
             const IndividualBillData = {
-                Invoice_No: `RF${book.tripid}`,
                 Trip_id: book.tripid,
                 Status: "Billed",
                 Amount: book?.totalcalcAmount || 0,
@@ -389,9 +467,11 @@ const useBilling = () => {
                 Customer: customerData?.customer,
                 billing_no: book?.billingno,
                 guestname: book?.guestname,
+                State:statedata
             }
             await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
             handleCancel();
+            setBillAdd(false)
             setSuccess(true);
             setSuccessMessage("Successfully Added");
 
@@ -438,6 +518,7 @@ const useBilling = () => {
                     setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
+                    setBillAdd(true)
                     setEdit(false)
                     setIndividualBilled(false)
                     }
@@ -468,7 +549,7 @@ const useBilling = () => {
             });
     }, []);
 
-    const memoizedCustomer = useMemo(() => book?.customer, [book?.customer]);
+    
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
@@ -479,6 +560,8 @@ const useBilling = () => {
                     }
                     const customerData = await response.json();
                     setCustomerData(customerData);
+
+                    // console.log(response,'Response datas ',customerData)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
@@ -487,6 +570,32 @@ const useBilling = () => {
 
         fetchCustomerData();
     }, [memoizedCustomer, apiUrl]);
+
+    useEffect(() => {
+        const fetchStateDetails = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/statedetails`);
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch state details');
+                }
+    
+                const data = await response.json();
+                setStateDetails(data);
+    
+                console.log(data, 'State details fetched'); 
+            } 
+            catch (err) {
+                // setError(err.message); // Handle errors
+                console.error('Error fetching state details:', err);
+            }
+        };
+        fetchStateDetails();    
+    }, [customerData]);
+
+
+
 
     const organizationaddress1 = customerData.address1;
     // const organizationaddress2 = customerData.address2;
@@ -646,8 +755,9 @@ const useBilling = () => {
         setMapImageUrl,
         setGMapImageUrl,
         handleKeyenterinvoicdeno,
-        setInvoiceNo,
-        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate
+        setInvoiceNo,billadd,invoicestate,dataotherStations,
+        mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate,
+        stateDetails,setStateDetails
     };
 };
 

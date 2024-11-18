@@ -48,6 +48,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { CircularProgress } from '@mui/material';
 import { GiConsoleController } from 'react-icons/gi';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Backdrop from '@mui/material/Backdrop';
 export const PDFbill = [
   {
     Option: "PDF 1",
@@ -156,6 +157,7 @@ const TransferReport = ({ stationName }) => {
   const [comparisonResult, setComparisonResult] = useState(null);
   const [customerData, setCustomerData] = useState([]);
   const [stationData, setStationData] = useState([])
+  const [isPdfloading, setIsPdfloading] = useState(false)
 
   // useEffect(() => {
   //   setSelectedImageorganisation(sharedData)
@@ -456,15 +458,35 @@ const TransferReport = ({ stationName }) => {
   }, [apiUrl, customer])
 
 
-  const handleButtonClick = async (params) => {
-    setPdfPrint(true)
-    const { tripid, customer } = params.row;
-    setTripno(tripid)
-    const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
-    const pdfdetails = await response.json()
-    setParticularPdf(pdfdetails)
+  // const handleButtonClick = async (params) => {
+  //   setPdfPrint(true)
+  //   const { tripid, customer } = params.row;
+  //   setTripno(tripid)
+  //   const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+  //   const pdfdetails = await response.json()
+  //   setParticularPdf(pdfdetails)
 
+  // };
+
+// Changes with loading untill all data fetch  
+  const handleButtonClick = async (params) => {
+    setIsPdfloading(true); // Start the loading screen
+    
+    const { tripid, customer } = params.row;
+    setTripno(tripid);
+
+    try {
+      const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+      const pdfdetails = await response.json();
+      setParticularPdf(pdfdetails);
+      setPdfPrint(true);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsPdfloading(false);
+    }
   };
+
   const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
     if (!misformat) {
       setError(true)
@@ -479,15 +501,60 @@ const TransferReport = ({ stationName }) => {
     handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
     handleDownloadPdf();
   };
+  const tripheaderIndex = pdfzipdata?.map(li=>li.tripid)
 
   return (
+    
     <div className="TransferReport-form main-content-form Scroll-Style-hide">
+     
       <form >
         <div className="detail-container-main detail-container-main-tfreport">
           <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
+            {/* <Backdrop
+    open={isPdfloading}
+    sx={{
+      // zIndex: 9999, // Ensures it appears above all elements
+      color: '#fff',
+      position: 'fixed', // Ensures it covers the entire screen
+      backgroundColor: 'rgba(0, 0, 0, 0.9)', // Darker background with high opacity
+      display: 'flex', // Centers the spinner
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <CircularProgress />
+  </Backdrop> */}
+  <Backdrop
+  open={isPdfloading}
+  sx={{
+    zIndex: 9999, 
+    color: '#fff',
+    position: 'fixed', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    display: 'flex', 
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
+>
+  <div
+    style={{
+      backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+      padding: '20px', 
+      borderRadius: '10px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)', 
+    }}
+  >
+    <CircularProgress />
+  </div>
+</Backdrop>
+
               <div className="input-field input-field-transfer-report">
                 <div className="input input-transfer-report" >
+               
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
                   </div>
@@ -532,7 +599,15 @@ const TransferReport = ({ stationName }) => {
                     options={MISformat?.map((option) => ({
                       label: option?.Option,
                     }))}
-                    onChange={(event, value) => setMisformat(value?.label)}
+                    // onChange={(event, value) => setMisformat(value?.label)}
+                    onChange={(event, value) => {
+                      setMisformat(value?.label)
+                      setisButtonLoading(true);  
+                      setTimeout(() => {
+                        setisButtonLoading(false);
+                      }, 3000);
+                    }}
+                    
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
@@ -688,8 +763,6 @@ const TransferReport = ({ stationName }) => {
                     onChange={(event, value) => {
                       setPdfBillList(value?.label);
                       setisButtonLoading(true);
-
-                      // Stop loading after 2000 milliseconds
                       setTimeout(() => {
                         setisButtonLoading(false);
                       }, 3000);
@@ -830,7 +903,7 @@ const TransferReport = ({ stationName }) => {
                       </Button>
                       <Menu {...bindMenu(popupState)}>
                         {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                        <MenuItem onClick={() => handledatazipDownload(misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel)}>  ZIP </MenuItem>
+                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex,misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel,stationData,customerData)}>  ZIP </MenuItem>
                         {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                         {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                       </Menu>

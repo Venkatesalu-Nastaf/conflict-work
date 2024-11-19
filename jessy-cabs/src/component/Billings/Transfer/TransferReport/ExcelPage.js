@@ -45,7 +45,7 @@ const useExeclpage = () => {
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point / Shed", width: 180 },
-        { key: "useage", header: "Drop Point", width: 120 },
+        { key: "useage", header: "Drop Point", width: 200},
         { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
@@ -80,7 +80,9 @@ const useExeclpage = () => {
         { key: "parking", header: "Parking", width: 120 },
         { key: "toll", header: "Toll", width: 100 },
         { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
-        { key: "totalcalcAmount", header: "Amount With All Taxes", width: 200 }
+        { key: "totalcalcAmount", header: "Amount With All Taxes", width: 200 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+
 
 
         // Add more keys as needed
@@ -125,7 +127,8 @@ const useExeclpage = () => {
         { key: "totalkm1", header: "Total Km", width: 120 },
         { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        { key: "opsremark", header: "Ops Remarks", width: 150 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+        { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
 
@@ -219,13 +222,14 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
@@ -322,9 +326,10 @@ const useExeclpage = () => {
                     singleData2['location'] = location
                     singleData2["Gender"] = singleData2["gender"] ? singleData2["gender"] : "N/A"
                     singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
-                    singleData2["VendorName"] = " Jesscy Cabs"
+                    singleData2["VendorName"] = " Jessy Cabs"
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["ShedInDate"]=singleData2["ShedInDate"] ? dayjs(singleData2["ShedInDate"]).format("DD-MM-YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
@@ -441,14 +446,15 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
@@ -537,7 +543,8 @@ const useExeclpage = () => {
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"

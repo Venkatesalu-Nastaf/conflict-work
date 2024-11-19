@@ -136,6 +136,7 @@ const Organization = ({ logoImage }) => {
                                                 disabled={!editMode}
                                             />
                                         </div>
+                                        
                                         {/* </div>
                                 <div className="input-field organisation-details-input-feilds"> */}
                                         <div className="input input-buttons-small">
@@ -330,7 +331,6 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
-
                                 <div className="input organization-input">
                                     <label htmlFor="">Sender Mail:</label>
                                     <TextField
@@ -344,7 +344,7 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
-
+                                
                                 <div className="input organization-input">
                                     <label htmlFor="">App Password:</label>
                                     <TextField

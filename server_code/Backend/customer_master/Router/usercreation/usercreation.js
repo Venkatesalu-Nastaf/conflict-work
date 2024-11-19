@@ -31,7 +31,7 @@ router.get('/TemplateUser--Creation', async (req, res) => {
         console.log(err,'errorrrr')
         return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log(results,"reesss")
+      // console.log(results,"reesss")
       return res.status(200).json(results);
 })
 })

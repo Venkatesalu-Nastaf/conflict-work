@@ -384,8 +384,9 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel) => {
+    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation)
+        
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -599,6 +600,8 @@ const useExeclpage = () => {
                         particularPdf={[pdfData]}
                         organisationdetail={organizationsdetail1}
                         imagename={imageorganisation}
+                        customerData={customerData}
+                        stationData={stationData}
 
                     />
                 ).toBlob();
@@ -671,7 +674,8 @@ const useExeclpage = () => {
 
                 const mergedPDFBytes = await mergedPDFDocument.save();
                 //   const fileName = `PDF_${index + 1}.pdf`; 
-                const fileName = `PDF_${rowSelectionModel[index]}.pdf`;
+                const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
+                // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
                 // console.log(blob,"pdfblob")
                 // zip.file(fileName, blob);
                 pdffolder.file(fileName, mergedPDFBytes);

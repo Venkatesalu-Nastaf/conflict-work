@@ -455,7 +455,7 @@ const TransferReport = ({ stationName }) => {
       }
     }
     fetchData()
-  }, [apiUrl, customer])
+  }, [apiUrl, customer, misformat, pdfBillList])
 
 
   // const handleButtonClick = async (params) => {
@@ -468,10 +468,10 @@ const TransferReport = ({ stationName }) => {
 
   // };
 
-// Changes with loading untill all data fetch  
+  // Changes with loading untill all data fetch  
   const handleButtonClick = async (params) => {
     setIsPdfloading(true); // Start the loading screen
-    
+
     const { tripid, customer } = params.row;
     setTripno(tripid);
 
@@ -501,17 +501,17 @@ const TransferReport = ({ stationName }) => {
     handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
     handleDownloadPdf();
   };
-  const tripheaderIndex = pdfzipdata?.map(li=>li.tripid)
+  const tripheaderIndex = pdfzipdata?.map(li => li.tripid)
 
   return (
-    
+
     <div className="TransferReport-form main-content-form Scroll-Style-hide">
-     
+
       <form >
         <div className="detail-container-main detail-container-main-tfreport">
           <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
-            {/* <Backdrop
+              {/* <Backdrop
     open={isPdfloading}
     sx={{
       // zIndex: 9999, // Ensures it appears above all elements
@@ -525,36 +525,36 @@ const TransferReport = ({ stationName }) => {
   >
     <CircularProgress />
   </Backdrop> */}
-  <Backdrop
-  open={isPdfloading}
-  sx={{
-    zIndex: 9999, 
-    color: '#fff',
-    position: 'fixed', 
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-    display: 'flex', 
-    alignItems: 'center',
-    justifyContent: 'center',
-  }}
->
-  <div
-    style={{
-      backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-      padding: '20px', 
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)', 
-    }}
-  >
-    <CircularProgress />
-  </div>
-</Backdrop>
+              <Backdrop
+                open={isPdfloading}
+                sx={{
+                  zIndex: 9999,
+                  color: '#fff',
+                  position: 'fixed',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    padding: '20px',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              </Backdrop>
 
               <div className="input-field input-field-transfer-report">
                 <div className="input input-transfer-report" >
-               
+
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
                   </div>
@@ -602,12 +602,12 @@ const TransferReport = ({ stationName }) => {
                     // onChange={(event, value) => setMisformat(value?.label)}
                     onChange={(event, value) => {
                       setMisformat(value?.label)
-                      setisButtonLoading(true);  
+                      setisButtonLoading(true);
                       setTimeout(() => {
                         setisButtonLoading(false);
                       }, 3000);
                     }}
-                    
+
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
@@ -903,7 +903,7 @@ const TransferReport = ({ stationName }) => {
                       </Button>
                       <Menu {...bindMenu(popupState)}>
                         {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex,misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel,stationData,customerData)}>  ZIP </MenuItem>
+                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData)}>  ZIP </MenuItem>
                         {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                         {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                       </Menu>

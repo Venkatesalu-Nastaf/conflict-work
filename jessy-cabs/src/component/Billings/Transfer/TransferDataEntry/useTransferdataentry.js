@@ -509,7 +509,6 @@ const useTransferdataentry = () => {
     //     console.log("sattaions added")
     //     setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     // };
-    // console.log(servicestation,"consolenavi")
 
     const handleRowSelection = (newSelectionModel) => {
         const selectedTripIds = newSelectionModel
@@ -2070,6 +2069,7 @@ const useTransferdataentry = () => {
         setToDate,
         info,
         servicestation,
+        setServiceStation,
         // handleserviceInputChange,
         handleShow,
         handleCancel,

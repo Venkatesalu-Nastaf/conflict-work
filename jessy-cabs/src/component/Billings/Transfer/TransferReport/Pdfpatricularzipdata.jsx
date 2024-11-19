@@ -351,8 +351,7 @@ const styles = StyleSheet.create({
 
 });
 
-const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, }) => {
-  console.log(particularPdf, organisationdetail, imagename,'pdfZipData')
+const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, customerData, stationData }) => {
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
@@ -383,8 +382,16 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
+  // const [tripReporttime, setTripReporttime] = useState('')
+  // const [tripClosetime, setTripClosetime] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
+  const [tripRelasingTime, setTripReleasingTime] = useState('')
   const [tripClosetime, setTripClosetime] = useState('')
+  const [tripStartTime, setTripStartTime] = useState('')
+  const [tripStartKm, setTripStartKm] = useState('')
+  const [tripReportKm, setTripReportKm] = useState('')
+  const [tripReleaseKm, setTripReleaseKm] = useState('')
+  const [tripCloseKm, setTripCloseKm] = useState('')
   const [triptotaldays, setTripTotalDays] = useState('')
   const [triptotaltime, setTripTotalTime] = useState('')
   const [triptotalkms, setTriptotalKms] = useState('')
@@ -479,7 +486,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let Tripstartdate = ''
     let TripClosedate = ''
     let Reporttime = ''
+    let Releasingtime = ''
+    let Starttime = ''
     let CloseTime = ''
+    let ReportKm = ''
+    let ReleaseKm = ""
+    let StartKm = ""
+    let CloseKm = ""
     let Totaldays = ''
     let Totaltime = ''
     let Totalkms = ''
@@ -529,14 +542,24 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
-        Reporttime = trimSeconds(li.reporttime)
-        startTime = trimSeconds(li.starttime)
-        shedInTime = trimSeconds(li.shedintime)
-        CloseTime = trimSeconds(li.closetime);
-        startkm = li.shedout;
-        closekm = li.shedin;
-        reportkm = li.startkm;
-        releasekm = li.closekm;
+
+        Reporttime = li.starttime
+        Starttime = li.reporttime
+        CloseTime = li.closetime
+        Releasingtime = li.shedintime
+        ReportKm = li.startkm
+        StartKm = li.shedout
+        CloseKm = li.shedin
+        ReleaseKm = li.closekm
+
+        // Reporttime = trimSeconds(li.reporttime)
+        // startTime = trimSeconds(li.starttime)
+        // shedInTime = trimSeconds(li.shedintime)
+        // CloseTime = trimSeconds(li.closetime);
+        // startkm = li.shedout;
+        // closekm = li.shedin;
+        // reportkm = li.startkm;
+        // releasekm = li.closekm;
         Totaldays = li.totaldays
         Totaltime = convertTimeFormat(li.totaltime);
         Totalkms = li.totalkm1
@@ -596,8 +619,18 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
+
     setTripReporttime(Reporttime)
-    setTripClosetime(CloseTime)
+    setTripStartTime(Starttime)
+    setTripClosetime(Releasingtime)
+    setTripReleasingTime(CloseTime)
+    setTripReportKm(ReportKm)
+    setTripStartKm(StartKm)
+    setTripCloseKm(CloseKm)
+    setTripReleaseKm(ReleaseKm)
+
+    // setTripReporttime(Reporttime)
+    // setTripClosetime(CloseTime)
     setTripTotalDays(Totaldays)
     setTripTotalTime(Totaltime)
     setTriptotalKms(Totalkms)
@@ -607,20 +640,22 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
     setAddresscustomer(customeraddress1)
-    setStarttime(startTime)
-    setShedintime(shedInTime)
+    // setStarttime(startTime)
+    // setShedintime(shedInTime)
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
-    setStartkm(startkm)
-    setClosekm(closekm)
-    setReleasingKM(releasekm)
-    setReportKM(reportkm)
+    // setStartkm(startkm)
+    // setClosekm(closekm)
+    // setReleasingKM(releasekm)
+    // setReportKM(reportkm)
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
   const remainingItems = routemap.slice(24);
+  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
+
   return (
     <>
       <PDFDocument>
@@ -631,8 +666,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 <View style={styles.headingsection}>
                   <View>
                     <Text style={styles.text1}>{orgname}</Text>
-                    <Text style={styles.text2}> {orgaddress1}</Text>
-                    <Text style={styles.text2}>{orgaddress3} </Text>
+                    <Text style={styles.text2}> {stationData[0]?.address}</Text>
+                    {/* <Text style={styles.text2}>{orgaddress3} </Text> */}
                   </View>
                   <View>
                     <Text style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
@@ -668,7 +703,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientAddress}> {addresscustomer}</Text>
+                      <Text style={styles.clientAddress}> {customerData[0]?.address1}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category</Text>
@@ -846,94 +881,96 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                     <View style={styles.tablehead1}>
                       <View style={styles.labeltag5}>
-                        <Text > Starting</Text>
+                        <Text > Closing</Text>
 
                       </View>
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
+                        <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
 
                       </View>
 
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{starttime}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripClosetime)}</Text>}
 
                       </View>
                       <View style={styles.labeltag6}>
-                        <Text>{startkm}</Text>
+                        {customerData[0]?.hybrid !== 1 ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
 
                       </View>
 
                     </View>
-                    <View style={styles.tablehead2}>
-                      <View style={styles.labeltag9}>
-                        <Text >Reporting</Text>
+                    {customerData[0]?.hybrid === 1 ?
+                      <View style={styles.tablehead2}>
+                        <View style={styles.labeltag9}>
+                          <Text >Releasing</Text>
 
-                      </View>
-
-
-                      <View style={styles.labeltag10}>
-                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
-
-                      </View>
-
-                      <View style={styles.labeltag10}>
-                        <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
-
-                      </View>
-                      <View style={styles.labeltag10}>
-                        <Text>{reportKM}</Text>
-
-                      </View>
-
-                    </View>
-
-                    <View style={styles.tablehead3}>
-                      <View style={styles.labeltag13}>
-                        <Text >Releasing</Text>
-
-                      </View>
+                        </View>
 
 
-                      <View style={styles.labeltag14}>
-                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
+                        <View style={styles.labeltag10}>
+                          <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
 
-                      </View>
+                        </View>
+
+                        <View style={styles.labeltag10}>
+                          <Text>{trimSeconds(tripRelasingTime)}</Text>
+
+                        </View>
+                        <View style={styles.labeltag10}>
+                          {customerData[0]?.hybrid == 1 ? <Text>{hclKm}</Text> : <Text>{"-"}</Text>}
+
+                        </View>
+
+                      </View> : ""}
+
+                    {customerData[0]?.hybrid === 1 ?
+                      <View style={styles.tablehead3}>
+                        <View style={styles.labeltag13}>
+                          <Text >Reporting</Text>
+
+                        </View>
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
+
+                        </View>
 
 
 
-                      <View style={styles.labeltag14}>
-                        <Text>{tripClosetime}</Text>
+                        <View style={styles.labeltag14}>
+                          <Text>{trimSeconds(tripReporttime)}</Text>
 
-                      </View>
-                      <View style={styles.labeltag14}>
-                        <Text>{releasingKM}</Text>
+                        </View>
+                        <View style={styles.labeltag14}>
+                          {customerData[0]?.hybrid == 1 ? <Text> 0 </Text> : <Text>{'-'}</Text>}
 
-                      </View>
+                        </View>
 
-                    </View>
+                      </View> : ""}
 
 
                     <View style={styles.tablehead4}>
                       <View style={styles.labeltag17}>
-                        <Text >Closing</Text>
+                        <Text >Starting</Text>
 
                       </View>
 
 
                       <View style={styles.labeltag18}>
-                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
+                        <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{shedintime}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripStartTime)} </Text>}
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{reportKM}</Text>
+                        {customerData[0]?.hybrid !== 1 ? <Text>{tripStartKm}</Text> : <Text>{ }</Text>}
 
                       </View>
 
@@ -955,7 +992,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
                       <View style={styles.labeltag22}>
-                        <Text>{triptotalkms ? triptotalkms : 0}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
 
                       </View>
 

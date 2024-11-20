@@ -341,7 +341,7 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, location, customer]);
 
 
 

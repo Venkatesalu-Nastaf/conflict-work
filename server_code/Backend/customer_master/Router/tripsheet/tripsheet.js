@@ -134,6 +134,7 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_NightbataTotalAmount,
         Vendor_Bata,
         Vendor_BataAmount,
+        Vendor_FULLTotalAmount,
         Vendor_BataTotalAmount,
         TotalTimeWithoutAddHours
 

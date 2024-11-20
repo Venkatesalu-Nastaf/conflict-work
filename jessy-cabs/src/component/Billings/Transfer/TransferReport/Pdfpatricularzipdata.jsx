@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
     fontSize: '11px',
 
   },
+  text2add: {
+    fontSize: '11px',
+    width: "40%"
+
+  },
 
   gstno: {
     fontSize: '11px',
@@ -97,6 +102,13 @@ const styles = StyleSheet.create({
     fontWeight: 'extrabold',
 
   },
+  clientNameadd: {
+    fontSize: '10px',
+    color: '#000000',
+    fontWeight: 'extrabold',
+    width: "40%"
+
+  },
   // labeltag1: {
   //   fontSize: '13px',
   //   textAlign: 'center'
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: 'extrabold',
     textAlign: 'left',
     lineHeight: '1.3px',
-
+    width: '50%'
   },
   remarksection: {
     flexDirection: 'row',
@@ -666,7 +678,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                 <View style={styles.headingsection}>
                   <View>
                     <Text style={styles.text1}>{orgname}</Text>
-                    <Text style={styles.text2}> {stationData[0]?.address}</Text>
+                    <Text style={styles.text2add}> {stationData[0]?.address}</Text>
                     {/* <Text style={styles.text2}>{orgaddress3} </Text> */}
                   </View>
                   <View>
@@ -733,13 +745,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {address1}</Text>
+                      <Text style={styles.clientNameadd}> {address1}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Drop Address</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {dropaddress}</Text>
+                      <Text style={styles.clientNameadd}> {dropaddress}</Text>
                     </View>
 
                     <View style={styles.deatilssection}>
@@ -792,7 +804,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                       <Text style={styles.labeltag}>Date</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</Text>
+                      <Text style={styles.clientName}> {tripsheetdate}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Duty Type</Text>

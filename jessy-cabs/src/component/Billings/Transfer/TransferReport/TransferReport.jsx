@@ -384,7 +384,7 @@ const TransferReport = ({ stationName }) => {
         return
       }
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} />).toBlob();
+      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
@@ -398,7 +398,7 @@ const TransferReport = ({ stationName }) => {
         return
       }
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} />).toBlob();
+      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");

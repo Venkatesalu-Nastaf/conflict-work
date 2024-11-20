@@ -1,7 +1,42 @@
 /* .top-div {
     
 } */
-
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /* margin-top: 7px; */
+  }
+  .loading-spinners{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .logo-loading img {
+    width: 100px;
+  }
+  
+  .logo-loading {
+    height: 80px;
+    width: 80px;
+    animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+  
+    0%,
+    100% {
+      transform: scale(1);
+    }
+  
+    50% {
+      transform: scale(1.3);
+    }
+  }
+  
 .signature-generate-main {
     padding-bottom: 20px;
     width: 715px;

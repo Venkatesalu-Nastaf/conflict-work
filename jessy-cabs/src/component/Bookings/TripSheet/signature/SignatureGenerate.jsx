@@ -3,6 +3,7 @@ import './SignatureGenerate.css'
 import { APIURL } from '../../../url';
 import axios from 'axios'
 import { format as datefunsdata, parse } from 'date-fns';
+import Logo from "../../../../assets/img/logo.png";
 
 const SignatureGenerate = () => {
     const apiUrl = APIURL;
@@ -86,39 +87,69 @@ const SignatureGenerate = () => {
     //     }
     // }, [fulldetails]);
 
-
+    const [isLoading, setIsLoading] = useState(false);
     if (expired) {
         return <div>This link has expired. Please generate a new link.</div>;
     }
 
+    // const generateLink = async () => {
+
+
+    //     try {
+    //         const tripno = tripId
+    //         const status = "Accept"
+    //         const { dateTime, time } = getCurrentDateTimeFormatted();
+    //         const signtauretimes = {
+    //             status: status,
+    //             datesignature: dateTime,
+    //             signtime: time
+    //         }
+    //         const response = await axios.post(`${apiUrl}/generate-link/${tripno}`)
+    //         // await axios.post(`${apiUrl}/signaturedatatimes/${tripno}/${status}`)
+    //         await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes)
+
+
+    //         const data = response.data.link
+    //         window.location.href = data;
+    //         // window.open(data, '_blank');
+    //         // setExpired(true);
+    //         sessionStorage.setItem("expiredsign", true);
+    //         localStorage.setItem("expiredsign", true);
+
+    //         // setLink(data);
+    //         // getSignatureImage()
+    //         // copyToClipboardf(data)
+    //     } catch {
+    //     }
+    // };
+  
     const generateLink = async () => {
-
-
         try {
-            const tripno = tripId
-            const status = "Accept"
+            setIsLoading(true); // Start loading
+            console.log(isLoading,'loafing state')
+            const tripno = tripId;
+            const status = "Accept";
             const { dateTime, time } = getCurrentDateTimeFormatted();
             const signtauretimes = {
                 status: status,
                 datesignature: dateTime,
-                signtime: time
-            }
-            const response = await axios.post(`${apiUrl}/generate-link/${tripno}`)
-            // await axios.post(`${apiUrl}/signaturedatatimes/${tripno}/${status}`)
-            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes)
+                signtime: time,
+            };
 
+            const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
+            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
 
-            const data = response.data.link
+            const data = response.data.link;
             window.location.href = data;
-            // window.open(data, '_blank');
-            // setExpired(true);
+
             sessionStorage.setItem("expiredsign", true);
             localStorage.setItem("expiredsign", true);
+        } catch (error) {
+            console.error("Error generating link:", error);
+        } finally {
+            setIsLoading(true); // Stop loading
 
-            // setLink(data);
-            // getSignatureImage()
-            // copyToClipboardf(data)
-        } catch {
+            console.log(isLoading,'loafing state')
         }
     };
     const handlesignaturedata = () => {
@@ -145,7 +176,15 @@ const SignatureGenerate = () => {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+       
+        <div  className={isLoading ? "loading-container" : ""} style={{ display: 'flex', justifyContent: 'center' }}>
+             { isLoading ? (
+          <div className="loading-spinners">
+            <div className="logo-loading">
+              <img src={Logo} alt="logo" />
+            </div> 
+          </div>
+             ):(
             <div className='top-div signature-generate-main'>
                 <div className='signature-generate-input'>
                     <p>Trip Id : </p>
@@ -204,7 +243,9 @@ const SignatureGenerate = () => {
                         <button className='Accept-btn' onClick={handleTollParkinglink}>upload toll & parking</button> : <></>
                     }
                 </div>
+                
             </div>
+             )}
 
             {/* <>
                 <div>
@@ -216,9 +257,10 @@ const SignatureGenerate = () => {
 
 
 
-
+             
         </div>
-    )
+             )
+            
 }
 
 export default SignatureGenerate

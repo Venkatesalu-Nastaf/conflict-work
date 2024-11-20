@@ -179,9 +179,26 @@ function App() {
 
   // loading with correction
 
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("auth");
+  //   console.log(auth,'authen')
+   
+  //   if (auth === null || auth === undefined) {
+  //     setIsLoading(false)
+  //     navigate('/', { replace: true });
+  //     return; 
+  //   }
+  
+  // }, [isLoading, location.pathname, navigate, permissions]);
+
+
   useEffect(() => {
     const auth = localStorage.getItem("auth") === 'true';
-  
+    if (auth === null || auth === undefined) {
+      setIsLoading(false)
+      navigate('/', { replace: true });
+      return; 
+    }
     // Start a timer to stop loading
     const timer = setTimeout(() => {
       setIsLoading(false);

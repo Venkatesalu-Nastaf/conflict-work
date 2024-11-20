@@ -9,6 +9,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const DigitalSignature = () => {
   const apiUrl = APIURL;
@@ -118,25 +121,81 @@ const DigitalSignature = () => {
     };
   };
 
+  // const saveSignature = async () => {
+  //   const dataUrl = sigCanvasRef.current.toDataURL("image/png");
+  //   const status = "Updated"
+  //   const datadate=Date.now().toString();
+  //   const tripId = decryptdata(tripIddata)
+  //   const uniquenodata = decryptunique(uniqueno)
+  //   const { dateTime, time ,dates,timesdata} = getCurrentDateTimeFormatted();
+  //   const signtauretimes={
+  //       status:status,
+  //       datesignature:dateTime,
+  //       signtime:time,          
+  //       updateclosedate:dates,
+  //       updateclosetime:timesdata
+  //      }
+  //     const signaturedata={
+  //       dataurlsign:dataUrl
+  //     }
+  
+  //   try {
+  //     await fetch(`${apiUrl}/api/saveSignaturewtid`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         signatureData: dataUrl,
+  //         tripId: tripId,
+  //         uniqueno: uniquenodata,
+  //         imageName:datadate
+  //       }),
+  //     });
+  //     // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+  //     await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
+  //     setSuccessMessage("upload successfully")
+  //     // THIS API FRO DRIVER APP
+  //     await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`,signaturedata)
+      
+  //     clearSignature();
+  //     setUploadToll(true)
+  //     // setTimeout(() => {
+  //     //   setExpired(true);
+  //     //   sessionStorage.setItem("expired", true);
+  //     //   localStorage.setItem("expired", true);
+  //     // }, 5000);
+  //   } catch {
+  //     setExpired(true);
+  //   }
+  // };
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+const [isSuccess, setIsSuccess] = useState(null);
+
+  // Changes with loading  working good
   const saveSignature = async () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
-    const status = "Updated"
-    const datadate=Date.now().toString();
-    const tripId = decryptdata(tripIddata)
-    const uniquenodata = decryptunique(uniqueno)
-    const { dateTime, time ,dates,timesdata} = getCurrentDateTimeFormatted();
-    const signtauretimes={
-        status:status,
-        datesignature:dateTime,
-        signtime:time,          
-        updateclosedate:dates,
-        updateclosetime:timesdata
-       }
-      const signaturedata={
-        dataurlsign:dataUrl
-      }
+    const status = "Updated";
+    const datadate = Date.now().toString();
+    const tripId = decryptdata(tripIddata);
+    const uniquenodata = decryptunique(uniqueno);
+    const { dateTime, time, dates, timesdata } = getCurrentDateTimeFormatted();
+    const signtauretimes = {
+      status: status,
+      datesignature: dateTime,
+      signtime: time,
+      updateclosedate: dates,
+      updateclosetime: timesdata,
+    };
+    const signaturedata = {
+      dataurlsign: dataUrl,
+    };
   
     try {
+      setIsLoading(true);
+  
       await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
         headers: {
@@ -146,26 +205,26 @@ const DigitalSignature = () => {
           signatureData: dataUrl,
           tripId: tripId,
           uniqueno: uniquenodata,
-          imageName:datadate
+          imageName: datadate,
         }),
       });
-      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`,signtauretimes)
-      setSuccessMessage("upload successfully")
-      // THIS API FRO DRIVER APP
-      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`,signaturedata)
-      
+  
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes);
+  
+      setSuccessMessage("Upload successfully");
+  
+      await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`, signaturedata);
+  
       clearSignature();
-      setUploadToll(true)
-      // setTimeout(() => {
-      //   setExpired(true);
-      //   sessionStorage.setItem("expired", true);
-      //   localStorage.setItem("expired", true);
-      // }, 5000);
-    } catch {
+      setUploadToll(true);
+    } catch (error) {
       setExpired(true);
+
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   // useEffect(() => {
   //   const expirationTimer = setTimeout(() => {
@@ -211,8 +270,27 @@ const DigitalSignature = () => {
         }}
         onBegin={Startsignature}
       />
+      {isLoading && (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "70%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(255, 255, 255,)",
+          zIndex: 10,
+        }}
+      >
+        <CircularProgress />
+      </div>
+    )}
       <div>
         <p style={{ textAlign: 'center', color: "green" }}>{successMessage}...</p>
+        
         <button className="clear-button" onClick={clearSignature}>
           Clear Signature
         </button>

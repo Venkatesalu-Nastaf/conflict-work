@@ -229,7 +229,7 @@ const useExeclpage = () => {
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
@@ -329,7 +329,7 @@ const useExeclpage = () => {
                     singleData2["VendorName"] = " Jessy Cabs"
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
-                    singleData2["ShedInDate"]=singleData2["ShedInDate"] ? dayjs(singleData2["ShedInDate"]).format("DD-MM-YYYY"):""
+                    singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
@@ -454,7 +454,7 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
-                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
@@ -544,7 +544,7 @@ const useExeclpage = () => {
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
-                    singleData["ShedInDate"]=singleData["ShedInDate"] ? dayjs(singleData["ShedInDate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"

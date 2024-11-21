@@ -924,6 +924,10 @@ const useGroupbilling = () => {
                 const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
                 console.log(getresponse, 'Removed Successfully');
             }
+            setSuccess(true)
+            setSuccessMessage("Successfully Removed")
+            setSelectedRow([])
+            setParticularId([])
         } catch (error) {
             //     // Handle errors
             //     console.error("Error occurred:", error);
@@ -941,8 +945,9 @@ const useGroupbilling = () => {
         // };
 
 
-        const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
-        setRows(updatedRows);
+        // const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
+        // setRows(updatedRows);
+        setRows([])
 
         setRowSelectionModel([]);
     };
@@ -1027,9 +1032,11 @@ const useGroupbilling = () => {
             rowSelectedValues?.forEach((li) => {
                 TotalAmount += li;
             });
-            const selectedTotal = rowSelectedValues.reduce((sum, value) => sum + value, 0);
-            const groupTotal = groupAmount.reduce((sum, value) => sum + value, 0)
-            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal);
+            console.log(rowSelectedValues,'rowselected values',groupAmount);
+            
+            const selectedTotal = rowSelectedValues?.reduce((sum, value) => sum + value, 0);
+            const groupTotal = (groupAmount || []).reduce((sum, value) => sum + value, 0);
+            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal,'TotalAmount',TotalAmount);
 
             const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
             const ToDate = dayjs(toDate).format('YYYY-MM-DD')

@@ -537,7 +537,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                       <View style={styles.tableheadsno}><Text>S No</Text></View>
                       <View style={styles.tableheading}><Text>Trip DT</Text></View>
-                      <View style={styles.tableheadtripno}><Text>Trip NO</Text></View>
+                      <View style={styles.tableheadtripno}><Text>Trip No</Text></View>
                       <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
                       <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
                       <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
@@ -684,7 +684,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       </View>
                     )} */}
                     {
-                      customerData[0].state === stationData[0].state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
+                      customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
                         <>
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
                             <Text style={{ width: '130px', fontSize: 10 }}>CGST {cgstcalc}% on {fullAmount}:</Text>
@@ -697,7 +697,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         </> :
 
                         <View View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '130px', fontSize: 10 }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}>GST </Text>}
+                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '130px', fontSize: 10 }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}> </Text>}
                           {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igstAmount}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>0.00</Text>}
                         </View>
                     }

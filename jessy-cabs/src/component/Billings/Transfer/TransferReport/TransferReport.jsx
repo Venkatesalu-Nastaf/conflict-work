@@ -444,8 +444,8 @@ const TransferReport = ({ stationName }) => {
         const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
         console.log(response.data, 'customer response');
         const data = response.data;
-        const customerDetails = data.groupBillingDetails;
-        const stationDetails = data.groupBillingStations;
+        const customerDetails = data.customerDetails;
+        const stationDetails = data.customerStations;
 
         setCustomerData(customerDetails)
         setStationData(stationDetails)

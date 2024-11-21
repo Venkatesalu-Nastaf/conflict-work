@@ -92,9 +92,33 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     const [organizationsdetail, setOrganizationDetail] = useState([]);
     const [imageorganisation, setSelectedImageorganisation] = useState(null);
     const { sharedData } = useData();
+    const [customerData, setCustomerData] = useState([]);
+    const [stationData, setStationData] = useState([])
     const apiUrl = APIURL
 
-    // console.log(refPdfPrint,'rrrr');
+    //  get station and customer details
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            console.log(customer, 'customer =====');
+    
+            const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
+            console.log(response.data, 'customer response');
+            const data = response.data;
+            const customerDetails = data.customerDetails;
+            const stationDetails = data.customerStations;
+    
+            setCustomerData(customerDetails)
+            setStationData(stationDetails)
+          }
+          catch (error) {
+            console.log(error);
+          }
+        }
+        fetchData()
+      }, [apiUrl, customer])
+
+
 
     useEffect(() => {
         const fetchStateDetails = async () => {
@@ -517,7 +541,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                             overflowY: 'auto'
                         }}
                     >
-                        <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} billingGroupData={billingGroupDetails} referenceno={referNo} Branchstate={stateDetails} />
+                        <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} billingGroupData={billingGroupDetails} referenceno={referNo} Branchstate={stateDetails} customerData={customerData} stationData={stationData} />
                     </Box>
                 </Modal>
             </form>

@@ -656,7 +656,7 @@ function App() {
                 <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName}  Statename={Statename} organizationNames={organizationNames} /> ):( <NoPermission />)} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} organizationNames={organizationNames} />) : ( <NoPermission />)}
+                  element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : ( <NoPermission />)}
                 />
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} organizationNames={organizationNames} />) : (<NoPermission />)} />
               </Route>

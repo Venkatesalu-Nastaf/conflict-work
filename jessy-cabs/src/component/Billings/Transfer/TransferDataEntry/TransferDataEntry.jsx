@@ -27,7 +27,7 @@ import { Box } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import {  CircularProgress } from '@mui/material';
 
-const TransferDataEntry = ({ Statename,stationName, organizationNames }) => {
+const TransferDataEntry = ({stationName, organizationNames }) => {
   const {
     rows,
     error,
@@ -256,7 +256,7 @@ const TransferDataEntry = ({ Statename,stationName, organizationNames }) => {
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
                     </div>
-                    <Autocomplete
+                    {/* <Autocomplete
                       fullWidth
                       id="free-station"
                       className='full-width'
@@ -298,11 +298,11 @@ const TransferDataEntry = ({ Statename,stationName, organizationNames }) => {
                              />
                         );
                       }}
-                    />
+                    /> */}
 
 
 
-                   {/* <TextField
+                   <TextField
                       size="small"
                        id="freet-station"
                       className='full-width'
@@ -312,7 +312,7 @@ const TransferDataEntry = ({ Statename,stationName, organizationNames }) => {
                       value={servicestation || ""}
   
                       autoComplete='off'
-                    /> */}
+                    />
                   </div>
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>

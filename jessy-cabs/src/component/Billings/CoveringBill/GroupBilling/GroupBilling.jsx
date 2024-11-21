@@ -82,6 +82,9 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         setStateDetails,
         billingGroupDetails,
         setBillingGroupDetails,
+        handlecustomer,
+        disabeldata,
+        handleInvoicegenerate,referInvoiceno,setReferINVOICENO
     } = useGroupbilling();
 
 
@@ -191,14 +194,18 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     useEffect(() => {
         if (viewGroupBill && viewGroupBill.length > 0) {
             const firstBill = viewGroupBill[0];
+            console.log(firstBill,"ll")
+            setReferINVOICENO(firstBill.InvoiceNo)
             setBillingDate(dayjs(firstBill.InvoiceDate, "YYYY-MM-DD"));
             setCustomer(firstBill.Customer);
             setFromDate(dayjs(firstBill.FromDate, "YYYY-MM-DD"));
             setToDate(dayjs(firstBill.ToDate, "YYYY-MM-DD"));
-            setServiceStation(firstBill.station)
+            setServiceStation(firstBill.State)
             handleDateChange(dayjs(firstBill.InvoiceDate, "DD-MM-YYYY"), 'Billingdate');
         }
     }, [viewGroupBill]);
+  
+  
     return (
         <div className="main-content-form Scroll-Style-hide">
             <form >
@@ -240,7 +247,10 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         size="small"
                                         value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
                                         options={organizationNames}
-                                        onChange={(event, value) => setCustomer(value)}
+                                        disabled={disabeldata}
+                                        // onChange={(event, value) => setCustomer(value)}
+                                        // onChange={handlecustomer}
+                                           onChange={(event, value) => handlecustomer(value)}
                                         renderInput={(params) => {
                                             return (
                                                 <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
@@ -259,6 +269,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 className='full-width'
                                                 label="Bill Date"
                                                 name="Billingdate"
+                                                disabled={disabeldata}
                                                 value={
                                                     Billingdate ||
                                                     (viewGroupBill?.InvoiceDate ? dayjs(viewGroupBill.InvoiceDate) : null) ||
@@ -327,7 +338,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
-                                    <Autocomplete
+                                    {/* <Autocomplete
                                         fullWidth
                                         id="freestation"
                                         className='full-width'
@@ -344,11 +355,31 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                                 <TextField {...params} label="Stations" name='station' inputRef={params.inputRef} />
                                             );
                                         }}
-                                    />
+                                    /> */}
+                                       <TextField
+                      size="small"
+                       id="freet-station"
+                      className='full-width'
+                    
+                      label="State" 
+                      name='station'
+                      value={servicestation || ""}
+  
+                      autoComplete='off'
+                    />
                                 </div>
+                                { referInvoiceno === "created" ? <></> :
                                 <div className="input">
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={() => handleShow()} >View Bill</Button>
                                 </div>
+}
+                                {invoiceno && disabeldata && (
+                                <div className="input">
+                                    <Button variant="contained" disabled={!CoveringBill_read} 
+                                     onClick={() => handleInvoicegenerate()}
+
+             >Bill Generate</Button>
+                                </div>)}
                             </div>
                             {/* <div className="input-field">
                                 <div className="input">
@@ -378,9 +409,11 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         <div className="input">
                             <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
                         </div>
+                        { referInvoiceno === "created" ? <></> :
                         <div className="input" >
                             <Button variant="contained" disabled={!CoveringBill_delete} onClick={handleRemoveData} >Remove</Button>
                         </div>
+}
                     </div>
                 </div>
                 <div className="table-bookingCopy-GroupBilling">

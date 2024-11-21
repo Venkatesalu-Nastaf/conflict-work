@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,Switch} from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { CircularProgress } from '@mui/material';
@@ -445,6 +445,18 @@ const Accuntinfo = ({ stationName }) => {
                 // variant="standard"
                 />
               </div>
+
+              <div className="input">
+                  <FormLabel htmlFor='TimeToggle'>TimeToggle</FormLabel>
+                  <Switch
+                    label='label'
+                    id="TimeToggleaccount"
+                    name="TimeToggle"
+                    onChange={handleChange}
+                    checked={selectedCustomerData.TimeToggle || book.TimeToggle ||  0}
+                  />
+                </div>
+              
 
               <div className="input radio">
                 <FormControl>

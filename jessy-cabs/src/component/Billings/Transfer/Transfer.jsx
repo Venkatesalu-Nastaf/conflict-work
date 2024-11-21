@@ -45,7 +45,7 @@ const Transfer = ({ stationName, organizationNames,Statename }) => {
               </TabList>
             </Box>
             <TabPanel value="transferlist"><TransferList  Statename={Statename} stationName={stationName} organizationNames={organizationNames} /></TabPanel>
-            <TabPanel value="dataentry"><TransferDataEntry Statename={Statename} stationName={stationName} organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="dataentry"><TransferDataEntry  stationName={stationName} organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="TransferReport"><TransferReport stationName={stationName} /></TabPanel>
           </TabContext>
         </Box>

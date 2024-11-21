@@ -1560,4 +1560,88 @@ router.get('/customerdatgst/:customers', (req, res) => {
 
 
 
+router.get('/customerinvoicecreate/:customers', (req, res) => {
+  const { customers } = req.params;
+
+
+  const query = 'SELECT * FROM customers where customer = ?';
+  const sql1 = 'SELECT state FROM customers where customer = ?';
+  // const sql2='SELECT * FROM stationcreation where state = ? and  gstno is not null'
+  const sql2 = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+
+  // const sql3 = 'SELECT organizationname,addressLine1,contactPhoneNumber,gstnumber from organizationdetails';
+
+  db.query(query, [customers], (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send({ error: 'Database query failed' });
+    }
+
+    if (results.length > 0) {
+      const data = results[0].billingGroup || null;
+      if (data === null) {
+        const datas = results[0].state || null;
+        db.query(sql2, [datas], (err, results3) => {
+          if (err) {
+            console.log(err, "sql1")
+            return res.status(500).send({ error: 'Database query failed' });
+          }
+          if (results3.length > 0) {
+            const resultstate = results[0]?.state
+           
+            return res.status(200).json(resultstate);
+            // return res.status(200).json({ data: resultgst, data2: resultaddress, data3: resultgstnumber, otherdata: "InStations" });
+          }
+          else {
+            const resultstate = "Tamil Nadu"
+            return res.status(200).json(resultstate);
+            // return res.status(200).json({ data: resultgst1, data2: resultaddress, data3: resultgstnumber, otherdata: "OutStations" });
+
+
+          }
+        })
+
+      }
+      else {
+        db.query(sql1, [data], (err, results1) => {
+          if (err) {
+            console.log(err, "sql1")
+            return res.status(500).send({ error: 'Database query failed' });
+          }
+          const datas = results1[0].state || null;
+          console.log(results1, "lll")
+          console.log(datas)
+          if (results1.length > 0) {
+            db.query(sql2, [datas], (err, result5) => {
+              if (err) {
+                console.log(err, "sql1")
+                return res.status(500).send({ error: 'Database query failed' });
+              }
+              if (result5.length > 0) {
+                const resultgst = results1[0].state
+             
+                return res.status(200).json(resultgst);
+                // return res.status(200).json({ data: resultgst, data2: resultaddress, data3: resultgstnumber, otherdata: "InStations" });
+              }
+              else {
+                 const resultstate = "Tamil Nadu"
+                return res.status(200).json(resultstate);
+                // return res.status(200).json({ data: resultgst1, data2: resultaddress, data3: resultgstnumber, otherdata: "OutStations" });
+              }
+            })
+          }
+          // return  res.status(200).json(datas);
+        })
+      }
+    }
+    else {
+      return res.status(500).json([]);
+    }
+
+    // res.status(200).send(results);
+  });
+});
+
+
+
 module.exports = router;

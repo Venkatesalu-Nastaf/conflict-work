@@ -26,7 +26,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
-const CoveringSubmit = ({ stationName, organizationNames }) => {
+const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
 
     const {
         rows,
@@ -66,6 +66,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
     const CoveringBill_read = permissions[7]?.read;
+    console.log(Statename,"name")
 
     return (
         <div className="CoveringSubmit-form main-content-form Scroll-Style-hide">
@@ -153,8 +154,11 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                                        options={stationName.map((option) => ({
-                                            label: option.Stationname,
+                                        // options={stationName.map((option) => ({
+                                        //     label: option.Stationname,
+                                        // }))}
+                                        options={Statename.map((option) => ({
+                                            label: option.state,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {

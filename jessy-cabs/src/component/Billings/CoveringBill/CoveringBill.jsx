@@ -8,7 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import GroupBilling from './GroupBilling/GroupBilling';
 import CoveringSubmit from './CoveringSubmit/CoveringSubmit';
 
-const CoveringBill = ({ stationName, organizationNames }) => {
+const CoveringBill = ({ Statename,stationName, organizationNames }) => {
   const [value, setValue] = React.useState("groupbilling");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -25,7 +25,7 @@ const CoveringBill = ({ stationName, organizationNames }) => {
               </TabList>
             </Box>
             <TabPanel value="groupbilling"><GroupBilling stationName={stationName} organizationNames={organizationNames} /></TabPanel>
-            <TabPanel value="coveringsubmit"><CoveringSubmit stationName={stationName} organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="coveringsubmit"><CoveringSubmit stationName={stationName} Statename={Statename} organizationNames={organizationNames} /></TabPanel>
           </TabContext>
         </Box>
       </div>

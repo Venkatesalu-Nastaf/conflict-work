@@ -80,15 +80,7 @@ router.get('/stationcreation', (req, res) => {
 
 
 
-router.get('/Statecreation', (req, res) => {
-  db.query('SELECT DISTINCT(state) FROM stationcreation where state is not null', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
-    }
-  
-    return res.status(200).json(results);
-  });
-});
+
 
 
 // Fetch all station names
@@ -149,6 +141,20 @@ router.get("/getAllStationDetails/:stateName", (req, res) => {
   console.log(stateName, 'AllStations');
 
   db.query("SELECT * FROM stationcreation WHERE state = ?", [stateName], (error, result) => {
+    if (error) {
+      console.log(error, 'error'); // Log the error for debugging
+      return res.status(500).json({ message: "Database query error", error });
+    }
+
+    res.status(200).json(result);
+  });
+});
+
+router.get("/Statecreation", (req, res) => {
+  
+
+
+  db.query('SELECT DISTINCT state FROM stationcreation WHERE state is not null and  gstno IS NOT NULL AND gstno != ""',(error, result) => {
     if (error) {
       console.log(error, 'error'); // Log the error for debugging
       return res.status(500).json({ message: "Database query error", error });

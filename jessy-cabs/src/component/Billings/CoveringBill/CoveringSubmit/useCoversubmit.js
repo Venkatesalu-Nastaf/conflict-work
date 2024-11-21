@@ -9,6 +9,7 @@ import { APIURL } from "../../../url";
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "Status", headerName: "Status", width: 130 },
+    { field: "State", headerName: "Station", width: 130 },
     { field: "ReferenceNo", headerName: "Reference No", width: 130 },
     { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "Customer", headerName: "Customer", width: 130 },
@@ -145,12 +146,12 @@ const useCoversubmit = () => {
             setErrorMessage('Select a Orgaization')
             return
           } 
-          if (!servicestation) {
-            setError(true)
-            setErrorMessage('Select a Station')
-            return
-          } 
-        if (servicestation === "" || servicestation === "All") {
+        //   if (!servicestation) {
+        //     setError(true)
+        //     setErrorMessage('Select a Station')
+        //     return
+        //   } 
+        if (servicestation === "" ) {
             try {
                 const response = await axios.get(`${apiUrl}/ListDetails`,
                     {
@@ -170,7 +171,7 @@ const useCoversubmit = () => {
                         id: index + 1,
                     }));
                     setRows(rowsWithUniqueId);
-                    setServiceStation("All")
+                    // setServiceStation("All")
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                 } else {
@@ -202,7 +203,7 @@ const useCoversubmit = () => {
                 }
             }
         }
-        else if (servicestation !== "" && servicestation !== "All") {
+        else if (servicestation !== "") {
             try {
                 const response = await axios.get(`${apiUrl}/ListDetailsWithStation`,
                     {

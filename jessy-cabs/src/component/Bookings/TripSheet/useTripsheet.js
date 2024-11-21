@@ -199,6 +199,7 @@ const useTripsheet = () => {
         maxTripid: "",
     })
     const [timeToggle, setTimeToggle] = useState('');
+    const [timeTogglevendor, setTimeToggleVendor] = useState('');
     const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
     const [manualMarkTrigger, setManualMarkTrigger] = useState(false)
@@ -1773,6 +1774,42 @@ const useTripsheet = () => {
         fetchdatacustomerTimeToggle();
     }, [fetchdatacustomerTimeToggle]);
 
+    const VendorTimetoggle = useMemo(() => {
+        return (
+            selectedCustomerDatas.travelsname ||
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""
+        );
+    }, [ selectedCustomerDatas.travelsname, formData.travelsname ,selectedCustomerData.travelsname, book.travelsname]);
+    const fetchdatavendorTimeToggle = useCallback(async () => {
+        if (VendorTimetoggle) {
+            try {
+                const response = await axios.get(`${apiUrl}/AccountinfoTimetOOGLE/${VendorTimetoggle}`);
+                const data = response.data;
+                if (data.length > 0) {
+                    const res = data[0].TimeToggle;
+                    // console.log(data,"cust")
+
+                    setTimeToggleVendor(res); // Update state with the fetched result
+                } else {
+                    setTimeToggleVendor('');
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+                setTimeToggleVendor('');
+            }
+        } else {
+            setTimeToggleVendor('');
+        }
+    }, [apiUrl,VendorTimetoggle]);
+
+    useEffect(() => {
+        fetchdatavendorTimeToggle()
+    }, [fetchdatavendorTimeToggle]);
+   
+
 
     const fetchdatacustomerhybrid = useCallback(async () => {
         if (customerdatatimetoggle) {
@@ -2040,7 +2077,7 @@ const useTripsheet = () => {
 
                     const RemainTotalCalculation = LongTripHours + Number(formattedHours);
                     const a = RemainTotalCalculation.toFixed(2)
-                    console.log(a);
+                    // console.log(a);
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
                     const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
@@ -2511,7 +2548,7 @@ const useTripsheet = () => {
         const shedinTime = vendorinfo?.vendorshedintime || ""
         const totalDays = calculatevendorTotalDays()
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        const datatimetoggle = timeToggle
+        const datatimetoggle = timeTogglevendor
 
 
         let additionalMinutes = 0;
@@ -4947,7 +4984,7 @@ const useTripsheet = () => {
     
                         const RemainTotalCalculation = LongTripHours + Number(formattedHours);
                         const a = RemainTotalCalculation.toFixed(2)
-                        console.log(a);
+                        // console.log(a);
                         const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
     
                         const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
@@ -5182,7 +5219,7 @@ const useTripsheet = () => {
     
         }
 
-      console.log(calculatewithoutadditonalhour(),"lllll")
+     
     
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,

@@ -22,7 +22,7 @@ const useTransferlist = () => {
   const [warningMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
   const [loading, setLoading] = useState(false)
-  const [userastation,setUserStations]=useState([])
+  // const [userastation,setUserStations]=useState([])
   const  userdata = localStorage.getItem("username");
 
 
@@ -121,9 +121,9 @@ const useTransferlist = () => {
 
   }
   // useme
-  const filteredStationNames = userastation
-  .filter((option) => option.Stationname !== "All") // Remove "All"
-  .map((option) => option.Stationname);
+  // const filteredStationNames = userastation
+  // .filter((option) => option.Stationname !== "All") // Remove "All"
+  // .map((option) => option.Stationname);
 
   // const filteredStationNames = useMemo(() => {
   //   return userastation
@@ -317,7 +317,7 @@ const useTransferlist = () => {
           FromDate: fromDate.format("YYYY-MM-DD"),
           EndDate: toDate.format("YYYY-MM-DD"),
           Station:servicestation,
-          userastationdata:filteredStationNames
+      
 
           
         },
@@ -462,6 +462,8 @@ const useTransferlist = () => {
 
 
 
+
+
   const handleButtonClickTripsheet = (params) => {
     const data = params.row;
     localStorage.setItem("selectedtripsheetid", data.Trip_id);
@@ -506,7 +508,7 @@ const useTransferlist = () => {
     loading,
     info,
     infoMessage,
-    setUserStations
+    // setUserStations
   };
 };
 

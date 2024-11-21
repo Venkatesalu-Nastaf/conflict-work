@@ -54,7 +54,7 @@ const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
         handlePdfDownload,
         handleShow,
         columns,
-        handleButtonClickTripsheet
+        // handleButtonClickTripsheet
     } = useCoversubmit();
 
     useEffect(() => {
@@ -229,7 +229,7 @@ const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
                                 columns={columns}
                                 pageSize={5}
                                 checkboxSelection
-                                onRowClick={handleButtonClickTripsheet}
+                                // onRowClick={handleButtonClickTripsheet}
                             />
                         </Box>
                     </div>

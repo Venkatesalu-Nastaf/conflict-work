@@ -78,6 +78,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
     setServiceStation,
     setInfo,
      setINFOMessage,
+     handlecustomer
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -171,21 +172,24 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                       size="small"
                       value={customer || ''}
                       options={organizationNames}
-                      disabled={groupdisable} 
+                     
+                      onChange={(event, value) => handlecustomer(value)}
 
-                       onChange={(event, value) => {
-                        if (!groupId) {
-                          setCustomer(value)
-                        } else {
+                      //  onChange={(event, value) => {
+                      //   if (!groupId) {
+                      //     setCustomer(value)
+                          
+                      //   }
+                      //    else {
                         
-                          setInfo(true)
-                          setINFOMessage("not change customer ")
-                        }
-                        }}
+                      //     setInfo(true)
+                      //     setINFOMessage("not change customer ")
+                      //   }
+                      //   }}
                       // onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Organization" name='customer'  disabled={groupdisable} inputRef={params.inputRef} />
+                          <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                         );
                       }}
                     />
@@ -320,12 +324,18 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
+                  {invoiceno ? <></>:
                   <div className="input">
                     <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
+}
+                  {groupId && customer ? <div className="input">
+                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button>
+                  </div>:
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button>
                   </div>
+}
                 </div>
               </div>
             </div>

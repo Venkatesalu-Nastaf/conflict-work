@@ -580,9 +580,9 @@ router.get('/getTripIdFromTransferList', (req, res) => {
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: 'No Trip IDs found for the given Group ID' });
-    }
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: 'No Trip IDs found for the given Group ID' });
+    // }
 
     return res.status(200).json(result);
   });
@@ -968,14 +968,65 @@ router.delete('/deleteTransfer/:groupid', (req, res) => {
 
 
 
-router.put('/statusChangeTransfer/:invoiceno', (req, res) => {
-  const { invoiceno } = req.params;
-  const sqlquery = 'update Transfer_list set Status="Billed" where Invoice_no = ? ';
-  db.query(sqlquery, [invoiceno], (err, result) => {
+// router.put('/statusChangeTransfer/:invoiceno', (req, res) => {
+//   const { invoiceno } = req.params;
+//   const sqlquery = 'update Transfer_list set Status="Billed" where Invoice_no = ? ';
+//   db.query(sqlquery, [invoiceno], (err, result) => {
+//     if (err) {
+//       console.log(err, 'error');
+//     }
+//     return res.status(200).json({ message: "Data updated successfully" });
+
+//   })
+// })
+
+
+const getNextInvoiceNo = (state) => {
+  const query = `
+    SELECT GREATEST(
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+    ) + 1 AS max_invoiceno;
+  `;
+
+  // Run the query to find the maximum invoice number
+  return new Promise((resolve, reject) => {
+    db.query(query, [state, state, state], (err, result) => {
+      if (err) {
+        reject(err); // Reject on error
+      } else if (result.length > 0) {
+        const nextInvoiceNo = `IV${result[0].max_invoiceno}`;
+        // const nextInvoiceNo = result[0].max_invoiceno
+        resolve(nextInvoiceNo); // Resolve with the next invoice number
+      } else {
+        resolve(null); // Handle case where no result is found
+      }
+    });
+  });
+};
+router.put('/statusChangeTransfer/:invoiceno/:State', async(req, res) => {
+  const { invoiceno,State } = req.params;
+  const nextInvoiceNo = await getNextInvoiceNo(State);
+  const sqlquery = 'update Transfer_list set Status="Billed",Invoice_no = ? where Grouptrip_id = ? ';
+  db.query(sqlquery, [nextInvoiceNo,invoiceno], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
     return res.status(200).json({ message: "Data updated successfully" });
+
+  })
+})
+
+router.get('/Transferlistgetinvoicenolast/:Grouptrip', async(req, res) => {
+  const {Grouptrip } = req.params;
+  const sqlquery = 'select Invoice_no  from  Transfer_list where Grouptrip_id = ? ';
+  db.query(sqlquery, [Grouptrip], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+    }
+    console.log(result)
+    return res.status(200).json(result);
 
   })
 })
@@ -1036,16 +1087,16 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
 });
 
 router.get('/gettransfer_listdatas', (req, res) => {
-  const { Status, Organization_name, FromDate, EndDate, Station, userastationdata } = req.query;
-  console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp", userastationdata, Station)
+  const { Status, Organization_name, FromDate, EndDate, Station, } = req.query;
+  console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp",Station)
   const orgName = decodeURIComponent(Organization_name)
 
   // console.log(data,"ll")
 
-  if (Station === "all" || Station === "All") {  // const { Status  } = req.query;
+  if (Station) {  // const { Status  } = req.query;
     console.log(Station, "SSALLLL")
     if (Status === "all") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Stations IN (?)', [orgName, FromDate, EndDate, userastationdata], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND State = ?', [orgName, FromDate, EndDate,Station], (err, result) => {
         // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
         // 
         if (err) {
@@ -1056,7 +1107,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
       });
     }
     else if (Status === "billed") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations IN (?)', [orgName, FromDate, EndDate, Status, userastationdata], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND State = ?', [orgName, FromDate, EndDate, Status,Station], (err, result) => {
 
         if (err) {
           // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
@@ -1082,7 +1133,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
     //   });
     // }
     else if (Status === "notbilled") {
-      db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND  Status = ? AND  Stations IN (?)', [orgName, FromDate, EndDate, Status, userastationdata], (err, result) => {
+      db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND  Status = ? AND State = ?', [orgName, FromDate, EndDate, Status, Station], (err, result) => {
 
         if (err) {
           console.error(err); // Log the error for debugging
@@ -1097,10 +1148,10 @@ router.get('/gettransfer_listdatas', (req, res) => {
       });
     }
   }
-  else if (Station !== "all" || Station !== "All") {
-    console.log("s", Station)
+  else  {
+  
     if (Status === "all") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Stations = ?', [orgName, FromDate, EndDate, Station], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) ', [orgName, FromDate, EndDate], (err, result) => {
         // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
         // 
         if (err) {
@@ -1111,7 +1162,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
       });
     }
     else if (Status === "billed") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations = ?', [orgName, FromDate, EndDate, Status, Station], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? ', [orgName, FromDate, EndDate, Status], (err, result) => {
 
         if (err) {
           // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
@@ -1138,7 +1189,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
     //   });
     // }
     else if (Status === "notbilled") {
-      db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND Stations = ?', [orgName, FromDate, EndDate, Status, Station], (err, result) => {
+      db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? ', [orgName, FromDate, EndDate, Status], (err, result) => {
 
         if (err) {
           console.error(err); // Log the error for debugging

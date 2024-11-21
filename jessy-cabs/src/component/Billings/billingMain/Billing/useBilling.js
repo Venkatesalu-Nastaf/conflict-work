@@ -374,11 +374,24 @@ const useBilling = () => {
     }
 
 
+    // const customerMotherdatagroupstation = async(customer)=>{
+    //     console.log(customer,"enetr")
+    //     try{
+    //         const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+    //         const datas =resultresponse.data;
+    //         return datas
+          
+    //     }
+    //     catch(err){
+         
+    //     }
+    // }
+
     const customerMotherdatagroupstation = async(customer)=>{
         console.log(customer,"enetr")
         try{
-            const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
-            const datas =resultresponse.data;
+            const resultresponse = await axios.get(`${apiUrl}/customerinvoicecreate/${customer}`)
+            const datas = resultresponse.data;
             return datas
           
         }

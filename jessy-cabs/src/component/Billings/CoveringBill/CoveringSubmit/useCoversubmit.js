@@ -10,8 +10,9 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "Status", headerName: "Status", width: 130 },
     { field: "State", headerName: "Station", width: 130 },
+    { field: "InvoiceNo", headerName: "IvnoiceGenerated", width: 130 },
     { field: "ReferenceNo", headerName: "Reference No", width: 130 },
-    { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
+    { field: "InvoiceDate", headerName: "BillDate", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "Customer", headerName: "Customer", width: 130 },
     { field: "FromDate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
@@ -258,11 +259,11 @@ const useCoversubmit = () => {
     }
 
 
-    const handleButtonClickTripsheet = (params) => {
-        const data = params.row;
-        const groupbillingurl = `/home/billing/coveringbill?tab=groupbilling&Tripid=${data.Trip_id || ''}&InvoiceNo=${data.InvoiceNo || ''}&InvoiceColumn=${invoiceColumn || ''}&InvoiceDate=${data.InvoiceDate}&FromDate=${data.FromDate || ''}&ToDate=${data.ToDate || ''}&ReferenceNo=${data.ReferenceNo}`
-        window.location.href = groupbillingurl
-    };
+    // const handleButtonClickTripsheet = (params) => {
+    //     const data = params.row;
+    //     const groupbillingurl = `/home/billing/coveringbill?tab=groupbilling&Tripid=${data.Trip_id || ''}&InvoiceNo=${data.InvoiceNo || ''}&InvoiceColumn=${invoiceColumn || ''}&InvoiceDate=${data.InvoiceDate}&FromDate=${data.FromDate || ''}&ToDate=${data.ToDate || ''}&ReferenceNo=${data.ReferenceNo}`
+    //     window.location.href = groupbillingurl
+    // };
     // const handleShow = useCallback(async () => {
 
     //     try {
@@ -323,7 +324,7 @@ const useCoversubmit = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
-        handleButtonClickTripsheet
+        // handleButtonClickTripsheet
     };
 };
 

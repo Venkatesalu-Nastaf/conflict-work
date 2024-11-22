@@ -397,7 +397,8 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={() => handleShow()} >View Bill</Button>
                                 </div>
 }
-                                {invoiceno && disabeldata && (
+                                {invoiceno && disabeldata &&  referInvoiceno != "created" && (
+
                                 <div className="input">
                                     <Button variant="contained" disabled={!CoveringBill_read} 
                                      onClick={() => handleInvoicegenerate()}
@@ -430,9 +431,16 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         </PopupState>
                     </div>
                     <div className="input-field">
-                        <div className="input">
+                   
+                    {invoiceno && customer ? <div className="input">
+                            <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Edit</Button>
+                        </div>:<div className="input">
                             <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
-                        </div>
+                        </div>}
+                        
+                        {/* <div className="input">
+                            <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
+                        </div> */}
                         { referInvoiceno === "created" ? <></> :
                         <div className="input" >
                             <Button variant="contained" disabled={!CoveringBill_delete} onClick={handleRemoveData} >Remove</Button>

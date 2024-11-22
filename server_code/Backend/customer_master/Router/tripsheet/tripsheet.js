@@ -136,7 +136,8 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataAmount,
         Vendor_FULLTotalAmount,
         Vendor_BataTotalAmount,
-        TotalTimeWithoutAddHours
+        TotalTimeWithoutAddHours,
+        Hybriddata
 
     } = req.body
 
@@ -267,7 +268,8 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-        TotalTimeWithoutAddHours
+        TotalTimeWithoutAddHours,
+        Hybriddata
     }
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -469,7 +471,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours } = req.body
+        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata } = req.body
 
 
     const updatedCustomerData = {
@@ -599,7 +601,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-        TotalTimeWithoutAddHours
+        TotalTimeWithoutAddHours,Hybriddata
     }
     // console.log(updatedCustomerData,"llll")
 
@@ -2111,8 +2113,8 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
     console.log(vehicleNo, "nooo")
     // const status = 'Transfer_Closed';
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
-
-    sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled'  and Hybriddata = 0`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
@@ -2122,6 +2124,27 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
         if (result) {
             res.status(200).json(result)
         }
+    })
+
+})
+
+router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
+    const vehicleNo = req.params.VehicleNo
+    console.log(vehicleNo, "nooo")
+    // const status = 'Transfer_Closed';
+    // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
+//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    sql = `SELECT  COALESCE(SUM(closekm), 0) AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
+    db.query(sql, [vehicleNo], (err, result) => {
+        if (err) {
+            console.log("err", err)
+            res.json({ message: "error fetching data", success: false })
+        }
+
+        if (result) {
+            res.status(200).json(result)
+        }
+        console.log(result,"pp")
     })
 
 })

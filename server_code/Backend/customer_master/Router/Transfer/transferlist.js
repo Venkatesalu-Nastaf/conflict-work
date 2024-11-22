@@ -980,6 +980,50 @@ router.delete('/deleteTransfer/:groupid', (req, res) => {
 //   })
 // })
 
+// const getNextInvoiceNo1 = (state) => {
+//   const query = `
+//     SELECT CASE
+//       WHEN GREATEST(
+//           COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+//           COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+//           COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+//       ) + 1 < 10 
+//       THEN 
+//       LPAD(
+//       GREATEST(
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+//           ) + 1, 
+//           2, '0')
+//       ELSE 
+//         GREATEST(
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+//               COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+//           ) + 1
+//     END AS max_invoiceno;
+//   `;
+
+//   // Run the query to find the maximum invoice number
+//   return new Promise((resolve, reject) => {
+//     db.query(
+//       query,
+//       [state, state, state, state, state, state,state, state, state], // Pass the correct number of parameters
+//       (err, result) => {
+//         if (err) {
+//           reject(err); // Reject on error
+//         } else if (result.length > 0) {
+//           const nextInvoiceNo = `IV${result[0].max_invoiceno}`; // Prefix 'IV' to the invoice number
+//           resolve(nextInvoiceNo); // Resolve with the next invoice number
+//         } else {
+//           resolve(null); // Handle case where no result is found
+//         }
+//       }
+//     );
+//   });
+// };
+
 
 const getNextInvoiceNo = (state) => {
   const query = `
@@ -996,6 +1040,7 @@ const getNextInvoiceNo = (state) => {
       if (err) {
         reject(err); // Reject on error
       } else if (result.length > 0) {
+
         const nextInvoiceNo = `IV${result[0].max_invoiceno}`;
         // const nextInvoiceNo = result[0].max_invoiceno
         resolve(nextInvoiceNo); // Resolve with the next invoice number

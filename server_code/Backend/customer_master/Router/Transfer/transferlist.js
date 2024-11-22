@@ -1005,11 +1005,11 @@ const getNextInvoiceNo = (state) => {
     });
   });
 };
-router.put('/statusChangeTransfer/:invoiceno/:State', async(req, res) => {
-  const { invoiceno,State } = req.params;
+router.put('/statusChangeTransfer/:invoiceno/:State', async (req, res) => {
+  const { invoiceno, State } = req.params;
   const nextInvoiceNo = await getNextInvoiceNo(State);
   const sqlquery = 'update Transfer_list set Status="Billed",Invoice_no = ? where Grouptrip_id = ? ';
-  db.query(sqlquery, [nextInvoiceNo,invoiceno], (err, result) => {
+  db.query(sqlquery, [nextInvoiceNo, invoiceno], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
@@ -1018,8 +1018,8 @@ router.put('/statusChangeTransfer/:invoiceno/:State', async(req, res) => {
   })
 })
 
-router.get('/Transferlistgetinvoicenolast/:Grouptrip', async(req, res) => {
-  const {Grouptrip } = req.params;
+router.get('/Transferlistgetinvoicenolast/:Grouptrip', async (req, res) => {
+  const { Grouptrip } = req.params;
   const sqlquery = 'select Invoice_no  from  Transfer_list where Grouptrip_id = ? ';
   db.query(sqlquery, [Grouptrip], (err, result) => {
     if (err) {
@@ -1088,7 +1088,7 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
 
 router.get('/gettransfer_listdatas', (req, res) => {
   const { Status, Organization_name, FromDate, EndDate, Station, } = req.query;
-  console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp",Station)
+  console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp", Station)
   const orgName = decodeURIComponent(Organization_name)
 
   // console.log(data,"ll")
@@ -1096,7 +1096,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
   if (Station) {  // const { Status  } = req.query;
     console.log(Station, "SSALLLL")
     if (Status === "all") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND State = ?', [orgName, FromDate, EndDate,Station], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND State = ?', [orgName, FromDate, EndDate, Station], (err, result) => {
         // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
         // 
         if (err) {
@@ -1107,7 +1107,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
       });
     }
     else if (Status === "billed") {
-      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND State = ?', [orgName, FromDate, EndDate, Status,Station], (err, result) => {
+      db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? AND State = ?', [orgName, FromDate, EndDate, Status, Station], (err, result) => {
 
         if (err) {
           // return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
@@ -1148,8 +1148,8 @@ router.get('/gettransfer_listdatas', (req, res) => {
       });
     }
   }
-  else  {
-  
+  else {
+
     if (Status === "all") {
       db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) ', [orgName, FromDate, EndDate], (err, result) => {
         // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
@@ -1442,6 +1442,75 @@ router.get('/customerdatamothergroup/:customers', (req, res) => {
 //   });
 // });
 
+// router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
+//   const { customer } = req.params;
+//   console.log(customer, 'params customer');
+
+//   const customerQuery = 'SELECT * FROM customers WHERE customer = ?';
+
+//   db.query(customerQuery, [customer], (err, customerResult) => {
+//     if (err) {
+//       console.log(err, 'error');
+//       return res.status(500).json({ error: 'Database error' });
+//     }
+
+//     if (customerResult.length === 0) {
+//       return res.status(404).json({ error: 'Customer not found' });
+//     }
+
+//     const groupBilling = customerResult[0]?.billingGroup;
+//     const state = customerResult[0]?.state;
+//     console.log(customerResult, 'customer result', groupBilling, state);
+
+//     const stationQuery = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+//     const billingGroupstationQuery = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+
+//     // First, fetch stations related to the customer's state
+//     db.query(stationQuery, [state], (err, stationResult) => {
+//       if (err) {
+//         console.log(err, 'error');
+//         return res.status(500).json({ error: 'Database error' });
+//       }
+
+//       // If groupBilling is defined, fetch billing group details and stations
+//       if (groupBilling) {
+//         const groupBillingQuery = 'SELECT * FROM customers WHERE customer = ?';
+
+//         db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
+//           if (err) {
+//             console.log(err, 'error');
+//             return res.status(500).json({ error: 'Database error' });
+//           }
+
+//           // Fetch stations related to the billing group's state
+//           db.query(billingGroupstationQuery, [state], (err, billingGroupStationResult) => {
+//             if (err) {
+//               console.log(err, 'error');
+//               return res.status(500).json({ error: 'Database error' });
+//             }
+
+//             // Send all results in the response
+//             res.status(200).json({
+//               // customerDetails: customerResult,
+//               groupBillingDetails: billingResult,
+//               // customerStations: stationResult,
+//               groupBillingStations: billingGroupStationResult,
+//             });
+//           });
+//         });
+//       } else {
+//         // If no billing group, send only customer details and station results
+//         res.status(200).json({
+//           customerDetails: customerResult,
+//           customerStations: stationResult,
+//           groupBillingDetails: [],
+//           groupBillingStations: [],
+//         });
+//       }
+//     });
+//   });
+// });
+
 router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
   const { customer } = req.params;
   console.log(customer, 'params customer');
@@ -1450,8 +1519,8 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
 
   db.query(customerQuery, [customer], (err, customerResult) => {
     if (err) {
-      console.log(err, 'error');
-      return res.status(500).json({ error: 'Database error' });
+      console.error(err, 'error');
+      return res.status(500).json({ error: 'Database error while fetching customer' });
     }
 
     if (customerResult.length === 0) {
@@ -1463,53 +1532,67 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     console.log(customerResult, 'customer result', groupBilling, state);
 
     const stationQuery = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
-    const billingGroupstationQuery = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+    const defaultStationQuery = 'SELECT * FROM stationcreation WHERE state = "Tamil Nadu" AND gstno IS NOT NULL AND gstno != ""';
 
-    // First, fetch stations related to the customer's state
-    db.query(stationQuery, [state], (err, stationResult) => {
-      if (err) {
-        console.log(err, 'error');
-        return res.status(500).json({ error: 'Database error' });
-      }
+    const fetchStations = (state, callback) => {
+      db.query(stationQuery, [state], (err, stationResult) => {
+        if (err) {
+          console.error(err, 'error');
+          return res.status(500).json({ error: 'Database error while fetching stations' });
+        }
 
-      // If groupBilling is defined, fetch billing group details and stations
-      if (groupBilling) {
-        const groupBillingQuery = 'SELECT * FROM customers WHERE customer = ?';
+        const allGstEmpty = stationResult.every(station => !station.gstno || station.gstno.trim() === '');
 
-        db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
-          if (err) {
-            console.log(err, 'error');
-            return res.status(500).json({ error: 'Database error' });
-          }
-
-          // Fetch stations related to the billing group's state
-          db.query(billingGroupstationQuery, [state], (err, billingGroupStationResult) => {
+        if (allGstEmpty) {
+          db.query(defaultStationQuery, (err, defaultStations) => {
             if (err) {
-              console.log(err, 'error');
-              return res.status(500).json({ error: 'Database error' });
+              console.error(err, 'error');
+              return res.status(500).json({ error: 'Database error while fetching default stations' });
             }
-
-            // Send all results in the response
-            res.status(200).json({
-              // customerDetails: customerResult,
-              groupBillingDetails: billingResult,
-              // customerStations: stationResult,
-              groupBillingStations: billingGroupStationResult,
-            });
+            callback(defaultStations);
           });
-        });
-      } else {
-        // If no billing group, send only customer details and station results
+        } else {
+          callback(stationResult);
+        }
+      });
+    };
+
+    if (groupBilling === null || groupBilling === '') {
+      console.log(groupBilling, 'yyyyyyyyyyyyyyyyyy');
+
+      console.log('Fetching stations for customer state');
+      fetchStations(state, stationResult => {
+        console.log(stationResult, 'Station results for customer state');
         res.status(200).json({
           customerDetails: customerResult,
           customerStations: stationResult,
-          groupBillingDetails: [],
-          groupBillingStations: [],
+
         });
-      }
-    });
+      });
+    } else {
+      const groupBillingQuery = 'SELECT * FROM customers WHERE customer = ?';
+      db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
+        if (err) {
+          console.error(err, 'error');
+          return res.status(500).json({ error: 'Database error while fetching group billing details' });
+        }
+        console.log(billingResult, 'ppppppppppppp');
+
+        const groupbillingstate = billingResult[0]?.state
+        console.log('Fetching stations for group billing state');
+        fetchStations(groupbillingstate, billingGroupStationResult => {
+          console.log(billingGroupStationResult, 'Station results for group billing state');
+          res.status(200).json({
+
+            customerDetails: billingResult,
+            customerStations: billingGroupStationResult,
+          });
+        });
+      });
+    }
   });
 });
+
 
 
 router.get('/customerdatgst/:customers', (req, res) => {
@@ -1639,7 +1722,7 @@ router.get('/customerinvoicecreate/:customers', (req, res) => {
           }
           if (results3.length > 0) {
             const resultstate = results[0]?.state
-           
+
             return res.status(200).json(resultstate);
             // return res.status(200).json({ data: resultgst, data2: resultaddress, data3: resultgstnumber, otherdata: "InStations" });
           }
@@ -1670,12 +1753,12 @@ router.get('/customerinvoicecreate/:customers', (req, res) => {
               }
               if (result5.length > 0) {
                 const resultgst = results1[0].state
-             
+
                 return res.status(200).json(resultgst);
                 // return res.status(200).json({ data: resultgst, data2: resultaddress, data3: resultgstnumber, otherdata: "InStations" });
               }
               else {
-                 const resultstate = "Tamil Nadu"
+                const resultstate = "Tamil Nadu"
                 return res.status(200).json(resultstate);
                 // return res.status(200).json({ data: resultgst1, data2: resultaddress, data3: resultgstnumber, otherdata: "OutStations" });
               }

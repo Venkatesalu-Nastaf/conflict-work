@@ -47,6 +47,8 @@ const useStationCreation = () => {
         }
     }, [error, success, warning, info]);
 
+   
+
     //-------------------------------------------------
 
     const [book, setBook] = useState({
@@ -591,6 +593,10 @@ const handleStationChange = async (event, value) => {
                     }));
                     setRows(rowsWithUniqueId);
                     setLoading(false);
+                    if (stationUpdate) {
+                        localStorage.setItem("stationValue", "stationupadted");
+                        console.log("Station updated and value set in localStorage.");
+                      }
                     
 
                 } else {

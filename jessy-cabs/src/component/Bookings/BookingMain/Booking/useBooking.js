@@ -45,6 +45,8 @@ const useBooking = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
   };
+  const [escort, setEscort] = useState('No');
+  const [transferreport, setTransferreport] = useState('No')
   const [formValues, setFormValues] = useState({
     guestname: "",
     guestmobileno: "",
@@ -136,7 +138,11 @@ const useBooking = () => {
       "mobile",
       "vehiclemodule",
       "ratenamebook",
-      "shedOutDate"
+      "shedOutDate",
+      "escort",
+      'transferreport'
+
+
     ];
 
     parameterKeys.forEach((key) => {
@@ -146,6 +152,7 @@ const useBooking = () => {
       }
     });
     formData["status"] = statusValue;
+    // console.log(formData,'form datas')
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
     const ratetye = formData["ratenamebook"]
@@ -204,10 +211,14 @@ const useBooking = () => {
     driverName: "",
     mobileNo: "",
     travelsemail: "",
-    Groups: ""
+    Groups: "",
+    escort:'',
+    transferreport:""
   }
 
   const [book, setBook] = useState(bookDatdObj);
+  console.log(book ,'book datas')
+  
   const handleCancel = () => {
     setBook(bookDatdObj);
     setOrderByDropDown([])
@@ -316,6 +327,27 @@ const useBooking = () => {
       setSelectedCustomerdriver,
     ]
   );
+
+  const handleBookEscortChange = (event) => {
+    setEscort(event.target.value);
+    console.log(escort,"escoret data")
+};
+  // const handleBookEscortChange = (event) => {
+  //   const selectedValue = event.target.value; // Get selected value
+  //   setEscort(selectedValue); // Update state
+  //   console.log("Selected Value:", selectedValue); // Debugging
+  //   console.log(escort,'escort update')
+  // };
+ 
+const handleAirportTransferChange = (event) => {
+  // const selectedValue = event.target.value;
+    setTransferreport(event.target.value);
+    console.log(transferreport,"Airport data")
+};
+useEffect(() => {
+  console.log("Escort state updated:", escort); // Logs the updated state
+  console.log("transper state updated:", transferreport);
+}, [escort,transferreport]);
 
   //Entering Manually...
   const handleVehicleChange = (event, value, name) => {
@@ -658,6 +690,8 @@ const useBooking = () => {
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
           status: datamode,
+          escort:formData.escort || selectedCustomerData.escort || book.escort || "No",
+          transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No",
           Sendmailauth: organistaionsendmail.Sender_Mail,
           Mailauthpass: organistaionsendmail.EmailApp_Password
         };
@@ -719,7 +753,9 @@ const useBooking = () => {
         mode: modedata,
         bookingno: lastBookinglogno,
         driverName: logupdatabookdetails.driverName,
-        username: logupdatabookdetails.username
+        username: logupdatabookdetails.username,
+         escort:formData.escort || selectedCustomerData.escort || book.escort,
+          transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
 
       };
       await axios.post(`${apiUrl}/bookinglogDetails`, updatedBooklogdetails)
@@ -813,7 +849,10 @@ const useBooking = () => {
         ratenamebook: ratename,
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
-        customer: restSelectedCustomerData.customer
+        customer: restSelectedCustomerData.customer,
+        escort:formData.escort || selectedCustomerData.escort || book.escort,
+        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+
       };
 
       setSendmailGuestsms(true)
@@ -928,6 +967,8 @@ const useBooking = () => {
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
         customer: restSelectedCustomerData.customer,
+        escort:formData.escort || selectedCustomerData.escort || book.escort,
+        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
       };
 
       const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
@@ -1325,7 +1366,8 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning
+    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
+    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort
   };
 };
 export default useBooking;

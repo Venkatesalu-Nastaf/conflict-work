@@ -261,8 +261,11 @@ function App() {
   
 
   const loginUserName = localStorage.getItem("username")
+  
+  const stationvalue = localStorage.getItem("stationValue");
 
   const [stationName, setStationName] = useState([]);
+
 
   useEffect(() => {
     const fetchSattionName = async () => {
@@ -275,7 +278,7 @@ function App() {
       }
     }
     fetchSattionName();
-  }, [apiUrl, loginUserName])
+  }, [apiUrl, loginUserName,stationvalue])
 
 // console.log(permissions,'permissinon datas come')
 //     const auth = localStorage.getItem("auth") === 'true';

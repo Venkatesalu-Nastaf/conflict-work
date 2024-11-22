@@ -256,7 +256,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID,calculatewithoutadditonalhour,hybridhclcustomer
+    mapPopUp, setMapPopUp, manualTripID,calculatewithoutadditonalhour,hybridhclcustomer,timeToggle,HclKMCalculation
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
 
@@ -1495,14 +1495,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* <br></br> */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                  {conflictkm?.maximumkm !== 0 && hybridhclcustomer !== 1 && tripID !== conflictkm.maxtripid && data === undefined && (
                     (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
                       <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                         Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
                       </label>
                     )
                   )}
-                  {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                  {data === undefined  && hybridhclcustomer !== 1 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
                     </label>
@@ -1537,8 +1537,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div style={{ display: "grid" }} className="input">
-                  {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
-
+                  { hybridhclcustomer !== 1 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
+           
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1563,7 +1563,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <div className="input" style={{ display: "grid" }}>
-                  {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  { hybridhclcustomer !== 1 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1589,7 +1589,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <div style={{ display: "grid" }} className="input">
-                  {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  {hybridhclcustomer !== 1 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1621,7 +1621,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="totalkm1"
-                    value={calculateTotalKilometers() || ''}
+                    value={ calculateTotalKilometers() }
                     onChange={handleChange}
                     label="Total KM"
                     id="totalkm1"
@@ -2545,7 +2545,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div>
                                   <TextField
                                     name="pack"
-                                    value={calcPackage || formData.calcPackage || ratepackage || ''}
+                                    value={selectedCustomerData?.duty==="Transfer" ? "Transfer" : calcPackage || formData.calcPackage || ratepackage || ''}
                                     label="Pack"
                                     id="pack"
                                     size="small"

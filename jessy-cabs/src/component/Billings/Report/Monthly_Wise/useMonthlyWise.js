@@ -27,7 +27,7 @@ const useMonthlyWise = () => {
         {
             field: 'billingno',
             headerName: 'Bill No',
-            type: 'number',
+            // type: 'number',
             width: 90,
         },
         { field: 'customer', headerName: 'Customer Name', width: 180 },

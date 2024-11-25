@@ -206,6 +206,7 @@ const useTripsheet = () => {
     const [hybridhclcustomer, setHybridHclCustomer] = useState('')
     const [hybridhclnavigate, setHybridHclNavigate] = useState('')
     const [timetogglenavigate, setTimeToggleNaviagate] = useState('')
+    const [timetogglevendornavigate, setTimeToggleVendorNaviagate] = useState('')
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
@@ -554,8 +555,10 @@ const useTripsheet = () => {
         const tranreport = params.get('transferreport') || "No";
         const HCLDATA = Number(params.get('hybriddatahcl')) || 0
         const timetoggledata = Number(params.get('TimeToggle')) || 0
+        const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
+        setTimeToggleVendorNaviagate(timetogglevendor)
 
         setTransferreport(tranreport)
         setEscort(escort)
@@ -1072,7 +1075,8 @@ const useTripsheet = () => {
                     Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
                     Hybriddata: hybridhclcustomer || 0,
-                    TimeToggleData: timeToggle
+                    TimeToggleData: timeToggle,
+                    VendorTimeToggle: timeTogglevendor
                 };
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -1325,7 +1329,8 @@ const useTripsheet = () => {
                 Vendor_BataAmount: vendorbilldata.Vendor_BataAmount || 0,
                 Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                 Hybriddata: hybridhclcustomer || 0,
-                TimeToggleData: timeToggle
+                TimeToggleData: timeToggle,
+                VendorTimeToggle: timeTogglevendor
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
@@ -1771,7 +1776,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 if (data.length > 0) {
                     const res = data[0].TimeToggle;
-                    // console.log(data,"cust")
+                    
 
                     setTimeToggle(res); // Update state with the fetched result
                 } else {
@@ -1807,7 +1812,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 if (data.length > 0) {
                     const res = data[0].TimeToggle;
-                    // console.log(data,"cust")
+                    // console.log(typeof(res),"custommmmm")
 
                     setTimeToggleVendor(res); // Update state with the fetched result
                 } else {
@@ -2583,7 +2588,7 @@ const useTripsheet = () => {
         const shedinTime = vendorinfo?.vendorshedintime || ""
         const totalDays = calculatevendorTotalDays()
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        const datatimetoggle = timeTogglevendor
+        const datatimetoggle = timeTogglevendor || timetogglevendornavigate
 
 
         let additionalMinutes = 0;
@@ -3154,6 +3159,7 @@ const useTripsheet = () => {
                             setGroupTripId(bookingDetails.GroupTripId)
                             setHybridHclCustomer(bookingDetails.Hybriddata)
                             setTimeToggle(bookingDetails.TimeToggleData)
+                            setTimeToggleVendor(bookingDetails.VendorTimeToggle)
 
                             //---------------------------
 
@@ -3659,14 +3665,58 @@ const useTripsheet = () => {
     }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll,])
 
     // extra Amount calculation--------------------------
+
+
+    const datatimeminutescahrges = (extraHR11, ex_hrAmount11) => {
+
+        console.log(extraHR11, "kk")
+        const datatimetoggle = timeToggle || timetogglenavigate
+        if (datatimetoggle === 1) {
+            if (extraHR11) {
+                console.log(extraHR, "lldaaa", typeof (extraHR))
+                const [hrda, mida] = extraHR11.toString().split('.').map(Number);
+                console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
+                const onehrdata = Number(hrda) * Number(ex_hrAmount11)
+                const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
+                const etrxamin = result * Number(mida)
+                const totalamountwithmin = onehrdata + etrxamin
+                const totalamounthrmin = Math.round(totalamountwithmin)
+                console.log(onehrdata, "ooooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
+                return totalamountwithmin
+                // const totalamounthrmin = Math.round(totalamountwithmin)
+                // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
+            }
+        }
+        else {
+            let extraAbout_hr1 = Number(extraHR) * Number(extrahr_amount);
+            return extraAbout_hr1
+        }
+    }
+
+
+
+
+
     useEffect(() => {
         const extraClac = () => {
-            let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
-            const extarhour = Math.round(extraAbout_hr)
+            // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
+            const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
+           
+            // const extarhour = Math.round(extraAbout_hr)
+            const extarhour = Math.round(daghr)
             setEx_HrAmount(extarhour)
         }
         extraClac();
     }, [extraHR, extrahr_amount])
+    // useEffect(() => {
+    //     const extraClac = async() => {
+    //         let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
+    //         datatimeminutescahrges(extraHR,extrahr_amount)
+    //         const extarhour = Math.round(extraAbout_hr)
+    //         setEx_HrAmount(extarhour)
+    //     }
+    //     extraClac();
+    // }, [extraHR, extrahr_amount])
 
     useEffect(() => {
         const extraClac = () => {
@@ -3680,14 +3730,49 @@ const useTripsheet = () => {
 
     // -------------------------------------------vendorbilldata--------------------
 
+
+    const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
+
+
+        const datatimetoggle = timeTogglevendor || timetogglevendornavigate
+        if (datatimetoggle === 1) {
+            if (vendorhr) {
+
+                const [hrdavendor, midavendor] = vendorhr.toString().split('.').map(Number);
+                // console.log(hrdavendor, "Hour part",midavendor, "Minute vendorpart",vendorhramount);
+                const onehrdata = Number(hrdavendor) * Number(vendorhramount)
+                const result = Math.round((vendorhramount / 60) * 10) / 10;
+                const etrxamin = result * Number(midavendor)
+                const totalamountwithmin = onehrdata + etrxamin
+                const totalamounthrmin = Math.round(totalamountwithmin)
+                console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
+                return totalamounthrmin
+
+            }
+        }
+        else {
+
+            let extraAbout_hr1 = Number(vendorhr) * Number(vendorhramount);
+            return extraAbout_hr1
+        }
+    }
+
     useEffect(() => {
         const VendorextraClac = () => {
-            let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
-            setVendorExtrahrTotaldataAmount(extraAbout_hr)
+            // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
+            const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours)
+            const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours)
+            const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
+            // setVendorExtrahrTotaldataAmount(extraAbout_hr)
+            setVendorExtrahrTotaldataAmount(vendorTotalfullamount)
             // setVendorbilldata({ ...vendorbilldata, Vendor_totalAmountHours: extraAbout_hr })
+            // setVendorbilldata(prevData => ({
+            //     ...prevData,
+            //     Vendor_totalAmountHours: extraAbout_hr
+            // }));
             setVendorbilldata(prevData => ({
                 ...prevData,
-                Vendor_totalAmountHours: extraAbout_hr
+                Vendor_totalAmountHours: vendorTotalfullamount
             }));
 
 
@@ -3695,6 +3780,21 @@ const useTripsheet = () => {
         VendorextraClac();
     }, [vendorbilldata?.Vendor_ExtraHours, vendorbilldata?.Vendor_ExtraAmountHours, vendorpassvalue.Vendor_ExtraHours, vendorpassvalue.Vendor_ExtraAmountHours])
 
+
+    // useEffect(() => {
+    //     const VendorextraClac = () => {
+    //         let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
+    //         setVendorExtrahrTotaldataAmount(extraAbout_hr)
+    //         // setVendorbilldata({ ...vendorbilldata, Vendor_totalAmountHours: extraAbout_hr })
+    //         setVendorbilldata(prevData => ({
+    //             ...prevData,
+    //             Vendor_totalAmountHours: extraAbout_hr
+    //         }));
+
+
+    //     }
+    //     VendorextraClac();
+    // }, [vendorbilldata?.Vendor_ExtraHours, vendorbilldata?.Vendor_ExtraAmountHours, vendorpassvalue.Vendor_ExtraHours, vendorpassvalue.Vendor_ExtraAmountHours])
 
     useEffect(() => {
         const VendorextraClac = () => {
@@ -3869,7 +3969,7 @@ const useTripsheet = () => {
 
             vendortotalHours = await convertTimeToNumber(vendortothr);
             // const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
-            console.log(vendortotalHours, "hours")
+
             const consvertedTotalHour = vendortotalHours
             console.log(consvertedTotalHour, "totalfffffffffffffh")
 
@@ -4148,7 +4248,7 @@ const useTripsheet = () => {
             organizationname = await fetchdatacustomeraratename();
             CustomerStatioms = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
 
-            console.log(organizationname, "ratetype")
+            // console.log(organizationname, "ratetype")
 
 
             if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {

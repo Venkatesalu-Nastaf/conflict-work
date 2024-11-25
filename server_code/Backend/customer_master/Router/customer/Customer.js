@@ -349,7 +349,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate, "f", formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate,customer)
 
   db.query('select * from customers where customerType=?', [customer], (err, results) => {
     if (err) {

@@ -138,7 +138,8 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataTotalAmount,
         TotalTimeWithoutAddHours,
         Hybriddata,
-        TimeToggleData
+        TimeToggleData,
+        VendorTimeToggle
 
     } = req.body
 
@@ -271,7 +272,7 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours,
         Hybriddata,
-        TimeToggleData
+        TimeToggleData,VendorTimeToggle
     }
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -473,7 +474,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData } = req.body
+        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle } = req.body
 
 
     const updatedCustomerData = {
@@ -603,7 +604,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData
+        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle
     }
     // console.log(updatedCustomerData,"llll")
 

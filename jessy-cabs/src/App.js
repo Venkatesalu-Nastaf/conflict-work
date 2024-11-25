@@ -62,6 +62,8 @@ import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
 import is from "date-fns/esm/locale/is/index.js";
+import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
+import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
 
 
 
@@ -651,6 +653,7 @@ function App() {
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined  ? (<FuelInfo />) : (<NoPermission /> )} />
                 <Route path="/home/info/employee" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <Employes />):(<NoPermission />)} />
+                <Route path="/home/info/agreement" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <AgreementMain />):(<NoPermission />)} />
                 
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>

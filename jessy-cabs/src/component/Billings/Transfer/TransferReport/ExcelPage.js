@@ -33,10 +33,11 @@ const useExeclpage = () => {
 
         { key: "VendorName", header: "Vendor Name", width: 150 },
         { key: "Vendor", header: "Vendor", width: 120 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
-        { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
+        // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
         { key: "tripsheetdate", header: "Date", width: 120 },
@@ -97,15 +98,17 @@ const useExeclpage = () => {
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
-        { key: "vehType", header: "Vehicle Make", width: 180 },
+        // { key: "vehType", header: "Vehicle Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
 
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         { key: "tripsheetdate", header: "Date", width: 120 },
-        { key: "employeeno", header: "User Name", width: 150 },
+        // { key: "employeeno", header: "User Name", width: 150 },
+        { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point", width: 180 },
@@ -215,6 +218,7 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
+                    console.log(data,'datas of excel datss')
                 
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]

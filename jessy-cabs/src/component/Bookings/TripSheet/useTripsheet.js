@@ -3369,10 +3369,16 @@ const useTripsheet = () => {
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
+                    setSuccess(true)
+                setSuccessMessage('Signature Added Sucessfully')
+
                 }
             }
         } catch (err) {
             console.log(err, 'error');
+            setWarning(true);
+                setWarningMessage("Failed to fetch signature image. Please try again.");
+
         }
     };
 

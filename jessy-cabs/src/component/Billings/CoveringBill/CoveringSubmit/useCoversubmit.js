@@ -82,14 +82,26 @@ const useCoversubmit = () => {
             pdf.setFont('helvetica', 'normal');
             pdf.text("Cover Submit", 10, 10);
 
+            // const tableData = [[
+            //     row['id'],
+            //     row['Status'],
+            //     row['InvoiceNo'],
+            //     row['InvoiceDate'],
+            //     row['Customer'],
+            //     row['FromDate'],
+            //     row['ToDate'],
+            //     row['Trips'],
+            //     row['Amount']
+            // ]];
+
             const tableData = [[
                 row['id'],
                 row['Status'],
                 row['InvoiceNo'],
-                row['InvoiceDate'],
+                row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Customer'],
-                row['FromDate'],
-                row['ToDate'],
+                row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
+                row['ToDate'] ? dayjs(row['ToDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Trips'],
                 row['Amount']
             ]];

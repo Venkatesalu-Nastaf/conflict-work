@@ -276,7 +276,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <tr key={index} className="tabledata-ref">
                                     <td className="tdata">{index + 1}</td>
                                     <td className="tdata">{li.InvoiceNo}</td>
-                                    <td className="tdata">{li.InvoiceDate}</td>
+                                    {/* <td className="tdata">{li.InvoiceDate}</td> */}
+                                    <td className="tdata">{li.InvoiceDate ? dayjs(li.InvoiceDate).format("DD-MM-YYYY") : 'N/A'}</td>
                                     <td className="tdata">{li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
                                     <td className="tdata">{li.totalcalcAmount}</td>

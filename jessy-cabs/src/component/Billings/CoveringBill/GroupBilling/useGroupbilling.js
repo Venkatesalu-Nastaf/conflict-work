@@ -542,85 +542,351 @@ const useGroupbilling = () => {
     };
 
 
+    // const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
+    //     try {
+    //         const fileName = "Group Billing"
+    //         // creating one worksheet in workbook
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         //         console.log(headers,"hed")
+            
+    //         const columns = headers.map(key => ({ key, header: key }));
+    //         //         worksheet.columns = columnsexcel
+    //         worksheet.columns = columns;
+    //         // updated the font for first row.
+    //         worksheet.getRow(1).font = { bold: true };
+
+    //         // Set background color for header cells
+    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' } // Green background color
+    //             };
+    //         });
+
+
+    //         worksheet.getRow(1).height = 30;
+    //         // loop through all of the columns and set the alignment with width.
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    //         console.log(rows, "datas of row ")
+
+    //         rows.forEach((singleData, index) => {
+
+    //             singleData["SNo"] = index + 1;
+    //             // singleData["duty1"]=singleData["duty"]
+    //             const location = `${singleData.address1}`;
+    //             singleData['location'] = location
+
+    //             singleData["duty1"] = singleData["duty"]
+    //             singleData["Vendor"] = " Jessy Cabs"
+    //             singleData["VendorName"] = " Jessy Cabs"
+    //             singleData["vechicletype"] = singleData["vehType"]
+    //             singleData["vehTypebilling"] = singleData["vehType"]
+    //             singleData["totalkm2"] = singleData["totalkm1"]
+    //             singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
+    //             singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+    //             singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
+    //              singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                
+
+    //             worksheet.addRow(singleData);
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+
+    //         // loop through all of the rows and set the outline style.
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
+
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
+
+    //                 const cellAddress = singleCell._address;
+
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    //         // write the content using writeBuffer
+    //         const buf = await workbook.xlsx.writeBuffer();
+
+    //         // download the processed file
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         // removing worksheet's instance to create new one
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+
+    // }
+
+    // const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Group Billing';
+    //     try {
+    //         const fileName = "Group Billing";
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    
+    //         // Define the columns based on your data
+    //         const columns = [
+    //             {key: "SNo", header: "Ref", width: 130},
+    //             { key: 'id', header: 'ID', width: 130 },
+    //             { key: 'billingno', header: 'Billing No' , width: 130},
+    //             { key: 'bookingno', header: 'Booking No' , width: 130},
+    //             { key: 'vendor', header: 'Vendor' , width: 130},
+    //             { key: 'customer', header: 'Customer' , width: 300},
+    //             { key: 'guestname', header: 'Guest Name', width: 130 },
+    //             { key: 'tripid', header: 'Trip ID', width: 130 },
+    //             { key: 'vehRegNo', header: 'Vehicle No  ', width: 130 },
+    //             { key: 'vehicleName', header: 'Vehicle Name', width: 130 },
+    //             { key: 'driverName', header: 'Driver Name' , width: 130},
+    //             { key: 'department', header: 'Department' , width: 130},
+    //             { key: 'Groups', header: 'Group', width: 130 },
+    //             { key: 'address1', header: 'Address',width: 190 },
+    //             { key: 'apps', header: 'Application Status', width: 130 },
+    //             { key: 'status', header: 'Status', width: 130 },
+    //             { key: 'shedInDate', header: 'Shed In Date' , width: 130},
+    //             { key: 'shedOutDate', header: 'Shed Out Date' , width: 130},
+    //             { key: 'tripsheetdate', header: 'Trip Sheet Date', width: 130 },
+    //             { key: 'mobileNo', header: 'Mobile Number' , width: 130},
+    //             { key: 'startdate', header: 'Start Date  ', width: 130 },
+    //             { key: 'starttime', header: 'Start Time' , width: 130},
+    //             { key: 'closedate', header: 'Close Date' , width: 130},
+    //             { key: 'closetime', header: 'Close Time', width: 130 },
+               
+                
+    //             { key: 'totalcalcAmount', header: 'Total Calc Amount', width: 130 },
+    //             { key: 'Vendor_Bata', header: 'Vendor Bata' , width: 130},
+                
+    //             // { key: 'guestname', header: 'Guest Name' , width: 130},
+                      
+    //             { key: 'pickup', header: 'Pickup ', width: 130 },
+                
+
+    //         ];
+    
+    //         worksheet.columns = columns;
+    
+    //         // Style the header row
+    //         worksheet.getRow(1).font = { bold: true };
+    //         worksheet.getRow(1).eachCell((cell) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' },
+    //             };
+    //         });
+    //         worksheet.getRow(1).height = 30;
+    
+    //         // Format column width and alignment
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    
+    //         // Add rows to the worksheet
+    //         console.log(rows, "datas of row ")
+    //         rows.forEach((row, index) => {
+    //             const formattedRow = {
+    //                 SNo: index + 1, 
+                    
+    //                 id: row.id || 'N/A',
+    //                 billingno:row.billingno || 'N/A',
+    //                 bookingno:row.bookingno || 'N/A',
+    //                 vendor :"Jessy",
+    //                 customer: row.customer || 'N/A',
+    //                 guestname:row.guestname || 'N/A',
+    //                 tripid: row.tripid || 'N/A',
+    //                 vehRegNo:row.vehRegNo || 'N/A',
+    //                 vehicleName: row.vehicleName || 'N/A',
+    //                 shedOutDate:row.shedOutDate ? dayjs(row.shedOutDate).format("DD-MM-YYYY") : 'N/A',
+    //                 driverName : row.driverName || 'N/A',
+    //                 mobileNo: row.mobileNo || 'N/A',
+    //                 startdate:row.startdate ? dayjs(row.startdate).format("DD-MM-YYYY") : 'N/A',
+    //                 closedate:row.closedate ? dayjs(row.closedate).format("DD-MM-YYYY") : 'N/A',
+    //                 Groups: row.Groups || 'N/A',
+    //                 address1: row.address1 || 'N/A',
+    //                 apps: row.apps || 'N/A',
+    //                 starttime: row.starttime ? dayjs(row.starttime, "HH:mm:ss").format("HH:mm") : 'N/A',
+    //                 closetime: row.closetime? dayjs(row.closetime, "HH:mm:ss").format("HH:mm") : 'N/A',
+    //                 totalcalcAmount: row.totalcalcAmount || 0,
+    //                 Vendor_Bata: row.Vendor_Bata || 0,
+    //                 status: row.status || 'N/A',
+    //                 shedInDate: row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : 'N/A',
+    //                 tripsheetdate: row.tripsheetdate ? dayjs(row.tripsheetdate).format("DD-MM-YYYY") : 'N/A',
+    //                 guestname: row.guestname || 'N/A',
+    //                 department:row.department || 'N/A',
+    //                 pickup:row.pickup || 'N/A'
+                   
+                  
+    //             };
+            
+    //             worksheet.addRow(formattedRow);
+    //         });
+            
+    
+    //         // Apply borders to all cells
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             row.eachCell((cell) => {
+    //                 cell.border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    
+    //         // Write to a buffer and save the file
+    //         const buf = await workbook.xlsx.writeBuffer();
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('Error generating Excel:', error);
+    //     } finally {
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+    // };
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
-        const workSheetName = 'Worksheet-1';
+        const workSheetName = 'Group Billing';
+    
         try {
-            const fileName = "Group Billing"
-            // creating one worksheet in workbook
+            const fileName = "Group Billing";
             const worksheet = workbook.addWorksheet(workSheetName);
-            const headers = Object.keys(rows[0]);
-            //         console.log(headers,"hed")
-            const columns = headers.map(key => ({ key, header: key }));
-            //         worksheet.columns = columnsexcel
+    
+            // Define the columns with default headers
+            const columns = [
+                { key: "SNo", header: "Ref" },
+                { key: 'id', header: 'ID' },
+                { key: 'billingno', header: 'Billing No' },
+                { key: 'bookingno', header: 'Booking No' },
+                { key: 'vendor', header: 'Vendor' },
+                { key: 'customer', header: 'Customer' },
+                { key: 'guestname', header: 'Guest Name' },
+                { key: 'tripid', header: 'Trip ID' },
+                { key: 'vehRegNo', header: 'Vehicle No' },
+                { key: 'vehicleName', header: 'Vehicle Name' },
+                { key: 'driverName', header: 'Driver Name' },
+                { key: 'department', header: 'Department' },
+                { key: 'Groups', header: 'Group' },
+                { key: 'address1', header: 'Address' },
+                { key: 'apps', header: 'Application Status' },
+                { key: 'status', header: 'Status' },
+                { key: 'shedInDate', header: 'Shed In Date' },
+                { key: 'shedOutDate', header: 'Shed Out Date' },
+                { key: 'tripsheetdate', header: 'Trip Sheet Date' },
+                { key: 'mobileNo', header: 'Mobile Number' },
+                { key: 'startdate', header: 'Start Date' },
+                { key: 'starttime', header: 'Start Time' },
+                { key: 'closedate', header: 'Close Date' },
+                { key: 'closetime', header: 'Close Time' },
+                { key: 'totalcalcAmount', header: 'Total Calc Amount' },
+                { key: 'Vendor_Bata', header: 'Vendor Bata' },
+                { key: 'pickup', header: 'Pickup' },
+            ];
+    
             worksheet.columns = columns;
-            // updated the font for first row.
-            worksheet.getRow(1).font = { bold: true };
-
-            // Set background color for header cells
-            worksheet.getRow(1).eachCell((cell, colNumber) => {
+    
+            // Style the header row
+            worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
+            worksheet.getRow(1).eachCell((cell) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' } // Green background color
+                    fgColor: { argb: '9BB0C1' }, // Light blue
                 };
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+                cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-
-
-            worksheet.getRow(1).height = 30;
-            // loop through all of the columns and set the alignment with width.
-            worksheet.columns.forEach((column) => {
-                column.width = column.header.length + 5;
-                column.alignment = { horizontal: 'center', vertical: 'middle' };
+    
+            worksheet.getRow(1).height = 30; // Adjust header row height
+    
+            // Add rows to the worksheet
+            rows.forEach((row, index) => {
+                const formattedRow = {
+                    SNo: index + 1,
+                    id: row.id || 'N/A',
+                    billingno: row.billingno || 'N/A',
+                    bookingno: row.bookingno || 'N/A',
+                    vendor: "Jessy",
+                    customer: row.customer || 'N/A',
+                    guestname: row.guestname || 'N/A',
+                    tripid: row.tripid || 'N/A',
+                    vehRegNo: row.vehRegNo || 'N/A',
+                    vehicleName: row.vehicleName || 'N/A',
+                    shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format("DD-MM-YYYY") : 'N/A',
+                    driverName: row.driverName || 'N/A',
+                    mobileNo: row.mobileNo || 'N/A',
+                    startdate: row.startdate ? dayjs(row.startdate).format("DD-MM-YYYY") : 'N/A',
+                    closedate: row.closedate ? dayjs(row.closedate).format("DD-MM-YYYY") : 'N/A',
+                    Groups: row.Groups || 'N/A',
+                    address1: row.address1 || 'N/A',
+                    apps: row.apps || 'N/A',
+                    starttime: row.starttime ? dayjs(row.starttime, "HH:mm:ss").format("HH:mm") : 'N/A',
+                    closetime: row.closetime ? dayjs(row.closetime, "HH:mm:ss").format("HH:mm") : 'N/A',
+                    totalcalcAmount: row.totalcalcAmount || 0,
+                    Vendor_Bata: row.Vendor_Bata || 0,
+                    status: row.status || 'N/A',
+                    shedInDate: row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : 'N/A',
+                    tripsheetdate: row.tripsheetdate ? dayjs(row.tripsheetdate).format("DD-MM-YYYY") : 'N/A',
+                    department: row.department || 'N/A',
+                    pickup: row.pickup || 'N/A',
+                };
+    
+                worksheet.addRow(formattedRow);
             });
-
-            rows.forEach((singleData, index) => {
-
-                worksheet.addRow(singleData);
-                // Adjust column width based on the length of the cell values in the added row
-                worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-                    // Set column width to the maximum of current width and cell length plus extra space
-                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+    
+            // Adjust column width dynamically based on content
+            worksheet.columns.forEach(column => {
+                let maxLength = column.header.length; // Start with header length
+                worksheet.eachRow((row) => {
+                    const cellValue = row.getCell(column.key).value || '';
+                    const cellLength = cellValue.toString().length;
+                    maxLength = Math.max(maxLength, cellLength);
                 });
+                column.width = maxLength + 5; // Add padding
             });
-
-            // loop through all of the rows and set the outline style.
-            worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
-                const currentCell = row._cells;
-
-                // loop through currentCell to apply border only for the non-empty cell of excel
-                currentCell.forEach((singleCell) => {
-
-                    const cellAddress = singleCell._address;
-
-                    // apply border
-                    worksheet.getCell(cellAddress).border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                });
-            });
-            // write the content using writeBuffer
-            const buf = await workbook.xlsx.writeBuffer();
-
-            // download the processed file
-            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    
+            // Save the workbook
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: "application/octet-stream" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${fileName}.xlsx`;
+            link.click();
         } catch (error) {
-            console.error('<<<ERRROR>>>', error);
-            console.error('Something Went Wrong', error.message);
-        } finally {
-            // removing worksheet's instance to create new one
-            workbook.removeWorksheet(workSheetName);
+            console.error("Error generating Excel file:", error);
         }
-
-    }
+    };
+        
+    
 
     const handleCoverPDFDownload = () => {
         if (rows.length === 0) {

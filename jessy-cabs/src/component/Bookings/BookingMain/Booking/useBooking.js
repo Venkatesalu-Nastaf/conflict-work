@@ -217,7 +217,7 @@ const useBooking = () => {
   }
 
   const [book, setBook] = useState(bookDatdObj);
-  console.log(book ,'book datas')
+  // console.log(book ,'book datas')
   
   const handleCancel = () => {
     setBook(bookDatdObj);
@@ -330,7 +330,7 @@ const useBooking = () => {
 
   const handleBookEscortChange = (event) => {
     setEscort(event.target.value);
-    console.log(escort,"escoret data")
+    // console.log(escort,"escoret data")
 };
   // const handleBookEscortChange = (event) => {
   //   const selectedValue = event.target.value; // Get selected value
@@ -342,12 +342,9 @@ const useBooking = () => {
 const handleAirportTransferChange = (event) => {
   // const selectedValue = event.target.value;
     setTransferreport(event.target.value);
-    console.log(transferreport,"Airport data")
+    // console.log(transferreport,"Airport data")
 };
-useEffect(() => {
-  console.log("Escort state updated:", escort); // Logs the updated state
-  console.log("transper state updated:", transferreport);
-}, [escort,transferreport]);
+
 
   //Entering Manually...
   const handleVehicleChange = (event, value, name) => {
@@ -754,8 +751,8 @@ useEffect(() => {
         bookingno: lastBookinglogno,
         driverName: logupdatabookdetails.driverName,
         username: logupdatabookdetails.username,
-         escort:formData.escort || selectedCustomerData.escort || book.escort,
-          transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+        Escort:logupdatabookdetails.escort,
+        Transferreport:logupdatabookdetails.transferreport
 
       };
       await axios.post(`${apiUrl}/bookinglogDetails`, updatedBooklogdetails)

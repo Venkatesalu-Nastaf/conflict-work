@@ -10,9 +10,10 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
     const date = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
     const shedOutDate = tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate;
     const startDate = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
-    const startkm = tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm
-    const endkm = tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm
-    const Totalkm =Number(startkm) - Number(endkm)
+    const endkm = tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm
+   
+    const Totalkm = Number(endkm)
+    
  
 
 

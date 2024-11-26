@@ -1,5 +1,5 @@
 .CustomerReview {
-    width: 85%;
+    /* width: 85%; */
     background: rgba(255, 255, 255, 0.957);
     border-radius: 0.7rem;
     padding: 1rem;
@@ -64,7 +64,7 @@
 
 @media only screen and (min-width:1219px) {
     .weekly-chart {
-        width: 86% !important;
+        /* width: 86% !important; */
     }
 }
 

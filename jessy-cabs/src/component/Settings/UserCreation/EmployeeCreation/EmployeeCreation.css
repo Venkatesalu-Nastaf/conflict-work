@@ -22,6 +22,10 @@
   /* background-color: var(--glass); */
 }
 
+.organisation-input-field {
+  width: 230px !important;
+}
+
 .EmployeeCreation-header {
   /* border-top: solid 1px #ccc; */
   /* background: var(--glass); */

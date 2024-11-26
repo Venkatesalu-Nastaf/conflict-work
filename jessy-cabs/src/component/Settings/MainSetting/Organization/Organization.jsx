@@ -344,7 +344,6 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
-                                
                                 <div className="input organization-input">
                                     <label htmlFor="">App Password:</label>
                                     <TextField
@@ -358,7 +357,6 @@ const Organization = ({ logoImage }) => {
                                         disabled={!editMode}
                                     />
                                 </div>
-
                                 <div className="input organization-input">
                                     <div>
                                         <label htmlFor="">Bank Details:</label>
@@ -375,8 +373,6 @@ const Organization = ({ logoImage }) => {
                                             autoComplete="password"
                                             disabled={!editMode} />
                                     </div>
-                                  
-
 
                                 </div>
                                 {/* <textarea /> */}

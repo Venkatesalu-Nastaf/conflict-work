@@ -402,7 +402,7 @@ useEffect(() => {
       } else if (error.response) {
           setError(true);
           // Handle other Axios errors (like 4xx or 5xx responses)
-          setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+          // setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
       } else {
           // Fallback for other errors
           setError(true);

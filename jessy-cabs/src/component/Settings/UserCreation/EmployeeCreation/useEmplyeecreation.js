@@ -16,8 +16,10 @@ const useEmplyeecreation = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
+    const [isOpenvehcile,setIsOpenvehicle] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [isEditable, setIsEditable] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage, setWarningMessage] = useState({});
@@ -335,6 +337,8 @@ const useEmplyeecreation = () => {
         organizationname: '',
         employeeid:'',
         userpassword: '',
+        EmailApp_Password: '',
+        Sender_Mail:'',
         active: false,
         superAdmin: false,
     });
@@ -385,6 +389,8 @@ const useEmplyeecreation = () => {
             organizationname: '',
             employeeid:'',
             userpassword: '',
+            EmailApp_Password: '',
+            Sender_Mail:'',
             active: false,
             superAdmin: false
         }));
@@ -397,12 +403,37 @@ const useEmplyeecreation = () => {
         setIsEditMode(false)
     };
     
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         //   const organizationname = localStorage.getItem('usercompany');
+    //         try {
+    //             // if (!organizationname) return
+    //             const response = await fetch(`${apiUrl}/organizationdata`);
+    //             if (response.status === 200) {
+                     
+    //                 const userDataArray = await response.json();
+    //                 //   console.log(userDataArray,'userdata');
+    //                 if (userDataArray.length > 0) {
+    //                     setOrganisationSendEmail(userDataArray[0])
+    //                     // setDatatrigger(!datatrigger)
+    //                 } else {
+    //                     setErrorMessage('User data not found.');
+    //                     setError(true);
+    //                 }
+    //             }   
+    //         }
+    //         catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl]);
+
     useEffect(() => {
         const fetchData = async () => {
             //   const organizationname = localStorage.getItem('usercompany');
             try {
                 // if (!organizationname) return
-                const response = await fetch(`${apiUrl}/organizationdata`);
+                const response = await fetch(`${apiUrl}/organisationdataforsendingemail`);
                 if (response.status === 200) {
                      
                     const userDataArray = await response.json();
@@ -414,7 +445,7 @@ const useEmplyeecreation = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                }   
+                }
             }
             catch {
             }
@@ -529,6 +560,7 @@ const useEmplyeecreation = () => {
         const email = book.email
         const mobileno = book.mobileno
         const password = book.userpassword
+        // const EmailApp_Password=book.EmailApp_Password
 
 
 
@@ -587,8 +619,11 @@ const useEmplyeecreation = () => {
             setWarningMessage(" User Name Already Exists");
             return;
         }
-
+        // if (!EmailApp_Password) {
+        //     return;
+        // }
         try {
+
             const created_at = dayjs().format("YYYY-MM-DD")
             const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
@@ -620,6 +655,7 @@ const useEmplyeecreation = () => {
             const email = book.email
             const mobileno = book.mobileno
             const password = book.userpassword
+            // const EmailApp_Password=book.EmailApp_Password
 
 
             // console.log("NASTAF Technologies", branchName, "book", book)
@@ -674,7 +710,9 @@ const useEmplyeecreation = () => {
                 setErrorMessage("Fill Active..");
                 return;
             }
-
+            // if (!EmailApp_Password) {
+            //     return;
+            // }
 
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book, };
@@ -850,6 +888,8 @@ const useEmplyeecreation = () => {
         actionName,
         error,
         success,
+        isEditable,
+        setIsEditable,
         info,
         warning,
         successMessage,
@@ -860,6 +900,8 @@ const useEmplyeecreation = () => {
         handleChange,
         handleRowClickUser,
         handleAdd,
+        isOpenvehcile,
+        setIsOpenvehicle,
         hidePopup,
         handleAutocompleteChange,
         showPasswords,

@@ -26,15 +26,28 @@ router.get('/organizationdata', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
         }
-
+        
         if (result.length === 0) {
             return res.status(404).json({ error: 'Route data not found' });
         }
-
         const routeData = result;
         return res.status(200).json(routeData);
     });
 });
+
+router.get('/organisationdataforsendingemail', (req, res) => {
+    db.query( 'SELECT EmailApp_Password as Email_Password, Sender_Mail as Sender_Email FROM usercreation WHERE EmailApp_Password IS NOT NULL AND EmailApp_Password != "" AND Sender_Mail IS NOT NULL AND Sender_Mail != ""', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Route data not found' });
+        }
+        return res.status(200).json(result);
+    });
+})
+
 router.get('/organisationpdfdata', (req, res) => {
     db.query('SELECT * FROM organizationdetails ', (err, result) => {
         if (err) {

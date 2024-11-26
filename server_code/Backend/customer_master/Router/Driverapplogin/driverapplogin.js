@@ -338,21 +338,34 @@ router.get('/TemplateForDriverCreation', async (req, res) => {
   });
 });
 
+router.get('/organisationdatafordriveremail', (req, res) => {
+    db.query( 'SELECT EmailApp_Password as Sendmailauth , Sender_Mail as Mailauthpass FROM usercreation WHERE EmailApp_Password IS NOT NULL AND EmailApp_Password != "" AND Sender_Mail IS NOT NULL AND Sender_Mail != ""', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Route data not found' });
+        }
+        console.log(result, 'dsgvd')
+        return res.status(200).json(result);
 
-//send email from booking page
+    });
+})
+
+// send email from booking page
 router.post('/send-emaildriverdata', async (req, res) => {
   try {
       const { userid, Drivername, UserName, password, Sendmailauth, Mailauthpass, Email, templateMessageData } = req.body;
       console.log("Received Template Data for Email:", templateMessageData);
-
+      // console.log(Sendmailauth, Mailauthpass, "Maaaaaaaaaiiiiiilllllll")
       // Set up the mail transporter
       const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
           secure: true,
           auth: {
-              user: Sendmailauth,
-              pass: Mailauthpass,
+              user: Mailauthpass,
+              pass: Sendmailauth,
           },
           tls: {
               rejectUnauthorized: false,
@@ -373,8 +386,8 @@ router.post('/send-emaildriverdata', async (req, res) => {
              <p>Password: ${password}</p>`; 
 
       const mailOptions = {
-          from: Sendmailauth,
-          to: `${Email},${Sendmailauth}`,
+          from: Mailauthpass,
+          to: `${Email},${Mailauthpass}`,
           subject: 'Welcome To JESSY CABS',
           html: emailContent,
       };

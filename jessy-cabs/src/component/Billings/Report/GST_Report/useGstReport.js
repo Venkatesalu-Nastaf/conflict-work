@@ -308,7 +308,8 @@ const useGstReport = () => {
             });
 
             const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
-
+             console.log( tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults,"gstresponse");
+             
             // Combine coveringBilledResults and transferBilledResults into a single array
             const combinedData = [
                 ...coveringBilledResults.map(item => ({

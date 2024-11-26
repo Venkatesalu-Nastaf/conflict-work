@@ -44,7 +44,7 @@ const useVehiclestatement = () => {
     const [popupOpen, setPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     const [infoMessage] = useState({});
     const [fullamountdata, setVendorfullamount] = useState(0)
 
@@ -354,6 +354,12 @@ const useVehiclestatement = () => {
 
     }
     const handleShow = async () => {
+ 
+        if(!travelsname){
+            setWarning(true);
+            setWarningMessage("Enter the Travelsname")
+            return
+        }
         try {
             const response = await axios.get(
                 `${apiUrl}/VehicleStatement-bookings?Travelsname=${encodeURIComponent(

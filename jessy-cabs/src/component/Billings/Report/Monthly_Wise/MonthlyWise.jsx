@@ -20,7 +20,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MenuItem from '@mui/material/MenuItem';
 import ClearIcon from '@mui/icons-material/Clear';
 import Autocomplete from "@mui/material/Autocomplete";
-import { Customertype } from "../../../Registration/Customer/Customerdata";
+import { Customertypefilterdata  } from "../../../Registration/Customer/Customerdata";
 const MonthlyWise = () => {
     const {
         successMessage,
@@ -89,7 +89,7 @@ const MonthlyWise = () => {
                                 sx={{ width: "100%" }}
                                 onChange={(event, value) => handleAutocompleteChange(event, value)}
                                 value={customertypedata}
-                                options={Customertype.map((option) => ({
+                                options={Customertypefilterdata.map((option) => ({
                                     label: option.Option,
                                 }))}
                                 renderInput={(params) => {

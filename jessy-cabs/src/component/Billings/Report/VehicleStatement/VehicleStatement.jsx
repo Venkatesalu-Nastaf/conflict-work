@@ -50,7 +50,7 @@ const VehicleStatement = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [warning, setWarning] = useState(false);
-  const [warningMessage] = useState({});
+  const [warningMessage,setWarningMessgae] = useState({});
   const [ setTableData] = useState([])
 
   const [totalValues, setTotalValues] = useState({
@@ -107,12 +107,31 @@ const VehicleStatement = () => {
 
 
   // TIME CONVERTION TYPE HH:MM
-  const convertTotalTimeToMinutes = (totaltime) => {
-    const [hoursPart, minutesPart] = totaltime.split(' ');
-    const hours = parseInt(hoursPart?.replace('h', ''), 10);
-    const minutes = parseInt(minutesPart?.replace('m', ''), 10);
 
-    return (hours * 60) + minutes;
+  // const convertTotalTimeToMinutes = (totaltime) => {
+
+
+  //   const [hoursPart, minutesPart] = totaltime.split(' ');
+  //   const hours = parseInt(hoursPart?.replace('h', ''), 10);
+  //   const minutes = parseInt(minutesPart?.replace('m', ''), 10);
+
+  //   return (hours * 60) + minutes;
+  // };
+  const convertTotalTimeToMinutes = (totaltime) => {
+    console.log(totaltime,"ee")
+    const hoursMatch = totaltime.match(/(\d+)h/);
+    // const minutesMatch = totaltime.match(/(\d+)m/);
+    const minutesMatch = totaltime.match(/(\d+)m/);
+
+    // Extract hours and minutes, defaulting to 0 if not present
+    const hours1= hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    const minutes1 = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+    console.log(hours1,"match",minutes1)
+    // // const [hoursPart, minutesPart] = totaltime.split(' ');
+    // const hours = parseInt(hoursPart?.replace('h', ''), 10);
+    // const minutes = parseInt(minutesPart?.replace('m', ''), 10);
+
+    return (hours1 * 60) + minutes1;
   };
 
   const convertMinutesToTime = (minutes) => {
@@ -153,6 +172,7 @@ const VehicleStatement = () => {
       vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(Vendor_BataTotalAmount) || 0;
 
       const totalTimeMinutes = convertTotalTimeToMinutes(vendorTotaltime);
+      console.log(totalTimeMinutes,"min")
       vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
     });
 
@@ -270,6 +290,13 @@ const VehicleStatement = () => {
   // with try catch block
   const showList = async (e) => {    
     e.preventDefault();
+    if(data.hireTypes === ''){
+      setCustomerData([]);
+      setWarning(true);
+      setWarningMessgae("Please Select Hire Types");
+      return
+
+    }
     
     try {
         const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
@@ -333,18 +360,79 @@ const VehicleStatement = () => {
                 }
 
                 setCustomerData(parseData);
-                setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
+                // setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
             } else {
                 setCustomerData([]);
                 setError(true);
                 setErrorMessage("No Data Found");
             }
 
-        } else {
+        }
+        else if (data.hireTypes === "Out Side Travels") {
+          const parseData = transformAtached(datas);
+          if (parseData.length > 0) {
+              const reducedData = reduceFun(parseData);
+
+              if (reducedData) {
+                  setTotalValues(prev => ({
+                      ...prev,
+                      fullTotalKM: reducedData.totalKilometers,
+                      fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+                      totalAmount: reducedData.totalPackageAmount,
+                      totalAdvance: reducedData.totalAdvance,
+                      totalBalance: reducedData.totaalBalance,
+                      totalBeta: reducedData.totalBeta,
+                  }));
+                  setSuccess(true);
+                  setSuccessMessage("Successfully Listed");
+              } else {
+                  setTotalValues({});
+              }
+
+              setCustomerData(parseData);
+              // setData(prev => ({ ...prev, hireTypes: "lease" }));
+          } else {
+              setCustomerData([]);
+              setError(true);
+              setErrorMessage("No Data Found");
+          }
+
+      }   else if (data.hireTypes === "DCO Vehicle") {
+        const parseData = transformAtached(datas);
+        if (parseData.length > 0) {
+            const reducedData = reduceFun(parseData);
+
+            if (reducedData) {
+                setTotalValues(prev => ({
+                    ...prev,
+                    fullTotalKM: reducedData.totalKilometers,
+                    fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+                    totalAmount: reducedData.totalPackageAmount,
+                    totalAdvance: reducedData.totalAdvance,
+                    totalBalance: reducedData.totaalBalance,
+                    totalBeta: reducedData.totalBeta,
+                }));
+                setSuccess(true);
+                setSuccessMessage("Successfully Listed");
+            } else {
+                setTotalValues({});
+            }
+
+            setCustomerData(parseData);
+            // setData(prev => ({ ...prev, hireTypes: "lease" }));
+        } 
+        else {
             setCustomerData([]);
             setError(true);
-            setErrorMessage("Please Select Hire Types");
+            setErrorMessage("No Data Found");
         }
+
+    }
+    // else {
+    //         setCustomerData([]);
+    //         setWarning(true);
+    //         setWarningMessgae("Please Select Hire Types");
+    //     }
 
     } 
     // catch (error) {
@@ -410,7 +498,7 @@ const VehicleStatement = () => {
         column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
 
-
+     console.log(Customerdata,"GG")
       Customerdata.forEach((Customer, index) => {
         // Add advancepaidtovendor to Vendor_FULLTotalAmount
         worksheet.addRow(Customer);
@@ -427,15 +515,25 @@ const VehicleStatement = () => {
 
 
       // Add the total row
+      // const totalRow = worksheet.addRow({});
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle') + 1).value = 'TOTAL';
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'TTime') + 1).value = totalValues?.fullTotalHR;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'TKMS') + 1).value = totalValues?.fullTotalKM;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'D.Advance') + 1).value = totalValues?.totalAdvance;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = totalValues?.totalBalance;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
+      // console.log(totalRow,"ooo")
       const totalRow = worksheet.addRow({});
+      // console.log(totalRow,"ooo")
       totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle') + 1).value = 'TOTAL';
-      totalRow.getCell(columns1.findIndex(col => col.header === 'TTime') + 1).value = totalValues?.fullTotalHR;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Tot. Time') + 1).value = totalValues?.fullTotalHR;
       totalRow.getCell(columns1.findIndex(col => col.header === 'TKMS') + 1).value = totalValues?.fullTotalKM;
       totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'D.Advance') + 1).value = totalValues?.totalAdvance;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Driver Advance') + 1).value = totalValues?.totalAdvance;
       totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = totalValues?.totalBalance;
       totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
-
+    // console.log(totalRow,"ooo")
 
       totalRow.eachCell((cell) => {
         cell.font = { bold: true };
@@ -519,10 +617,10 @@ const VehicleStatement = () => {
     // Create the total row
     const totalRow = customer_colums.map(column => {
       if (column.headerName === 'Vehicle') return "TOTAL";
-      if (column.headerName === 'TTime') return totalValues?.fullTotalHR;
+      if (column.headerName === 'Tot. Time') return totalValues?.fullTotalHR;
       if (column.headerName === 'TKMS') return totalValues?.fullTotalKM;
       if (column.headerName === 'Amount') return totalValues?.totalAmount;
-      if (column.headerName === 'D.Advance') return totalValues?.totalAdvance;
+      if (column.headerName === 'Driver Advance') return totalValues?.totalAdvance;
       if (column.headerName === 'Balance') return totalValues?.totalBalance;
       if (column.headerName === 'Beta') return totalValues?.totalBeta;
 
@@ -621,11 +719,13 @@ const VehicleStatement = () => {
                 onChange={(e) => setData(prev => ({ ...prev, hireTypes: e.target.value }))}
               >
                 <MenuItem value="">
-                  <em>None</em>
+                  {/* <em>None</em> */}
                 </MenuItem>
                 <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
-                <MenuItem value={"Own  Vehicle"}>Own  Vehicle</MenuItem>
-                <MenuItem value={"lease"}>Lease</MenuItem>
+                <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
+                <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
+                <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem>
+              
               </Select>
             </FormControl>
           </div>

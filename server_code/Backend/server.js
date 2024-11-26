@@ -909,15 +909,8 @@ app.get("/getvehicleInfo", (req, res) => {
     console.log("query", req.query);
     const { hireTypes, startDate, endDate } = req.query;
     const status = 'Closed'
-    // const sql = `
-    //   SELECT * FROM tripsheet
-    //   WHERE hireTypes = ?
-    //   AND (
-    //     (startdate <= ? AND closedate >= ?)
-    //     OR (startdate BETWEEN ? AND ?)
-    //     OR (closedate BETWEEN ? AND ?)
-    //   )
-    // `;
+ 
+  
 
     const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
 
@@ -928,6 +921,7 @@ app.get("/getvehicleInfo", (req, res) => {
         console.error("Error executing query:", err);
         return res.status(500).json({ message: "Something went wrong", error: true });
       }
+      console.log(result)
       return res.status(200).json(result);
     });
 

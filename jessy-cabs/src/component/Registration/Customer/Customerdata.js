@@ -25,9 +25,25 @@ export const Customertype = [
     Option: "Gen Customers",
     optionvalue: "gencustomers",
   },
+];
+
+
+export const Customertypefilterdata = [
+  {
+    Option: "Corporate",
+    optionvalue: "corporate",
+  },
+  {
+    Option: "Travels",
+    optionvalue: "travels",
+  },
+  {
+    Option: "Gen Customers",
+    optionvalue: "gencustomers",
+  },
   {
     Option: "All",
-    optionvalue: "gencustomers",
+    optionvalue: "All",
   },
 ];
 

@@ -26,7 +26,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ClearIcon from '@mui/icons-material/Clear';
 // import DialogContent from '@mui/material/DialogContent';
 import Autocomplete from "@mui/material/Autocomplete";
-import { Customertype } from "../../Customer/Customerdata";
+import {Customertypefilterdata } from "../../Customer/Customerdata";
 
 
 // const columns = [
@@ -123,7 +123,7 @@ const MonthlyWise = () => {
                                 sx={{ width: "100%" }}
                                 onChange={(event, value) => handleAutocompleteChange(event, value)}
                                 value={customertypedata}
-                                options={Customertype.map((option) => ({
+                                options={Customertypefilterdata.map((option) => ({
                                     label: option.Option,
                                 }))}
                                 //   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}

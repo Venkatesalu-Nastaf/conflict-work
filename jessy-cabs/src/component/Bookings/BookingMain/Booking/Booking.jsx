@@ -73,6 +73,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -151,7 +152,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
     handleSelectAll, handlecheckbox, selectAll, deletefile,
 
      handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
-     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort
+     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -261,7 +262,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
         <div>
           <div className="booking-top-division Scroll-Style">
             <span className="d-grid">
-              <label>Booking</label>
+              <label>Booking ID </label>
               <input
                 type="text"
                 id="standard-size-bookingno"
@@ -1139,17 +1140,28 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
-                    Edit
-                  </Button>
+                  // <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  //   Edit
+                  // </Button>
+                  <LoadingButton  loading={isEditbtnload} variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  Edit
+                </LoadingButton>
                 ) : (
-                  <Button
-                    disabled={!Booking_new}
-                    variant="contained"
-                    onClick={handleAdd}
-                  >
-                    Add
-                  </Button>
+                  // <Button
+                  //   disabled={!Booking_new}
+                  //   variant="contained"
+                  //   onClick={handleAdd}
+                  // >
+                  //   Add
+                  // </Button>
+                  <LoadingButton
+                  disabled={!Booking_new}
+                  variant="contained"
+                  onClick={handleAdd}
+                  loading={isAddbtnload}
+                >
+                  Add
+                </LoadingButton>
                 )}
               </div>
             </div>

@@ -97,7 +97,8 @@ const useCoversubmit = () => {
             const tableData = [[
                 row['id'],
                 row['Status'],
-                row['InvoiceNo'],
+                // row['InvoiceNo'],
+                row['ReferenceNo'],
                 row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Customer'],
                 row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
@@ -107,13 +108,13 @@ const useCoversubmit = () => {
             ]];
 
             pdf.autoTable({
-                head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
+                head: [['Sno', 'Status', 'ReferenceNo', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
                 body: tableData,
                 startY: 20,
             });
 
             const pdfBlob = pdf.output('blob');
-            saveAs(pdfBlob, `${row['InvoiceNo']}.pdf`);
+            saveAs(pdfBlob, `${row['ReferenceNo']}.pdf`);
         });
     };
 

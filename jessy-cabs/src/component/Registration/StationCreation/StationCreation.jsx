@@ -335,9 +335,9 @@ const StationCreation = () => {
                     size="small"
                     id="state-autocomplete"
                     freeSolo
-                    value={selectedState}
+                    value={selectedState ||selectedCustomerData?.state || book.state || ""}
                     options={Object.keys(stateToStations)}
-                    onChange={handleStateChange}  // Ensure `handleStateChange` updates `selectedState`
+                    onChange={handleStateChange} 
                     renderInput={(params) => (
                       <TextField
                         {...params}

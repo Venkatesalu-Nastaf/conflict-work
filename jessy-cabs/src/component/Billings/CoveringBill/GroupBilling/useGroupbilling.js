@@ -56,6 +56,12 @@ const useGroupbilling = () => {
     const [groupAmount, setGroupAmount] = useState(0)
     const [stateDetails, setStateDetails] = useState([]);
     const [disabeldata,setDisabelData]=useState(false);
+
+    // Loading//
+
+    const [isSaveload , setisSaveload] = useState(false);
+    const [isgroupEditload , setisGfoupEditload] = useState(false)
+    const [isBllload , setisBillload] = useState(false)
    
     const [billingGroupDetails, setBillingGroupDetails] = useState('')
     const [groupBillingData, setGroupBillingData] = useState([])
@@ -1225,6 +1231,7 @@ const useGroupbilling = () => {
         console.log(presentIds, 'present');
         if (presentIds.length > 0) {
             setError(true)
+            setisSaveload(false)
             setErrorMessage("Already Entered This TripID.")
             return
         }
@@ -1239,15 +1246,20 @@ const useGroupbilling = () => {
             rowSelectedValues?.forEach((li) => {
                 TotalAmount += li;
             });
-            const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
-            const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+            const FromDate = dayjs(fromDate).format('DD-MM-YYYY')
+            // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
+            const ToDate = dayjs(toDate).format('DD-MM-YYYY')
+            // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
             if (rowSelectionModel.length === 0) {
                 setError(true);
+                setisSaveload(false)
                 setErrorMessage("Please select the Row");
                 return;
             }
             try {
+                setisSaveload(true)
                 const groupbillList = {
                     status: "Billed",
                     InvoiceDate: InvoiceDate,
@@ -1265,6 +1277,7 @@ const useGroupbilling = () => {
 
                 await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
                 setSuccess(true)
+                setisSaveload(false)
                 setSuccessMessage("Successfully Added")
                 setRows([])
             }
@@ -1277,15 +1290,18 @@ const useGroupbilling = () => {
                 // Check if there's no response, indicating a network error
                 if (error.message) {
                     setError(true);
+                    setisSaveload(false);
                     setErrorMessage("Check your internet connection");
                     // console.log('Network error');
                 } else if (error.response) {
                     setError(true);
+                    setisSaveload(false)
                     // Handle other Axios errors (like 4xx or 5xx responses)
                     setErrorMessage("Failed To Save: " + (error.response.data.message || error.message));
                 } else {
                     // Fallback for other errors
                     setError(true);
+                    setisSaveload(false)
                     setErrorMessage("An unexpected error occurred: " + error.message);
                 }
             }
@@ -1315,6 +1331,7 @@ const useGroupbilling = () => {
                 return;
             }
             try {
+                setisSaveload(true)
                 const totalAmount = groupTotal + selectedTotal;
                 // const trips = parseInt(groupBillingData[0].Trips)
                 const Trip = particularId.length + rowSelectionModel.length
@@ -1341,10 +1358,12 @@ const useGroupbilling = () => {
                 console.log(groupbillList, 'groupbill', groupBillingData, Trips, selectedRow, tripid, tripIdArray);
                 await axios.post(`${apiUrl}/updateGroupBilling`, groupbillList)
                 setSuccess(true)
+                setisSaveload(false)
                 setSuccessMessage("Successfully Added")
                 setRows([])
             }
             catch (err) {
+                setisSaveload(false)
 
             }
         }
@@ -1359,11 +1378,13 @@ const useGroupbilling = () => {
         }
         if (referInvoiceno === "created"){
             setError(true);
+            setisBillload(false)
             setErrorMessage("Already INVOICE Generated");
             return;
         }
         console.log(selectedRow,"ROWTRIPD")
         try{
+            setisBillload(true)
             const InvoiceDate1 = dayjs(Billingdate).format('YYYY-MM-DD')
           
             const groupinvoiceList = {
@@ -1377,13 +1398,14 @@ const useGroupbilling = () => {
             const response =await axios.post(`${apiUrl}/billgeneratecoveringbill`,groupinvoiceList)
             console.log(response)
             setSuccess(true)
+            setisBillload(false)
             setSuccessMessage("Successfully Added")
             setRows([])
 
 
         }
         catch{
-
+            setisBillload(false)
         }
 
     }
@@ -1442,7 +1464,7 @@ const useGroupbilling = () => {
         billingGroupDetails,
         setBillingGroupDetails,
         handleInvoicegenerate,
-        handlecustomer,disabeldata,referInvoiceno,setReferINVOICENO
+        handlecustomer,disabeldata,referInvoiceno,setReferINVOICENO,isSaveload , setisSaveload,isgroupEditload , setisGfoupEditload,isBllload , setisBillload
 
     };
 };

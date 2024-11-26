@@ -85,6 +85,11 @@ const useTripsheet = () => {
     const [editMap, setEditMap] = useState(false)
     const [mapPopUp, setMapPopUp] = useState(false)
 
+    // Loading//
+
+    const [isAddload,setisAddload] = useState(false)
+    const [isEditload,setisEditload] = useState(false)
+
     //-------------------------calc-------------------
     let [calcPackage, setcalcPackage] = useState('')
     let [extraHR, setExtraHR] = useState('')
@@ -991,6 +996,7 @@ const useTripsheet = () => {
         }
 
         try {
+            setisEditload(true)
             try {
                 await getSignatureImage()
 
@@ -1107,6 +1113,7 @@ const useTripsheet = () => {
                 setSmsGuest(true)
                 setSuccess(true);
                 handleCancel();
+                setisEditload(false)
                 setSuccessMessage("Successfully updated");
                 setLockData(false)
                 setLockDatavendorBill(false)
@@ -1115,11 +1122,14 @@ const useTripsheet = () => {
             } catch (err) {
                 // console.log(err, "erredit")
                 setError(true);
+                setisEditload(false)
                 setErrorMessage("Check your Network Connection");
+                
             }
         } catch (err) {
             // console.log(err, "errrdit2")
             setError(true);
+            setisEditload(false)
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -1236,6 +1246,7 @@ const useTripsheet = () => {
         }
 
         try {
+            setisAddload(true)
             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
             const dattasign = book.apps;
             const updatedBook = {
@@ -1342,6 +1353,7 @@ const useTripsheet = () => {
             handleSendSMS();
             handleDriverSendSMS();
             handlecheck();
+            setisAddload(false)
             setSuccessMessage("Successfully Added");
             setLockData(false)
             setLockDatavendorBill(false)
@@ -1358,15 +1370,18 @@ const useTripsheet = () => {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
+                setisAddload(false)
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisAddload(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisAddload(false)
             }
         }
     };
@@ -5504,7 +5519,8 @@ const useTripsheet = () => {
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
-        manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate
+        manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
+        isAddload,setisAddload,isEditload,setisEditload
 
     };
 };

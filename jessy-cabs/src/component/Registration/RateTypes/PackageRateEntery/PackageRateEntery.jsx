@@ -30,6 +30,7 @@ import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -66,7 +67,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleEdit,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading,isbtnloading,setisbtnloading
 
   } = usePackagerateentry();
 
@@ -383,9 +384,11 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   </div>}
                   <div className="input package-rate-entry-edit-division" style={{ justifyContent: 'start' }}>
                     {isEditMode ? (
-                      <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                      // <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                      <LoadingButton loading={isbtnloading}variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</LoadingButton>
                     ) : (
-                      <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
+                      // <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
+                      <LoadingButton loading={isbtnloading} variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</LoadingButton>
                     )}
                   </div>
                 </div>

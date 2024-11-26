@@ -28,6 +28,7 @@ import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const GroupBilling = ({ stationName, organizationNames }) => {
     const apiurl = APIURL;
@@ -84,7 +85,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         setBillingGroupDetails,
         handlecustomer,
         disabeldata,
-        handleInvoicegenerate,referInvoiceno,setReferINVOICENO
+        handleInvoicegenerate,referInvoiceno,setReferINVOICENO,isSaveload , setisSaveload,isgroupEditload , setisGfoupEditload,isBllload , setisBillload
     } = useGroupbilling();
 
 
@@ -400,10 +401,10 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                 {invoiceno && disabeldata &&  referInvoiceno != "created" && (
 
                                 <div className="input">
-                                    <Button variant="contained" disabled={!CoveringBill_read} 
-                                     onClick={() => handleInvoicegenerate()}
-
-             >Bill Generate</Button>
+                                    {/* <Button variant="contained" disabled={!CoveringBill_read} 
+                                     onClick={() => handleInvoicegenerate()} >Bill Generate</Button> */}
+                                      <LoadingButton loading={isBllload} variant="contained" disabled={!CoveringBill_read} 
+                                     onClick={() => handleInvoicegenerate()} >Bill Generate</LoadingButton>
                                 </div>)}
                             </div>
                             {/* <div className="input-field">
@@ -433,9 +434,11 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                     <div className="input-field">
                    
                     {invoiceno && customer ? <div className="input">
-                            <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Edit</Button>
+                            {/* <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Edit</Button> */}
+                            <LoadingButton loading={isSaveload} variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Edit</LoadingButton>
                         </div>:<div className="input">
-                            <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
+                            {/* <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button> */}
+                            <LoadingButton loading={isSaveload} variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</LoadingButton>
                         </div>}
                         
                         {/* <div className="input">

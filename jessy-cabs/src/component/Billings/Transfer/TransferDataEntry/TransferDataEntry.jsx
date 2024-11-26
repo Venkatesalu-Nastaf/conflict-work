@@ -26,6 +26,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import {  CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const TransferDataEntry = ({stationName, organizationNames }) => {
   const {
@@ -78,7 +79,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
     setServiceStation,
     setInfo,
      setINFOMessage,
-     handlecustomer
+     handlecustomer,isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -326,14 +327,17 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                   </div>
                   {invoiceno ? <></>:
                   <div className="input">
-                    <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
+                    {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
+                    <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
                   </div>
 }
                   {groupId && customer ? <div className="input">
-                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button>
+                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button> */}
+                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</LoadingButton>
                   </div>:
                   <div className="input">
-                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button>
+                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button> */}
+                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</LoadingButton>
                   </div>
 }
                 </div>

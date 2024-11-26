@@ -102,6 +102,7 @@ import {
 import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
+import LoadingButton from '@mui/lab/LoadingButton';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -256,10 +257,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,setSuccess,
+    setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate
+    hybridhclnavigate,isAddload,setisAddload,isEditload,setisEditload
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -303,34 +305,76 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
+  // const handlesignatureimages = async () => {
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+  //   // await getSignatureImage()
+  //   if (!tripid) {
+
+  //     setWarning(true);
+  //     setWarningMessage("Enter The Tripid")
+  //     return
+  //   }
+  //   const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
+  //   if (response.status === 200) {
+  //     const imageUrl = URL.createObjectURL(await response.blob());
+  //     setSignImageUrl(imageUrl);
+  //     setSignaturepopup(true);
+  //   }
+  //   else if (signimageUrl === "") {
+  //     if (fileInputRefdata.current) {
+  //       fileInputRefdata.current.click();
+  //       setSignatureupload(false)
+
+  //     } else {
+  //       console.error("File input ref is not available");
+  //     }
+  //   } else {
+  //     setSignaturepopup(true);
+  //     getSignatureImage()
+  //   }
+  // }
+
+ /// changes 
   const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    // await getSignatureImage()
+
     if (!tripid) {
-
       setWarning(true);
-      setWarningMessage("Enter The Tripid")
-      return
+      setWarningMessage("Enter The Tripid");
+      return;
     }
-    const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
-    if (response.status === 200) {
-      const imageUrl = URL.createObjectURL(await response.blob());
-      setSignImageUrl(imageUrl);
-      setSignaturepopup(true);
-    }
-    else if (signimageUrl === "") {
-      if (fileInputRefdata.current) {
-        fileInputRefdata.current.click();
-        setSignatureupload(false)
 
+    try {
+      const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
+
+      if (response.status === 200) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+        setSignaturepopup(true);
+        setSuccess(true)
+        setWarning(false);
+        setSuccessMessage("Signature loaded successfully!");
+      } else if (signimageUrl === "") {
+        if (fileInputRefdata.current) {
+          fileInputRefdata.current.click();
+          setSignatureupload(false);
+          setSuccessMessage("Please upload a signature image.");
+        } else {
+          console.error("File input ref is not available");
+        }
       } else {
-        console.error("File input ref is not available");
+        setSignaturepopup(true);
+        getSignatureImage();
+        setSuccessMessage("Signature loaded successfully!");
       }
-    } else {
-      setSignaturepopup(true);
-      getSignatureImage()
+    } catch (error) {
+      console.error("Error fetching signature image:", error);
+      setWarning(true);
+      setWarningMessage("Failed to fetch signature image. Please try again.");
     }
-  }
+  };
+
+
   // const textRef = useRef();
   //   const SignPage = async (event) => {
   //     event.preventDefault();
@@ -3002,7 +3046,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleClickOpen();
                     }}
                   >
-                    calculate
+                    Overview
                   </Button>
                 </div>
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
@@ -3018,10 +3062,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </Dialog>
                 <div className="input">
                   {isEditMode ? (<>
-                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                    {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
+                    <LoadingButton  loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
                   </>
                   ) : (
-                    <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                    // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                    <LoadingButton  loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
                   )}
                 </div>
 

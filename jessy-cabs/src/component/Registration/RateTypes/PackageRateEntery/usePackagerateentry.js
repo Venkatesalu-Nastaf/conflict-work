@@ -88,6 +88,7 @@ const usePackagerateentry = () => {
     const [validitydata, setValiditydata] = useState([])
 
     const [loading, setLoading] = useState(false)
+    const [isbtnloading,setisbtnloading] = useState(false)
    
     const memoizedUrl = useMemo(() => {
         if (!commonData.ratetype || !commonData.OrganizationName) {
@@ -382,6 +383,7 @@ const usePackagerateentry = () => {
             return;
         }
         try {
+            setisbtnloading(true)
 
             const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
             // const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
@@ -389,6 +391,7 @@ const usePackagerateentry = () => {
             // If successful, update state
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisbtnloading(false)
             handleCancel()
             handleList()
         } 
@@ -402,15 +405,18 @@ const usePackagerateentry = () => {
             // Check if there's no response, indicating a network error
             if (error.message ) {
                 setError(true);
+                setisbtnloading(false)
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);
+                setisbtnloading(false)
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
             } else {
                 // Fallback for other errors
                 setError(true);
+                setisbtnloading(false)
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
@@ -458,6 +464,7 @@ const usePackagerateentry = () => {
 
     //Edit
     const handleEdit = async () => {
+        setisbtnloading(true)
         try {
             const updatedData = {
                 ...commonData,
@@ -465,6 +472,7 @@ const usePackagerateentry = () => {
             };
             await axios.put(`${apiUrl}/ratemanagement-edit/${selectedCustomerId}`, updatedData);
             setSuccess(true);
+            setisbtnloading(false)
             setSuccessMessage("Successfully updated");
             handleCancel();
             setRows([]);
@@ -472,6 +480,7 @@ const usePackagerateentry = () => {
 
         } catch {
             setError(true);
+            setisbtnloading(false)
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -548,7 +557,7 @@ const usePackagerateentry = () => {
         isEditMode,
         handleEdit,
         handleShow,
-        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata,loading,setLoading
+        handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata,loading,setLoading,isbtnloading,setisbtnloading
     };
 };
 

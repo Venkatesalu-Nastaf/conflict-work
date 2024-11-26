@@ -47,6 +47,9 @@ const useBooking = () => {
   };
   const [escort, setEscort] = useState('No');
   const [transferreport, setTransferreport] = useState('No')
+  const [isAddbtnload,setisAddbtnload] = useState(false)
+  const [isEditbtnload,setisEditbtnload] = useState(false)
+  
   const [formValues, setFormValues] = useState({
     guestname: "",
     guestmobileno: "",
@@ -800,6 +803,7 @@ const handleAirportTransferChange = (event) => {
     }
 
     try {
+      setisAddbtnload(true)
       setDatatrigger(!datatrigger)
       const selectedBookingDate = dayjs().format("YYYY-MM-DD");
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
@@ -875,6 +879,7 @@ const handleAirportTransferChange = (event) => {
       setRow([]);
       setRows([]);
       setSuccess(true);
+      setisAddbtnload(false)
       setSuccessMessage("Successfully Added");
       handlecheck(lastBookingno);
       setEdit(false)
@@ -908,7 +913,9 @@ const handleAirportTransferChange = (event) => {
   };
 
   const handleEdit = async (userid) => {
+    
     try {
+      setisEditbtnload(true)
       const selectedCustomer = rows.find(
         (row) =>
           row.bookingno === selectedCustomerData.bookingno ||
@@ -977,6 +984,7 @@ const handleAirportTransferChange = (event) => {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
+          setisEditbtnload(false)
           if (sendEmail) {
             handlecheck(editbookno);
           }
@@ -1364,7 +1372,8 @@ const handleAirportTransferChange = (event) => {
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
     vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
-    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort
+    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,
+    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload
   };
 };
 export default useBooking;

@@ -16,7 +16,7 @@
     width: max-content;
     gap: 20px;
     justify-content: space-around;
-    margin-top: 60px;
+    /* margin-top: 60px; */
     position: relative;
     /* left: 20px; */
   }
@@ -29,7 +29,7 @@
     width: max-content;
     gap: 20px;
     justify-content: space-around;
-    margin-top: 60px;
+    /* margin-top: 60px; */
     position: relative;
     left: 0px;
   }
@@ -37,7 +37,7 @@
 
 @media screen and (min-width: 769px) and (max-width: 971px) {
   .RightSide {
-    width: 97%;
+    width: 99%;
   }
 }
 
@@ -64,7 +64,7 @@
     justify-content: flex-start;
     margin-top: 0px;
     position: relative;
-    left: 10px;
+    /* left: 10px; */
   }
 }
 
@@ -78,7 +78,7 @@
 @media screen and (min-width:427px) and (max-width: 768px) {
   .RightSide {
     width: 100%;
-    margin-top: 40px;
+    /* margin-top: 40px; */
     position: relative;
     left: 19px;
   }
@@ -87,7 +87,7 @@
 @media screen and (min-width:320px) and (max-width: 426.99px) {
   .RightSide {
     width: 100%;
-    margin-top: 40px;
+    /* margin-top: 40px; */
     position: relative;
     left: 10px;
   }
@@ -104,7 +104,7 @@
 
 @media screen and (max-width: 1218.95px) {
   .area-chart {
-    width: 96%;
+    width: 98%;
   }
 }
 

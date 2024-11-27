@@ -223,6 +223,7 @@
   height: 50px;
   position: absolute;
   background-color: #cccccc44;
+  z-index: 1;
 }
 
 .user-name-item p {

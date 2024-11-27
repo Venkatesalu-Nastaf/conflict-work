@@ -7,7 +7,8 @@
 }
 
 .Table .MuiPaper-root {
-  height: 380px;
+  height: 350px;
+  padding-bottom: 10px;
 }
 
 .Table thead th {
@@ -111,7 +112,7 @@ th {
 }
 
 
-.button-container{
+.button-container {
   display: flex;
   gap: 2px;
 }

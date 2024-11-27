@@ -102,6 +102,7 @@ import {
 import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
+import LoadingButton from '@mui/lab/LoadingButton';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -195,7 +196,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setFormData,
     setSelectedCustomerData,
     selectedStatus,
-    setSelectedStatus, 
+    // setSelectedStatus, 
     setCloseTime,
     organizationdata,
     popupOpen,
@@ -220,9 +221,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleTripmaplogClick,
     maplogimgpopupOpen,
     row,
-    handleUpload, isHybridCustomer,
+    handleUpload,
+    //  isHybridCustomer,
     handleRefresh,
-    handleButtonClick,
+    // handleButtonClick,
     handleTripRowClick,
     imgpopupOpen,
     selectedRow,
@@ -255,10 +257,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,setSuccess,
+    setSuccessMessage,
+    // timeToggle,HclKMCalculation,
+
+    hybridhclnavigate,isAddload,setisAddload,isEditload,setisEditload
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
-
+  const dayhcl = hybridhclcustomer || hybridhclnavigate
+  // console.log(dayhcl,"dayhcl",hybridhclcustomer,"nnnnn",hybridhclnavigate)
   const apiurl = APIURL
   // Permission ------------ayyan
 
@@ -298,34 +305,76 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
+  // const handlesignatureimages = async () => {
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+  //   // await getSignatureImage()
+  //   if (!tripid) {
+
+  //     setWarning(true);
+  //     setWarningMessage("Enter The Tripid")
+  //     return
+  //   }
+  //   const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
+  //   if (response.status === 200) {
+  //     const imageUrl = URL.createObjectURL(await response.blob());
+  //     setSignImageUrl(imageUrl);
+  //     setSignaturepopup(true);
+  //   }
+  //   else if (signimageUrl === "") {
+  //     if (fileInputRefdata.current) {
+  //       fileInputRefdata.current.click();
+  //       setSignatureupload(false)
+
+  //     } else {
+  //       console.error("File input ref is not available");
+  //     }
+  //   } else {
+  //     setSignaturepopup(true);
+  //     getSignatureImage()
+  //   }
+  // }
+
+ /// changes 
   const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    // await getSignatureImage()
+
     if (!tripid) {
-
       setWarning(true);
-      setWarningMessage("Enter The Tripid")
-      return
+      setWarningMessage("Enter The Tripid");
+      return;
     }
-    const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
-    if (response.status === 200) {
-      const imageUrl = URL.createObjectURL(await response.blob());
-      setSignImageUrl(imageUrl);
-      setSignaturepopup(true);
-    }
-    else if (signimageUrl === "") {
-      if (fileInputRefdata.current) {
-        fileInputRefdata.current.click();
-        setSignatureupload(false)
 
+    try {
+      const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
+
+      if (response.status === 200) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+        setSignaturepopup(true);
+        setSuccess(true)
+        setWarning(false);
+        setSuccessMessage("Signature loaded successfully!");
+      } else if (signimageUrl === "") {
+        if (fileInputRefdata.current) {
+          fileInputRefdata.current.click();
+          setSignatureupload(false);
+          setSuccessMessage("Please upload a signature image.");
+        } else {
+          console.error("File input ref is not available");
+        }
       } else {
-        console.error("File input ref is not available");
+        setSignaturepopup(true);
+        getSignatureImage();
+        setSuccessMessage("Signature loaded successfully!");
       }
-    } else {
-      setSignaturepopup(true);
-      getSignatureImage()
+    } catch (error) {
+      console.error("Error fetching signature image:", error);
+      setWarning(true);
+      setWarningMessage("Failed to fetch signature image. Please try again.");
     }
-  }
+  };
+
+
   // const textRef = useRef();
   //   const SignPage = async (event) => {
   //     event.preventDefault();
@@ -594,7 +643,7 @@ const TripSheet = ({ stationName, logoImage }) => {
             <span className="Title-Name">Trip Sheet</span>
           </p>
           <div className="Tripsheet-header main-content-form">
-            
+
             <div>
               <div className='tripsheet-top-division'>
                 <span className="d-grid">
@@ -605,7 +654,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
                   // onChange={handleChange}
                   />
-                </span> 
+                </span>
 
                 <span className="d-grid">
                   <label>Billing No</label>
@@ -1494,14 +1543,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                   {/* <br></br> */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                  {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
                     (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
                       <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                         Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
                       </label>
                     )
                   )}
-                  {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                  {data === undefined && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
                     </label>
@@ -1536,7 +1585,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                 <div style={{ display: "grid" }} className="input">
-                  {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
+                  {dayhcl === 0 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
 
                   <div style={{ display: "flex" }}>
                     <div className="icone">
@@ -1562,7 +1611,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <div className="input" style={{ display: "grid" }}>
-                  {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1588,7 +1637,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
 
                 <div style={{ display: "grid" }} className="input">
-                  {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                  {dayhcl === 0 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1620,7 +1669,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="totalkm1"
-                    value={calculateTotalKilometers() || ''}
+                    value={calculateTotalKilometers()}
                     onChange={handleChange}
                     label="Total KM"
                     id="totalkm1"
@@ -2347,7 +2396,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                             </div>
-                            <div className={Number(superpower) === 1  && billing_read === 1 ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}>
+                            <div className={Number(superpower) === 1 && billing_read === 1 ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}>
                               <p className='bill-topics'>Vendor Bill</p>
                               <div className="input-field">
                                 <div className="input-g">
@@ -2534,321 +2583,321 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                             </div>
                             {
-                              Number(superpower) === 1  && billing_read === 1 ?
-                            <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
-                              <p className='bill-topics'>Customer Bill</p>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <Inventory2Icon color="action" />
+                              Number(superpower) === 1 && billing_read === 1 ?
+                                <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
+                                  <p className='bill-topics'>Customer Bill</p>
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <Inventory2Icon color="action" />
+                                      </div>
+                                      <TextField
+                                        name="pack"
+                                        value={selectedCustomerData?.duty === "Transfer" ? "Transfer" : calcPackage || formData.calcPackage || ratepackage || ''}
+                                        label="Pack"
+                                        id="pack"
+                                        size="small"
+                                        variant="standard"
+                                        autoComplete="password"
+                                        sx={{ m: 1, width: "60ch" }}
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount5"
+                                        value={package_amount || formData.calcPackage || ''}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amount5"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                      <Checkbox
+                                        size="small"
+                                        checked={lockdatacustomerbill}
+                                        onChange={(event) => setLockDatacustomerBill(event.target.checked)}
+                                      />
+                                      <p style={{ margin: "0px" }}>Lock</p>
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="pack"
-                                    value={calcPackage || formData.calcPackage || ratepackage || ''}
-                                    label="Pack"
-                                    id="pack"
-                                    size="small"
-                                    variant="standard"
-                                    autoComplete="password"
-                                    sx={{ m: 1, width: "60ch" }}
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
-                                  </div>
-                                  <TextField
-                                    name="amount5"
-                                    value={package_amount || formData.calcPackage || ''}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amount5"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Checkbox
-                                    size="small"
-                                    checked={lockdatacustomerbill}
-                                    onChange={(event) => setLockDatacustomerBill(event.target.checked)}
-                                  />
-                                  <p style={{ margin: "0px" }}>Lock</p>
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faRoad} />
-                                  </div>
-                                  <TextField
-                                    name="exkm1"
-                                    className='customer-bill-input'
-                                    value={extraKM || formData.calcPackage || 0}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setExtraKM(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Ex.Km"
-                                    id="ex-exkm1"
-                                    autoComplete="password"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField size="small"
-                                    name='exkmTkm2'
-                                    className='customer-bill-input'
-                                    value={extrakm_amount || formData.calcPackage || ''}
-                                    onChange={(e) => {
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faRoad} />
+                                      </div>
+                                      <TextField
+                                        name="exkm1"
+                                        className='customer-bill-input'
+                                        value={extraKM || formData.calcPackage || 0}
+                                        onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setExtraKM(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Ex.Km"
+                                        id="ex-exkm1"
+                                        autoComplete="password"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField size="small"
+                                        name='exkmTkm2'
+                                        className='customer-bill-input'
+                                        value={extrakm_amount || formData.calcPackage || ''}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setextrakm_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    id="exkmTkm2"
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                          if (lockdatacustomerbill) {
+                                            setextrakm_amount(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        id="exkmTkm2"
+                                        variant="standard"
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount6"
+                                        className='customer-bill-input'
+                                        value={ex_kmAmount || formData.calcPackage || 0}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amount6"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="amount6"
-                                    className='customer-bill-input'
-                                    value={ex_kmAmount || formData.calcPackage || 0}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amount6"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faStopwatch} />
-                                  </div>
-                                  <TextField
-                                    name="exHrs1"
-                                    className='customer-bill-input'
-                                    value={extraHR || formData.calcPackage || 0}
-                                    onChange={(e) => {
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faStopwatch} />
+                                      </div>
+                                      <TextField
+                                        name="exHrs1"
+                                        className='customer-bill-input'
+                                        value={extraHR || formData.calcPackage || 0}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setExtraHR(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="exHrs1"
-                                    id="ex-exHrs1"
-                                    size="small"
-                                    autoComplete="password"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField
-                                    size="small"
-                                    id="exHrsTHrs2"
-                                    name='exHrsTHrs2'
-                                    className='customer-bill-input'
-                                    value={extrahr_amount || formData.calcPackage || 0}
-                                    onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setExtraHR(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="exHrs1"
+                                        id="ex-exHrs1"
+                                        size="small"
+                                        autoComplete="password"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        id="exHrsTHrs2"
+                                        name='exHrsTHrs2'
+                                        className='customer-bill-input'
+                                        value={extrahr_amount || formData.calcPackage || 0}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setextrahr_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                  />
+                                          if (lockdatacustomerbill) {
+                                            setextrahr_amount(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                      />
 
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount7"
+                                        className='customer-bill-input'
+                                        value={ex_hrAmount || formData.calcPackage || 0}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amouamount7"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="amount7"
-                                    className='customer-bill-input'
-                                    value={ex_hrAmount || formData.calcPackage || 0}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amouamount7"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faCloudMoon} />
-                                  </div>
-                                  <TextField
-                                    name="night1"
-                                    className='customer-bill-input'
-                                    value={nightBta}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setNightBeta(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Night"
-                                    id="night1"
-                                    autoComplete="password"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField
-                                    size="small"
-                                    className='customer-bill-input'
-                                    name='nightThrs2'
-                                    id="nightThrs2"
-                                    value={nightCount}
-                                    onChange={(e) => {
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faCloudMoon} />
+                                      </div>
+                                      <TextField
+                                        name="night1"
+                                        className='customer-bill-input'
+                                        value={nightBta}
+                                        onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setNightBeta(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Night"
+                                        id="night1"
+                                        autoComplete="password"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        className='customer-bill-input'
+                                        name='nightThrs2'
+                                        id="nightThrs2"
+                                        value={nightCount}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setNightCount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                          if (lockdatacustomerbill) {
+                                            setNightCount(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount8"
+                                        className='customer-bill-input'
+                                        value={night_totalAmount || 0}
+                                        size="small"
+                                        autoComplete="password"
+                                        label="Amount"
+                                        id="amount8"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="amount8"
-                                    className='customer-bill-input'
-                                    value={night_totalAmount || 0}
-                                    size="small"
-                                    autoComplete="password"
-                                    label="Amount"
-                                    id="amount8"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faMoneyBill1Wave} />
-                                  </div>
-                                  <TextField
-                                    name="driverconvenience1"
-                                    className='customer-bill-input'
-                                    value={driverBeta}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverBeta(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Driver Convenience"
-                                    autoComplete="password"
-                                    id="driverconvenience1"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField
-                                    size="small"
-                                    name='dtc2'
-                                    id='dtc2'
-                                    className='customer-bill-input'
-                                    value={driverbeta_Count}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverbeta_Count(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                      </div>
+                                      <TextField
+                                        name="driverconvenience1"
+                                        className='customer-bill-input'
+                                        value={driverBeta}
+                                        onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setdriverBeta(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Driver Convenience"
+                                        autoComplete="password"
+                                        id="driverconvenience1"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        name='dtc2'
+                                        id='dtc2'
+                                        className='customer-bill-input'
+                                        value={driverbeta_Count}
+                                        onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setdriverbeta_Count(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount9"
+                                        className='customer-bill-input'
+                                        value={driverBeta_amount}
+                                        onChange={(e) => {
+                                          if (lockdatacustomerbill) {
+                                            setdriverBeta_amount(e.target.value)
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        size="small"
+                                        label="Amount"
+                                        id="amount9"
+                                        autoComplete="password"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
                                   <TextField
                                     name="amount9"
-                                    className='customer-bill-input'
-                                    value={driverBeta_amount}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverBeta_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
+                                    className='total-amount-textfield'
+                                    value={totalcalcAmount || 0}
                                     size="small"
-                                    label="Amount"
-                                    id="amount9"
+                                    label="Total Amount"
+                                    id="amount-amount9"
                                     autoComplete="password"
                                     variant="standard"
                                   />
                                 </div>
-                              </div>
-                              <TextField
-                                name="amount9"
-                                className='total-amount-textfield'
-                                value={totalcalcAmount || 0}
-                                size="small"
-                                label="Total Amount"
-                                id="amount-amount9"
-                                autoComplete="password"
-                                variant="standard"
-                              />
-                            </div>
-                            :
-                            <></>
-}
+                                :
+                                <></>
+                            }
                           </div>
                         </TabPanel>
                           : <></>
@@ -2856,9 +2905,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </Tabs>
                       <DialogActions className='tripsheet-cancel-save-btn'>
                         <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" onClick={handleClose} autoFocus>
-                          Save
-                        </Button>
+                        {isEditMode ?
+                          <Button variant="contained" onClick={handleEdit}>
+                            Save
+                          </Button>
+                          : <></>
+                        }
                       </DialogActions>
                     </div>
 
@@ -2994,13 +3046,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleClickOpen();
                     }}
                   >
-                    calculate
+                    Overview
                   </Button>
                 </div>
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)}
+                    {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
+                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -3010,10 +3062,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </Dialog>
                 <div className="input">
                   {isEditMode ? (<>
-                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                    {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
+                    <LoadingButton  loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
                   </>
                   ) : (
-                    <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                    // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                    <LoadingButton  loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
                   )}
                 </div>
 
@@ -3165,7 +3219,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => {
-                          handleAutocompleteChange(event, value,"vehicleName");
+                          handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
                             setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
                           }
@@ -3285,287 +3339,287 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
-                  {selectedStatus === "Temporary Closed" && (      
-                  <div className='box-Container'>
-                              <div className='bill-topi'style={{paddingBottom:'6px',paddingLeft:'250px',fontWeight: 600,fontSize:'20px',}}>Vendor Info</div>
-                              <div className="input-field tripsheet-vendor-info-first-input-field">
-                                <div className="input-g">
-                                  <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-vendor_vehicle"
-                                    freeSolo
-                                    onChange={(event, value) => {
-                                      if (lockdata) {
-                                        handleAutocompleteVendor(event, value, "vendor_vehicle");
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    value={vendorinfo?.vendor_vehicle}
-                                    options={vehileNames?.map((option) => ({
-                                      label: option,
-                                    }))}
-                                    renderInput={(params) => (
-                                      <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
-                                    )}
-                                  />
-                                </div>
-                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-duty"
-                                    freeSolo
-                                    sx={{ width: "100%" }}
-                                    onChange={(event, value) => {
-                                      if (lockdata) {
-                                        handleAutocompleteVendor(event, value, "vendor_duty")
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    value={vendorinfo?.vendor_duty}
-                                    options={Duty.map((option) => ({
-                                      label: option.option,
-                                    }))}
-                                    renderInput={(params) => {
-                                      return (
-                                        <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
-                                      )
-                                    }
-                                    }
-                                  />
-                                </div>
+                  {selectedStatus === "Temporary Closed" && (
+                    <div className='box-Container'>
+                      <div className='bill-topi' style={{ paddingBottom: '6px', paddingLeft: '250px', fontWeight: 600, fontSize: '20px', }}>Vendor Info</div>
+                      <div className="input-field tripsheet-vendor-info-first-input-field">
+                        <div className="input-g">
+                          <Autocomplete
+                            fullWidth
+                            size="small"
+                            id="free-solo-vendor_vehicle"
+                            freeSolo
+                            onChange={(event, value) => {
+                              if (lockdata) {
+                                handleAutocompleteVendor(event, value, "vendor_vehicle");
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
+                            }}
+                            value={vendorinfo?.vendor_vehicle}
+                            options={vehileNames?.map((option) => ({
+                              label: option,
+                            }))}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
+                            )}
+                          />
+                        </div>
+                        <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                          <Autocomplete
+                            fullWidth
+                            size="small"
+                            id="free-solo-duty"
+                            freeSolo
+                            sx={{ width: "100%" }}
+                            onChange={(event, value) => {
+                              if (lockdata) {
+                                handleAutocompleteVendor(event, value, "vendor_duty")
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
+                            }}
+                            value={vendorinfo?.vendor_duty}
+                            options={Duty.map((option) => ({
+                              label: option.option,
+                            }))}
+                            renderInput={(params) => {
+                              return (
+                                <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
+                              )
+                            }
+                            }
+                          />
+                        </div>
 
-                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Checkbox
-                                    size="small"
-                                    checked={lockdata}
-                                    onChange={(event) => setLockData(event.target.checked)}
-                                  />
-                                  <p style={{ margin: "0px" }}>Lock</p>
-                                </div>
-                              </div>
-                              <div className="input-field" style={{ marginTop: '15px' }}>
-                                <div className="input-g" >
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                      label="StartDate"
-                                      id="vendorshedOutDate"
-                                      // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                      value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                      format="DD/MM/YYYY"
-                                      // onChange={(date) => {
-                                      onChange={(date) => {
-                                        if (lockdata) {
-                                          handleDatevendorChange(date, 'vendorshedOutDate')
-                                        } else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }}
-                                    >
-                                      {({ inputProps, inputRef }) => (
-                                        <TextField {...inputProps} inputRef={inputRef} />
-                                      )}
-                                    </DatePicker>
-                                  </LocalizationProvider>
+                        <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                          <Checkbox
+                            size="small"
+                            checked={lockdata}
+                            onChange={(event) => setLockData(event.target.checked)}
+                          />
+                          <p style={{ margin: "0px" }}>Lock</p>
+                        </div>
+                      </div>
+                      <div className="input-field" style={{ marginTop: '15px' }}>
+                        <div className="input-g" >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              label="StartDate"
+                              id="vendorshedOutDate"
+                              // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                              value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                              format="DD/MM/YYYY"
+                              // onChange={(date) => {
+                              onChange={(date) => {
+                                if (lockdata) {
+                                  handleDatevendorChange(date, 'vendorshedOutDate')
+                                } else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} />
+                              )}
+                            </DatePicker>
+                          </LocalizationProvider>
 
-                                </div>
-                                <div className="input-g">
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        </div>
+                        <div className="input-g">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                                    <DatePicker
-                                      label="CloseDate"
-                                      id="vendorshedInDate"
+                            <DatePicker
+                              label="CloseDate"
+                              id="vendorshedInDate"
 
 
-                                      // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                      value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                      format="DD/MM/YYYY"
-                                      // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
-                                      onChange={(date) => {
-                                        if (lockdata) {
-                                          handleDatevendorChange(date, 'vendorshedInDate')
-                                        } else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }}
-                                    >
-                                      {({ inputProps, inputRef }) => (
-                                        <TextField {...inputProps} inputRef={inputRef} />
-                                      )}
-                                    </DatePicker>
-                                  </LocalizationProvider>
-                                </div>
+                              // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                              value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                              format="DD/MM/YYYY"
+                              // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                              onChange={(date) => {
+                                if (lockdata) {
+                                  handleDatevendorChange(date, 'vendorshedInDate')
+                                } else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} />
+                              )}
+                            </DatePicker>
+                          </LocalizationProvider>
+                        </div>
 
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendortotaldays"
-                                    value={calculatevendorTotalDays()}
-                                    label="Total Days"
-                                    size="small"
-                                    type="number"
-                                    id="totaldays"
-                                    sx={{ width: "100%" }}
-                                  />
-                                </div>
+                        <div className="input-g">
+                          <TextField
+                            name="vendortotaldays"
+                            value={calculatevendorTotalDays()}
+                            label="Total Days"
+                            size="small"
+                            type="number"
+                            id="totaldays"
+                            sx={{ width: "100%" }}
+                          />
+                        </div>
 
-                              </div>
-                              <div className="input-field" style={{ marginBottom: '10px' }}>
-                                <div className="input-g">
-                                  <div className='input-g'>
-                                    <div className='full-width' style={{ display: 'grid' }}>
-                                      <label>Start Time</label>
-                                      <input
-                                        type="time"
-                                        name="venodrreporttime"
-                                        value={vendorinfo?.vendorreporttime}
-                                        onChange={(event) => {
-                                          if (lockdata) {
-                                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
-                                          } else {
-                                            setWarning(true);
-                                            setWarningMessage("IS not locked,locked Enter Again");
-                                          }
-                                        }}
+                      </div>
+                      <div className="input-field" style={{ marginBottom: '10px' }}>
+                        <div className="input-g">
+                          <div className='input-g'>
+                            <div className='full-width' style={{ display: 'grid' }}>
+                              <label>Start Time</label>
+                              <input
+                                type="time"
+                                name="venodrreporttime"
+                                value={vendorinfo?.vendorreporttime}
+                                onChange={(event) => {
+                                  if (lockdata) {
+                                    setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                  } else {
+                                    setWarning(true);
+                                    setWarningMessage("IS not locked,locked Enter Again");
+                                  }
+                                }}
 
-                                        style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
-                                      // }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="input-g">
-                                  <div className='closetime tripsheet-shed-in-time'>
-                                    <label>Close Time</label>
-
-                                    <input
-                                      type="time"
-                                      name="vendorshedintime"
-                                      value={vendorinfo?.vendorshedintime}
-                                      onChange={(event) => {
-                                        if (lockdata) {
-                                          setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
-                                        }
-                                        else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }
-                                      }
-                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendorTotaltime"
-                                    value={calculatevendorTotalTime() || ""}
-                                    label="Total Time"
-                                    id="pack5"
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendorshedoutkm"
-                                    value={vendorinfo?.vendorshedoutkm || ""}
-                                    onChange={handlevendorinfofata}
-                                    label="starting Kilometers"
-                                    id="vendorshedoutkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                                                                                
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendorshedinkm"
-                                    value={vendorinfo?.vendorshedinkm || ""}
-                                    label="closing Kilometers"
-                                    onChange={handlevendorinfofata}
-                                    id="vendorshedinkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendortotalkm"
-                                    value={calculatevendorTotalKilometers() || ''}
-                                    label="Total kilometers"
-                                    id="vendortotalkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>  
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendorRemarks"
-                                    value={vendorinfo?.vendorRemarks || ""}
-                                    onChange={handlevendorinfofata}
-                                    label="Remarks"
-                                    id="vendorRemarks"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <Button
-                                    variant='contained'
-                                    onClick={handleVendorcalc}
-                                    disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
-                                  >
-                                    Update
-                                  </Button>
-                                </div>
-                              </div>
+                                style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                              // }}
+                              />
                             </div>
+                          </div>
+                        </div>
+
+                        <div className="input-g">
+                          <div className='closetime tripsheet-shed-in-time'>
+                            <label>Close Time</label>
+
+                            <input
+                              type="time"
+                              name="vendorshedintime"
+                              value={vendorinfo?.vendorshedintime}
+                              onChange={(event) => {
+                                if (lockdata) {
+                                  setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                }
+                                else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }
+                              }
+                              style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                            />
+                          </div>
+                        </div>
+                        <div className="input-g">
+                          <TextField
+                            name="vendorTotaltime"
+                            value={calculatevendorTotalTime() || ""}
+                            label="Total Time"
+                            id="pack5"
+                            size="small"
+                            sx={{ width: "100%" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-field">
+
+                        <div className="input-g" >
+                          <TextField
+                            name="vendorshedoutkm"
+                            value={vendorinfo?.vendorshedoutkm || ""}
+                            onChange={handlevendorinfofata}
+                            label="starting Kilometers"
+                            id="vendorshedoutkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+
+                        <div className="input-g" >
+                          <TextField
+                            name="vendorshedinkm"
+                            value={vendorinfo?.vendorshedinkm || ""}
+                            label="closing Kilometers"
+                            onChange={handlevendorinfofata}
+                            id="vendorshedinkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                        <div className="input-g" >
+                          <TextField
+                            name="vendortotalkm"
+                            value={calculatevendorTotalKilometers() || ''}
+                            label="Total kilometers"
+                            id="vendortotalkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-field">
+                        <div className="input-g">
+                          <TextField
+                            name="vendorRemarks"
+                            value={vendorinfo?.vendorRemarks || ""}
+                            onChange={handlevendorinfofata}
+                            label="Remarks"
+                            id="vendorRemarks"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                        <div className="input-g">
+                          <Button
+                            variant='contained'
+                            onClick={handleVendorcalc}
+                            disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
+                          >
+                            Update
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   )}
 
                   <div>
-                  {selectedStatus !== "Temporary Closed" && (
-  <div className="tripsheet-table1">
-    <table className="table-condensed table-striped fixed_header">
-      <thead className="BI_tablehead">
-        <tr>
-          <th className="table-head-booking table-heading-1">Driver name</th>
-          <th className="table-head-booking">Vehicle Name</th>
-          <th className="table-head-booking">Vehicle Reg No</th>
-          <th className="table-head-booking">Travels Name</th>
-        </tr>
-      </thead>
-      <tbody className="BI_tablebody Scroll-Style">
-        {driverdetails.length === 0 ? (
-          <tr>
-            <td colSpan={4}>No data available.</td>
-          </tr>
-        ) : (
-          driverdetails.map((row) => (
-            <tr key={row.id} onClick={() => handleRowClick(row)}>
-              <td>{row.driverName}</td>
-              <td>{row.vehicleName}</td>
-              <td>{row.vehRegNo}</td>
-              <td>{row.travelsname}</td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
-)}
+                    {selectedStatus !== "Temporary Closed" && (
+                      <div className="tripsheet-table1">
+                        <table className="table-condensed table-striped fixed_header">
+                          <thead className="BI_tablehead">
+                            <tr>
+                              <th className="table-head-booking table-heading-1">Driver name</th>
+                              <th className="table-head-booking">Vehicle Name</th>
+                              <th className="table-head-booking">Vehicle Reg No</th>
+                              <th className="table-head-booking">Travels Name</th>
+                            </tr>
+                          </thead>
+                          <tbody className="BI_tablebody Scroll-Style">
+                            {driverdetails.length === 0 ? (
+                              <tr>
+                                <td colSpan={4}>No data available.</td>
+                              </tr>
+                            ) : (
+                              driverdetails.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.driverName}</td>
+                                  <td>{row.vehicleName}</td>
+                                  <td>{row.vehRegNo}</td>
+                                  <td>{row.travelsname}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

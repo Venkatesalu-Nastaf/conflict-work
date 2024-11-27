@@ -114,16 +114,21 @@ export const Undergroup = [
 
   export const Vehicleinfo= [
     {
-      Option: "Attached Vehicle",
-      optionvalue: "attachedvehicle",
+      Option:"Attached Vehicle",
+      optionvalue:"Attached Vehicle",
     },
     {
-      Option: "Out Side Travels",
-      optionvalue: "outsidetravels",
+      Option:"OutSide Travels",
+      optionvalue:"OutSide Travels",
     },
     {
-      Option: "Own  Vehicle",
-      optionvalue: "ownvehicle",
+      Option:"Own Vehicle",
+      optionvalue:"Own Vehicle",
     },
+    {
+      Option:"DCO Vehicle",
+      optionvalue:"DCO Vehicle",
+    }
   
   ];
+

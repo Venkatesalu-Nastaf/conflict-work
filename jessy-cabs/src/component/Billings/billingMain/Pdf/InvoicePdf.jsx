@@ -10,11 +10,13 @@ import Invoice from "./Invoice";
 import { APIURL } from "../../../url";
 
 
-const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,stateDetails,otherStations}) => {
+const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, stateDetails, otherStations, invoicedata }) => {
     // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
     const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
-    const [billingDate] = useState(dayjs());
+    // const [billingDate] = useState(dayjs());
+    // console.log(billdatadate,"billlldate")
     const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
+    // console.log(attachedImage.length > 0, attachedImage)
     // const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
     // const apiUrl = APIURL;
     const targetRef = useRef();
@@ -26,7 +28,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
     const formatAddress = (address) => {
         return address?.split('\n').map((line, index) => <p key={index}>{line}</p>);
     }
-    console.log(otherStations,"pppp",otherStations?.data)
+    // console.log(otherStations,"pppp",otherStations?.data)
 
 
     // const startDate = dayjs(book.startdate);
@@ -35,14 +37,17 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
     // const billingdate = book.startdate ? dayjs(book.startdate).format('YYYY-MM-DD') : boo
     const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
     // const gstAmount = customerData?.gstTax / 2
-    const gstAmount1= otherStations?.data/ 2;
+    const gstAmount1 = otherStations?.data / 2;
     const othergst = otherStations?.data
     // const cgst = totalAmount * gstAmount / 100 || 0;
     // const sgst = totalAmount * gstAmount / 100 || 0;
+
     const cgst = totalAmount * gstAmount1 / 100 || 0;
     const sgst = totalAmount * gstAmount1 / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst || 0;
+    // console.log(paymentValue,"ooooo")
     const AmountInWords = numWords(parseInt(paymentValue)) || 0;
+    // console.log(AmountInWords,"llll",paymentValue)
 
     // setting the Billed details
     // useEffect(() => {
@@ -81,17 +86,19 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
             setParticularPdf(false);
         }
     };
-    console.log(customerData,"ppdata")
+    // console.log(customerData,"ppdata")
 
     // const handlePrint = async () => {
     //     setIndividualBilled(!individualBilled);
     //     setParticularPdf(false);
     //         generatePDF(targetRef, { filename: 'page.pdf' });
 
-    const customerState = customerData.state;
-    const commonState = stateDetails?.find(item => item.state === customerState) || [];
 
-    console.log(commonState,"Common state of customers")
+    // console.log(customerData,"lllllll")
+    // const customerState = customerData.state;
+    // const commonState = stateDetails?.find(item => item.state === customerState) || [];
+
+    // console.log(commonState,"Common state of customers")
 
 
     // };
@@ -103,14 +110,15 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                         <div className="header-div">
                             <div>
                                 <p className="org-name">{organizationdata.organizationname}</p>
-                                {commonState ? (
-                                <h2 className="organisationtext">{commonState.address}</h2>
-                            ) : (
-                                <>
-                                    <h2 className="org-address">{organizationdata.addressLine1}</h2>
-                                    {/* <h2 className="org-address">{orgaddress3}</h2> */}
-                                </>
-                            )}
+                                {otherStations.data6 !== null ? (
+                                    // <h2 className="organisationtext">{commonState.address}</h2>
+                                    <h2 className="organisationtext">{otherStations.data5}</h2>
+                                ) : (
+                                    <>
+                                        <h2 className="org-address">{organizationdata.addressLine1}</h2>
+                                        {/* <h2 className="org-address">{orgaddress3}</h2> */}
+                                    </>
+                                )}
 
                                 {/* <p className="org-address">{organizationdata.addressLine1}</p> */}
                                 <p className="org-address">{organizationdata.contactEmail}</p>
@@ -118,7 +126,9 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                             </div>
                             <div className="image-div">
                                 <img src={logo} className="image" alt="organisationimage" />
-                                <p className="org-gst">GSTIN : {organizationdata.gstnumber}</p>
+                                {otherStations.data6 !== null ?
+                                    <p className="org-gst">GSTIN : {otherStations.data6}</p> :
+                                    <p className="org-gst">GSTIN : {organizationdata.gstnumber}</p>}
                             </div>
                         </div>
                         <div className="taxinvoice">
@@ -134,11 +144,13 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                 </div>
                                 {/* <p className="receiver-details">GSTIN : {customerData.gstnumber}</p> */}
                                 <p className="receiver-details">GSTIN : {otherStations.data3}</p>
-                            </div>
+                            </div>  
                             <div className="invno-div">
-                                <p className="receiver-details">Invoice No : {particularRefNo}</p>
+                                {/* <p className="receiver-details">Invoice No : {particularRefNo}</p> */}
+                                <p className="receiver-details" style={{paddingRight:"58px"}}>Invoice No : {invoicedata}</p>
                                 {/* <p className="receiver-details">Invoice Date : {billingDate.format('YYYY-MM-DD')} </p> */}
-                                <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('DD-MM-YYYY')} </p>
+                                {/* <p className="receiver-details">Invoice Date : {billdatadate ? billdatadate : billingDate.format('DD-MM-YYYY')} </p> */}
+                                <p className="receiver-details">Invoice Date : {dayjs(billdatadate).format('DD-MM-YYYY')}</p>
                             </div>
                         </div>
                         <div className="table-div">
@@ -170,44 +182,66 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                             Driver Bata {book.driverbeta_Count} @ Rs . {book.driverBeta} <br />
                                             {book.pickup}
                                         </td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) || 0}.00</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll)|| 0}.00</td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll) || 0}.00</td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div className="total-div" style={{marginLeft: '50px'}}>
-                        {otherStations?.otherdata === "InStations" ?
-                        <>
-                            <div style={{marginLeft: "100px"}}>
-                                {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                        <div className="total-div" style={{ marginLeft: '50px' }}>
+                            { (otherStations?.otherdata === "InStations" ? (
+                                <>
+                                
+                                    <div style={{ marginLeft: "100px" }}>
+                                        {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
-                                <h4>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
-                                <h4>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
-                                <h4>Total Amount :</h4>
-                            </div>
-                            <div className="amount-div">
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p>
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
-                            </div>
-                            </>
-                            :
-                            <>
-                             <div style={{marginLeft: "100px"}}>
-                                {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
+                                      { gstAmount1 !== 0 ? 
+                                      <>
+                                        <h4>Amount :</h4> 
+                                        <h4>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                        <h4>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4> 
+                                        <h4>Total Amount :</h4> </> : <>
+                                        <h4>Amount :</h4> <h4></h4>
+                                        <h4></h4> 
+                                        <h4 style={{ marginTop: '110px' }}>Total Amount :</h4> 
+                                      </>}
+                                    </div>
+                                    <div className="amount-div">
+                                    <p className="amounttext" style={{ marginTop: '23px' }}>{book.totalcalcAmount || 0}.00</p>
+                                        {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
+                                        <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{cgst.toFixed(2)}</p>
+                                        <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{sgst.toFixed(2)}</p>
+                                        <p className="amounttext" style={{ marginTop: '23px'}}>{paymentValue.toFixed(0)}.00</p>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                gstAmount1 !== 0 &&(
+                                    <div style={{ marginLeft: "100px" }}>
+                                        {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
-                                <h4>IGST {othergst}% on {book.totalcalcAmount} :</h4>
-                              
-                                <h4>Total Amount :</h4>
-                            </div>
-                            <div className="amount-div">
-                                {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
+                                        <h4>IGST {othergst}% on {book.totalcalcAmount} :</h4>
+
+                                        <h4>Total Amount :</h4>
+                                    </div>
+                                    <div className="amount-div">
+                                        {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
                                 <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
-                                <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
-                            </div>
-                            </>
-                            }
+                                        <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                                    </div>)
+                                </>
+                            )
+
+                            )}
                         </div>
                         <div>
                             <p style={{ fontWeight: 'bold' }}>E.& O.E In Words-Rupees</p>
@@ -232,21 +266,27 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
                                     }
                                 </div>
                             </div>
-
                             <div style={{ paddingBottom: '10px', paddingRight: '10px', width: "30%", }}>
                                 <p className="sign-text" style={{ display: "flex", marginLeft: "80px" }}>For JessyCabs</p>
                                 {signimageUrl !== "" ?
-                                    <img className='dialogboximg' src={signimageUrl} alt=" " style={{ marginLeft:"100px"}} />: <div className='dialogboximg' ></div>}
+                                    <img className='dialogboximg' src={signimageUrl} alt=" " style={{ marginLeft: "100px" }} /> : <div className='dialogboximg' ></div>}
                                 <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
                             </div>
-
                         </div>
                         <div className="google-map">
-                            <div>
+                        <div>
                                 {/* <h4 className="map-text">Map Image</h4> */}
-                                {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' /> : <div></div>}
-
+                                {GmapimageUrl !== '' ? (
+                                    <img 
+                                        className="mapimage" 
+                                        src={GmapimageUrl}  
+                                        // style={{ height: '200px',width:'200px' }} 
+                                    />
+                                ) : (
+                                    <div></div>
+                                )}
                             </div>
+
                             <div className="tripsheet-RouteSummary">
                                 {routeData.length > 0 && (
                                     <>
@@ -264,14 +304,25 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate ,
 
                         </div>
                         <div>
-                            {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : ""}
+                            {/* {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : ""}
                             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
                                 attachedImage.map((image, index) => (
                                     <img key={index} src={image} alt='' className="attachimage" />
                                 ))
                                 :
                                 <div></div>
-                            }
+                            } */}
+                            {attachedImage.length > 0 ? (
+                                <>
+                                    <p className="attach-text">Attached Images</p>
+                                    {attachedImage.map((image, index) => (
+                                        <img key={index} src={image} alt='' className="attachimage" loading="lazy" />
+                                    ))}
+                                </>
+                            ) : (
+                                <></>
+                            )}
+
                         </div>
 
                     </div>

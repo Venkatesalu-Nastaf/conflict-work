@@ -134,8 +134,12 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_NightbataTotalAmount,
         Vendor_Bata,
         Vendor_BataAmount,
-        Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
+        Vendor_BataTotalAmount,
+        TotalTimeWithoutAddHours,
+        Hybriddata,
+        TimeToggleData,
+        VendorTimeToggle
 
     } = req.body
 
@@ -266,6 +270,9 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
+        TotalTimeWithoutAddHours,
+        Hybriddata,
+        TimeToggleData,VendorTimeToggle
     }
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -467,7 +474,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount, } = req.body
+        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle } = req.body
 
 
     const updatedCustomerData = {
@@ -597,7 +604,9 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
+        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle
     }
+    // console.log(updatedCustomerData,"llll")
 
     console.log(driverBeta,
         driverbeta_Count,
@@ -624,251 +633,251 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
 });
 
 // confirm tripsheet details------------------------------------------------
-router.put('/tripsheet-confirm/:tripid', (req, res) => {
-    const tripid = req.params.tripid;
-    const {
-        bookingno,
-        tripsheetdate,
-        status,
-        billingno,
-        apps,
-        customer,
-        orderedby,
-        mobile,
-        guestname,
-        guestmobileno,
-        email,
-        address1,
-        streetno,
-        city,
-        hireTypes,
-        department,
-        vehRegNo,
-        vehType,
-        driverName,
-        mobileNo,
-        driversmsexbetta,
-        gps,
-        duty,
-        pickup,
-        useage,
-        request,
-        shedOutDate,
-        startdate,
-        closedate,
-        shedInDate,
-        totaldays,
-        employeeno,
-        reporttime,
-        starttime,
-        closetime,
-        additionaltime,
-        advancepaidtovendor,
-        customercode,
-        startkm,
-        closekm,
-        shedkm,
-        shedin,
-        shedout,
-        shedintime,
-        permit,
-        parking,
-        toll,
-        vpermettovendor,
-        vendortoll,
-        customeradvance,
-        email1,
-        remark,
-        smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
-        starttime2,
-        closetime2,
-        totaltime,
-        startkm1,
-        closekm1,
-        totalkm1,
-        remark1, escort, minHour, minKM, vehicleName2,
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-        nightThrs,
-        dtc,
-        dtc2,
-        nightThrs2,
-        exkmTkm2,
-        exHrsTHrs2,
-        netamount,
-        vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
-        discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
-        selects,
-        documenttype,
-        on1,
-        smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss, Groups, transferreport, travelsemail, travelsname, vehileName, orderbyemail } = req.body;
+// router.put('/tripsheet-confirm/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     const {
+//         bookingno,
+//         tripsheetdate,
+//         status,
+//         billingno,
+//         apps,
+//         customer,
+//         orderedby,
+//         mobile,
+//         guestname,
+//         guestmobileno,
+//         email,
+//         address1,
+//         streetno,
+//         city,
+//         hireTypes,
+//         department,
+//         vehRegNo,
+//         vehType,
+//         driverName,
+//         mobileNo,
+//         driversmsexbetta,
+//         gps,
+//         duty,
+//         pickup,
+//         useage,
+//         request,
+//         shedOutDate,
+//         startdate,
+//         closedate,
+//         shedInDate,
+//         totaldays,
+//         employeeno,
+//         reporttime,
+//         starttime,
+//         closetime,
+//         additionaltime,
+//         advancepaidtovendor,
+//         customercode,
+//         startkm,
+//         closekm,
+//         shedkm,
+//         shedin,
+//         shedout,
+//         shedintime,
+//         permit,
+//         parking,
+//         toll,
+//         vpermettovendor,
+//         vendortoll,
+//         customeradvance,
+//         email1,
+//         remark,
+//         smsguest,
+//         documentnotes,
+//         VendorTripNo,
+//         vehicles,
+//         duty1,
+//         startdate1,
+//         closedate1,
+//         totaldays1,
+//         locks,
+//         starttime2,
+//         closetime2,
+//         totaltime,
+//         startkm1,
+//         closekm1,
+//         totalkm1,
+//         remark1, escort, minHour, minKM, vehicleName2,
+//         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+//         nightThrs,
+//         dtc,
+//         dtc2,
+//         nightThrs2,
+//         exkmTkm2,
+//         exHrsTHrs2,
+//         netamount,
+//         vehcommission,
+//         caramount1,
+//         manualbills,
+//         pack,
+//         amount5,
+//         exkm1,
+//         amount6,
+//         exHrs1,
+//         amount7,
+//         night1,
+//         amount8,
+//         driverconvenience1,
+//         amount9,
+//         rud,
+//         netamount1,
+//         discount,
+//         ons,
+//         manualbills1,
+//         balance,
+//         fcdate,
+//         taxdate,
+//         insdate,
+//         stpermit,
+//         maintenancetype,
+//         kilometer,
+//         selects,
+//         documenttype,
+//         on1,
+//         smsgust,
+//         emailcheck,
+//         booker,
+//         reload,
+//         manualbillss, Groups, transferreport, travelsemail, travelsname, vehileName, orderbyemail } = req.body;
 
-    const updatedCustomerData = {
-        bookingno,
-        tripsheetdate,
-        status,
-        billingno,
-        apps,
-        customer,
-        orderedby,
-        mobile,
-        guestname,
-        guestmobileno,
-        email,
-        address1,
-        streetno,
-        city,
-        hireTypes,
-        department,
-        vehRegNo,
-        vehType,
-        driverName,
-        mobileNo,
-        driversmsexbetta,
-        gps,
-        duty,
-        pickup,
-        useage,
-        request,
-        shedOutDate,
-        startdate,
-        closedate,
-        shedInDate,
-        totaldays,
-        employeeno,
-        reporttime,
-        starttime,
-        closetime,
-        additionaltime,
-        advancepaidtovendor,
-        customercode,
-        startkm,
-        closekm,
-        shedkm,
-        shedin,
-        shedout,
-        shedintime,
-        permit,
-        parking,
-        toll,
-        vpermettovendor,
-        vendortoll,
-        customeradvance,
-        email1,
-        remark,
-        smsguest,
-        documentnotes,
-        VendorTripNo,
-        vehicles,
-        duty1,
-        startdate1,
-        closedate1,
-        totaldays1,
-        locks,
-        starttime2,
-        closetime2,
-        totaltime,
-        startkm1,
-        closekm1,
-        totalkm1,
-        remark1, escort, minHour, minKM, vehicleName2,
-        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-        nightThrs,
-        dtc,
-        dtc2,
-        nightThrs2,
-        exkmTkm2,
-        exHrsTHrs2,
-        netamount,
-        vehcommission,
-        caramount1,
-        manualbills,
-        pack,
-        amount5,
-        exkm1,
-        amount6,
-        exHrs1,
-        amount7,
-        night1,
-        amount8,
-        driverconvenience1,
-        amount9,
-        rud,
-        netamount1,
-        discount,
-        ons,
-        manualbills1,
-        balance,
-        fcdate,
-        taxdate,
-        insdate,
-        stpermit,
-        maintenancetype,
-        kilometer,
-        selects,
-        documenttype,
-        on1,
-        smsgust,
-        emailcheck,
-        booker,
-        reload,
-        manualbillss,
-        Groups,
-        transferreport, travelsemail, travelsname, vehileName, orderbyemail
-    };
+//     const updatedCustomerData = {
+//         bookingno,
+//         tripsheetdate,
+//         status,
+//         billingno,
+//         apps,
+//         customer,
+//         orderedby,
+//         mobile,
+//         guestname,
+//         guestmobileno,
+//         email,
+//         address1,
+//         streetno,
+//         city,
+//         hireTypes,
+//         department,
+//         vehRegNo,
+//         vehType,
+//         driverName,
+//         mobileNo,
+//         driversmsexbetta,
+//         gps,
+//         duty,
+//         pickup,
+//         useage,
+//         request,
+//         shedOutDate,
+//         startdate,
+//         closedate,
+//         shedInDate,
+//         totaldays,
+//         employeeno,
+//         reporttime,
+//         starttime,
+//         closetime,
+//         additionaltime,
+//         advancepaidtovendor,
+//         customercode,
+//         startkm,
+//         closekm,
+//         shedkm,
+//         shedin,
+//         shedout,
+//         shedintime,
+//         permit,
+//         parking,
+//         toll,
+//         vpermettovendor,
+//         vendortoll,
+//         customeradvance,
+//         email1,
+//         remark,
+//         smsguest,
+//         documentnotes,
+//         VendorTripNo,
+//         vehicles,
+//         duty1,
+//         startdate1,
+//         closedate1,
+//         totaldays1,
+//         locks,
+//         starttime2,
+//         closetime2,
+//         totaltime,
+//         startkm1,
+//         closekm1,
+//         totalkm1,
+//         remark1, escort, minHour, minKM, vehicleName2,
+//         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+//         nightThrs,
+//         dtc,
+//         dtc2,
+//         nightThrs2,
+//         exkmTkm2,
+//         exHrsTHrs2,
+//         netamount,
+//         vehcommission,
+//         caramount1,
+//         manualbills,
+//         pack,
+//         amount5,
+//         exkm1,
+//         amount6,
+//         exHrs1,
+//         amount7,
+//         night1,
+//         amount8,
+//         driverconvenience1,
+//         amount9,
+//         rud,
+//         netamount1,
+//         discount,
+//         ons,
+//         manualbills1,
+//         balance,
+//         fcdate,
+//         taxdate,
+//         insdate,
+//         stpermit,
+//         maintenancetype,
+//         kilometer,
+//         selects,
+//         documenttype,
+//         on1,
+//         smsgust,
+//         emailcheck,
+//         booker,
+//         reload,
+//         manualbillss,
+//         Groups,
+//         transferreport, travelsemail, travelsname, vehileName, orderbyemail
+//     };
 
 
-    db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to update data in MySQL" });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Customer not found" });
-        }
-        // for BE_closed
-        db.query(`UPDATE tripsheet SET apps='Closed' WHERE tripid=${tripid}`, (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to update tripsheet details in MySQL' });
-            }
-            return res.status(200).json(result);
-        });
-        return res.status(200).json({ message: "Data updated successfully" });
-    });
-});
+//     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to update data in MySQL" });
+//         }
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: "Customer not found" });
+//         }
+//         // for BE_closed
+//         db.query(`UPDATE tripsheet SET apps='Closed' WHERE tripid=${tripid}`, (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ error: 'Failed to update tripsheet details in MySQL' });
+//             }
+//             return res.status(200).json(result);
+//         });
+//         return res.status(200).json({ message: "Data updated successfully" });
+//     });
+// });
 
 // ----chnage collect data-----------------------------------
 
@@ -2107,8 +2116,8 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
     console.log(vehicleNo, "nooo")
     // const status = 'Transfer_Closed';
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
-
-    sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled'  and Hybriddata = 0`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
@@ -2118,6 +2127,27 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
         if (result) {
             res.status(200).json(result)
         }
+    })
+
+})
+
+router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
+    const vehicleNo = req.params.VehicleNo
+    console.log(vehicleNo, "nooo")
+    // const status = 'Transfer_Closed';
+    // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
+//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    sql = `SELECT  COALESCE(SUM(closekm), 0) AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
+    db.query(sql, [vehicleNo], (err, result) => {
+        if (err) {
+            console.log("err", err)
+            res.json({ message: "error fetching data", success: false })
+        }
+
+        if (result) {
+            res.status(200).json(result)
+        }
+        console.log(result,"pp")
     })
 
 })
@@ -2371,7 +2401,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
 router.get('/customerratenamedata/:customerdata', (req, res) => {
     const customer = req.params.customerdata;
     console.log(customer, "cusssssssssssssssssss")
-    db.query('select rateType,TimeToggle from customers where customer = ?', [customer], (err, result) => {
+    db.query('select rateType,TimeToggle,hybrid from customers where customer = ?', [customer], (err, result) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;

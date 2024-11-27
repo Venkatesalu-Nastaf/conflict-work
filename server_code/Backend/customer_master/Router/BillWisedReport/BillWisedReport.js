@@ -11,7 +11,7 @@ router.get('/customerBilledDetails', (req, res) => {
                 return reject('Error fetching individual billing details');
             }
             resolve(result);
-            
+
         });
     });
 
@@ -21,6 +21,7 @@ router.get('/customerBilledDetails', (req, res) => {
                 return reject('Error fetching group billing details');
             }
             resolve(result);
+            console.log(result, 'result groupbilling');
         });
     });
 
@@ -50,6 +51,8 @@ router.get('/customerBilledDetails', (req, res) => {
 // get Trip Advance || Received Amount
 router.get('/getTripAdvance', (req, res) => {
     const { Tripid } = req.query;
+    console.log(Tripid, 'tripidadvance');
+
     const tripidArray = Array.isArray(Tripid) ? Tripid.map(Number) : [Number(Tripid)];
     db.query("SELECT tripid,customeradvance FROM tripsheet WHERE tripid IN (?)", [tripidArray], (error, result) => {
         if (error) {
@@ -88,8 +91,8 @@ router.put('/updateInvoiceStatus', async (req, res) => {
     }
 
     // Prepare the queries
-    const updateTransferTable = `UPDATE Transfer_list SET BillReportStatus = "Success" WHERE Invoice_no IN (?)`;
-    const updateGroupTable = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE InvoiceNo IN (?)`;
+    const updateTransferTable = `UPDATE Transfer_list SET BillReportStatus = "Success" WHERE Grouptrip_id IN (?)`;
+    const updateGroupTable = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE ReferenceNo IN (?)`;
     const updateIndividualTable = `UPDATE Individual_Billing SET BillReportStatus = "Success" WHERE Invoice_No IN (?)`;
 
     try {
@@ -138,7 +141,6 @@ router.put('/updateInvoiceStatus', async (req, res) => {
 
 router.post('/addCollect', (req, res) => {
     const { collectedAmount, bankname } = req.body;
-    console.log(collectedAmount, bankname, "bankkkkkkkkkkkkkk");
     if (!bankname || !collectedAmount) {
         return res.status(400).json({ message: 'Bank name and collected amount are required' });
     }
@@ -161,7 +163,6 @@ router.post('/addCollect', (req, res) => {
         const capitalAmount = results[0].capital || 0;
         const updatedTotalin = parseInt(currentTotalin) + parseInt(collectedAmount); // Add the collected amount to the current totalin
         const totalcapital = parseInt(collectedAmount) + parseInt(capitalAmount)
-        console.log(updatedTotalin, totalcapital, 'bankkkkk', bankname);
 
         // Now, update the totalin value in the database
         const updateQuery = "UPDATE bankaccountdetails SET totalin = ?,capital=? WHERE bankname = ?";
@@ -170,7 +171,6 @@ router.post('/addCollect', (req, res) => {
                 console.error('Error updating totalin:', err);
                 return res.status(500).json({ message: 'Database error' });
             }
-            console.log(result, 'sssssssssssssss');
             res.status(200).json({ message: 'Totalin value updated successfully', result });
         });
     });
@@ -200,48 +200,68 @@ router.post('/getBalanceAmount', (req, res) => {
 
 // update BillwiseReport to get balance amount
 router.put('/updateBalanceAmount', async (req, res) => {
-    const { uniqueVoucherId, TotalCollectAmount } = req.body;
-
-    // Validate input
-    if (!Array.isArray(uniqueVoucherId) || !Array.isArray(TotalCollectAmount) || uniqueVoucherId.length !== TotalCollectAmount.length) {
-        return res.status(400).json({ error: 'Invalid input data' });
-    }
-
-    // Prepare the query
+    const { uniqueVoucherId, finalTotalColletedAmount,
+        finalTotalBalanceAmount, finalTdsPlusCollected } = req.body;
     const updateQuery = `
         UPDATE BillWiseReceipt
-        SET Collected = ?, TotalBalance = ?
-        WHERE voucherID = ?;
+        SET Collected = ?, TotalBalance = ?,TotalCollected = ?
+        WHERE voucherID IN (?);
     `;
+    db.query(
+        updateQuery,
+        [finalTotalColletedAmount, finalTotalBalanceAmount, finalTdsPlusCollected, uniqueVoucherId],
+        (error, result) => {
+            if (error) {
+                console.error('Error updating balance:', error);
+                return res.status(500).json({ error: 'Database update failed' });
+            }
 
-    try {
-        // Use a transaction to ensure all updates are done together
-        await db.beginTransaction();
-
-        for (let i = 0; i < uniqueVoucherId.length; i++) {
-            const voucherId = uniqueVoucherId[i];
-            const collectedAmount = TotalCollectAmount[i];
-
-            const totalBalance = '0';
-
-            await new Promise((resolve, reject) => {
-                db.query(updateQuery, [collectedAmount, totalBalance, voucherId], (error, result) => {
-                    if (error) {
-                        return reject(error);
-                    }
-                    resolve(result);
-                });
-            });
+            console.log('Update successful:', result);
+            res.status(200).json({ message: 'Balance updated successfully', result });
         }
+    );
 
-        // Commit transaction
-        await db.commit();
-        res.status(200).json({ message: 'Balance amounts updated successfully' });
-    } catch (error) {
-        // Rollback transaction in case of an error
-        await db.rollback();
-        res.status(500).json({ error: 'Failed to update balance amounts', details: error.message });
-    }
+
+    // Validate input
+    // if (!Array.isArray(uniqueVoucherId) || !Array.isArray(TotalCollectAmount) || uniqueVoucherId.length !== TotalCollectAmount.length) {
+    //     return res.status(400).json({ error: 'Invalid input data' });
+    // }
+
+    // // Prepare the query
+    // const updateQuery = `
+    //     UPDATE BillWiseReceipt
+    //     SET Collected = ?, TotalBalance = ?
+    //     WHERE voucherID = ?;
+    // `;
+
+    // try {
+    //     // Use a transaction to ensure all updates are done together
+    //     await db.beginTransaction();
+
+    //     for (let i = 0; i < uniqueVoucherId.length; i++) {
+    //         const voucherId = uniqueVoucherId[i];
+    //         const collectedAmount = TotalCollectAmount[i];
+
+    //         const totalBalance = '0';
+
+    //         await new Promise((resolve, reject) => {
+    //             db.query(updateQuery, [collectedAmount, totalBalance, voucherId], (error, result) => {
+    //                 if (error) {
+    //                     return reject(error);
+    //                 }
+    //                 resolve(result);
+    //             });
+    //         });
+    //     }
+
+    //     // Commit transaction
+    //     await db.commit();
+    //     res.status(200).json({ message: 'Balance amounts updated successfully' });
+    // } catch (error) {
+    //     // Rollback transaction in case of an error
+    //     await db.rollback();
+    //     res.status(500).json({ error: 'Failed to update balance amounts', details: error.message });
+    // }
 });
 
 // router.put('/updateBalanceAmount',(req,res)=>{

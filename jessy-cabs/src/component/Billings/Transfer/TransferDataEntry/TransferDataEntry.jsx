@@ -26,9 +26,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import {  CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-const TransferDataEntry = ({ stationName, organizationNames }) => {
-
+const TransferDataEntry = ({stationName, organizationNames }) => {
   const {
     rows,
     error,
@@ -53,7 +53,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     info,
     infoMessage,
     servicestation,
-    // handleserviceInputChange,
+    handleserviceInputChange,
     handleShow,
     handleCancel,
     handleClickGenerateBill,
@@ -76,9 +76,10 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleRemove,
     loading,
     setLoading,
-    // setServiceStation,
+    setServiceStation,
     setInfo,
      setINFOMessage,
+     handlecustomer,isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -172,21 +173,24 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       size="small"
                       value={customer || ''}
                       options={organizationNames}
-                      disabled={groupdisable} 
+                     
+                      onChange={(event, value) => handlecustomer(value)}
 
-                       onChange={(event, value) => {
-                        if (!groupId) {
-                          setCustomer(value)
-                        } else {
+                      //  onChange={(event, value) => {
+                      //   if (!groupId) {
+                      //     setCustomer(value)
+                          
+                      //   }
+                      //    else {
                         
-                          setInfo(true)
-                          setINFOMessage("not change customer ")
-                        }
-                        }}
+                      //     setInfo(true)
+                      //     setINFOMessage("not change customer ")
+                      //   }
+                      //   }}
                       // onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Organization" name='customer'  disabled={groupdisable} inputRef={params.inputRef} />
+                          <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                         );
                       }}
                     />
@@ -269,9 +273,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       // value={groupId ? groupstation : servicestation }
                       // inputValue={groupId ? groupstation : servicestation || ""}
                       // inputValue={ servicestation || ""}
-                      // options={stationName.map((option) => ({
-                      //     label:option.Stationname
-                      //   }))}
+                      options={Statename.map((option) => ({
+                          label:option.state
+                        }))}
                         // options={stationName
                         //   .filter((option) => option.Stationname !== "All") // Filter out "All" before mapping
                         //   .map((option) => ({
@@ -290,10 +294,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       //   }
 
                       // }}
+                      onChange={(event)=>setServiceStation(event.target.value)}
                       // onChange={(event, value) => handleserviceInputChange(event, value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Stations" name='station' inputRef={params.inputRef}
+                          <TextField {...params} label="State" name='station' inputRef={params.inputRef}
                           //  value={groupId ? groupstation : servicestation }  
                              />
                         );
@@ -320,12 +325,21 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
+                  {invoiceno ? <></>:
                   <div className="input">
-                    <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
+                    {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
+                    <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
                   </div>
+}
+                  {groupId && customer ? <div className="input">
+                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button> */}
+                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</LoadingButton>
+                  </div>:
                   <div className="input">
-                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button>
+                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button> */}
+                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</LoadingButton>
                   </div>
+}
                 </div>
               </div>
             </div>

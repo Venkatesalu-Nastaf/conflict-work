@@ -26,7 +26,7 @@ import { CircularProgress } from '@mui/material';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
-const TransferList = ({ stationName, organizationNames }) => {
+const TransferList = ({ stationName, organizationNames,Statename }) => {
     const {
         rows,
         actionName,
@@ -56,7 +56,7 @@ const TransferList = ({ stationName, organizationNames }) => {
         // setLoading
         info,
         infoMessage,
-        setUserStations
+        // setUserStations
 
     } = useTransferlist();
 
@@ -65,12 +65,12 @@ const TransferList = ({ stationName, organizationNames }) => {
 
     const Transfer_read = permissions[6]?.read;
     // console.log(stationName,"nn")
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (stationName?.length > 0) {
-            setUserStations(stationName)
-        }
-      }, [stationName])
+    //     if (stationName?.length > 0) {
+    //         setUserStations(stationName)
+    //     }
+    //   }, [stationName])
 
     return (
         <div className="TransferList-form main-content-form Scroll-Style-hide">
@@ -176,8 +176,8 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         size="small"
                                         value={servicestation}
                                         // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
-                                        options={stationName.map((option) => ({
-                                            label: option.Stationname,
+                                        options={Statename.map((option) => ({
+                                            label: option.state,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {

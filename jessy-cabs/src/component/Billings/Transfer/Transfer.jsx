@@ -10,7 +10,7 @@ import TransferList from './TransferList/TransferList';
 import TransferReport from './TransferReport/TransferReport';
 import { PdfData } from './TransferReport/PdfContext';
 
-const Transfer = ({ stationName, organizationNames }) => {
+const Transfer = ({ stationName, organizationNames,Statename }) => {
 
   const [value, setValue] = useState("transferlist");
   const { setBillingPage, setTransferReport } = PdfData()
@@ -44,8 +44,8 @@ const Transfer = ({ stationName, organizationNames }) => {
                 <Tab label="Transfer Report" value="TransferReport" />
               </TabList>
             </Box>
-            <TabPanel value="transferlist"><TransferList stationName={stationName} organizationNames={organizationNames} /></TabPanel>
-            <TabPanel value="dataentry"><TransferDataEntry stationName={stationName} organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="transferlist"><TransferList  Statename={Statename} stationName={stationName} organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="dataentry"><TransferDataEntry  stationName={stationName} organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="TransferReport"><TransferReport stationName={stationName} /></TabPanel>
           </TabContext>
         </Box>

@@ -567,7 +567,7 @@ const useDrivercreation = () => {
             try {
                 const response = await fetch(`${apiUrl}/TemplateForDriverCreation`);
                 if (response.status === 200) {
-                    const userDataArray = await response.json();
+                    const userDataArray = await response.json();    
                     console.log("Fetched data:", userDataArray);
     
                     if (userDataArray.length > 0) {
@@ -586,37 +586,52 @@ const useDrivercreation = () => {
         fetchData();
     }, [apiUrl],[templateMessageData]);
     
-    // Additional useEffect to monitor state changes
-    // useEffect(() => {
-    //     if (templateMessageData) {
-    //         console.log("templateMessageData after fetch:", templateMessageData, 'TemplateDriver');
-        
-    // }, [templateMessageData]);
-    
 
-  useEffect(() => {
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(`${apiUrl}/organizationdata`);
+//         if (response.status === 200) {
+
+//           const userDataArray = await response.json();
+//           if (userDataArray.length > 0) {
+//             setOrganisationSendEmail(userDataArray[0])
+//             setDatatrigger(!datatrigger)
+
+//           } else {
+//             // setErrorMessage('User data not found.');
+//             // setError(true);
+//           }
+//         }
+//       }
+//       catch {
+//       }
+//     };
+//     fetchData();
+//   }, [apiUrl, datatrigger]);
+//   console.log(organistaionsendmail,"dataatatta")
+
+useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/organizationdata`);
-        if (response.status === 200) {
-
-          const userDataArray = await response.json();
-          if (userDataArray.length > 0) {
-            setOrganisationSendEmail(userDataArray[0])
-            setDatatrigger(!datatrigger)
-
-          } else {
-            // setErrorMessage('User data not found.');
-            // setError(true);
-          }
+        try {
+            const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
+            if (response.status === 200) {
+                const userDataArray = await response.json();
+                  console.log(userDataArray,'userdata');
+                if (userDataArray.length > 0) {
+                    setOrganisationSendEmail(userDataArray[0])
+                    // setDatatrigger(!datatrigger)
+                } else {
+                    setErrorMessage('User data not found.');
+                    setError(true);
+                }   
+            }
         }
-      }
-      catch {
-      }
+        catch {
+        }
     };
     fetchData();
-  }, [apiUrl, datatrigger]);
-//   console.log(organistaionsendmail,"dataatatta")
+}, [apiUrl]);
 
 const handlecheckmaildriver = async (lastBookingno) => {
     try {
@@ -626,15 +641,14 @@ const handlecheckmaildriver = async (lastBookingno) => {
             Drivername: book.drivername,
             UserName: book.username,
             password: book.userpassword,
-            Sendmailauth: organistaionsendmail.Sender_Mail,
-            Mailauthpass: organistaionsendmail.EmailApp_Password,
+            Sendmailauth: organistaionsendmail.Sendmailauth,
+            Mailauthpass: organistaionsendmail.Mailauthpass,
             Email: book.Email,
             templateMessageData
         };
 
         console.log("Sending data:", dataToSend); // For debugging purposes
         await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
-
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
     } catch (error) {

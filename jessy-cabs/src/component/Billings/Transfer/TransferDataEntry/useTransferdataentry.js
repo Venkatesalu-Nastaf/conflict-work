@@ -82,6 +82,11 @@ const useTransferdataentry = () => {
     const [loading, setLoading] = useState(false)
     const [matchTripID, setMatchTripID] = useState('')
 
+    // loading //
+    const [isbtnloading , setisbtnloading] = useState(false);
+    const [iseditloading , setiseditloading] = useState(false);
+    const [isbillloading , setisbillloading] = useState(false)
+
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -509,7 +514,6 @@ const useTransferdataentry = () => {
     //     console.log("sattaions added")
     //     setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     // };
-    // console.log(servicestation,"consolenavi")
 
     const handleRowSelection = (newSelectionModel) => {
         const selectedTripIds = newSelectionModel
@@ -600,11 +604,18 @@ const useTransferdataentry = () => {
     // my code 
     const handleButtonClickTripsheet = async () => {
         try {
+            
             // Validate rowSelectionModel
-            if (!rowSelectionModel) {
-                console.error('Error: rowSelectionModel is undefined or null');
-                return;
+            // if (!rowSelectionModel) {
+            //     console.error('Error: rowSelectionModel is undefined or null');
+            //     return;
+            // }
+            if (rowSelectionModel.length === 0) {
+                setError(true)
+                setErrorMessage("Please select the Row")
+                return
             }
+            setisbillloading(true)
 
             const id = rowSelectionModel;
             const tripDetails = selectTripid.map(item => ({
@@ -632,8 +643,12 @@ const useTransferdataentry = () => {
             const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
 
             // Sending PUT requests
-            const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
+            // const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
+            const response = await axios.put(`${apiUrl}/statusChangeTransfer/${groupId}/${servicestation}`);
             const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
+            const responseinvoice = await axios.get(`${apiUrl}/Transferlistgetinvoicenolast/${groupId}`);
+            const invoicenodata = responseinvoice.data;
+            const invoicenovalue =invoicenodata[0].Invoice_no
             console.log(response, Tripresponse, 'check response');
             // Setting selected customer data in local storage
             localStorage.setItem('selectedcustomer', customerdata);
@@ -642,10 +657,13 @@ const useTransferdataentry = () => {
             localStorage.setItem('selectedcustomerdata', decodedCustomer);
 
             // Constructing billing page URL
-            const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&State=${servicestation}&TransferReport=true&Status=Billed`;
+            // const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&State=${servicestation}&TransferReport=true&Status=Billed`;
+            const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoicenovalue}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&State=${servicestation}&TransferReport=true&Status=Billed`;
+
 
             // Redirecting to billing page
             window.location.href = billingPageUrl;
+            setisbillloading(false)
         }
         // catch (error) {
         //     // Handle any errors that occurred during the requests
@@ -657,15 +675,18 @@ const useTransferdataentry = () => {
             // Check if there's no response, indicating a network error
             if (error.message) {
                 setError(true);
+                setisbillloading(false)
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);
+                setisbillloading(false)
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
             } else {
                 // Fallback for other errors
                 setError(true);
+                setisbillloading(false)
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
@@ -1542,10 +1563,25 @@ const useTransferdataentry = () => {
     //     }
     // }
     // console.log(rows,"kk")
+    // const customerMotherdatagroupstation = async (customer) => {
+    //     console.log(customer, "enetr")
+    //     try {
+    //         const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+    //         const datas = resultresponse.data;
+    //         return datas
+
+    //     }
+    //     catch (err) {
+
+    //     }
+    // }
+
+  
+
     const customerMotherdatagroupstation = async (customer) => {
         console.log(customer, "enetr")
         try {
-            const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+            const resultresponse = await axios.get(`${apiUrl}/customerinvoicecreate/${customer}`)
             const datas = resultresponse.data;
             return datas
 
@@ -1554,6 +1590,16 @@ const useTransferdataentry = () => {
 
         }
     }
+    const handlecustomer = async(e)=>{
+        console.log(e,"ppp")
+        setCustomer(e)
+      const data =  await customerMotherdatagroupstation(e);
+    setServiceStation(data)
+        
+
+        
+    }
+
     // console.log(customerMotherdatagroupstation(customer),"ll")
 
     // console.log(customer,"CUST")
@@ -1564,6 +1610,7 @@ const useTransferdataentry = () => {
         console.log(presentIds, 'present');
         if (presentIds.length > 0) {
             setError(true)
+            setisbtnloading(false)
             setErrorMessage("Already Entered This TripID.")
             return
         }
@@ -1647,6 +1694,8 @@ const useTransferdataentry = () => {
                 const invalidTripIds = invalidTrips.map(trip => trip.tripid).join(', ');
                 console.log(`The following trip IDs are invalid (amount is zero or null): ${invalidTripIds}`);
                 setError(true);
+                setisbtnloading(false)
+
                 setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
             }
 
@@ -1659,6 +1708,7 @@ const useTransferdataentry = () => {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
                 }
+                setisbtnloading(true)
 
                 const fromdate = rows[0]?.startdate;
                 // const stationsName = rows[0]?.department;
@@ -1703,6 +1753,7 @@ const useTransferdataentry = () => {
 
                 await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
                 setSuccess(true);
+                setisbtnloading(false)
                 setSuccessMessage("Successfully added");
                 console.log(transferlist, 'listtransfer');
 
@@ -1717,15 +1768,18 @@ const useTransferdataentry = () => {
                 // Check if there's no response, indicating a network error
                 if (error.message) {
                     setError(true);
+                    setisbtnloading(false)
                     setErrorMessage("Check your internet connection");
                     // console.log('Network error');
                 } else if (error.response) {
                     setError(true);
+                    setisbtnloading(false)
                     // Handle other Axios errors (like 4xx or 5xx responses)
                     setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
                 } else {
                     // Fallback for other errors
                     setError(true);
+                    setisbtnloading(false)
                     setErrorMessage("An unexpected error occurred: " + error.message);
                 }
             }
@@ -1737,6 +1791,7 @@ const useTransferdataentry = () => {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
                 }
+                setisbtnloading(true)
                 const fromdate2 = rows[0]?.startdate;
                 const enddate = rows[rows.length - 1]?.startdate;
                 const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');
@@ -1770,6 +1825,7 @@ const useTransferdataentry = () => {
 
                 if (data) {
                     setError(true);
+                    setisbtnloading(false)
                     setErrorMessage("Already Tripid Id inserted");
                     return
                 }
@@ -1806,6 +1862,7 @@ const useTransferdataentry = () => {
 
                 const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
                 setSuccess(true)
+                setisbtnloading(false)
                 setSuccessMessage("Successfully Added")
                 setRows([])
 
@@ -1830,15 +1887,18 @@ const useTransferdataentry = () => {
                 // Check if there's no response, indicating a network error
                 if (error.message) {
                     setError(true);
+                    setisbtnloading(false)
                     setErrorMessage("Check your internet connection");
                     // console.log('Network error');
                 } else if (error.response) {
                     setError(true);
+                    setisbtnloading(false)
                     // Handle other Axios errors (like 4xx or 5xx responses)
                     setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
                 } else {
                     // Fallback for other errors
                     setError(true);
+                    setisbtnloading(false)
                     setErrorMessage("An unexpected error occurred: " + error.message);
                 }
             }
@@ -1958,7 +2018,7 @@ const useTransferdataentry = () => {
                     setCustomer(response.data[0].Organization_name);
                     setInvoiceno(response.data[0].Invoice_no);
                     setBillingdate(response.data[0].Billdate);
-                    setServiceStation(response.data[0].Stations)
+                    setServiceStation(response.data[0].State)
 
 
                     // Second API call to get tripsheet details using transferTripId
@@ -1993,7 +2053,19 @@ const useTransferdataentry = () => {
                         setSuccessMessage("Successfully Listed");
                     }
                 } else {
+                    setRows([]);
+                    setFromDate();
+                    setToDate();
+
+                    setCustomer();
+                    setInvoiceno();
+                    setBillingdate();
+                    setServiceStation()
+                    setError(true);
+                    setErrorMessage("no data found")
+                            
                     console.log('No Trip_id found for the given GroupTripId');
+                   
                 }
             } catch (error) {
                 console.log(error, 'error');
@@ -2070,6 +2142,7 @@ const useTransferdataentry = () => {
         setToDate,
         info,
         servicestation,
+        setServiceStation,
         // handleserviceInputChange,
         handleShow,
         handleCancel,
@@ -2093,7 +2166,7 @@ const useTransferdataentry = () => {
         loading,
         setLoading,
         setInfo,
-        infoMessage, setINFOMessage,
+        infoMessage, setINFOMessage,handlecustomer, isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading
 
     };
 };

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     clientext: {
         fontSize: '13px',
-        width: '100px'
+        width: '90px'
 
     },
     clientsubtext: {
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     text2: {
         fontSize: '11px',
         paddingTop: 5,
+        width:"60%"
     },
     text3: {
         fontSize: '12px',
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename, commonStateAdress, billingGroupDetails }) => {
+const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename, commonStateAdress, billingGroupDetails, customerData, stationData }) => {
     const [address1, setAddress1] = useState('')
     const [totalAmount, setTotalAmount] = useState('')
     const [extraKmAmount, setExtraKmAmount] = useState('')
@@ -168,10 +169,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const organisationimage = imagename
     const customStateDatas = commonStateAdress
 
-    console.log(customStateDatas, 'customStateDatas', customStateDatas.length)
-    console.log(billingGroupDetails, 'customerbilling', customStateDatas);
 
-    console.log(customStateDatas[0]?.gstno, 'Custom state gstno ')
     useEffect(() => {
         if (invdata) {
             let totalamount = 0
@@ -222,7 +220,6 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const groupigst = billingGroupDetails[0]?.gstTax;
     const billingGroupCGST = Math.round(fullAmount * groupgst / 100 || 0)
     const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
-    console.log(groupgst, 'billinggst', billingGroupCGST, billingGroupIGST);
 
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
@@ -234,7 +231,15 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const igstFullFormattedAmount = igstFullAmount.toFixed(0)
     const tripsheetnos = invdata?.length
     const rupeestext = numWords(parseInt(formattedFullAmount));
-    console.log('rupees', rupeestext);
+
+    // final gst amount
+    const cgstcalc = customerData[0]?.gstTax / 2;
+    const sgstcalc = customerData[0]?.gstTax / 2;
+    const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
+
+    const igstcalc = customerData[0]?.gstTax;
+    const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
+    console.log(customer, 'pdf222');
 
     return (
         <PDFDocument>
@@ -245,6 +250,13 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                     </View>
                     <View style={styles.headingsection}>
                         <View style={{ marginBottom: '5px' }}>
+                            <Text style={styles.text1}>{organisationdetailfill[0]?.organizationname}</Text>
+                            <Text style={styles.text2}>{stationData[0]?.address}</Text>
+                            <Text style={styles.text2}>{stationData[0]?.state}</Text>
+                            <Text style={styles.text2}>{organisationdetailfill[0]?.contactEmail}</Text>
+                            <Text style={styles.text2}>
+                                Tel: {organisationdetailfill[0]?.telephone || 'N/A'}, Mob: {organisationdetailfill[0]?.contactPhoneNumber || 'N/A'}
+                            </Text>
                             {/* <Text style={styles.text1}>JESSY CABS</Text>
                             <Text style={styles.text2}>No:8/7, 11th Street,Nandanam(Extn.)</Text>
                             <Text style={styles.text2}>Nadanam,Chennai-600 035</Text>
@@ -254,7 +266,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                           {console.log('organisationdetailfill:', organisationdetailfill)}
 {console.log('newStateforpdf:', customStateDatas)} */}
 
-                            {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ? (
+                            {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ? (
                                 // Render this view if newStateforpdf has values
                                 <>
 
@@ -281,7 +293,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                         Tel: {organisationdetailfill[0]?.telephone || 'N/A'}, Mob: {organisationdetailfill[0]?.contactPhoneNumber || 'N/A'}
                                     </Text>
                                 </>
-                            )}
+                            )} */}
 
                             {/* <Text style={styles.text1}>{organisationdetailfill[0].organizationname}</Text>
                             <Text style={styles.text2}>{organisationdetailfill[0].addressLine1}</Text>
@@ -296,9 +308,12 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                 {/* <Image src={`${apiUrl}/public/org_logo/${organisationimage}`} style={styles.logo} /> */}
                             </View>
                             <View style={{ flexDirection: 'row', marginRight: '0px', position: 'relative', top: '15px' }}>
+                                <Text style={[styles.gstno, { fontSize: 10 }]}>
+                                    GSTIN: {stationData[0]?.gstno}
+                                </Text>
                                 {/* <Text style={styles.gstno}>GSTIN  :  33AALCCn0190M1ZK</Text> */}
                                 {/* <Text style={styles.gstno}>GSTIN: {organisationdetailfill[0].gstnumber}</Text> */}
-                                {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ? (
+                                {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ? (
                                     <Text style={[styles.gstno, { fontSize: 10 }]}>
                                         GSTIN: {customStateDatas[0]?.gstno}
                                     </Text>
@@ -307,7 +322,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                         GSTIN: {organisationdetailfill[0]?.gstnumber}
                                     </Text>
                                 )
-                                }
+                                } */}
                             </View>
                         </View>
                     </View>
@@ -315,28 +330,35 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                     <View style={styles.maincontent}>
                         <View style={styles.clientdiv}>
                             <View style={styles.clientnamediv}>
-                                <View style={{ flexDirection: 'row', paddingBottom: 4 }}>
-                                    <Text style={styles.clientext}>Client Name : </Text>
-                                    <View style={{ flexDirection: 'column' }}>
+                                <View style={{ flexDirection: 'row', paddingBottom: 4 ,alignItems:"baseline"}}>
+                                    <Text style={styles.clientext}>Client Name </Text> 
+                                     <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+                                    <View style={{ flexDirection: 'column',width:"50%" }}>
                                         <Text style={styles.clientsubtext}>{customer}</Text>
-                                        {billingGroupDetails.length > 0 ? <Text style={styles.clientsubtext}>{billingGroupDetails[0]?.address1}</Text> : <Text style={styles.clientsubtext}>{address1}</Text>}
+                                        <Text style={styles.clientsubtext}>{customerData[0]?.address1}</Text>
                                         {/* <Text style={styles.clientsubtext}>{address1}</Text> */}
 
                                     </View>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={styles.clientext}>GST IN : </Text>
-                                    {billingGroupDetails.length > 0 ? <Text style={styles.clientsubtext}>{billingGroupDetails[0]?.gstnumber}</Text> : <Text style={styles.clientsubtext}>{gst}</Text>}
+                                <View style={{ flexDirection: 'row' ,alignItems:"baseline"}}>
+                                    <Text style={styles.clientext}>GST IN  </Text>
+                                    <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+
+                                    <Text style={styles.clientsubtext}>{customerData[0]?.gstnumber}</Text>
                                 </View>
                             </View>
 
                             <View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={styles.billtext}>Bill No:</Text>
+                                <View style={{ flexDirection: 'row',alignItems:"baseline"}}>
+                                    <Text style={styles.billtext}>Bill No</Text>
+                                    <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+
                                     <Text style={styles.billtextinvoice}>{invoiceno}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={styles.billtextdate}>Bill Date:</Text>
+                                <View style={{ flexDirection: 'row' ,alignItems:"baseline"}}>
+                                    <Text style={styles.billtextdate}>Bill Date</Text>
+                                    <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
+
                                     <Text style={styles.billtextdatetext}>{invoiceDate}</Text>
                                 </View>
                             </View>
@@ -404,9 +426,29 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                     <Text style={{ width: '120px', fontSize: '11px' }}>SUB TOTAL: </Text>
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount || 0}</Text>
                                 </View>
-                                {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ?
+                                {
+                                    customerData[0].state === stationData[0].state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
+                                        <>
+                                            <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                                                <Text style={{ width: '120px', fontSize: '11px' }}>CGST {cgstcalc}% on {fullAmount}: </Text>
+                                                <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', }}>
+                                                <Text style={{ width: '120px', fontSize: '11px' }}>SGST {sgstcalc}% on {fullAmount}:</Text>
+                                                <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                                            </View>
+                                        </>
+                                        :
+                                        <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', }}>
+                                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '120px', fontSize: '11px' }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '120px', fontSize: '11px' }}>GST</Text>}
+                                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{igstAmount}</Text> : <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>0</Text>}
+                                        </View>
+                                    // customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ?
+
+                                }
+                                {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ?
                                     <>
                                         <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                             {billingGroupDetails.length > 0 ? <Text style={{ width: '120px', fontSize: '11px' }}>CGST {groupgst}% on {fullAmount}: </Text> : <Text style={{ width: '120px', fontSize: '11px' }}>CGST {calgst}% on {fullAmount}: </Text>}
@@ -421,7 +463,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                         {billingGroupDetails.length > 0 ? <Text style={{ width: '120px', fontSize: '11px' }}>IGST {groupigst}% on {fullAmount}:</Text> : <Text style={{ width: '120px', fontSize: '11px' }}>IGST {gstAmount}% on {fullAmount}:</Text>}
                                         {billingGroupDetails.length > 0 ? <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{billingGroupIGST.toFixed(0)}</Text> : <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{igst.toFixed(0)}</Text>}
                                     </View>
-                                }
+                                } */}
 
                                 {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
                                     <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
@@ -447,7 +489,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
 
                     <View style={styles.totalsuminitial}>
-                        {gstAmount === 0 ? (
+                        {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 15 }}>
                                 <Text style={{ fontSize: 11, }}>NOTE:</Text>
                                 <Text style={{ fontSize: 10, marginTop: 5 }}>

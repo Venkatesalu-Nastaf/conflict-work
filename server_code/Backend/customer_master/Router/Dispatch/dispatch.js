@@ -537,14 +537,21 @@ router.get('/getdatafromboookingvalue/:bookingno',(req,res)=>{
 })
 router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
-  const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-  const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+  // const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+  // const formattedToDate = moment(toDate).format('YYYY-MM-DD');
   db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)",
     [Travelsname, fromDate, toDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
       }
-      return res.status(200).json(results)
+      const resultsdata = results.map(result => ({
+        ...result, // Spread the existing properties
+        vpermettovendor: result.vpermettovendor || 0, // Default to 0 if null or undefined
+        vendortoll: result.vendortoll || 0, // Add default for another field if needed
+        advancepaidtovendor: result.advancepaidtovendor || 0
+      }));
+      // return res.status(200).json(results)
+      return res.status(200).json(resultsdata)
     }
   )
 })
@@ -558,6 +565,7 @@ router.get('/tripsheetvendordata', (req, res) => {
     if (results.length === 0) {
       return res.status(400).json({ error: "Data not Found" });
     }
+    
     return res.status(200).json(results)
   }
   )

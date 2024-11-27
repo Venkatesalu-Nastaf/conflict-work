@@ -9,7 +9,7 @@ import TabContext from "@mui/lab/TabContext";
 import BankAccount from './BankAccount/BankAccount';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
-const BillingMain = ({ organizationNames }) => {
+const BillingMain = ({ organizationNames,Statename }) => {
   const [value, setValue] = React.useState("billing");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -26,7 +26,7 @@ const BillingMain = ({ organizationNames }) => {
                 <Tab label="BankAccount Details" value="bankAccountdetails" />
               </TabList>
             </Box>
-            <TabPanel value="billing"><Billing /></TabPanel>
+            <TabPanel value="billing"><Billing Statename={Statename} /></TabPanel>
             <TabPanel value="IndividualBilling"><PaymentDetail organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>

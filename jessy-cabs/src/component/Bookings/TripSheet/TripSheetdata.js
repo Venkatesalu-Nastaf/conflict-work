@@ -85,19 +85,42 @@ export const Apps = [
 
 // Hire Types
 
+// export const HireTypes = [
+//   {
+//     option: "Attached Vehicle",
+//     optionvalue: "attachedvehicle",
+//   },
+//   {
+//     option: "Out Side Travels",
+//     optionvalue: "outsidetravels",
+//   },
+//   {
+//     option: "Own  Vehicle",
+//     optionvalue: "ownvehicle",
+//   },
+//   {
+//     option: "DCO Vehicle",
+//     optionvalue: "dcovehicle",
+//   },
+// ];
 export const HireTypes = [
   {
-    option: "Attached Vehicle",
-    optionvalue: "attachedvehicle",
+    Option:"Attached Vehicle",
+    optionvalue:"Attached Vehicle",
   },
   {
-    option: "Out Side Travels",
-    optionvalue: "outsidetravels",
+    Option:"OutSide Travels",
+    optionvalue:"OutSide Travels",
   },
   {
-    option: "Own  Vehicle",
-    optionvalue: "ownvehicle",
+    Option:"Own Vehicle",
+    optionvalue:"Own Vehicle",
   },
+  {
+    Option:"DCO Vehicle",
+    optionvalue:"DCO Vehicle",
+  }
+
 ];
 // Department
 export const Department = [

@@ -7,6 +7,10 @@ import dayjs from 'dayjs';
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book,Totaltimes, totalkm,TotalDays }) => {
 
 
+  const startkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
+  const endkm = tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm
+  const Totalkm =Number(startkm) - Number(endkm)
+
   const targetRef = useRef();
   return (
     <>
@@ -107,28 +111,22 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   </thead>
                   <tbody>
                     <tr>
-                      <td id='table-datas'><span >Starting</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("YYYY-MM-DD"):""}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
-                    </tr>
-                    {/* <tr>
-                      <td id='table-datas'><span >Starting</span></td>
-                      <td id='table-datas'><span >{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm}</span></td>
-                    </tr> */}
-                    {/* <tr>
-                      <td id='table-datas'><span >Closing</span></td>
-                      <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
-                    </tr> */}
-                    <tr>
+                 
+
                       <td id='table-datas'><span >Closing</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
+                    </tr>
+                  
+                    <tr>
+                      <td id='table-datas'><span >Starting</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("YYYY-MM-DD"):""}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
+
+                      
+                  
                     </tr>
                     
                     <tr>
@@ -137,7 +135,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                       <td id='table-datas'><span >{TotalDays}</span>days</td>
                       {/* <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData}</span></td> */}
                       <td id='table-datas'><span >{Totaltimes}</span></td>
-                      <td id='table-datas'><span >{totalkm}</span></td>
+                      <td id='table-datas'><span >{Totalkm}</span></td>
                     </tr>
                   </tbody>
 

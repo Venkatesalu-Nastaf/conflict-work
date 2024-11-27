@@ -349,30 +349,27 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate, "f", formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate,customer)
 
-  db.query('select * from customers where customerType=?', [customer], (err, results) => {
+
+  let query = 'SELECT * FROM customers';
+let params = [];
+
+if (customer !== "All") {
+    query += ' WHERE customerType = ?';
+    params.push(customer);
+}
+
+    db.query(query, params, (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
-    console.log(results)
+ 
     const datas = results?.map((data) => data.customer)
-    //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
-    //    const sql=`SELECT 
-    //     customer, 
-    //     SUM(totalcalcAmount) AS totalAmount
-    // FROM 
-    //     tripsheet
-    // WHERE 
-    //     tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-    //     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    //     AND customer IN (?)
-    // GROUP BY 
-    //     customer `;
     const sql = `
   SELECT 
     customer,orderbyemail,billingno,
-    SUM(totalcalcAmount) AS totalAmount
+    SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
   FROM 
     tripsheet
   WHERE 
@@ -382,6 +379,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   GROUP BY 
     customer
 `;
+
     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
       if (err) {
         console.log(err)

@@ -50,6 +50,7 @@ const useTransferreport = () => {
   const [billingGroupDetails, setBillingGroupDetails] = useState('')
 
   const [loading, setLoading] = useState(false)
+  const [isButtonloading, setisButtonLoading] = useState(false)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
@@ -83,7 +84,7 @@ const useTransferreport = () => {
       setTransferReport(false)
     }
   });
-  console.log(servicestation, 'stateee');
+  // console.log(servicestation, 'stateee');
 
   useEffect(() => {
     if (transferReport === false || transferReport === undefined) {
@@ -340,7 +341,7 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, location, customer]);
 
 
 
@@ -939,7 +940,8 @@ const useTransferreport = () => {
     setBilledStatusCheck,
     loading, setLoading,
     billingGroupDetails,
-    setBillingGroupDetails
+    setBillingGroupDetails,
+    isButtonloading, setisButtonLoading
   };
 };
 

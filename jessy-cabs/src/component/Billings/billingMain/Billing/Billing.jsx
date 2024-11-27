@@ -12,6 +12,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { faBuilding} from '@fortawesome/free-solid-svg-icons';
 //dialog box
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -61,7 +62,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const Billing = () => {
+const Billing = ({Statename}) => {
     const {
         actionName,
         error,
@@ -83,10 +84,10 @@ const Billing = () => {
         selectedBankAccount,
         bankOptions,
         handlePopupClose,
-        organizationaddress1,
+        // organizationaddress1,
         handleKeyenterinvoicdeno,
         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,invoicestate,
-        discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,
+        discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,handleserviceInputChange,datastate,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
 
         // ... (other state variables and functions)
@@ -103,6 +104,7 @@ const Billing = () => {
     const Billing_new = permissions[5]?.new;
     const { logo } = useData()
     const { particularPdf, organizationDetail } = PdfData()
+   
   
     return (
         <div className="form-container form-container-billing main-content-billing">
@@ -162,6 +164,29 @@ const Billing = () => {
                                     onKeyDown={handleKeyenterinvoicdeno}
                                 />
                             </div>
+                      
+                            <div className="input">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
+                                    </div>
+                                    <Autocomplete
+                                        fullWidth
+                                        id="free-Statebill"
+                                        freeSolo
+                                        size="small"
+                                        value={datastate}
+                                        // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                                        options={Statename.map((option) => ({
+                                            label: option.state,
+                                        }))}
+                                        onChange={(event, value) => handleserviceInputChange(event, value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="State" inputRef={params.inputRef}value={datastate} />
+                                            );
+                                        }}
+                                    />
+                                    </div>
                             <div className="input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
@@ -177,6 +202,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
+        
                             <div className="input">
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
@@ -192,7 +218,10 @@ const Billing = () => {
                                         onChange={(date) => handleDateChange(date, 'Billingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={book?.Billingdate} />
+                                            <TextField {...inputProps} inputRef={inputRef}
+                                            
+                                            value={book?.Billingdate}
+                                            />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -1253,12 +1282,13 @@ const Billing = () => {
                             <InvoicePdf
                                 book={book}
                                 logo={logo}
-                                organizationaddress={organizationaddress1}
+                                // organizationaddress={organizationaddress1}
                                 organizationdata={organizationDetail}
                                 customerData={customerData}
                                 billdatadate={billingdate}
                                 stateDetails={stateDetails}
                                 otherStations={dataotherStations}
+                                invoicedata = {invoicestate || book.invoiceno}
                             />
                         </Box>
                         {/* <Paymentinvoice

@@ -88,19 +88,24 @@ router.post('/billing', (req, res) => {
 // });
 
 router.post('/updateGroupBilling', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo } = req.body;
-console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, ReferenceNo,'updateGroup');
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, State, ReferenceNo } = req.body;
+console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,State, ReferenceNo,'updateGroup');
 
   // Ensure that a ReferenceNo is provided to identify the row to update
   if (!ReferenceNo) {
     return res.status(400).json({ error: 'ReferenceNo is required to update the record' });
   }
 
+  // const updateGroupBillingQuery = `
+  //     UPDATE Group_billing 
+  //     SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+  //         Trips = ?, Amount = ?, Trip_id = ?, station = ?
+  //     WHERE ReferenceNo = ?`;
   const updateGroupBillingQuery = `
-      UPDATE Group_billing 
-      SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
-          Trips = ?, Amount = ?, Trip_id = ?, station = ?
-      WHERE ReferenceNo = ?`;
+  UPDATE Group_billing 
+  SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+      Trips = ?, Amount = ?, Trip_id = ?, State = ?
+  WHERE ReferenceNo = ?`; 
 
   const selectGroupTripIdQuery = `
       SELECT ReferenceNo AS Grouptrip_id FROM Group_billing WHERE Trip_id IN (?)`;
@@ -112,7 +117,7 @@ console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip
       UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
 
   // Step 1: Update Group_billing
-  db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station, ReferenceNo], (err, result) => {
+  db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), State, ReferenceNo], (err, result) => {
     if (err) {
       console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to update the record in MySQL' });
@@ -166,11 +171,11 @@ console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip
 
 
 router.post('/GroupBillingList', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station } = req.body;
-  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station, 'groupbill');
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,State } = req.body;
+  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, 'groupbill');
 
   const insertBillingQuery = `
-    INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, station)
+    INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,State)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const selectGroupTripIdQuery = `
@@ -182,8 +187,9 @@ router.post('/GroupBillingList', (req, res) => {
   const updateGroupTripIdInTripsheetQuery = `
     UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
 
+
   // Step 1: Insert into Group_billing
-  db.query(insertBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), station], (err, result) => {
+  db.query(insertBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','),State], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }
@@ -209,7 +215,9 @@ router.post('/GroupBillingList', (req, res) => {
               if (updateError) {
                 return res.status(500).json({ error: 'Failed to update GroupTripId in tripsheet' });
               }
-              console.log(finalResult, 'finalResult');
+              console.log(finalResult, 'finalResult',Trip_id,"kk");
+            
+            
 
               return res.status(200).json({ message: 'Inserted and updated successfully', groupTripId });
             });
@@ -222,6 +230,111 @@ router.post('/GroupBillingList', (req, res) => {
   });
 });
 
+
+// router.get('/max-invoiceno/:datas', (req, res) => {
+//   const state = req.params.datas;  // Get the 'state' parameter from the request query
+
+//   const query = `
+//     SELECT GREATEST(
+//         COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+//         COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+//         COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+//     ) + 1 AS max_invoiceno;
+//   `;
+
+//   // Pass the state value three times as parameters for each subquery
+//   db.query(query, [state, state, state], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({
+//         error: 'Failed to retrieve the maximum invoice number',
+//         details: err,
+//       });
+//     }
+
+//     if (result.length > 0) {
+//       return res.status(200).json({
+//         message: 'Maximum InvoiceNo retrieved successfully',
+//         maxInvoiceno: result[0].max_invoiceno,
+//       });
+//     } else {
+//       return res.status(404).json({
+//         message: 'No invoice numbers found for the specified state',
+//       });
+//     }
+//   });
+// });
+
+
+const getNextInvoiceNo1 = (state) => {
+  const query = `
+    SELECT GREATEST(
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+    ) + 1 AS max_invoiceno;
+  `;
+
+  // Run the query to find the maximum invoice number
+  return new Promise((resolve, reject) => {
+    db.query(query, [state, state, state], (err, result) => {
+      if (err) {
+        reject(err); // Reject on error
+      } else if (result.length > 0) {
+        // const nextInvoiceNo = `IV${result[0].max_invoiceno}`;
+        const nextInvoiceNo = result[0].max_invoiceno
+        resolve(nextInvoiceNo); // Resolve with the next invoice number
+      } else {
+        resolve(null); // Handle case where no result is found
+      }
+    });
+  });
+};
+
+
+router.post('/billgeneratecoveringbill', async(req, res) => {
+  const { InvoiceDate,Trip_id,ReferenceNo,State,Invoiceno } = req.body;
+  console.log(InvoiceDate,Trip_id,ReferenceNo,State,Invoiceno, 'groupbill');
+  
+
+  const insertBillingQuery = `
+  INSERT INTO GroupBillinginvoice_no(Referenceno,Invoice_No,Tripid,State)
+  VALUES (?, ?, ?,?)`;
+
+  const updateGroupTripIdInTripsheetQuery = `
+  UPDATE  Group_billing SET InvoiceDate = ?,InvoiceNo = ? WHERE ReferenceNo= ?`;
+
+    const invoiceQueries = Trip_id.map(async(tripId,index) => {
+      // const nextInvoiceNo = await getNextInvoiceNo1(State);
+     
+      return new Promise(async(resolve, reject) => {
+   
+       const nextInvoiceNo = await getNextInvoiceNo1(State);
+       console.log(`IV${nextInvoiceNo + index}`,"pp")
+        db.query(insertBillingQuery, [ReferenceNo,`IV${nextInvoiceNo + index}`,tripId, State], (invoiceErr, invoiceResult) => {
+          if (invoiceErr) {
+            reject(invoiceErr);
+          } else {
+            resolve(invoiceResult);
+          }
+        });
+      });
+    });
+
+    Promise.all(invoiceQueries)
+      .then(() => {
+        db.query(updateGroupTripIdInTripsheetQuery, [InvoiceDate, Invoiceno, ReferenceNo], (updateErr, updateResult) => {
+          if (updateErr) {
+            return res.status(500).json({ error: 'Failed to update Group_billing', details: updateErr });
+          }
+          return res.status(200).json({ message: 'Inserted and updated successfully' });
+        });
+      })
+      .catch((invoiceErr) => {
+        return res.status(500).json({ error: 'Failed to insert into GroupBillinginvoice_no', details: invoiceErr });
+      });
+
+    })
+  
 
 
 // router.post('/GroupBillingList', (req, res) => {
@@ -256,7 +369,7 @@ router.post('/GroupBillingList', (req, res) => {
 router.get('/ListDetailsWithStation', (req, res) => {
   const { Customer, FromDate, ToDate, station } = req.query;
 
-  const sqlquery = "SELECT * FROM Group_billing WHERE Customer=? AND station=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 0 DAY)";
+  const sqlquery = "SELECT * FROM Group_billing WHERE Customer=? AND State=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 0 DAY)";
 
   db.query(sqlquery, [Customer, station, FromDate, ToDate], (err, result) => {
     if (err) {
@@ -295,6 +408,17 @@ router.get('/ReferenceNo', (req, res) => {
 router.get('/GroupReference/:ReferenceNo', (req, res) => {
   const ReferenceNo = req.params.ReferenceNo;
   const sqlquery = "select * from Group_billing where ReferenceNo = ?";
+  db.query(sqlquery, [ReferenceNo], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+    }
+    return res.status(200).json(result)
+  })
+})
+
+router.get('/GroupReferenceforinvoiceno/:ReferenceNo', (req, res) => {
+  const ReferenceNo = req.params.ReferenceNo;
+  const sqlquery = "select * from GroupBillinginvoice_no where ReferenceNo = ?";
   db.query(sqlquery, [ReferenceNo], (err, result) => {
     if (err) {
       console.log(err, 'error');

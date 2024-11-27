@@ -33,10 +33,11 @@ const useExeclpage = () => {
 
         { key: "VendorName", header: "Vendor Name", width: 150 },
         { key: "Vendor", header: "Vendor", width: 120 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
-        { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
+        // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
         { key: "tripsheetdate", header: "Date", width: 120 },
@@ -45,7 +46,7 @@ const useExeclpage = () => {
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point / Shed", width: 180 },
-        { key: "useage", header: "Drop Point", width: 120 },
+        { key: "useage", header: "Drop Point", width: 200},
         { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
@@ -80,7 +81,9 @@ const useExeclpage = () => {
         { key: "parking", header: "Parking", width: 120 },
         { key: "toll", header: "Toll", width: 100 },
         { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
-        { key: "totalcalcAmount", header: "Amount With All Taxes", width: 200 }
+        { key: "totalcalcAmount", header: "Amount With All Taxes", width: 200 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+
 
 
         // Add more keys as needed
@@ -95,15 +98,17 @@ const useExeclpage = () => {
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
-        { key: "vehType", header: "Vehicle Make", width: 180 },
+        // { key: "vehType", header: "Vehicle Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
 
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         { key: "tripsheetdate", header: "Date", width: 120 },
-        { key: "employeeno", header: "User Name", width: 150 },
+        // { key: "employeeno", header: "User Name", width: 150 },
+        { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point", width: 180 },
@@ -125,7 +130,8 @@ const useExeclpage = () => {
         { key: "totalkm1", header: "Total Km", width: 120 },
         { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        { key: "opsremark", header: "Ops Remarks", width: 150 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+        { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
 
@@ -212,6 +218,7 @@ const useExeclpage = () => {
                 });
 
                 data.forEach((singleData, index) => {
+                    console.log(data,'datas of excel datss')
                 
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -219,13 +226,14 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
@@ -322,9 +330,10 @@ const useExeclpage = () => {
                     singleData2['location'] = location
                     singleData2["Gender"] = singleData2["gender"] ? singleData2["gender"] : "N/A"
                     singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
-                    singleData2["VendorName"] = " Jesscy Cabs"
+                    singleData2["VendorName"] = " Jessy Cabs"
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
@@ -384,8 +393,9 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel) => {
+    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation)
+        
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -440,14 +450,15 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
@@ -536,7 +547,8 @@ const useExeclpage = () => {
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
@@ -599,6 +611,8 @@ const useExeclpage = () => {
                         particularPdf={[pdfData]}
                         organisationdetail={organizationsdetail1}
                         imagename={imageorganisation}
+                        customerData={customerData}
+                        stationData={stationData}
 
                     />
                 ).toBlob();
@@ -671,7 +685,8 @@ const useExeclpage = () => {
 
                 const mergedPDFBytes = await mergedPDFDocument.save();
                 //   const fileName = `PDF_${index + 1}.pdf`; 
-                const fileName = `PDF_${rowSelectionModel[index]}.pdf`;
+                const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
+                // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
                 // console.log(blob,"pdfblob")
                 // zip.file(fileName, blob);
                 pdffolder.file(fileName, mergedPDFBytes);

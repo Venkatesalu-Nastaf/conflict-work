@@ -9,8 +9,10 @@ import { APIURL } from "../../../url";
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "Status", headerName: "Status", width: 130 },
+    { field: "State", headerName: "Station", width: 130 },
+    { field: "InvoiceNo", headerName: "IvnoiceGenerated", width: 130 },
     { field: "ReferenceNo", headerName: "Reference No", width: 130 },
-    { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
+    { field: "InvoiceDate", headerName: "BillDate", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "Customer", headerName: "Customer", width: 130 },
     { field: "FromDate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
@@ -80,26 +82,39 @@ const useCoversubmit = () => {
             pdf.setFont('helvetica', 'normal');
             pdf.text("Cover Submit", 10, 10);
 
+            // const tableData = [[
+            //     row['id'],
+            //     row['Status'],
+            //     row['InvoiceNo'],
+            //     row['InvoiceDate'],
+            //     row['Customer'],
+            //     row['FromDate'],
+            //     row['ToDate'],
+            //     row['Trips'],
+            //     row['Amount']
+            // ]];
+
             const tableData = [[
                 row['id'],
                 row['Status'],
-                row['InvoiceNo'],
-                row['InvoiceDate'],
+                // row['InvoiceNo'],
+                row['ReferenceNo'],
+                row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Customer'],
-                row['FromDate'],
-                row['ToDate'],
+                row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
+                row['ToDate'] ? dayjs(row['ToDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Trips'],
                 row['Amount']
             ]];
 
             pdf.autoTable({
-                head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
+                head: [['Sno', 'Status', 'ReferenceNo', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
                 body: tableData,
                 startY: 20,
             });
 
             const pdfBlob = pdf.output('blob');
-            saveAs(pdfBlob, `${row['InvoiceNo']}.pdf`);
+            saveAs(pdfBlob, `${row['ReferenceNo']}.pdf`);
         });
     };
 
@@ -145,12 +160,12 @@ const useCoversubmit = () => {
             setErrorMessage('Select a Orgaization')
             return
           } 
-          if (!servicestation) {
-            setError(true)
-            setErrorMessage('Select a Station')
-            return
-          } 
-        if (servicestation === "" || servicestation === "All") {
+        //   if (!servicestation) {
+        //     setError(true)
+        //     setErrorMessage('Select a Station')
+        //     return
+        //   } 
+        if (servicestation === "" ) {
             try {
                 const response = await axios.get(`${apiUrl}/ListDetails`,
                     {
@@ -170,7 +185,7 @@ const useCoversubmit = () => {
                         id: index + 1,
                     }));
                     setRows(rowsWithUniqueId);
-                    setServiceStation("All")
+                    // setServiceStation("All")
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                 } else {
@@ -202,7 +217,7 @@ const useCoversubmit = () => {
                 }
             }
         }
-        else if (servicestation !== "" && servicestation !== "All") {
+        else if (servicestation !== "") {
             try {
                 const response = await axios.get(`${apiUrl}/ListDetailsWithStation`,
                     {
@@ -257,11 +272,11 @@ const useCoversubmit = () => {
     }
 
 
-    const handleButtonClickTripsheet = (params) => {
-        const data = params.row;
-        const groupbillingurl = `/home/billing/coveringbill?tab=groupbilling&Tripid=${data.Trip_id || ''}&InvoiceNo=${data.InvoiceNo || ''}&InvoiceColumn=${invoiceColumn || ''}&InvoiceDate=${data.InvoiceDate}&FromDate=${data.FromDate || ''}&ToDate=${data.ToDate || ''}&ReferenceNo=${data.ReferenceNo}`
-        window.location.href = groupbillingurl
-    };
+    // const handleButtonClickTripsheet = (params) => {
+    //     const data = params.row;
+    //     const groupbillingurl = `/home/billing/coveringbill?tab=groupbilling&Tripid=${data.Trip_id || ''}&InvoiceNo=${data.InvoiceNo || ''}&InvoiceColumn=${invoiceColumn || ''}&InvoiceDate=${data.InvoiceDate}&FromDate=${data.FromDate || ''}&ToDate=${data.ToDate || ''}&ReferenceNo=${data.ReferenceNo}`
+    //     window.location.href = groupbillingurl
+    // };
     // const handleShow = useCallback(async () => {
 
     //     try {
@@ -322,7 +337,7 @@ const useCoversubmit = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
-        handleButtonClickTripsheet
+        // handleButtonClickTripsheet
     };
 };
 

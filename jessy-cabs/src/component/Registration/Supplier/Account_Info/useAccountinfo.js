@@ -260,6 +260,8 @@ const useAccountinfo = () => {
     vehicleInfo: '',
     driverName: "",
     vehRegNo: "",
+    TimeToggle: false,
+    
     // stations: ""
 
   });
@@ -463,6 +465,7 @@ const useAccountinfo = () => {
       cperson: '',
       driverName: "",
       vehRegNo: "",
+      TimeToggle:false,
       // stations: ""
 
 

@@ -166,7 +166,7 @@ const LogDetails = () => {
   return (
 
     <>
-      <div className='main-content-form'>
+      <div className='main-content-form' >
         <div className='input-field vendor-statement-input-field' style={{ alignItems: 'flex-end' , marginBottom:"15px"}}>
 
           <div className="input">

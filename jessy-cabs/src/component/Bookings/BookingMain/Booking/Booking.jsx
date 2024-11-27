@@ -12,6 +12,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import InputLabel from '@mui/material/InputLabel';
 import {
   Duty,
   Hire,
@@ -72,6 +73,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -149,7 +151,8 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
     selectedCustomerdriver,
     handleSelectAll, handlecheckbox, selectAll, deletefile,
 
-     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
+     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
+     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -259,7 +262,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
         <div>
           <div className="booking-top-division Scroll-Style">
             <span className="d-grid">
-              <label>Booking</label>
+              <label>Booking ID </label>
               <input
                 type="text"
                 id="standard-size-bookingno"
@@ -1010,6 +1013,55 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 }}
               />
             </div>
+            <div className='input time booking-start-time-input'>
+
+
+              <FormControl fullWidth size="small" sx={{marginTop:"20px", width:"85%",marginLeft:"30px"}}>
+                <InputLabel id="demo-simple-select-label">Escort</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={formData.escort || selectedCustomerData.escort || book.escort || "No"}
+                  label="escort"
+                  // onChange={handleBookEscortChange}
+                  onChange={(event) => {
+                    const selectedValue = event.target.value || "No";
+                    setFormData({ ...formData, escort: selectedValue });
+                    setSelectedCustomerData({ ...selectedCustomerData, escort:selectedValue });
+                    setBook({ ...book, escort: event.target.value });
+                    setEscort(selectedValue);
+                  }}
+                >
+                  <MenuItem value={"Yes"}>Yes</MenuItem>
+                  <MenuItem value={"No"}>No</MenuItem>
+
+                </Select>
+              </FormControl>
+                
+                  </div>
+
+                  <div className='input time booking-start-time-input'>
+                    <FormControl fullWidth size="small" sx={{marginTop:"20px", width:"85%",marginLeft:"25px"}}>
+                      <InputLabel className="input-type-grid">Airport Transfer</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        value={formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No"}
+                        label='transferreport'
+                        // onChange={handleAirportTransferChange}
+                        onChange={(event) => {
+                          setFormData({ ...formData, transferreport: event.target.value });
+                          setSelectedCustomerData({ ...selectedCustomerData,transferreport: event.target.value });
+                          setBook({ ...book,transferreport: event.target.value });
+                          setTransferreport(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                </div>
+
 
             {isEditMode ? (
               <div>
@@ -1088,17 +1140,28 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
-                    Edit
-                  </Button>
+                  // <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  //   Edit
+                  // </Button>
+                  <LoadingButton  loading={isEditbtnload} variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  Edit
+                </LoadingButton>
                 ) : (
-                  <Button
-                    disabled={!Booking_new}
-                    variant="contained"
-                    onClick={handleAdd}
-                  >
-                    Add
-                  </Button>
+                  // <Button
+                  //   disabled={!Booking_new}
+                  //   variant="contained"
+                  //   onClick={handleAdd}
+                  // >
+                  //   Add
+                  // </Button>
+                  <LoadingButton
+                  disabled={!Booking_new}
+                  variant="contained"
+                  onClick={handleAdd}
+                  loading={isAddbtnload}
+                >
+                  Add
+                </LoadingButton>
                 )}
               </div>
             </div>

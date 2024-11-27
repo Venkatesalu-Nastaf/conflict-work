@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -44,6 +46,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import EditIcon from '@mui/icons-material/Edit';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
 import Avatar from "@mui/material/Avatar";
@@ -73,12 +76,16 @@ const EmployeeCreation = ({ stationName }) => {
     error,
     success,
     info,
+    setIsEditable,
+    isEditable,
     warning,
     successMessage,
     errorMessage,
     warningMessage,
     infoMessage,
     book,
+    isOpenvehcile,
+    setIsOpenvehicle,
     handleClick,
     handleChange,
     handleRowClickUser,
@@ -100,7 +107,6 @@ const EmployeeCreation = ({ stationName }) => {
     }
   }, [actionName, handleClick]);
 
-
   const [stationNameforUSer, setSationNameforUser] = useState([])
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -120,7 +126,15 @@ const EmployeeCreation = ({ stationName }) => {
     }
   }, [stationName]);
  
-
+  const handleClickOpen = () => {
+    setIsOpenvehicle(true)
+  }
+  const handleClose = () => {
+    setIsOpenvehicle(false)
+  }
+  const handleEditClick = () => {
+    setIsEditable(true); // Enable edit mode
+  };
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
@@ -174,9 +188,7 @@ const EmployeeCreation = ({ stationName }) => {
                     style={{ width: '100%' }}
                   />
                 </div>
-               
-
-
+           
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
@@ -201,8 +213,6 @@ const EmployeeCreation = ({ stationName }) => {
                     </span>
                   </div>
                 </div>
-
-
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faMailBulk} size="lg" />
@@ -375,7 +385,7 @@ const EmployeeCreation = ({ stationName }) => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input" style={{ width: "160px" }}>
+                <div className="input" style={{ width: "160px",marginRight:'30px' }}>
                   {isEditMode ? (
                     <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
@@ -387,8 +397,76 @@ const EmployeeCreation = ({ stationName }) => {
                     <div style={{ display: "flex", justifyContent: "end" }}>
                       <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
                     </div>
-                  }
-                </div>
+                  } 
+                </div> 
+                                           
+                <div>
+                  <Button disabled={!UserCreation_new} variant="outlined" onClick={handleClickOpen} style={{marginLeft:'30px'}}>
+                    Email Info
+                  </Button>
+
+                  <Dialog open={isOpenvehcile} onClose={handleClose}>
+                    <DialogContent>
+                      <div style={{ position: 'relative' }}>
+                        {/* Sender Mail Field */}
+                        <div style={{ marginBottom: '20px', width: '100%' }}>
+                          <label htmlFor="Sender_Mail" style={{ display: 'block', marginBottom: '5px' }}>
+                            Sender Mail:
+                          </label>
+                          <TextField
+                            sx={{
+                              width: '100%',
+                              filter: isEditable ? 'none' : 'blur(1px)', 
+                            }}
+                            size="small"
+                            id="Sender_Mail"
+                            name="Sender_Mail"
+                            className="organisation-input-field"
+                            value={book.Sender_Mail || ''}
+                            onChange={handleChange}
+                            disabled={!isEditable} // Disable input if not editable
+                          />
+                        </div>
+
+                        {/* App Password Field */}
+                        <div style={{ width: '100%' }}>
+                          <label htmlFor="EmailApp_Password" style={{ display: 'block', marginBottom: '5px' }}>
+                            App Password:
+                          </label>
+                          <TextField
+                            sx={{
+                              width: '100%',
+                              filter: isEditable ? 'none' : 'blur(1px)', // Apply blur if not editable
+                            }}
+                            size="small"
+                            id="EmailApp_Password"
+                            name="EmailApp_Password"
+                            className="organisation-input-field"
+                            value={book.EmailApp_Password || ''}
+                            onChange={handleChange}
+                            disabled={!isEditable} // Disable input if not editable
+                          />
+                        </div>
+
+                        {/* Edit Button */}
+                        {!isEditable && (
+                          <Button
+                            style={{
+                              position: 'absolute',
+                              top: '-10px',
+                              right: '-15px',
+                              cursor: 'pointer',
+                            }}
+                            onClick={handleEditClick}
+                          >
+                            <EditIcon />
+                          </Button>
+                        )}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div> 
+
               </div>
             </div>
             <div className='alert-popup-main'>

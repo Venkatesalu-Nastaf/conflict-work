@@ -11,7 +11,7 @@ import { blue } from "@mui/material/colors";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationdetail, imagename, tripno }) => {
+const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationdetail, imagename, tripno, customerData, stationData }) => {
 
   const targetRef = useRef();
   const { setPdfPrint } = PdfData()
@@ -52,7 +52,13 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
+  const [tripRelasingTime, setTripReleasingTime] = useState('')
   const [tripClosetime, setTripClosetime] = useState('')
+  const [tripStartTime, setTripStartTime] = useState('')
+  const [tripStartKm, setTripStartKm] = useState('')
+  const [tripReportKm, setTripReportKm] = useState('')
+  const [tripReleaseKm, setTripReleaseKm] = useState('')
+  const [tripCloseKm, setTripCloseKm] = useState('')
   const [triptotaldays, setTripTotalDays] = useState('')
   const [triptotaltime, setTripTotalTime] = useState('')
   const [triptotalkms, setTriptotalKms] = useState('')
@@ -108,7 +114,13 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     let Tripstartdate = ''
     let TripClosedate = ''
     let Reporttime = ''
+    let Releasingtime = ''
+    let Starttime = ''
     let CloseTime = ''
+    let ReportKm = ''
+    let ReleaseKm = ""
+    let StartKm = ""
+    let CloseKm = ""
     let Totaldays = ''
     let Totaltime = ''
     let Totalkms = ''
@@ -121,6 +133,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
+        console.log(li.TotalTimeWithoutAddHours, 'hcll');
+
         addressone = li.address1
 
         customers = li.customer
@@ -146,10 +160,16 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
-        Reporttime = li.reporttime
+        Reporttime = li.starttime
+        Starttime = li.reporttime
         CloseTime = li.closetime
+        Releasingtime = li.shedintime
+        ReportKm = li.startkm
+        StartKm = li.shedout
+        CloseKm = li.shedin
+        ReleaseKm = li.closekm
         Totaldays = li.totaldays
-        Totaltime = li.totaltime
+        Totaltime = li.TotalTimeWithoutAddHours
         Totalkms = li.totalkm1
         TotalParking = li.parking
         TotalToll = li.toll
@@ -160,6 +180,14 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
       })
     }
+    setTripReporttime(Reporttime)
+    setTripStartTime(Starttime)
+    setTripClosetime(Releasingtime)
+    setTripReleasingTime(CloseTime)
+    setTripReportKm(ReportKm)
+    setTripStartKm(StartKm)
+    setTripCloseKm(CloseKm)
+    setTripReleaseKm(ReleaseKm)
     setAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
@@ -186,8 +214,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
-    setTripReporttime(Reporttime)
-    setTripClosetime(CloseTime)
+    // setTripReporttime(Reporttime)
+    // setTripClosetime(CloseTime)
     setTripTotalDays(Totaldays)
     setTripTotalTime(Totaltime)
     setTriptotalKms(Totalkms)
@@ -337,8 +365,9 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     return time;
   }
 
-
-
+  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
+  //  const HclTotalKms = customerData[0]?.hybrid === 1 ? 
+  console.log(customerData, 'hybrid', particularPdf);
 
   return (
     <>
@@ -347,8 +376,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px' }}>
             <div className="customerdiv">
               <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
-              <h2 className="organisationtext">{orgaddress1}</h2>
-              <h2 className="organisationtext">{orgaddress3}</h2>
+              <h2 className="organisationtext">{stationData[0]?.address}</h2>
+              {/* <h2 className="organisationtext">{orgaddress3}</h2> */}
             </div>
             <div className="Taxinvoicediv">
               <h3 className="Taxinvoicetext">
@@ -366,15 +395,15 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
           <div className="mobilediv">
             <h2 className="organisationtext">Tel : {organisationdetails[0]?.telephone} Mob :  {organisationdetails[0]?.contactPhoneNumber}</h2>
 
-            <h2 className="organisationtext"> GST : {organisationdetails[0]?.gstnumber}</h2>
+            <h2 className="organisationtext"> GST : {stationData[0]?.gstno}</h2>
 
           </div>
 
-          <div style={{ display: 'flex', gap:20, border: '1.5px solid #000000', padding: 10,}}>
+          <div style={{ display: 'flex', gap: 20, border: '1.5px solid #000000', padding: 10, }}>
             <div className="clientFistDiv">
 
               <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
-              <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{addressCustomer}</span></p>
+              <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{customerData[0]?.address1}</span></p>
               <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName">{category}</span></p>
               <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
               <p className="detailstext" > <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
@@ -418,35 +447,36 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Starting</td>
-                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
-                    <td>{'-'}</td>
-                    <td>{'-'}</td>
+                    <td> Closing </td>
+                    <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
+                    {customerData[0]?.hybrid === 1 ? <td>{'-'}</td> : <td>{trimSeconds(tripClosetime)}</td>}
+                    {customerData[0]?.hybrid !== 1 ? <td>{tripReleaseKm}</td> : <td>{'-'}</td>}
                   </tr>
-                  <tr>
-                    <td>Reporting</td>
-                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
-                    <td>{tripReporttime ? trimSeconds(tripReporttime) : 0.00}</td>
-                    <td>{'-'}</td>
-                  </tr>
-                  <tr>
+                  {customerData[0]?.hybrid === 1 ? <tr>
                     <td>Releasing</td>
                     <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
                     {/* <td>{tripClosetime}</td> */}
-                    <td>{trimSeconds(tripClosetime)}</td>
-                    <td>{triptotalkms}</td>
-                  </tr>
+                    <td>{trimSeconds(tripRelasingTime)}</td>
+                    {customerData[0]?.hybrid == 1 ? <td>{hclKm}</td> : <td>{'-'}</td>}
+                  </tr> : ""}
+                  {customerData[0]?.hybrid === 1 ? <tr>
+                    <td>Reporting</td>
+                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{tripReporttime ? trimSeconds(tripReporttime) : 0.00}</td>
+                    {customerData[0]?.hybrid == 1 ? <td>0</td> : <td>{'-'}</td>}
+                  </tr> : ""}
                   <tr>
-                    <td> Closing </td>
-                    <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
-                    <td>{'-'}</td>
-                    <td>{'-'}</td>
+                    <td>Starting</td>
+                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
+                    {customerData[0]?.hybrid === 1 ? <td>{'-'}</td> : <td>{trimSeconds(tripStartTime)}</td>}
+                    {customerData[0]?.hybrid !== 1 ? <td>{tripStartKm}</td> : <td>{'-'}</td>}
                   </tr>
+
                   <tr>
                     <td>Total </td>
                     <td>{triptotaldays ? triptotaldays : 0}</td>
                     <td>{triptotaltime ? triptotaltime : 0.00}</td>
-                    <td>{triptotalkms ? triptotalkms : 0}</td>
+                    {customerData[0]?.hybrid === 1 ? <td> {hclKm}</td> : <td>{triptotalkms}</td>}
                   </tr>
                 </tbody>
               </table>
@@ -461,7 +491,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
           </div>
           <div>
-            <div style={{display: 'flex', alignItems: 'center', paddingTop: '20px'}}>
+            <div style={{ display: 'flex', alignItems: 'center', paddingTop: '20px' }}>
               <div>
                 {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' style={{ width: '375px', height: '100%' }} /> : <div></div>}
               </div>
@@ -472,7 +502,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               </div>
             </div>
             {routeData.length > 0 && (
-              <div className="tripsheet-RouteSummary" style={{marginTop:50}}>
+              <div className="tripsheet-RouteSummary" style={{ marginTop: 50 }}>
                 <h2>Route Summary</h2>
                 <ol type="1">
                   {routeData.map((data, index) => (
@@ -483,10 +513,10 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                 </ol>
               </div>
             )}
-                                  
+
           </div>
           <div >
-            {attachedImage ? <p className="attachtext" style={{marginTop:180}}>Attached Image</p> : <p className="attachtext"></p>}
+            {attachedImage ? <p className="attachtext" style={{ marginTop: 180 }}>Attached Image</p> : <p className="attachtext"></p>}
             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
               attachedImage.map((image, index) => (
                 <img key={index} src={image} alt='' className="attachimage" />

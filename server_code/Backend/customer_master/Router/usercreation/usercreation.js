@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
@@ -31,41 +30,44 @@ router.get('/TemplateUser--Creation', async (req, res) => {
         console.log(err,'errorrrr')
         return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log(results,"reesss")
+      // console.log(results,"reesss")
       return res.status(200).json(results);
-})
+})  
 })
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
-  const { username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, superAdmin } = book;
-  const { Sender_Mail, EmailApp_Password } = organistaionsendmail;
+  const { username, stationname, designation, organizationname,employeeid,EmailApp_Password,Sender_Mail, userpassword, active, email, mobileno, superAdmin } = book;
+  const { Sender_Email, Email_Password } = organistaionsendmail;
   const themesdata = "theme1";
+
   console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
-  console.log(username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, created_at);
+  console.log(Sender_Email,Email_Password, 'emilllllllllll');
+  
+  console.log(username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, created_at,);
   const idString = stationname.join(',');
   console.log(idString, "ff");
 
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid, userpassword, active,email,mobileno,theme,created_at,superAdmin)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname,employeeid, userpassword, active, email, mobileno, themesdata, created_at, superAdmin]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid,userpassword,EmailApp_Password,Sender_Mail,active,email,mobileno,theme,created_at,superAdmin)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname,employeeid, userpassword,EmailApp_Password,Sender_Mail,active, email, mobileno, themesdata, created_at, superAdmin]);
 
     // Set up the mail transporter
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: Sender_Mail,
-        pass: EmailApp_Password
+        user: Sender_Email,
+        pass: Email_Password
       }
     });
 
     // If templateMessageData exists, replace both username and userpassword placeholders
-    const emailContent = templateMessageData 
+    const emailContent = templateMessageData
       ? templateMessageData.replace(/\${username}/g, username).replace(/\${userpassword}/g, userpassword) // Global replacement
       : `<p>Hi ${username},<br>UserName: ${username}<br>Password: ${userpassword}</p>`;
 
     const mailOptions = {
-      from: Sender_Mail,
+      from: Sender_Email,
       to: email,
       subject: 'Credential Details',
       html: emailContent // Use the modified emailContent
@@ -384,7 +386,7 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
 
   const { username, designation,employeeid, userpassword, email, mobileno } = updatedata
 
-  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation,employeeid,  userpassword, email, mobileno, editid], (err, results) => {
+  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation,employeeid, userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
       return res.status(500).json({ Message: "Error updating data", err });
     }

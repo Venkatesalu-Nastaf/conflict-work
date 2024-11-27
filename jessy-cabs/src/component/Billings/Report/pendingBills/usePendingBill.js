@@ -13,7 +13,7 @@ const usePendingBill = () => {
         { field: 'BillDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
         { field: 'CustomerName', headerName: 'Customer Name', width: 180 },
         { field: 'TotalAmount', headerName: 'Bill Amount', width: 180 },
-        { field: 'Collected', headerName: 'Collected', width: 180 },
+        { field: 'TotalCollected', headerName: 'Collected', width: 180 },
         { field: 'TotalBalance', headerName: 'Balance', width: 180 },
         { field: 'Account', headerName: 'Account', width: 180 },
 
@@ -86,7 +86,7 @@ const usePendingBill = () => {
             const response = await axios.post(`${apiUrl}/${endpoint}`, { customerData });
 
             if (response.data && response.data.length > 0) {
-                const bills = addSerialNumber(response.data);
+                const bills = addSerialNumber(response.data);                
                 const totalAmount = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalAmount), 0);
                 const totalBalance = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalBalance), 0);
 

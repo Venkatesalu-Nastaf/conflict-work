@@ -290,7 +290,7 @@ const Cards = () => {
           <option value="12">December</option>
         </select>
       </div>
-      <div style={{ display: 'flex', gap: '5px' }}>
+      <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
         <div className="Cards" >
           {cardData.map((card, index) => (
             <div className="parentContainer cards-dashboard" key={index} >
@@ -306,9 +306,9 @@ const Cards = () => {
             </div>
           ))}
         </div>
-        <div>
+        {/* <div>
           <Updates />
-        </div>
+        </div> */}
       </div>
     </div>
   );

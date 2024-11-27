@@ -34,6 +34,14 @@
 .first-div {
     height: 97vh;
     overflow: auto;
+    padding: 0px 15px;
+    margin-top: 50px;
+}
+
+@media screen and (max-width: 1218.95px) {
+    .first-div {
+        padding: 0px 35px;
+    }
 }
 
 .first-div::-webkit-scrollbar {
@@ -50,15 +58,15 @@
 
     .left-div {
         /* width: 65vw; */
-        height: 88vh;
+        /* height: 88vh; */
         /* overflow: auto; */
         padding: 20px;
         display: grid;
     }
 
     .right-div {
-        height: 93vh;
-        padding: 20px;
+        /* height: 93vh; */
+        padding: 0px 30px;
         /* overflow: auto; */
     }
 }
@@ -69,14 +77,14 @@
     }
 
     .left-div {
-        width: 94vw;
+        /* width: 94vw; */
         padding: 20px 0px;
     }
 }
 
 @media screen and (min-width: 1219px) and (max-width: 1340px) {
     .right-div {
-        width: 25vw;
+        /* width: 25vw; */
     }
 }
 

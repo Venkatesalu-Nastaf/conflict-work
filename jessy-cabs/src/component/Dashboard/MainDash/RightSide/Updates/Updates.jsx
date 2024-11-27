@@ -18,7 +18,7 @@ const Updates = () => {
               <div className="updates-notification-division">
                 <span className="update-username">{update.name}</span>
                 <span> {update.noti}</span>
-                <span className="update-time">{update.time}..</span>
+                <span className="update-time"> {update.time}..</span>
               </div>
             </div>
           </div>

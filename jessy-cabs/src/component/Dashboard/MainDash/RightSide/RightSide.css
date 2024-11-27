@@ -18,7 +18,7 @@
     justify-content: space-around;
     margin-top: 60px;
     position: relative;
-    left: 20px;
+    /* left: 20px; */
   }
 }
 
@@ -37,7 +37,7 @@
 
 @media screen and (min-width: 769px) and (max-width: 971px) {
   .RightSide {
-    width: 100%;
+    width: 97%;
   }
 }
 
@@ -47,10 +47,11 @@
     flex-direction: row;
     width: max-content;
     gap: 20px;
-    justify-content: space-around;
+    justify-content: flex-start;
     margin-top: 0px;
     position: relative;
-    left: 40px;
+    /* left: 40px; */
+    width: 100%;
   }
 }
 
@@ -60,7 +61,7 @@
     flex-direction: row;
     /* width: max-content; */
     gap: 20px;
-    justify-content: space-around;
+    justify-content: flex-start;
     margin-top: 0px;
     position: relative;
     left: 10px;
@@ -99,6 +100,12 @@
 
 .area-chart {
   margin-top: 15px;
+}
+
+@media screen and (max-width: 1218.95px) {
+  .area-chart {
+    width: 96%;
+  }
 }
 
 @media screen and (min-width:769px) and (max-width: 1219px) {

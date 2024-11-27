@@ -47,39 +47,87 @@ const usePaymentdetails = () => {
   const handleExcelDownload = () => {
     const csvData = convertToCSV(rows);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "customer_details.csv");
+    saveAs(blob, "Individual_billing.csv");
   };
-  const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);
-    pdf.setFont("helvetica", "normal");
-    pdf.text("Customer Details", 10, 10);
-    const tableData = rows.map((row) => [
-      row["id"],
-      row["voucherno"],
-      row["printName"],
-      row["Billname"],
-      row["date"],
-      row["PaymentCategory"],
-      row["amount"],
-    ]);
-    pdf.autoTable({
-      head: [
-        [
-          "Sno",
-          "VoucherNo",
-          "Payment Date",
-          "Bill Name",
-          "Payment Category",
-          "Amount",
-        ],
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF();
+  //   pdf.setFontSize(12);
+  //   pdf.setFont("helvetica", "normal");
+  //   pdf.text("Customer Details", 10, 10);
+  //   const tableData = rows.map((row) => [
+  //     row["id"],
+  //     row["voucherno"],
+  //     row["printName"],
+  //     row["Billname"],
+  //     row["date"],
+  //     row["PaymentCategory"],
+  //     row["amount"],
+  //   ]);
+  //   console.log(rows,'datss of roew inndualbilling')
+  //   pdf.autoTable({
+  //     head: [
+  //       [
+  //         "Sno",
+  //         "VoucherNo",
+  //         "Payment Date",
+  //         "Bill Name",
+  //         "Payment Category",
+  //         "Amount",
+  //       ],
+  //     ],
+  //     body: tableData,
+  //     startY: 20,
+  //   });
+  //   const pdfBlob = pdf.output("blob");
+  //   saveAs(pdfBlob, "Customer_Details.pdf");
+  // };
+
+const handlePdfDownload = () => {
+  const pdf = new jsPDF();
+  pdf.setFontSize(12);
+  pdf.setFont("helvetica", "normal");
+  pdf.text("Customer Details", 10, 10);
+
+  // Map over the rows and format the Bill_Date
+  const tableData = rows.map((row) => [
+    row["id"],
+    row["Trip_id"],
+    row["State"],
+    row["Invoice_No"],
+    row["billing_no"],
+    row["Customer"],
+    dayjs(row["Bill_Date"]).format('DD-MM-YYYY'),
+    row["Amount"],
+    row["Status"],
+    row["guestname"]
+
+  ]);
+
+  console.log(rows, 'datss of roew inndualbilling');
+  
+  pdf.autoTable({
+    head: [
+      [
+        "Sno",
+        "TripSheetNo",
+        "State",
+        "Invoice No",
+        "Billing No",
+        "Organization",
+        "Bill Date",
+        "Total Amount",
+        "Status",
+        "Guest Name"
       ],
-      body: tableData,
-      startY: 20,
-    });
-    const pdfBlob = pdf.output("blob");
-    saveAs(pdfBlob, "Customer_Details.pdf");
-  };
+    ],
+    body: tableData,
+    startY: 20,
+  });
+
+  const pdfBlob = pdf.output("blob");
+  saveAs(pdfBlob, "Individual_Billing.pdf");
+};
+
 
   // for POPUP-----------------------
   const hidePopup = () => {

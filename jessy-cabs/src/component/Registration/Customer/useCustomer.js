@@ -87,52 +87,125 @@ const useCustomer = () => {
         }]);
     };
 
+    // const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
+    //     try {
+
+    //         const fileName = "customer_details"
+    //         // creating one worksheet in workbook
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         const columns = headers.map(key => ({ key, header: key }));
+    //         worksheet.columns = columns;
+    //         // updated the font for first row.
+    //         worksheet.getRow(1).font = { bold: true };
+    //         // Set background color for header cells
+    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' } // Green background color
+    //             };
+    //         });
+    //         worksheet.getRow(1).height = 30;
+    //         // loop through all of the columns and set the alignment with width.
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    //         rows.forEach((singleData, index) => {
+    //             console.log(singleData,'dats in customer excel')
+    //             worksheet.addRow(singleData);
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+    //         // loop through all of the rows and set the outline style.
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    //         // write the content using writeBuffer
+    //         const buf = await workbook.xlsx.writeBuffer();
+    //         // download the processed file
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         // removing worksheet's instance to create new one
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+
+    // }
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
         try {
-
-            const fileName = "customer_details"
-            // creating one worksheet in workbook
+            const fileName = "customer_details";
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
+    
+            const formattedRows = rows.map(row => {
+                const formattedRow = { ...row };
+                if (formattedRow.date) {
+                    formattedRow.date = dayjs(formattedRow.date).format('DD-MM-YYYY');
+                }
+                return formattedRow;
+            });
+    
             const columns = headers.map(key => ({ key, header: key }));
             worksheet.columns = columns;
-            // updated the font for first row.
+    
             worksheet.getRow(1).font = { bold: true };
-            // Set background color for header cells
+    
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' } // Green background color
+                    fgColor: { argb: '9BB0C1' }
                 };
             });
+            
             worksheet.getRow(1).height = 30;
-            // loop through all of the columns and set the alignment with width.
+            
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-            rows.forEach((singleData, index) => {
+    
+            formattedRows.forEach((singleData, index) => {
                 worksheet.addRow(singleData);
-                // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-                    // Set column width to the maximum of current width and cell length plus extra space
+                    const cellValue = singleData[column.key] || '';
+                    const cellLength = cellValue.toString().length;
+                    const currentColumnWidth = column.width || 0;
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-            // loop through all of the rows and set the outline style.
+    
             worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
                 const currentCell = row._cells;
-                // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
                     const cellAddress = singleCell._address;
-                    // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -141,81 +214,154 @@ const useCustomer = () => {
                     };
                 });
             });
-            // write the content using writeBuffer
+    
             const buf = await workbook.xlsx.writeBuffer();
-            // download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
-            console.error('<<<ERRROR>>>', error);
-            console.error('Something Went Wrong', error.message);
+            console.error('<<<ERROR>>>', error);
         } finally {
-            // removing worksheet's instance to create new one
             workbook.removeWorksheet(workSheetName);
         }
+    };
+    
+    
+    
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF({
+    //         orientation: "landscape",
+    //         unit: "mm",
+    //         format: "tabloid"
+    //     });
+    //     pdf.setFontSize(10);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("Customer Details", 10, 10);
+    //     const header = Object.keys(rows[0]);
+    //     // Extracting body
+    //     const body = rows.map(row => Object.values(row));
 
-    }
+    //     console.log(rows,'data in customer pdf')
+    //     let fontdata = 1;
+    //     if (header.length <= 13) {
+    //         fontdata = 16;
+    //     }
+    //     else if (header.length >= 14 && header.length <= 20) {
+    //         fontdata = 11;
+    //     } else if (header.length >= 21 && header.length <= 23) {
+    //         fontdata = 9;
+    //     }
+    //     else if (header.length >= 24 && header.length <= 26) {
+    //         fontdata = 7;
+    //     }
+    //     else if (header.length >= 27 && header.length <= 30) {
+    //         fontdata = 6;
+    //     }
+    //     else if (header.length >= 31 && header.length <= 35) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 36 && header.length <= 40) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 41 && header.length <= 46) {
+    //         fontdata = 2;
+    //     }
+    //     pdf.autoTable({
+    //         head: [header],
+    //         body: body,
+    //         startY: 20,
+    //         headStyles: {
+    //             // fontSize: 5,
+    //             fontSize: fontdata,
+    //             cellPadding: 1.5, // Decrease padding in header
+    //             minCellHeigh: 8,
+    //             valign: 'middle',
+    //             font: 'helvetica', // Set font type for body
+    //             cellWidth: 'wrap',
+    //         },
+
+    //         bodyStyles: {
+    //             fontSize: fontdata - 1,
+    //             valign: 'middle',
+    //             cellWidth: 'auto'
+    //             // Adjust the font size for the body
+    //         },
+    //         columnWidth: 'auto'
+
+    //     });
+    //     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+    //     // Scale content
+    //     pdf.scale(scaleFactor, scaleFactor);
+    //     const pdfBlob = pdf.output('blob');
+    //     saveAs(pdfBlob, 'Customer_Details.pdf');
+    // };
+
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
             format: "tabloid"
         });
-        pdf.setFontSize(10);
+    
+        pdf.setFontSize(10);  
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
+    
         const header = Object.keys(rows[0]);
-        // Extracting body
-        const body = rows.map(row => Object.values(row));
+    
+        const formattedRows = rows.map(row => {
+            const formattedRow = { ...row };
+            // Format the 'date' field if it exists
+            if (formattedRow.date) {
+                formattedRow.date = dayjs(formattedRow.date).format('DD-MM-YYYY');
+            }
+            return formattedRow;
+        });
+    
+        const body = formattedRows.map(row => Object.values(row));
+    
+        console.log(formattedRows, 'data in customer pdf');
+    
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
-        }
-        else if (header.length >= 14 && header.length <= 20) {
+        } else if (header.length >= 14 && header.length <= 20) {
             fontdata = 11;
         } else if (header.length >= 21 && header.length <= 23) {
             fontdata = 9;
-        }
-        else if (header.length >= 24 && header.length <= 26) {
+        } else if (header.length >= 24 && header.length <= 26) {
             fontdata = 7;
-        }
-        else if (header.length >= 27 && header.length <= 30) {
+        } else if (header.length >= 27 && header.length <= 30) {
             fontdata = 6;
-        }
-        else if (header.length >= 31 && header.length <= 35) {
+        } else if (header.length >= 31 && header.length <= 35) {
             fontdata = 4;
-        }
-        else if (header.length >= 36 && header.length <= 40) {
+        } else if (header.length >= 36 && header.length <= 40) {
             fontdata = 4;
-        }
-        else if (header.length >= 41 && header.length <= 46) {
+        } else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
+    
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
             headStyles: {
-                // fontSize: 5,
                 fontSize: fontdata,
-                cellPadding: 1.5, // Decrease padding in header
-                minCellHeigh: 8,
+                cellPadding: 1.5,
+                minCellHeight: 8,
                 valign: 'middle',
-                font: 'helvetica', // Set font type for body
+                font: 'helvetica',
                 cellWidth: 'wrap',
             },
-
             bodyStyles: {
                 fontSize: fontdata - 1,
                 valign: 'middle',
                 cellWidth: 'auto'
-                // Adjust the font size for the body
             },
             columnWidth: 'auto'
-
         });
+    
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        // Scale content
         pdf.scale(scaleFactor, scaleFactor);
+        
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };

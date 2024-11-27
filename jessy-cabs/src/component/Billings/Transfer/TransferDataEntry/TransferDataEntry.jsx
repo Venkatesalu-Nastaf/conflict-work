@@ -350,9 +350,9 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <>
-                  <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  {/* <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                     Download
-                  </Button>
+                  </Button> */}
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>

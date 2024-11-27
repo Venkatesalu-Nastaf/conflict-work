@@ -58,176 +58,345 @@ const useAccountinfo = () => {
 
 
 
+  // const handleExcelDownload = async () => {
+  //   const workbook = new Excel.Workbook();
+  //   const workSheetName = 'Worksheet-1';
+
+  //   try {
+
+  //     const fileName = "Account_Info"
+  //     // creating one worksheet in workbook
+  //     const worksheet = workbook.addWorksheet(workSheetName);
+  //     const headers = Object.keys(rows[0]);
+  //     //         console.log(headers,"hed")
+  //     const columns = headers.map(key => ({ key, header: key }));
+  //     worksheet.columns = columns;
+
+  //     // updated the font for first row.
+  //     worksheet.getRow(1).font = { bold: true };
+
+  //     // Set background color for header cells
+  //     worksheet.getRow(1).eachCell((cell, colNumber) => {
+  //       cell.fill = {
+  //         type: 'pattern',
+  //         pattern: 'solid',
+  //         fgColor: { argb: '9BB0C1' } // Green background color
+  //       };
+  //     });
+
+
+  //     worksheet.getRow(1).height = 30;
+  //     // loop through all of the columns and set the alignment with width.
+  //     worksheet.columns.forEach((column) => {
+  //       column.width = column.header.length + 5;
+  //       column.alignment = { horizontal: 'center', vertical: 'middle' };
+  //     });
+
+  //     rows.forEach((singleData, index) => {
+  
+  //       console.log(singleData,'data in acc excel')
+
+  //       worksheet.addRow(singleData);
+
+  //       // Adjust column width based on the length of the cell values in the added row
+  //       worksheet.columns.forEach((column) => {
+  //         const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+  //         const cellLength = cellValue.toString().length; // Get length of cell value as a string
+  //         const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+  //         // Set column width to the maximum of current width and cell length plus extra space
+  //         column.width = Math.max(currentColumnWidth, cellLength + 5);
+  //       });
+  //     });
+
+  //     // loop through all of the rows and set the outline style.
+  //     worksheet.eachRow({ includeEmpty: false }, (row) => {
+  //       // store each cell to currentCell
+  //       const currentCell = row._cells;
+
+  //       // loop through currentCell to apply border only for the non-empty cell of excel
+  //       currentCell.forEach((singleCell) => {
+
+  //         const cellAddress = singleCell._address;
+
+  //         // apply border
+  //         worksheet.getCell(cellAddress).border = {
+  //           top: { style: 'thin' },
+  //           left: { style: 'thin' },
+  //           bottom: { style: 'thin' },
+  //           right: { style: 'thin' },
+  //         };
+  //       });
+  //     });
+  //     // write the content using writeBuffer
+  //     const buf = await workbook.xlsx.writeBuffer();
+
+  //     // download the processed file
+  //     saveAs(new Blob([buf]), `${fileName}.xlsx`);
+  //   } catch (error) {
+  //     console.error('<<<ERRROR>>>', error);
+  //     console.error('Something Went Wrong', error.message);
+  //   } finally {
+  //     // removing worksheet's instance to create new one
+  //     workbook.removeWorksheet(workSheetName);
+  //   }
+
+  // }
+
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
 
     try {
+        const fileName = "Account_Info";
+        const worksheet = workbook.addWorksheet(workSheetName);
 
-      const fileName = "Account_Info"
-      // creating one worksheet in workbook
-      const worksheet = workbook.addWorksheet(workSheetName);
-      const headers = Object.keys(rows[0]);
-      //         console.log(headers,"hed")
-      const columns = headers.map(key => ({ key, header: key }));
-      worksheet.columns = columns;
+        // Define headers
+        const headers = Object.keys(rows[0]);
+        const columns = headers.map(key => ({ key, header: key }));
+        worksheet.columns = columns;
 
-      // updated the font for first row.
-      worksheet.getRow(1).font = { bold: true };
+        // Style the header row
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '9BB0C1' }, // Light blue background color
+            };
+        });
+        worksheet.getRow(1).height = 30;
 
-      // Set background color for header cells
-      worksheet.getRow(1).eachCell((cell, colNumber) => {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: '9BB0C1' } // Green background color
+        // Set default column alignment and width
+        worksheet.columns.forEach(column => {
+            column.width = column.header.length + 5;
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+        });
+
+        // Transform date format
+        const transformDate = (dateStr) => {
+            return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
         };
-      });
 
-
-      worksheet.getRow(1).height = 30;
-      // loop through all of the columns and set the alignment with width.
-      worksheet.columns.forEach((column) => {
-        column.width = column.header.length + 5;
-        column.alignment = { horizontal: 'center', vertical: 'middle' };
-      });
-
-      rows.forEach((singleData, index) => {
-
-
-        worksheet.addRow(singleData);
-
-        // Adjust column width based on the length of the cell values in the added row
-        worksheet.columns.forEach((column) => {
-          const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-          const cellLength = cellValue.toString().length; // Get length of cell value as a string
-          const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-          // Set column width to the maximum of current width and cell length plus extra space
-          column.width = Math.max(currentColumnWidth, cellLength + 5);
+        // Preprocess rows to format dates
+        const processedRows = rows.map(row => {
+            const newRow = { ...row };
+            // List of fields to format as dates
+            const dateFields = ['Accdate']; // Add other date fields if needed
+            dateFields.forEach(field => {
+                if (newRow[field]) {
+                    newRow[field] = transformDate(newRow[field]);
+                }
+            });
+            return newRow;
         });
-      });
 
-      // loop through all of the rows and set the outline style.
-      worksheet.eachRow({ includeEmpty: false }, (row) => {
-        // store each cell to currentCell
-        const currentCell = row._cells;
+        // Add rows to the worksheet
+        processedRows.forEach(singleData => {
+            worksheet.addRow(singleData);
 
-        // loop through currentCell to apply border only for the non-empty cell of excel
-        currentCell.forEach((singleCell) => {
-
-          const cellAddress = singleCell._address;
-
-          // apply border
-          worksheet.getCell(cellAddress).border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
+            // Adjust column width based on the cell values
+            worksheet.columns.forEach(column => {
+                const cellValue = singleData[column.key] || ''; // Get value or empty string if undefined
+                const cellLength = cellValue.toString().length; // Get length of the value
+                column.width = Math.max(column.width, cellLength + 5); // Adjust column width
+            });
         });
-      });
-      // write the content using writeBuffer
-      const buf = await workbook.xlsx.writeBuffer();
 
-      // download the processed file
-      saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        // Add borders to cells
+        worksheet.eachRow({ includeEmpty: false }, (row) => {
+            row.eachCell({ includeEmpty: false }, (cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        // Write workbook to buffer and download
+        const buf = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-      console.error('<<<ERRROR>>>', error);
-      console.error('Something Went Wrong', error.message);
+        console.error('<<<ERROR>>>', error);
+        console.error('Something Went Wrong', error.message);
     } finally {
-      // removing worksheet's instance to create new one
-      workbook.removeWorksheet(workSheetName);
+        // Remove worksheet instance
+        workbook.removeWorksheet(workSheetName);
     }
+};
 
-  }
 
  
 
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF({
+  //     orientation: "landscape",
+  //     unit: "mm",
+  //     format: "tabloid" // [width, height] in inches
+  //   });
+  //   pdf.setFontSize(10);
+  //   pdf.setFont('helvetica', 'normal');
+  //   pdf.text("Account Details", 10, 10);
+  //   const header = Object.keys(rows[0]);
+
+  //   // Extracting body
+  //   const body = rows.map(row => Object.values(row));
+  //  console.log(rows ,'data in acc pdf')
+
+  //   let fontdata = 1;
+  //   if (header.length <= 13) {
+  //     fontdata = 16;
+  //   }
+  //   else if (header.length >= 14 && header.length <= 18) {
+  //     fontdata = 11;
+  //   }
+  //   else if (header.length >= 19 && header.length <= 20) {
+  //     fontdata = 10;
+  //   } else if (header.length >= 21 && header.length <= 23) {
+  //     fontdata = 9;
+  //   }
+  //   else if (header.length >= 24 && header.length <= 26) {
+  //     fontdata = 7;
+  //   }
+  //   else if (header.length >= 27 && header.length <= 30) {
+  //     fontdata = 6;
+  //   }
+  //   else if (header.length >= 31 && header.length <= 35) {
+  //     fontdata = 4;
+  //   }
+  //   else if (header.length >= 36 && header.length <= 40) {
+  //     fontdata = 4;
+  //   }
+  //   else if (header.length >= 41 && header.length <= 46) {
+  //     fontdata = 2;
+  //   }
+ 
+
+  //   pdf.autoTable({
+  //     head: [header],
+  //     body: body,
+  //     startY: 20,
+
+  //     headStyles: {
+  //       // fontSize: 5,
+  //       fontSize: fontdata,
+  //       cellPadding: 1.5, // Decrease padding in header
+
+  //       minCellHeigh: 8,
+  //       valign: 'middle',
+
+  //       font: 'helvetica', // Set font type for body
+
+  //       cellWidth: 'wrap',
+  //       // cellWidth: 'auto'
+  //     },
+
+  //     bodyStyles: {
+  //       // fontSize:4,
+  //       // fontSize: fontdata-1
+  //       fontSize: fontdata - 1,
+  //       valign: 'middle',
+  //       //  cellWidth: 'wrap',
+  //       cellWidth: 'auto'
+  //       // Adjust the font size for the body
+
+  //     },
+  //     columnWidth: 'auto'
+
+  //   });
+  //   const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+
+
+  //   // Scale content
+  //   pdf.scale(scaleFactor, scaleFactor);
+  //   const pdfBlob = pdf.output('blob');
+  //   saveAs(pdfBlob, 'Account_Details.pdf');
+  // };
+
   const handlePdfDownload = () => {
     const pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: "tabloid" // [width, height] in inches
+        orientation: "landscape",
+        unit: "mm",
+        format: "tabloid" // [width, height] in inches
     });
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Account Details", 10, 10);
-    const header = Object.keys(rows[0]);
+
+    // Transform date format
+    const transformDate = (dateStr) => {
+        return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+    };
+
+    // Preprocess rows to format dates
+    const processedRows = rows.map(row => {
+        const newRow = { ...row };
+        // List of fields to format as dates
+        const dateFields = ['Accdate']; // Add other date fields if needed
+        dateFields.forEach(field => {
+            if (newRow[field]) {
+                newRow[field] = transformDate(newRow[field]);
+            }
+        });
+        return newRow;
+    });
+
+    const header = Object.keys(processedRows[0]);
 
     // Extracting body
-    const body = rows.map(row => Object.values(row));
-
+    const body = processedRows.map(row => Object.values(row));
 
     let fontdata = 1;
     if (header.length <= 13) {
-      fontdata = 16;
-    }
-    else if (header.length >= 14 && header.length <= 18) {
-      fontdata = 11;
-    }
-    else if (header.length >= 19 && header.length <= 20) {
-      fontdata = 10;
+        fontdata = 16;
+    } else if (header.length >= 14 && header.length <= 18) {
+        fontdata = 11;
+    } else if (header.length >= 19 && header.length <= 20) {
+        fontdata = 10;
     } else if (header.length >= 21 && header.length <= 23) {
-      fontdata = 9;
+        fontdata = 9;
+    } else if (header.length >= 24 && header.length <= 26) {
+        fontdata = 7;
+    } else if (header.length >= 27 && header.length <= 30) {
+        fontdata = 6;
+    } else if (header.length >= 31 && header.length <= 35) {
+        fontdata = 4;
+    } else if (header.length >= 36 && header.length <= 40) {
+        fontdata = 4;
+    } else if (header.length >= 41 && header.length <= 46) {
+        fontdata = 2;
     }
-    else if (header.length >= 24 && header.length <= 26) {
-      fontdata = 7;
-    }
-    else if (header.length >= 27 && header.length <= 30) {
-      fontdata = 6;
-    }
-    else if (header.length >= 31 && header.length <= 35) {
-      fontdata = 4;
-    }
-    else if (header.length >= 36 && header.length <= 40) {
-      fontdata = 4;
-    }
-    else if (header.length >= 41 && header.length <= 46) {
-      fontdata = 2;
-    }
- 
 
     pdf.autoTable({
-      head: [header],
-      body: body,
-      startY: 20,
-
-      headStyles: {
-        // fontSize: 5,
-        fontSize: fontdata,
-        cellPadding: 1.5, // Decrease padding in header
-
-        minCellHeigh: 8,
-        valign: 'middle',
-
-        font: 'helvetica', // Set font type for body
-
-        cellWidth: 'wrap',
-        // cellWidth: 'auto'
-      },
-
-      bodyStyles: {
-        // fontSize:4,
-        // fontSize: fontdata-1
-        fontSize: fontdata - 1,
-        valign: 'middle',
-        //  cellWidth: 'wrap',
-        cellWidth: 'auto'
-        // Adjust the font size for the body
-
-      },
-      columnWidth: 'auto'
-
+        head: [header],
+        body: body,
+        startY: 20,
+        headStyles: {
+            fontSize: fontdata,
+            cellPadding: 1.5, // Decrease padding in header
+            minCellHeight: 8,
+            valign: 'middle',
+            font: 'helvetica', // Set font type for body
+            cellWidth: 'wrap',
+        },
+        bodyStyles: {
+            fontSize: fontdata - 1,
+            valign: 'middle',
+            cellWidth: 'auto', // Adjust the font size for the body
+        },
+        columnWidth: 'auto',
     });
-    const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
 
+    const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
 
     // Scale content
     pdf.scale(scaleFactor, scaleFactor);
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Account_Details.pdf');
-  };
+};
+
 
   // TABLE START
   const columns = [
@@ -235,7 +404,10 @@ const useAccountinfo = () => {
     { field: "cperson", headerName: "Supplier_Name", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
     // { field: "stations", headerName: "Stations", width: 160 },
-    { field: "Accdate", headerName: "Acc_Date", width: 160 },
+    { field: "Accdate", headerName: "Acc_Date", width: 160 , valueFormatter: (params) => {
+      // Format the date to DD-MM-YYYY
+      return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
+    },},
     { field: "accountNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
     { field: "phone", headerName: "Phone", width: 160 },

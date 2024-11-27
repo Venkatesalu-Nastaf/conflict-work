@@ -148,174 +148,327 @@ const useDrivercreation = () => {
 
     
 
-    const handleExcelDownload=async()=>{
-        const workbook = new Excel.Workbook();
-        const workSheetName = 'Worksheet-1';
+    // const handleExcelDownload=async()=>{
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
 
-        try {
+    //     try {
 
-            const fileName = "Drivercreation Reports"
-            // creating one worksheet in workbook
-            const worksheet = workbook.addWorksheet(workSheetName);
-            const headers = Object.keys(rows[0]);
-            //         console.log(headers,"hed")
-            const columnsExcel = headers.map(key => ({ key, header: key }));
+    //         const fileName = "Drivercreation Reports"
+    //         // creating one worksheet in workbook
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         //         console.log(headers,"hed")
+    //         const columnsExcel = headers.map(key => ({ key, header: key }));
             
-            worksheet.columns = columnsExcel;
+    //         worksheet.columns = columnsExcel;
 
-            // updated the font for first row.
-            worksheet.getRow(1).font = { bold: true };
+    //         // updated the font for first row.
+    //         worksheet.getRow(1).font = { bold: true };
 
-            // Set background color for header cells
-            worksheet.getRow(1).eachCell((cell, colNumber) => {
-                cell.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' } // Green background color
-                };
-            });
+    //         // Set background color for header cells
+    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' } // Green background color
+    //             };
+    //         });
 
 
-            worksheet.getRow(1).height = 30;
-            // loop through all of the columns and set the alignment with width.
-            worksheet.columns.forEach((column) => {
-                column.width = column.header.length + 5;
-                column.alignment = { horizontal: 'center', vertical: 'middle' };
-            });
+    //         worksheet.getRow(1).height = 30;
+    //         // loop through all of the columns and set the alignment with width.
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
 
-            rows.forEach((singleData, index) => {
+    //         rows.forEach((singleData, index) => {
+
+    //             console.log(singleData,'this is the data in driver excel')
              
 
-                worksheet.addRow(singleData);
+    //             worksheet.addRow(singleData);
 
-                // Adjust column width based on the length of the cell values in the added row
-                worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
 
-                    // Set column width to the maximum of current width and cell length plus extra space
-                    column.width = Math.max(currentColumnWidth, cellLength + 5);
-                });
-            });
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
 
-            // loop through all of the rows and set the outline style.
-            worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
-                const currentCell = row._cells;
+    //         // loop through all of the rows and set the outline style.
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
 
-                // loop through currentCell to apply border only for the non-empty cell of excel
-                currentCell.forEach((singleCell) => {
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
 
-                    const cellAddress = singleCell._address;
+    //                 const cellAddress = singleCell._address;
 
-                    // apply border
-                    worksheet.getCell(cellAddress).border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                });
-            });
-            // write the content using writeBuffer
-            const buf = await workbook.xlsx.writeBuffer();
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    //         // write the content using writeBuffer
+    //         const buf = await workbook.xlsx.writeBuffer();
 
-            // download the processed file
-            saveAs(new Blob([buf]), `${fileName}.xlsx`);
-        } catch (error) {
-            console.error('<<<ERRROR>>>', error);
-            console.error('Something Went Wrong', error.message);
-        } finally {
-            // removing worksheet's instance to create new one
-            workbook.removeWorksheet(workSheetName);
-        }
+    //         // download the processed file
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         // removing worksheet's instance to create new one
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
 
-    }
-    const handlePdfDownload = () => {
-        const pdf = new jsPDF({
-            orientation: "landscape",
-            unit: "mm",
-            format: "tabloid" // [width, height] in inches
+    // }
+  // changes with date format
+  const handleExcelDownload = async () => {
+    const workbook = new Excel.Workbook();
+    const workSheetName = 'Worksheet-1';
+
+    try {
+        const fileName = "Drivercreation Reports";
+        const worksheet = workbook.addWorksheet(workSheetName);
+        const headers = Object.keys(rows[0]);
+        const columnsExcel = headers.map(key => ({ key, header: key }));
+        worksheet.columns = columnsExcel;
+
+        // Style the header row
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '9BB0C1' }
+            };
         });
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text("Driver Details", 10, 10);
-         const header = Object.keys(rows[0]);
+        worksheet.getRow(1).height = 30;
+        worksheet.columns.forEach((column) => {
+            column.width = column.header.length + 5;
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+        });
+
+        // Transform rows data
+        const transformedRows = rows.map(singleData => {
+            const transformedData = { ...singleData };
+
+            const formatDate = (dateStr) => {
+                return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+            };
+
+            transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
+            transformedData.created_at = formatDate(transformedData.created_at);
+            transformedData.joiningdate = formatDate(transformedData.joiningdate);
+            transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
+
+            return transformedData;
+        });
+
+        transformedRows.forEach((singleData) => {
+            worksheet.addRow(singleData);
+            worksheet.columns.forEach((column) => {
+                const cellValue = singleData[column.key] || '';
+                const cellLength = cellValue.toString().length;
+                const currentColumnWidth = column.width || 0;
+                column.width = Math.max(currentColumnWidth, cellLength + 5);
+            });
+        });
+
+        worksheet.eachRow({ includeEmpty: false }, (row) => {
+            row._cells.forEach((singleCell) => {
+                const cellAddress = singleCell._address;
+                worksheet.getCell(cellAddress).border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        const buf = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    } catch (error) {
+        console.error('<<<ERRROR>>>', error);
+        console.error('Something Went Wrong', error.message);
+    } finally {
+        workbook.removeWorksheet(workSheetName);
+    }
+};
+    
+// const handlePdfDownload = () => {
+//         const pdf = new jsPDF({
+//             orientation: "landscape",
+//             unit: "mm",
+//             format: "tabloid" // [width, height] in inches
+//         });
+//         pdf.setFontSize(10);
+//         pdf.setFont('helvetica', 'normal');
+//         pdf.text("Driver Details", 10, 10);
+//          const header = Object.keys(rows[0]);
       
-        // Extracting body
-        const body = rows.map(row => Object.values(row));
-        console.log(header.length,"len")
+//         // Extracting body
+//         const body = rows.map(row => Object.values(row));
+//         // console.log(header.length,"len")
+//         console.log(rows,"date in the driver customers")
       
-        let fontdata = 1;
-        if (header.length <= 13) {
-            fontdata = 16;
-        }
-        else if (header.length >= 14 && header.length <= 17) {
-            fontdata = 11;
-        }
-        else if (header.length >= 18 && header.length <= 20) {
-          fontdata = 10;
-      } else if (header.length >= 21 && header.length <= 23) {
-            fontdata = 9;
-        }
-        else if (header.length >= 24 && header.length <= 26) {
-            fontdata = 7;
-        }
-        else if (header.length >= 27 && header.length <= 30) {
-            fontdata = 6;
-        }
-        else if (header.length >= 31 && header.length <= 35) {
-            fontdata = 4;
-        }
-        else if (header.length >= 36 && header.length <= 40) {
-            fontdata = 4;
-        }
-        else if (header.length >= 41 && header.length <= 46) {
-            fontdata = 2;
-        }
-        console.log(fontdata,"data")
+//         let fontdata = 1;
+//         if (header.length <= 13) {
+//             fontdata = 16;
+//         }
+//         else if (header.length >= 14 && header.length <= 17) {
+//             fontdata = 11;
+//         }
+//         else if (header.length >= 18 && header.length <= 20) {
+//           fontdata = 10;
+//       } else if (header.length >= 21 && header.length <= 23) {
+//             fontdata = 9;
+//         }
+//         else if (header.length >= 24 && header.length <= 26) {
+//             fontdata = 7;
+//         }
+//         else if (header.length >= 27 && header.length <= 30) {
+//             fontdata = 6;
+//         }
+//         else if (header.length >= 31 && header.length <= 35) {
+//             fontdata = 4;
+//         }
+//         else if (header.length >= 36 && header.length <= 40) {
+//             fontdata = 4;
+//         }
+//         else if (header.length >= 41 && header.length <= 46) {
+//             fontdata = 2;
+//         }
+//         console.log(fontdata,"data")
         
-        pdf.autoTable({
-            head: [header],
-            body: body,
-            startY: 20,
+//         pdf.autoTable({
+//             head: [header],
+//             body: body,
+//             startY: 20,
       
-            headStyles: {
-                // fontSize: 5,
-                fontSize: fontdata,
-                cellPadding: 1.5, // Decrease padding in header
+//             headStyles: {
+//                 // fontSize: 5,
+//                 fontSize: fontdata,
+//                 cellPadding: 1.5, // Decrease padding in header
       
-                minCellHeigh: 8,
-                valign: 'middle',
+//                 minCellHeigh: 8,
+//                 valign: 'middle',
       
-                font: 'helvetica', // Set font type for body
+//                 font: 'helvetica', // Set font type for body
       
-                cellWidth: 'wrap',
-                // cellWidth: 'auto'
-            },
+//                 cellWidth: 'wrap',
+//                 // cellWidth: 'auto'
+//             },
       
-            bodyStyles: {
-                // fontSize:4,
-                // fontSize: fontdata-1
-                fontSize: fontdata-1,
-                valign: 'middle',
-                //  cellWidth: 'wrap',
-                cellWidth: 'auto'
-                // Adjust the font size for the body
+//             bodyStyles: {
+//                 // fontSize:4,
+//                 // fontSize: fontdata-1
+//                 fontSize: fontdata-1,
+//                 valign: 'middle',
+//                 //  cellWidth: 'wrap',
+//                 cellWidth: 'auto'
+//                 // Adjust the font size for the body
       
-            },
-            columnWidth: 'auto'
+//             },
+//             columnWidth: 'auto'
       
-      });
-        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE")
+//       });
+//         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+//         console.log(scaleFactor, "SCALE")
       
-        // Scale content
-        pdf.scale(scaleFactor, scaleFactor);
-        const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'drivercreationReports.pdf');
-      };
+//         // Scale content
+//         pdf.scale(scaleFactor, scaleFactor);
+//         const pdfBlob = pdf.output('blob');
+//         saveAs(pdfBlob, 'drivercreationReports.pdf');
+//       };
+
+const handlePdfDownload = () => {
+    const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "tabloid"
+    });
+
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Driver Details", 10, 10);
+
+    const header = Object.keys(rows[0]);
+
+    // Preprocessing rows to handle empty keys and format dates
+    const transformedRows = rows.map(row => {
+        const transformDate = (dateStr) => {
+            return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+        };
+
+        const transformedRow = {};
+        for (const key in row) {
+            if (row[key] === null || row[key] === '' || row[key] === undefined) {
+                transformedRow[key] = null;
+            } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
+                transformedRow[key] = transformDate(row[key]);
+            } else {
+                transformedRow[key] = row[key];
+            }
+        }
+        return transformedRow;
+    });
+
+    // Extracting body
+    const body = transformedRows.map(row => Object.values(row));
+
+    // Adjust font size based on the number of columns
+    let fontdata = 1;
+    if (header.length <= 13) fontdata = 16;
+    else if (header.length <= 17) fontdata = 11;
+    else if (header.length <= 20) fontdata = 10;
+    else if (header.length <= 23) fontdata = 9;
+    else if (header.length <= 26) fontdata = 7;
+    else if (header.length <= 30) fontdata = 6;
+    else if (header.length <= 35) fontdata = 4;
+    else fontdata = 2;
+
+    console.log(fontdata, "font size");
+
+    // Adding table to PDF
+    pdf.autoTable({
+        head: [header],
+        body: body,
+        startY: 20,
+        headStyles: {
+            fontSize: fontdata,
+            cellPadding: 1.5,
+            minCellHeight: 8,
+            valign: 'middle',
+            font: 'helvetica',
+            cellWidth: 'wrap',
+        },
+        bodyStyles: {
+            fontSize: fontdata - 1,
+            valign: 'middle',
+            cellWidth: 'auto',
+        },
+        columnWidth: 'auto',
+    });
+
+    // Save the PDF
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'drivercreationReports.pdf');
+};
+
 
     // TABLE END
 

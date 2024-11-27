@@ -105,19 +105,19 @@ export const Apps = [
 // ];
 export const HireTypes = [
   {
-    Option:"Attached Vehicle",
+    option:"Attached Vehicle",
     optionvalue:"Attached Vehicle",
   },
   {
-    Option:"OutSide Travels",
+    option:"OutSide Travels",
     optionvalue:"OutSide Travels",
   },
   {
-    Option:"Own Vehicle",
+    option:"Own Vehicle",
     optionvalue:"Own Vehicle",
   },
   {
-    Option:"DCO Vehicle",
+    option:"DCO Vehicle",
     optionvalue:"DCO Vehicle",
   }
 

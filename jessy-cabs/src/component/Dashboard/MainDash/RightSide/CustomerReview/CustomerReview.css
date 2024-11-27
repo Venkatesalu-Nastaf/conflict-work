@@ -1,7 +1,7 @@
 .CustomerReview {
     /* width: 85%; */
     background: rgba(255, 255, 255, 0.957);
-    border-radius: 0.7rem;
+    border-radius: 3px;
     padding: 1rem;
     gap: 1rem;
     display: flex;
@@ -157,10 +157,10 @@
 }
 
 
-  .area-text-chart{
+.area-text-chart {
     letter-spacing: .5px;
     font-size: 20px;
     color: #000;
     margin-top: 2px;
     margin-bottom: 2px;
-  }
+}

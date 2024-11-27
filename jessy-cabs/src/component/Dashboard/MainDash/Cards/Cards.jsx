@@ -7,6 +7,7 @@ import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
 import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
+import Updates from "../RightSide/Updates/Updates";
 //import numbro from 'numbro';
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 const apiUrl = APIURL;
@@ -20,7 +21,7 @@ const Cards = () => {
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
 
-  const {selectedMonths,setSelectedMonths} = PdfData();
+  const { selectedMonths, setSelectedMonths } = PdfData();
 
 
   const TotalNumber = (number) => {
@@ -289,20 +290,25 @@ const Cards = () => {
           <option value="12">December</option>
         </select>
       </div>
-      <div className="Cards" >
-        {cardData.map((card, index) => (
-          <div className="parentContainer cards-dashboard" key={index} >
-            <Card
-              title={card.title}
-              color={card.color}
-              barValue={card.barValue}
-              value={card.value}
-              png={card.png}
-              series={card.series}
-              amount={card.totalamount}
-            />
-          </div>
-        ))}
+      <div style={{ display: 'flex', gap: '5px' }}>
+        <div className="Cards" >
+          {cardData.map((card, index) => (
+            <div className="parentContainer cards-dashboard" key={index} >
+              <Card
+                title={card.title}
+                color={card.color}
+                barValue={card.barValue}
+                value={card.value}
+                png={card.png}
+                series={card.series}
+                amount={card.totalamount}
+              />
+            </div>
+          ))}
+        </div>
+        <div>
+          <Updates />
+        </div>
       </div>
     </div>
   );

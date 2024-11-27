@@ -1,6 +1,6 @@
 .Cards {
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
 
 .Cards .apexcharts-toolbar,
@@ -56,7 +56,7 @@
 } */
 
 .cards-dashboard {
-  width: 100%;
+  width: 22vw;
 }
 
 @media screen and (max-width: 1219px) {

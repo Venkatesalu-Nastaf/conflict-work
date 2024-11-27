@@ -44,12 +44,12 @@
 }
 
 @media screen and (min-width: 1219px) {
-    .first-div {
+    /* .first-div {
         display: flex;
-    }
+    } */
 
     .left-div {
-        width: 65vw;
+        /* width: 65vw; */
         height: 88vh;
         /* overflow: auto; */
         padding: 20px;
@@ -82,7 +82,7 @@
 
 @media screen and (min-width: 1341px) {
     .right-div {
-        width: 27vw;
+        /* width: 27vw; */
     }
 }
 

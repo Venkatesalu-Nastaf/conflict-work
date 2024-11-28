@@ -356,22 +356,39 @@ const useTransferlist = () => {
     const body = rows.map(row => {
       // Map the row values to an array in the correct order
       return [
-        row['id'],  // 'id' first
-        row['Grouptrip_id'],
-        row['Invoice_no'],
-        // row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
-        row['Status'],
-        row['State'],
-        row['BillReportStatus '],
-        row['Billdate'] ? dayjs(row['Billdateate']).format('DD-MM-YYYY') : 'N/A',
-        // row['ToDate'] ? dayjs(row['ToDate']).format('DD-MM-YYYY') : 'N/A',
-        row['Organization_name'],
-        row['Trip_id'],
-        row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
-        row['EndDate'] ? dayjs(row['EndDate']).format('DD-MM-YYYY') : 'N/A',
-        row['Trips'],
-        row['Amount'],
-        row['State'],
+        // row['id'],  // 'id' first
+        // row['Grouptrip_id'],
+        // row['Invoice_no'],
+        // // row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
+        // row['Status'],
+        // row['State'],
+        // row['BillReportStatus '],
+        // row['Billdate'] ? dayjs(row['Billdateate']).format('DD-MM-YYYY') : 'N/A',
+        // // row['ToDate'] ? dayjs(row['ToDate']).format('DD-MM-YYYY') : 'N/A',
+        // row['Organization_name'],
+        // row['Trip_id'],
+        // row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
+        // row['EndDate'] ? dayjs(row['EndDate']).format('DD-MM-YYYY') : 'N/A',
+        // row['Trips'],
+        // row['Amount'],
+        // row['State'],
+        row['id'],  
+row['Grouptrip_id'],
+row['Invoice_no'],
+// row['InvoiceDate'] ? dayjs(row['InvoiceDate']).format('DD-MM-YYYY') : 'N/A',
+row['Status'],
+row['State'],
+row['BillReportStatus '],
+row['Billdate'] ? dayjs(row['Billdate']).format('DD-MM-YYYY') : 'N/A',
+"", 
+row['Organization_name'],
+row['Trip_id'],
+row['FromDate'] ? dayjs(row['FromDate']).format('DD-MM-YYYY') : 'N/A',
+row['EndDate'] ? dayjs(row['EndDate']).format('DD-MM-YYYY') : 'N/A',
+row['Trips'],
+row['Amount'],
+row['State']
+
       ];
     });
   

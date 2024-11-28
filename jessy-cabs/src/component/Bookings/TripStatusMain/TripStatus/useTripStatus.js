@@ -95,60 +95,149 @@ const useDispatched = () => {
     return !hideColumns.includes(col.field) || (statusvalue !== "pending" && statusvalue !== "Cancelled");
   });
 
+  // const handleExcelDownload = async () => {
+  //   const workbook = new Excel.Workbook();
+  //   const workSheetName = 'Worksheet-1';
+  //   try {
+  //     const fileName = "Pending Reports"
+  //     // creating one worksheet in workbook
+  //     const worksheet = workbook.addWorksheet(workSheetName);
+  //     const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
+  //     const filteredcolumnsdata = filteredColumns.map(key => ({ key: key.field, header: key.headerName }));
+  //     const newcolumndata = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : columndata
+  //     //worksheet.columns = columnsexcel
+  //     worksheet.columns = newcolumndata;
+  //     // updated the font for first row.
+  //     worksheet.getRow(1).font = { bold: true };
+  //     // Set background color for header cells
+  //     worksheet.getRow(1).eachCell((cell, colNumber) => {
+  //       cell.fill = {
+  //         type: 'pattern',
+  //         pattern: 'solid',
+  //         fgColor: { argb: '9BB0C1' } // Green background color
+  //       };
+  //     });
+  //     worksheet.getRow(1).height = 30;
+  //     // loop through all of the columns and set the alignment with width.
+  //     worksheet.columns.forEach((column) => {
+  //       column.width = column.header.length + 5;
+  //       column.alignment = { horizontal: 'center', vertical: 'middle' };
+  //     });
+
+  //     rows.forEach((singleData, index) => {
+  //       worksheet.addRow(singleData);
+
+  //       console.log(rows, ' data rows in trip status')
+
+  //       // Adjust column width based on the length of the cell values in the added row
+  //       worksheet.columns.forEach((column) => {
+  //         const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+  //         const cellLength = cellValue.toString().length; // Get length of cell value as a string
+  //         const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+  //         // Set column width to the maximum of current width and cell length plus extra space
+  //         column.width = Math.max(currentColumnWidth, cellLength + 5);
+  //       });
+  //     });
+
+  //     // loop through all of the rows and set the outline style.
+  //     worksheet.eachRow({ includeEmpty: false }, (row) => {
+  //       // store each cell to currentCell
+  //       const currentCell = row._cells;
+
+  //       // loop through currentCell to apply border only for the non-empty cell of excel
+  //       currentCell.forEach((singleCell) => {
+
+  //         const cellAddress = singleCell._address;
+
+  //         // apply border
+  //         worksheet.getCell(cellAddress).border = {
+  //           top: { style: 'thin' },
+  //           left: { style: 'thin' },
+  //           bottom: { style: 'thin' },
+  //           right: { style: 'thin' },
+  //         };
+  //       });
+  //     });
+  //     // write the content using writeBuffer
+  //     const buf = await workbook.xlsx.writeBuffer();
+
+  //     // download the processed file
+  //     saveAs(new Blob([buf]), `${fileName}.xlsx`);
+  //   } catch (error) {
+  //     console.error('<<<ERRROR>>>', error);
+  //     console.error('Something Went Wrong', error.message);
+  //   } finally {
+  //     // removing worksheet's instance to create new one
+  //     workbook.removeWorksheet(workSheetName);
+  //   }
+  // }
+
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
     try {
       const fileName = "Pending Reports"
-      // creating one worksheet in workbook
       const worksheet = workbook.addWorksheet(workSheetName);
       const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
       const filteredcolumnsdata = filteredColumns.map(key => ({ key: key.field, header: key.headerName }));
-      const newcolumndata = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : columndata
-      //worksheet.columns = columnsexcel
+      const newcolumndata = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : columndata;
+      
       worksheet.columns = newcolumndata;
-      // updated the font for first row.
       worksheet.getRow(1).font = { bold: true };
-      // Set background color for header cells
       worksheet.getRow(1).eachCell((cell, colNumber) => {
         cell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: '9BB0C1' } // Green background color
+          fgColor: { argb: '9BB0C1' }
         };
       });
       worksheet.getRow(1).height = 30;
-      // loop through all of the columns and set the alignment with width.
+  
       worksheet.columns.forEach((column) => {
         column.width = column.header.length + 5;
         column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
-
+  
       rows.forEach((singleData, index) => {
-        worksheet.addRow(singleData);
-
-        // Adjust column width based on the length of the cell values in the added row
+        const formattedData = { ...singleData };
+  
+        const formatDate = (dateString) => {
+          if (!dateString) return '';
+          const date = new Date(dateString);
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          return `${day}-${month}-${year}`;
+        };
+  
+        formattedData.startdate = formatDate(singleData.startdate);
+        formattedData.closedate = formatDate(singleData.closedate);
+        formattedData.tripsheetdate = formatDate(singleData.tripsheetdate);
+  
+        const formatTime = (timeString) => {
+          if (!timeString) return '';
+          const [hour, minute] = timeString.split(':');
+          return `${hour}:${minute}`;
+        };
+  
+        formattedData.starttime = formatTime(singleData.starttime);
+        formattedData.closetime = formatTime(singleData.closetime);
+  
+        worksheet.addRow(formattedData);
+  
         worksheet.columns.forEach((column) => {
-          const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-          const cellLength = cellValue.toString().length; // Get length of cell value as a string
-          const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-          // Set column width to the maximum of current width and cell length plus extra space
+          const cellValue = formattedData[column.key] || '';
+          const cellLength = cellValue.toString().length;
+          const currentColumnWidth = column.width || 0;
           column.width = Math.max(currentColumnWidth, cellLength + 5);
         });
       });
-
-      // loop through all of the rows and set the outline style.
+  
       worksheet.eachRow({ includeEmpty: false }, (row) => {
-        // store each cell to currentCell
         const currentCell = row._cells;
-
-        // loop through currentCell to apply border only for the non-empty cell of excel
         currentCell.forEach((singleCell) => {
-
           const cellAddress = singleCell._address;
-
-          // apply border
           worksheet.getCell(cellAddress).border = {
             top: { style: 'thin' },
             left: { style: 'thin' },
@@ -157,40 +246,150 @@ const useDispatched = () => {
           };
         });
       });
-      // write the content using writeBuffer
+  
       const buf = await workbook.xlsx.writeBuffer();
-
-      // download the processed file
       saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
       console.error('<<<ERRROR>>>', error);
       console.error('Something Went Wrong', error.message);
     } finally {
-      // removing worksheet's instance to create new one
       workbook.removeWorksheet(workSheetName);
     }
   }
+  
+
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF({
+  //     orientation: "landscape",
+  //     unit: "mm",
+  //     format: "tabloid" // [width, height] in inches
+  //   });
+  //   pdf.setFontSize(10);
+  //   pdf.setFont('helvetica', 'normal');
+  //   pdf.text("Booking Details", 10, 10);
+  //   const fullcoumndata = columns.map(key => (key.field));
+  //   const filteredcolumnsdata = filteredColumns.map(key => (key.field));
+  //   const header = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : fullcoumndata;
+  //   const body = rows.map(row => {
+
+  //     console.log(rows, ' data rows pdf in trip status')
+  //     const rowData = [];
+  //     header.forEach(columnName => {
+  //       // Assuming row[columnName] exists and contains the value
+  //       rowData.push(row[columnName]);
+  //     });
+  //     return rowData;
+  //   });
+  //   let fontdata = 1;
+  //   if (header.length <= 13) {
+  //     fontdata = 16;
+  //   }
+  //   else if (header.length >= 14 && header.length <= 18) {
+  //     fontdata = 11;
+  //   }
+  //   else if (header.length >= 19 && header.length <= 20) {
+  //     fontdata = 10;
+  //   } else if (header.length >= 21 && header.length <= 23) {
+  //     fontdata = 9;
+  //   }
+  //   else if (header.length >= 24 && header.length <= 26) {
+  //     fontdata = 6.5;
+  //   }
+  //   else if (header.length >= 27 && header.length <= 30) {
+  //     fontdata = 6;
+  //   }
+  //   else if (header.length >= 31 && header.length <= 33) {
+  //     fontdata = 4;
+  //   } else if (header.length >= 34 && header.length <= 35) {
+  //     fontdata = 3;
+  //   }
+  //   else if (header.length >= 36 && header.length <= 40) {
+  //     fontdata = 3;
+  //   }
+  //   else if (header.length >= 41 && header.length <= 46) {
+  //     fontdata = 2;
+  //   }
+  //   else if (header.length >= 47 && header.length <= 50) {
+  //     fontdata = 2;
+  //   }
+
+  //   pdf.autoTable({
+  //     head: [header],
+  //     body: body,
+  //     startY: 20,
+  //     headStyles: {
+  //       // fontSize: 5,
+  //       fontSize: fontdata,
+  //       cellPadding: 1.5, // Decrease padding in header
+  //       minCellHeigh: 8,
+  //       valign: 'middle',
+  //       font: 'helvetica', // Set font type for body
+  //       cellWidth: 'wrap',
+  //       // cellWidth: 'auto'
+  //     },
+
+  //     bodyStyles: {
+  //       fontSize: fontdata - 1,
+  //       valign: 'middle',
+  //       cellWidth: 'auto'
+  //       // Adjust the font size for the body
+  //     },
+  //     columnWidth: 'auto'
+  //   });
+  //   const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+  //   // Scale content
+  //   pdf.scale(scaleFactor, scaleFactor);
+  //   const pdfBlob = pdf.output('blob');
+  //   saveAs(pdfBlob, 'pending Reports.pdf');
+  // };
 
   const handlePdfDownload = () => {
     const pdf = new jsPDF({
       orientation: "landscape",
       unit: "mm",
-      format: "tabloid" // [width, height] in inches
+      format: "tabloid"
     });
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Booking Details", 10, 10);
+  
     const fullcoumndata = columns.map(key => (key.field));
     const filteredcolumnsdata = filteredColumns.map(key => (key.field));
     const header = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : fullcoumndata;
+  
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formatTime = (timeString) => {
+      if (!timeString) return '';
+      const [hour, minute] = timeString.split(':');
+      return `${hour}:${minute}`;
+    };
+  
     const body = rows.map(row => {
       const rowData = [];
       header.forEach(columnName => {
-        // Assuming row[columnName] exists and contains the value
-        rowData.push(row[columnName]);
+        let value = row[columnName];
+  
+        if (columnName === "startdate" || columnName === "closedate" || columnName === "tripsheetdate") {
+          value = formatDate(value);
+        }
+  
+        if (columnName === "starttime" || columnName === "closetime") {
+          value = formatTime(value);
+        }
+  
+        rowData.push(value);
       });
       return rowData;
     });
+  
     let fontdata = 1;
     if (header.length <= 13) {
       fontdata = 16;
@@ -223,36 +422,35 @@ const useDispatched = () => {
     else if (header.length >= 47 && header.length <= 50) {
       fontdata = 2;
     }
-
+  
     pdf.autoTable({
       head: [header],
       body: body,
       startY: 20,
       headStyles: {
-        // fontSize: 5,
         fontSize: fontdata,
-        cellPadding: 1.5, // Decrease padding in header
+        cellPadding: 1.5,
         minCellHeigh: 8,
         valign: 'middle',
-        font: 'helvetica', // Set font type for body
+        font: 'helvetica',
         cellWidth: 'wrap',
-        // cellWidth: 'auto'
       },
-
+  
       bodyStyles: {
         fontSize: fontdata - 1,
         valign: 'middle',
         cellWidth: 'auto'
-        // Adjust the font size for the body
       },
       columnWidth: 'auto'
     });
+  
     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-    // Scale content
     pdf.scale(scaleFactor, scaleFactor);
+  
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'pending Reports.pdf');
   };
+  
   
   const handleInputChange = (event, newValue) => {
     setdepartment(newValue);

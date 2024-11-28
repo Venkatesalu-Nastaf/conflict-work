@@ -664,7 +664,7 @@ function App() {
                   path="/home/billing/coveringbill"
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : ( <NoPermission />)}
                 />
-                <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
               </Route>
 
              <Route path="/home/billing/reports/Pendingbills" element ={<PendingBills />}></Route>

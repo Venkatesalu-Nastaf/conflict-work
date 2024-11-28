@@ -12,7 +12,7 @@ import VendorStatement from './VendorStatement/VendorStatement';
 import VehicleStatement from './VehicleStatement/VehicleStatement';
 import LogDetails from './LogDetails/LogDetails';
 import { ReportData } from './Context/ReportContext';
-export const Reports = ({ stationName }) => {
+export const Reports = ({ stationName,Statename }) => {
     const { value, setValue } = ReportData()
 //     const handleChange = (event, newValue) => {
 //         console.log(newValue,"valueinner")
@@ -71,7 +71,7 @@ const reports = localStorage.getItem('reports');
                             </TabList>
                         </Box>
                         <TabPanel value="MonthlyWise"><MonthlyWise /></TabPanel>
-                        <TabPanel value="GSTReports"><GstReport /></TabPanel>
+                        <TabPanel value="GSTReports"><GstReport stationName={stationName}  Statename={Statename} /></TabPanel>
 
                         <TabPanel value="BilledwiseReceipt"><BillWiseReceipt stationName={stationName} /></TabPanel>
                         <TabPanel value="Pendingbills"><PendingBills /></TabPanel>

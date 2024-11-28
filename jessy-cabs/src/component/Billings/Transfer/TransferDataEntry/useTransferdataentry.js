@@ -1603,7 +1603,7 @@ const useTransferdataentry = () => {
     // console.log(customerMotherdatagroupstation(customer),"ll")
 
     // console.log(customer,"CUST")
-    console.log(rowSelectionModel, 'presentrowSelect', matchTripID);
+    // console.log(rowSelectionModel, 'presentrowSelect', matchTripID);
 
     const handleAddGroup = async () => {
         const presentIds = rowSelectionModel.filter(id => matchTripID.includes(id.toString()));
@@ -1724,7 +1724,6 @@ const useTransferdataentry = () => {
                 // const OrganizationName =  await customerMotherdatagroupstation(selectedCustomerDatas.customer || customer);
                 const Trips = validTrips.length;
                 const billstatus = "notbilled";
-
                 // Construct the transfer list with valid trips and their amounts
                 const transferlist = {
                     Status: billstatus,

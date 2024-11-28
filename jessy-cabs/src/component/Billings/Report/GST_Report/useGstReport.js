@@ -16,6 +16,9 @@ const useGstReport = () => {
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [rows, setRows] = useState([]);
+    const [customerData, setCustomerData] = useState([]);
+    const [stationData, setStationData] = useState([]);
+    const [gstTaxPercent, setGstTaxPercent] = useState(0);
     const [gstReport, setGstReport] = useState({
         customer: '',
         fromDate: dayjs().format('YYYY-MM-DD'),
@@ -31,13 +34,17 @@ const useGstReport = () => {
         totalAmount: ""
     })
 
+    //Loading //
+    const [isGstbtnloading, setisGstbtnloading] = useState(false)
+
     const columns = [
         { field: 'id', headerName: 'Sno', width: 70 },
-        { field: "", headerName: "Invoice No", width: 130 },
-        { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
-        { field: 'billingno', headerName: 'Bill No', width: 90 },
-        { field: 'billdate', headerName: 'Bill Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
-        { field: 'tripsheetdate', headerName: 'Trip Date', width: 130 ,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY')},
+        // { field: "", headerName: "Invoice No", width: 130 },
+        // { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
+        { field: 'invoiceNo', headerName: 'Invoice No', width: 90 },
+        // { field: 'billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
+        { field: 'billdate', headerName: 'Invoice Date', width: 130, },
+        { field: 'tripsheetdate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'customer', headerName: 'Customer Name', width: 130 },
         { field: 'gstNumber', headerName: 'GSTIN', width: 130 },
         { field: 'totalcalcAmount', headerName: 'GROSS', width: 130 },
@@ -45,11 +52,41 @@ const useGstReport = () => {
         { field: 'cgst', headerName: 'CGST', width: 130 },
         { field: 'sgst', headerName: 'SGST', width: 130 },
         { field: 'igst', headerName: 'IGST', width: 130 },
-        { field: "Trips", headerName: "Trip No", width: 130 },
+        { field: "tripid", headerName: "Trip ID", width: 130 },
         { field: 'billed', headerName: 'Billed', width: 130 },
     ];
 
     const apiUrl = APIURL;
+
+    // fetch gst Tax Percentage
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const customer = gstReport?.customer;
+
+                const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
+                console.log(response.data, 'customer response');
+                const data = response.data;
+                const customerDetails = data.customerDetails;
+                const stationDetails = data.customerStations;
+
+                setCustomerData(customerDetails)
+                setStationData(stationDetails)
+
+
+                if (customerDetails.length > 0) {
+                    setisGstbtnloading(false)
+                } else {
+                    setisGstbtnloading(false)
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
+    }, [apiUrl, gstReport.customer, isGstbtnloading])
+
 
     // Fetch all customers
     useEffect(() => {
@@ -102,10 +139,10 @@ const useGstReport = () => {
             // Define column widths
             const columnWidths = {
                 id: 10,
-                Invoice_no:20,
-                invoicedate:20,
-                billingno: 20,
-                billdate: 20,
+                invoiceNo: 20,
+                invoicedate: 20,
+                // billingno: 20,
+                // billdate: 20,
                 tripsheetdate: 20,
                 customer: 30,
                 gstNumber: 20,
@@ -114,7 +151,7 @@ const useGstReport = () => {
                 cgst: 15,
                 sgst: 15,
                 igst: 15,
-                Trips:20,
+                tripid: 20,
                 billed: 10
             };
 
@@ -144,11 +181,11 @@ const useGstReport = () => {
             rows.forEach(row => {
                 const newRow = worksheet.addRow({
                     id: row.id,
-                    Invoice_no: row.Invoice_no,
+                    invoiceNo: row.invoiceNo,
                     invoicedate: row.invoicedate,
                     billingno: row.billingno,
-                    billdate: row.billdate,
-                    tripsheetdate: row.tripsheetdate,
+                    billdate: dayjs(row.billdate).format('DD-MM-YYYY'),
+                    tripsheetdate: dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
                     customer: row.customer,
                     gstNumber: row.gstNumber,
                     totalcalcAmount: row.totalcalcAmount,
@@ -156,7 +193,7 @@ const useGstReport = () => {
                     cgst: row.cgst,
                     sgst: row.sgst,
                     igst: row.igst,
-                    Trips:row.Trips,
+                    tripid: row.tripid,
                     billed: row.billed
                 });
 
@@ -187,7 +224,7 @@ const useGstReport = () => {
                 cgst: totalCGST,
                 sgst: totalSGST,
                 igst: '',
-                Trips:'',
+                Trips: '',
                 billed: ''
             });
 
@@ -233,16 +270,17 @@ const useGstReport = () => {
 
         // Map the rows to the format needed for autoTable
         const tableRows = rows.map(row => [
-            row.id, row.Invoice_no, row.invoicedate,row.billingno, row.billdate, row.tripsheetdate, row.customer,
-            row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.Trips,row.billed
+            row.id, row.invoiceNo, dayjs(row.invoiceDate).format('DD-MM-YYYY'), dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
+            row.customer,
+            row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.tripid, row.billed
         ]);
 
         // Add the total row to the end of the table rows
         tableRows.push(totalRow);
 
         const columnWidths = [
-            10, 15, 19, 19, 19,
-            20, 20, 15, 15, 15, 15, 14
+            9, 15, 19, 19, 19,
+            18, 18, 12, 15, 15, 14, 15
         ];
 
         doc.autoTable({
@@ -302,101 +340,190 @@ const useGstReport = () => {
             setErrorMessage('Please Enter the Customer.')
             return
         }
+
         try {
-            const response = await axios.get(`${apiUrl}/getAllBilledDetails`, {
+            const response = await axios.get(`${apiUrl}/getAllStateBilledDetails`, {
                 params: gstReport
             });
+            const { combinedResults, allTripDetails, tripsheetResults } = response.data;
 
-            const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
-             console.log( tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults,"gstresponse");
-             
-            // Combine coveringBilledResults and transferBilledResults into a single array
-            const combinedData = [
-                ...coveringBilledResults.map(item => ({
-                    billdate: dayjs(item.InvoiceDate).format('YYYY-MM-DD'),
-                    customer: item.Customer,
-                })),
-                ...transferBilledResults.map(item => ({
-                    billdate: dayjs(item.Billdate).format('YYYY-MM-DD'),
-                    customer: item.Organization_name,
-                })),
-                ...individualBilledResults.map(item => ({
-                    billdate: dayjs(item.Bill_Date).format('YYYY-MM-DD'),
-                    customer: item.Customer,
-                }))
-            ];
+            if (allTripDetails.length === 0) {
+                setError(true)
+                setErrorMessage("No Data Found")
+                setRows([])
+                setTaxReport({
+                    TaxableValue: "",
+                    cgst: "",
+                    sgst: "",
+                    igst: "",
+                    totalGST: "",
+                    totalAmount: ""
+                })
+                return
+            }
+            const updatedTripsheetResults = tripsheetResults.map(trip => {
+                const tripDetails = allTripDetails.find(detail => detail.tripId === String(trip.tripid));
 
-            // Create a map from combinedData for easy lookup
-            const billDateMap = combinedData.reduce((map, item) => {
-                map[item.customer] = item.billdate;
-                return map;
-            }, {});
+                if (tripDetails) {
+                    return {
+                        ...trip,
+                        invoiceNo: tripDetails.invoiceNo,
+                        invoiceDate: tripDetails.invoiceDate,
+                    };
+                }
 
-            // Create a map from customerResults for easy lookup
-            const customerMap = customerResults.reduce((map, item) => {
-                map[item.customer] = {
-                    gstNumber: item.gstnumber,
-                    gstTax: item.gstTax
-                };
-                return map;
-            }, {});
+                return trip;
+            });
 
             // Initialize totals
             let totalCGST = 0;
             let totalSGST = 0;
+            let totalIGST = 0;
             let totalGST = 0;
             let totalAmount = 0;
+            let totalCGSTAmount = 0;
+            let totalIGSTAmount = 0;
+            let cgstTax = customerData[0]?.gstTax / 2;
+            let igstTax = customerData[0]?.gstTax
 
-            // Update tripsheetResults with the billdate and GST details from maps
-            const updatedTripsheetResults = tripsheetResults.map((item, index) => {
-                const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
-                const customerDetails = customerMap[item.customer] || {};
-                const gstTax = customerDetails.gstTax || 0;
+            const FinalTripsheetResults = updatedTripsheetResults.map((item, index) => {
+                const billdate = item.invoiceDate;
+                const customerDetails = item.customer;
+                const gstTax = customerData[0]?.gstTax || 0;
                 const totalcalcAmount = item.totalcalcAmount || 0;
-                const cgst = Math.round((gstTax * totalcalcAmount) / 100);
+                const cgst = customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ? Math.round((cgstTax * totalcalcAmount) / 100) || 0 : 0
+                const igst = customerData[0]?.state !== stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? Math.round((igstTax * totalcalcAmount) / 100) || 0 : 0
                 const sgst = cgst;
 
                 // Update totals
                 totalCGST += cgst;
                 totalSGST += sgst;
-                totalGST += cgst + sgst;
-                totalAmount += totalcalcAmount + cgst + sgst;
+                totalIGST += igst;
+                totalAmount += totalcalcAmount;
+                totalGST += customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ? cgst + sgst : igst;
+                totalCGSTAmount += totalcalcAmount + cgst + sgst;
+                totalIGSTAmount += totalcalcAmount + igst;
+
 
                 return {
                     ...item,
                     id: index + 1,
                     billdate: billdate,
-                    tripsheetdate: dayjs(item.tripsheetdate).format('DD-MM-YYYY'),
+                    tripsheetdate: dayjs(item.tripsheetdate),
                     billed: "Yes",
-                    gstNumber: customerDetails.gstNumber || '',
+                    gstNumber: customerData[0]?.gstnumber || '',
                     gstTax: Math.round(gstTax),
                     cgst: cgst,
                     sgst: sgst,
-                    igst: 0
+                    igst: igst
                 };
             });
-            // Set rows and tax report state
-            setRows(updatedTripsheetResults);
+            setRows(FinalTripsheetResults)
             setSuccess(true)
             setSuccessMessage('Successfully Listed')
             setTaxReport({
-                TaxableValue: Math.round(totalAmount - totalGST),
+                TaxableValue: Math.round(totalAmount),
                 cgst: Math.round(totalCGST),
                 sgst: Math.round(totalSGST),
-                igst: 0,
+                igst: Math.round(totalIGST),
                 totalGST: Math.round(totalGST),
-                totalAmount: Math.round(totalAmount)
+                totalAmount: customerData[0]?.state === stationData[0]?.state ? Math.round(totalCGSTAmount) : Math.round(totalIGSTAmount)
             });
+
+            // const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
+            // console.log(tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults, "gstresponse");
+            // // Combine coveringBilledResults and transferBilledResults into a single array
+            // const combinedData = [
+            //     ...coveringBilledResults.map(item => ({
+            //         billdate: dayjs(item.InvoiceDate).format('YYYY-MM-DD'),
+            //         customer: item.Customer,
+            //     })),
+            //     ...transferBilledResults.map(item => ({
+            //         billdate: dayjs(item.Billdate).format('YYYY-MM-DD'),
+            //         customer: item.Organization_name,
+            //     })),
+            //     ...individualBilledResults.map(item => ({
+            //         billdate: dayjs(item.Bill_Date).format('YYYY-MM-DD'),
+            //         customer: item.Customer,
+            //     }))
+            // ];
+
+            // // Create a map from combinedData for easy lookup
+            // const billDateMap = combinedData.reduce((map, item) => {
+            //     map[item.customer] = item.billdate;
+            //     return map;
+            // }, {});
+
+            // // Create a map from customerResults for easy lookup
+            // const customerMap = customerResults.reduce((map, item) => {
+            //     map[item.customer] = {
+            //         gstNumber: item.gstnumber,
+            //         gstTax: item.gstTax
+            //     };
+            //     return map;
+            // }, {});
+
+            // // Initialize totals
+            // let totalCGST = 0;
+            // let totalSGST = 0;
+            // let totalGST = 0;
+            // let totalAmount = 0;
+
+            // // Update tripsheetResults with the billdate and GST details from maps
+            // const updatedTripsheetResults = tripsheetResults.map((item, index) => {
+            //     const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
+            //     const customerDetails = customerMap[item.customer] || {};
+            //     const gstTax = customerDetails.gstTax || 0;
+            //     let cgstTax = gstTax / 2;
+            //     const totalcalcAmount = item.totalcalcAmount || 0;
+            //     const cgst = Math.round((cgstTax * totalcalcAmount) / 100);
+            //     const sgst = cgst;
+            //     console.log(cgst, 'gggg', cgstTax);
+
+            //     // Update totals
+            //     totalCGST += cgst;
+            //     totalSGST += sgst;
+            //     totalGST += cgst + sgst;
+            //     totalAmount += totalcalcAmount + cgst + sgst;
+
+            //     return {
+            //         ...item,
+            //         id: index + 1,
+            //         billdate: billdate,
+            //         tripsheetdate: dayjs(item.tripsheetdate),
+            //         billed: "Yes",
+            //         gstNumber: customerDetails.gstNumber || '',
+            //         gstTax: Math.round(gstTax),
+            //         cgst: cgst,
+            //         sgst: sgst,
+            //         igst: 0
+            //     };
+            // });
+            // console.log(updatedTripsheetResults, 'updatetrip');
+
+            // // Set rows and tax report state
+            // setRows(updatedTripsheetResults);
+            // setSuccess(true)
+            // setSuccessMessage('Successfully Listed')
+            // setTaxReport({
+            //     TaxableValue: Math.round(totalAmount - totalGST),
+            //     cgst: Math.round(totalCGST),
+            //     sgst: Math.round(totalSGST),
+            //     igst: 0,
+            //     totalGST: Math.round(totalGST),
+            //     totalAmount: Math.round(totalAmount)
+            // });
 
         }
         //  catch (error) {
-            // console.error('Error fetching data:', error);
+        // console.error('Error fetching data:', error);
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your internet connection");
                 // console.log('Network error');
@@ -433,95 +560,189 @@ const useGstReport = () => {
             setErrorMessage('Please Enter Department.')
             return
         }
+
         try {
-            const response = await axios.get(`${apiUrl}/getBilledDetails`, {
+            const response = await axios.get(`${apiUrl}/getParticularStateBilledDetails`, {
                 params: gstReport
             });
 
-            const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
-            if (tripsheetResults.length === 0) {
+            console.log(response.data, 'gstreportdata');
+            const { combinedResults, allTripDetails, tripsheetResults } = response.data;
+
+            if (allTripDetails.length === 0) {
                 setError(true)
-                setErrorMessage('No Data Found')
+                setErrorMessage("No Data Found")
+                setRows([])
+                setTaxReport({
+                    TaxableValue: "",
+                    cgst: "",
+                    sgst: "",
+                    igst: "",
+                    totalGST: "",
+                    totalAmount: ""
+                })
                 return
             }
 
-            // Combine coveringBilledResults and transferBilledResults into a single array
-            const combinedData = [
-                ...coveringBilledResults.map(item => ({
-                    billdate: dayjs(item.InvoiceDate).format('DD-MM-YYYY'),
-                    customer: item.Customer,
-                })),
-                ...transferBilledResults.map(item => ({
-                    billdate: dayjs(item.Billdate).format('DD-MM-YYYY'),
-                    customer: item.Organization_name,
-                })),
-                ...individualBilledResults.map(item => ({
-                    billdate: dayjs(item.Bill_Date).format('DD-MM-YYYY'),
-                    customer: item.Customer,
-                }))
-            ];
+            const updatedTripsheetResults = tripsheetResults.map(trip => {
+                const tripDetails = allTripDetails.find(detail => detail.tripId === String(trip.tripid));
 
-            // Create a map from combinedData for easy lookup
-            const billDateMap = combinedData.reduce((map, item) => {
-                map[item.customer] = item.billdate;
-                return map;
-            }, {});
+                if (tripDetails) {
+                    return {
+                        ...trip,
+                        invoiceNo: tripDetails.invoiceNo,
+                        invoiceDate: tripDetails.invoiceDate,
+                    };
+                }
 
-            // Create a map from customerResults for easy lookup
-            const customerMap = customerResults.reduce((map, item) => {
-                map[item.customer] = {
-                    gstNumber: item.gstnumber,
-                    gstTax: item.gstTax
-                };
-                return map;
-            }, {});
+                return trip;
+            });
+
 
             // Initialize totals
             let totalCGST = 0;
             let totalSGST = 0;
+            let totalIGST = 0;
             let totalGST = 0;
             let totalAmount = 0;
+            let totalCGSTAmount = 0;
+            let totalIGSTAmount = 0;
+            let cgstTax = customerData[0]?.gstTax / 2;
+            let igstTax = customerData[0]?.gstTax
 
-            // Update tripsheetResults with the billdate and GST details from maps
-            const updatedTripsheetResults = tripsheetResults.map((item, index) => {
-                const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
-                const customerDetails = customerMap[item.customer] || {};
-                const gstTax = customerDetails.gstTax || 0;
+            const FinalTripsheetResults = updatedTripsheetResults.map((item, index) => {
+                const billdate = item.invoiceDate;
+                const customerDetails = item.customer;
+                const gstTax = customerData[0]?.gstTax || 0;
                 const totalcalcAmount = item.totalcalcAmount || 0;
-                const cgst = Math.round((gstTax * totalcalcAmount) / 100);
+                const cgst = customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ? Math.round((cgstTax * totalcalcAmount) / 100) || 0 : 0
+                const igst = customerData[0]?.state !== stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? Math.round((igstTax * totalcalcAmount) / 100) || 0 : 0
                 const sgst = cgst;
 
                 // Update totals
                 totalCGST += cgst;
                 totalSGST += sgst;
-                totalGST += cgst + sgst;
-                totalAmount += totalcalcAmount + cgst + sgst;
+                totalIGST += igst;
+                totalAmount += totalcalcAmount;
+                totalGST += customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ? cgst + sgst : igst;
+                totalCGSTAmount += totalcalcAmount + cgst + sgst;
+                totalIGSTAmount += totalcalcAmount + igst;
+
+
 
                 return {
                     ...item,
                     id: index + 1,
                     billdate: billdate,
-                    tripsheetdate: dayjs(item.tripsheetdate).format('YYYY-MM-DD'),
+                    tripsheetdate: dayjs(item.tripsheetdate),
                     billed: "Yes",
-                    gstNumber: customerDetails.gstNumber || '',
+                    gstNumber: customerData[0]?.gstnumber || '',
                     gstTax: Math.round(gstTax),
                     cgst: cgst,
                     sgst: sgst,
-                    igst: 0
+                    igst: igst
                 };
             });
-            // Set rows and tax report state
-            setRows(updatedTripsheetResults);
+            setRows(FinalTripsheetResults)
             setSuccess(true)
             setSuccessMessage('Successfully Listed')
             setTaxReport({
-                TaxableValue: Math.round(totalAmount - totalGST),
+                TaxableValue: Math.round(totalAmount),
                 cgst: Math.round(totalCGST),
                 sgst: Math.round(totalSGST),
-                igst: 0,
+                igst: Math.round(totalIGST),
                 totalGST: Math.round(totalGST),
-                totalAmount: Math.round(totalAmount)
+                totalAmount: customerData[0]?.state === stationData[0]?.state ? Math.round(totalCGSTAmount) : Math.round(totalIGSTAmount)
             });
+
+
+            //     const { tripsheetResults, coveringBilledResults, transferBilledResults, individualBilledResults, customerResults } = response.data;
+            //     if (tripsheetResults.length === 0) {
+            //         setError(true)
+            //         setErrorMessage('No Data Found')
+            //         return
+            //     }
+
+            //     // Combine coveringBilledResults and transferBilledResults into a single array
+            //     const combinedData = [
+            //         ...coveringBilledResults.map(item => ({
+            //             billdate: dayjs(item.InvoiceDate).format('DD-MM-YYYY'),
+            //             customer: item.Customer,
+            //         })),
+            //         ...transferBilledResults.map(item => ({
+            //             billdate: dayjs(item.Billdate).format('DD-MM-YYYY'),
+            //             customer: item.Organization_name,
+            //         })),
+            //         ...individualBilledResults.map(item => ({
+            //             billdate: dayjs(item.Bill_Date).format('DD-MM-YYYY'),
+            //             customer: item.Customer,
+            //         }))
+            //     ];
+
+            //     // Create a map from combinedData for easy lookup
+            //     const billDateMap = combinedData.reduce((map, item) => {
+            //         map[item.customer] = item.billdate;
+            //         return map;
+            //     }, {});
+            //   console.log(billDateMap,'bbbbbbbbb');
+
+            //     // Create a map from customerResults for easy lookup
+            //     const customerMap = customerResults.reduce((map, item) => {
+            //         map[item.customer] = {
+            //             gstNumber: item.gstnumber,
+            //             gstTax: item.gstTax
+            //         };
+            //         return map;
+            //     }, {});
+
+            //     // Initialize totals
+            //     let totalCGST = 0;
+            //     let totalSGST = 0;
+            //     let totalGST = 0;
+            //     let totalAmount = 0;
+
+            //     // Update tripsheetResults with the billdate and GST details from maps
+            //     const updatedTripsheetResults = tripsheetResults.map((item, index) => {
+            //         const billdate = billDateMap[item.customer] || billDateMap[item.Organization_name] || null;
+            //         const customerDetails = customerMap[item.customer] || {};
+            //         const gstTax = customerDetails.gstTax || 0;
+            //         const totalcalcAmount = item.totalcalcAmount || 0;
+            //         const cgst = Math.round((gstTax * totalcalcAmount) / 100);
+            //         const sgst = cgst;
+
+            //         // Update totals
+            //         totalCGST += cgst;
+            //         totalSGST += sgst;
+            //         totalGST += cgst + sgst;
+            //         totalAmount += totalcalcAmount + cgst + sgst;
+            //         console.log(billdate,'bbbb6666');
+
+            //         return {
+            //             ...item,
+            //             id: index + 1,
+            //             billdate: billdate,
+            //             tripsheetdate: dayjs(item.tripsheetdate),
+            //             billed: "Yes",
+            //             gstNumber: customerDetails.gstNumber || '',
+            //             gstTax: Math.round(gstTax),
+            //             cgst: cgst,
+            //             sgst: sgst,
+            //             igst: 0
+            //         };
+            //     });
+            //     // Set rows and tax report state
+            //     console.log(updatedTripsheetResults,'updatetrip');
+            //     setRows(updatedTripsheetResults);
+            //     setSuccess(true)
+            //     setSuccessMessage('Successfully Listed')
+            //     setTaxReport({
+            //         TaxableValue: Math.round(totalAmount - totalGST),
+            //         cgst: Math.round(totalCGST),
+            //         sgst: Math.round(totalSGST),
+            //         igst: 0,
+            //         totalGST: Math.round(totalGST),
+            //         totalAmount: Math.round(totalAmount)
+            //     });
 
         }
         //  catch (error) {
@@ -529,9 +750,9 @@ const useGstReport = () => {
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your internet connection");
                 // console.log('Network error');
@@ -575,7 +796,8 @@ const useGstReport = () => {
         successMessage,
         error,
         errorMessage,
-        hidePopup
+        hidePopup,
+        isGstbtnloading, setisGstbtnloading
     };
 };
 export default useGstReport;

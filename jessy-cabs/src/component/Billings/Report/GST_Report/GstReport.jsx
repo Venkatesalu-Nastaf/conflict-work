@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./GstReport.css";
 import Box from "@mui/material/Box";
 import { Menu, TextField } from "@mui/material";
@@ -18,11 +18,17 @@ import { Autocomplete } from "@mui/material";
 import dayjs from 'dayjs';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import axios from "axios"
+import { APIURL } from '../../../url';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
-export const GstReport = () => {
-  const { organization, gstReport, setGstReport, department, handleShow,hidePopup,handleShowAll, rows, columns,
-     taxReport, handleDownloadPdf, handleDownloadExcel,success,successMessage,error,errorMessage } = useGstReport();
+
+export const GstReport = ({ stationName, Statename }) => {
+  const { organization, gstReport, setGstReport, department, handleShow, hidePopup, handleShowAll, rows, columns,
+    taxReport, handleDownloadPdf, handleDownloadExcel, success, successMessage, error, errorMessage,isGstbtnloading,setisGstbtnloading } = useGstReport();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const apiUrl = APIURL
 
   const handleDateChange = (field, date) => {
     setGstReport(prevGstReport => ({
@@ -38,12 +44,25 @@ export const GstReport = () => {
     }));
   };
 
+  // const handleCustomerChange = (event, value) => {
+    
+  //   setGstReport(prevGstReport => ({
+  //     ...prevGstReport,
+  //     customer: value || '', // Ensure value is not undefined
+      
+  //   }));
+  // };
+
   const handleCustomerChange = (event, value) => {
-    setGstReport(prevGstReport => ({
+    
+    setGstReport((prevGstReport) => ({
       ...prevGstReport,
-      customer: value || '', // Ensure value is not undefined
+      customer: value || '',
     }));
+  
+    setisGstbtnloading(true);
   };
+  
 
   return (
     <>
@@ -88,12 +107,18 @@ export const GstReport = () => {
               id="free-solo-customer"
               freeSolo
               size="small"
-              options={["All", ...department.map(org => org.stationname)]}
+              //   options={Statename.map((option) => ({
+              //     label: option.state,
+              // }))}
+              options={[...Statename.map((org) => org.state)]}
               value={gstReport.department}
               onChange={handleDepartmentChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Department" name='department' inputRef={params.inputRef} />
-              )}
+              renderInput={(params) => {
+                return (
+                  <TextField {...params} label="State" name='department' inputRef={params.inputRef}
+                  />
+                )
+              }}
             />
           </div>
           <div className="input">
@@ -120,10 +145,12 @@ export const GstReport = () => {
           </div>
           <div className='input'>
             <div className="input" >
-              <Button onClick={handleShow} variant="outlined">Show</Button>
+              {/* <Button onClick={handleShow} variant="outlined">Show</Button> */}
+              <LoadingButton loading={isGstbtnloading} onClick={handleShow} variant="outlined">Show</LoadingButton>
             </div>
             <div className="input">
-              <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</Button>
+              {/* <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</Button> */}
+              <LoadingButton  loading={isGstbtnloading} className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</LoadingButton>
             </div>
           </div>
         </div>
@@ -159,6 +186,18 @@ export const GstReport = () => {
               className="full-width"
               value={taxReport.sgst}
               label="SGST"
+              id="customer"
+              margin="normal"
+              size="small"
+            />
+          </div>
+          <div className="input">
+            <TextField
+              name="orderByMobileNo"
+              autoComplete="new-password"
+              className="full-width"
+              value={taxReport.igst}
+              label="IGST"
               id="customer"
               margin="normal"
               size="small"
@@ -228,23 +267,23 @@ export const GstReport = () => {
               },
             }}
           >
-             <div className='alert-popup-main'>
-            {error &&
-              <div className='alert-popup Error'>
-                <div className="popup-icon"><ClearIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{errorMessage}</p>
-              </div>
-            }
-            {success &&
-              <div className='alert-popup Success'>
-                <div className="popup-icon"><FileDownloadDoneIcon /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                <p>{successMessage}</p>
-              </div>
-            }
-        
-          </div>
+            <div className='alert-popup-main'>
+              {error &&
+                <div className='alert-popup Error'>
+                  <div className="popup-icon"><ClearIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{errorMessage}</p>
+                </div>
+              }
+              {success &&
+                <div className='alert-popup Success'>
+                  <div className="popup-icon"><FileDownloadDoneIcon /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                  <p>{successMessage}</p>
+                </div>
+              }
+
+            </div>
             <DataGrid
               rows={rows}
               columns={columns}
@@ -258,7 +297,7 @@ export const GstReport = () => {
             />
           </Box>
         </div>
-       
+
 
       </div>
     </>

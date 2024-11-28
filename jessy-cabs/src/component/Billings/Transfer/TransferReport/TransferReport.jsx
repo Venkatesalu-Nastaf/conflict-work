@@ -822,7 +822,7 @@ const TransferReport = ({ stationName }) => {
                             Download
                           </LoadingButton>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate)}>Excel</MenuItem>
+                            <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate,customerData)}>Excel</MenuItem>
                             <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
                             <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
                           </Menu>

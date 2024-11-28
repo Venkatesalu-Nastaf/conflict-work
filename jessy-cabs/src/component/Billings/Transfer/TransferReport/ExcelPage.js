@@ -45,7 +45,8 @@ const useExeclpage = () => {
         { key: "guestname", header: "Travelled Employee Name", width: 200 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
-        { key: "pickup", header: "Pickup Point / Shed", width: 180 },
+        // { key: "pickup", header: "Pickup Point / Shed", width: 180 },
+        { key: "address1", header: "Pickup Point / Shed", width: 180 },
         { key: "useage", header: "Drop Point", width: 200},
         { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
@@ -111,7 +112,7 @@ const useExeclpage = () => {
         { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
-        { key: "pickup", header: "Pickup Point", width: 180 },
+        { key: "address1", header: "Pickup Point", width: 180 },
         { key: "useage", header: "Drop Point", width: 120 },
         { key: "remark", header: "Runing Details", width: 150 },
         { key: "Zonetranfer", header: "Zone for Airport transfers", width: 150 },
@@ -150,8 +151,11 @@ const useExeclpage = () => {
 
     };
     function addPercentage(amount, percent) {
+     
         let percentageValue = (amount * percent) / 100;
-        return amount + percentageValue;
+      
+        const datapercent = amount + percentageValue
+        return datapercent.toFixed(2)
     }
     function withoutTaxesdata(total,toll,parking,permit) {
         let withoutaxValue = total-toll-parking-permit;
@@ -178,8 +182,9 @@ const useExeclpage = () => {
         return time;
       }
 
-    const handleExcelDownload = async (misformat, invoice, invoicedate) => {
+    const handleExcelDownload = async (misformat, invoice, invoicedate,customerData) => {
         console.log(misformat, invoice, invoicedate, "zipexcel")
+        console.log(customerData,"llll",customerData[0].gstTax)
         const data = invoice;
         const data2 = invoice;
 
@@ -237,10 +242,12 @@ const useExeclpage = () => {
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+                    singleData["gstTax"] = customerData[0].gstTax
                     
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
                     singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
-                    singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    singleData["totalcalcAmount"]= customerData[0].gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],customerData[0].gstTax)
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -274,6 +281,7 @@ const useExeclpage = () => {
                             right: { style: 'thin' },
                         };
                     });
+
                 });
 
                 // write the content using writeBuffer

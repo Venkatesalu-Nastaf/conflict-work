@@ -152,7 +152,8 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
             return words;
         }
     };
-    const rupeestext = convertToWords(fullTotal) || '------';
+    // const rupeestext = convertToWords(fullTotal) || '------';
+  
     // const rupeestext = convertToWords(fullTotal);
     const commonBillingState = commonStates.length > 0 ? commonStates : commonState;
     console.log(commonBillingState, 'common--------');
@@ -162,10 +163,34 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     // final calculation
     const cgstcalc = customerData[0]?.gstTax / 2;
     const sgstcalc = customerData[0]?.gstTax / 2;
-    const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
+    // const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
+  
+    // const cgstAmount = fullAmount * cgstcalc / 100 || 0;
 
-    const igstcalc = customerData[0]?.gstTax;
-    const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
+    // const igstcalc = customerData[0]?.gstTax;
+    // const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
+    console.log(pdfData,"lll")
+
+    const totalSum = pdfData?.reduce((sum, li) => 
+        sum + Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0),0);
+      const totalSumadvance = pdfData?.reduce(
+        (sum, li) => sum + Number(li.customeradvance || 0) ,
+        0
+      );
+      const totalSumcalc = pdfData?.reduce(
+        (sum, li) => sum + Number(li.totalcalcAmount || 0),
+        0
+      );
+      const totalAmountdata = Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)
+    //   const totalAmountdata = Number(42870)
+
+      const cgstAmount = totalAmountdata * cgstcalc / 100 || 0;
+      const paymentValue = totalAmountdata + cgstAmount + cgstAmount || 0;
+      const roundamount = paymentValue.toFixed(0)
+      const igstcalc = customerData[0]?.gstTax;
+      const igstAmount = totalAmountdata * igstcalc / 100 || 0
+      const rupeestext = convertToWords(roundamount) || '------';
+    
 
     return (
         <>
@@ -239,12 +264,12 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="Datediv">
-                    {/* <p>From: <span className="Datetext">{FromDate}</span></p> */}
+            
                     <p>From: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
 
                     <p>To: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
                 </div>
-                <div>
+                {/* <div>
                     <table className="table-ref">
                         <thead>
                             <tr>
@@ -276,7 +301,6 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <tr key={index} className="tabledata-ref">
                                     <td className="tdata">{index + 1}</td>
                                     <td className="tdata">{li.InvoiceNo}</td>
-                                    {/* <td className="tdata">{li.InvoiceDate}</td> */}
                                     <td className="tdata">{li.InvoiceDate ? dayjs(li.InvoiceDate).format("DD-MM-YYYY") : 'N/A'}</td>
                                     <td className="tdata">{li.customer}</td>
                                     <td className="tdata">{li.guestname}</td>
@@ -328,7 +352,196 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                             </tr>
                         </tfoot>
                     </table>
+                </div> */}
+
+
+<div>
+                    <table className="table-ref">
+                        <thead>
+                            <tr>
+                                <th className="tableheadtext">SNo</th>
+                                <th className="tableheadtext">Bill No</th>
+                                <th className="tableheadtext">Bill Date</th>
+                                <th className="tableheadtext">Ordered By</th>
+                                <th className="tableheadtext">Reported To</th>
+                                <th className="tableheadtext">Park/Permit</th>
+                                <th className="tableheadtext">Cus Adv</th>
+                                <th className="tableheadtext">Amount</th>
+                                <th className="tableheadtext">Total Amount</th>
+
+                                 {/* <th className="tableheadtext">Amount</th>
+                                {
+                                    customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+                                        <>
+                                            <th className="tableheadtext">CGST</th>
+                                            <th className="tableheadtext">SGST</th>
+                                        </>
+                                        :
+                                        <>
+                                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <th className="tableheadtext">IGST</th> : ""}
+                                        </>
+                                }
+                                {pdfData.some(li => parseInt(li.customeradvance) > 0) && (
+                                    <th className="tableheadtext">Cus Adv</th>
+                                )}
+                                <th className="tableheadtext">Bill Amt</th> */}
+                            </tr> 
+                        </thead>
+                        <tbody className="tablebody" style={{ height: pdfData.length <= 2 ? '180px' : '100%' }}>
+                            {pdfData?.map((li, index) => (
+                                <tr key={index} className="tabledata-ref">
+                                    <td className="tdata">{index + 1}</td>
+                                    <td className="tdata">{li.InvoiceNo}</td>
+                                    {/* <td className="tdata">{li.InvoiceDate}</td> */}
+                                    <td className="tdata">{li.InvoiceDate ? dayjs(li.InvoiceDate).format("DD-MM-YYYY") : 'N/A'}</td>
+                                    <td className="tdata">{li.customer}</td>
+                                    <td className="tdata">{li.guestname}</td>
+                                    {/* <td className="tdata">{Number(li.parking)+ Number(li.permit)+Number(li.toll)}</td> */}
+                                    <td className="tdata">{[li.parking, li.permit, li.toll].reduce((sum, value) => sum + Number(value), 0)}</td>
+
+                                    <td className="tdata">{li.customeradvance || 0}</td>
+                                    <td className="tdata">{li.totalcalcAmount}</td>
+                                    <td className="tdata">
+  {[li.parking, li.permit, li.toll, li.customeradvance || 0, li.totalcalcAmount || 0].reduce((sum, value) => sum + Number(value), 0)}
+</td>
+
+                                    {/* <td className="tdata">{li.totalcalcAmount}</td> */}
+                                    {/* {
+                                        customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+                                            <>
+                                                <td className="tdata">{(li.totalcalcAmount) * Gst / 100 || 0}</td>
+                                                <td className="tdata">{(li.totalcalcAmount) * Gst / 100 || 0}</td>
+                                            </>
+                                            :
+                                            <>
+                                                {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <td className="tdata">{(li.totalcalcAmount) * fullGST / 100 || 0}</td> : ""}
+                                            </>
+                                    }
+
+                                    {advance > 0 && <td className="tdata">{parseInt(li.customeradvance || 0)}</td>}
+
+                                    <td className="tdata">
+                                        {(parseInt(li.totalcalcAmount || 0) + parseInt(li.totalcalcAmount || 0) * Gst / 100 + parseInt(li.totalcalcAmount) * Gst / 100 || 0).toFixed(0) - parseInt(li.customeradvance || 0) || 0}
+                                    </td> */}
+                                </tr>
+                            ))}
+                        </tbody>
+                        {/* <tfoot>
+                            <tr>
+                                <td className="tdata">{ }</td>
+                                <td className="tdata"> </td>
+                                <td className="tdata"></td>
+                                <td className="tdata"></td>
+                                <td className="tdata">Total</td>
+                                <td className="tdata">{fullAmount}</td>
+                                {customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+
+                                    <>
+                                        <td className="tdata">{cgstAmount || 0}</td>
+                                        <td className="tdata">{cgstAmount || 0}</td>
+                                    </>
+                                    :
+                                    <>
+                                        {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ?
+                                            <td className="tdata">{igstAmount || 0}</td> : ""}
+                                    </>
+                                }
+                                {advance > 0 && (
+                                    <td className="tdata">{advance}</td>
+                                )}
+                                <td className="tdata">{fullTotal || 0}</td>
+                            </tr>
+                        </tfoot> */}
+
+
+
+<tfoot>
+                            <tr>
+                                <td className="tdata">{ }</td>
+                                <td className="tdata"> </td>
+                                <td className="tdata"></td>
+                                <td className="tdata"></td>
+                                <td className="tdata">Total</td>
+                                 <td className="tdata">{totalSum}</td> 
+                                 <td className="tdata">{totalSumadvance}</td> 
+                                 <td className="tdata">{totalSumcalc}</td>
+                                 <td className="tdata">
+  {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}
+</td>                   
+                        
+                                {/* {customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+
+                                    <>
+                                        <td className="tdata">{cgstAmount || 0}</td>
+                                        <td className="tdata">{cgstAmount || 0}</td>
+                                    </>
+                                    :
+                                    <>
+                                        {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ?
+                                            <td className="tdata">{igstAmount || 0}</td> : ""}
+                                    </>
+                                }
+                                {advance > 0 && (
+                                    <td className="tdata">{advance}</td>
+                                )}
+                                <td className="tdata">{fullTotal || 0}</td> */}
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
+
+                <div className="total-div" style={{ marginLeft: '50px' }}>
+
+                       
+                                      
+                        { customerData[0]?.state === stationData[0]?.state ?
+                                     <>    
+                                      <div style={{ marginLeft: "100px" }}>
+                                     
+                                   {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+                                   <>
+                                  
+                                    <h4>Amount :</h4> 
+                                 
+                                    <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4>
+                                    
+                                    <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4>
+                                    <h4>Total Amount :</h4> </> : <>
+                                    <h4>Amount :</h4> <h4></h4>
+                                    <h4></h4> 
+                                    <h4 style={{ marginTop: '110px' }}>Total Amount :</h4> 
+                                  </>}
+                                </div>
+                                <div className="amount-div">
+                                {/* <div style={{textAlign:'center',width:'75px'}}> */}
+                                <p className="amounttext">{Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}.00</p>
+                                    
+                                     <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{cgstAmount.toFixed(2)}</p>
+                                    <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{cgstAmount.toFixed(2)}</p>
+                                    <p className="amounttext" style={{ marginTop: '23px'}}>{paymentValue.toFixed(0)}.00</p> 
+                                </div>
+                            </> : <>
+                            
+                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && <>
+                                           <div style={{ marginLeft: "100px" }}><h4>Amount :</h4> 
+                                           <h4>IGST {igstcalc}% on {totalAmountdata} :</h4>
+   
+                                           <h4>Total Amount :</h4>
+                                       </div>
+                                       <div className="amount-div">
+                                       <p className="amounttext">{totalAmountdata}.00</p>
+                                       
+                                     <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{igstAmount.toFixed(2)}</p>
+                                
+                                           <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                                       </div>
+                                       </>
+                            }
+                            </>
+                               }
+                                 
+                                   
+                    </div>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px', textTransform: 'capitalize' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px', fontWeight: 600 }}>{rupeestext}</p></div>
                 {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ?
                     <div style={{ display: 'flex', alignItems: 'center' }}>

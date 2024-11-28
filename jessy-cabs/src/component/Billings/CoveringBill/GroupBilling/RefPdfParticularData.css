@@ -109,3 +109,10 @@ tbody {
   border: 1px solid gray !important;
   
 }
+
+.total-div{
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+  /* margin-right: 40px; */
+}

@@ -424,7 +424,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         Download
                                     </Button>
                                     <Menu {...bindMenu(popupState)}>
-                                        <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                        <MenuItem onClick={() => handleExcelDownload(customerData)}>Excel</MenuItem>
                                         <MenuItem onClick={handleGstPdf}>GST PDF</MenuItem>
                                     </Menu>
                                 </React.Fragment>

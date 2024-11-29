@@ -292,32 +292,6 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="UptoHours"
-                      className='full-width'
-                      label="Upto Hours  "
-                      name="UptoHours"
-                      autoComplete="new-password"
-                      value={fieldSet.UptoHours || ""}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </div>
-                  <div className="input">
-                    <TextField
-                      type='number'
-                      size="small"
-                      id="UptoKMS"
-                      className='full-width'
-                      label="Upto KMS"
-                      name="UptoKMS"
-                      autoComplete="new-password"
-                      value={fieldSet.UptoKMS || ""}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </div>
-                  <div className="input">
-                    <TextField
-                      type='number'
-                      size="small"
                       id="extraHours"
                       className='full-width'
                       label="Extra Hours"
@@ -340,6 +314,33 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
+                  <div className="input">
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="UptoHours"
+                      className='full-width'
+                      label="Upto Hours  "
+                      name="UptoHours"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoHours || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input">
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="UptoKMS"
+                      className='full-width'
+                      label="Upto KMS"
+                      name="UptoKMS"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoKMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  
                   <div className="input">
                     <TextField
                       type='number'

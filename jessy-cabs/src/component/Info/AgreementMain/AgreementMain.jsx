@@ -8,7 +8,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Agreement from './Agreement/Agreement';
 
-const AgreementMain = () => {
+const AgreementMain = ({organizationNames}) => {
     const [value, setValue] = React.useState("agreement");
 
     const handleChange = (event, newValue) => {
@@ -24,7 +24,7 @@ const AgreementMain = () => {
                                 <Tab label="Agreement" value="agreement" />
                             </TabList>
                         </Box>
-                        <TabPanel value="agreement"><Agreement /></TabPanel>
+                        <TabPanel value="agreement"><Agreement organizationNames={organizationNames} /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

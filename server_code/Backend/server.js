@@ -1,7 +1,7 @@
 //Database connection for Nastaf Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');  
 const app = express();
 const fs = require('fs');
 const db = require('./db');
@@ -81,6 +81,7 @@ const IndividualBill = require('./customer_master/Router/Individual_Billing/Indi
 const GstReport = require('./customer_master/Router/GstReport/GstReport');
 const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport');
 const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
+const AggrementPage = require('./customer_master/Router/Aggrement/aggrement')
 const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard')
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -91,7 +92,7 @@ app.use('/', vehicleinfoRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', bookingRouter); // Booking page database:-
 // -----------------------------------------------------------------------------------------------------------
-
+app.use('/', AggrementPage); // Aggrement page database:-
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', transferlistRouter); // Transfer lsit Database:
 // -----------------------------------------------------------------------------------------------------------

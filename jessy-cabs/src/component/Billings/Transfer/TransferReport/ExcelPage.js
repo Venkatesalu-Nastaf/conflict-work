@@ -45,7 +45,7 @@ const useExeclpage = () => {
         { key: "guestname", header: "Travelled Employee Name", width: 200 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
-        // { key: "pickup", header: "Pickup Point / Shed", width: 180 },
+ 
         { key: "address1", header: "Pickup Point / Shed", width: 180 },
         { key: "useage", header: "Drop Point", width: 200},
         { key: "starttime", header: "Shift Timing", width: 150 },
@@ -233,6 +233,7 @@ const useExeclpage = () => {
                     singleData["duty1"] = singleData["duty"]
                     singleData["Vendor"] = " Jessy Cabs"
                     singleData["VendorName"] = " Jessy Cabs"
+                    singleData["UserNos_Occupancy"] = 1
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
@@ -339,6 +340,8 @@ const useExeclpage = () => {
                     singleData2["Gender"] = singleData2["gender"] ? singleData2["gender"] : "N/A"
                     singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
                     singleData2["VendorName"] = " Jessy Cabs"
+                    singleData2["UserNos_Occupancy"] = 1
+                    singleData2["calcPackage"] =  singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] :singleData2["calcPackage"]
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
                     singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD-MM-YYYY"):""

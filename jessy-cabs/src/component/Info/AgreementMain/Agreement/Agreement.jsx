@@ -3,6 +3,7 @@ import "./Agreement.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
+import { Autocomplete } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,6 +12,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { TextField } from "@mui/material";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -37,6 +39,8 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 // import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
@@ -50,7 +54,6 @@ import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { CircularProgress } from '@mui/material';
-
 import { APIURL } from "../../../url";
 
 // import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -69,7 +72,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Agreement = () => {
+const Agreement = ({organizationNames}) => {
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
@@ -80,7 +83,11 @@ const Agreement = () => {
     success,
     info,
     warning,
+    selectedCustomerDatas,
     successMessage,
+    customer,
+    setCustomer,
+    handlecustomer,
     errorMessage,
     warningMessage,
     infoMessage,
@@ -92,6 +99,7 @@ const Agreement = () => {
     hidePopup,
     formData,
     handleDateChange,
+    handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
     columns,
@@ -102,6 +110,11 @@ const Agreement = () => {
     handleCloseDialog,
     dialogOpen,
     setFile,
+    setFromDate,
+    toDate,
+    setToDate,
+    setBook,
+    fromDate,
     isEditMode,
     handleEdit,
     handleContextMenu,
@@ -117,7 +130,7 @@ const Agreement = () => {
     setLoading
 
   } = useEmployee();
-
+  // console.log(organizationNames,"ppppppppppppp")
 
 
   // permissions
@@ -143,80 +156,100 @@ const Agreement = () => {
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
             <div className="input-field employee-input-feilds">
+            <div className="input input-transferlist">
+                            <div className="icone">
+                                <HailOutlinedIcon color="action" />
+                            </div>
+                            <Autocomplete
+                                fullWidth
+                                id="free-solo-Organization"
+                                className="full-width"
+                                freeSolo
+                                size="small"
+                                name="customer"
+                                value={book.customer || ''}
+                                options={organizationNames.map(option => (typeof option === 'string' ? { label: option } : option))} // Ensure options have a `label`
+                                onChange={(event, value) =>
+                                    handleAutocompleteChange(event, value, "customer")
+                                }
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                                )}
+                            />
+                        </div>
+                                <div className="input">
+                              <div className="icone">
+                                  <CalendarMonthIcon color="action" />
+                              </div>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                      <DatePicker
+                                          id="fromdate"
+                                          className="full-width"
+                                          label="From Date"
+                                          name="fromdate"
+                                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : dayjs(fromDate)}
+                                          format="DD/MM/YYYY"
+                                          onChange={(date) => {
+                                              handleDateChange(date, 'fromdate');
+                                          }}
+                                      />
+                                  </DemoContainer>
+                              </LocalizationProvider>
+                          </div>
+
+                              <div className="input">
+                                  <div className="icone">
+                                      <CalendarMonthIcon color="action" />
+                                  </div>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                          <DatePicker
+                                              id="toDate"
+                                              className="full-width"
+                                              label="To Date"
+                                              name="toDate"
+                                              value={selectedCustomerDatas.toDate ? dayjs(selectedCustomerDatas.toDate) : dayjs(toDate)}
+                                              format="DD/MM/YYYY"
+                                              onChange={(date) => {
+                                                  handleDateChange(date, 'toDate');
+                                                  const formattedDate = dayjs(date).format('DD-MM-YYYY');
+                                                  setToDate(formattedDate);
+                                              }}
+                                          />
+                                      </DemoContainer>
+                                  </LocalizationProvider>
+                              </div>
+                                
+
               <div className="input">
                 <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="organization-name"
-                  className="full-width"
-                  label="Organization Name"
-                  name="organization-name"
-                  autoComplete="new-password"
-                // value={selectedCustomerData?.empid || book.empid}
-                // onChange={handleChange}
-                />
-              </div>
-
-
-
-
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <div className="icone">
-                    <CalendarMonthIcon color="action" />
-                  </div>
-                  <DatePicker
-                    id="date"
-                    className="full-width"
-                    label="Date"
-                    format="DD/MM/YYYY"
-                  // value={
-                  //   formData.joiningdate || selectedCustomerData.joiningdate
-                  //     ? dayjs(selectedCustomerData.joiningdate)
-                  //     : null
-                  // }
-                  // onChange={(date) => handleDateChange(date, "joiningdate")}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField
-                        {...inputProps}
-                        inputRef={inputRef}
-                      // value={selectedCustomerData?.joiningdate}
-                      />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <TransgenderRoundedIcon color="action" />
+                  <EmailIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="email"
                   className="full-width"
-                  label="Email"
+                  label="Email Id"
                   name="email"
                   autoComplete="new-password"
-                // value={selectedCustomerData?.gender || book.gender}
-                // onChange={handleChange}
+                  value={selectedCustomerData?.email || book.email}
+                  onChange={handleChange}
                 />
               </div>
               <div className="input">
                 <div className="icone">
-                  <BloodtypeIcon color="action" />
+                  <PhoneIphoneIcon color="action" />
                 </div>
                 <TextField
                   size="small"
-                  id="mobile-no"
+                  id="mobileno"
                   className="full-width"
-                  label="Mobile No"
-                  name="mobile-no"
+                  label="Mobile"
+                  name="mobileno"
                   autoComplete="new-password"
-                // value={selectedCustomerData?.bloodgroup || book.bloodgroup}
-                // onChange={handleChange}
+                  value={selectedCustomerData?.mobileno || book.mobileno}
+                  onChange={handleChange}
                 />
               </div>
               <div className="input input-address">
@@ -224,12 +257,12 @@ const Agreement = () => {
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <textarea
-                  id="address1"
+                  id="address"
                   className='textarea-input'
-                  name="address1"
+                  name="address"
                   rows="3"
-                  // value={selectedCustomerData?.address1 || book.address1}
-                  // onChange={handleChange}
+                  value={selectedCustomerData?.address || book.address}
+                  onChange={handleChange}
                   placeholder="Address"
                 />
 
@@ -240,13 +273,13 @@ const Agreement = () => {
                 </div>
                 <TextField
                   size="small"
-                  id="gst"
+                  id="gstno"
                   className="full-width"
                   label="GST"
-                  name="gst"
+                  name="gstno"
                   autoComplete="new-password"
-                // value={selectedCustomerData?.aadharcard || book.aadharcard}
-                // onChange={handleChange}
+                value={selectedCustomerData?.gstno|| book.gstno}
+                onChange={handleChange}
                 />
               </div>
 
@@ -257,16 +290,23 @@ const Agreement = () => {
                   type="file"
                   style={{ display: "none" }}
                   onChange={handleFileChange}
-                />
+                />    
                 <label htmlFor="file-upload">
-                  <Button variant="contained" component="span">
+                  <Button variant="outlined" component="span">
                     Upload
                   </Button>
                 </label>
                 {/* {fileName && <p>Selected file: {fileName}</p>} */}
               </div>
-            </div>
 
+              <div className="input">
+                {isEditMode ? (
+                  <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" disabled={!Employee_modify} onClick={handleAdd}>Add</Button>
+                )}
+              </div>
+            </div>
 
           </div>
         </div>
@@ -366,10 +406,6 @@ const Agreement = () => {
           </StyledSpeedDial>
         </Box>
 
-
-
-
-
         <div>
           <div className="download-search">
             <div className="Download-btn">
@@ -415,12 +451,8 @@ const Agreement = () => {
                 </div>
               </div>
             </div>
-
-
-
           </div>
-
-
+          
           <div className="table-bookingCopy-Employe ">
             <div className="registration-employee-table">
               {/* <DataGrid

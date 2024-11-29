@@ -653,8 +653,7 @@ function App() {
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined  ? (<FuelInfo />) : (<NoPermission /> )} />
                 <Route path="/home/info/employee" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <Employes />):(<NoPermission />)} />
-                <Route path="/home/info/agreement" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <AgreementMain />):(<NoPermission />)} />
-                
+                <Route path="/home/info/agreement" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <AgreementMain  organizationNames={organizationNames}/>):(<NoPermission />)} />                
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 

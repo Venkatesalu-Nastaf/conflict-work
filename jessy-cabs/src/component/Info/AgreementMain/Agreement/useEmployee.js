@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
@@ -8,19 +7,23 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import { toDate } from 'validator';
 
 const useEmployee = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
+    const [customer, setCustomer] = useState("");
     const [formData] = useState({});
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
+    const [fromDate, setFromDate] = useState(dayjs());
+    const [ToDate, setToDate] = useState(dayjs());
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
@@ -61,169 +64,81 @@ const useEmployee = () => {
                 </Button>
             ),
         },
-        { field: "empid", headerName: "Employe ID", width: 140 },
-        { field: "empname", headerName: "Name", width: 130 },
-        { field: "empemailid", headerName: "Email", width: 130 },
-        { field: "empmobile", headerName: "Mobile", width: 130 },
-        { field: "jobroll", headerName: "Job Roll", width: 130 },
-        { field: "joiningdate", headerName: "Joining Date", width: 130 },
-        { field: "gender", headerName: "Gender", width: 130 },
-        { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
-        { field: "guardian", headerName: "Guardian", width: 130 },
-        { field: "uanid", headerName: "UAN ID", width: 140 },
-        { field: "esino", headerName: "ESI NO", width: 140 },
-        { field: "fixedsalary", headerName: "Net Salary", width: 130 },
-        { field: "licenceno", headerName: "Driving Licence No", width: 140 },
+        { field: "customer", headerName: "Customer", width: 140 },
+        { field: "fromdate", headerName: "From Date", width: 140 },
+        { field: "todate", headerName: "To Date", width: 140 },
+        { field: "email", headerName: "Mail ID", width: 140 },
+        { field: "mobileno", headerName: "Mobile No", width: 140 },
+        { field: "address", headerName: "Address", width: 140 },
+        { field: "gstno", headerName: "GST No", width: 140 },
+
     ];
+   
     // TABLE END
 
     // };
 
-    // const handleExcelDownload = async () => {
-    //     const workbook = new Excel.Workbook();
-    //     const workSheetName = 'Worksheet-1';
-
-    //     try {
-
-    //         const fileName = "Employeedateils"
-    //         // creating one worksheet in workbook
-    //         const worksheet = workbook.addWorksheet(workSheetName);
-    //         const headers = Object.keys(rows[0]);
-    //         const columnsExcel = headers.map(key => ({ key, header: key }));
-
-    //         worksheet.columns = columnsExcel;
-
-    //         // updated the font for first row.
-    //         worksheet.getRow(1).font = { bold: true };
-
-    //         // Set background color for header cells
-    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
-    //             cell.fill = {
-    //                 type: 'pattern',
-    //                 pattern: 'solid',
-    //                 fgColor: { argb: '9BB0C1' } // Green background color
-    //             };
-    //         });
-
-
-    //         worksheet.getRow(1).height = 30;
-    //         // loop through all of the columns and set the alignment with width.
-    //         worksheet.columns.forEach((column) => {
-    //             column.width = column.header.length + 5;
-    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
-    //         });
-
-    //         rows.forEach((singleData, index) => {
-
-    //             console.log(rows,'datas of agreees')
-
-    //             worksheet.addRow(singleData);
-
-    //             // Adjust column width based on the length of the cell values in the added row
-    //             worksheet.columns.forEach((column) => {
-    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
-    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-    //                 // Set column width to the maximum of current width and cell length plus extra space
-    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
-    //             });
-    //         });
-
-    //         // loop through all of the rows and set the outline style.
-    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
-    //             // store each cell to currentCell
-    //             const currentCell = row._cells;
-
-    //             // loop through currentCell to apply border only for the non-empty cell of excel
-    //             currentCell.forEach((singleCell) => {
-
-    //                 const cellAddress = singleCell._address;
-
-    //                 // apply border
-    //                 worksheet.getCell(cellAddress).border = {
-    //                     top: { style: 'thin' },
-    //                     left: { style: 'thin' },
-    //                     bottom: { style: 'thin' },
-    //                     right: { style: 'thin' },
-    //                 };
-    //             });
-    //         });
-    //         // write the content using writeBuffer
-    //         const buf = await workbook.xlsx.writeBuffer();
-
-    //         // download the processed file
-    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
-    //     } catch (error) {
-    //         console.error('<<<ERRROR>>>', error);
-    //         console.error('Something Went Wrong', error.message);
-    //     } finally {
-    //         // removing worksheet's instance to create new one
-    //         workbook.removeWorksheet(workSheetName);
-    //     }
-
-    // }
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-    
+
         try {
-            const fileName = "Employeedetails";
+
+            const fileName = "Employeedateils"
+            // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-    
             const columnsExcel = headers.map(key => ({ key, header: key }));
-    
+
             worksheet.columns = columnsExcel;
-    
+
+            // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
-    
+
+            // Set background color for header cells
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' }
+                    fgColor: { argb: '9BB0C1' } // Green background color
                 };
             });
-    
+
+
             worksheet.getRow(1).height = 30;
-    
+            // loop through all of the columns and set the alignment with width.
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-    
-            // Format the date before adding rows
-            const formatDate = (dateStr) => {
-                return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : ''; // Format date
-            };
-    
-            // Map the rows to format the joiningdate field
-            const formattedRows = rows.map(row => {
-                const formattedRow = { ...row };
-                if (formattedRow.joiningdate) {
-                    formattedRow.joiningdate = formatDate(formattedRow.joiningdate);
-                }
-                return formattedRow;
-            });
-    
-            // Add rows to the worksheet
-            formattedRows.forEach((singleData, index) => {
+
+            rows.forEach((singleData, index) => {
+
+
                 worksheet.addRow(singleData);
-    
+
+                // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || '';
-                    const cellLength = cellValue.toString().length;
-                    const currentColumnWidth = column.width || 0;
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-    
-            // Add borders to the cells
+
+            // loop through all of the rows and set the outline style.
             worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
                 const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
+
                     const cellAddress = singleCell._address;
+
+                    // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -232,103 +147,21 @@ const useEmployee = () => {
                     };
                 });
             });
-    
-            // Write the content to buffer
+            // write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
             console.error('<<<ERRROR>>>', error);
             console.error('Something Went Wrong', error.message);
         } finally {
+            // removing worksheet's instance to create new one
             workbook.removeWorksheet(workSheetName);
         }
-    };
+
+    }
     
-
-    // const handlePdfDownload = () => {
-    //     const pdf = new jsPDF({
-    //         orientation: "landscape",
-    //         unit: "mm",
-    //         format: "tabloid" // [width, height] in inches
-    //     });
-    //     pdf.setFontSize(10);
-    //     pdf.setFont('helvetica', 'normal');
-    //     pdf.text("Employee Details", 10, 10);
-    //     const header = Object.keys(rows[0]);
-
-    //     // Extracting body
-    //     const body = rows.map(row => Object.values(row));
-
-    //     console.log(rows,'data of agrees data')
-
-    //     let fontdata = 1;
-    //     if (header.length <= 13) {
-    //         fontdata = 16;
-    //     }
-    //     else if (header.length >= 14 && header.length <= 17) {
-    //         fontdata = 11;
-    //     }
-    //     else if (header.length >= 18 && header.length <= 20) {
-    //         fontdata = 10;
-    //     } else if (header.length >= 21 && header.length <= 23) {
-    //         fontdata = 9;
-    //     }
-    //     else if (header.length >= 24 && header.length <= 26) {
-    //         fontdata = 7;
-    //     }
-    //     else if (header.length >= 27 && header.length <= 30) {
-    //         fontdata = 6;
-    //     }
-    //     else if (header.length >= 31 && header.length <= 35) {
-    //         fontdata = 4;
-    //     }
-    //     else if (header.length >= 36 && header.length <= 40) {
-    //         fontdata = 4;
-    //     }
-    //     else if (header.length >= 41 && header.length <= 46) {
-    //         fontdata = 2;
-    //     }
-
-    //     pdf.autoTable({
-    //         head: [header],
-    //         body: body,
-    //         startY: 20,
-
-    //         headStyles: {
-    //             // fontSize: 5,
-    //             fontSize: fontdata,
-    //             cellPadding: 1.5, // Decrease padding in header
-
-    //             minCellHeigh: 8,
-    //             valign: 'middle',
-
-    //             font: 'helvetica', // Set font type for body
-
-    //             cellWidth: 'wrap',
-    //             // cellWidth: 'auto'
-    //         },
-
-    //         bodyStyles: {
-    //             // fontSize:4,
-    //             // fontSize: fontdata-1
-    //             fontSize: fontdata - 1,
-    //             valign: 'middle',
-    //             //  cellWidth: 'wrap',
-    //             cellWidth: 'auto'
-    //             // Adjust the font size for the body
-
-    //         },
-    //         columnWidth: 'auto'
-
-    //     });
-    //     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-
-    //     // Scale content
-    //     pdf.scale(scaleFactor, scaleFactor);
-    //     const pdfBlob = pdf.output('blob');
-    //     saveAs(pdfBlob, 'EmployeeReports.pdf');
-    // };
-
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
@@ -338,74 +171,78 @@ const useEmployee = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
-    
         const header = Object.keys(rows[0]);
-    
-        // Format the joiningdate before adding to the body
-        const formatDate = (dateStr) => {
-            return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : ''; // Customize your format here
-        };
-    
-        // Create a new body with formatted dates
-        const body = rows.map(row => {
-            const formattedRow = { ...row };
-            if (formattedRow.joiningdate) {
-                formattedRow.joiningdate = formatDate(formattedRow.joiningdate);
-            }
-            return Object.values(formattedRow); // Convert object to array for the table
-        });
-    
+
+        // Extracting body
+        const body = rows.map(row => Object.values(row));
+
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
-        } else if (header.length >= 14 && header.length <= 17) {
+        }
+        else if (header.length >= 14 && header.length <= 17) {
             fontdata = 11;
-        } else if (header.length >= 18 && header.length <= 20) {
+        }
+        else if (header.length >= 18 && header.length <= 20) {
             fontdata = 10;
         } else if (header.length >= 21 && header.length <= 23) {
             fontdata = 9;
-        } else if (header.length >= 24 && header.length <= 26) {
+        }
+        else if (header.length >= 24 && header.length <= 26) {
             fontdata = 7;
-        } else if (header.length >= 27 && header.length <= 30) {
+        }
+        else if (header.length >= 27 && header.length <= 30) {
             fontdata = 6;
-        } else if (header.length >= 31 && header.length <= 35) {
+        }
+        else if (header.length >= 31 && header.length <= 35) {
             fontdata = 4;
-        } else if (header.length >= 36 && header.length <= 40) {
+        }
+        else if (header.length >= 36 && header.length <= 40) {
             fontdata = 4;
-        } else if (header.length >= 41 && header.length <= 46) {
+        }
+        else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-    
+
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-    
+
             headStyles: {
+                // fontSize: 5,
                 fontSize: fontdata,
-                cellPadding: 1.5,
-                minCellHeight: 8,
+                cellPadding: 1.5, // Decrease padding in header
+
+                minCellHeigh: 8,
                 valign: 'middle',
-                font: 'helvetica',
+
+                font: 'helvetica', // Set font type for body
+
                 cellWidth: 'wrap',
+                // cellWidth: 'auto'
             },
-    
+
             bodyStyles: {
+                // fontSize:4,
+                // fontSize: fontdata-1
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                cellWidth: 'auto',
+                //  cellWidth: 'wrap',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+
             },
             columnWidth: 'auto'
+
         });
-    
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-    
+
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'EmployeeReports.pdf');
     };
-    
 
 
     const hidePopup = () => {
@@ -427,23 +264,17 @@ const useEmployee = () => {
 
 
     const [book, setBook] = useState({
-        empid: '',
-        empname: '',
-        empemailid: '',
-        empmobile: '',
-        jobroll: '',
-        joiningdate: '',
-        gender: '',
-        bloodgroup: '',
-        address1: '',
-        aadharcard: '',
-        pancard: '',
-        guardian: '',
-        fixedsalary: '',
-        uanid: '',
-        esino: '',
-        licenceno: '',
+        customer:'',
+        fromdate:'',
+        toDate:'',
+        email:'',
+        mobileno:'',
+        address:'',
+        gstno:'',
+
     });
+
+    console.log(book, 'rrrrrrrrrrrr')
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
@@ -452,7 +283,7 @@ const useEmployee = () => {
                 ...prevBook,
                 [name]: checked,
             }));
-            setSelectedCustomerData((prevData) => ({
+            setSelectedCustomerDatas((prevData) => ({
                 ...prevData,
                 [name]: checked,
             }));
@@ -461,53 +292,57 @@ const useEmployee = () => {
                 ...prevBook,
                 [name]: value,
             }));
-            setSelectedCustomerData((prevData) => ({
+            setSelectedCustomerDatas((prevData) => ({
                 ...prevData,
                 [name]: value,
             }));
         }
     };
 
-    const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('YYYY-MM-DD');
-        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: parsedDate,
-        }));
-        setSelectedCustomerData((prevBook) => ({
-            ...prevBook,
-            [name]: parsedDate,
+    const handleAutocompleteChange = (event, value, name) => {
+        const selectedOption = value?.label || value || ""; // Handle both string and object options
+        setBook(prevState => ({
+            ...prevState,
+            [name]: selectedOption, // Dynamically set the key
         }));
     };
+    
+
+    const handleDateChange = (date, name) => {
+        if (!date || !dayjs(date).isValid()) {
+            console.error("Invalid date selected");
+            return;
+        }
+        const formattedDate = dayjs(date).format('DD-MM-YYYY');
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
+        setSelectedCustomerDatas((prevData) => ({
+            ...prevData,
+            [name]: formattedDate,
+        }));
+    };
+    
 
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            empid: '',
-            empname: '',
-            empemailid: '',
-            empmobile: '',
-            jobroll: '',
-            joiningdate: '',
-            gender: '',
-            bloodgroup: '',
-            address1: '',
-            aadharcard: '',
-            pancard: '',
-            guardian: '',
-            fixedsalary: '',
-            uanid: '',
-            esino: '',
-            licenceno: '',
+        customer:'',
+        fromdate:'',
+        toDate:'',
+        email:'',
+        mobileno:'',
+        address:'',
+        gstno:'',
         }));
-        setSelectedCustomerData({});
+        setSelectedCustomerDatas({});
         setIsEditMode(false);
     };
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
-        setSelectedCustomerData(customerData);
+        setSelectedCustomerDatas(customerData);
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
     }, []);
@@ -535,7 +370,7 @@ const useEmployee = () => {
 
     ///--------------------------------------------
 
-    const empid = selectedCustomerData?.empid || book.empid
+    const empid = selectedCustomerDatas?.empid || book.empid
     const [file, setFile] = useState(null);
 
     const addPdf = async () => {
@@ -581,7 +416,7 @@ const useEmployee = () => {
         setLoading(true);
         setError(false); // Reset error state before each request
         try {
-            const response = await axios.get(`${apiUrl}/employees`);
+            const response = await axios.get(`${apiUrl}/agreementdata`);
             const data = response.data;
             
             const rowsWithUniqueId = data.map((row, index) => ({
@@ -594,10 +429,11 @@ const useEmployee = () => {
         } catch (err) {
             if (err.message === 'Network Error') {
                 setErrorMessage("Check network connection.");
-            } else {
-                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
-            }
-            setError(true);
+            } 
+            // else {
+            //     setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            // }
+            // setError(true);
         } finally {
             setLoading(false); // Ensure loading is false in all cases
         }
@@ -609,17 +445,22 @@ const useEmployee = () => {
     }, [handleList]);
 
     //----------------------------------------------
+
+ 
     const handleAdd = async () => {
-        const empid = book.empid || selectedCustomerData.empid;
-        if (!empid) {
+        const email  = book.email  || selectedCustomerDatas.email ;
+        if (!email ) {
             setError(true);
-            setErrorMessage("Check your Employee ID");
+            setErrorMessage("Fill your Email ID");
             return;
         }
+        
+        console.log(email, 'dhbdd')
         try {
-            await axios.post(`${apiUrl}/employees`, book);
+            await axios.post(`${apiUrl}/agreementdatas`, book); 
             handleCancel();
             addPdf();
+            setCustomer();
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
@@ -649,11 +490,11 @@ const useEmployee = () => {
         }
     };
 
-    const handleEdit = async (userid) => {
-        const selectedCustomer = rows.find((row) => row.empid === empid);
-        const { id, ...rest } = selectedCustomerData;
+    const handleEdit = async (email) => {
+        const selectedCustomer = rows.find((row) => row.email === email);
+        const { id, ...rest } = selectedCustomerDatas;
         const updatedCustomer = { ...rest };
-        await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
+        await axios.put(`${apiUrl}/agreementedit/${selectedCustomer.empid}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -696,8 +537,8 @@ const useEmployee = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
-                setSelectedCustomerData(null);
+                await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerDatas.empid}`);
+                setSelectedCustomerDatas(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
@@ -706,8 +547,8 @@ const useEmployee = () => {
 
             else if (actionName === 'Edit') {
                 const selectedCustomer = rows.find((row) => row.empid === empid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerDatas };
+                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerDatas.empid}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -848,7 +689,7 @@ const useEmployee = () => {
     };
 
     return {
-        selectedCustomerData,
+        selectedCustomerDatas,
         selectedCustomerId,
         rows,
         actionName,
@@ -863,7 +704,7 @@ const useEmployee = () => {
         book,
         handleClick,
         handleChange,
-
+        setBook,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -874,14 +715,20 @@ const useEmployee = () => {
         columns,
         searchText,
         setSearchText,
+        fromDate,setFromDate,
+        ToDate,
+        setToDate,
         handleShowAll,
         allFile,
         handleCloseDialog,
         dialogOpen,
         setFile,
+        customer,
+        setCustomer,
         isEditMode,
         handleEdit,
         handleContextMenu,
+        handleAutocompleteChange,
         handleimagedelete,
         handlecheckbox,
         handleDocumentDownload,

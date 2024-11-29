@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Page, Text, View, Document as PDFDocument, StyleSheet, Image } from '@react-pdf/renderer';
 import { APIURL } from '../../../url';
 import numWords from 'num-words'
+import dayjs from 'dayjs';
+
 
 const styles = StyleSheet.create({
     page: {
@@ -359,16 +361,23 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                     <Text style={styles.billtextdate}>Bill Date</Text>
                                     <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
 
-                                    <Text style={styles.billtextdatetext}>{invoiceDate}</Text>
+                                    {/* <Text style={styles.billtextdatetext}>{invoiceDate}</Text> */}
+                                    <Text style={styles.billtextdatetext}>{dayjs(invoiceDate).format('DD-MM-YYYY')}</Text>
                                 </View>
                             </View>
                         </View>
                         <View style={{ borderBottom: '1px solid black' }}>
                             <View style={{ flexDirection: 'row', width: '250px', justifyContent: 'space-between', padding: 5 }}>
                                 <Text style={{ fontSize: '13px' }}>Duration: </Text>
-                                <Text style={{ fontSize: '12px' }}>{fromDate} </Text>
+                                {/* <Text style={{ fontSize: '12px' }}>{fromDate} </Text> */}
+
+                                <Text style={{ fontSize: '12px' }}>
+                                    {dayjs(fromDate).format('DD-MM-YYYY')}
+                                </Text>
+
                                 <Text style={{ fontSize: '12px' }}>To: </Text>
-                                <Text style={{ fontSize: '12px' }}>{enddate}</Text>
+                                {/* <Text style={{ fontSize: '12px' }}>{dayjs(enddate).format('DD-MM-YYYY')}</Text> */}
+                                <Text style={{ fontSize: '12px' }}>{dayjs(enddate).format('DD-MM-YYYY')}</Text>
                             </View>
                         </View>
 

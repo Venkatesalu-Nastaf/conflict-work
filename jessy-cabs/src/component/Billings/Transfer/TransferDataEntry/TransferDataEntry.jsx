@@ -79,7 +79,8 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
     setServiceStation,
     setInfo,
      setINFOMessage,
-     handlecustomer,isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading
+     handlecustomer,isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading,
+     addEditTrigger, setAddEditTrigger
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -320,7 +321,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                     />
                   </div>
                   <div className="input">
-                    <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>
+                    <Button variant="contained" disabled={!Transfer_read} onClick={()=>handleShow()} >List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
@@ -331,7 +332,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                     <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
                   </div>
 }
-                  {groupId && customer ? <div className="input">
+                  {groupId && customer && !addEditTrigger? <div className="input">
                     {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button> */}
                     <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</LoadingButton>
                   </div>:

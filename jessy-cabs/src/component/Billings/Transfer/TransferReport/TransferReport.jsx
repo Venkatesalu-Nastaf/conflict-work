@@ -281,8 +281,14 @@ const TransferReport = ({ stationName }) => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
+        console.log(tripData, 'tripdata');
+
         setBillId(tripData)
         setInvoicedata(tripData)
+        if (tripData.length > 0) {
+          setisButtonLoading(false)
+          return
+        }
       }
       catch (err) {
         console.log(err, 'error');
@@ -316,6 +322,7 @@ const TransferReport = ({ stationName }) => {
     }
   }, [pdfBillList])
 
+  const invoicenoCheck = invoiceno[0] === null || invoiceno[0] === undefined || invoiceno === "" || invoiceno[0] === "";
 
   const handleDownloadPdf = async () => {
 
@@ -392,11 +399,18 @@ const TransferReport = ({ stationName }) => {
       setComparisonResult(commonState);
     }
     else if (pdfBillList === "PDF 2") {
+      console.log(pdfBillList, 'pdfBilllist');
+
       if (invoicedata === "" || invoicedata === null || invoicedata === undefined) {
+        console.log(pdfBillList, 'pdfBilllist22');
+
         setError(true)
         setErrorMessage("Invoice Data is empty")
         return
       }
+      console.log(pdfBillList, 'pdfBilllist22');
+      console.log('checking', invoiceno, pdfBillList);
+
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
       const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
       saveAs(blob, fileName);
@@ -447,8 +461,10 @@ const TransferReport = ({ stationName }) => {
         const customerDetails = data.customerDetails;
         const stationDetails = data.customerStations;
 
+
         setCustomerData(customerDetails)
         setStationData(stationDetails)
+
       }
       catch (error) {
         console.log(error);
@@ -501,7 +517,7 @@ const TransferReport = ({ stationName }) => {
     handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
     handleDownloadPdf();
   };
-  const tripheaderIndex = pdfzipdata?.map(li => li.tripid)
+  const tripheaderIndex = pdfzipdata?.map(li => li?.tripid)
 
   return (
 
@@ -603,9 +619,9 @@ const TransferReport = ({ stationName }) => {
                     onChange={(event, value) => {
                       setMisformat(value?.label)
                       setisButtonLoading(true);
-                      setTimeout(() => {
-                        setisButtonLoading(false);
-                      }, 3000);
+                      // setTimeout(() => {
+                      //   setisButtonLoading(false);
+                      // }, 3000);
                     }}
 
                     renderInput={(params) => {
@@ -749,23 +765,32 @@ const TransferReport = ({ stationName }) => {
                     className='full-width'
                     freeSolo
                     size="small"
-                    options={billedStatusCheck === "Billed"
-                      ? PDFbill?.map(option => ({
-                        label: option.Option,
-                      })) : PDFbill?.filter(option => option.Option === "PDF 2").map(option => ({
-                        label: option.Option,
-                      }))
-
+                    options={
+                      invoicenoCheck
+                        ? PDFbill?.filter(option => option.Option === "PDF 2").map(option => ({
+                          label: option.Option,
+                        }))
+                        : PDFbill?.map(option => ({
+                          label: option.Option,
+                        }))
                     }
+                    // options={ invoicenoCheck
+                    //   ? PDFbill?.map(option => ({
+                    //     label: option.Option,
+                    //   })) : PDFbill?.filter(option => option.Option === "PDF 2").map(option => ({
+                    //     label: option.Option,
+                    //   }))
+
+                    // }
 
                     value={pdfBillList}
                     // onChange={(event, value) => setPdfBillList(value?.label)}
                     onChange={(event, value) => {
                       setPdfBillList(value?.label);
                       setisButtonLoading(true);
-                      setTimeout(() => {
-                        setisButtonLoading(false);
-                      }, 3000);
+                      // setTimeout(() => {
+                      //   setisButtonLoading(false);
+                      // }, 3000);
                     }}
                     renderInput={(params) => {
                       return (
@@ -822,8 +847,8 @@ const TransferReport = ({ stationName }) => {
                             Download
                           </LoadingButton>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate,customerData)}>Excel</MenuItem>
-                            <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
+                            <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate, customerData)}>Excel</MenuItem>
+                            <MenuItem onClick={() => handleDownloadPdf()}>PDF</MenuItem>
                             <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>

@@ -83,10 +83,12 @@ const useTransferdataentry = () => {
     const [matchTripID, setMatchTripID] = useState('')
 
     // loading //
-    const [isbtnloading , setisbtnloading] = useState(false);
-    const [iseditloading , setiseditloading] = useState(false);
-    const [isbillloading , setisbillloading] = useState(false)
+    const [isbtnloading, setisbtnloading] = useState(false);
+    const [iseditloading, setiseditloading] = useState(false);
+    const [isbillloading, setisbillloading] = useState(false)
 
+    //    Add and Edit Boolean 
+    const [addEditTrigger, setAddEditTrigger] = useState(false)
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -604,7 +606,7 @@ const useTransferdataentry = () => {
     // my code 
     const handleButtonClickTripsheet = async () => {
         try {
-            
+
             // Validate rowSelectionModel
             // if (!rowSelectionModel) {
             //     console.error('Error: rowSelectionModel is undefined or null');
@@ -648,7 +650,7 @@ const useTransferdataentry = () => {
             const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
             const responseinvoice = await axios.get(`${apiUrl}/Transferlistgetinvoicenolast/${groupId}`);
             const invoicenodata = responseinvoice.data;
-            const invoicenovalue =invoicenodata[0].Invoice_no
+            const invoicenovalue = invoicenodata[0].Invoice_no
             console.log(response, Tripresponse, 'check response');
             // Setting selected customer data in local storage
             localStorage.setItem('selectedcustomer', customerdata);
@@ -975,14 +977,16 @@ const useTransferdataentry = () => {
             setSuccessMessage("Successfully Removed")
             setRows(updatedRows);
             setSelectedRow([]);
+            setMatchTripID('')
+
             const responsedata = resultresponse.data
             if (responsedata.affectedRows > 0) {
                 const updatedRows = rows.filter(row => !selectId.includes(row.id));
-                setRemoveTransferRow(!removeTransferRow)
 
+                setRemoveTransferRow(!removeTransferRow)
+                setRowSelectionModel([])
                 setRows(updatedRows);
                 setSelectedRow([]);
-
 
             }
 
@@ -1073,6 +1077,7 @@ const useTransferdataentry = () => {
         setRows(updatedRows);
         setSelectedRow([]);
     };
+    console.log(dayjs('2024-11-23T10:4').format('DD/MM/YYYY'), '-----------------------');
 
     // const handleKeyenter = useCallback(async (event) => {
 
@@ -1186,6 +1191,7 @@ const useTransferdataentry = () => {
 
     //working code
     const handleShow = async () => {
+        setAddEditTrigger(true)
         if (!customer) {
             setError(true)
             setErrorMessage("Please Enter the Customer")
@@ -1201,7 +1207,7 @@ const useTransferdataentry = () => {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate) || dayjs(fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate) || dayjs(toDate).format('YYYY-MM-DD');
-            // console.log('22', fromDate, toDate, servicestationValue, fromDateValue, toDateValue);
+            console.log('22', fromDate, toDate, fromDateValue, toDateValue);
             const enddate = dayjs(toDateValue).format('YYYY-MM-DD')
             const fromdate = dayjs(fromDateValue).format('YYYY-MM-DD')
             // console.log('22', servicestationValue, enddate, fromdate, customerValue);
@@ -1217,6 +1223,7 @@ const useTransferdataentry = () => {
             // const stationsName = await customerMotherdatagroupstation(selectedCustomerDatas.customer || customer);
             // setServiceStation(stationsName)
 
+            console.log(customerValue, fromDate, enddate, '=====================');
 
             const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
                 params: {
@@ -1576,7 +1583,7 @@ const useTransferdataentry = () => {
     //     }
     // }
 
-  
+
 
     const customerMotherdatagroupstation = async (customer) => {
         console.log(customer, "enetr")
@@ -1590,14 +1597,14 @@ const useTransferdataentry = () => {
 
         }
     }
-    const handlecustomer = async(e)=>{
-        console.log(e,"ppp")
+    const handlecustomer = async (e) => {
+        console.log(e, "ppp")
         setCustomer(e)
-      const data =  await customerMotherdatagroupstation(e);
-    setServiceStation(data)
-        
+        const data = await customerMotherdatagroupstation(e);
+        setServiceStation(data)
 
-        
+
+
     }
 
     // console.log(customerMotherdatagroupstation(customer),"ll")
@@ -1607,7 +1614,6 @@ const useTransferdataentry = () => {
 
     const handleAddGroup = async () => {
         const presentIds = rowSelectionModel.filter(id => matchTripID.includes(id.toString()));
-        console.log(presentIds, 'present');
         if (presentIds.length > 0) {
             setError(true)
             setisbtnloading(false)
@@ -1680,6 +1686,7 @@ const useTransferdataentry = () => {
 
         if (groupId === "") {
             // Map to get trip details
+
             const tripDetails = selectTripid.map(item => ({
                 tripid: item.tripid,
                 totalcalcAmount: item.totalcalcAmount
@@ -1753,6 +1760,7 @@ const useTransferdataentry = () => {
                 await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
                 setSuccess(true);
                 setisbtnloading(false)
+                setAddEditTrigger(true)
                 setSuccessMessage("Successfully added");
                 console.log(transferlist, 'listtransfer');
 
@@ -2048,6 +2056,7 @@ const useTransferdataentry = () => {
                         }));
 
                         setRows(rowsWithUniqueId);
+                        setAddEditTrigger(false)
                         setSuccess(true);
                         setSuccessMessage("Successfully Listed");
                     }
@@ -2062,9 +2071,9 @@ const useTransferdataentry = () => {
                     setServiceStation()
                     setError(true);
                     setErrorMessage("no data found")
-                            
+
                     console.log('No Trip_id found for the given GroupTripId');
-                   
+
                 }
             } catch (error) {
                 console.log(error, 'error');
@@ -2165,7 +2174,8 @@ const useTransferdataentry = () => {
         loading,
         setLoading,
         setInfo,
-        infoMessage, setINFOMessage,handlecustomer, isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading
+        addEditTrigger, setAddEditTrigger,
+        infoMessage, setINFOMessage, handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading
 
     };
 };

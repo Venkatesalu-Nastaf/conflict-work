@@ -736,6 +736,8 @@ const useTransferreport = () => {
           const fromdate = Result?.map(li => li.FromDate);
           setFromDate(fromdate)
           const enddate = Result?.map(li => li.EndDate);
+          console.log(enddate,'enddate');
+          
           setEndDate(enddate)
           const organization = Result?.map(li => li.Organization_name);
 

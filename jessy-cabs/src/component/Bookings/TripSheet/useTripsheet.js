@@ -2544,7 +2544,8 @@ const useTripsheet = () => {
                     vehRegNo: manualInput,
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
-                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
+                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
+                    vehicleName2:selectedVehicle?.vehicleName || prevState.vehicleName2  
                 }));
 
                 setSelectedCustomerData(prevState => ({
@@ -2552,7 +2553,8 @@ const useTripsheet = () => {
                     vehRegNo: manualInput,
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
-                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
+                    hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
+                    vehicleName2:selectedVehicle?.vehicleName || prevState.vehicleName2  
                 }));
             }
         }
@@ -2857,6 +2859,8 @@ const useTripsheet = () => {
     const calculatevendorTotalKilometers = () => {
         const startKm = vendorinfo?.vendorshedoutkm || "";
         const closeKm = vendorinfo?.vendorshedinkm || "";
+        // const startKm = vendorinfo?.vendorshedoutkm || "";
+        // const closeKm = vendorinfo?.vendorshedinkm || "";
 
         // if (startKm !== undefined && closeKm !== undefined) {
         //     let totalKm = parseInt(closeKm) - parseInt(startKm);
@@ -3677,7 +3681,9 @@ const useTripsheet = () => {
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
+            
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
+      
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
@@ -3688,14 +3694,20 @@ const useTripsheet = () => {
     // extra Amount calculation--------------------------
 
 
-    const datatimeminutescahrges = (extraHR11, ex_hrAmount11) => {
+    const datatimeminutescahrges = (extraHR111, ex_hrAmount11) => {
 
-        console.log(extraHR11, "kk")
+        const extraHR11 = extraHR111 || 0
         const datatimetoggle = timeToggle || timetogglenavigate
+
+        console.log(extraHR11, "kk",typeof(extraHR11),ex_hrAmount11,datatimetoggle)
+        
+      
         if (datatimetoggle === 1) {
+            console.log(extraHR11,"enetr111111111111")
             if (extraHR11) {
+            // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
                 console.log(extraHR, "lldaaa", typeof (extraHR))
-                const [hrda, mida] = extraHR11.toString().split('.').map(Number);
+                const [hrda, mida = 0] = extraHR11.toString().split('.').map(Number);
                 console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
                 const onehrdata = Number(hrda) * Number(ex_hrAmount11)
                 const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
@@ -3707,8 +3719,13 @@ const useTripsheet = () => {
                 // const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
             }
+            else{
+                console.log(extraHR11,"enetroooooooooo")
+                return 0
+            }
         }
         else {
+            console.log("enetr")
             let extraAbout_hr1 = Number(extraHR) * Number(extrahr_amount);
             return extraAbout_hr1
         }
@@ -3722,6 +3739,7 @@ const useTripsheet = () => {
         const extraClac = () => {
             // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
             const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
+             console.log(daghr,"datagr")
            
             // const extarhour = Math.round(extraAbout_hr)
             const extarhour = Math.round(daghr)
@@ -3754,12 +3772,12 @@ const useTripsheet = () => {
 
     const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
 
-
+          console.log(vendorhr,"kkkkkkkhrrrven",typeof(vendorhr))
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
         if (datatimetoggle === 1) {
-            if (vendorhr) {
+            if (vendorhr !== 0) {
 
-                const [hrdavendor, midavendor] = vendorhr.toString().split('.').map(Number);
+                const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.').map(Number);
                 // console.log(hrdavendor, "Hour part",midavendor, "Minute vendorpart",vendorhramount);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 const result = Math.round((vendorhramount / 60) * 10) / 10;
@@ -3769,6 +3787,9 @@ const useTripsheet = () => {
                 console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamounthrmin
 
+            }
+            else{
+                return 0 
             }
         }
         else {
@@ -3781,7 +3802,8 @@ const useTripsheet = () => {
     useEffect(() => {
         const VendorextraClac = () => {
             // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
-            const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours)
+            const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) || 0
+            console.log(extravendorhr,typeof(extravendorhr),"extratratimechanges")
             const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours)
             const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
             // setVendorExtrahrTotaldataAmount(extraAbout_hr)
@@ -3937,29 +3959,6 @@ const useTripsheet = () => {
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
 
-    // const fetchdatasupplierraratenamestations = async () => {
-
-    //     const supplierdata = vendorinfo.vendor_ratename || ratename;
-
-    //     if (supplierdata) {
-
-    //         const response = await axios.get(`${apiUrl}/supplierratenamedatastations/${supplierdata}`)
-    //         const data = response.data
-    //         if (data.length > 0) {
-    //             console.log(data.length, "eneter")
-    //             const res = response.data[0].stations
-    //             console.log(res, "eneter")
-    //             return res
-    //         }
-
-    //         return ""
-    //     }
-
-    //     else {
-    //         return ''
-    //     }
-
-    // }
 
     const handleVendorcalc = async () => {
         handleCalc()
@@ -3993,7 +3992,7 @@ const useTripsheet = () => {
 
             const consvertedTotalHour = vendortotalHours
             console.log(consvertedTotalHour, "totalfffffffffffffh")
-
+   
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
                     totkm: vendortotkm,
@@ -4036,19 +4035,7 @@ const useTripsheet = () => {
                 const matches = consvertedTotalHour
                 if (matches) {
                     console.log(matches, "mmaaa")
-                    // const hours = parseInt(matches[1], 10);
-                    // const minutes = parseInt(matches[2], 10);
-
-                    // Convert minutes to decimal
-                    // const decimalMinutes = (minutes / 60).toFixed(2).substring(2); // Convert to '07'
-                    // const decimalMinutes = minutes < 10 ? `0${minutes}` : minutes.toString();
-
-
-                    // Combine hours and decimal minutes
-                    // const decimalTime = parseFloat(`${hours}.${decimalMinutes}`);
-
-
-                    // let time = matches.toFixed(2) - Hours.toFixed(2);
+                 
                     let time = matches - Hours.toFixed(2);
                     const convertedTime = Number(time.toFixed(2))
 
@@ -4058,16 +4045,15 @@ const useTripsheet = () => {
 
 
             }
-            // if (vendortotkm > KMS) {
-
-            //     let KM = (Number(vendortotkm) - Number(KMS))
-            //     dataextrakms = KM
-            // }
-
+            else{
+                dataextrahous = 0
+            }
+           
 
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
+                console.log(Number(vendortotkm),Number(KMS),"kmmmmmmmmmmmmmmmmm",KM)
                 let kmfixed = Number(KM.toFixed(2))
 
                 // dataextrakms = KM
@@ -4197,23 +4183,7 @@ const useTripsheet = () => {
     }
 
 
-    // useEffect(async()=>{
-    //  const customerdata =  formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
-    //  console
-    //  if(customerdata){
-    //     console.log(customerdata,"customerdatatatat")
-    //  try{
-    //     const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdata}`)
-    //     const res=response.data
-    //     console.log(res,"cuuuu")
-    //  }
-    //  catch(err){
-    //     console.log(err)
-    //  }
-
-
-    //  }
-    // },[ formData.customer ])
+   
 
 
 
@@ -4362,7 +4332,7 @@ const useTripsheet = () => {
 
 
             } else {
-                setExtraHR('')
+                setExtraHR(0)
             }
             console.log("total km", totkm)
             // if (totkm > KMS) {
@@ -4476,21 +4446,8 @@ const useTripsheet = () => {
 
     const handleClickOpen = async () => {
 
-        // duty = formData.duty || selectedCustomerData.duty || book.duty;
-        // vehicleNames = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
-        // totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
-        // tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTimes() || '');
-        // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-
-        // if (!totkm || !tothr || !duty || !vehicleNames || !organizationname) {
-        //     setError(true);
-        //     setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
-        //     return;
-
-        // }
-        // else {
         setOpen(true);
-        // }
+        
     };
 
     const handleClose = () => {
@@ -4685,9 +4642,11 @@ const useTripsheet = () => {
                         Number(trip.startkm) === maxValue
                     );
                 });
-
+                const hclcustomerhybrid = Number(hclkmdatas[0].totalCloseKm)
+                const datamaxhybrid = maxValue + hclcustomerhybrid
                 // Find the maximum value 
-                setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
+                // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
+                setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
 
                 const shedoutkm1 = Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
 
@@ -4727,7 +4686,10 @@ const useTripsheet = () => {
                     if (result !== undefined) {
                         const hclcustomertotalkm = Number(hclkmdatas[0].totalCloseKm)
                         const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
+                        console.log(ggg,"hybridtotalkmwithout hybrid")
+                        console.log(hclcustomertotalkm,"hybridwithhybrid")
                         const dattt = ggg + hclcustomertotalkm
+                        console.log(dattt,"hybridfulllkmm")
                         // console.log(dattt,"s",ggg)
                         // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
                         setConflictKMData({ maximumkm: dattt, maxtripid: result?.tripid })

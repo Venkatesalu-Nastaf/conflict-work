@@ -12,7 +12,14 @@
   flex-direction: column;
   color: #000;
 }
+.green-button {
+  background-color: rgb(1, 147, 1) !important; /* Override default styles */
+  color: white;
+}
 
+.green-button:hover {
+  background-color: rgb(2, 116, 2) !important;
+}
 .Tripsheet-header {
   border-top: solid 1px #ccc;
   /* background: var(--glass); */

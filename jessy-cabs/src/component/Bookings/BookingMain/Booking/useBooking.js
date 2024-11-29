@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, } from "react";
+import { useState, useEffect, useCallback,useMemo } from "react";
 import axios from "axios";
 import { useUser } from "../../../form/UserContext";
 import { useLocation } from "react-router-dom";
@@ -41,6 +41,7 @@ const useBooking = () => {
   const [ratename, setRate_name] = useState("");
   const [vehileName, setVehicleName] = useState([]);
   const [CopyEmail, setCopyEmail] = useState(false);
+  const [hybdridatabooking,setHybdriDatabooking] = useState(0);
   const handlePopupClose = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
@@ -471,6 +472,9 @@ const handleAirportTransferChange = (event) => {
 
         if (resData.success) {
           setOrderByDropDown(resData.data)
+          console.log(resData,"jjj")
+          
+          
           setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
         } else {
           setOrderByDropDown([])
@@ -767,6 +771,45 @@ const handleAirportTransferChange = (event) => {
     }
   }
   //------------------------------------------------------
+  
+  const customerdatatimetoggle = useMemo(() => {
+    return (
+        formData.customer ||
+        selectedCustomerData.customer ||
+        selectedCustomerDatas.customer || book.customer
+    );
+}, [formData.customer, selectedCustomerData.customer, selectedCustomerDatas.customer , book.customer]);
+
+  const fetchdatacustomerhybrid = useCallback(async () => {
+    if (customerdatatimetoggle) {
+        try {
+            const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdatatimetoggle}`);
+            const data = response.data;
+            if (data.length > 0) {
+                const res = data[0].hybrid;
+                // console.log(data,"cust")
+                setHybdriDatabooking(res)
+                // Update state with the fetched result
+            } else {
+              setHybdriDatabooking(0)
+            }
+        } catch (error) {
+
+            console.error('Error fetching customer data:', error);
+            setHybdriDatabooking(0)
+          
+        }
+    } else {
+      setHybdriDatabooking(0)
+ 
+
+    }
+}, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
+
+// Use useEffect to trigger the fetch function only when necessary
+useEffect(() => {
+    fetchdatacustomerhybrid();
+}, [fetchdatacustomerhybrid]);
   const handleAdd = async () => {
    
 
@@ -853,6 +896,7 @@ const handleAirportTransferChange = (event) => {
         customer: restSelectedCustomerData.customer,
         escort:formData.escort || selectedCustomerData.escort || book.escort,
         transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+        hybridhcldata:hybdridatabooking
 
       };
 
@@ -973,6 +1017,7 @@ const handleAirportTransferChange = (event) => {
         customer: restSelectedCustomerData.customer,
         escort:formData.escort || selectedCustomerData.escort || book.escort,
         transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+        hybridhcldata:hybdridatabooking
       };
 
       const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno

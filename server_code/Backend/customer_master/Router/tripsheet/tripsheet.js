@@ -2123,7 +2123,7 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
             console.log("err", err)
             res.json({ message: "error fetching data", success: false })
         }
-
+      console.log(result.length,"lemmmmmmmmm")
         if (result) {
             res.status(200).json(result)
         }

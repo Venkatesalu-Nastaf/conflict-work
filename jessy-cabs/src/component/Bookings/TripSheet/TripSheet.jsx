@@ -335,26 +335,66 @@ const TripSheet = ({ stationName, logoImage }) => {
   // }
 
  /// changes 
+  // const handlesignatureimages = async () => {
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+  //   if (!tripid) {
+  //     setWarning(true);
+  //     setWarningMessage("Enter The Tripid");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
+
+  //     if (response.status === 200) {
+  //       const imageUrl = URL.createObjectURL(await response.blob());
+  //       setSignImageUrl(imageUrl);
+  //       setSignaturepopup(true);
+  //       setSuccess(true)
+  //       setWarning(false);
+  //       setSuccessMessage("Signature loaded successfully!");
+  //     } else if (signimageUrl === "") {
+  //       if (fileInputRefdata.current) {
+  //         fileInputRefdata.current.click();
+  //         setSignatureupload(false);
+  //         setSuccessMessage("Please upload a signature image.");
+  //       } else {
+  //         console.error("File input ref is not available");
+  //       }
+  //     } else {
+  //       setSignaturepopup(true);
+  //       getSignatureImage();
+  //       setSuccessMessage("Signature loaded successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching signature image:", error);
+  //     setWarning(true);
+  //     setWarningMessage("Failed to fetch signature image. Please try again.");
+  //   }
+  // };
+
   const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
+  
     if (!tripid) {
       setWarning(true);
       setWarningMessage("Enter The Tripid");
       return;
     }
-
+  
     try {
       const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
-
+  
       if (response.status === 200) {
         const imageUrl = URL.createObjectURL(await response.blob());
-        setSignImageUrl(imageUrl);
+        setSignImageUrl(imageUrl); // Update state
         setSignaturepopup(true);
-        setSuccess(true)
+        setSuccess(true);
         setWarning(false);
         setSuccessMessage("Signature loaded successfully!");
-      } else if (signimageUrl === "") {
+      } else {
+        setSignImageUrl(""); // Clear state
         if (fileInputRefdata.current) {
           fileInputRefdata.current.click();
           setSignatureupload(false);
@@ -362,15 +402,9 @@ const TripSheet = ({ stationName, logoImage }) => {
         } else {
           console.error("File input ref is not available");
         }
-      } else {
-        setSignaturepopup(true);
-        getSignatureImage();
-        setSuccessMessage("Signature loaded successfully!");
       }
     } catch (error) {
       console.error("Error fetching signature image:", error);
-      setWarning(true);
-      setWarningMessage("Failed to fetch signature image. Please try again.");
     }
   };
 
@@ -1371,7 +1405,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                           setBook({ ...book, reporttime: event.target.value });
                           setreporttime(event.target.value);
-                          if (!lockdata) {
+                          if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                           }
                         }}
@@ -1404,6 +1438,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         setStartTime(rTime);
                         setFormData({ ...formData, starttime: rTime });
                         setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
+                        if (!lockdata && dayhcl === 1) {
+                          setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                        }
                       }}
                     />
                   </div>
@@ -1438,6 +1475,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
                         setBook({ ...book, closetime: rTime });
                         setCloseTime(rTime);
+                        if (!lockdata && dayhcl === 1) {
+                          setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                        }
                       }}
                     />
                   </div>
@@ -1482,13 +1522,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                             console.log("Invalid Shed In Time");
                           } else {
                             // Valid input, you can handle any additional logic here
-                            if (!lockdata) {
+                            if (!lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
                           }
                         } else {
                           // If the day difference is more than 1, allow any time
-                          if (!lockdata) {
+                          if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
                         }
@@ -1568,7 +1608,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           handleChange(e)
                           setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                          if (!lockdata) {
+                          if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                           }
                         }
@@ -1599,6 +1639,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           handleChange(e)
                           setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                          if (!lockdata && dayhcl === 1) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                          }
                         }
                       }}
                       size="small"
@@ -1625,6 +1668,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                           handleChange(e)
+                          if (!lockdata && dayhcl === 1) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                          }
                         }
                       }}
                       label="Close KM"
@@ -1650,7 +1696,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                           handleChange(e)
-                          if (!lockdata) {
+                          if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
                         }
@@ -1904,7 +1950,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                    <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                                  <Button
+                                    disabled={!Tripsheet_modify}
+                                    onClick={handlesignatureimages}
+                                    variant="contained"
+                                    className={`full-width ${signimageUrl ? 'green-button' : ''}`}
+                                    sx={!signimageUrl ? { backgroundColor: '' } : undefined}
+                                  >
+                                    Signature
+                                  </Button>
+                                    {/* <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button> */}
                                   </div>
                                   <input
                                     ref={fileInputRefdata}
@@ -3006,11 +3061,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
                     onChange={(e) => {
                       handleChange(e);
-                      if (!lockdata) {
-                        setVendorinfodata((vendorinfo) => ({
-                          ...vendorinfo, vendorRemarks: e.target.value,
-                        }));
-                      }
+                    
                     }}
                     label="Remark"
                     id="remark"
